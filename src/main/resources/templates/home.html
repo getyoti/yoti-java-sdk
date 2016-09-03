@@ -1,0 +1,14 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>Home</title>
+</head>
+<body>
+  <p th:text="'Hello, ' + ${name} + '!'" />
+  <p th:text="'Should you come back, I\'ll be able to remember you by the id ' + ${userId} + '.'" />
+  <p th:text="'The activity was a ' + ${outcome} + '.'" />
+</body>
+</html>
