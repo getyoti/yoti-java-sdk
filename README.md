@@ -21,7 +21,7 @@ You will need to pass this token to Yoti-SDK in order to retrieve user data (pro
 ```
 
 # Building and running your example server-app
-1. In the Dashboard, edit "Callback URL" with the URL pointing to your /login endpoint
+1. In the Dashboard, edit "Callback URL" with the URL pointing to your /login endpoint. Note that this requires an endpoint visible on the Internet (see http://yoti.com/developers for more details).
 2. Edit the **resources/application.yml** and replace the "yoti-client-sdk-id-from-dashboard" value with the Yoti client SDK ID you can find in the Dashboard
 3. Download your application key from Yoti-Dashboard and copy it to **/resources/app-keypair.pem**
 4. Run ```mvn clean package``` to build the project.
@@ -31,11 +31,12 @@ You will need to pass this token to Yoti-SDK in order to retrieve user data (pro
 * Your endpoint is listening under **http://localhost:8080/login**.
 
 In order to receive calls on your /login endpoint, you need to expose your server-app to the outside world. We require that you use the domain from the Callback URL and **HTTPS**. 
-In order to add HTTPS to your plain HTTP server-app, we suggest to use HTTPS termination with Nginx. You can follow the guide under http://xxx.
+In order to add HTTPS to your plain HTTP server-app, we suggest to use HTTPS termination with Nginx (see http://yoti.com/developers for more details).
+
 Alternatively you can use HTTPS directly in the server-app by using ``` application.yml.ssl ``` configuration.
 
 # Requirements for running the application
-* Java6 and newer
+* Minimum Java 6
 * If you're using oracle JDK/JRE (optional for OpenJDK) please install JCE extension in your server's Java to allow strong encryption (http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html)
 * In case of using JRE/JDK older than Java 8_101, please import the LetsEncrypt certificate in your Java keystore by using Java key-tool
 ```
