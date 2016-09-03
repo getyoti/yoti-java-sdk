@@ -10,7 +10,7 @@ You will need to pass this token to Yoti-SDK in order to retrieve user data (pro
 * Logic for retrieving the profile is in ```com.yoti.api.examples.springboot.YotiLoginController#doLogin```
 * ```resources/app-keypair.pem``` keypair you can get from Dashboard
 * ```resource/application.yml``` serve-app configuration. You can change the port and SDK Application Id
-* ```resource/application.yml.ssl``` alternative configuration that enforces SSL usage by your server-app (no need for nginx ssl proxy). To use it, just rename it to 'application.yml', make sure that the configuration has the right path to the java keystore with an SSL key (example one included in the project ``` server.keystore.jks ```.
+* ```resource/application.yml.ssl``` alternative configuration that enforces SSL usage by your server-app (no need for nginx ssl proxy). To use it, just rename it to 'application.yml', make sure that the configuration has the right path to the java keystore with an SSL key (example one included in the project ``` server.keystore.jks ```).
 * Project is a Spring-boot server application. In maven we used the current SDK version:
 ```
     <dependency>
@@ -23,7 +23,7 @@ You will need to pass this token to Yoti-SDK in order to retrieve user data (pro
 # Building and running your example server-app
 1. In the Dashboard, edit "Callback URL" with the URL pointing to your /login endpoint. Note that this requires an endpoint visible on the Internet (see http://yoti.com/developers for more details).
 2. Edit the **resources/application.yml** and replace the "yoti-client-sdk-id-from-dashboard" value with the Yoti client SDK ID you can find in the Dashboard
-3. Download your application key from Yoti-Dashboard and copy it to **/resources/app-keypair.pem**
+3. Download your application key from Yoti-Dashboard and copy it to ** resources/app-keypair.pem **
 4. Run ```mvn clean package``` to build the project.
 
 # Running
