@@ -2,6 +2,10 @@ spring:
    thymeleaf:
       cache: false
 server:
-    port: 8080
+    port: 443
+    ssl:
+      enabled: true
+      key-store: "server.keystore.jks"
+      key-store-password: javaexample
 yotiApp:
    id: yoti-client-sdk-id-from-dashboard

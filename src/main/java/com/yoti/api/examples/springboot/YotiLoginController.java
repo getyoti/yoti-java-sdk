@@ -37,6 +37,7 @@ public class YotiLoginController {
 
         // load profile data into model
         model.addAttribute("name", profile.getGivenNames());
+        model.addAttribute("phone", profile.getPhoneNumber());
         model.addAttribute("userId", activityDetails.getUserId());
         model.addAttribute("outcome", activityDetails.getOutcome());
 
