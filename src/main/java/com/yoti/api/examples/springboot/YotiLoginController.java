@@ -39,7 +39,6 @@ public class YotiLoginController {
         model.addAttribute("name", profile.getGivenNames());
         model.addAttribute("phone", profile.getPhoneNumber());
         model.addAttribute("userId", activityDetails.getUserId());
-        model.addAttribute("outcome", activityDetails.getOutcome());
 
         return "home";
     }
