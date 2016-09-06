@@ -14,7 +14,7 @@ You will need to pass this token to Yoti-SDK in order to retrieve user data (pro
 * ```resource/application.yml``` this configuration that enforces SSL usage by your server-app (no need for nginx ssl proxy). Make sure that update the SDK Application ID and the configuration has the right path to the java keystore with an SSL key (example one included in the project ``` server.keystore.jks ```).
 * ```resource/application.yml.plain``` HTTP server-app configuration. To use it, just rename it to 'application.yml', this requires a Nginx proxy
 * Project is a Spring-boot server application. In maven we used the current SDK version:
-```
+```xml
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>java-sdk-impl</artifactId>
