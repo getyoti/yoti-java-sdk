@@ -13,14 +13,21 @@ Before you start, you'll need to create an Application in [Dashboard](https://ww
 * `resources/app-keypair.pem` is the keypair you can get from Dashboard.
 * `resource/application.yml` contains the configuration that enforces SSL usage by your server-app (in case you are not using a proxy server like Nginx). Make sure that you update the SDK Application ID and the configuration points to the right path to the java keystore with an SSL key (there is an already one included in the project ``` server.keystore.jks ```).
 * `resource/application.yml.plain` This is the HTTP server-app configuration that you need to use if you decide to handle SSL certificates at a proxy server (e.g. Nginx) level. To use it, just rename it to `application.yml`. If you are using Nginx you can configure SSL by following this guide http://nginx.org/en/docs/http/configuring_https_servers.html .
-* This project contains a Spring-boot server application. In this example we used the current SDK version by including the specific Maven dependency:
+* This project contains a Spring-boot server application. In this example we used the current SDK version by including the specific Maven dependency with its repository:
 ```xml
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>java-sdk-impl</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
+    ...
+    <repository>
+      <id>yoti-sdk</id>
+      <name>libs-snapshot-local</name>
+      <url>https://www.yoti.com/downloads/sdk/libs-snapshot-local/</url>
+    </repository>
 ```
+* If you haven't got access to our maven repository yet, please contact tech@yoti.com. 
 
 # Building and running your example server-app
 1. In Dashboard edit the "Callback URL" field with the URL pointing to your /login endpoint.
