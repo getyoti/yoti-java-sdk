@@ -2,11 +2,11 @@ Spring Boot Yoti SDK example
 =============================
 
 This project shows an example implementation of a server-app with an endpoint which will be called by Yoti with a "token".
-You will need to pass this token to Yoti-SDK in order to retrieve user data (profile) of a user which has been logged in by Yoti.
+You will need to pass this token to Yoti-SDK in order to retrieve the profile of a user which has been logged in by Yoti.
 
-**Before you start, you'll need to create an application in Dashboard and verify the domain (https://www.yoti.com/dashboard).**
+Before you start, you'll need to create an Application in [Dashboard](https://www.yoti.com/dashboard) and verify the domain.
 
-**NOTE: While creating application in Dashboard, some of the attributes (except: phone number, selfie) require users to have a Yoti with a verified passport. If your application, for instance, requires the user's date of birth and your user has not added her/his passport to her/his Yoti account, this will lead to a failed login.**
+**NOTE: While creating Application in Dashboard, some of the attributes (except phone number and selfie) require users to have a Yoti with a verified passport. If your application, for instance, requires the user's date of birth and she/he has not added their passport to their Yoti account, this will lead to a failed login.**
 
 # Project Structure
 * Logic for retrieving the profile is in ```com.yoti.api.examples.springboot.YotiLoginController#doLogin```
