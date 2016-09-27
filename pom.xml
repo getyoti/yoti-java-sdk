@@ -68,11 +68,12 @@
       </plugin>
     </plugins>
   </build>
-  <distributionManagement>
+  <repositories>
     <repository>
       <id>yoti-sdk</id>
       <name>libs-snapshot-local</name>
       <url>https://www.yoti.com/downloads/sdk/libs-snapshot-local/</url>
     </repository>
-  </distributionManagement>
+  </repositories>
+
 </project>
