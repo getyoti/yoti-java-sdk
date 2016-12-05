@@ -59,11 +59,7 @@ ActivityDetails activityDetails;
 HumanProfile profile;
 try {
 	activityDetails = client.getActivityDetails(token);
-    if(activityDetails.getOutcome().isSuccessful()) {
-    	profile = activityDetails.getUserProfile();
-    } else {
-		// handle unhappy path
-	}            
+   	profile = activityDetails.getUserProfile();
 } catch (ProfileException e) {
     LOG.info("Could not get profile", e);
     return "error";
