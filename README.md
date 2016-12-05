@@ -127,7 +127,7 @@ If necessary, this can be overridden by setting the *yoti.api.url* system proper
 * [Andras Bulla](https://github.com/lopihe)
 * [Radoslaw Busz](https://github.com/gitplaneta)
 * [David Goate](https://github.com/davidgoate)
-* Attila Kiss
+* [Attila Kiss](https://github.com/atkiss)
 * [Quirino Zagarese](https://github.com/qzagarese) 
 
 
