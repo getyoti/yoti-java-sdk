@@ -24,12 +24,12 @@ If you are using Maven, you need to add the following dependency:
 <dependency>
 	<groupId>com.yoti</groupId>
 	<artifactId>java-sdk-impl</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 </dependency>
 ```
 If you are using Gradle, here is the dependency to add:
 
-`compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.0-SNAPSHOT'`
+`compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.0'`
 
 
 
