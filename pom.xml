@@ -6,6 +6,27 @@
   <packaging>pom</packaging>
   <version>1.0</version>
   <name>Yoti Java SDK</name>
+  <description>Java SDK for simple integration with the Yoti platform</description>
+  <url>https://github.com/getyoti/java</url>
+  
+  <developers>
+    <developer>
+      <name>Andras Bulla</name>
+    </developer>
+    <developer>
+      <name>Radoslaw Busz</name>
+    </developer>
+    <developer>
+      <name>David Goate</name>
+    </developer>
+    <developer>
+      <name>Attila Kiss</name>
+    </developer>
+    <developer>
+      <name>Quirino Zagarese</name>
+    </developer>
+  </developers>
+  
   <modules>
     <module>java-sdk-api</module>
     <module>java-sdk-dummy</module>
