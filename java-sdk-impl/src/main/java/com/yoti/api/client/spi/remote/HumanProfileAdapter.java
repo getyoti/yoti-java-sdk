@@ -24,7 +24,7 @@ final class HumanProfileAdapter implements HumanProfile {
     private static final String ATTRIBUTE_NATIONALITY = "nationality";
     private static final String ATTRIBUTE_PHONE_NUMBER = "phone_number";
     private static final String ATTRIBUTE_SELFIE = "selfie";
-    private static final String ATTRIBUTE_ADDRESS = "address";
+    private static final String ATTRIBUTE_ADDRESS = "email_address";
     private static final String ATTRIBUTE_DOCUMENT_DETAILS = "document_details";
     private final Profile wrapped;
 
