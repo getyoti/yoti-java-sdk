@@ -41,6 +41,8 @@ import com.yoti.api.client.spi.remote.util.CryptoUtil.EncryptionResult;
 public class SecureYotiClientTest {
     private static final Map<String, String> PROFILE_ATTRIBUTES;
 
+    private static final Map<String, String> EMPTY_PROFILE = new HashMap<String, String>();
+    
     static {
         PROFILE_ATTRIBUTES = new HashMap<String, String>();
         PROFILE_ATTRIBUTES.put("test-attr1", "test-value2");
@@ -85,6 +87,66 @@ public class SecureYotiClientTest {
         assertProfileAttributes(profile, PROFILE_ATTRIBUTES);
     }
 
+    @Test
+    public void shouldGetEmptyProfileWithNullContent() throws Exception {
+        Key receiptKey = generateKey();
+        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
+
+        byte[] profileContent = null;
+        byte[] wrappedReceiptKey = encryptAsymmetric(receiptKey.getEncoded(), publicKey);
+        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
+                .withWrappedReceiptKey(wrappedReceiptKey).withOtherPartyProfile(profileContent)
+                .withProfile(profileContent).withTimestamp(TIMESTAMP).withReceiptId(RECEIPT_ID)
+                .withOutcome(Receipt.Outcome.SUCCESS).build();
+
+        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
+
+        ProfileService profileService = mock(ProfileService.class);
+        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
+                .thenReturn(receipt);
+
+        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
+
+        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
+
+        ActivityDetails activityDetails = client.getActivityDetails(encryptedToken);
+        assertNotNull(activityDetails);
+        Profile profile = activityDetails.getUserProfile();
+
+        assertNotNull(profile);
+        assertProfileAttributes(profile, EMPTY_PROFILE);
+    }
+
+    @Test
+    public void shouldGetEmptyProfileWithEmptyContent() throws Exception {
+        Key receiptKey = generateKey();
+        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
+
+        byte[] profileContent = new byte[0];
+        byte[] wrappedReceiptKey = encryptAsymmetric(receiptKey.getEncoded(), publicKey);
+        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
+                .withWrappedReceiptKey(wrappedReceiptKey).withOtherPartyProfile(profileContent)
+                .withProfile(profileContent).withTimestamp(TIMESTAMP).withReceiptId(RECEIPT_ID)
+                .withOutcome(Receipt.Outcome.SUCCESS).build();
+
+        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
+
+        ProfileService profileService = mock(ProfileService.class);
+        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
+                .thenReturn(receipt);
+
+        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
+
+        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
+
+        ActivityDetails activityDetails = client.getActivityDetails(encryptedToken);
+        assertNotNull(activityDetails);
+        Profile profile = activityDetails.getUserProfile();
+
+        assertNotNull(profile);
+        assertProfileAttributes(profile, EMPTY_PROFILE);
+    }
+    
     @Test(expected = ProfileException.class)
     public void shouldFailWithInvalidTimestamp() throws Exception {
         Key receiptKey = generateKey();
