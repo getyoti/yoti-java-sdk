@@ -127,13 +127,11 @@ final class SecureYotiClient implements YotiClient {
     }
 
     private Profile createProfile(byte[] profileBytes, Key secretKey) throws ProfileException {
-        Map<String, Object> attributeMap = null;
+        Map<String, Object> attributeMap = new HashMap<String, Object>();
         if (profileBytes != null && profileBytes.length > 0) {
             EncryptedData encryptedData = parseProfileContent(profileBytes);
             byte[] profileData = decrypt(encryptedData.getCipherText(), secretKey, encryptedData.getIv());
             attributeMap = parseProfile(profileData);
-        } else {
-            attributeMap = new HashMap<String, Object>();
         }
         return createProfile(attributeMap);
     }
