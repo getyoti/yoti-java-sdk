@@ -62,10 +62,10 @@ com.yoti.client.accessSecurityKey=file:~/.yoti/my-key.pem
 #### YAML
 ```
 com:
-  yoti:
-      client:
-        clientSdkId:"my-app-id"
-        accessSecurityKey:"file:/my-key.pem"
+    yoti:
+        client:
+            clientSdkId: "my-app-id"
+            accessSecurityKey: "file:/my-key.pem"
 ```
 
 ## That's It - You're Done!
