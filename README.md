@@ -112,10 +112,17 @@ A set of classes responsible for working with different sources (e.g. files, cla
 Dummy implementation without connectivity to any platform services. Can be used for testing purposes.
 ### java-sdk-impl
 Real SDK implementation that takes care of decrypting the token, fetching the user profile from Yoti servers by issuing a signed request and finally decrypting the fetched profile.
+###java-sdk-spring-boot-auto-config
+A module that can be used in Spring Boot applications to automatically configure the YotiClient and KeyPairSource with standard application properties.
  
 ## Requirements
 * Java 1.6 or higher
 * SLF4J 
+
+## Spring Boot Auto Configuration
+As a convenience, if your application happens to use Spring Boot, you can utilise the Spring Boot auto configuration module that will take care of configuring the Yoti Client and Key Pair for you based on standard application properties.
+
+For more information and to see an example of this in use take a look at the Spring Boot Auto Configuration module and Spring Boot example in this repository.
 
 ## Misc
 * By default, Yoti SDKs fetch profiles from [https://api.yoti.com/api/v1](https://api.yoti.com/api/v1).
@@ -126,7 +133,7 @@ If necessary, this can be overridden by setting the *yoti.api.url* system proper
 # Authors
 * [Andras Bulla](https://github.com/lopihe)
 * [Radoslaw Busz](https://github.com/gitplaneta)
-* [David Goate](https://github.com/davidgoate)
+* [David Goaté](https://github.com/davidgoate)
 * [Attila Kiss](https://github.com/atkiss)
 * [Quirino Zagarese](https://github.com/qzagarese) 
 
