@@ -112,7 +112,7 @@ A set of classes responsible for working with different sources (e.g. files, cla
 Dummy implementation without connectivity to any platform services. Can be used for testing purposes.
 ### java-sdk-impl
 Real SDK implementation that takes care of decrypting the token, fetching the user profile from Yoti servers by issuing a signed request and finally decrypting the fetched profile.
-###java-sdk-spring-boot-auto-config
+### java-sdk-spring-boot-auto-config
 A module that can be used in Spring Boot applications to automatically configure the YotiClient and KeyPairSource with standard application properties.
  
 ## Requirements

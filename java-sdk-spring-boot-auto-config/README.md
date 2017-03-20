@@ -33,8 +33,10 @@ If you are using Maven, you need to add the following dependencies:
 
 If you are using Gradle, here is the dependency to add:
 
-`compile group: 'com.yoti', name: 'java-sdk-spring-boot-auto-config', version: '1.0'`
-`compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.0'`
+```
+compile group: 'com.yoti', name: 'java-sdk-spring-boot-auto-config', version: '1.0'
+compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.0'
+```
 
 
 ### Configure The Client
