@@ -15,23 +15,29 @@ import com.yoti.api.client.YotiClient;
 
 @Controller
 public class YotiLoginController {
+
     private static final Logger LOG = LoggerFactory.getLogger(YotiLoginController.class);
+
+    private final YotiClient client;
+
     @Autowired
-    private YotiClient client;
+    public YotiLoginController(final YotiClient client) {
+        this.client = client;
+    }
 
     /**
      * This endpoint is the "Callback URL" which will be called by user's browser after user logs in. It's a GET endpoint.
      * We will pass you a token inside url query string (/login?token=token-value)
      */
     @RequestMapping("/login")
-    public String doLogin(@RequestParam("token") String token, Model model) {
+    public String doLogin(@RequestParam("token") final String token, final Model model) {
         ActivityDetails activityDetails;
         HumanProfile profile;
         try {
             activityDetails = client.getActivityDetails(token);
             profile = activityDetails.getUserProfile();
-        } catch (ProfileException e) {
-            LOG.info("Could not get profile", e);
+        } catch (final ProfileException profileException) {
+            LOG.info("Could not get profile", profileException);
             return "error";
         }
 
