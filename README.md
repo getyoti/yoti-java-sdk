@@ -176,3 +176,11 @@ Please provide the following the get you up and working as quick as possible:
 - OS Version
 - Version of Java being used
 - Screenshot
+
+# Authors
+ * [Andras Bulla](https://github.com/lopihe)
+ * [Radoslaw Busz](https://github.com/gitplaneta)
+ * [David Goaté](https://github.com/davidgoate)
+ * [Attila Kiss](https://github.com/atkiss)
+ * [Quirino Zagarese](https://github.com/qzagarese) 
+ 
