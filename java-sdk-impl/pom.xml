@@ -8,7 +8,7 @@
   <name>Yoti Java SDK implementation package</name>
   <description>Java SDK for simple integration with the Yoti platform</description>
   <url>https://github.com/getyoti/java</url>
-  
+
   <developers>
     <developer>
       <name>Andras Bulla</name>
@@ -26,7 +26,7 @@
       <name>Quirino Zagarese</name>
     </developer>
   </developers>
-  
+
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
@@ -108,10 +108,11 @@
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>1.3.4</version>
+          <version>1.4.5</version>
           <configuration>
             <failBuildOnCVSS>${owasp.dependency.check.cvss.limit}</failBuildOnCVSS>
             <cveValidForHours>${owasp.dependency.check.cve.update.limit}</cveValidForHours>
+            <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
           </configuration>
         </plugin>
         <plugin>
@@ -294,10 +295,11 @@
       <plugin>
         <groupId>org.owasp</groupId>
         <artifactId>dependency-check-maven</artifactId>
-        <version>1.3.4</version>
+        <version>1.4.5</version>
         <configuration>
           <failBuildOnCVSS>${owasp.dependency.check.cvss.limit}</failBuildOnCVSS>
           <cveValidForHours>${owasp.dependency.check.cve.update.limit}</cveValidForHours>
+          <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
         </configuration>
         <reportSets>
           <reportSet>
