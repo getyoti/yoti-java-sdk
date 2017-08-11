@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.yoti</groupId>
   <artifactId>java-sdk-impl</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.1</version>
   <name>Yoti Java SDK implementation package</name>
   <description>Java SDK for simple integration with the Yoti platform</description>
   <url>https://github.com/getyoti/java</url>
@@ -61,12 +61,12 @@
     <dependency>
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcpkix-jdk15on</artifactId>
-      <version>1.51</version>
+      <version>1.57</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.7.5</version>
+      <version>2.7.9.1</version>
     </dependency>
     <dependency>
       <groupId>com.google.protobuf</groupId>
@@ -76,12 +76,12 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.12</version>
+      <version>1.7.25</version>
     </dependency>
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>java-sdk-api</artifactId>
-      <version>1.0</version>
+      <version>1.1</version>
     </dependency>
     <!-- Testing dependencies -->
     <dependency>
@@ -98,7 +98,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>1.10.19</version>
+      <version>2.8.47</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -108,7 +108,7 @@
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>1.4.5</version>
+          <version>2.1.0</version>
           <configuration>
             <failBuildOnCVSS>${owasp.dependency.check.cvss.limit}</failBuildOnCVSS>
             <cveValidForHours>${owasp.dependency.check.cve.update.limit}</cveValidForHours>
@@ -295,7 +295,7 @@
       <plugin>
         <groupId>org.owasp</groupId>
         <artifactId>dependency-check-maven</artifactId>
-        <version>1.4.5</version>
+        <version>2.1.0</version>
         <configuration>
           <failBuildOnCVSS>${owasp.dependency.check.cvss.limit}</failBuildOnCVSS>
           <cveValidForHours>${owasp.dependency.check.cve.update.limit}</cveValidForHours>

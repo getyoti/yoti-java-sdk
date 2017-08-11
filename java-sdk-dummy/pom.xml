@@ -8,7 +8,7 @@
   <name>Yoti Java SDK mock testing package</name>
   <description>Java SDK for simple integration with the Yoti platform</description>
   <url>https://github.com/getyoti/java</url>
-  
+
   <developers>
     <developer>
       <name>Andras Bulla</name>
@@ -117,7 +117,7 @@
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>java-sdk-api</artifactId>
-      <version>1.0</version>
+      <version>1.1</version>
     </dependency>
   </dependencies>
 

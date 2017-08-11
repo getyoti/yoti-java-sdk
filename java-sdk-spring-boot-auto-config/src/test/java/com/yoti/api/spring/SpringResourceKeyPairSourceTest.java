@@ -4,7 +4,7 @@ import com.yoti.api.client.KeyPairSource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
@@ -18,8 +18,6 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class SpringResourceKeyPairSourceTest {
 
-    private static final int DUMMY_BYTE = 4;
-
     private final KeyPair dummyKeyPair = new KeyPair(null, null);
 
     @Mock
@@ -32,7 +30,6 @@ public class SpringResourceKeyPairSourceTest {
     public void testGetFromStream() throws Exception {
 
         when(mockResource.getInputStream()).thenReturn(mockStream);
-        when(mockStream.read()).thenReturn(DUMMY_BYTE);
 
         final SpringResourceKeyPairSource source = new SpringResourceKeyPairSource(mockResource);
         final KeyPair keyPair = source.getFromStream(new TestStreamVisitor());
@@ -46,6 +43,7 @@ public class SpringResourceKeyPairSourceTest {
 
         @Override
         public KeyPair accept(final InputStream in) throws IOException {
+            assertThat(in, sameInstance(mockStream));
             return dummyKeyPair;
         }
 
