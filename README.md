@@ -132,6 +132,17 @@ No matter if the user is a new or an existing one, Yoti will always provide her/
 
 The `HumanProfile` class provides a set of methods to retrieve different user attributes. Whether the attributes are present or not depends on the settings you have applied to your app on Yoti Dashboard.
 
+## Connectivity Requirements
+
+Interacting with the `YotiClient` to get `ActivityDetails` is not an offline operation. Your application will need to be able to establish an outbound TCP connection to port 443 to the Yoti servers at `https://api.yoti.com` (by default - see the [Misc](#misc) section).
+
+By default the Yoti Client will block indefinitely when connecting to the remote server or reading data. Consequently it is **possible that your application thread could be blocked**. 
+
+Since version 1.1 of the `java-sdk-impl` you can set the following two system properties to control this behaviour:
+
+* `yoti.client.connect.timeout.ms` - the number of milliseconds that you are prepared to wait for the connection to be established. Zero is interpreted as an infinite timeout.
+* `yoti.client.read.timeout.ms` - the number of milliseconds that you are prepared to wait for data to become available to read in the response stream. Zero is interpreted as an infinite timeout.
+
 ## Modules
 
 The SDK is split into a number of modules for easier use and future extensibility. 
