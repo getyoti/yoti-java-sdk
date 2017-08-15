@@ -38,7 +38,6 @@
     <url>http://github.com/getyoti/java.git</url>
   </scm>
 
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -61,13 +60,11 @@
       <groupId>com.yoti</groupId>
       <artifactId>java-sdk-api</artifactId>
       <version>1.1</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>java-sdk-impl</artifactId>
       <version>1.1</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
