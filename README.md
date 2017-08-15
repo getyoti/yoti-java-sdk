@@ -14,14 +14,17 @@ Everything you need to get started
 3) [Enabling the SDK](#enabling-the-sdk)-
 Description on importing your SDK 
 
-4) [Client initialisation](#client-initialisation)-
+4) [Client Initialisation](#client-initialisation)-
 Description on setting up your SDK
 
-5) [Profile retrieval](#profile-retrieval) -
+5) [Profile Retrieval](#profile-retrieval) -
 Description on setting up profile
 
-6) [Handling users](#handling-users) -
+6) [Handling Users](#handling-users) -
 Description on handling user log on's
+
+7) [Connectivity Requirements](#connectivity-requirements)-
+Description of network connectivity requirements
 
 7) [Modules](#modules)- 
 The Modules above explained
