@@ -2,9 +2,6 @@
 
 This module aims to make integration of the Yoti Java SDK client into Spring Boot projects more simple by reducing the
  amount of boilerplate code required by the client application and allows the developer to simply provide two properties.
- 
-You will still need to provide an appropriate implementation of the Yoti Java SDK as one is not included in this module. 
-See the example dependencies below for more information on how to do this.
 
 ## Requirements
 
@@ -21,12 +18,7 @@ If you are using Maven, you need to add the following dependencies:
 <dependency>
   <groupId>com.yoti</groupId>
   <artifactId>java-sdk-spring-boot-auto-config</artifactId>
-  <version>1.0</version>
-</dependency>
-<dependency>
-  <groupId>com.yoti</groupId>
-  <artifactId>java-sdk-impl</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 ```
 
@@ -34,8 +26,7 @@ If you are using Maven, you need to add the following dependencies:
 If you are using Gradle, here is the dependency to add:
 
 ```
-compile group: 'com.yoti', name: 'java-sdk-spring-boot-auto-config', version: '1.0'
-compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.0'
+compile group: 'com.yoti', name: 'java-sdk-spring-boot-auto-config', version: '1.1'
 ```
 
 

@@ -14,14 +14,17 @@ Everything you need to get started
 3) [Enabling the SDK](#enabling-the-sdk)-
 Description on importing your SDK 
 
-4) [Client initialisation](#client-initialisation)-
+4) [Client Initialisation](#client-initialisation)-
 Description on setting up your SDK
 
-5) [Profile retrieval](#profile-retrieval) -
+5) [Profile Retrieval](#profile-retrieval) -
 Description on setting up profile
 
-6) [Handling users](#handling-users) -
+6) [Handling Users](#handling-users) -
 Description on handling user log on's
+
+7) [Connectivity Requirements](#connectivity-requirements)-
+Description of network connectivity requirements
 
 7) [Modules](#modules)- 
 The Modules above explained
@@ -61,12 +64,12 @@ If you are using Maven, you need to add the following dependency:
 <dependency>
 	<groupId>com.yoti</groupId>
 	<artifactId>java-sdk-impl</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 </dependency>
 ```
 If you are using Gradle, here is the dependency to add:
 
-`compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.0'`
+`compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.1'`
 
 
 ## Client initialisation
@@ -131,6 +134,17 @@ Where `yourUserSearchMethod` is a piece of logic in your app that is supposed to
 No matter if the user is a new or an existing one, Yoti will always provide her/his profile, so you don't necessarily need to store it.
 
 The `HumanProfile` class provides a set of methods to retrieve different user attributes. Whether the attributes are present or not depends on the settings you have applied to your app on Yoti Dashboard.
+
+## Connectivity Requirements
+
+Interacting with the `YotiClient` to get `ActivityDetails` is not an offline operation. Your application will need to be able to establish an outbound TCP connection to port 443 to the Yoti servers at `https://api.yoti.com` (by default - see the [Misc](#misc) section).
+
+By default the Yoti Client will block indefinitely when connecting to the remote server or reading data. Consequently it is **possible that your application thread could be blocked**. 
+
+Since version 1.1 of the `java-sdk-impl` you can set the following two system properties to control this behaviour:
+
+* `yoti.client.connect.timeout.ms` - the number of milliseconds that you are prepared to wait for the connection to be established. Zero is interpreted as an infinite timeout.
+* `yoti.client.read.timeout.ms` - the number of milliseconds that you are prepared to wait for data to become available to read in the response stream. Zero is interpreted as an infinite timeout.
 
 ## Modules
 

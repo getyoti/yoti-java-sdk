@@ -14,7 +14,7 @@
 
   <groupId>com.yoti</groupId>
   <artifactId>java-sdk-spring-boot-auto-config</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
   <name>Yoti Java Spring Boot Integration</name>
   <description>Library to integrate the Java Yoti SDK with Spring Boot Applications</description>
   <url>https://github.com/getyoti/java</url>
@@ -38,7 +38,6 @@
     <url>http://github.com/getyoti/java.git</url>
   </scm>
 
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -53,21 +52,19 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-autoconfigure</artifactId>
-      <version>1.5.2.RELEASE</version>
+      <version>1.5.6.RELEASE</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>java-sdk-api</artifactId>
-      <version>1.0</version>
-      <scope>provided</scope>
+      <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>java-sdk-impl</artifactId>
-      <version>1.0</version>
-      <scope>provided</scope>
+      <version>1.1</version>
     </dependency>
 
     <dependency>
@@ -80,7 +77,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>1.10.19</version>
+      <version>2.8.47</version>
       <scope>test</scope>
     </dependency>
 
@@ -92,7 +89,7 @@
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>1.4.5</version>
+          <version>2.1.0</version>
           <configuration>
             <failBuildOnCVSS>${owasp.dependency.check.cvss.limit}</failBuildOnCVSS>
             <cveValidForHours>${owasp.dependency.check.cve.update.limit}</cveValidForHours>
