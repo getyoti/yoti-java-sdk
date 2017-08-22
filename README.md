@@ -8,33 +8,36 @@ Welcome to the Yoti Java SDK. This repo contains the tools and step by step inst
 1) [An Architectural view](#an-architectural-view) -
 High level overview of integration
 
-2) [Requirements](#requirements)
+1) [Requirements](#requirements)
 Everything you need to get started
 
-3) [Enabling the SDK](#enabling-the-sdk)-
+1) [Building From Source](#building-from-source)
+Everything you need to get started
+
+1) [Enabling the SDK](#enabling-the-sdk)-
 Description on importing your SDK 
 
-4) [Client Initialisation](#client-initialisation)-
+1) [Client Initialisation](#client-initialisation)-
 Description on setting up your SDK
 
-5) [Profile Retrieval](#profile-retrieval) -
+1) [Profile Retrieval](#profile-retrieval) -
 Description on setting up profile
 
-6) [Handling Users](#handling-users) -
+1) [Handling Users](#handling-users) -
 Description on handling user log on's
 
-7) [Connectivity Requirements](#connectivity-requirements)-
+1) [Connectivity Requirements](#connectivity-requirements)-
 Description of network connectivity requirements
 
-7) [Modules](#modules)- 
+1) [Modules](#modules)- 
 The Modules above explained
 
-8) [Spring Boot Auto Configuration](#spring-boot-auto-configuration)- 
+1) [Spring Boot Auto Configuration](#spring-boot-auto-configuration)- 
 Description of utilising Spring Boot
 
-9) [Misc](#misc)
+1) [Misc](#misc)
 
-10) [Support](#support)-
+1) [Support](#support)-
 Please feel free to reach out
 
 ## An Architectural view
@@ -54,6 +57,16 @@ Yoti also allows you to enable user details verification from your mobile app by
 
 * Java 1.6 or higher
 * SLF4J 
+
+## Building From Source
+
+If you want to build from source you can do so using the [Maven Wrapper](https://github.com/takari/maven-wrapper) that is bundled with this distribution. For those familiar with Gradle this is much like the Gradle Wrapper and ensures that the correct version of Maven is being used.
+
+From the top level directory:
+
+```bash
+./mvnw clean install
+```
 
 ## Enabling the SDK
 
