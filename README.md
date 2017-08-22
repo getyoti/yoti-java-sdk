@@ -71,11 +71,17 @@ If you are using Gradle, here is the dependency to add:
 
 `compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.1'`
 
+You will find all classes packaged under `com.yoti.api`
+
 
 ## Client initialisation
 
 The YotiClient is the SDK entry point. To initialise it you need include the following snippet inside your endpoint initialisation section:
 ```java
+import com.yoti.api.client.YotiClient;
+import com.yoti.api.client.YotiClientBuilder;
+import static com.yoti.api.client.FileKeyPairSource.fromFile;
+
 YotiClient client = YotiClientBuilder.newInstance()
     .forApplication(<YOUR_CLIENT_SDK_ID>)
     .withKeyPair(fromFile(<PATH/TO/YOUR/APPLICATION/KEY_PAIR.pem>)).build();
@@ -90,11 +96,18 @@ Where:
 When your application receives a token via the exposed endpoint (it will be assigned to a query string parameter named `token`), you can easily retrieve the user profile by adding the following to your endpoint handler:
 
 ```java
+import com.yoti.api.client.ActivityDetails;
+
 ActivityDetails activityDetails = client.getActivityDetails(encryptedToken);
 ```
 or, for a more detailed example:
 
 ```java
+import com.yoti.api.client.YotiClient;
+import com.yoti.api.client.ActivityDetails;
+import com.yoti.api.client.HumanProfile;
+import com.yoti.api.client.ProfileException;
+
 try {
 	final ActivityDetails activityDetails = client.getActivityDetails(token);
    	final HumanProfile profile = activityDetails.getUserProfile();
@@ -133,11 +146,11 @@ try {
 Where `yourUserSearchMethod` is a piece of logic in your app that is supposed to find a user, given a userId. 
 No matter if the user is a new or an existing one, Yoti will always provide her/his profile, so you don't necessarily need to store it.
 
-The `HumanProfile` class provides a set of methods to retrieve different user attributes. Whether the attributes are present or not depends on the settings you have applied to your app on Yoti Dashboard.
+The `com.yoti.api.client.HumanProfile` class provides a set of methods to retrieve different user attributes. Whether the attributes are present or not depends on the settings you have applied to your app on Yoti Dashboard.
 
 ## Connectivity Requirements
 
-Interacting with the `YotiClient` to get `ActivityDetails` is not an offline operation. Your application will need to be able to establish an outbound TCP connection to port 443 to the Yoti servers at `https://api.yoti.com` (by default - see the [Misc](#misc) section).
+Interacting with the `com.yoti.api.client.YotiClient` to get `com.yoti.api.client.ActivityDetails` is not an offline operation. Your application will need to be able to establish an outbound TCP connection to port 443 to the Yoti servers at `https://api.yoti.com` (by default - see the [Misc](#misc) section).
 
 By default the Yoti Client will block indefinitely when connecting to the remote server or reading data. Consequently it is **possible that your application thread could be blocked**. 
 
@@ -175,7 +188,7 @@ For more information and to see an example of this in use take a look at the Spr
 ## Misc
 
 * By default, Yoti SDKs fetch profiles from [https://api.yoti.com/api/v1](https://api.yoti.com/api/v1).
-If necessary, this can be overridden by setting the *yoti.api.url* system property.
+If necessary, this can be overridden by setting the `yoti.api.url` system property.
 * Yoti Java SDK uses AES-256 encryption. If you are using the Oracle JDK, this key length is not enabled by default. The following stack overflow question explains how to fix this: [http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters](http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters)
 * To find out how to set up your Java project in order to use this SDK, you can check the Spring Boot example in this repo.   
 ## Support
