@@ -12,7 +12,7 @@ High level overview of integration
 Everything you need to get started
 
 1) [Building From Source](#building-from-source)
-Everything you need to get started
+Everything you need to build from source
 
 1) [Enabling the SDK](#enabling-the-sdk)-
 Description on importing your SDK 
@@ -60,7 +60,7 @@ Yoti also allows you to enable user details verification from your mobile app by
 
 ## Building From Source
 
-If you want to build from source you can do so using the [Maven Wrapper](https://github.com/takari/maven-wrapper) that is bundled with this distribution. For those familiar with Gradle this is much like the Gradle Wrapper and ensures that the correct version of Maven is being used.
+Building from source is generally not necessary since artifacts are published in Maven Central. However, if you want to build from source you can do so using the [Maven Wrapper](https://github.com/takari/maven-wrapper) that is bundled with this distribution. For those familiar with Gradle this is much like the Gradle Wrapper and ensures that the correct version of Maven is being used.
 
 From the top level directory:
 
