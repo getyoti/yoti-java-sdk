@@ -68,7 +68,7 @@ From the top level directory:
 ./mvnw clean install
 ```
 
-Notable flags that you may wish to use to skip certain static analysis/code quality tools are listed below. This is only recommended if you find that there tools are taking too long during development or are raising false positives that you are yet to exclude. **They should not be ignored when building a candidate for a release.**
+Notable flags that you may wish to use to skip certain static analysis/code quality tools are listed below. This is only recommended if you find that these tools are taking too long during development or are flagging false positives that you are yet to exclude. **They should not be ignored when building a candidate for a release unless you are sure that the issues being raised are not a cause for concern.**
 
 * `-Dfindbugs.skip=true`: skips findbugs and the findbugs security extension.
 * `-Ddependency-check.skip=true`: skips the OWASP dependency scanner.
