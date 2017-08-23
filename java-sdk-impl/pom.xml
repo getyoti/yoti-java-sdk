@@ -128,6 +128,13 @@
             <effort>Max</effort>
             <threshold>Low</threshold>
             <excludeFilterFile>findbugs-rules.xml</excludeFilterFile>
+            <plugins>
+              <plugin>
+                <groupId>com.h3xstream.findsecbugs</groupId>
+                <artifactId>findsecbugs-plugin</artifactId>
+                <version>1.7.1</version>
+              </plugin>
+            </plugins>
           </configuration>
         </plugin>
       </plugins>
@@ -136,9 +143,6 @@
       <plugin>
         <groupId>org.owasp</groupId>
         <artifactId>dependency-check-maven</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
         <executions>
           <execution>
             <goals>
