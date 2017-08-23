@@ -60,12 +60,23 @@ Yoti also allows you to enable user details verification from your mobile app by
 
 ## Building From Source
 
-Building from source is generally not necessary since artifacts are published in Maven Central. However, if you want to build from source you can do so using the [Maven Wrapper](https://github.com/takari/maven-wrapper) that is bundled with this distribution. For those familiar with Gradle this is much like the Gradle Wrapper and ensures that the correct version of Maven is being used.
+Building from source is generally not necessary for third parties since artifacts are published in Maven Central. However, if you want to build from source you can do so using the [Maven Wrapper](https://github.com/takari/maven-wrapper) that is bundled with this distribution. For those familiar with Gradle this is much like the Gradle Wrapper and ensures that the correct version of Maven is being used.
 
 From the top level directory:
 
 ```bash
 ./mvnw clean install
+```
+
+Notable flags that you may wish to use to skip certain static analysis/code quality tools are listed below. This is only recommended if you find that there tools are taking too long during development or are raising false positives that you are yet to exclude. **They should not be ignored when building a candidate for a release.**
+
+* `-Dfindbugs.skip=true`: skips findbugs and the findbugs security extension.
+* `-Ddependency-check.skip=true`: skips the OWASP dependency scanner.
+
+### Example usage
+
+```bash
+./mvnw clean install -Dfindbugs.skip=true -Ddependency-check.skip=true
 ```
 
 ## Enabling the SDK
