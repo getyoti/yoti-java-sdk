@@ -5,7 +5,7 @@
   <groupId>com.yoti</groupId>
   <artifactId>java-sdk-api</artifactId>
   <version>1.1</version>
-  <name>Yoti Java SDK</name>
+  <name>Yoti Java SDK API</name>
   <description>Java SDK for simple integration with the Yoti platform</description>
   <url>https://github.com/getyoti/java</url>
 
@@ -102,6 +102,13 @@
           <configuration>
             <effort>Max</effort>
             <threshold>Low</threshold>
+            <plugins>
+              <plugin>
+                <groupId>com.h3xstream.findsecbugs</groupId>
+                <artifactId>findsecbugs-plugin</artifactId>
+                <version>1.7.1</version>
+              </plugin>
+            </plugins>
           </configuration>
         </plugin>
       </plugins>

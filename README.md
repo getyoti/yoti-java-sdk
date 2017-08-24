@@ -8,33 +8,39 @@ Welcome to the Yoti Java SDK. This repo contains the tools and step by step inst
 1) [An Architectural view](#an-architectural-view) -
 High level overview of integration
 
-2) [Requirements](#requirements)
+1) [Requirements](#requirements)
 Everything you need to get started
 
-3) [Enabling the SDK](#enabling-the-sdk)-
+1) [Building From Source](#building-from-source)
+Everything you need to build from source
+
+1) [Enabling the SDK](#enabling-the-sdk)-
 Description on importing your SDK 
 
-4) [Client Initialisation](#client-initialisation)-
+1) [Client Initialisation](#client-initialisation)-
 Description on setting up your SDK
 
-5) [Profile Retrieval](#profile-retrieval) -
+1) [Profile Retrieval](#profile-retrieval) -
 Description on setting up profile
 
-6) [Handling Users](#handling-users) -
+1) [Handling Users](#handling-users) -
 Description on handling user log on's
 
-7) [Connectivity Requirements](#connectivity-requirements)-
+1) [Connectivity Requirements](#connectivity-requirements)-
 Description of network connectivity requirements
 
-7) [Modules](#modules)- 
+1) [Modules](#modules)- 
 The Modules above explained
 
-8) [Spring Boot Auto Configuration](#spring-boot-auto-configuration)- 
+1) [Spring Boot Auto Configuration](#spring-boot-auto-configuration)- 
 Description of utilising Spring Boot
 
-9) [Misc](#misc)
+1) [Misc](#misc)
 
-10) [Support](#support)-
+1) [Known Issues](#known-issues)-
+Known issues using the libraries
+
+1) [Support](#support)-
 Please feel free to reach out
 
 ## An Architectural view
@@ -55,6 +61,27 @@ Yoti also allows you to enable user details verification from your mobile app by
 * Java 1.6 or higher
 * SLF4J 
 
+## Building From Source
+
+Building from source is generally not necessary for third parties since artifacts are published in Maven Central. However, if you want to build from source you can do so using the [Maven Wrapper](https://github.com/takari/maven-wrapper) that is bundled with this distribution. For those familiar with Gradle this is much like the Gradle Wrapper and ensures that the correct version of Maven is being used.
+
+From the top level directory:
+
+```bash
+./mvnw clean install
+```
+
+Notable flags that you may wish to use to skip certain static analysis/code quality tools are listed below. This is only recommended if you find that these tools are taking too long during development or are flagging false positives that you are yet to exclude. **They should not be ignored when building a candidate for a release unless you are sure that the issues being raised are not a cause for concern.**
+
+* `-Dfindbugs.skip=true`: skips findbugs and the findbugs security extension.
+* `-Ddependency-check.skip=true`: skips the OWASP dependency scanner.
+
+### Example usage
+
+```bash
+./mvnw clean install -Dfindbugs.skip=true -Ddependency-check.skip=true
+```
+
 ## Enabling the SDK
 
 To import the Yoti SDK inside your project, you can use your favourite dependency management system.
@@ -71,11 +98,17 @@ If you are using Gradle, here is the dependency to add:
 
 `compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.1'`
 
+You will find all classes packaged under `com.yoti.api`
+
 
 ## Client initialisation
 
 The YotiClient is the SDK entry point. To initialise it you need include the following snippet inside your endpoint initialisation section:
 ```java
+import com.yoti.api.client.YotiClient;
+import com.yoti.api.client.YotiClientBuilder;
+import static com.yoti.api.client.FileKeyPairSource.fromFile;
+
 YotiClient client = YotiClientBuilder.newInstance()
     .forApplication(<YOUR_CLIENT_SDK_ID>)
     .withKeyPair(fromFile(<PATH/TO/YOUR/APPLICATION/KEY_PAIR.pem>)).build();
@@ -90,11 +123,18 @@ Where:
 When your application receives a token via the exposed endpoint (it will be assigned to a query string parameter named `token`), you can easily retrieve the user profile by adding the following to your endpoint handler:
 
 ```java
+import com.yoti.api.client.ActivityDetails;
+
 ActivityDetails activityDetails = client.getActivityDetails(encryptedToken);
 ```
 or, for a more detailed example:
 
 ```java
+import com.yoti.api.client.YotiClient;
+import com.yoti.api.client.ActivityDetails;
+import com.yoti.api.client.HumanProfile;
+import com.yoti.api.client.ProfileException;
+
 try {
 	final ActivityDetails activityDetails = client.getActivityDetails(token);
    	final HumanProfile profile = activityDetails.getUserProfile();
@@ -133,11 +173,11 @@ try {
 Where `yourUserSearchMethod` is a piece of logic in your app that is supposed to find a user, given a userId. 
 No matter if the user is a new or an existing one, Yoti will always provide her/his profile, so you don't necessarily need to store it.
 
-The `HumanProfile` class provides a set of methods to retrieve different user attributes. Whether the attributes are present or not depends on the settings you have applied to your app on Yoti Dashboard.
+The `com.yoti.api.client.HumanProfile` class provides a set of methods to retrieve different user attributes. Whether the attributes are present or not depends on the settings you have applied to your app on Yoti Dashboard.
 
 ## Connectivity Requirements
 
-Interacting with the `YotiClient` to get `ActivityDetails` is not an offline operation. Your application will need to be able to establish an outbound TCP connection to port 443 to the Yoti servers at `https://api.yoti.com` (by default - see the [Misc](#misc) section).
+Interacting with the `com.yoti.api.client.YotiClient` to get `com.yoti.api.client.ActivityDetails` is not an offline operation. Your application will need to be able to establish an outbound TCP connection to port 443 to the Yoti servers at `https://api.yoti.com` (by default - see the [Misc](#misc) section).
 
 By default the Yoti Client will block indefinitely when connecting to the remote server or reading data. Consequently it is **possible that your application thread could be blocked**. 
 
@@ -175,9 +215,70 @@ For more information and to see an example of this in use take a look at the Spr
 ## Misc
 
 * By default, Yoti SDKs fetch profiles from [https://api.yoti.com/api/v1](https://api.yoti.com/api/v1).
-If necessary, this can be overridden by setting the *yoti.api.url* system property.
+If necessary, this can be overridden by setting the `yoti.api.url` system property.
 * Yoti Java SDK uses AES-256 encryption. If you are using the Oracle JDK, this key length is not enabled by default. The following stack overflow question explains how to fix this: [http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters](http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters)
 * To find out how to set up your Java project in order to use this SDK, you can check the Spring Boot example in this repo.   
+
+## Known Issues
+
+### Loading Private Keys
+
+#### Affects
+
+* Version 1.1 onwards.
+
+#### Description
+
+There was a known issue with the encoding of RSA private key PEM files that were issued in the past by Yoti Dashboard (most likely where you downloaded the private key for your application).
+
+Some software is more accepting that others and will have been able to cope with the incorrect encoding, whereas some stricter libraries will not accept this encoding.
+
+At version `1.1` of this client the Java Security Provider that we use (`Bouncy Castle`) was [upgraded](https://www.bouncycastle.org/releasenotes.html) from `1.51` -> `1.57`. This upgrade appears to have made the key parser more strict in terms of encoding since it no longer accepts these incorrectly encoded keys. 
+
+#### Symptoms
+
+This error usually manifests itself when constructing and instance of the Yoti Client to read the private key.
+
+Generally you'll encounter an exception with an message and stack trace as follows:
+
+```java
+com.yoti.api.client.InitialisationException: Cannot load key pair
+	at com.yoti.api.client.spi.remote.SecureYotiClient.loadKeyPair(SecureYotiClient.java:99)
+	at com.yoti.api.client.spi.remote.SecureYotiClient.<init>(SecureYotiClient.java:73)
+	at com.yoti.api.client.spi.remote.SecureYotiClientFactory.getInstance(SecureYotiClientFactory.java:25)
+	at com.yoti.api.client.ServiceLocatorYotiClientBuilder.build(ServiceLocatorYotiClientBuilder.java:40)
+	at com.yoti.api.spring.YotiClientAutoConfiguration.yotiClient(YotiClientAutoConfiguration.java:48)
+	
+Caused by: org.bouncycastle.openssl.PEMException: problem creating RSA private key: java.lang.IllegalArgumentException: failed to construct sequence from byte[]: corrupted stream detected
+	at org.bouncycastle.openssl.PEMParser$KeyPairParser.parseObject(Unknown Source)
+	at org.bouncycastle.openssl.PEMParser.readObject(Unknown Source)
+	at com.yoti.api.client.spi.remote.SecureYotiClient$KeyStreamVisitor.findKeyPair(SecureYotiClient.java:269)
+	at com.yoti.api.client.spi.remote.SecureYotiClient$KeyStreamVisitor.accept(SecureYotiClient.java:260)
+	at com.yoti.api.spring.SpringResourceKeyPairSource.getFromStream(SpringResourceKeyPairSource.java:28)
+	at com.yoti.api.client.spi.remote.SecureYotiClient.loadKeyPair(SecureYotiClient.java:97)
+	... 52 common frames omitted
+	
+Caused by: org.bouncycastle.openssl.PEMException: problem creating RSA private key: java.lang.IllegalArgumentException: failed to construct sequence from byte[]: corrupted stream detected
+	at org.bouncycastle.openssl.PEMParser$RSAKeyPairParser.parse(Unknown Source)
+	... 58 common frames omitted
+	
+Caused by: java.lang.IllegalArgumentException: failed to construct sequence from byte[]: corrupted stream detected
+	at org.bouncycastle.asn1.ASN1Sequence.getInstance(Unknown Source)
+	... 59 common frames omitted
+```
+
+#### How To Fix
+
+You can re-encode the badly encoded PEM file using some software that is more accepting of the incorrect encoding and saving the new key. 
+ 
+An example of software able to do this is `OpenSSL` versions `1.0.2g` and `1.1.0` using the command:
+
+```bash
+openssl rsa -in input-file.pem -out fixed-input-file.pem
+```
+
+Using the new (correctly encoded) file should now be compatible with versions 1.1 onwards (as well as older versions like `1.0` prior to this).
+
 ## Support
 
 For any questions or support please email [sdksupport@yoti.com](mailto:sdksupport@yoti.com).

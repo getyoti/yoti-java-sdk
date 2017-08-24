@@ -21,5 +21,14 @@
         <Package name="com.yoti.api.client.spi.remote.proto"/>
         <Bug pattern="MS_SHOULD_BE_FINAL,SE_BAD_FIELD,DLS_DEAD_LOCAL_STORE,UCF_USELESS_CONTROL_FLOW"/>
     </Match>
+
+    <Match>
+        <Class name="com.yoti.api.client.spi.remote.SecureYotiClient"/>
+        <Bug pattern="CIPHER_INTEGRITY"/>
+    </Match>
+
+    <Match>
+        <Bug pattern="CRLF_INJECTION_LOGS"/>
+    </Match>
 </FindBugsFilter>
 
