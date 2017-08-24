@@ -37,6 +37,9 @@ Description of utilising Spring Boot
 
 1) [Misc](#misc)
 
+1) [Known Issues](#known-issues)-
+Known issues using the libraries
+
 1) [Support](#support)-
 Please feel free to reach out
 
@@ -215,6 +218,67 @@ For more information and to see an example of this in use take a look at the Spr
 If necessary, this can be overridden by setting the `yoti.api.url` system property.
 * Yoti Java SDK uses AES-256 encryption. If you are using the Oracle JDK, this key length is not enabled by default. The following stack overflow question explains how to fix this: [http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters](http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters)
 * To find out how to set up your Java project in order to use this SDK, you can check the Spring Boot example in this repo.   
+
+## Known Issues
+
+### Loading Private Keys
+
+#### Affects
+
+* Version 1.1 onwards.
+
+#### Description
+
+There was a known issue with the encoding of RSA private key PEM files that were issued in the past by Yoti Dashboard (most likely where you downloaded the private key for your application).
+
+Some software is more accepting that others and will have been able to cope with the incorrect encoding, whereas some stricter libraries will not accept this encoding.
+
+At version `1.1` of this client the Java Security Provider that we use (`Bouncy Castle`) was [upgraded](https://www.bouncycastle.org/releasenotes.html) from `1.51` -> `1.57`. This upgrade appears to have made the key parser more strict in terms of encoding since it no longer accepts these incorrectly encoded keys. 
+
+#### Symptoms
+
+This error usually manifests itself when constructing and instance of the Yoti Client to read the private key.
+
+Generally you'll see an error message and stack trace as follows:
+
+```java
+com.yoti.api.client.InitialisationException: Cannot load key pair
+	at com.yoti.api.client.spi.remote.SecureYotiClient.loadKeyPair(SecureYotiClient.java:99)
+	at com.yoti.api.client.spi.remote.SecureYotiClient.<init>(SecureYotiClient.java:73)
+	at com.yoti.api.client.spi.remote.SecureYotiClientFactory.getInstance(SecureYotiClientFactory.java:25)
+	at com.yoti.api.client.ServiceLocatorYotiClientBuilder.build(ServiceLocatorYotiClientBuilder.java:40)
+	at com.yoti.api.spring.YotiClientAutoConfiguration.yotiClient(YotiClientAutoConfiguration.java:48)
+	
+Caused by: org.bouncycastle.openssl.PEMException: problem creating RSA private key: java.lang.IllegalArgumentException: failed to construct sequence from byte[]: corrupted stream detected
+	at org.bouncycastle.openssl.PEMParser$KeyPairParser.parseObject(Unknown Source)
+	at org.bouncycastle.openssl.PEMParser.readObject(Unknown Source)
+	at com.yoti.api.client.spi.remote.SecureYotiClient$KeyStreamVisitor.findKeyPair(SecureYotiClient.java:269)
+	at com.yoti.api.client.spi.remote.SecureYotiClient$KeyStreamVisitor.accept(SecureYotiClient.java:260)
+	at com.yoti.api.spring.SpringResourceKeyPairSource.getFromStream(SpringResourceKeyPairSource.java:28)
+	at com.yoti.api.client.spi.remote.SecureYotiClient.loadKeyPair(SecureYotiClient.java:97)
+	... 52 common frames omitted
+	
+Caused by: org.bouncycastle.openssl.PEMException: problem creating RSA private key: java.lang.IllegalArgumentException: failed to construct sequence from byte[]: corrupted stream detected
+	at org.bouncycastle.openssl.PEMParser$RSAKeyPairParser.parse(Unknown Source)
+	... 58 common frames omitted
+	
+Caused by: java.lang.IllegalArgumentException: failed to construct sequence from byte[]: corrupted stream detected
+	at org.bouncycastle.asn1.ASN1Sequence.getInstance(Unknown Source)
+	... 59 common frames omitted
+```
+
+#### How To Fix
+
+You can re-encode the badly encoded PEM file using some software that is more accepting of the incorrect encoding and saving the new key. 
+ 
+An example of software able to do this is `OpenSSL` versions `1.0.2g` and `1.1.0` using the command:
+
+```bash
+openssl rsa -in input-file.pem -out fixed-input-file.pem
+```
+
+Using the new (correctly encoded) file should now be compatible with versions 1.1 onwards (as well as older versions like `1.0` prior to this).
+
 ## Support
 
 For any questions or support please email [sdksupport@yoti.com](mailto:sdksupport@yoti.com).
