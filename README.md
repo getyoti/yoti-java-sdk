@@ -239,7 +239,7 @@ At version `1.1` of this client the Java Security Provider that we use (`Bouncy 
 
 This error usually manifests itself when constructing and instance of the Yoti Client to read the private key.
 
-Generally you'll see an error message and stack trace as follows:
+Generally you'll encounter an exception with an message and stack trace as follows:
 
 ```java
 com.yoti.api.client.InitialisationException: Cannot load key pair
