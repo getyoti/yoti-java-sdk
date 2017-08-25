@@ -32,6 +32,7 @@
     <module>java-sdk-dummy</module>
     <module>java-sdk-impl</module>
     <module>java-sdk-spring-boot-auto-config</module>
+    <module>java-sdk-spring-security</module>
     <module>java-sdk-springboot-example</module>
   </modules>
   <build>
