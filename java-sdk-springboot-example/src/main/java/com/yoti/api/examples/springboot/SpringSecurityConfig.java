@@ -2,11 +2,11 @@ package com.yoti.api.examples.springboot;
 
 import com.yoti.api.client.YotiClient;
 import com.yoti.api.examples.springboot.web.DemoController;
+import com.yoti.api.spring.YotiProperties;
 import com.yoti.api.spring.security.auth.YotiAuthenticationProvider;
 import com.yoti.api.spring.security.service.YotiUserService;
 import com.yoti.api.spring.security.web.YotiAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,8 +32,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private YotiUserService userService;
 
-    @Value("${com.yoti.applicationId}")
-    private String yotiApplicationId;
+    @Autowired
+    private YotiProperties yotiProperties;
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -45,7 +45,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout().clearAuthentication(true).invalidateHttpSession(true).logoutSuccessHandler(logoutSuccessHandler()).permitAll()
                 .and()
                 .formLogin().disable()
-                .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("https://www.yoti.com/connect/" + yotiApplicationId)).and()
+                .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("https://www.yoti.com/connect/" + yotiProperties.getApplicationId())).and()
                 .addFilterBefore(yotiAuthFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
