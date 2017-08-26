@@ -10,8 +10,8 @@ Before you start, you'll need to create an Application in [Dashboard](https://ww
 ## Project Structure
 * The logic for retrieving the profile can be found in `com.yoti.api.examples.springboot.YotiLoginController#doLogin`.
 * `resources/app-keypair.pem` is the keypair you can get from Dashboard.
-* `resource/application.yml` contains the configuration that enforces SSL usage by your server-app (in case you are not using a proxy server like Nginx). Make sure that you update the SDK Application ID and the configuration points to the right path to the java keystore with an SSL key (there is an already one included in the project ``` server.keystore.jks ```).
-* `resource/application.yml.plain` This is the HTTP server-app configuration that you need to use if you decide to handle SSL certificates at a proxy server (e.g. Nginx) level. To use it, just rename it to `application.yml`. If you are using Nginx you can configure SSL by following this guide http://nginx.org/en/docs/http/configuring_https_servers.html .
+* `resource/application.yml` contains the configuration that enforces SSL usage by your server-app (in case you are not using a proxy server like NGINX). Make sure that you update the SDK Application ID and the configuration points to the right path to the java keystore with an SSL key (there is an already one included in the project ``` server.keystore.jks ```).
+* `resource/application.yml.plain` This is the HTTP server-app configuration that you need to use if you decide to handle SSL certificates at a proxy server (e.g. NGINX) level. To use it, just rename it to `application.yml`. If you are using NGINX you can configure SSL by following this guide http://NGINX.org/en/docs/http/configuring_https_servers.html .
 * This project contains a Spring-boot server application. In this example we used the current SDK version by including the specific Maven dependency with its repository:
 ```xml
     <dependency>
