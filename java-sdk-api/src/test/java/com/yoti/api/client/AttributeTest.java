@@ -1,11 +1,9 @@
 package com.yoti.api.client;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import org.junit.Test;
 
-import com.yoti.api.client.Attribute;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
 
 public class AttributeTest {
     private static final String NAME = "test";
@@ -24,7 +22,7 @@ public class AttributeTest {
     }
 
     @Test
-    public void shouldReturnNullIfValueTypeIsDiffernet() {
+    public void shouldReturnNullIfValueTypeIsDifferent() {
         Attribute a = new Attribute(NAME, "testString");
         assertNull(a.getValue(Integer.class));
     }
@@ -38,12 +36,12 @@ public class AttributeTest {
     @Test
     public void shouldReturnDefaultIfValueTypeIsDifferent() {
         Attribute a = new Attribute(NAME, "testString");
-        assertEquals(new Integer(1), a.getValueOrDefault(Integer.class, new Integer(1)));
+        assertThat(1, is(a.getValueOrDefault(Integer.class, 1)));
     }
 
     @Test
     public void shouldReturnDefaultIfValueIsNull() {
         Attribute a = new Attribute(NAME, null);
-        assertEquals(new Integer(1), a.getValueOrDefault(Integer.class, new Integer(1)));
+        assertThat(1, is(a.getValueOrDefault(Integer.class, 1)));
     }
 }
