@@ -20,7 +20,7 @@ import org.springframework.core.io.ResourceLoader;
  */
 @Configuration
 @ConditionalOnClass(YotiClient.class)
-@EnableConfigurationProperties(YotiClientProperties.class)
+@EnableConfigurationProperties({YotiClientProperties.class, YotiProperties.class})
 public class YotiClientAutoConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringResourceKeyPairSource.class);
