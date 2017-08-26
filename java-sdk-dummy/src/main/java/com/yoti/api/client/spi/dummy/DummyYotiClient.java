@@ -1,22 +1,11 @@
 package com.yoti.api.client.spi.dummy;
 
+import com.yoti.api.client.*;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-
-import com.yoti.api.client.ActivityDetails;
-import com.yoti.api.client.ApplicationProfile;
-import com.yoti.api.client.Attribute;
-import com.yoti.api.client.Date;
-import com.yoti.api.client.DocumentDetails;
-import com.yoti.api.client.HumanProfile;
-import com.yoti.api.client.Image;
-import com.yoti.api.client.InitialisationException;
-import com.yoti.api.client.ProfileException;
-import com.yoti.api.client.YotiClient;
-import com.yoti.api.client.YotiClientConfiguration;
-import com.yoti.api.client.YotiClientFactory;
 
 public class DummyYotiClient implements YotiClient, YotiClientFactory {
     private static final String EXCEPTION_TRIGGER_PREFIX = "exception-";
