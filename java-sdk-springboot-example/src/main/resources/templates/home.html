@@ -1,14 +1,22 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>Home</title>
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/tacit.min.css}"/>
 </head>
 <body>
-  <p th:text="'Hello, ' + ${name} + '!'" />
-  <p th:text="'Your phone number is:' + ${phone} " />
-  <p th:text="'Should you come back, I\'ll be able to remember you by the id ' + ${userId} + '.'" />
+<main>
+    <h1>Welcome <span th:text="${user.name}"></span>!</h1>
+    <div>
+        <p>Should you come back, I&apos;ll be able to remember you by the id: <code
+                th:text="${user.rememberMeId}"></code>.
+        </p>
+    </div>
+    <div>
+        <form method="post" th:action="@{/logout}">
+            <input type="submit" value="Logout"/>
+        </form>
+    </div>
+</main>
 </body>
 </html>

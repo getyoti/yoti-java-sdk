@@ -7,5 +7,6 @@ server:
 com:
     yoti:
         client:
-            clientSdkId: "yoti-client-sdk-id-from-dashboard"
-            accessSecurityKey: "classpath:/app-keypair.pem"
+            clientSdkId: "sdk-id-from-dashboard"
+            accessSecurityKey: "classpath:/local-access-security.pem"
+        applicationId: "app-id-from-dashboard"
