@@ -1,6 +1,6 @@
 # Yoti Spring Security Module
 
-This module aims to make integration with Spring Security easier by providing some classes that fit into Sprig Security's authentication model.
+This module aims to make integration with Spring Security easier by providing some classes that fit into Spring Security's existing authentication model.
 
 Notably:
 
