@@ -2,7 +2,6 @@ package com.yoti.api.client.spi.remote.call;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yoti.api.client.ActivityDetails;
 import org.junit.Test;
 
 import java.util.Map;
