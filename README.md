@@ -290,30 +290,6 @@ openssl rsa -in input-file.pem -out fixed-input-file.pem
 
 Using the new (correctly encoded) file should now be compatible with versions 1.1 onwards (as well as older versions like `1.0` prior to this).
 
-### `com.yoti.api.client.HumanProfile.getFullName` Returns Null
-
-#### Affects
-
-* Before 1.2
-
-#### Description
-
-Prior to version `1.2` the `com.yoti.api.client.HumanProfile.getFullName` method always returned `null` (even if the given names and family names were not `null`).
-
-#### Symptoms
-
-Getting `null` when calling the `com.yoti.api.client.HumanProfile.getFullName` method.
-
-#### How To Fix
-
-This method was removed from the SDK at version `1.2` since it has never functioned as intended.
-
-If you'd like to implement this functionality yourself you can do so as follows;
-
-```java
-String fullName = com.yoti.api.client.HumanProfile.getGivenNames + " " + com.yoti.api.client.HumanProfile.getFamilyName;
-```
-
 ## Support
 
 For any questions or support please email [sdksupport@yoti.com](mailto:sdksupport@yoti.com).

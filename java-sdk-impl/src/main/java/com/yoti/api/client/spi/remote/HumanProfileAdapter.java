@@ -1,17 +1,24 @@
 package com.yoti.api.client.spi.remote;
 
-import com.yoti.api.client.*;
-
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.Collection;
 
+import com.yoti.api.client.Attribute;
+import com.yoti.api.client.Date;
+import com.yoti.api.client.DocumentDetails;
+import com.yoti.api.client.HumanProfile;
+import com.yoti.api.client.Image;
+import com.yoti.api.client.Profile;
+
 /**
  * Adapter linking Profile and ApplicationProfile together by wrapping the latter and exposing well-known attributes.
+ *
  */
 final class HumanProfileAdapter implements HumanProfile {
     private static final String ATTRIBUTE_FAMILY_NAME = "family_name";
     private static final String ATTRIBUTE_GIVEN_NAMES = "given_names";
+    private static final String ATTRIBUTE_FULL_NAME = "full_name";
     private static final String ATTRIBUTE_DOB = "date_of_birth";
     private static final String ATTRIBUTE_GENDER = "gender";
     private static final String ATTRIBUTE_NATIONALITY = "nationality";
@@ -57,6 +64,11 @@ final class HumanProfileAdapter implements HumanProfile {
     @Override
     public String getGivenNames() {
         return wrapped.getAttribute(ATTRIBUTE_GIVEN_NAMES);
+    }
+
+    @Override
+    public String getFullName() {
+        return wrapped.getAttribute(ATTRIBUTE_FULL_NAME);
     }
 
     @Override
