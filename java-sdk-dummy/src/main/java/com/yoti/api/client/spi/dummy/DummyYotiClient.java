@@ -54,11 +54,6 @@ public class DummyYotiClient implements YotiClient, YotiClientFactory {
             }
 
             @Override
-            public String getFullName() {
-                return "John Doe";
-            }
-
-            @Override
             public Date getDateOfBirth() {
                 return null;
             }
