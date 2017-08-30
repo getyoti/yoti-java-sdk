@@ -306,7 +306,7 @@ Getting `null` when calling the `com.yoti.api.client.HumanProfile.getFullName` m
 
 #### How To Fix
 
-This method has been market as deprecated from version `1.2` and is likely to be removed in version `2.0` since it has never functioned as intended.
+This method has been marked as deprecated from version `1.2` and is likely to be removed in version `2.0` since it has never functioned as intended.
 
 An additional convenience method has been added to perform this functionality instead:
 
