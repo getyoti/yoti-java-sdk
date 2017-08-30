@@ -94,12 +94,12 @@ If you are using Maven, you need to add the following dependency:
 <dependency>
 	<groupId>com.yoti</groupId>
 	<artifactId>java-sdk-impl</artifactId>
-	<version>1.1</version>
+	<version>1.2</version>
 </dependency>
 ```
 If you are using Gradle, here is the dependency to add:
 
-`compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.1'`
+`compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.2'`
 
 You will find all classes packaged under `com.yoti.api`
 

@@ -17,7 +17,7 @@ Before you start, you'll need to create an Application in [Dashboard](https://ww
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>java-sdk-impl</artifactId>
-      <version>1.1</version>
+      <version>1.2</version>
     </dependency>
 ```
 
@@ -29,7 +29,7 @@ Before you start, you'll need to create an Application in [Dashboard](https://ww
 1. Run `mvn clean package` to build the project.
 
 ## Running
-* You can run your server-app by executing `java -jar target/java-sdk-springboot-example-1.1-SNAPSHOT.jar`
+* You can run your server-app by executing `java -jar target/java-sdk-springboot-example-1.2.jar`
 * Your endpoint is listening under `https://localhost/login`.
 
 In order to receive calls on your /login endpoint, you need to expose your server-app to the outside world. We require that you use the domain from the Callback URL and HTTPS.
