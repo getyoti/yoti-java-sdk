@@ -1,19 +1,13 @@
 package com.yoti.api.client.spi.remote;
 
+import com.yoti.api.client.*;
+
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.Collection;
 
-import com.yoti.api.client.Attribute;
-import com.yoti.api.client.Date;
-import com.yoti.api.client.DocumentDetails;
-import com.yoti.api.client.HumanProfile;
-import com.yoti.api.client.Image;
-import com.yoti.api.client.Profile;
-
 /**
  * Adapter linking Profile and ApplicationProfile together by wrapping the latter and exposing well-known attributes.
- *
  */
 final class HumanProfileAdapter implements HumanProfile {
     private static final String ATTRIBUTE_FAMILY_NAME = "family_name";
@@ -26,6 +20,8 @@ final class HumanProfileAdapter implements HumanProfile {
     private static final String ATTRIBUTE_SELFIE = "selfie";
     private static final String ATTRIBUTE_ADDRESS = "email_address";
     private static final String ATTRIBUTE_DOCUMENT_DETAILS = "document_details";
+    private static final char SPACE = ' ';
+
     private final Profile wrapped;
 
     private HumanProfileAdapter(Profile wrapped) {
@@ -67,8 +63,20 @@ final class HumanProfileAdapter implements HumanProfile {
     }
 
     @Override
+    @Deprecated
     public String getFullName() {
         return wrapped.getAttribute(ATTRIBUTE_FULL_NAME);
+    }
+
+    @Override
+    public String getGivenAndLastNames() {
+        final String givenNames = getGivenNames();
+        final String familyName = getFamilyName();
+        if (givenNames == null && familyName == null) {
+            return null;
+        } else {
+            return buildGivenAndLastNameString(givenNames, familyName);
+        }
     }
 
     @Override
@@ -149,5 +157,22 @@ final class HumanProfileAdapter implements HumanProfile {
             return false;
         }
         return true;
+    }
+
+    private String buildGivenAndLastNameString(final String givenNames, final String familyName) {
+        // in Java 8 a java.util.StringJoiner does this much more nicely - but this is JDK 6 compatible.
+        final StringBuilder result = new StringBuilder();
+        appendIfNotNull(result, givenNames);
+        if (givenNames != null && familyName != null) {
+            result.append(SPACE);
+        }
+        appendIfNotNull(result, familyName);
+        return result.toString();
+    }
+
+    private void appendIfNotNull(final StringBuilder builder, final String input) {
+        if (input != null) {
+            builder.append(input);
+        }
     }
 }

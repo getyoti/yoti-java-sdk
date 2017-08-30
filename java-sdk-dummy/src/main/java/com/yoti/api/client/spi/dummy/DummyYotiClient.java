@@ -54,7 +54,13 @@ public class DummyYotiClient implements YotiClient, YotiClientFactory {
             }
 
             @Override
+            @Deprecated
             public String getFullName() {
+                return "John Doe";
+            }
+
+            @Override
+            public String getGivenAndLastNames() {
                 return "John Doe";
             }
 
