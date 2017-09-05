@@ -43,10 +43,6 @@ This can be achieved as outlined in the `java-sdk-spring-boot-auto-config` modul
 
 This class is responsible for inspecting the `ActivityDetails` and returning an Authentication principal.
 
-### Code Sample
-
-See the `java-sdk-springboot-example` module of this repository.
-
 ## Authors
 
 * [David Goaté](https://github.com/davidgoate)
