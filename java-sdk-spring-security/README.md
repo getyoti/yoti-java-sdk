@@ -25,14 +25,14 @@ If you are using Maven, you need to add the following dependencies:
 <dependency>
   <groupId>com.yoti</groupId>
   <artifactId>yoti-java-sdk-spring-security</artifactId>
-  <version>1.0</version>
+  <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
 
 If you are using Gradle, here is the dependency to add:
 
 ```
-compile group: 'com.yoti', name: 'yoti-java-sdk-spring-security', version: '1.0'
+compile group: 'com.yoti', name: 'yoti-java-sdk-spring-security', version: '1.0-SNAPSHOT'
 ```
 
 ### Provide a `YotiClient` instance
