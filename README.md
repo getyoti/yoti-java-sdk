@@ -35,6 +35,9 @@ The Modules above explained
 1) [Spring Boot Auto Configuration](#spring-boot-auto-configuration)- 
 Description of utilising Spring Boot
 
+1) [Spring Security Integration](#spring-security-integration)- 
+Integrating Yoti Authentication with Spring Boot.
+
 1) [Misc](#misc)
 
 1) [Known Issues](#known-issues)-
@@ -91,12 +94,12 @@ If you are using Maven, you need to add the following dependency:
 <dependency>
 	<groupId>com.yoti</groupId>
 	<artifactId>java-sdk-impl</artifactId>
-	<version>1.1</version>
+	<version>1.2</version>
 </dependency>
 ```
 If you are using Gradle, here is the dependency to add:
 
-`compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.1'`
+`compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.2'`
 
 You will find all classes packaged under `com.yoti.api`
 
@@ -205,12 +208,20 @@ Dummy implementation without connectivity to any platform services. Can be used 
 Real SDK implementation that takes care of decrypting the token, fetching the user profile from Yoti servers by issuing a signed request and finally decrypting the fetched profile.
 ### java-sdk-spring-boot-auto-config
 A module that can be used in Spring Boot applications to automatically configure the YotiClient and KeyPairSource with standard application properties.
+### java-sdk-spring-security
+A module that can be used in Spring applications that use Spring Security to add Yoti authentication.
 
 ## Spring Boot Auto Configuration
 
 As a convenience, if your application happens to use Spring Boot, you can utilise the Spring Boot auto configuration module that will take care of configuring the Yoti Client and Key Pair for you based on standard application properties.
 
 For more information and to see an example of this in use take a look at the Spring Boot Auto Configuration module and Spring Boot example in this repository.
+
+## Spring Security Integration
+
+If you use Spring Security you can use the `java-sdk-spring-security` module to make integration easier. You are provided with some classes that fit into Spring Security's existing authentication model.
+
+Combining this with the Spring Boot Auto Configuration can make integration very easy with very little code needing to be written.
 
 ## Misc
 
