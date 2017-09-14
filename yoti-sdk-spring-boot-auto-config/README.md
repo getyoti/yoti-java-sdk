@@ -17,7 +17,7 @@ If you are using Maven, you need to add the following dependencies:
 ```xml
 <dependency>
   <groupId>com.yoti</groupId>
-  <artifactId>java-sdk-spring-boot-auto-config</artifactId>
+  <artifactId>yoti-sdk-spring-boot-auto-config</artifactId>
   <version>1.2</version>
 </dependency>
 ```
@@ -26,7 +26,7 @@ If you are using Maven, you need to add the following dependencies:
 If you are using Gradle, here is the dependency to add:
 
 ```
-compile group: 'com.yoti', name: 'java-sdk-spring-boot-auto-config', version: '1.2'
+compile group: 'com.yoti', name: 'yoti-sdk-spring-boot-auto-config', version: '1.2'
 ```
 
 

@@ -13,10 +13,10 @@
   </properties>
 
   <groupId>com.yoti</groupId>
-  <artifactId>java-sdk-spring-boot-auto-config</artifactId>
-  <version>1.2</version>
-  <name>Yoti Java Spring Boot Integration</name>
-  <description>Library to integrate the Java Yoti SDK with Spring Boot Applications</description>
+  <artifactId>yoti-sdk-spring-security</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>Spring Security Integration For The Yoti SDK</name>
+  <description>Library to integrate the Java Yoti SDK with Spring Security</description>
   <url>https://github.com/getyoti/java</url>
 
   <developers>
@@ -49,22 +49,33 @@
   </dependencyManagement>
 
   <dependencies>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-autoconfigure</artifactId>
-      <version>1.5.6.RELEASE</version>
-      <scope>provided</scope>
-    </dependency>
 
     <dependency>
       <groupId>com.yoti</groupId>
-      <artifactId>java-sdk-api</artifactId>
+      <artifactId>yoti-sdk-api</artifactId>
       <version>1.2</version>
     </dependency>
     <dependency>
       <groupId>com.yoti</groupId>
-      <artifactId>java-sdk-impl</artifactId>
+      <artifactId>yoti-sdk-impl</artifactId>
       <version>1.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-web</artifactId>
+      <version>4.2.3.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>1.7.25</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -73,11 +84,22 @@
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>2.8.47</version>
+      <version>1.10.19</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
+      <version>1.3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-library</artifactId>
+      <version>1.3</version>
       <scope>test</scope>
     </dependency>
 

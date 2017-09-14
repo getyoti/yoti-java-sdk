@@ -28,12 +28,12 @@
   </developers>
 
   <modules>
-    <module>java-sdk-api</module>
-    <module>java-sdk-dummy</module>
-    <module>java-sdk-impl</module>
-    <module>java-sdk-spring-boot-auto-config</module>
+    <module>yoti-sdk-api</module>
+    <module>yoti-sdk-dummy</module>
+    <module>yoti-sdk-impl</module>
+    <module>yoti-sdk-spring-boot-auto-config</module>
     <module>java-sdk-spring-security</module>
-    <module>java-sdk-springboot-example</module>
+    <module>yoti-sdk-spring-boot-example</module>
   </modules>
   <build>
     <plugins>
