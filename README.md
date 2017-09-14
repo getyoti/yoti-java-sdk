@@ -208,7 +208,7 @@ Dummy implementation without connectivity to any platform services. Can be used 
 Real SDK implementation that takes care of decrypting the token, fetching the user profile from Yoti servers by issuing a signed request and finally decrypting the fetched profile.
 ### yoti-sdk-spring-boot-auto-config
 A module that can be used in Spring Boot applications to automatically configure the YotiClient and KeyPairSource with standard application properties.
-### java-sdk-spring-security
+### yoti-sdk-spring-security
 A module that can be used in Spring applications that use Spring Security to add Yoti authentication.
 
 ## Spring Boot Auto Configuration
@@ -219,7 +219,7 @@ For more information and to see an example of this in use take a look at the Spr
 
 ## Spring Security Integration
 
-If you use Spring Security you can use the `java-sdk-spring-security` module to make integration easier. You are provided with some classes that fit into Spring Security's existing authentication model.
+If you use Spring Security you can use the `yoti-sdk-spring-security` module to make integration easier. You are provided with some classes that fit into Spring Security's existing authentication model.
 
 Combining this with the Spring Boot Auto Configuration can make integration very easy with very little code needing to be written.
 
