@@ -5,7 +5,7 @@
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-impl</artifactId>
   <version>1.3</version>
-  <name>Yoti Java SDK implementation package</name>
+  <name>Yoti SDK implementation package</name>
   <description>Java SDK for simple integration with the Yoti platform</description>
   <url>https://github.com/getyoti/java</url>
 

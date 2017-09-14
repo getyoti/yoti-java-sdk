@@ -5,7 +5,7 @@
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-dummy</artifactId>
   <version>1.2</version>
-  <name>Yoti Java SDK mock testing package</name>
+  <name>Yoti SDK mock testing package</name>
   <description>Java SDK for simple integration with the Yoti platform</description>
   <url>https://github.com/getyoti/java</url>
 

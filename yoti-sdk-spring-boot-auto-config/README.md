@@ -1,6 +1,6 @@
 # Yoti Spring Boot Auto Configuration Java SDK Module
 
-This module aims to make integration of the Yoti Java SDK client into Spring Boot projects more simple by reducing the
+This module aims to make integration of the Yoti SDK client into Spring Boot projects more simple by reducing the
  amount of boilerplate code required by the client application and allows the developer to simply provide two properties.
 
 ## Requirements

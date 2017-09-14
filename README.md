@@ -227,7 +227,7 @@ Combining this with the Spring Boot Auto Configuration can make integration very
 
 * By default, Yoti SDKs fetch profiles from [https://api.yoti.com/api/v1](https://api.yoti.com/api/v1).
 If necessary, this can be overridden by setting the `yoti.api.url` system property.
-* Yoti Java SDK uses AES-256 encryption. If you are using the Oracle JDK, this key length is not enabled by default. The following stack overflow question explains how to fix this: [http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters](http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters)
+* This SDK uses AES-256 encryption. If you are using the Oracle JDK, this key length is not enabled by default. The following stack overflow question explains how to fix this: [http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters](http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters)
 * To find out how to set up your Java project in order to use this SDK, you can check the Spring Boot example in this repo.   
 
 ## Known Issues

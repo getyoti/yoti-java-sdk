@@ -15,7 +15,7 @@
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-spring-boot-auto-config</artifactId>
   <version>1.3</version>
-  <name>Yoti Java Spring Boot Integration</name>
+  <name>Yoti Spring Boot Integration</name>
   <description>Library to integrate the Java Yoti SDK with Spring Boot Applications</description>
   <url>https://github.com/getyoti/java</url>
 

@@ -5,7 +5,7 @@
   <artifactId>yoti-sdk</artifactId>
   <packaging>pom</packaging>
   <version>1.0</version>
-  <name>Yoti Java SDK</name>
+  <name>Yoti SDK</name>
   <description>Java SDK for simple integration with the Yoti platform</description>
   <url>https://github.com/getyoti/java</url>
 
