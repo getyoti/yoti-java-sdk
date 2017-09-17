@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.yoti</groupId>
-  <artifactId>java-sdk</artifactId>
+  <artifactId>yoti-sdk</artifactId>
   <packaging>pom</packaging>
   <version>1.0</version>
-  <name>Yoti Java SDK</name>
+  <name>Yoti SDK</name>
   <description>Java SDK for simple integration with the Yoti platform</description>
   <url>https://github.com/getyoti/java</url>
 
@@ -28,12 +28,12 @@
   </developers>
 
   <modules>
-    <module>java-sdk-api</module>
-    <module>java-sdk-dummy</module>
-    <module>java-sdk-impl</module>
-    <module>java-sdk-spring-boot-auto-config</module>
-    <module>java-sdk-spring-security</module>
-    <module>java-sdk-springboot-example</module>
+    <module>yoti-sdk-api</module>
+    <module>yoti-sdk-dummy</module>
+    <module>yoti-sdk-impl</module>
+    <module>yoti-sdk-spring-boot-auto-config</module>
+    <module>yoti-sdk-spring-security</module>
+    <module>yoti-sdk-spring-boot-example</module>
   </modules>
   <build>
     <plugins>

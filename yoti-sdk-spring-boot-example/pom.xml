@@ -3,9 +3,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.yoti</groupId>
-  <artifactId>java-sdk-springboot-example</artifactId>
-  <version>1.2</version>
-  <name>Yoti Java Spring Boot Example</name>
+  <artifactId>yoti-sdk-spring-boot-example</artifactId>
+  <version>1.3</version>
+  <name>Yoti Spring Boot Example</name>
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -33,8 +33,8 @@
   <dependencies>
     <dependency>
       <groupId>com.yoti</groupId>
-      <artifactId>java-sdk-spring-boot-auto-config</artifactId>
-      <version>1.2</version>
+      <artifactId>yoti-sdk-spring-boot-auto-config</artifactId>
+      <version>1.3</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

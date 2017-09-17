@@ -1,6 +1,6 @@
 # Yoti Spring Boot Auto Configuration Java SDK Module
 
-This module aims to make integration of the Yoti Java SDK client into Spring Boot projects more simple by reducing the
+This module aims to make integration of the Yoti SDK client into Spring Boot projects more simple by reducing the
  amount of boilerplate code required by the client application and allows the developer to simply provide two properties.
 
 ## Requirements
@@ -17,8 +17,8 @@ If you are using Maven, you need to add the following dependencies:
 ```xml
 <dependency>
   <groupId>com.yoti</groupId>
-  <artifactId>java-sdk-spring-boot-auto-config</artifactId>
-  <version>1.2</version>
+  <artifactId>yoti-sdk-spring-boot-auto-config</artifactId>
+  <version>1.3</version>
 </dependency>
 ```
 
@@ -26,7 +26,7 @@ If you are using Maven, you need to add the following dependencies:
 If you are using Gradle, here is the dependency to add:
 
 ```
-compile group: 'com.yoti', name: 'java-sdk-spring-boot-auto-config', version: '1.2'
+compile group: 'com.yoti', name: 'yoti-sdk-spring-boot-auto-config', version: '1.3'
 ```
 
 

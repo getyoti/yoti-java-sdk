@@ -93,13 +93,13 @@ If you are using Maven, you need to add the following dependency:
 ```xml
 <dependency>
 	<groupId>com.yoti</groupId>
-	<artifactId>java-sdk-impl</artifactId>
-	<version>1.2</version>
+	<artifactId>yoti-sdk-impl</artifactId>
+	<version>1.3</version>
 </dependency>
 ```
 If you are using Gradle, here is the dependency to add:
 
-`compile group: 'com.yoti', name: 'java-sdk-impl', version: '1.2'`
+`compile group: 'com.yoti', name: 'yoti-sdk-impl', version: '1.3'`
 
 You will find all classes packaged under `com.yoti.api`
 
@@ -184,7 +184,7 @@ Interacting with the `com.yoti.api.client.YotiClient` to get `com.yoti.api.clien
 
 By default the Yoti Client will block indefinitely when connecting to the remote server or reading data. Consequently it is **possible that your application thread could be blocked**. 
 
-Since version 1.1 of the `java-sdk-impl` you can set the following two system properties to control this behaviour:
+Since version 1.1 of the `yoti-sdk-impl` you can set the following two system properties to control this behaviour:
 
 * `yoti.client.connect.timeout.ms` - the number of milliseconds that you are prepared to wait for the connection to be established. Zero is interpreted as an infinite timeout.
 * `yoti.client.read.timeout.ms` - the number of milliseconds that you are prepared to wait for data to become available to read in the response stream. Zero is interpreted as an infinite timeout.
@@ -192,7 +192,7 @@ Since version 1.1 of the `java-sdk-impl` you can set the following two system pr
 ## Modules
 
 The SDK is split into a number of modules for easier use and future extensibility. 
-### java-sdk-api
+### yoti-sdk-api
 Being the only interface you need to explicitly couple your code to this module exposes the core classes:
 #### HumanProfile
 The set of attributes the user has configured for the transaction.
@@ -202,13 +202,13 @@ Builds a YotiClient instance by automatically selecting the available implementa
 Allows your app to retrieve a user profile, given an encrypted token.
 #### KeyPairSource and its implementations
 A set of classes responsible for working with different sources (e.g. files, classpath resources, URLs) to load the private/public keypair.
-### java-sdk-dummy
+### yoti-sdk-dummy
 Dummy implementation without connectivity to any platform services. Can be used for testing purposes.
-### java-sdk-impl
+### yoti-sdk-impl
 Real SDK implementation that takes care of decrypting the token, fetching the user profile from Yoti servers by issuing a signed request and finally decrypting the fetched profile.
-### java-sdk-spring-boot-auto-config
+### yoti-sdk-spring-boot-auto-config
 A module that can be used in Spring Boot applications to automatically configure the YotiClient and KeyPairSource with standard application properties.
-### java-sdk-spring-security
+### yoti-sdk-spring-security
 A module that can be used in Spring applications that use Spring Security to add Yoti authentication.
 
 ## Spring Boot Auto Configuration
@@ -219,7 +219,7 @@ For more information and to see an example of this in use take a look at the Spr
 
 ## Spring Security Integration
 
-If you use Spring Security you can use the `java-sdk-spring-security` module to make integration easier. You are provided with some classes that fit into Spring Security's existing authentication model.
+If you use Spring Security you can use the `yoti-sdk-spring-security` module to make integration easier. You are provided with some classes that fit into Spring Security's existing authentication model.
 
 Combining this with the Spring Boot Auto Configuration can make integration very easy with very little code needing to be written.
 
@@ -227,7 +227,7 @@ Combining this with the Spring Boot Auto Configuration can make integration very
 
 * By default, Yoti SDKs fetch profiles from [https://api.yoti.com/api/v1](https://api.yoti.com/api/v1).
 If necessary, this can be overridden by setting the `yoti.api.url` system property.
-* Yoti Java SDK uses AES-256 encryption. If you are using the Oracle JDK, this key length is not enabled by default. The following stack overflow question explains how to fix this: [http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters](http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters)
+* This SDK uses AES-256 encryption. If you are using the Oracle JDK, this key length is not enabled by default. The following stack overflow question explains how to fix this: [http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters](http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters)
 * To find out how to set up your Java project in order to use this SDK, you can check the Spring Boot example in this repo.   
 
 ## Known Issues

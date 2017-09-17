@@ -13,7 +13,7 @@
   </properties>
 
   <groupId>com.yoti</groupId>
-  <artifactId>yoti-java-sdk-spring-security</artifactId>
+  <artifactId>yoti-sdk-spring-security</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>Spring Security Integration For The Yoti SDK</name>
   <description>Library to integrate the Java Yoti SDK with Spring Security</description>
@@ -52,13 +52,13 @@
 
     <dependency>
       <groupId>com.yoti</groupId>
-      <artifactId>java-sdk-api</artifactId>
-      <version>1.2</version>
+      <artifactId>yoti-sdk-api</artifactId>
+      <version>1.3</version>
     </dependency>
     <dependency>
       <groupId>com.yoti</groupId>
-      <artifactId>java-sdk-impl</artifactId>
-      <version>1.2</version>
+      <artifactId>yoti-sdk-impl</artifactId>
+      <version>1.3</version>
     </dependency>
 
     <dependency>

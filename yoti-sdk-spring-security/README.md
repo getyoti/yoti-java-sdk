@@ -24,7 +24,7 @@ If you are using Maven, you need to add the following dependencies:
 ```xml
 <dependency>
   <groupId>com.yoti</groupId>
-  <artifactId>yoti-java-sdk-spring-security</artifactId>
+  <artifactId>yoti-sdk-spring-security</artifactId>
   <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
@@ -32,12 +32,12 @@ If you are using Maven, you need to add the following dependencies:
 If you are using Gradle, here is the dependency to add:
 
 ```
-compile group: 'com.yoti', name: 'yoti-java-sdk-spring-security', version: '1.0-SNAPSHOT'
+compile group: 'com.yoti', name: 'yoti-sdk-spring-security', version: '1.0-SNAPSHOT'
 ```
 
 ### Provide a `YotiClient` instance
 
-This can be achieved as outlined in the `java-sdk-spring-boot-auto-config` module.
+This can be achieved as outlined in the `yoti-sdk-spring-boot-auto-config` module.
 
 ### Provide a `YotiUserService` instance
 
