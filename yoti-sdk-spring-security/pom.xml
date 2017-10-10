@@ -17,7 +17,7 @@
   <version>1.0-SNAPSHOT</version>
   <name>Spring Security Integration For The Yoti SDK</name>
   <description>Library to integrate the Java Yoti SDK with Spring Security</description>
-  <url>https://github.com/getyoti/java</url>
+  <url>https://github.com/getyoti/yoti-java-sdk</url>
 
   <developers>
     <developer>
@@ -28,14 +28,14 @@
   <licenses>
     <license>
       <name>Yoti License</name>
-      <url>https://github.com/getyoti/java/LICENSE.txt</url>
+      <url>https://github.com/getyoti/yoti-java-sdk/LICENSE.txt</url>
     </license>
   </licenses>
 
   <scm>
-    <connection>scm:http://github.com/getyoti/java.git</connection>
-    <developerConnection>scm:http://github.com/getyoti/java.git</developerConnection>
-    <url>http://github.com/getyoti/java.git</url>
+    <connection>scm:http://github.com/getyoti/yoti-java-sdk.git</connection>
+    <developerConnection>scm:http://github.com/getyoti/yoti-java-sdk.git</developerConnection>
+    <url>http://github.com/getyoti/yoti-java-sdk.git</url>
   </scm>
 
   <dependencyManagement>
