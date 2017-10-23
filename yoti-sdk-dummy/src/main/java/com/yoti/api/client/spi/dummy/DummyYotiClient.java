@@ -173,6 +173,11 @@ public class DummyYotiClient implements YotiClient, YotiClientFactory {
             public String getReceiptId() {
                 return "12345678";
             }
+            
+            @Override
+            public String getBase64Selfie() {
+            		return "";
+            }
 
         };
     }

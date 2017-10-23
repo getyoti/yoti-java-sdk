@@ -3,6 +3,7 @@ package com.yoti.api.client.spi.remote;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.Test;
@@ -72,5 +73,26 @@ public class SimpleActivityDetailsTest {
     public void shouldReturnReceiptId() {
         SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, USER_PROFILE, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
         assertEquals(RECEIPT_ID_STRING, s.getReceiptId());
+    }
+    
+    @Test
+    public void shouldReturnBase64SelfieIfSelfieSet() {
+    		HashMap<String, Object> attrMap = new HashMap<String, Object>();
+    		attrMap.put("selfie", new JpegAttributeValue("selfieTestVal".getBytes()));
+    		
+        SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, new SimpleProfile(attrMap), APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        String selfie = "data:image/jpeg;base64," + Base64.toBase64String(s.getUserProfile().getSelfie().getContent());
+        
+        assertEquals(selfie, s.getBase64Selfie());
+    }
+    
+    @Test
+    public void shouldReturnBlankBase64SelfieIfSelfieNotSet() {
+    		HashMap<String, Object> attrMap = new HashMap<String, Object>();
+    		attrMap.put("family_name", "Smith");
+    		
+        SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, new SimpleProfile(attrMap), APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        
+        assertEquals("", s.getBase64Selfie());
     }
 }
