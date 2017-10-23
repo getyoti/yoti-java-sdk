@@ -26,9 +26,9 @@ final class SimpleActivityDetails implements ActivityDetails {
         this.receiptId = toBase64String(notNull(receiptId, "Receipt id"));
         
         if(this.userProfile.getSelfie() != null) {
-        		this.base64Selfie = "data:image/jpeg;base64," + toBase64String(this.userProfile.getSelfie().getContent());
+            this.base64Selfie = "data:image/jpeg;base64," + toBase64String(this.userProfile.getSelfie().getContent());
         } else {
-        		this.base64Selfie = "";
+            this.base64Selfie = "";
         }
     }
 
@@ -59,7 +59,7 @@ final class SimpleActivityDetails implements ActivityDetails {
     
     @Override
     public String getBase64Selfie() {
-    		return base64Selfie;
+        return base64Selfie;
     }
 
     private <T> T notNull(T value, String name) {

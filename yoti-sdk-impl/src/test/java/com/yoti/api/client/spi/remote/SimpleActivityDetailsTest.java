@@ -77,8 +77,8 @@ public class SimpleActivityDetailsTest {
     
     @Test
     public void shouldReturnBase64SelfieIfSelfieSet() {
-    		HashMap<String, Object> attrMap = new HashMap<String, Object>();
-    		attrMap.put("selfie", new JpegAttributeValue("selfieTestVal".getBytes()));
+        HashMap<String, Object> attrMap = new HashMap<String, Object>();
+        attrMap.put("selfie", new JpegAttributeValue("selfieTestVal".getBytes()));
     		
         SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, new SimpleProfile(attrMap), APP_PROFILE, TIMESTAMP, RECEIPT_ID);
         String selfie = "data:image/jpeg;base64," + Base64.toBase64String(s.getUserProfile().getSelfie().getContent());
@@ -88,8 +88,8 @@ public class SimpleActivityDetailsTest {
     
     @Test
     public void shouldReturnBlankBase64SelfieIfSelfieNotSet() {
-    		HashMap<String, Object> attrMap = new HashMap<String, Object>();
-    		attrMap.put("family_name", "Smith");
+        HashMap<String, Object> attrMap = new HashMap<String, Object>();
+        attrMap.put("family_name", "Smith");
     		
         SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, new SimpleProfile(attrMap), APP_PROFILE, TIMESTAMP, RECEIPT_ID);
         

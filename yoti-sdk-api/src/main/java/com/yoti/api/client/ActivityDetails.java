@@ -45,9 +45,9 @@ public interface ActivityDetails {
     String getReceiptId();
     
     /**
-     * Base64 PNG selfie image
+     * Base64 Jpeg selfie image
      * 
-     * @return Base64 PNG selfie image in String format
+     * @return Base64 Jpeg selfie image in String format
      */
     String getBase64Selfie();
 }

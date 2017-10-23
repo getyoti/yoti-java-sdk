@@ -176,7 +176,7 @@ public class DummyYotiClient implements YotiClient, YotiClientFactory {
             
             @Override
             public String getBase64Selfie() {
-            		return "";
+                return "";
             }
 
         };
