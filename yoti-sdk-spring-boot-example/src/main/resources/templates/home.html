@@ -4,11 +4,17 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"></link>
 <title>Home</title>
 </head>
-<body>
-  <p th:text="'Hello, ' + ${name} + '!'" />
-  <p th:text="'Your phone number is:' + ${phone} " />
-  <p th:text="'Should you come back, I\'ll be able to remember you by the id ' + ${userId} + '.'" />
+<body style="font-family:sans-serif;text-weight:bold">
+  <ul class="list-group">
+    <li class="list-group-item list-group-item-primary" th:text="'Hello, ' + ${name} + '!'" />
+    <li class="list-group-item list-group-item-primary" th:text="'Your phone number is:' + ${phone} " />
+    <li class="list-group-item list-group-item-primary" th:text="'Should you come back, I\'ll be able to remember you by the id ' + ${userId} + '.'" />
+  </ul>
+  <img th:src="${base64Selfie}" />
+  <br />
+  <a th:href="${base64Selfie}" download="selfie.jpg">Download Selfie!</a>
 </body>
 </html>
