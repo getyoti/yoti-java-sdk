@@ -72,6 +72,7 @@ public class RemoteProfileServiceTest {
         Map<String, String> headers = headersCaptor.getValue();
         assertAuthKey(keyPair, headers);
         assertDigest(keyPair, url, headers);
+        assertYotiSDK(keyPair, headers);
     }
 
     private void assertDigest(KeyPair keyPair, URL url, Map<String, String> headers) throws GeneralSecurityException {
@@ -84,6 +85,10 @@ public class RemoteProfileServiceTest {
 
     private void assertAuthKey(KeyPair keyPair, Map<String, String> headers) {
         assertEquals(base64(keyPair.getPublic().getEncoded()), headers.get("X-Yoti-Auth-Key"));
+    }
+
+    private void assertYotiSDK(KeyPair keyPair, Map<String, String> headers) {
+        assertEquals("Java", headers.get("X-Yoti-SDK"));
     }
 
     private URL assertUrl(ArgumentCaptor<UrlConnector> urlCaptor) throws MalformedURLException {
