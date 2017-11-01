@@ -152,7 +152,7 @@ try {
 
 ### Working with the ActivityDetails object
 
-The ActivityDetails object contains a UserProfile object containing the details of the user that the app requested, and which can be accessed using a set of helper methods `getUserProfile().getSelfie()`, `getUserProfile().getGender()` etc
+The ActivityDetails object contains a UserProfile object containing the details of the user that the app requested, which can be accessed using a set of helper methods `getUserProfile().getSelfie()`, `getUserProfile().getGender()` etc.
 
 The ActivityDetails object itself also contains data relating to the Request, such as the ReceiptID `activityDetails.getReceiptID()`, Base64Selfie `activityDetails.getBase64Selfie()` and Timestamp `activityDetails.getTimestamp()`
 
