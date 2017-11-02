@@ -24,7 +24,7 @@ Description on setting up your SDK
 Description on setting up profile
 
 1) [Handling Users](#handling-users) -
-Description on handling user log on's
+Description on handling user logons
 
 1) [Connectivity Requirements](#connectivity-requirements)-
 Description of network connectivity requirements
@@ -193,15 +193,14 @@ Since version 1.1 of the `yoti-sdk-impl` you can set the following two system pr
 
 The SDK is split into a number of modules for easier use and future extensibility. 
 ### yoti-sdk-api
-Being the only interface you need to explicitly couple your code to this module exposes the core classes:
-#### HumanProfile
-The set of attributes the user has configured for the transaction.
-#### YotiClientBuilder
-Builds a YotiClient instance by automatically selecting the available implementations on the class path.
-#### YotiClient
-Allows your app to retrieve a user profile, given an encrypted token.
-#### KeyPairSource and its implementations
-A set of classes responsible for working with different sources (e.g. files, classpath resources, URLs) to load the private/public keypair.
+Being the only interface you need to explicitly couple your code to this module. Exposes the core classes:
+Class | Description
+----- | -----------
+HumanProfile  | The set of attributes the user has configured for the transaction.
+YotiClientBuilder  | Builds a YotiClient instance by automatically selecting the available implementations on the class path.
+YotiClient | Allows your app to retrieve a user profile, given an encrypted token.
+KeyPairSource and its implementations | A set of classes responsible for working with different sources (e.g. files, classpath resources, URLs) to load the private/public keypair.
+
 ### yoti-sdk-dummy
 Dummy implementation without connectivity to any platform services. Can be used for testing purposes.
 ### yoti-sdk-impl
