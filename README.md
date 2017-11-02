@@ -194,6 +194,7 @@ Since version 1.1 of the `yoti-sdk-impl` you can set the following two system pr
 The SDK is split into a number of modules for easier use and future extensibility. 
 ### yoti-sdk-api
 Being the only interface you need to explicitly couple your code to this module. Exposes the core classes:
+
 Class | Description
 ----- | -----------
 HumanProfile  | The set of attributes the user has configured for the transaction.
