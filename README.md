@@ -92,9 +92,9 @@ If you are using Maven, you need to add the following dependency:
 
 ```xml
 <dependency>
-	<groupId>com.yoti</groupId>
-	<artifactId>yoti-sdk-impl</artifactId>
-	<version>1.3</version>
+    <groupId>com.yoti</groupId>
+    <artifactId>yoti-sdk-impl</artifactId>
+    <version>1.3</version>
 </dependency>
 ```
 If you are using Gradle, here is the dependency to add:
@@ -139,9 +139,9 @@ import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.ProfileException;
 
 try {
-	final ActivityDetails activityDetails = client.getActivityDetails(token);
-   	final HumanProfile profile = activityDetails.getUserProfile();
-   	//use the profile to extract attributes.
+    final ActivityDetails activityDetails = client.getActivityDetails(token);
+    final HumanProfile profile = activityDetails.getUserProfile();
+    //use the profile to extract attributes.
 } catch (ProfileException e) {
     LOG.info("Could not get profile", e);
     // do something meaningful.
@@ -160,18 +160,18 @@ Here is an example of how this works:
 ```java
 ActivityDetails activityDetails;
 try {
-	activityDetails = client.getActivityDetails(token);
-  Optional<YourAppUserClass> user = yourUserSearchMethod(activityDetails.getUserId());
-  if (user.isPresent()) {
-		String userId = activityDetails.getUserId();
-		Image selfie = profile.getSelfie();
-		String givenNames = profile.getGivenNames();
-		String familyName = profile.getFamilyName();
-		String mobileNumber = profile.getPhoneNumber();
-		String emailAddress = profile.getEmailAddress();
-		Date dateOfBirth = profile.getDateOfBirth();
-		Gender gender = profile.getGender();
-		String nationality = profile.getNationality();
+    activityDetails = client.getActivityDetails(token);
+    Optional<YourAppUserClass> user = yourUserSearchMethod(activityDetails.getUserId());
+    if (user.isPresent()) {
+        String userId = activityDetails.getUserId();
+        Image selfie = profile.getSelfie();
+        String givenNames = profile.getGivenNames();
+        String familyName = profile.getFamilyName();
+        String mobileNumber = profile.getPhoneNumber();
+        String emailAddress = profile.getEmailAddress();
+        Date dateOfBirth = profile.getDateOfBirth();
+        Gender gender = profile.getGender();
+        String nationality = profile.getNationality();
   } else {
       // handle registration
   }              
@@ -261,28 +261,28 @@ Generally you'll encounter an exception with an message and stack trace as follo
 
 ```java
 com.yoti.api.client.InitialisationException: Cannot load key pair
-	at com.yoti.api.client.spi.remote.SecureYotiClient.loadKeyPair(SecureYotiClient.java:99)
-	at com.yoti.api.client.spi.remote.SecureYotiClient.<init>(SecureYotiClient.java:73)
-	at com.yoti.api.client.spi.remote.SecureYotiClientFactory.getInstance(SecureYotiClientFactory.java:25)
-	at com.yoti.api.client.ServiceLocatorYotiClientBuilder.build(ServiceLocatorYotiClientBuilder.java:40)
-	at com.yoti.api.spring.YotiClientAutoConfiguration.yotiClient(YotiClientAutoConfiguration.java:48)
-	
+    at com.yoti.api.client.spi.remote.SecureYotiClient.loadKeyPair(SecureYotiClient.java:99)
+    at com.yoti.api.client.spi.remote.SecureYotiClient.<init>(SecureYotiClient.java:73)
+    at com.yoti.api.client.spi.remote.SecureYotiClientFactory.getInstance(SecureYotiClientFactory.java:25)
+    at com.yoti.api.client.ServiceLocatorYotiClientBuilder.build(ServiceLocatorYotiClientBuilder.java:40)
+    at com.yoti.api.spring.YotiClientAutoConfiguration.yotiClient(YotiClientAutoConfiguration.java:48)
+    
 Caused by: org.bouncycastle.openssl.PEMException: problem creating RSA private key: java.lang.IllegalArgumentException: failed to construct sequence from byte[]: corrupted stream detected
-	at org.bouncycastle.openssl.PEMParser$KeyPairParser.parseObject(Unknown Source)
-	at org.bouncycastle.openssl.PEMParser.readObject(Unknown Source)
-	at com.yoti.api.client.spi.remote.SecureYotiClient$KeyStreamVisitor.findKeyPair(SecureYotiClient.java:269)
-	at com.yoti.api.client.spi.remote.SecureYotiClient$KeyStreamVisitor.accept(SecureYotiClient.java:260)
-	at com.yoti.api.spring.SpringResourceKeyPairSource.getFromStream(SpringResourceKeyPairSource.java:28)
-	at com.yoti.api.client.spi.remote.SecureYotiClient.loadKeyPair(SecureYotiClient.java:97)
-	... 52 common frames omitted
-	
+    at org.bouncycastle.openssl.PEMParser$KeyPairParser.parseObject(Unknown Source)
+    at org.bouncycastle.openssl.PEMParser.readObject(Unknown Source)
+    at com.yoti.api.client.spi.remote.SecureYotiClient$KeyStreamVisitor.findKeyPair(SecureYotiClient.java:269)
+    at com.yoti.api.client.spi.remote.SecureYotiClient$KeyStreamVisitor.accept(SecureYotiClient.java:260)
+    at com.yoti.api.spring.SpringResourceKeyPairSource.getFromStream(SpringResourceKeyPairSource.java:28)
+    at com.yoti.api.client.spi.remote.SecureYotiClient.loadKeyPair(SecureYotiClient.java:97)
+    ... 52 common frames omitted
+    
 Caused by: org.bouncycastle.openssl.PEMException: problem creating RSA private key: java.lang.IllegalArgumentException: failed to construct sequence from byte[]: corrupted stream detected
-	at org.bouncycastle.openssl.PEMParser$RSAKeyPairParser.parse(Unknown Source)
-	... 58 common frames omitted
-	
+    at org.bouncycastle.openssl.PEMParser$RSAKeyPairParser.parse(Unknown Source)
+    ... 58 common frames omitted
+    
 Caused by: java.lang.IllegalArgumentException: failed to construct sequence from byte[]: corrupted stream detected
-	at org.bouncycastle.asn1.ASN1Sequence.getInstance(Unknown Source)
-	... 59 common frames omitted
+    at org.bouncycastle.asn1.ASN1Sequence.getInstance(Unknown Source)
+    ... 59 common frames omitted
 ```
 
 #### How To Fix
