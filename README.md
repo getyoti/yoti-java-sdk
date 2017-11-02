@@ -161,16 +161,23 @@ Here is an example of how this works:
 ActivityDetails activityDetails;
 try {
 	activityDetails = client.getActivityDetails(token);
-    Optional<YourAppUserClass> user = yourUserSearchMethod(activityDetails.getUserId());
-    if(user.isPresent()) {
-        // handle login
-    } else {
-        // handle registration
-    }
-              
+  Optional<YourAppUserClass> user = yourUserSearchMethod(activityDetails.getUserId());
+  if (user.isPresent()) {
+		String userId = activityDetails.getUserId();
+		Image selfie = profile.getSelfie();
+		String givenNames = profile.getGivenNames();
+		String familyName = profile.getFamilyName();
+		String mobileNumber = profile.getPhoneNumber();
+		String emailAddress = profile.getEmailAddress();
+		Date dateOfBirth = profile.getDateOfBirth();
+		Gender gender = profile.getGender();
+		String nationality = profile.getNationality();
+  } else {
+      // handle registration
+  }              
 } catch (ProfileException e) {
-    LOG.info("Could not get profile", e);
-    return "error";
+  LOG.info("Could not get profile", e);
+  return "error";
 }
 ```
 Where `yourUserSearchMethod` is a piece of logic in your app that is supposed to find a user, given a userId. 
