@@ -7,7 +7,7 @@
   <version>1.0</version>
   <name>Yoti SDK</name>
   <description>Java SDK for simple integration with the Yoti platform</description>
-  <url>https://github.com/getyoti/java</url>
+  <url>https://github.com/getyoti/yoti-java-sdk</url>
 
   <developers>
     <developer>
