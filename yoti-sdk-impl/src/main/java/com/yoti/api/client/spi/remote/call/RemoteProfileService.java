@@ -35,6 +35,7 @@ public final class RemoteProfileService implements ProfileService {
 
     private static final String AUTH_KEY_HEADER = "X-Yoti-Auth-Key";
     private static final String DIGEST_HEADER = "X-Yoti-Auth-Digest";
+    private static final String YOTI_SDK_HEADER = "X-Yoti-SDK";
     private static final String CONTENT_TYPE = "Content-Type";
 
     private static final String BOUNCY_CASTLE_PROVIDER = "BC";
@@ -109,6 +110,7 @@ public final class RemoteProfileService implements ProfileService {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put(AUTH_KEY_HEADER, authKey);
         headers.put(DIGEST_HEADER, digest);
+        headers.put(YOTI_SDK_HEADER, "Java");
         headers.put(CONTENT_TYPE, "application/json");
 
         UrlConnector urlConnector = UrlConnector.get(apiUrl + resourcePath);

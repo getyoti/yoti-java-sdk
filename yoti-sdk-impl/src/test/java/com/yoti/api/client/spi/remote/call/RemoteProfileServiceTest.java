@@ -32,6 +32,7 @@ import com.yoti.api.client.spi.remote.Base64;
 
 public class RemoteProfileServiceTest {
     private static final String MESSAGE_PREFIX = "GET&";
+    private static final String YOTI_SDK_HEADER = "X-Yoti-SDK";
 
     public static final Receipt RECEIPT = new Receipt.Builder().withProfile(new byte[] { 1, 2, 3, 4 }).build();
     public static final ProfileResponse PROFILE_RESPONSE = new ProfileResponse.ProfileResponseBuilder()
@@ -72,6 +73,7 @@ public class RemoteProfileServiceTest {
         Map<String, String> headers = headersCaptor.getValue();
         assertAuthKey(keyPair, headers);
         assertDigest(keyPair, url, headers);
+        assertYotiSDK(keyPair, headers);
     }
 
     private void assertDigest(KeyPair keyPair, URL url, Map<String, String> headers) throws GeneralSecurityException {
@@ -84,6 +86,10 @@ public class RemoteProfileServiceTest {
 
     private void assertAuthKey(KeyPair keyPair, Map<String, String> headers) {
         assertEquals(base64(keyPair.getPublic().getEncoded()), headers.get("X-Yoti-Auth-Key"));
+    }
+
+    private void assertYotiSDK(KeyPair keyPair, Map<String, String> headers) {
+        assertEquals("Java", headers.get(YOTI_SDK_HEADER));
     }
 
     private URL assertUrl(ArgumentCaptor<UrlConnector> urlCaptor) throws MalformedURLException {
