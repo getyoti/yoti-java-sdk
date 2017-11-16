@@ -32,6 +32,7 @@ import com.yoti.api.client.spi.remote.Base64;
 
 public class RemoteProfileServiceTest {
     private static final String MESSAGE_PREFIX = "GET&";
+    private static final String YOTI_SDK_HEADER = "X-Yoti-SDK";
 
     public static final Receipt RECEIPT = new Receipt.Builder().withProfile(new byte[] { 1, 2, 3, 4 }).build();
     public static final ProfileResponse PROFILE_RESPONSE = new ProfileResponse.ProfileResponseBuilder()
@@ -88,7 +89,7 @@ public class RemoteProfileServiceTest {
     }
 
     private void assertYotiSDK(KeyPair keyPair, Map<String, String> headers) {
-        assertEquals("Java", headers.get("X-Yoti-SDK"));
+        assertEquals("Java", headers.get(YOTI_SDK_HEADER));
     }
 
     private URL assertUrl(ArgumentCaptor<UrlConnector> urlCaptor) throws MalformedURLException {
