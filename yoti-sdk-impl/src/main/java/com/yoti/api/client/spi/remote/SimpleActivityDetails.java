@@ -15,15 +15,21 @@ final class SimpleActivityDetails implements ActivityDetails {
     private final HumanProfile userProfile;
     private final Date timestamp;
     private final String receiptId;
+    private final String base64Selfie;
 
     public SimpleActivityDetails(String userId, Profile userProfile, Profile applicationProfile, Date timestamp,
             byte[] receiptId) {
-
         this.userId = notNull(userId, "User id");
         this.userProfile = HumanProfileAdapter.wrap(notNull(userProfile, "User profile"));
         this.applicationProfile = ApplicationProfileAdapter.wrap(notNull(applicationProfile, "Application profile"));
         this.timestamp = notNull(timestamp, "Timestamp");
         this.receiptId = toBase64String(notNull(receiptId, "Receipt id"));
+        
+        if(this.userProfile.getSelfie() != null) {
+            this.base64Selfie = "data:image/jpeg;base64," + toBase64String(this.userProfile.getSelfie().getContent());
+        } else {
+            this.base64Selfie = "";
+        }
     }
 
     @Override
@@ -49,6 +55,11 @@ final class SimpleActivityDetails implements ActivityDetails {
     @Override
     public String getReceiptId() {
         return receiptId;
+    }
+    
+    @Override
+    public String getBase64Selfie() {
+        return base64Selfie;
     }
 
     private <T> T notNull(T value, String name) {
