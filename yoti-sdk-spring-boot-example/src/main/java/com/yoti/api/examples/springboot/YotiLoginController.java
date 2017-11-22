@@ -45,6 +45,7 @@ public class YotiLoginController {
         model.addAttribute("name", profile.getGivenNames());
         model.addAttribute("phone", profile.getPhoneNumber());
         model.addAttribute("userId", activityDetails.getUserId());
+        model.addAttribute("base64Selfie", activityDetails.getBase64Selfie());
 
         return "home";
     }

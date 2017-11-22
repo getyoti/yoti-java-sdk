@@ -10,5 +10,8 @@
   <p th:text="'Hello, ' + ${name} + '!'" />
   <p th:text="'Your phone number is:' + ${phone} " />
   <p th:text="'Should you come back, I\'ll be able to remember you by the id ' + ${userId} + '.'" />
+  <img th:src="${base64Selfie}" />
+  <br />
+  <a th:href="${base64Selfie}" download="selfie.jpg">Download Selfie</a>
 </body>
 </html>
