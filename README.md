@@ -8,16 +8,16 @@ Welcome to the Yoti Java SDK. This repo contains the tools and step by step inst
 1) [An Architectural view](#an-architectural-view) -
 High level overview of integration
 
-1) [Requirements](#requirements)
+1) [Requirements](#requirements) -
 Everything you need to get started
 
-1) [Building From Source](#building-from-source)
+1) [Building From Source](#building-from-source) -
 Everything you need to build from source
 
-1) [Enabling the SDK](#enabling-the-sdk)-
+1) [Enabling the SDK](#enabling-the-sdk) -
 Description on importing your SDK 
 
-1) [Client Initialisation](#client-initialisation)-
+1) [Client Initialisation](#client-initialisation) -
 Description on setting up your SDK
 
 1) [Profile Retrieval](#profile-retrieval) -
@@ -26,24 +26,25 @@ Description on setting up profile
 1) [Handling Users](#handling-users) -
 Description on handling user logons
 
-1) [Connectivity Requirements](#connectivity-requirements)-
+1) [Connectivity Requirements](#connectivity-requirements) -
 Description of network connectivity requirements
 
-1) [Modules](#modules)- 
+1) [Modules](#modules) -
 The Modules above explained
 
-1) [Spring Boot Auto Configuration](#spring-boot-auto-configuration)- 
+1) [Spring Boot Auto Configuration](#spring-boot-auto-configuration) -
 Description of utilising Spring Boot
 
-1) [Spring Security Integration](#spring-security-integration)- 
+1) [Spring Security Integration](#spring-security-integration) -
 Integrating Yoti Authentication with Spring Boot.
 
-1) [Misc](#misc)
+1) [Misc](#misc) -
+Miscellaneous items
 
-1) [Known Issues](#known-issues)-
+1) [Known Issues](#known-issues) -
 Known issues using the libraries
 
-1) [Support](#support)-
+1) [Support](#support) -
 Please feel free to reach out
 
 ## An Architectural View
