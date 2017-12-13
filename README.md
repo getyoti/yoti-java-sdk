@@ -173,6 +173,7 @@ try {
         String emailAddress = profile.getEmailAddress();
         Date dateOfBirth = profile.getDateOfBirth();
         Gender gender = profile.getGender();
+		String postalAddress = profile.getPostalAddress();
         String nationality = profile.getNationality();
   } else {
       // handle registration
