@@ -50,6 +50,13 @@ public interface HumanProfile extends Profile {
     Gender getGender();
 
     /**
+     * The user's postal address as a String
+     *
+     * @return the postal address
+     */
+    String getPostalAddress();
+    
+    /**
      * Corresponds to the nationality in the passport.
      *
      * @return the nationality

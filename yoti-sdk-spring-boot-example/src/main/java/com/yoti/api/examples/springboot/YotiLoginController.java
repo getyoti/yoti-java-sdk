@@ -47,6 +47,7 @@ public class YotiLoginController {
         model.addAttribute("phoneNumber", profile.getPhoneNumber());
         model.addAttribute("dateOfBirth", profile.getDateOfBirth());
         model.addAttribute("emailAddress", profile.getEmailAddress());
+        model.addAttribute("postalAddress", profile.getPostalAddress());
         model.addAttribute("nationality", profile.getNationality());
         model.addAttribute("gender", profile.getGender());
         model.addAttribute("userId", activityDetails.getUserId());

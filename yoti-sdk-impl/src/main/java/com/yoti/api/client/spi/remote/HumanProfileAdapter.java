@@ -15,6 +15,7 @@ final class HumanProfileAdapter implements HumanProfile {
     private static final String ATTRIBUTE_FULL_NAME = "full_name";
     private static final String ATTRIBUTE_DOB = "date_of_birth";
     private static final String ATTRIBUTE_GENDER = "gender";
+    private static final String ATTRIBUTE_POSTAL_ADDRESS = "postal_address";
     private static final String ATTRIBUTE_NATIONALITY = "nationality";
     private static final String ATTRIBUTE_PHONE_NUMBER = "phone_number";
     private static final String ATTRIBUTE_SELFIE = "selfie";
@@ -96,6 +97,11 @@ final class HumanProfileAdapter implements HumanProfile {
         } else {
             return null;
         }
+    }
+    
+    @Override
+    public String getPostalAddress() {
+        return wrapped.getAttribute(ATTRIBUTE_POSTAL_ADDRESS);
     }
 
     @Override

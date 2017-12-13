@@ -73,6 +73,11 @@ public class DummyYotiClient implements YotiClient, YotiClientFactory {
             public Gender getGender() {
                 return null;
             }
+            
+            @Override
+            public String getPostalAddress() {
+                return null;
+            }
 
             @Override
             public String getNationality() {

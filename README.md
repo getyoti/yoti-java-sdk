@@ -173,6 +173,7 @@ try {
         String emailAddress = profile.getEmailAddress();
         Date dateOfBirth = profile.getDateOfBirth();
         Gender gender = profile.getGender();
+        String postalAddress = profile.getPostalAddress();
         String nationality = profile.getNationality();
   } else {
       // handle registration
@@ -238,6 +239,8 @@ Combining this with the Spring Boot Auto Configuration can make integration very
 If necessary, this can be overridden by setting the `yoti.api.url` system property.
 * This SDK uses AES-256 encryption. If you are using the Oracle JDK, this key length is not enabled by default. The following stack overflow question explains how to fix this: [http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters](http://stackoverflow.com/questions/6481627/java-security-illegal-key-size-or-default-parameters)
 * To find out how to set up your Java project in order to use this SDK, you can check the Spring Boot example in this repo.   
+* Windows users - if you see `unmappable character for encoding Cp1252` when running `mvn clean install`, you need to set the default encoding to be UTF-8 before proceeding. This can be done by setting the `JAVA_TOOL_OPTIONS` variable from the Command Prompt:
+```set JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8```
 
 ## Known Issues
 
