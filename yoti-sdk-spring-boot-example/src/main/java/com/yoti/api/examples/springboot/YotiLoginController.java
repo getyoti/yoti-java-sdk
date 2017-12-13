@@ -42,8 +42,13 @@ public class YotiLoginController {
         }
 
         // load profile data into model
-        model.addAttribute("name", profile.getGivenNames());
-        model.addAttribute("phone", profile.getPhoneNumber());
+        model.addAttribute("givenNames", profile.getGivenNames());
+        model.addAttribute("familyName", profile.getFamilyName());
+        model.addAttribute("phoneNumber", profile.getPhoneNumber());
+        model.addAttribute("dateOfBirth", profile.getDateOfBirth());
+        model.addAttribute("emailAddress", profile.getEmailAddress());
+        model.addAttribute("nationality", profile.getNationality());
+        model.addAttribute("gender", profile.getGender());
         model.addAttribute("userId", activityDetails.getUserId());
         model.addAttribute("base64Selfie", activityDetails.getBase64Selfie());
 

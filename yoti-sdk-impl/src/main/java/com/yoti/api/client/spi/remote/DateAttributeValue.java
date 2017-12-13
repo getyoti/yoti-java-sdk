@@ -59,4 +59,9 @@ final class DateAttributeValue implements com.yoti.api.client.Date {
     public int getDay() {
         return day;
     }
+    
+    @Override
+    public String toString() {
+    	return year + "-" + month + "-" + day;
+    }    
 }
