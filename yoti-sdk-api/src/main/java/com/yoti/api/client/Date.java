@@ -10,4 +10,6 @@ public interface Date {
     int getMonth();
 
     int getDay();
+    
+    String toString();
 }

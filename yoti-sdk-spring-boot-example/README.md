@@ -29,7 +29,7 @@ Before you start, you'll need to create an Application in [Dashboard](https://ww
 
 ## Running
 * You can run your server-app by executing `java -jar target/yoti-sdk-spring-boot-example-1.3.jar`
-* Your endpoint is listening under `https://localhost/login`.
+* Your endpoint is listening under `https://localhost:8443/login`.
 
 In order to receive calls on your /login endpoint, you need to expose your server-app to the outside world. We require that you use the domain from the Callback URL and HTTPS.
 

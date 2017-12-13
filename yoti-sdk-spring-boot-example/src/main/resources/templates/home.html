@@ -1,17 +1,53 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>Home</title>
-</head>
-<body>
-  <p th:text="'Hello, ' + ${name} + '!'" />
-  <p th:text="'Your phone number is:' + ${phone} " />
-  <p th:text="'Should you come back, I\'ll be able to remember you by the id ' + ${userId} + '.'" />
-  <img th:src="${base64Selfie}" />
-  <br />
-  <a th:href="${base64Selfie}" download="selfie.jpg">Download Selfie</a>
-</body>
+        xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Home</title>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>User ID:</td>
+                <td><p th:text="${userId}"/></td>
+            </tr>
+            <tr>
+                <td>Selfie:</td>
+                <td>
+                    <img th:src="${base64Selfie}" />
+                    <br />
+                    <a th:href="${base64Selfie}" download="selfie.jpg">Download Selfie</a>          
+                </td>
+            </tr>                
+            <tr>
+                <td>Given Names:</td>
+                <td><p th:text="${givenNames}"/></td>
+            </tr>
+            <tr>
+                <td>Family Name:</td>
+                <td><p th:text="${familyName}"/></td>
+            </tr>
+            <tr>
+                <td>Phone Number:</td>
+                <td><p th:text="${phoneNumber}"/></td>
+            </tr>
+            <tr>
+                <td>Date of Birth:</td>
+                <td><p th:text="${dateOfBirth}"/></td>
+            </tr>
+            <tr>
+                <td>Email Address:</td>
+                <td><p th:text="${emailAddress}"/></td>
+            </tr>
+            <tr>
+            <td>Nationality:</td>
+                <td><p th:text="${nationality}"/></td>
+            </tr>
+            <tr>
+                <td>Gender:</td>
+                <td><p th:text="${gender}"/></td>
+            </tr>
+        </table>    
+    </body>
 </html>
