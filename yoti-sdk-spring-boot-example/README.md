@@ -35,6 +35,7 @@ In order to receive calls on your /login endpoint, you need to expose your serve
 
 ## Requirements for running the application
 * Java 6 or above
+* If you are using Java 9, you should add an `add-exports` argument to the command you use to run the .jar file, so that it is `java -jar target/yoti-sdk-spring-boot-example-1.3.jar --add-exports java.base/jdk.internal.ref=ALL-UNNAMED`
 * If you are using Oracle JDK/JRE you need to install JCE extension in your server's Java to allow strong encryption (http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html). This is not a requirement if you are using OpenJDK.
 
 
