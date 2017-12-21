@@ -122,11 +122,12 @@ public final class RemoteProfileService implements ProfileService {
             int responseCode = re.getResponseCode();
             switch (responseCode) {
             case HTTP_INTERNAL_ERROR:
-                throw new ProfileException("Error completing sharing: " + re.getResponseBody());
+                throw new ProfileException("Error completing sharing: " + re.getResponseBody(), re);
             case HTTP_NOT_FOUND:
-                throw new ProfileException("Profile not found: " + re.getResponseBody());
+                throw new ProfileException("Profile not found. This can be due to a used or expired token. Details: " 
+                    + re.getResponseBody(), re);
             default:
-                throw new ProfileException("Unexpected response: " + responseCode + " " + re.getResponseBody());
+                throw new ProfileException("Unexpected response: " + responseCode + " " + re.getResponseBody(), re);
             }
         }
     }

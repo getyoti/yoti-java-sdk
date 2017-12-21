@@ -131,6 +131,25 @@ public class RemoteProfileServiceTest {
 
         assertNull(null, receipt);
     }
+    
+    @Test(expected = ResourceException.class)
+    public void shouldThrowExceptionWithResourceExceptionCause()
+            throws Throwable {
+        ResourceFetcher resourceFetcher = mock(ResourceFetcher.class);
+        when(resourceFetcher.fetchResource(Mockito.<UrlConnector> any(), Mockito.<Map<String, String>> any(),
+                eq(ProfileResponse.class))).thenThrow(new ResourceException(404, "Test exception"));
+        RemoteProfileService profileService = new RemoteProfileService(resourceFetcher);
+
+        KeyPair keyPair = generateKeyPairFrom(KEY_PAIR_PEM);
+        Receipt receipt;
+		try {
+			receipt = profileService.getReceipt(keyPair, APP_ID, TOKEN);
+		} catch (Exception e) {
+			throw e.getCause();
+		}
+
+        assertNull(null, receipt);
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWithNullKeyPair() throws IOException, GeneralSecurityException, ProfileException {
