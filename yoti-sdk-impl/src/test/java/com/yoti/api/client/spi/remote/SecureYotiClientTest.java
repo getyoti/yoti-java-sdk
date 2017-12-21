@@ -1,27 +1,5 @@
 package com.yoti.api.client.spi.remote;
 
-import static com.yoti.api.client.spi.remote.util.CryptoUtil.base64Url;
-import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptAsymmetric;
-import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptSymmetric;
-import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKey;
-import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.Key;
-import java.security.KeyPair;
-import java.security.PublicKey;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.junit.Test;
-import org.mockito.Mockito;
-
 import com.google.protobuf.ByteString;
 import com.yoti.api.client.ActivityDetails;
 import com.yoti.api.client.ActivityFailureException;
@@ -37,12 +15,39 @@ import com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType;
 import com.yoti.api.client.spi.remote.proto.EncryptedDataProto;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 import com.yoti.api.client.spi.remote.util.CryptoUtil.EncryptionResult;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.PublicKey;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.yoti.api.client.spi.remote.util.CryptoUtil.base64Url;
+import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptAsymmetric;
+import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptSymmetric;
+import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKey;
+import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class SecureYotiClientTest {
-    private static final Map<String, String> PROFILE_ATTRIBUTES;
 
+    private static final Map<String, String> PROFILE_ATTRIBUTES;
     private static final Map<String, String> EMPTY_PROFILE = new HashMap<String, String>();
-    
+
     static {
         PROFILE_ATTRIBUTES = new HashMap<String, String>();
         PROFILE_ATTRIBUTES.put("test-attr1", "test-value2");
@@ -56,410 +61,257 @@ public class SecureYotiClientTest {
     private static final String INVALID_TIMESTAMP = "xx2006-01-02T15:04:05Z07:00";
     private static final byte[] RECEIPT_ID = { 1, 2, 3, 4, 5, 6, 7, 8 };
 
-    @Test
-    public void shouldGetCorrectProfile() throws Exception {
+    @Mock ProfileService profileServiceMock;
+
+    String encryptedToken;
+    KeyPairSource validKeyPairSource;
+    byte[] validReceiptKey;
+    EncryptionResult encryptionResult;
+
+    @Before
+    public void setUp() throws Exception {
         Key receiptKey = generateKey();
         PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
-
-        EncryptionResult er = encryptSymmetric(createProfileData(PROFILE_ATTRIBUTES), receiptKey);
-        byte[] profileContent = marshalProfile(er.data, er.iv);
-        byte[] wrappedReceiptKey = encryptAsymmetric(receiptKey.getEncoded(), publicKey);
-        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
-                .withWrappedReceiptKey(wrappedReceiptKey).withOtherPartyProfile(profileContent)
-                .withProfile(profileContent).withTimestamp(TIMESTAMP).withReceiptId(RECEIPT_ID)
-                .withOutcome(Receipt.Outcome.SUCCESS).build();
-
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-
-        ProfileService profileService = mock(ProfileService.class);
-        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
-                .thenReturn(receipt);
-
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        ActivityDetails activityDetails = client.getActivityDetails(encryptedToken);
-        assertNotNull(activityDetails);
-        Profile profile = activityDetails.getUserProfile();
-
-        assertNotNull(profile);
-        assertProfileAttributes(profile, PROFILE_ATTRIBUTES);
+        encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
+        validKeyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
+        validReceiptKey = encryptAsymmetric(receiptKey.getEncoded(), publicKey);
+        encryptionResult = encryptSymmetric(createProfileData(PROFILE_ATTRIBUTES), receiptKey);
     }
 
     @Test
-    public void shouldGetEmptyProfileWithNullContent() throws Exception {
-        Key receiptKey = generateKey();
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
+    public void getActivityDetails_shouldGetCorrectProfile() throws Exception {
+        byte[] profileContent = marshalProfile(encryptionResult.data, encryptionResult.iv);
+        Receipt receipt = new Receipt.Builder()
+                .withRememberMeId(USER_ID)
+                .withWrappedReceiptKey(validReceiptKey)
+                .withOtherPartyProfile(profileContent)
+                .withProfile(profileContent)
+                .withTimestamp(TIMESTAMP)
+                .withReceiptId(RECEIPT_ID)
+                .withOutcome(Receipt.Outcome.SUCCESS)
+                .build();
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        byte[] profileContent = null;
-        byte[] wrappedReceiptKey = encryptAsymmetric(receiptKey.getEncoded(), publicKey);
-        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
-                .withWrappedReceiptKey(wrappedReceiptKey).withOtherPartyProfile(profileContent)
-                .withProfile(profileContent).withTimestamp(TIMESTAMP).withReceiptId(RECEIPT_ID)
-                .withOutcome(Receipt.Outcome.SUCCESS).build();
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        ActivityDetails result = testObj.getActivityDetails(encryptedToken);
 
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-
-        ProfileService profileService = mock(ProfileService.class);
-        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
-                .thenReturn(receipt);
-
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        ActivityDetails activityDetails = client.getActivityDetails(encryptedToken);
-        assertNotNull(activityDetails);
-        Profile profile = activityDetails.getUserProfile();
-
-        assertNotNull(profile);
-        assertProfileAttributes(profile, EMPTY_PROFILE);
+        assertNotNull(result);
+        assertProfileAttributes(result.getUserProfile(), PROFILE_ATTRIBUTES);
     }
 
     @Test
-    public void shouldGetEmptyProfileWithEmptyContent() throws Exception {
-        Key receiptKey = generateKey();
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
+    public void getActivityDetails_shouldGetEmptyProfileWithNullContent() throws Exception {
+        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
+                .withWrappedReceiptKey(validReceiptKey)
+                .withOtherPartyProfile(null)
+                .withProfile(null)
+                .withTimestamp(TIMESTAMP)
+                .withReceiptId(RECEIPT_ID)
+                .withOutcome(Receipt.Outcome.SUCCESS)
+                .build();
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        ActivityDetails result = testObj.getActivityDetails(encryptedToken);
+
+        assertNotNull(result);
+        assertProfileAttributes(result.getUserProfile(), EMPTY_PROFILE);
+    }
+
+    @Test
+    public void getActivityDetails_shouldGetEmptyProfileWithEmptyContent() throws Exception {
         byte[] profileContent = new byte[0];
-        byte[] wrappedReceiptKey = encryptAsymmetric(receiptKey.getEncoded(), publicKey);
         Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
-                .withWrappedReceiptKey(wrappedReceiptKey).withOtherPartyProfile(profileContent)
-                .withProfile(profileContent).withTimestamp(TIMESTAMP).withReceiptId(RECEIPT_ID)
-                .withOutcome(Receipt.Outcome.SUCCESS).build();
+                .withWrappedReceiptKey(validReceiptKey)
+                .withOtherPartyProfile(profileContent)
+                .withProfile(profileContent)
+                .withTimestamp(TIMESTAMP)
+                .withReceiptId(RECEIPT_ID)
+                .withOutcome(Receipt.Outcome.SUCCESS)
+                .build();
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        ActivityDetails result = testObj.getActivityDetails(encryptedToken);
 
-        ProfileService profileService = mock(ProfileService.class);
-        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
-                .thenReturn(receipt);
-
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        ActivityDetails activityDetails = client.getActivityDetails(encryptedToken);
-        assertNotNull(activityDetails);
-        Profile profile = activityDetails.getUserProfile();
-
-        assertNotNull(profile);
-        assertProfileAttributes(profile, EMPTY_PROFILE);
+        assertNotNull(result);
+        assertProfileAttributes(result.getUserProfile(), EMPTY_PROFILE);
     }
     
     @Test(expected = ProfileException.class)
-    public void shouldFailWithInvalidTimestamp() throws Exception {
-        Key receiptKey = generateKey();
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
-
-        EncryptionResult er = encryptSymmetric(createProfileData(PROFILE_ATTRIBUTES), receiptKey);
-        byte[] profileContent = marshalProfile(er.data, er.iv);
-        byte[] wrappedReceiptKey = encryptAsymmetric(receiptKey.getEncoded(), publicKey);
+    public void getActivityDetails_shouldFailWithInvalidTimestamp() throws Exception {
+        byte[] profileContent = marshalProfile(encryptionResult.data, encryptionResult.iv);
         Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
-                .withWrappedReceiptKey(wrappedReceiptKey).withOtherPartyProfile(profileContent)
-                .withProfile(profileContent).withTimestamp(INVALID_TIMESTAMP).withReceiptId(RECEIPT_ID)
-                .withOutcome(Receipt.Outcome.SUCCESS).build();
+                .withWrappedReceiptKey(validReceiptKey)
+                .withOtherPartyProfile(profileContent)
+                .withProfile(profileContent)
+                .withTimestamp(INVALID_TIMESTAMP)
+                .withReceiptId(RECEIPT_ID)
+                .withOutcome(Receipt.Outcome.SUCCESS)
+                .build();
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-
-        ProfileService profileService = mock(ProfileService.class);
-        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
-                .thenReturn(receipt);
-
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = ProfileException.class)
-    public void shouldFailWithNoIV() throws Exception {
-        Key receiptKey = generateKey();
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
+    public void getActivityDetails_shouldFailWithNoIV() throws Exception {
+        byte[] profileContent = marshalProfile(encryptionResult.data, null);
+        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
+                .withWrappedReceiptKey(validReceiptKey)
+                .withOtherPartyProfile(profileContent)
+                .build();
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        EncryptionResult er = encryptSymmetric(createProfileData(PROFILE_ATTRIBUTES), receiptKey);
-        byte[] profileContent = marshalProfile(er.data, null);
-        byte[] wrappedKey = encryptAsymmetric(receiptKey.getEncoded(), publicKey);
-        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID).withWrappedReceiptKey(wrappedKey)
-                .withOtherPartyProfile(profileContent).build();
-
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-
-        ProfileService profileService = mock(ProfileService.class);
-        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
-                .thenReturn(receipt);
-
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = ProfileException.class)
-    public void shouldFailWithInvalidIV() throws Exception {
-        Key receiptKey = generateKey();
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
+    public void getActivityDetails_shouldFailWithInvalidIV() throws Exception {
+        byte[] profileContent = marshalProfile(encryptionResult.data, new byte[] { 1, 2 });
+        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
+                .withWrappedReceiptKey(validReceiptKey)
+                .withOtherPartyProfile(profileContent)
+                .build();
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        EncryptionResult er = encryptSymmetric(createProfileData(PROFILE_ATTRIBUTES), receiptKey);
-        byte[] profileContent = marshalProfile(er.data, new byte[] { 1, 2 });
-        byte[] wrappedKey = encryptAsymmetric(receiptKey.getEncoded(), publicKey);
-        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID).withWrappedReceiptKey(wrappedKey)
-                .withOtherPartyProfile(profileContent).build();
-
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-
-        ProfileService profileService = mock(ProfileService.class);
-        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
-                .thenReturn(receipt);
-
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = ProfileException.class)
-    public void shouldFailWithNoReceipt() throws Exception {
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
+    public void getActivityDetails_shouldFailWithNoReceipt() throws Exception {
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(null);
 
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-
-        ProfileService profileService = mock(ProfileService.class);
-        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
-                .thenReturn(null);
-
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = ActivityFailureException.class)
-    public void shouldFailWithFailureReceipt() throws Exception {
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
-
+    public void getActivityDetails_shouldFailWithFailureReceipt() throws Exception {
         Receipt receipt = new Receipt.Builder().withOutcome(Receipt.Outcome.FAILURE).build();
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-
-        ProfileService profileService = mock(ProfileService.class);
-        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
-                .thenReturn(receipt);
-
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
-
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = ProfileException.class)
-    public void shouldFailWithInvalidProfileData() throws Exception {
-        Key receiptKey = generateKey();
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
-
-        EncryptionResult er = encryptSymmetric(createProfileData(PROFILE_ATTRIBUTES), receiptKey);
-        byte[] profileContent = marshalProfile(new byte[] { 1, 2 }, er.iv);
-        byte[] wrappedKey = encryptAsymmetric(receiptKey.getEncoded(), publicKey);
-        Receipt receipt = new Receipt.Builder().withWrappedReceiptKey(wrappedKey).withOtherPartyProfile(profileContent)
+    public void getActivityDetails_shouldFailWithInvalidProfileData() throws Exception {
+        byte[] profileContent = marshalProfile(new byte[] { 1, 2 }, encryptionResult.iv);
+        Receipt receipt = new Receipt.Builder().withWrappedReceiptKey(validReceiptKey)
+                .withOtherPartyProfile(profileContent)
                 .build();
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-
-        ProfileService profileService = mock(ProfileService.class);
-        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
-                .thenReturn(receipt);
-
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = ProfileException.class)
-    public void shouldFailWithInvalidReceiptKey() throws Exception {
-        Key receiptKey = generateKey();
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
-
-        EncryptionResult er = encryptSymmetric(createProfileData(PROFILE_ATTRIBUTES), receiptKey);
-        byte[] profileContent = marshalProfile(er.data, er.iv);
-        byte[] wrappedKey = { 1, 2, 3 };
-        Receipt receipt = new Receipt.Builder().withWrappedReceiptKey(wrappedKey).withOtherPartyProfile(profileContent)
+    public void getActivityDetails_shouldFailWithInvalidReceiptKey() throws Exception {
+        byte[] profileContent = marshalProfile(encryptionResult.data, encryptionResult.iv);
+        byte[] invalidReceiptKey = { 1, 2, 3 };
+        Receipt receipt = new Receipt.Builder().withWrappedReceiptKey(invalidReceiptKey)
+                .withOtherPartyProfile(profileContent)
                 .build();
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-
-        ProfileService profileService = mock(ProfileService.class);
-        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
-                .thenReturn(receipt);
-
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = ProfileException.class)
-    public void shouldFailWithNoReceiptKey() throws Exception {
-        Key receiptKey = generateKey();
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
-
-        EncryptionResult er = encryptSymmetric(createProfileData(PROFILE_ATTRIBUTES), receiptKey);
-        byte[] profileContent = marshalProfile(er.data, er.iv);
-        byte[] wrappedKey = null;
-        Receipt receipt = new Receipt.Builder().withWrappedReceiptKey(wrappedKey).withOtherPartyProfile(profileContent)
+    public void getActivityDetails_shouldFailWithNoReceiptKey() throws Exception {
+        byte[] profileContent = marshalProfile(encryptionResult.data, encryptionResult.iv);
+        Receipt receipt = new Receipt.Builder().withWrappedReceiptKey(null)
+                .withOtherPartyProfile(profileContent)
                 .build();
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-
-        ProfileService profileService = mock(ProfileService.class);
-        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
-                .thenReturn(receipt);
-
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = ProfileException.class)
-    public void shouldFailWithNoProfileData() throws Exception {
-        Key receiptKey = generateKey();
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
-
-        EncryptionResult er = encryptSymmetric(createProfileData(PROFILE_ATTRIBUTES), receiptKey);
-        byte[] profileContent = marshalProfile(null, er.iv);
-        byte[] wrappedKey = encryptAsymmetric(receiptKey.getEncoded(), publicKey);
-        Receipt receipt = new Receipt.Builder().withWrappedReceiptKey(wrappedKey).withOtherPartyProfile(profileContent)
+    public void getActivityDetails_shouldFailWithNoProfileData() throws Exception {
+        byte[] profileContent = marshalProfile(null, encryptionResult.iv);
+        Receipt receipt = new Receipt.Builder().withWrappedReceiptKey(validReceiptKey)
+                .withOtherPartyProfile(profileContent)
                 .build();
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-
-        ProfileService profileService = mock(ProfileService.class);
-        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
-                .thenReturn(receipt);
-
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = ProfileException.class)
-    public void shouldFailWithExceptionFromProfileService() throws Exception {
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
+    public void getActivityDetails_shouldFailWithExceptionFromProfileService() throws Exception {
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenThrow(new ProfileException("Test exception"));
 
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-
-        ProfileService profileService = mock(ProfileService.class);
-        when(profileService.getReceipt(Mockito.<KeyPair> any(), Mockito.<String> any(), Mockito.<String> any()))
-                .thenThrow(new ProfileException("Test exception"));
-
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = InitialisationException.class)
-    public void shouldFailWhenStreamExceptionLoadingKeys() throws Exception {
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
-        KeyPairSource keyPairSource = new StaticKeyPairSource(true);
-        ProfileService profileService = mock(ProfileService.class);
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
+    public void getActivityDetails_shouldFailWhenStreamExceptionLoadingKeys() throws Exception {
+        KeyPairSource exceptionKeyPairSource = new StaticKeyPairSource(true);
 
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, exceptionKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = InitialisationException.class)
-    public void shouldFailWhenKeyPairSourceExceptionLoadingKeys() throws Exception {
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
-        KeyPairSource keyPairSource = new StaticKeyPairSource(false);
-        ProfileService profileService = mock(ProfileService.class);
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
+    public void getActivityDetails_shouldFailWhenKeyPairSourceExceptionLoadingKeys() throws Exception {
+        KeyPairSource exceptionKeyPairSource = new StaticKeyPairSource(false);
 
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, exceptionKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shouldFailWithNullApplicationId() throws Exception {
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-        ProfileService profileService = mock(ProfileService.class);
-
-        new SecureYotiClient(null, keyPairSource, profileService);
+    public void constructor_shouldFailWithNullApplicationId() throws Exception {
+        new SecureYotiClient(null, validKeyPairSource, profileServiceMock);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shouldFailWithNullKeyPairSource() throws Exception {
-        ProfileService profileService = mock(ProfileService.class);
-
-        new SecureYotiClient(APP_ID, null, profileService);
+    public void constructor_shouldFailWithNullKeyPairSource() throws Exception {
+        new SecureYotiClient(APP_ID, null, profileServiceMock);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shouldFailWithNullProfileService() throws Exception {
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-
-        new SecureYotiClient(APP_ID, keyPairSource, null);
+    public void constructor_shouldFailWithNullProfileService() throws Exception {
+        new SecureYotiClient(APP_ID, validKeyPairSource, null);
     }
 
     @Test(expected = InitialisationException.class)
-    public void shouldFailWithNoKeyPair() throws Exception {
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
-        KeyPairSource keyPairSource = new StaticKeyPairSource("no-key-pair-in-file");
-        ProfileService profileService = mock(ProfileService.class);
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
+    public void getActivityDetails_shouldFailWithNoKeyPair() throws Exception {
+        KeyPairSource invalidKeyPairSource = new StaticKeyPairSource("no-key-pair-in-file");
 
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, invalidKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = InitialisationException.class)
-    public void shouldFailWithInvalidKeyPair() throws Exception {
-        PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.INVALID_KEY_PAIR_PEM);
-        ProfileService profileService = mock(ProfileService.class);
-        String encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
+    public void getActivityDetails_shouldFailWithInvalidKeyPair() throws Exception {
+        KeyPairSource invalidKeyPairSource = new StaticKeyPairSource(CryptoUtil.INVALID_KEY_PAIR_PEM);
 
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, invalidKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = ProfileException.class)
-    public void shouldFailWithInvalidToken() throws Exception {
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-        ProfileService profileService = mock(ProfileService.class);
-        String encryptedToken = TOKEN;
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(encryptedToken);
+    public void getActivityDetails_shouldFailWithInvalidToken() throws Exception {
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(TOKEN);
     }
 
     @Test(expected = ProfileException.class)
-    public void shouldFailWithNullToken() throws Exception {
-        KeyPairSource keyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-        ProfileService profileService = mock(ProfileService.class);
-
-        SecureYotiClient client = new SecureYotiClient(APP_ID, keyPairSource, profileService);
-
-        client.getActivityDetails(null);
+    public void getActivityDetails_shouldFailWithNullToken() throws Exception {
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock);
+        testObj.getActivityDetails(null);
     }
 
     private void assertProfileAttributes(Profile profile, Map<String, String> profileAttributes) {
