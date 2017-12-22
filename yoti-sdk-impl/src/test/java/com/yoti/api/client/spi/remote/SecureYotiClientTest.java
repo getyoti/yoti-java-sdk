@@ -15,6 +15,7 @@ import com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType;
 import com.yoti.api.client.spi.remote.proto.EncryptedDataProto;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 import com.yoti.api.client.spi.remote.util.CryptoUtil.EncryptionResult;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,16 +28,20 @@ import java.io.InputStream;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.PublicKey;
-import java.util.HashMap;
 import java.util.Map;
 
+import static com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.DATE;
+import static com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.JSON;
+import static com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.STRING;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.base64Url;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptAsymmetric;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptSymmetric;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKey;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
+import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -45,14 +50,14 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class SecureYotiClientTest {
 
-    private static final Map<String, String> PROFILE_ATTRIBUTES;
-    private static final Map<String, String> EMPTY_PROFILE = new HashMap<String, String>();
-
-    static {
-        PROFILE_ATTRIBUTES = new HashMap<String, String>();
-        PROFILE_ATTRIBUTES.put("test-attr1", "test-value2");
-        PROFILE_ATTRIBUTES.put("test-attr2", "test-value3");
-    }
+    private static final String STRING_ATTRIBUTE = "testStringAttr";
+    private static final String STRING_ATTR_VALUE = "someStringValue";
+    private static final String DATE_ATTRIBUTE = "testDateAttr";
+    private static final String DATE_ATTR_VALUE = "1980-08-05";
+    private static final String JSON_KEY = "someKey";
+    private static final String JSON_VALUE = "someValue";
+    private static final String JSON_ATTRIBUTE = "testJsonAttr";
+    private static final String JSON_ATTR_VALUE = "{\"" + JSON_KEY + "\":\"" + JSON_VALUE + "\"}";
 
     private static final String TOKEN = "test-token-test-test-test";
     private static final String APP_ID = "appId";
@@ -72,10 +77,11 @@ public class SecureYotiClientTest {
     public void setUp() throws Exception {
         Key receiptKey = generateKey();
         PublicKey publicKey = generateKeyPairFrom(CryptoUtil.KEY_PAIR_PEM).getPublic();
+        validReceiptKey = encryptAsymmetric(receiptKey.getEncoded(), publicKey);
+        encryptionResult = encryptSymmetric(createProfileData(), receiptKey);
+
         encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
         validKeyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
-        validReceiptKey = encryptAsymmetric(receiptKey.getEncoded(), publicKey);
-        encryptionResult = encryptSymmetric(createProfileData(PROFILE_ATTRIBUTES), receiptKey);
     }
 
     @Test
@@ -96,7 +102,7 @@ public class SecureYotiClientTest {
         ActivityDetails result = testObj.getActivityDetails(encryptedToken);
 
         assertNotNull(result);
-        assertProfileAttributes(result.getUserProfile(), PROFILE_ATTRIBUTES);
+        validateProfileAttributes(result.getUserProfile());
     }
 
     @Test
@@ -115,7 +121,7 @@ public class SecureYotiClientTest {
         ActivityDetails result = testObj.getActivityDetails(encryptedToken);
 
         assertNotNull(result);
-        assertProfileAttributes(result.getUserProfile(), EMPTY_PROFILE);
+        validateEmptyProfile(result.getUserProfile());
     }
 
     @Test
@@ -135,9 +141,9 @@ public class SecureYotiClientTest {
         ActivityDetails result = testObj.getActivityDetails(encryptedToken);
 
         assertNotNull(result);
-        assertProfileAttributes(result.getUserProfile(), EMPTY_PROFILE);
+        validateEmptyProfile(result.getUserProfile());
     }
-    
+
     @Test(expected = ProfileException.class)
     public void getActivityDetails_shouldFailWithInvalidTimestamp() throws Exception {
         byte[] profileContent = marshalProfile(encryptionResult.data, encryptionResult.iv);
@@ -314,23 +320,36 @@ public class SecureYotiClientTest {
         testObj.getActivityDetails(null);
     }
 
-    private void assertProfileAttributes(Profile profile, Map<String, String> profileAttributes) {
+    private void validateProfileAttributes(Profile profile) {
         assertNotNull(profile.getAttributes());
-        assertEquals(profileAttributes.size(), profile.getAttributes().size());
-        for (Map.Entry<String, String> attribute : profileAttributes.entrySet()) {
-            assertEquals(attribute.getValue(), profile.getAttribute(attribute.getKey()));
-        }
+
+        assertEquals(STRING_ATTR_VALUE, profile.getAttribute(STRING_ATTRIBUTE));
+        assertEquals(DATE_ATTR_VALUE, profile.getAttribute(DATE_ATTRIBUTE, DateAttributeValue.class).toString());
+        assertEquals(1, profile.getAttribute(JSON_ATTRIBUTE, Map.class).size());
+        assertThat(profile.getAttribute(JSON_ATTRIBUTE, Map.class), (Matcher) hasEntry(JSON_KEY, JSON_VALUE));
+
+        assertEquals(3, profile.getAttributes().size());
     }
 
-    private byte[] createProfileData(Map<String, String> testAttributes) {
-        AttributeList.Builder attrListBuilder = AttributeList.newBuilder();
-        for (Map.Entry<String, String> e : testAttributes.entrySet()) {
-            Attribute attribute = Attribute.newBuilder().setContentType(ContentType.STRING).setName(e.getKey())
-                    .setValue(ByteString.copyFromUtf8(e.getValue())).build();
-            attrListBuilder.addAttributes(attribute);
-        }
+    private void validateEmptyProfile(Profile profile) {
+        assertNotNull(profile.getAttributes());
+        assertEquals(0, profile.getAttributes().size());
+    }
 
-        return attrListBuilder.build().toByteArray();
+    private byte[] createProfileData() {
+        return AttributeList.newBuilder()
+                .addAttributes(createAttribute(STRING_ATTRIBUTE, STRING_ATTR_VALUE, STRING))
+                .addAttributes(createAttribute(DATE_ATTRIBUTE, DATE_ATTR_VALUE, DATE))
+                .addAttributes(createAttribute(JSON_ATTRIBUTE, JSON_ATTR_VALUE, JSON))
+                .build().toByteArray();
+    }
+
+    private static Attribute createAttribute(String name, String value, ContentType contentType) {
+        return Attribute.newBuilder()
+                .setContentType(contentType)
+                .setName(name)
+                .setValue(ByteString.copyFromUtf8(value))
+                .build();
     }
 
     private static class StaticKeyPairSource implements KeyPairSource {

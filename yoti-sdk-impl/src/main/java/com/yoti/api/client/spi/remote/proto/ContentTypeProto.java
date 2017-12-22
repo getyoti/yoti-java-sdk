@@ -6,112 +6,145 @@ package com.yoti.api.client.spi.remote.proto;
 public final class ContentTypeProto {
   private ContentTypeProto() {}
   public static void registerAllExtensions(
+      com.google.protobuf.ExtensionRegistryLite registry) {
+  }
+
+  public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions(
+        (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   /**
-   * Protobuf enum {@code attrpubapi_v1.ContentType}
-   *
    * <pre>
    * ContentType indicates how to interpret the ‘Value’ field of an Attribute.
    * </pre>
+   *
+   * Protobuf enum {@code attrpubapi_v1.ContentType}
    */
   public enum ContentType
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
-     * <code>UNDEFINED = 0;</code>
-     *
      * <pre>
      * UNDEFINED should not be seen, and is used as an error placeholder
      * value.
      * </pre>
-     */
-    UNDEFINED(0, 0),
-    /**
-     * <code>STRING = 1;</code>
      *
+     * <code>UNDEFINED = 0;</code>
+     */
+    UNDEFINED(0),
+    /**
      * <pre>
      * STRING means the value is UTF-8 encoded text.
      * </pre>
-     */
-    STRING(1, 1),
-    /**
-     * <code>JPEG = 2;</code>
      *
+     * <code>STRING = 1;</code>
+     */
+    STRING(1),
+    /**
      * <pre>
      * JPEG indicates a standard .jpeg image.
      * </pre>
-     */
-    JPEG(2, 2),
-    /**
-     * <code>DATE = 3;</code>
      *
+     * <code>JPEG = 2;</code>
+     */
+    JPEG(2),
+    /**
      * <pre>
      * Date as string in RFC3339 format (YYYY-MM-DD).
      * </pre>
-     */
-    DATE(3, 3),
-    /**
-     * <code>PNG = 4;</code>
      *
+     * <code>DATE = 3;</code>
+     */
+    DATE(3),
+    /**
      * <pre>
      * PNG indicates a standard .png image.
      * </pre>
+     *
+     * <code>PNG = 4;</code>
      */
-    PNG(4, 4),
+    PNG(4),
+    /**
+     * <pre>
+     * JSON means the value is encoded using JSON.
+     * </pre>
+     *
+     * <code>JSON = 5;</code>
+     */
+    JSON(5),
     ;
 
     /**
-     * <code>UNDEFINED = 0;</code>
-     *
      * <pre>
      * UNDEFINED should not be seen, and is used as an error placeholder
      * value.
      * </pre>
+     *
+     * <code>UNDEFINED = 0;</code>
      */
     public static final int UNDEFINED_VALUE = 0;
     /**
-     * <code>STRING = 1;</code>
-     *
      * <pre>
      * STRING means the value is UTF-8 encoded text.
      * </pre>
+     *
+     * <code>STRING = 1;</code>
      */
     public static final int STRING_VALUE = 1;
     /**
-     * <code>JPEG = 2;</code>
-     *
      * <pre>
      * JPEG indicates a standard .jpeg image.
      * </pre>
+     *
+     * <code>JPEG = 2;</code>
      */
     public static final int JPEG_VALUE = 2;
     /**
-     * <code>DATE = 3;</code>
-     *
      * <pre>
      * Date as string in RFC3339 format (YYYY-MM-DD).
      * </pre>
+     *
+     * <code>DATE = 3;</code>
      */
     public static final int DATE_VALUE = 3;
     /**
-     * <code>PNG = 4;</code>
-     *
      * <pre>
      * PNG indicates a standard .png image.
      * </pre>
+     *
+     * <code>PNG = 4;</code>
      */
     public static final int PNG_VALUE = 4;
+    /**
+     * <pre>
+     * JSON means the value is encoded using JSON.
+     * </pre>
+     *
+     * <code>JSON = 5;</code>
+     */
+    public static final int JSON_VALUE = 5;
 
 
-    public final int getNumber() { return value; }
+    public final int getNumber() {
+      return value;
+    }
 
+    /**
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @Deprecated
     public static ContentType valueOf(int value) {
+      return forNumber(value);
+    }
+
+    public static ContentType forNumber(int value) {
       switch (value) {
         case 0: return UNDEFINED;
         case 1: return STRING;
         case 2: return JPEG;
         case 3: return DATE;
         case 4: return PNG;
+        case 5: return JSON;
         default: return null;
       }
     }
@@ -120,17 +153,17 @@ public final class ContentTypeProto {
         internalGetValueMap() {
       return internalValueMap;
     }
-    private static com.google.protobuf.Internal.EnumLiteMap<ContentType>
-        internalValueMap =
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+        ContentType> internalValueMap =
           new com.google.protobuf.Internal.EnumLiteMap<ContentType>() {
             public ContentType findValueByNumber(int number) {
-              return ContentType.valueOf(number);
+              return ContentType.forNumber(number);
             }
           };
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
-      return getDescriptor().getValues().get(index);
+      return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptorForType() {
@@ -146,17 +179,15 @@ public final class ContentTypeProto {
     public static ContentType valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
+        throw new IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       return VALUES[desc.getIndex()];
     }
 
-    private final int index;
     private final int value;
 
-    private ContentType(int index, int value) {
-      this.index = index;
+    private ContentType(int value) {
       this.value = value;
     }
 
@@ -168,23 +199,23 @@ public final class ContentTypeProto {
       getDescriptor() {
     return descriptor;
   }
-  private static com.google.protobuf.Descriptors.FileDescriptor
+  private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    java.lang.String[] descriptorData = {
-      "\n\021ContentType.proto\022\rattrpubapi_v1*E\n\013Co" +
+    String[] descriptorData = {
+      "\n\021ContentType.proto\022\rattrpubapi_v1*O\n\013Co" +
       "ntentType\022\r\n\tUNDEFINED\020\000\022\n\n\006STRING\020\001\022\010\n\004" +
-      "JPEG\020\002\022\010\n\004DATE\020\003\022\007\n\003PNG\020\004B*\n\026com.yoti.at" +
-      "trpubapi_v1B\020ContentTypeProto"
+      "JPEG\020\002\022\010\n\004DATE\020\003\022\007\n\003PNG\020\004\022\010\n\004JSON\020\005B*\n\026c" +
+      "om.yoti.attrpubapi_v1B\020ContentTypeProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          return null;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
