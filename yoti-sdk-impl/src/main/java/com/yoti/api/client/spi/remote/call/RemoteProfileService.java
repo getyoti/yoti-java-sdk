@@ -27,7 +27,8 @@ public final class RemoteProfileService implements ProfileService {
     private static final Logger LOG = LoggerFactory.getLogger(RemoteProfileService.class);
 
     private static final String PROPERTY_YOTI_API_URL = "yoti.api.url";
-    private static final String DEFAULT_YOTI_API_URL = "https://api.yoti.com" + YOTI_API_PATH_PREFIX;
+    private static final String DEFAULT_YOTI_HOST = "https://api.yoti.com";
+    public static final String DEFAULT_YOTI_API_URL = DEFAULT_YOTI_HOST + YOTI_API_PATH_PREFIX;
     private static final String MESSAGE_PREFIX = "GET&";
 
     private static final String PATH_TEMPLATE = "/profile/{}?nonce={}&timestamp={}&appId={}";
