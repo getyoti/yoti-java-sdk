@@ -5,14 +5,19 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.yoti.api.client.ActivityDetails;
 import com.yoti.api.client.ActivityFailureException;
+import com.yoti.api.client.AmlException;
 import com.yoti.api.client.InitialisationException;
 import com.yoti.api.client.KeyPairSource;
 import com.yoti.api.client.KeyPairSource.StreamVisitor;
 import com.yoti.api.client.Profile;
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.YotiClient;
+import com.yoti.api.client.aml.AmlProfile;
+import com.yoti.api.client.aml.AmlResult;
 import com.yoti.api.client.spi.remote.call.ProfileService;
 import com.yoti.api.client.spi.remote.call.Receipt;
+import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
+import com.yoti.api.client.spi.remote.exception.YotiSigningException;
 import com.yoti.api.client.spi.remote.proto.AttrProto.Attribute;
 import com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList;
 import com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType;
@@ -61,22 +66,35 @@ final class SecureYotiClient implements YotiClient {
     private final String appId;
     private final KeyPair keyPair;
     private final ProfileService profileService;
+    private final RemoteAmlService remoteAmlService;
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
-    SecureYotiClient(String applicationId, KeyPairSource kpSource, ProfileService profileService)
-            throws InitialisationException {
+    SecureYotiClient(String applicationId,
+                     KeyPairSource kpSource,
+                     ProfileService profileService,
+                     RemoteAmlService remoteAmlService) throws InitialisationException {
         this.appId = notNull(applicationId, "Application id");
         this.keyPair = loadKeyPair(notNull(kpSource, "Key pair source"));
         this.profileService = notNull(profileService, "Profile service");
+        this.remoteAmlService = notNull(remoteAmlService, "Aml service");
     }
 
     @Override
     public ActivityDetails getActivityDetails(String encryptedConnectToken) throws ProfileException {
         Receipt receipt = getReceipt(encryptedConnectToken, keyPair);
         return buildReceipt(receipt, keyPair.getPrivate());
+    }
+
+    @Override
+    public AmlResult performAmlCheck(AmlProfile amlProfile) throws AmlException {
+        LOG.debug("Performing aml check...");
+
+        return remoteAmlService.performCheck(keyPair, appId, amlProfile);
+
+
     }
 
     private Receipt getReceipt(String encryptedConnectToken, KeyPair keyPair) throws ProfileException {

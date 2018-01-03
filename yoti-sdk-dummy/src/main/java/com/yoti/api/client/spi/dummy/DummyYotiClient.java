@@ -1,6 +1,9 @@
 package com.yoti.api.client.spi.dummy;
 
 import com.yoti.api.client.*;
+import com.yoti.api.client.aml.AmlProfile;
+import com.yoti.api.client.aml.AmlResult;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -193,6 +196,12 @@ public class DummyYotiClient implements YotiClient, YotiClientFactory {
             throw new ProfileException(encryptedConnectToken);
         }
         return DUMMY_RECEIPT;
+    }
+
+    //FIXME - Do not check in like this
+    @Override
+    public AmlResult performAmlCheck(AmlProfile amlProfile) throws AmlException {
+        throw new NotImplementedException();
     }
 
     @Override

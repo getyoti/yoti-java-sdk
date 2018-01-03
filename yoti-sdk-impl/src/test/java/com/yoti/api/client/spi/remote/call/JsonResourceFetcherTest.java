@@ -31,7 +31,6 @@ public class JsonResourceFetcherTest {
     private static final String TEST_HEADER_KEY = "testHeader";
     private static final String TEST_HEADER_VALUE = "testValue";
     private static final Map<String, String> TEST_HEADERS = new HashMap<String, String>();
-    private static final String SERIALIZED_REQUEST_BODY = "testSerializedBody";
 
     @InjectMocks JsonResourceFetcher testObj;
 
@@ -40,8 +39,8 @@ public class JsonResourceFetcherTest {
     @Mock(answer = RETURNS_DEEP_STUBS) HttpURLConnection httpURLConnectionMock;
     @Mock UrlConnector urlConnectorMock;
     @Mock InputStream inputStreamMock;
+    byte[] requestBody = new byte[]{};
     Object parsedResponse = new Object();
-    Object requestBody = new Object();
 
     @BeforeClass
     public static void classSetup() {
@@ -99,14 +98,13 @@ public class JsonResourceFetcherTest {
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
         when(httpURLConnectionMock.getInputStream()).thenReturn(inputStreamMock);
         when(urlConnectorMock.getHttpUrlConnection()).thenReturn(httpURLConnectionMock);
-        when(objectMapperMock.writeValueAsString(requestBody)).thenReturn(SERIALIZED_REQUEST_BODY);
         when(objectMapperMock.readValue(inputStreamMock, Object.class)).thenReturn(parsedResponse);
 
         Object result = testObj.postResource(urlConnectorMock, requestBody, TEST_HEADERS, Object.class);
 
         verify(httpURLConnectionMock).setRequestMethod("POST");
         verify(httpURLConnectionMock).setRequestProperty(TEST_HEADER_KEY, TEST_HEADER_VALUE);
-        verify(httpURLConnectionMock.getOutputStream()).write(SERIALIZED_REQUEST_BODY.getBytes());
+        verify(httpURLConnectionMock.getOutputStream()).write(requestBody);
         assertSame(parsedResponse, result);
     }
 

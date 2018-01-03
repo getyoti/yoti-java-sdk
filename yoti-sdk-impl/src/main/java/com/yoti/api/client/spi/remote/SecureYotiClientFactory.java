@@ -1,5 +1,6 @@
 package com.yoti.api.client.spi.remote;
 
+import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,7 @@ public final class SecureYotiClientFactory implements YotiClientFactory {
         LOG.debug("Creating SecureYotiClient for application {} from {}", configuration.getApplicationId(),
                 configuration.getKeyPairSource());
         return new SecureYotiClient(configuration.getApplicationId(), configuration.getKeyPairSource(),
-                RemoteProfileService.newInstance());
+                RemoteProfileService.newInstance(), RemoteAmlService.newInstance());
     }
 
 }
