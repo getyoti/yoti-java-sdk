@@ -45,7 +45,7 @@ public final class RemoteProfileService implements ProfileService {
     }
 
     public static RemoteProfileService newInstance() {
-        return new RemoteProfileService(new JsonResourceFetcher(), new ProfilePathFactory(), new SignatureFactory());
+        return new RemoteProfileService(JsonResourceFetcher.createInstance(), new ProfilePathFactory(), new SignatureFactory());
     }
 
     RemoteProfileService(ResourceFetcher resourceFetcher,

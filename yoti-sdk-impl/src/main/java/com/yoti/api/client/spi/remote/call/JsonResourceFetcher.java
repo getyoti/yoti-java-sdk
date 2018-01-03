@@ -14,10 +14,20 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 final class JsonResourceFetcher implements ResourceFetcher {
+
     private static final Logger LOG = LoggerFactory.getLogger(JsonResourceFetcher.class);
     private static final String HTTP_GET_METHOD = "GET";
-    private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
     private static final String DEFAULT_CHARSET = "UTF-8";
+
+    private final ObjectMapper objectMapper;
+
+    public static JsonResourceFetcher createInstance() {
+        return new JsonResourceFetcher(new ObjectMapper());
+    }
+
+    JsonResourceFetcher(ObjectMapper json_mapper) {
+        objectMapper = json_mapper;
+    }
 
     @Override
     public <T> T fetchResource(UrlConnector urlConnector, Map<String, String> headers, Class<T> resourceClass)
@@ -60,7 +70,7 @@ final class JsonResourceFetcher implements ResourceFetcher {
     private <T> T parseResource(InputStream inputStream, Class<T> clazz) throws IOException {
         T result = null;
         try {
-            result = JSON_MAPPER.readValue(inputStream, clazz);
+            result = objectMapper.readValue(inputStream, clazz);
         } finally {
             if (inputStream != null) {
                 try {
