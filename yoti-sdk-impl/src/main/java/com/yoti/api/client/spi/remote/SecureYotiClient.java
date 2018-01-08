@@ -43,6 +43,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 import static javax.crypto.Cipher.DECRYPT_MODE;
 
 /**
@@ -243,13 +244,6 @@ final class SecureYotiClient implements YotiClient {
             throw new ProfileException("Base64 encoding error", iae);
         }
         return result;
-    }
-
-    private <T> T notNull(T value, String item) {
-        if (value == null) {
-            throw new IllegalArgumentException(item + " must not be null.");
-        }
-        return value;
     }
 
     private static class KeyStreamVisitor implements StreamVisitor {

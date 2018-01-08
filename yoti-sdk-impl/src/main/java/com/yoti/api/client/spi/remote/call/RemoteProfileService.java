@@ -1,27 +1,25 @@
 package com.yoti.api.client.spi.remote.call;
 
-import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.SecureRandom;
-import java.security.Security;
-import java.security.Signature;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
+import com.yoti.api.client.ProfileException;
+import com.yoti.api.client.spi.remote.Base64;
+import com.yoti.api.client.spi.remote.call.factory.ProfilePathFactory;
+import com.yoti.api.client.spi.remote.call.factory.SignatureFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.yoti.api.client.ProfileException;
-import com.yoti.api.client.spi.remote.Base64;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.KeyPair;
+import java.security.Security;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.yoti.api.client.spi.remote.util.Validation.notNull;
+import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
 public final class RemoteProfileService implements ProfileService {
+
     public static final String YOTI_API_PATH_PREFIX = "/api/v1";
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoteProfileService.class);
@@ -31,19 +29,15 @@ public final class RemoteProfileService implements ProfileService {
     public static final String DEFAULT_YOTI_API_URL = DEFAULT_YOTI_HOST + YOTI_API_PATH_PREFIX;
     private static final String MESSAGE_PREFIX = "GET&";
 
-    private static final String PATH_TEMPLATE = "/profile/{}?nonce={}&timestamp={}&appId={}";
-    private static final String PARAM_PLACEHOLDER = "\\{\\}";
-
     private static final String AUTH_KEY_HEADER = "X-Yoti-Auth-Key";
     private static final String DIGEST_HEADER = "X-Yoti-Auth-Digest";
     private static final String YOTI_SDK_HEADER = "X-Yoti-SDK";
     private static final String CONTENT_TYPE = "Content-Type";
-
-    private static final String BOUNCY_CASTLE_PROVIDER = "BC";
-    private static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
     private static final String STRING_ENCODING = "UTF-8";
 
     private final ResourceFetcher resourceFetcher;
+    private final ProfilePathFactory profilePathFactory;
+    private final SignatureFactory signatureFactory;
     private final String apiUrl;
 
     static {
@@ -51,11 +45,15 @@ public final class RemoteProfileService implements ProfileService {
     }
 
     public static RemoteProfileService newInstance() {
-        return new RemoteProfileService(new JsonResourceFetcher());
+        return new RemoteProfileService(JsonResourceFetcher.createInstance(), new ProfilePathFactory(), new SignatureFactory());
     }
 
-    RemoteProfileService(ResourceFetcher resourceFetcher) {
+    RemoteProfileService(ResourceFetcher resourceFetcher,
+                         ProfilePathFactory profilePathFactory,
+                         SignatureFactory signatureFactory) {
         this.resourceFetcher = resourceFetcher;
+        this.profilePathFactory = profilePathFactory;
+        this.signatureFactory = signatureFactory;
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
 
@@ -65,24 +63,15 @@ public final class RemoteProfileService implements ProfileService {
         notNull(appId, "Application id");
         notNull(connectToken, "Connect token");
 
-        String path = createRequestPath(appId, connectToken);
-        String digest = base64(signMessage(assembleMessage(path), keyPair.getPrivate()));
+        String path = profilePathFactory.create(appId, connectToken);
+        String digest = base64(signatureFactory.create(assembleMessage(path), keyPair.getPrivate()));
         String authKey = base64(keyPair.getPublic().getEncoded());
 
-        Receipt receipt;
         try {
-            receipt = fetchReceipt(path, digest, authKey);
+            return fetchReceipt(path, digest, authKey);
         } catch (IOException ioe) {
             throw new ProfileException("Error calling service to get profile", ioe);
         }
-        return receipt;
-    }
-
-    private String createRequestPath(String appId, String connectToken) {
-        String template = PATH_TEMPLATE.replaceFirst(PARAM_PLACEHOLDER, connectToken);
-        template = template.replaceFirst(PARAM_PLACEHOLDER, UUID.randomUUID().toString());
-        template = template.replaceFirst(PARAM_PLACEHOLDER, "" + System.nanoTime() / 1000);
-        return template.replaceFirst(PARAM_PLACEHOLDER, appId);
     }
 
     private byte[] assembleMessage(String path) {
@@ -94,19 +83,7 @@ public final class RemoteProfileService implements ProfileService {
         }
     }
 
-    private byte[] signMessage(byte[] message, PrivateKey privateKey) throws ProfileException {
-        try {
-            Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM, BOUNCY_CASTLE_PROVIDER);
-            signature.initSign(privateKey, new SecureRandom());
-            signature.update(message);
-            return signature.sign();
-        } catch (GeneralSecurityException gse) {
-            throw new ProfileException("Cannot sign request", gse);
-        }
-    }
-
-    private Receipt fetchReceipt(String resourcePath, String digest, String authKey)
-            throws IOException, ProfileException {
+    private Receipt fetchReceipt(String resourcePath, String digest, String authKey) throws IOException, ProfileException {
         LOG.info("Fetching profile from resource at {}", resourcePath);
         Map<String, String> headers = new HashMap<String, String>();
         headers.put(AUTH_KEY_HEADER, authKey);
@@ -122,26 +99,19 @@ public final class RemoteProfileService implements ProfileService {
         } catch (ResourceException re) {
             int responseCode = re.getResponseCode();
             switch (responseCode) {
-            case HTTP_INTERNAL_ERROR:
-                throw new ProfileException("Error completing sharing: " + re.getResponseBody(), re);
-            case HTTP_NOT_FOUND:
-                throw new ProfileException("Profile not found. This can be due to a used or expired token. Details: " 
-                    + re.getResponseBody(), re);
-            default:
-                throw new ProfileException("Unexpected response: " + responseCode + " " + re.getResponseBody(), re);
+                case HTTP_INTERNAL_ERROR:
+                    throw new ProfileException("Error completing sharing: " + re.getResponseBody(), re);
+                case HTTP_NOT_FOUND:
+                    throw new ProfileException("Profile not found. This can be due to a used or expired token. Details: "
+                            + re.getResponseBody(), re);
+                default:
+                    throw new ProfileException("Unexpected response: " + responseCode + " " + re.getResponseBody(), re);
             }
         }
     }
 
     private static String base64(byte[] data) {
         return Base64.getEncoder().encodeToString(data);
-    }
-
-    private <T> T notNull(T value, String item) {
-        if (value == null) {
-            throw new IllegalArgumentException(item + " must not be null.");
-        }
-        return value;
     }
 
 }

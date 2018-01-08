@@ -2,8 +2,9 @@ package com.yoti.api.client.spi.remote.call;
 
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.Base64;
+import com.yoti.api.client.spi.remote.call.factory.ProfilePathFactory;
+import com.yoti.api.client.spi.remote.call.factory.SignatureFactory;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -24,10 +25,9 @@ import static com.yoti.api.client.spi.remote.call.RemoteProfileService.YOTI_API_
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.KEY_PAIR_PEM;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.base64;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
-import static com.yoti.api.client.spi.remote.util.CryptoUtil.verifyMessage;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -50,6 +50,8 @@ public class RemoteProfileServiceTest {
             .createProfileResonse();
     private static final String APP_ID = "test-app";
     private static final String TOKEN = "test-token";
+    private static final String GENERATED_PROFILE_PATH = "/generatedProfilePath";
+    private static final byte[] SIGNATURE_BYTES = { 1, 2, 3 };
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
@@ -58,6 +60,8 @@ public class RemoteProfileServiceTest {
     @InjectMocks RemoteProfileService testObj;
 
     @Mock ResourceFetcher resourceFetcherMock;
+    @Mock ProfilePathFactory profilePathFactoryMock;
+    @Mock SignatureFactory signatureFactoryMock;
 
     @Captor ArgumentCaptor<Map<String, String>> headersCaptor;
     @Captor ArgumentCaptor<UrlConnector> urlConnectorCaptor;
@@ -66,6 +70,9 @@ public class RemoteProfileServiceTest {
     @Before
     public void setUp() throws Exception {
         keyPair = generateKeyPairFrom(KEY_PAIR_PEM);
+
+        when(profilePathFactoryMock.create(APP_ID, TOKEN)).thenReturn(GENERATED_PROFILE_PATH);
+        when(signatureFactoryMock.create((MESSAGE_PREFIX + GENERATED_PROFILE_PATH).getBytes(), keyPair.getPrivate())).thenReturn(SIGNATURE_BYTES);
     }
 
     @Test
@@ -76,20 +83,18 @@ public class RemoteProfileServiceTest {
 
         verify(resourceFetcherMock).fetchResource(urlConnectorCaptor.capture(), headersCaptor.capture(), eq(ProfileResponse.class));
         assertUrl(urlConnectorCaptor.getValue());
-        assertHeaders(headersCaptor.getValue(), urlConnectorCaptor.getValue());
+        assertHeaders(headersCaptor.getValue());
         assertSame(RECEIPT, result);
     }
 
-    private void assertHeaders(Map<String, String> headers, UrlConnector urlConnector) throws Exception {
+    private void assertHeaders(Map<String, String> headers) throws Exception {
         assertAuthKey(headers.get(X_YOTI_AUTH_KEY));
-        assertDigest(urlConnector.getUrlString(), headers.get(X_YOTI_AUTH_DIGEST));
+        assertDigest(headers.get(X_YOTI_AUTH_DIGEST));
         assertYotiSDK(headers.get(YOTI_SDK_HEADER));
     }
 
-    private void assertDigest(String url, String digestValue) throws Exception {
-        byte[] digestBytes = Base64.getDecoder().decode(digestValue);
-        String servicePath = MESSAGE_PREFIX + url.substring(RemoteProfileService.DEFAULT_YOTI_API_URL.length());
-        verifyMessage(servicePath.getBytes(), keyPair.getPublic(), digestBytes);
+    private void assertDigest(String digestValue) throws Exception {
+        assertArrayEquals(SIGNATURE_BYTES, Base64.getDecoder().decode(digestValue));
     }
 
     private void assertAuthKey(String authKeyValue) {
@@ -102,20 +107,7 @@ public class RemoteProfileServiceTest {
 
     private void assertUrl(UrlConnector urlConnector) throws MalformedURLException {
         URL url = new URL(urlConnector.getUrlString());
-        assertEquals(YOTI_API_PATH_PREFIX + "/profile/" + TOKEN, url.getPath());
-        assertTrue(url.getQuery().contains("appId=" + APP_ID));
-        assertTrue(url.getQuery().contains("nonce="));
-        assertTrue(url.getQuery().contains("timestamp="));
-    }
-
-    @Test
-    @Ignore("This test seems to add no value, and it's not clear what the desired behaviour is")
-    public void shouldReturnNullForNoResource() throws IOException, GeneralSecurityException, ProfileException, ResourceException {
-        when(resourceFetcherMock.fetchResource(any(UrlConnector.class), any(Map.class), eq(ProfileResponse.class))).thenReturn(PROFILE_RESPONSE);
-
-        Receipt result = testObj.getReceipt(keyPair, APP_ID, TOKEN);
-
-        assertEquals(RECEIPT, result);
+        assertEquals(YOTI_API_PATH_PREFIX + GENERATED_PROFILE_PATH, url.getPath());
     }
 
     @Test

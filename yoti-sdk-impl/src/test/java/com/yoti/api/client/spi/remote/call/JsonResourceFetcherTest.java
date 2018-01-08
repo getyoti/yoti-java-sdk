@@ -1,14 +1,12 @@
 package com.yoti.api.client.spi.remote.call;
 
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
-import static java.net.HttpURLConnection.HTTP_OK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -17,67 +15,129 @@ import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
+import static java.net.HttpURLConnection.HTTP_OK;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+import static org.mockito.Answers.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+@RunWith(MockitoJUnitRunner.class)
 public class JsonResourceFetcherTest {
-    @Test
-    public void shouldReturnResource() throws IOException, ResourceException {
-        HttpURLConnection connection = mock(HttpURLConnection.class);
-        when(connection.getResponseCode()).thenReturn(HTTP_OK);
-        when(connection.getInputStream()).thenReturn(stream("{ \"x\":\"test-response\"}"));
 
-        UrlConnector urlConnector = mock(UrlConnector.class);
-        when(urlConnector.getHttpUrlConnection()).thenReturn(connection);
+    private static final String ERROR_BODY = "errorBody";
+    private static final String TEST_HEADER_KEY = "testHeader";
+    private static final String TEST_HEADER_VALUE = "testValue";
+    private static final Map<String, String> TEST_HEADERS = new HashMap<String, String>();
+    private static final String SERIALIZED_REQUEST_BODY = "testSerializedBody";
 
-        JsonResourceFetcher fetcher = new JsonResourceFetcher();
-        TestClass test = fetcher.fetchResource(urlConnector, setupHeaders(), TestClass.class);
+    @InjectMocks JsonResourceFetcher testObj;
 
-        assertNotNull(test);
-        assertEquals("test-response", test.field);
+    @Mock ObjectMapper objectMapperMock;
 
-        verify(connection).setRequestMethod("GET");
-        verify(connection).setRequestProperty("test-header", "test-value");
+    @Mock(answer = RETURNS_DEEP_STUBS) HttpURLConnection httpURLConnectionMock;
+    @Mock UrlConnector urlConnectorMock;
+    @Mock InputStream inputStreamMock;
+    Object parsedResponse = new Object();
+    Object requestBody = new Object();
+
+    @BeforeClass
+    public static void classSetup() {
+        TEST_HEADERS.put(TEST_HEADER_KEY, TEST_HEADER_VALUE);
     }
 
     @Test
-    public void shouldFailForNonOkStatusCode() throws IOException, ResourceException {
-        HttpURLConnection connection = mock(HttpURLConnection.class);
-        when(connection.getResponseCode()).thenReturn(HTTP_BAD_REQUEST);
-        when(connection.getInputStream()).thenReturn(new ByteArrayInputStream("TEST".getBytes()));
+    public void fetchResource_shouldReturnResource() throws Exception {
+        when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
+        when(httpURLConnectionMock.getInputStream()).thenReturn(inputStreamMock);
+        when(urlConnectorMock.getHttpUrlConnection()).thenReturn(httpURLConnectionMock);
+        when(objectMapperMock.readValue(inputStreamMock, Object.class)).thenReturn(parsedResponse);
 
-        UrlConnector urlConnector = mock(UrlConnector.class);
-        when(urlConnector.getHttpUrlConnection()).thenReturn(connection);
+        Object result = testObj.fetchResource(urlConnectorMock, TEST_HEADERS, Object.class);
 
-        JsonResourceFetcher fetcher = new JsonResourceFetcher();
+        verify(httpURLConnectionMock).setRequestMethod("GET");
+        verify(httpURLConnectionMock).setRequestProperty(TEST_HEADER_KEY, TEST_HEADER_VALUE);
+        assertSame(parsedResponse, result);
+    }
+
+    @Test
+    public void fetchResource_shouldFailForNonOkStatusCode() throws Exception {
+        when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_BAD_REQUEST);
+        when(httpURLConnectionMock.getInputStream()).thenReturn(stream(ERROR_BODY));
+        when(urlConnectorMock.getHttpUrlConnection()).thenReturn(httpURLConnectionMock);
+
         try {
-            fetcher.fetchResource(urlConnector, setupHeaders(), TestClass.class);
+            testObj.fetchResource(urlConnectorMock, TEST_HEADERS, Object.class);
             fail("ResourceException expected");
         } catch (ResourceException re) {
-            verify(connection, times(1)).getInputStream();
+            assertEquals(HTTP_BAD_REQUEST, re.getResponseCode());
+            assertEquals(ERROR_BODY, re.getResponseBody());
         }
     }
 
     @Test
-    public void shouldCloseConnectionWhenJsonError() throws IOException, ResourceException {
-        InputStream stream = mock(InputStream.class);
-        when(stream.read()).thenThrow(new IOException());
+    public void fetchResource_shouldCloseConnectionAfterParsingError() throws Exception {
+        when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
+        when(httpURLConnectionMock.getInputStream()).thenReturn(inputStreamMock);
+        when(urlConnectorMock.getHttpUrlConnection()).thenReturn(httpURLConnectionMock);
+        IOException ioException = new IOException();
+        when(objectMapperMock.readValue(inputStreamMock, Object.class)).thenThrow(ioException);
 
-        HttpURLConnection connection = mock(HttpURLConnection.class);
-        when(connection.getResponseCode()).thenReturn(HTTP_OK);
-        when(connection.getInputStream()).thenReturn(stream);
-
-        UrlConnector urlConnector = mock(UrlConnector.class);
-        when(urlConnector.getHttpUrlConnection()).thenReturn(connection);
-
-        JsonResourceFetcher fetcher = new JsonResourceFetcher();
         try {
-            fetcher.fetchResource(urlConnector, setupHeaders(), TestClass.class);
+            testObj.fetchResource(urlConnectorMock, TEST_HEADERS, Object.class);
+            testObj.fetchResource(urlConnectorMock, null, Object.class);
             fail("IOException expected");
         } catch (IOException ioe) {
-            // ObjectMapper closes the stream first, hence the 2
-            verify(stream, times(2)).close();
+            verify(inputStreamMock).close();
+        }
+    }
+
+    @Test
+    public void postResource_shouldSendBodyAndReturnResponse() throws Exception {
+        when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
+        when(httpURLConnectionMock.getInputStream()).thenReturn(inputStreamMock);
+        when(urlConnectorMock.getHttpUrlConnection()).thenReturn(httpURLConnectionMock);
+        when(objectMapperMock.writeValueAsString(requestBody)).thenReturn(SERIALIZED_REQUEST_BODY);
+        when(objectMapperMock.readValue(inputStreamMock, Object.class)).thenReturn(parsedResponse);
+
+        Object result = testObj.postResource(urlConnectorMock, requestBody, TEST_HEADERS, Object.class);
+
+        verify(httpURLConnectionMock).setRequestMethod("POST");
+        verify(httpURLConnectionMock).setRequestProperty(TEST_HEADER_KEY, TEST_HEADER_VALUE);
+        verify(httpURLConnectionMock.getOutputStream()).write(SERIALIZED_REQUEST_BODY.getBytes());
+        assertSame(parsedResponse, result);
+    }
+
+    @Test
+    public void postResource_shouldFailForNonOkStatusCode() throws Exception {
+        when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_BAD_REQUEST);
+        when(httpURLConnectionMock.getInputStream()).thenReturn(stream(ERROR_BODY));
+        when(urlConnectorMock.getHttpUrlConnection()).thenReturn(httpURLConnectionMock);
+
+        try {
+            testObj.postResource(urlConnectorMock, null, null, Object.class);
+            fail("ResourceException expected");
+        } catch (ResourceException re) {
+            assertEquals(HTTP_BAD_REQUEST, re.getResponseCode());
+            assertEquals(ERROR_BODY, re.getResponseBody());
+        }
+    }
+
+    @Test
+    public void postResource_shouldCloseConnectionAfterParsingError() throws Exception {
+        when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
+        when(httpURLConnectionMock.getInputStream()).thenReturn(inputStreamMock);
+        when(urlConnectorMock.getHttpUrlConnection()).thenReturn(httpURLConnectionMock);
+        IOException ioException = new IOException();
+        when(objectMapperMock.readValue(inputStreamMock, Object.class)).thenThrow(ioException);
+
+        try {
+            testObj.postResource(urlConnectorMock, null, null, Object.class);
+            fail("IOException expected");
+        } catch (IOException ioe) {
+            verify(inputStreamMock).close();
         }
     }
 
@@ -85,14 +145,4 @@ public class JsonResourceFetcherTest {
         return new ByteArrayInputStream(string.getBytes());
     }
 
-    private Map<String, String> setupHeaders() {
-        Map<String, String> headers = new HashMap<String, String>();
-        headers.put("test-header", "test-value");
-        return headers;
-    }
-
-    public static class TestClass {
-        @JsonProperty("x")
-        private String field;
-    }
 }
