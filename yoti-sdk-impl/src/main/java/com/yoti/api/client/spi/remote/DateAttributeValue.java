@@ -6,11 +6,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static java.lang.String.format;
+
 /**
  * Attribute value holding a year/month/day tuple.
  *
  */
 final class DateAttributeValue implements com.yoti.api.client.Date {
+
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private static final String STRING_ENCODING = "UTF-8";
     private final int year;
@@ -59,9 +62,10 @@ final class DateAttributeValue implements com.yoti.api.client.Date {
     public int getDay() {
         return day;
     }
-    
+
     @Override
     public String toString() {
-    	return year + "-" + month + "-" + day;
-    }    
+        return format("%04d-%02d-%02d", year, month, day);
+    }
+
 }

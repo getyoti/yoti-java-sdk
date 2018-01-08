@@ -23,25 +23,34 @@ public class DateAttributeValueTest {
     }
 
     @Test
-    public void shouldParseValidString() throws UnsupportedEncodingException, ParseException {
+    public void parseFrom_shouldParseValidString() throws UnsupportedEncodingException, ParseException {
         DateAttributeValue date = DateAttributeValue.parseFrom(VALID_DATE_STRING);
         assertDate(date);
     }
 
     @Test
-    public void shouldParseValidArray() throws UnsupportedEncodingException, ParseException {
+    public void parseFrom_shouldParseValidArray() throws UnsupportedEncodingException, ParseException {
         DateAttributeValue date = DateAttributeValue.parseFrom(VALID_DATE_BYTES);
         assertDate(date);
     }
 
     @Test(expected = ParseException.class)
-    public void shouldNotParseInvalidDateFormat() throws UnsupportedEncodingException, ParseException {
+    public void parseFrom_shouldNotParseInvalidDateFormat() throws UnsupportedEncodingException, ParseException {
         DateAttributeValue.parseFrom(INVALID_DATE_FORMAT_STRING);
     }
 
     @Test(expected = ParseException.class)
-    public void shouldNotParseInvalidDateValue() throws UnsupportedEncodingException, ParseException {
-        Date date = DateAttributeValue.parseFrom(INVALID_DATE_VALUE_STRING);
+    public void parseFrom_shouldNotParseInvalidDateValue() throws UnsupportedEncodingException, ParseException {
+        DateAttributeValue.parseFrom(INVALID_DATE_VALUE_STRING);
+    }
+
+    @Test
+    public void toString_shouldFormatDateCorrectly() throws UnsupportedEncodingException, ParseException {
+        DateAttributeValue date = DateAttributeValue.parseFrom(VALID_DATE_STRING);
+
+        String result = date.toString();
+
+        assertEquals(VALID_DATE_STRING, result);
     }
 
     private void assertDate(Date date) {

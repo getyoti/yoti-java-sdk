@@ -1,34 +1,6 @@
 package com.yoti.api.client.spi.remote;
 
-import static javax.crypto.Cipher.DECRYPT_MODE;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
-import java.security.Key;
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.Security;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.bouncycastle.openssl.PEMException;
-import org.bouncycastle.openssl.PEMKeyPair;
-import org.bouncycastle.openssl.PEMParser;
-import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.yoti.api.client.ActivityDetails;
@@ -45,19 +17,45 @@ import com.yoti.api.client.spi.remote.proto.AttrProto.Attribute;
 import com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList;
 import com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType;
 import com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData;
+import org.bouncycastle.openssl.PEMException;
+import org.bouncycastle.openssl.PEMKeyPair;
+import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.Security;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static javax.crypto.Cipher.DECRYPT_MODE;
 
 /**
  * YotiClient talking to the Yoti Connect API remotely.
  */
 final class SecureYotiClient implements YotiClient {
-    private static final Logger LOG = LoggerFactory.getLogger(SecureYotiClient.class);
 
+    private static final Logger LOG = LoggerFactory.getLogger(SecureYotiClient.class);
     private static final String SYMMETRIC_CIPHER = "AES/CBC/PKCS7Padding";
     private static final String ASYMMETRIC_CIPHER = "RSA/NONE/PKCS1Padding";
-
     private static final String STRING_ENCODING = "UTF-8";
-
     private static final String RFC3339_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
     private final String appId;
     private final KeyPair keyPair;
@@ -168,7 +166,7 @@ final class SecureYotiClient implements YotiClient {
                 if (attributeValue != null) {
                     attributeMap.put(attribute.getName(), attributeValue);
                 }
-            } catch (UnsupportedEncodingException e) {
+            } catch (IOException e) {
                 LOG.info("Cannot decode value for attribute {}", attribute.getName());
             } catch (ParseException e) {
                 LOG.info("Cannot parse value for attribute {}", attribute.getName());
@@ -177,20 +175,21 @@ final class SecureYotiClient implements YotiClient {
         return attributeMap;
     }
 
-    private Object mapAttribute(Attribute attribute) throws UnsupportedEncodingException, ParseException {
-        Object attributeValue = null;
+    private Object mapAttribute(Attribute attribute) throws ParseException, IOException {
         if (ContentType.STRING.equals(attribute.getContentType())) {
-            attributeValue = attribute.getValue().toString(STRING_ENCODING);
+            return attribute.getValue().toString(STRING_ENCODING);
         } else if (ContentType.DATE.equals(attribute.getContentType())) {
-            attributeValue = DateAttributeValue.parseFrom(attribute.getValue().toByteArray());
+            return DateAttributeValue.parseFrom(attribute.getValue().toByteArray());
         } else if (ContentType.JPEG.equals(attribute.getContentType())) {
-            attributeValue = new JpegAttributeValue(attribute.getValue().toByteArray());
+            return new JpegAttributeValue(attribute.getValue().toByteArray());
         } else if (ContentType.PNG.equals(attribute.getContentType())) {
-            attributeValue = new PngAttributeValue(attribute.getValue().toByteArray());
-        } else {
-            LOG.error("Unknown type {} for attribute {}", attribute.getContentType(), attribute.getName());
+            return new PngAttributeValue(attribute.getValue().toByteArray());
+        } else if (ContentType.JSON.equals(attribute.getContentType())) {
+            return JSON_MAPPER.readValue(attribute.getValue().toString(STRING_ENCODING), Map.class);
         }
-        return attributeValue;
+
+        LOG.error("Unknown type {} for attribute {}", attribute.getContentType(), attribute.getName());
+        return attribute.getValue().toString(STRING_ENCODING);
     }
 
     private Profile createProfile(Map<String, Object> attributeMap) {
@@ -254,6 +253,7 @@ final class SecureYotiClient implements YotiClient {
     }
 
     private static class KeyStreamVisitor implements StreamVisitor {
+
         @Override
         public KeyPair accept(InputStream stream) throws IOException, InitialisationException {
             PEMParser reader = new PEMParser(new BufferedReader(new InputStreamReader(stream, STRING_ENCODING)));
@@ -266,7 +266,7 @@ final class SecureYotiClient implements YotiClient {
 
         private KeyPair findKeyPair(PEMParser reader) throws IOException, PEMException {
             KeyPair keyPair = null;
-            for (Object o = null; (o = reader.readObject()) != null;) {
+            for (Object o = null; (o = reader.readObject()) != null; ) {
                 if (o instanceof PEMKeyPair) {
                     keyPair = new JcaPEMKeyConverter().getKeyPair((PEMKeyPair) o);
                     break;
