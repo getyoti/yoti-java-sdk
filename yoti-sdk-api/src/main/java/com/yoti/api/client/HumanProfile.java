@@ -1,5 +1,7 @@
 package com.yoti.api.client;
 
+import java.util.Map;
+
 /**
  * Profile of an human user with convenience methods to access well-known attributes.
  */
@@ -55,6 +57,13 @@ public interface HumanProfile extends Profile {
      * @return the postal address
      */
     String getPostalAddress();
+    
+    /**
+     * The user's structured postal address as a Json
+     *
+     * @return the postal address
+     */
+    Map<?, ?> getStructuredPostalAddress();
     
     /**
      * Corresponds to the nationality in the passport.

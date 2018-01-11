@@ -5,6 +5,7 @@ import com.yoti.api.client.*;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Adapter linking Profile and ApplicationProfile together by wrapping the latter and exposing well-known attributes.
@@ -16,6 +17,7 @@ final class HumanProfileAdapter implements HumanProfile {
     private static final String ATTRIBUTE_DOB = "date_of_birth";
     private static final String ATTRIBUTE_GENDER = "gender";
     private static final String ATTRIBUTE_POSTAL_ADDRESS = "postal_address";
+    private static final String ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS = "structured_postal_address";
     private static final String ATTRIBUTE_NATIONALITY = "nationality";
     private static final String ATTRIBUTE_PHONE_NUMBER = "phone_number";
     private static final String ATTRIBUTE_SELFIE = "selfie";
@@ -102,6 +104,11 @@ final class HumanProfileAdapter implements HumanProfile {
     @Override
     public String getPostalAddress() {
         return wrapped.getAttribute(ATTRIBUTE_POSTAL_ADDRESS);
+    }
+    
+    @Override
+    public Map<?, ?> getStructuredPostalAddress() {
+        return wrapped.getAttribute(ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS, Map.class);
     }
 
     @Override
