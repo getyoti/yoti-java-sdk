@@ -83,6 +83,11 @@ public class DummyYotiClient implements YotiClient, YotiClientFactory {
             }
 
             @Override
+            public Map<?, ?> getStructuredPostalAddress() {
+                return null;
+            }
+
+            @Override
             public String getNationality() {
                 return null;
             }
