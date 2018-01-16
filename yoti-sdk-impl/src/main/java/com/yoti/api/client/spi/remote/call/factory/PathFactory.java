@@ -7,7 +7,7 @@ import static java.util.UUID.randomUUID;
 public class PathFactory {
 
     private static final String PROFILE_PATH_TEMPLATE = "/profile/%s?nonce=%s&timestamp=%s&appId=%s";
-    private static final String AML_PATH_TEMPLATE = "/aml-check?id=%s&nonce=%s&timestamp=%s";
+    private static final String AML_PATH_TEMPLATE = "/aml-check?appId=%s&nonce=%s&timestamp=%s";
 
     public String createProfilePath(String appId, String connectToken) {
         return format(PROFILE_PATH_TEMPLATE, connectToken, randomUUID(), createTimestamp(), appId);
