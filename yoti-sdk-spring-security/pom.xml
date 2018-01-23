@@ -197,6 +197,9 @@
       <plugin>
         <groupId>org.owasp</groupId>
         <artifactId>dependency-check-maven</artifactId>
+        <configuration>
+          <suppressionFile>${basedir}/suppressed-cves.xml</suppressionFile>
+        </configuration>
         <executions>
           <execution>
             <goals>
