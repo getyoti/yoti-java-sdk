@@ -48,6 +48,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 import static javax.crypto.Cipher.DECRYPT_MODE;
 
@@ -59,7 +60,6 @@ final class SecureYotiClient implements YotiClient {
     private static final Logger LOG = LoggerFactory.getLogger(SecureYotiClient.class);
     private static final String SYMMETRIC_CIPHER = "AES/CBC/PKCS7Padding";
     private static final String ASYMMETRIC_CIPHER = "RSA/NONE/PKCS1Padding";
-    private static final String STRING_ENCODING = "UTF-8";
     private static final String RFC3339_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
@@ -122,7 +122,7 @@ final class SecureYotiClient implements YotiClient {
         try {
             byte[] byteValue = Base64.getUrlDecoder().decode(encryptedConnectToken);
             byte[] decryptedToken = decrypt(byteValue, privateKey);
-            connectToken = new String(decryptedToken, STRING_ENCODING);
+            connectToken = new String(decryptedToken, DEFAULT_CHARSET);
         } catch (Exception e) {
             throw new ProfileException("Cannot decrypt connect token", e);
         }
@@ -196,7 +196,7 @@ final class SecureYotiClient implements YotiClient {
 
     private Object mapAttribute(Attribute attribute) throws ParseException, IOException {
         if (ContentType.STRING.equals(attribute.getContentType())) {
-            return attribute.getValue().toString(STRING_ENCODING);
+            return attribute.getValue().toString(DEFAULT_CHARSET);
         } else if (ContentType.DATE.equals(attribute.getContentType())) {
             return DateAttributeValue.parseFrom(attribute.getValue().toByteArray());
         } else if (ContentType.JPEG.equals(attribute.getContentType())) {
@@ -204,11 +204,11 @@ final class SecureYotiClient implements YotiClient {
         } else if (ContentType.PNG.equals(attribute.getContentType())) {
             return new PngAttributeValue(attribute.getValue().toByteArray());
         } else if (ContentType.JSON.equals(attribute.getContentType())) {
-            return JSON_MAPPER.readValue(attribute.getValue().toString(STRING_ENCODING), Map.class);
+            return JSON_MAPPER.readValue(attribute.getValue().toString(DEFAULT_CHARSET), Map.class);
         }
 
         LOG.error("Unknown type {} for attribute {}", attribute.getContentType(), attribute.getName());
-        return attribute.getValue().toString(STRING_ENCODING);
+        return attribute.getValue().toString(DEFAULT_CHARSET);
     }
 
     private Profile createProfile(Map<String, Object> attributeMap) {
@@ -219,7 +219,7 @@ final class SecureYotiClient implements YotiClient {
             throws ProfileException {
         try {
             byte[] rmi = receipt.getRememberMeId();
-            String rememberMeId = (rmi == null) ? null : new String(Base64.getEncoder().encode(rmi), STRING_ENCODING);
+            String rememberMeId = (rmi == null) ? null : new String(Base64.getEncoder().encode(rmi), DEFAULT_CHARSET);
 
             SimpleDateFormat format = new SimpleDateFormat(RFC3339_PATTERN);
             Date timestamp = format.parse(receipt.getTimestamp());
@@ -268,7 +268,7 @@ final class SecureYotiClient implements YotiClient {
 
         @Override
         public KeyPair accept(InputStream stream) throws IOException, InitialisationException {
-            PEMParser reader = new PEMParser(new BufferedReader(new InputStreamReader(stream, STRING_ENCODING)));
+            PEMParser reader = new PEMParser(new BufferedReader(new InputStreamReader(stream, DEFAULT_CHARSET)));
             KeyPair keyPair = findKeyPair(reader);
             if (keyPair == null) {
                 throw new InitialisationException("No key pair found in the provided source");

@@ -19,6 +19,7 @@ import java.util.Map;
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JSON;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DIGEST_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.JAVA;
@@ -60,7 +61,7 @@ public class RemoteAmlService {
 
         try {
             String resourcePath = pathFactory.createAmlPath(appId);
-            byte[] body = objectMapper.writeValueAsString(amlProfile).getBytes();
+            byte[] body = objectMapper.writeValueAsString(amlProfile).getBytes(DEFAULT_CHARSET);
             String digest = signatureFactory.create(keyPair.getPrivate(), HTTP_POST, resourcePath, body);
 
             Map<String, String> headers = new HashMap<String, String>();
