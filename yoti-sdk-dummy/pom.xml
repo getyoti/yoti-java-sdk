@@ -27,6 +27,7 @@
     </developer>
   </developers>
   <properties>
+    <yoti.sdk.version>1.4-SNAPSHOT</yoti.sdk.version>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
   </properties>
@@ -117,7 +118,7 @@
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>yoti-sdk-api</artifactId>
-      <version>1.4-SNAPSHOT</version>
+      <version>${yoti.sdk.version}</version>
     </dependency>
   </dependencies>
 
