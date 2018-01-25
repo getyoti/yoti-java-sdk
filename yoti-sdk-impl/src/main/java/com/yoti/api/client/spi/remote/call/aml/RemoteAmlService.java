@@ -54,10 +54,10 @@ public class RemoteAmlService {
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
 
-    public AmlResponse performCheck(KeyPair keyPair, String appId, AmlProfile amlProfile) throws AmlException {
+    public SimpleAmlResult performCheck(KeyPair keyPair, String appId, AmlProfile amlProfile) throws AmlException {
         notNull(keyPair, "Key pair");
         notNull(appId, "Application id");
-        notNull(amlProfile, "subject");
+        notNull(amlProfile, "amlProfile");
 
         try {
             String resourcePath = pathFactory.createAmlPath(appId);
@@ -71,7 +71,7 @@ public class RemoteAmlService {
 
             UrlConnector urlConnector = UrlConnector.get(apiUrl + resourcePath);
 
-            return resourceFetcher.postResource(urlConnector, body, headers, AmlResponse.class);
+            return resourceFetcher.postResource(urlConnector, body, headers, SimpleAmlResult.class);
         } catch (IOException ioException) {
             throw new AmlException("Error communicating with AML endpoint", ioException);
         } catch (GeneralSecurityException generalSecurityException) {

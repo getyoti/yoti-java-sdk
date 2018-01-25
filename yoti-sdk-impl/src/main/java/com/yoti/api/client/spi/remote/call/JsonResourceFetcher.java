@@ -1,5 +1,9 @@
 package com.yoti.api.client.spi.remote.call;
 
+import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
+import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,11 +13,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.Map;
 import java.util.Scanner;
-
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
-import static java.net.HttpURLConnection.HTTP_OK;
 
 public final class JsonResourceFetcher implements ResourceFetcher {
 

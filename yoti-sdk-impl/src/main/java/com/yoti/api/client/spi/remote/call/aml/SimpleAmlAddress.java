@@ -1,8 +1,9 @@
 package com.yoti.api.client.spi.remote.call.aml;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.yoti.api.client.aml.AmlAddress;
 
-public class AmlAddress {
+public class SimpleAmlAddress implements AmlAddress {
 
     @JsonProperty("post_code")
     private final String postCode;
@@ -10,7 +11,7 @@ public class AmlAddress {
     @JsonProperty("country")
     private final String country;
 
-    public AmlAddress(String postCode, String country) {
+    public SimpleAmlAddress(String postCode, String country) {
         this.postCode = postCode;
         this.country = country;
     }
@@ -25,7 +26,7 @@ public class AmlAddress {
 
     @Override
     public String toString() {
-        return "AmlAddress{" +
+        return "SimpleAmlAddress{" +
                 "postCode='" + postCode + '\'' +
                 ", country='" + country + '\'' +
                 '}';

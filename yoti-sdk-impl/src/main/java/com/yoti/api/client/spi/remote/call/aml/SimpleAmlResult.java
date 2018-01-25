@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yoti.api.client.aml.AmlResult;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AmlResponse implements AmlResult {
+public class SimpleAmlResult implements AmlResult {
 
     @JsonProperty("on_fraud_list")
     private boolean onFraudList;
@@ -40,6 +40,12 @@ public class AmlResponse implements AmlResult {
         this.onWatchList = onWatchList;
     }
 
-    //FIXME: Add a toString()
-
+    @Override
+    public String toString() {
+        return "SimpleAmlResult{" +
+                "onFraudList=" + onFraudList +
+                ", onPepList=" + onPepList +
+                ", onWatchList=" + onWatchList +
+                '}';
+    }
 }

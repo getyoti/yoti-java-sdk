@@ -1,5 +1,9 @@
 package com.yoti.api.client.spi.remote;
 
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
+import static com.yoti.api.client.spi.remote.util.Validation.notNull;
+import static javax.crypto.Cipher.DECRYPT_MODE;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -17,7 +21,6 @@ import com.yoti.api.client.aml.AmlResult;
 import com.yoti.api.client.spi.remote.call.ProfileService;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
-import com.yoti.api.client.spi.remote.exception.YotiSigningException;
 import com.yoti.api.client.spi.remote.proto.AttrProto.Attribute;
 import com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList;
 import com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType;
@@ -47,10 +50,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
-import static javax.crypto.Cipher.DECRYPT_MODE;
 
 /**
  * YotiClient talking to the Yoti Connect API remotely.
@@ -91,10 +90,7 @@ final class SecureYotiClient implements YotiClient {
     @Override
     public AmlResult performAmlCheck(AmlProfile amlProfile) throws AmlException {
         LOG.debug("Performing aml check...");
-
         return remoteAmlService.performCheck(keyPair, appId, amlProfile);
-
-
     }
 
     private Receipt getReceipt(String encryptedConnectToken, KeyPair keyPair) throws ProfileException {

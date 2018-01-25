@@ -1,6 +1,5 @@
 package com.yoti.api.client.spi.remote;
 
-import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,6 +8,7 @@ import com.yoti.api.client.YotiClient;
 import com.yoti.api.client.YotiClientConfiguration;
 import com.yoti.api.client.YotiClientFactory;
 import com.yoti.api.client.spi.remote.call.RemoteProfileService;
+import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
 
 public final class SecureYotiClientFactory implements YotiClientFactory {
     private static final Logger LOG = LoggerFactory.getLogger(SecureYotiClientFactory.class);

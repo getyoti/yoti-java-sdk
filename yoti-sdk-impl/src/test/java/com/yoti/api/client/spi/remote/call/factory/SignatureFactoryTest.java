@@ -1,5 +1,10 @@
 package com.yoti.api.client.spi.remote.call.factory;
 
+import static com.yoti.api.client.spi.remote.util.CryptoUtil.KEY_PAIR_PEM;
+import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
+import static com.yoti.api.client.spi.remote.util.CryptoUtil.verifyMessage;
+import static org.mockito.Mockito.when;
+
 import com.yoti.api.client.spi.remote.Base64;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,11 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.security.KeyPair;
-
-import static com.yoti.api.client.spi.remote.util.CryptoUtil.KEY_PAIR_PEM;
-import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
-import static com.yoti.api.client.spi.remote.util.CryptoUtil.verifyMessage;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SignatureFactoryTest {
