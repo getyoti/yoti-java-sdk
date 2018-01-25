@@ -70,8 +70,8 @@ public final class JsonResourceFetcher implements ResourceFetcher {
 
     private <T> T parseResponse(HttpURLConnection httpUrlConnection, Class<T> resourceClass) throws ResourceException, IOException {
         int responseCode = httpUrlConnection.getResponseCode();
-        if (responseCode != HTTP_OK) {
-            String responseBody = readAll(httpUrlConnection.getInputStream());
+        if (responseCode >= HttpURLConnection.HTTP_BAD_REQUEST) {
+            String responseBody = readAll(httpUrlConnection.getErrorStream());
             throw new ResourceException(responseCode, responseBody);
         }
         return parseResource(httpUrlConnection.getInputStream(), resourceClass);

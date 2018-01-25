@@ -64,7 +64,7 @@ public class JsonResourceFetcherTest {
     @Test
     public void fetchResource_shouldFailForNonOkStatusCode() throws Exception {
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_BAD_REQUEST);
-        when(httpURLConnectionMock.getInputStream()).thenReturn(stream(ERROR_BODY));
+        when(httpURLConnectionMock.getErrorStream()).thenReturn(stream(ERROR_BODY));
         when(urlConnectorMock.getHttpUrlConnection()).thenReturn(httpURLConnectionMock);
 
         try {
@@ -111,7 +111,7 @@ public class JsonResourceFetcherTest {
     @Test
     public void postResource_shouldFailForNonOkStatusCode() throws Exception {
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_BAD_REQUEST);
-        when(httpURLConnectionMock.getInputStream()).thenReturn(stream(ERROR_BODY));
+        when(httpURLConnectionMock.getErrorStream()).thenReturn(stream(ERROR_BODY));
         when(urlConnectorMock.getHttpUrlConnection()).thenReturn(httpURLConnectionMock);
 
         try {
