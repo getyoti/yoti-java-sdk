@@ -1,18 +1,5 @@
 package com.yoti.api.client.spi.remote.call;
 
-import com.yoti.api.client.ProfileException;
-import com.yoti.api.client.spi.remote.call.factory.PathFactory;
-import com.yoti.api.client.spi.remote.call.factory.SignatureFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.KeyPair;
-import java.security.Security;
-import java.util.HashMap;
-import java.util.Map;
-
 import static com.yoti.api.client.spi.remote.Base64.base64;
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.AUTH_KEY_HEADER;
@@ -27,13 +14,26 @@ import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static org.bouncycastle.cms.CMSAttributeTableGenerator.CONTENT_TYPE;
 
+import com.yoti.api.client.ProfileException;
+import com.yoti.api.client.spi.remote.call.factory.PathFactory;
+import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+import java.security.Security;
+import java.util.HashMap;
+import java.util.Map;
+
 public final class RemoteProfileService implements ProfileService {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoteProfileService.class);
 
     private final ResourceFetcher resourceFetcher;
     private final PathFactory pathFactory;
-    private final SignatureFactory signatureFactory;
+    private final SignedMessageFactory signedMessageFactory;
     private final String apiUrl;
 
     static {
@@ -41,15 +41,15 @@ public final class RemoteProfileService implements ProfileService {
     }
 
     public static RemoteProfileService newInstance() {
-        return new RemoteProfileService(JsonResourceFetcher.newInstance(), new PathFactory(), SignatureFactory.newInstance());
+        return new RemoteProfileService(JsonResourceFetcher.newInstance(), new PathFactory(), SignedMessageFactory.newInstance());
     }
 
     RemoteProfileService(ResourceFetcher resourceFetcher,
                          PathFactory profilePathFactory,
-                         SignatureFactory signatureFactory) {
+                         SignedMessageFactory signedMessageFactory) {
         this.resourceFetcher = resourceFetcher;
         this.pathFactory = profilePathFactory;
-        this.signatureFactory = signatureFactory;
+        this.signedMessageFactory = signedMessageFactory;
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
 
@@ -62,7 +62,7 @@ public final class RemoteProfileService implements ProfileService {
         String path = pathFactory.createProfilePath(appId, connectToken);
 
         try {
-            String digest = signatureFactory.create(keyPair.getPrivate(), HTTP_GET, path);
+            String digest = signedMessageFactory.create(keyPair.getPrivate(), HTTP_GET, path);
             String authKey = base64(keyPair.getPublic().getEncoded());
             return fetchReceipt(path, digest, authKey);
         } catch (GeneralSecurityException gse) {

@@ -16,14 +16,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.security.KeyPair;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SignatureFactoryTest {
+public class SignedMessageFactoryTest {
 
     private static final String SOME_METHOD = "someMethod";
     private static final String SOME_PATH = "somePath";
     private static final String SOME_MESSAGE = "someMessage";
     private static final String SOME_BODY = "someBody";
 
-    @InjectMocks SignatureFactory testObj;
+    @InjectMocks SignedMessageFactory testObj;
 
     @Mock MessageFactory messageFactoryMock;
 

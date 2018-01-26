@@ -1,21 +1,5 @@
 package com.yoti.api.client.spi.remote.call.aml;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yoti.api.client.AmlException;
-import com.yoti.api.client.aml.AmlProfile;
-import com.yoti.api.client.spi.remote.call.JsonResourceFetcher;
-import com.yoti.api.client.spi.remote.call.ResourceException;
-import com.yoti.api.client.spi.remote.call.ResourceFetcher;
-import com.yoti.api.client.spi.remote.call.UrlConnector;
-import com.yoti.api.client.spi.remote.call.factory.PathFactory;
-import com.yoti.api.client.spi.remote.call.factory.SignatureFactory;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.KeyPair;
-import java.util.HashMap;
-import java.util.Map;
-
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JSON;
@@ -30,25 +14,41 @@ import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yoti.api.client.AmlException;
+import com.yoti.api.client.aml.AmlProfile;
+import com.yoti.api.client.spi.remote.call.JsonResourceFetcher;
+import com.yoti.api.client.spi.remote.call.ResourceException;
+import com.yoti.api.client.spi.remote.call.ResourceFetcher;
+import com.yoti.api.client.spi.remote.call.UrlConnector;
+import com.yoti.api.client.spi.remote.call.factory.PathFactory;
+import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+import java.util.HashMap;
+import java.util.Map;
+
 public class RemoteAmlService {
 
     private final PathFactory pathFactory;
     private final ObjectMapper objectMapper;
-    private final SignatureFactory signatureFactory;
+    private final SignedMessageFactory signedMessageFactory;
     private final ResourceFetcher resourceFetcher;
     private final String apiUrl;
 
     public static RemoteAmlService newInstance() {
-        return new RemoteAmlService(JsonResourceFetcher.newInstance(), new PathFactory(), new ObjectMapper(), SignatureFactory.newInstance());
+        return new RemoteAmlService(JsonResourceFetcher.newInstance(), new PathFactory(), new ObjectMapper(), SignedMessageFactory.newInstance());
     }
 
     public RemoteAmlService(ResourceFetcher resourceFetcher,
                             PathFactory pathFactory,
                             ObjectMapper objectMapper,
-                            SignatureFactory signatureFactory) {
+                            SignedMessageFactory signedMessageFactory) {
         this.pathFactory = pathFactory;
         this.objectMapper = objectMapper;
-        this.signatureFactory = signatureFactory;
+        this.signedMessageFactory = signedMessageFactory;
         this.resourceFetcher = resourceFetcher;
 
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
@@ -62,7 +62,7 @@ public class RemoteAmlService {
         try {
             String resourcePath = pathFactory.createAmlPath(appId);
             byte[] body = objectMapper.writeValueAsString(amlProfile).getBytes(DEFAULT_CHARSET);
-            String digest = signatureFactory.create(keyPair.getPrivate(), HTTP_POST, resourcePath, body);
+            String digest = signedMessageFactory.create(keyPair.getPrivate(), HTTP_POST, resourcePath, body);
 
             Map<String, String> headers = new HashMap<String, String>();
             headers.put(DIGEST_HEADER, digest);

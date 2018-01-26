@@ -2,7 +2,7 @@ package com.yoti.api.client.spi.remote.call;
 
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.call.factory.PathFactory;
-import com.yoti.api.client.spi.remote.call.factory.SignatureFactory;
+import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,7 +60,7 @@ public class RemoteProfileServiceTest {
 
     @Mock ResourceFetcher resourceFetcherMock;
     @Mock PathFactory pathFactoryMock;
-    @Mock SignatureFactory signatureFactoryMock;
+    @Mock SignedMessageFactory signedMessageFactoryMock;
 
     @Captor ArgumentCaptor<Map<String, String>> headersCaptor;
     @Captor ArgumentCaptor<UrlConnector> urlConnectorCaptor;
@@ -75,7 +75,7 @@ public class RemoteProfileServiceTest {
 
     @Test
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
-        when(signatureFactoryMock.create(keyPair.getPrivate(), HTTP_GET, GENERATED_PROFILE_PATH)).thenReturn(SOME_SIGNATURE);
+        when(signedMessageFactoryMock.create(keyPair.getPrivate(), HTTP_GET, GENERATED_PROFILE_PATH)).thenReturn(SOME_SIGNATURE);
         when(resourceFetcherMock.fetchResource(any(UrlConnector.class), any(Map.class), eq(ProfileResponse.class))).thenReturn(PROFILE_RESPONSE);
 
         Receipt result = testObj.getReceipt(keyPair, APP_ID, TOKEN);
@@ -112,7 +112,7 @@ public class RemoteProfileServiceTest {
     @Test
     public void shouldWrapSecurityExceptionInProfileException() throws Exception {
         GeneralSecurityException securityException = new GeneralSecurityException();
-        when(signatureFactoryMock.create(keyPair.getPrivate(), HTTP_GET, GENERATED_PROFILE_PATH)).thenThrow(securityException);
+        when(signedMessageFactoryMock.create(keyPair.getPrivate(), HTTP_GET, GENERATED_PROFILE_PATH)).thenThrow(securityException);
 
         try {
             testObj.getReceipt(keyPair, APP_ID, TOKEN);
