@@ -15,7 +15,7 @@
 
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-spring-security</artifactId>
-  <version>1.0</version>
+  <version>1.4-SNAPSHOT</version>
   <name>Spring Security Integration For The Yoti SDK</name>
   <description>Library to integrate the Java Yoti SDK with Spring Security</description>
   <url>https://github.com/getyoti/yoti-java-sdk</url>
