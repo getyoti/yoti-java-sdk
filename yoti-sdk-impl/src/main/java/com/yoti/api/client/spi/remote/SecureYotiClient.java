@@ -1,18 +1,26 @@
 package com.yoti.api.client.spi.remote;
 
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
+import static com.yoti.api.client.spi.remote.util.Validation.notNull;
+import static javax.crypto.Cipher.DECRYPT_MODE;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.yoti.api.client.ActivityDetails;
 import com.yoti.api.client.ActivityFailureException;
+import com.yoti.api.client.AmlException;
 import com.yoti.api.client.InitialisationException;
 import com.yoti.api.client.KeyPairSource;
 import com.yoti.api.client.KeyPairSource.StreamVisitor;
 import com.yoti.api.client.Profile;
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.YotiClient;
+import com.yoti.api.client.aml.AmlProfile;
+import com.yoti.api.client.aml.AmlResult;
 import com.yoti.api.client.spi.remote.call.ProfileService;
 import com.yoti.api.client.spi.remote.call.Receipt;
+import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
 import com.yoti.api.client.spi.remote.proto.AttrProto.Attribute;
 import com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList;
 import com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType;
@@ -43,9 +51,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
-import static javax.crypto.Cipher.DECRYPT_MODE;
-
 /**
  * YotiClient talking to the Yoti Connect API remotely.
  */
@@ -54,29 +59,38 @@ final class SecureYotiClient implements YotiClient {
     private static final Logger LOG = LoggerFactory.getLogger(SecureYotiClient.class);
     private static final String SYMMETRIC_CIPHER = "AES/CBC/PKCS7Padding";
     private static final String ASYMMETRIC_CIPHER = "RSA/NONE/PKCS1Padding";
-    private static final String STRING_ENCODING = "UTF-8";
     private static final String RFC3339_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
     private final String appId;
     private final KeyPair keyPair;
     private final ProfileService profileService;
+    private final RemoteAmlService remoteAmlService;
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
-    SecureYotiClient(String applicationId, KeyPairSource kpSource, ProfileService profileService)
-            throws InitialisationException {
+    SecureYotiClient(String applicationId,
+                     KeyPairSource kpSource,
+                     ProfileService profileService,
+                     RemoteAmlService remoteAmlService) throws InitialisationException {
         this.appId = notNull(applicationId, "Application id");
         this.keyPair = loadKeyPair(notNull(kpSource, "Key pair source"));
         this.profileService = notNull(profileService, "Profile service");
+        this.remoteAmlService = notNull(remoteAmlService, "Aml service");
     }
 
     @Override
     public ActivityDetails getActivityDetails(String encryptedConnectToken) throws ProfileException {
         Receipt receipt = getReceipt(encryptedConnectToken, keyPair);
         return buildReceipt(receipt, keyPair.getPrivate());
+    }
+
+    @Override
+    public AmlResult performAmlCheck(AmlProfile amlProfile) throws AmlException {
+        LOG.debug("Performing aml check...");
+        return remoteAmlService.performCheck(keyPair, appId, amlProfile);
     }
 
     private Receipt getReceipt(String encryptedConnectToken, KeyPair keyPair) throws ProfileException {
@@ -104,7 +118,7 @@ final class SecureYotiClient implements YotiClient {
         try {
             byte[] byteValue = Base64.getUrlDecoder().decode(encryptedConnectToken);
             byte[] decryptedToken = decrypt(byteValue, privateKey);
-            connectToken = new String(decryptedToken, STRING_ENCODING);
+            connectToken = new String(decryptedToken, DEFAULT_CHARSET);
         } catch (Exception e) {
             throw new ProfileException("Cannot decrypt connect token", e);
         }
@@ -178,7 +192,7 @@ final class SecureYotiClient implements YotiClient {
 
     private Object mapAttribute(Attribute attribute) throws ParseException, IOException {
         if (ContentType.STRING.equals(attribute.getContentType())) {
-            return attribute.getValue().toString(STRING_ENCODING);
+            return attribute.getValue().toString(DEFAULT_CHARSET);
         } else if (ContentType.DATE.equals(attribute.getContentType())) {
             return DateAttributeValue.parseFrom(attribute.getValue().toByteArray());
         } else if (ContentType.JPEG.equals(attribute.getContentType())) {
@@ -186,11 +200,11 @@ final class SecureYotiClient implements YotiClient {
         } else if (ContentType.PNG.equals(attribute.getContentType())) {
             return new PngAttributeValue(attribute.getValue().toByteArray());
         } else if (ContentType.JSON.equals(attribute.getContentType())) {
-            return JSON_MAPPER.readValue(attribute.getValue().toString(STRING_ENCODING), Map.class);
+            return JSON_MAPPER.readValue(attribute.getValue().toString(DEFAULT_CHARSET), Map.class);
         }
 
         LOG.error("Unknown type {} for attribute {}", attribute.getContentType(), attribute.getName());
-        return attribute.getValue().toString(STRING_ENCODING);
+        return attribute.getValue().toString(DEFAULT_CHARSET);
     }
 
     private Profile createProfile(Map<String, Object> attributeMap) {
@@ -201,7 +215,7 @@ final class SecureYotiClient implements YotiClient {
             throws ProfileException {
         try {
             byte[] rmi = receipt.getRememberMeId();
-            String rememberMeId = (rmi == null) ? null : new String(Base64.getEncoder().encode(rmi), STRING_ENCODING);
+            String rememberMeId = (rmi == null) ? null : new String(Base64.getEncoder().encode(rmi), DEFAULT_CHARSET);
 
             SimpleDateFormat format = new SimpleDateFormat(RFC3339_PATTERN);
             Date timestamp = format.parse(receipt.getTimestamp());
@@ -250,7 +264,7 @@ final class SecureYotiClient implements YotiClient {
 
         @Override
         public KeyPair accept(InputStream stream) throws IOException, InitialisationException {
-            PEMParser reader = new PEMParser(new BufferedReader(new InputStreamReader(stream, STRING_ENCODING)));
+            PEMParser reader = new PEMParser(new BufferedReader(new InputStreamReader(stream, DEFAULT_CHARSET)));
             KeyPair keyPair = findKeyPair(reader);
             if (keyPair == null) {
                 throw new InitialisationException("No key pair found in the provided source");

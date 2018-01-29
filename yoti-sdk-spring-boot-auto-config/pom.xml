@@ -5,6 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <properties>
+    <yoti.sdk.version>1.4-SNAPSHOT</yoti.sdk.version>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <owasp.dependency.check.cvss.limit>4</owasp.dependency.check.cvss.limit>
@@ -14,7 +15,7 @@
 
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-spring-boot-auto-config</artifactId>
-  <version>1.3</version>
+  <version>1.4-SNAPSHOT</version>
   <name>Yoti Spring Boot Integration</name>
   <description>Library to integrate the Java Yoti SDK with Spring Boot Applications</description>
   <url>https://github.com/getyoti/yoti-java-sdk</url>
@@ -59,12 +60,12 @@
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>yoti-sdk-api</artifactId>
-      <version>1.4-SNAPSHOT</version>
+      <version>${yoti.sdk.version}</version>
     </dependency>
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>yoti-sdk-impl</artifactId>
-      <version>1.3</version>
+      <version>${yoti.sdk.version}</version>
     </dependency>
 
     <dependency>
@@ -175,6 +176,9 @@
       <plugin>
         <groupId>org.owasp</groupId>
         <artifactId>dependency-check-maven</artifactId>
+        <configuration>
+          <suppressionFile>${basedir}/suppressed-cves.xml</suppressionFile>
+        </configuration>
         <executions>
           <execution>
             <goals>

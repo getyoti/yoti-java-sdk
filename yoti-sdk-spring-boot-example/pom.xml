@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-spring-boot-example</artifactId>
-  <version>1.3</version>
+  <version>1.4-SNAPSHOT</version>
   <name>Yoti Spring Boot Example</name>
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -13,6 +13,7 @@
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
   <properties>
+    <yoti.sdk.version>1.4-SNAPSHOT</yoti.sdk.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
   </properties>
@@ -34,7 +35,7 @@
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>yoti-sdk-spring-boot-auto-config</artifactId>
-      <version>1.3</version>
+      <version>${yoti.sdk.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

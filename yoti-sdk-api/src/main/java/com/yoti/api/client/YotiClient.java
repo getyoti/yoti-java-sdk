@@ -1,5 +1,8 @@
 package com.yoti.api.client;
 
+import com.yoti.api.client.aml.AmlProfile;
+import com.yoti.api.client.aml.AmlResult;
+
 /**
  * <p>
  * Entry point to interact with the Yoti Connect API.
@@ -25,4 +28,17 @@ public interface YotiClient {
      *             aggregate exception signalling issues during the call
      */
     ActivityDetails getActivityDetails(String encryptedYotiToken) throws ProfileException;
+
+    /**
+     * Request an AML check for the given profile.
+     *
+     * @param amlProfile
+     *            Details of the profile to search for when performing the AML check
+     * @return an {@link AmlProfile} with the results of the check
+     *
+     * @throws AmlException
+     *             aggregate exception signalling issues during the call
+     */
+    AmlResult performAmlCheck(AmlProfile amlProfile) throws AmlException;
+
 }

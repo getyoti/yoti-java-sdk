@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 import static java.lang.String.format;
 
 /**
@@ -15,7 +16,6 @@ import static java.lang.String.format;
 final class DateAttributeValue implements com.yoti.api.client.Date {
 
     private static final String DATE_PATTERN = "yyyy-MM-dd";
-    private static final String STRING_ENCODING = "UTF-8";
     private final int year;
     private final int month;
     private final int day;
@@ -27,7 +27,7 @@ final class DateAttributeValue implements com.yoti.api.client.Date {
     }
 
     public static DateAttributeValue parseFrom(byte[] content) throws UnsupportedEncodingException, ParseException {
-        String source = new String(content, STRING_ENCODING);
+        String source = new String(content, DEFAULT_CHARSET);
         return parseFrom(source);
     }
 

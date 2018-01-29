@@ -8,6 +8,7 @@ import com.yoti.api.client.YotiClient;
 import com.yoti.api.client.YotiClientConfiguration;
 import com.yoti.api.client.YotiClientFactory;
 import com.yoti.api.client.spi.remote.call.RemoteProfileService;
+import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
 
 public final class SecureYotiClientFactory implements YotiClientFactory {
     private static final Logger LOG = LoggerFactory.getLogger(SecureYotiClientFactory.class);
@@ -22,7 +23,7 @@ public final class SecureYotiClientFactory implements YotiClientFactory {
         LOG.debug("Creating SecureYotiClient for application {} from {}", configuration.getApplicationId(),
                 configuration.getKeyPairSource());
         return new SecureYotiClient(configuration.getApplicationId(), configuration.getKeyPairSource(),
-                RemoteProfileService.newInstance());
+                RemoteProfileService.newInstance(), RemoteAmlService.newInstance());
     }
 
 }

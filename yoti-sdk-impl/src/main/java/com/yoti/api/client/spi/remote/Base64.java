@@ -93,6 +93,17 @@ public class Base64 {
     }
 
     /**
+     * Encodes the given array using the <a href="#basic">Basic</a> type base64 encoding scheme.
+     *
+     * @param   data
+     *          the byte array to encode
+     * @return  A String containing the resulting Base64 encoded characters
+     */
+    public static String base64(byte[] data) {
+        return Base64.getEncoder().encodeToString(data);
+    }
+
+    /**
      * Returns a {@link Encoder} that encodes using the
      * <a href="#url">URL and Filename safe</a> type base64
      * encoding scheme.

@@ -31,7 +31,7 @@ public class UrlConnector {
         return connection;
     }
 
-    String getUrlString() {
+    public String getUrlString() {
         return urlString;
     }
 

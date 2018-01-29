@@ -29,7 +29,6 @@
 
   <modules>
     <module>yoti-sdk-api</module>
-    <module>yoti-sdk-dummy</module>
     <module>yoti-sdk-impl</module>
     <module>yoti-sdk-spring-boot-auto-config</module>
     <module>yoti-sdk-spring-security</module>

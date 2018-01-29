@@ -1,5 +1,14 @@
 package com.yoti.api.client.spi.remote.call;
 
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
+import static java.net.HttpURLConnection.HTTP_OK;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+import static org.mockito.Answers.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,15 +24,6 @@ import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
-import static java.net.HttpURLConnection.HTTP_OK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
-import static org.mockito.Answers.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 @RunWith(MockitoJUnitRunner.class)
 public class JsonResourceFetcherTest {
 
@@ -31,7 +31,6 @@ public class JsonResourceFetcherTest {
     private static final String TEST_HEADER_KEY = "testHeader";
     private static final String TEST_HEADER_VALUE = "testValue";
     private static final Map<String, String> TEST_HEADERS = new HashMap<String, String>();
-    private static final String SERIALIZED_REQUEST_BODY = "testSerializedBody";
 
     @InjectMocks JsonResourceFetcher testObj;
 
@@ -40,8 +39,8 @@ public class JsonResourceFetcherTest {
     @Mock(answer = RETURNS_DEEP_STUBS) HttpURLConnection httpURLConnectionMock;
     @Mock UrlConnector urlConnectorMock;
     @Mock InputStream inputStreamMock;
+    byte[] requestBody = new byte[]{};
     Object parsedResponse = new Object();
-    Object requestBody = new Object();
 
     @BeforeClass
     public static void classSetup() {
@@ -65,7 +64,7 @@ public class JsonResourceFetcherTest {
     @Test
     public void fetchResource_shouldFailForNonOkStatusCode() throws Exception {
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_BAD_REQUEST);
-        when(httpURLConnectionMock.getInputStream()).thenReturn(stream(ERROR_BODY));
+        when(httpURLConnectionMock.getErrorStream()).thenReturn(stream(ERROR_BODY));
         when(urlConnectorMock.getHttpUrlConnection()).thenReturn(httpURLConnectionMock);
 
         try {
@@ -99,21 +98,20 @@ public class JsonResourceFetcherTest {
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
         when(httpURLConnectionMock.getInputStream()).thenReturn(inputStreamMock);
         when(urlConnectorMock.getHttpUrlConnection()).thenReturn(httpURLConnectionMock);
-        when(objectMapperMock.writeValueAsString(requestBody)).thenReturn(SERIALIZED_REQUEST_BODY);
         when(objectMapperMock.readValue(inputStreamMock, Object.class)).thenReturn(parsedResponse);
 
         Object result = testObj.postResource(urlConnectorMock, requestBody, TEST_HEADERS, Object.class);
 
         verify(httpURLConnectionMock).setRequestMethod("POST");
         verify(httpURLConnectionMock).setRequestProperty(TEST_HEADER_KEY, TEST_HEADER_VALUE);
-        verify(httpURLConnectionMock.getOutputStream()).write(SERIALIZED_REQUEST_BODY.getBytes());
+        verify(httpURLConnectionMock.getOutputStream()).write(requestBody);
         assertSame(parsedResponse, result);
     }
 
     @Test
     public void postResource_shouldFailForNonOkStatusCode() throws Exception {
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_BAD_REQUEST);
-        when(httpURLConnectionMock.getInputStream()).thenReturn(stream(ERROR_BODY));
+        when(httpURLConnectionMock.getErrorStream()).thenReturn(stream(ERROR_BODY));
         when(urlConnectorMock.getHttpUrlConnection()).thenReturn(httpURLConnectionMock);
 
         try {

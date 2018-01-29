@@ -214,10 +214,6 @@ YotiClientBuilder  | Builds a YotiClient instance by automatically selecting the
 YotiClient | Allows your app to retrieve a user profile, given an encrypted token.
 KeyPairSource and its implementations | A set of classes responsible for working with different sources (e.g. files, classpath resources, URLs) to load the private/public keypair.
 
-### yoti-sdk-dummy
-
-Dummy implementation without connectivity to any platform services. Can be used for testing purposes.
-
 ### yoti-sdk-impl
 
 Real SDK implementation that takes care of decrypting the token, fetching the user profile from Yoti servers by issuing a signed request and finally decrypting the fetched profile.

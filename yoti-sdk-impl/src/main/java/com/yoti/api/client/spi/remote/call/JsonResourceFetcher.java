@@ -1,5 +1,9 @@
 package com.yoti.api.client.spi.remote.call;
 
+import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
+import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,23 +14,18 @@ import java.net.HttpURLConnection;
 import java.util.Map;
 import java.util.Scanner;
 
-import static java.net.HttpURLConnection.HTTP_OK;
-
-final class JsonResourceFetcher implements ResourceFetcher {
+public final class JsonResourceFetcher implements ResourceFetcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonResourceFetcher.class);
-    private static final String HTTP_GET = "GET";
-    private static final String HTTP_POST = "POST";
-    private static final String DEFAULT_CHARSET = "UTF-8";
 
     private final ObjectMapper objectMapper;
 
-    public static JsonResourceFetcher createInstance() {
+    public static JsonResourceFetcher newInstance() {
         return new JsonResourceFetcher(new ObjectMapper());
     }
 
-    JsonResourceFetcher(ObjectMapper json_mapper) {
-        objectMapper = json_mapper;
+    JsonResourceFetcher(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -36,7 +35,7 @@ final class JsonResourceFetcher implements ResourceFetcher {
     }
 
     @Override
-    public <T> T postResource(UrlConnector urlConnector, Object body, Map<String, String> headers, Class<T> resourceClass)
+    public <T> T postResource(UrlConnector urlConnector, byte[] body, Map<String, String> headers, Class<T> resourceClass)
             throws ResourceException, IOException {
 
         HttpURLConnection httpUrlConnection = openConnection(urlConnector, HTTP_POST, headers);
@@ -45,6 +44,7 @@ final class JsonResourceFetcher implements ResourceFetcher {
     }
 
     private HttpURLConnection openConnection(UrlConnector urlConnector, String httpMethod, Map<String, String> headers) throws IOException {
+        LOG.debug("Connecting to: " + urlConnector.getUrlString());
         HttpURLConnection httpUrlConnection = urlConnector.getHttpUrlConnection();
         httpUrlConnection.setRequestMethod(httpMethod);
         setHeaders(headers, httpUrlConnection);
@@ -59,19 +59,18 @@ final class JsonResourceFetcher implements ResourceFetcher {
         }
     }
 
-    private void sendBody(Object body, HttpURLConnection httpUrlConnection) throws IOException {
+    private void sendBody(byte[] body, HttpURLConnection httpUrlConnection) throws IOException {
         if (body != null) {
-            String jsonBody = objectMapper.writeValueAsString(body);
             httpUrlConnection.setDoOutput(true);
-            httpUrlConnection.getOutputStream().write(jsonBody.getBytes(DEFAULT_CHARSET));
+            httpUrlConnection.getOutputStream().write(body);
             httpUrlConnection.getOutputStream().close();
         }
     }
 
     private <T> T parseResponse(HttpURLConnection httpUrlConnection, Class<T> resourceClass) throws ResourceException, IOException {
         int responseCode = httpUrlConnection.getResponseCode();
-        if (responseCode != HTTP_OK) {
-            String responseBody = readAll(httpUrlConnection.getInputStream());
+        if (responseCode >= HttpURLConnection.HTTP_BAD_REQUEST) {
+            String responseBody = readAll(httpUrlConnection.getErrorStream());
             throw new ResourceException(responseCode, responseBody);
         }
         return parseResource(httpUrlConnection.getInputStream(), resourceClass);
