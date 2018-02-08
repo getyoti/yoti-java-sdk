@@ -45,6 +45,13 @@ public interface HumanProfile extends Profile {
     Date getDateOfBirth();
 
     /**
+     * Did the user pass the age verification check?
+     *
+     * @return <code>TRUE</code> if they passed, <code>FALSE</code> if they failed, <code>null</code> if there was no check
+     */
+    Boolean isAgeVerified();
+
+    /**
      * Corresponds to the gender in the passport; will be one of the strings "MALE", "FEMALE" or "OTHER".
      *
      * @return the gender

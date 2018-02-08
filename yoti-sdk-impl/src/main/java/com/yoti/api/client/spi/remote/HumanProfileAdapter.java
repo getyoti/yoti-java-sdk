@@ -1,6 +1,11 @@
 package com.yoti.api.client.spi.remote;
 
-import com.yoti.api.client.*;
+import com.yoti.api.client.Attribute;
+import com.yoti.api.client.Date;
+import com.yoti.api.client.DocumentDetails;
+import com.yoti.api.client.HumanProfile;
+import com.yoti.api.client.Image;
+import com.yoti.api.client.Profile;
 
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
@@ -11,10 +16,13 @@ import java.util.Map;
  * Adapter linking Profile and ApplicationProfile together by wrapping the latter and exposing well-known attributes.
  */
 final class HumanProfileAdapter implements HumanProfile {
+
     private static final String ATTRIBUTE_FAMILY_NAME = "family_name";
     private static final String ATTRIBUTE_GIVEN_NAMES = "given_names";
     private static final String ATTRIBUTE_FULL_NAME = "full_name";
     private static final String ATTRIBUTE_DOB = "date_of_birth";
+    private static final String ATTRIBUTE_AGE_OVER = "age_over";
+    private static final String ATTRIBUTE_AGE_UNDER = "age_under";
     private static final String ATTRIBUTE_GENDER = "gender";
     private static final String ATTRIBUTE_POSTAL_ADDRESS = "postal_address";
     private static final String ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS = "structured_postal_address";
@@ -23,6 +31,7 @@ final class HumanProfileAdapter implements HumanProfile {
     private static final String ATTRIBUTE_SELFIE = "selfie";
     private static final String ATTRIBUTE_ADDRESS = "email_address";
     private static final String ATTRIBUTE_DOCUMENT_DETAILS = "document_details";
+
     private static final char SPACE = ' ';
 
     private final Profile wrapped;
@@ -88,6 +97,13 @@ final class HumanProfileAdapter implements HumanProfile {
     }
 
     @Override
+    public Boolean isAgeVerified() {
+        Boolean isAgeOver = wrapped.getAttribute(ATTRIBUTE_AGE_OVER, Boolean.class);
+        Boolean isAgeUnder = wrapped.getAttribute(ATTRIBUTE_AGE_UNDER, Boolean.class);
+        return isAgeOver != null ? isAgeOver : isAgeUnder;
+    }
+
+    @Override
     public Gender getGender() {
         String genderString = wrapped.getAttribute(ATTRIBUTE_GENDER);
         if (genderString != null) {
@@ -100,12 +116,12 @@ final class HumanProfileAdapter implements HumanProfile {
             return null;
         }
     }
-    
+
     @Override
     public String getPostalAddress() {
         return wrapped.getAttribute(ATTRIBUTE_POSTAL_ADDRESS);
     }
-    
+
     @Override
     public Map<?, ?> getStructuredPostalAddress() {
         return wrapped.getAttribute(ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS, Map.class);
@@ -188,4 +204,5 @@ final class HumanProfileAdapter implements HumanProfile {
             builder.append(input);
         }
     }
+
 }
