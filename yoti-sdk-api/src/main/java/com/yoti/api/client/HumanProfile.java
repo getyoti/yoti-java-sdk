@@ -6,6 +6,7 @@ import java.util.Map;
  * Profile of an human user with convenience methods to access well-known attributes.
  */
 public interface HumanProfile extends Profile {
+
     /**
      * Corresponds to primary name in passport, and surname in English.
      *
@@ -111,4 +112,5 @@ public interface HumanProfile extends Profile {
     static enum Gender {
         MALE, FEMALE, OTHER
     }
+
 }

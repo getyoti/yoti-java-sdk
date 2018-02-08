@@ -22,8 +22,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class HumanProfileAdapterTest {
 
-    private static final String ATTR_AGE_OVER = "age_over";
-    private static final String ATTR_AGE_UNDER = "age_under";
+    private static final String ATTR_AGE_OVER = "age_over:";
+    private static final String ATTR_AGE_UNDER = "age_under:";
     private static final String ATTR_GENDER = "gender";
     private static final String ATTR_DOCUMENT_DETAILS = "document_details";
     private static final String ATTR_GIVEN_NAMES = "given_names";
@@ -54,7 +54,7 @@ public class HumanProfileAdapterTest {
 
     @Test
     public void isAgeVerified_shouldReturnValueOfAgeOver() {
-        when(profileMock.getAttribute(ATTR_AGE_OVER, Boolean.class)).thenReturn(TRUE);
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, Boolean.class)).thenReturn(TRUE);
 
         Boolean result = testObj.isAgeVerified();
 
@@ -63,7 +63,7 @@ public class HumanProfileAdapterTest {
 
     @Test
     public void isAgeVerified_shouldReturnValueOfAgeUnder() {
-        when(profileMock.getAttribute(ATTR_AGE_UNDER, Boolean.class)).thenReturn(FALSE);
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, Boolean.class)).thenReturn(FALSE);
 
         Boolean result = testObj.isAgeVerified();
 
@@ -73,8 +73,8 @@ public class HumanProfileAdapterTest {
     // This scenario should never happen, but to be pragmatic...
     @Test
     public void isAgeVerified_shouldPreferAgeOverWhenBothAttributesArePresent() {
-        when(profileMock.getAttribute(ATTR_AGE_OVER, Boolean.class)).thenReturn(TRUE);
-        when(profileMock.getAttribute(ATTR_AGE_UNDER, Boolean.class)).thenReturn(FALSE);
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, Boolean.class)).thenReturn(TRUE);
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, Boolean.class)).thenReturn(FALSE);
 
         Boolean result = testObj.isAgeVerified();
 

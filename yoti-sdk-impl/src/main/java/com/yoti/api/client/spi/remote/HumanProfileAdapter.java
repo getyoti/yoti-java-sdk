@@ -21,8 +21,8 @@ final class HumanProfileAdapter implements HumanProfile {
     private static final String ATTRIBUTE_GIVEN_NAMES = "given_names";
     private static final String ATTRIBUTE_FULL_NAME = "full_name";
     private static final String ATTRIBUTE_DOB = "date_of_birth";
-    private static final String ATTRIBUTE_AGE_OVER = "age_over";
-    private static final String ATTRIBUTE_AGE_UNDER = "age_under";
+    private static final String ATTRIBUTE_AGE_OVER = "age_over:";
+    private static final String ATTRIBUTE_AGE_UNDER = "age_under:";
     private static final String ATTRIBUTE_GENDER = "gender";
     private static final String ATTRIBUTE_POSTAL_ADDRESS = "postal_address";
     private static final String ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS = "structured_postal_address";
@@ -57,6 +57,11 @@ final class HumanProfileAdapter implements HumanProfile {
     @Override
     public <T> T getAttribute(String name, Class<T> clazz) {
         return wrapped.getAttribute(name, clazz);
+    }
+
+    @Override
+    public <T> T findAttributeStartingWith(String name, Class<T> clazz) {
+        return wrapped.findAttributeStartingWith(name, clazz);
     }
 
     @Override
@@ -98,8 +103,8 @@ final class HumanProfileAdapter implements HumanProfile {
 
     @Override
     public Boolean isAgeVerified() {
-        Boolean isAgeOver = wrapped.getAttribute(ATTRIBUTE_AGE_OVER, Boolean.class);
-        Boolean isAgeUnder = wrapped.getAttribute(ATTRIBUTE_AGE_UNDER, Boolean.class);
+        Boolean isAgeOver = wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_OVER, Boolean.class);
+        Boolean isAgeUnder = wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_UNDER, Boolean.class);
         return isAgeOver != null ? isAgeOver : isAgeUnder;
     }
 
