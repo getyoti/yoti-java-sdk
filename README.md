@@ -206,7 +206,7 @@ Since version 1.1 of the `yoti-sdk-impl` you can set the following two system pr
 
 ## AML Integration
 
-Yoti provides an AML check service to allow a deeper KYC process to prevent fraud. This is a chargeable service, so please contact teamgrowth@yoti.com for more information.
+Yoti provides an AML check service to allow a deeper KYC process to prevent fraud. This is a chargeable service, so please contact [bizdev@yoti.com]('bizdev@yoti.com') for more information.
 
 Yoti will provide a boolean result on the following checks:
 * PEP list - Verify against Politically Exposed Persons list
@@ -214,7 +214,7 @@ Yoti will provide a boolean result on the following checks:
 * Watch list - Verify against watch lists from the Office of Foreign Assets Control
 
 To use this functionality you must ensure:
-* Your application is assigned to your Organisation in the Yoti Dashboard - please see here for further information.
+* Your application is assigned to your Organisation in the Yoti Dashboard - please see [here]('https://www.yoti.com/developers/documentation') for further information.
 * Within your application please ensure that you have selected the 'given names' and 'family name' attributes from the data tab. This is the minimum requirement for the AML check.
 
 The AML check uses a simplified view of the User Profile.  You need only provide the following:
@@ -225,6 +225,10 @@ The AML check uses a simplified view of the User Profile.  You need only provide
 To check a US citizen, you must provide two more attributes in addition to the three above:
 * Social Security Number - you will need to collect this from the user yourself
 * Postcode/Zip code
+
+### Consent
+Performing an Aml check on a person *requires* their consent.
+**You must ensure you have user consent *before* using this service.**
 
 ### Code Example
 
@@ -250,8 +254,6 @@ System.out.println(amlResult.isOnFraudList());
 System.out.println(amlResult.isOnWatchList());
 System.out.println(amlResult.isOnPepList());
 ```
-
-Please note: if you are using this service you must make your user aware of this transaction.
 
 ## Modules
 
