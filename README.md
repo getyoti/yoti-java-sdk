@@ -206,7 +206,7 @@ Since version 1.1 of the `yoti-sdk-impl` you can set the following two system pr
 
 ## AML Integration
 
-Yoti provides an AML check service to allow a deeper KYC process to prevent fraud. This is a chargeable service, so please contact [sdksupport@yoti.com]('sdksupport@yoti.com') for more information.
+Yoti provides an AML (Anti Money Laundering) check service to allow a deeper KYC process to prevent fraud. This is a chargeable service, so please contact [sdksupport@yoti.com]('sdksupport@yoti.com') for more information.
 
 Yoti will provide a boolean result on the following checks:
 * PEP list - Verify against Politically Exposed Persons list
