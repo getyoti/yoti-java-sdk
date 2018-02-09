@@ -12,6 +12,7 @@ import com.yoti.api.client.Profile;
  *
  */
 public final class ApplicationProfileAdapter implements ApplicationProfile {
+
     private static final String ATTRIBUTE_APPLICATION_NAME = "application_name";
     private static final String ATTRIBUTE_APPLICATION_LOGO = "application_logo";
     private static final String ATTRIBUTE_APPLICATION_URL = "application_url";
@@ -39,6 +40,11 @@ public final class ApplicationProfileAdapter implements ApplicationProfile {
     @Override
     public <T> T getAttribute(String name, Class<T> clazz) {
         return wrapped.getAttribute(name, clazz);
+    }
+
+    @Override
+    public <T> T findAttributeStartingWith(String name, Class<T> clazz) {
+        return wrapped.findAttributeStartingWith(name, clazz);
     }
 
     @Override

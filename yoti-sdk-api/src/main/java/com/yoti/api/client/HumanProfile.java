@@ -6,6 +6,7 @@ import java.util.Map;
  * Profile of an human user with convenience methods to access well-known attributes.
  */
 public interface HumanProfile extends Profile {
+
     /**
      * Corresponds to primary name in passport, and surname in English.
      *
@@ -43,6 +44,13 @@ public interface HumanProfile extends Profile {
      * @return Date of birth
      */
     Date getDateOfBirth();
+
+    /**
+     * Did the user pass the age verification check?
+     *
+     * @return <code>TRUE</code> if they passed, <code>FALSE</code> if they failed, <code>null</code> if there was no check
+     */
+    Boolean isAgeVerified();
 
     /**
      * Corresponds to the gender in the passport; will be one of the strings "MALE", "FEMALE" or "OTHER".
@@ -104,4 +112,5 @@ public interface HumanProfile extends Profile {
     static enum Gender {
         MALE, FEMALE, OTHER
     }
+
 }

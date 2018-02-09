@@ -2,14 +2,15 @@ package com.yoti.api.client.spi.remote;
 
 import static java.util.Collections.unmodifiableMap;
 
+import com.yoti.api.client.Attribute;
+import com.yoti.api.client.Profile;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.yoti.api.client.Attribute;
-import com.yoti.api.client.Profile;
-
 final class SimpleProfile implements Profile {
+
     private final Map<String, Attribute> attributes;
     private final Map<String, Attribute> protectedAttributes;
 
@@ -71,6 +72,12 @@ final class SimpleProfile implements Profile {
     }
 
     @Override
+    public <T> T findAttributeStartingWith(String name, Class<T> clazz) {
+        Attribute attribute = doFindAttribute(name);
+        return (attribute == null) ? null : attribute.getValue(clazz);
+    }
+
+    @Override
     public Collection<Attribute> getAttributes() {
         return protectedAttributes.values();
     }
@@ -84,9 +91,24 @@ final class SimpleProfile implements Profile {
     }
 
     private Attribute doGetAttribute(String name) {
+        ensureName(name);
+        return attributes.get(name);
+    }
+
+    private Attribute doFindAttribute(String name) {
+        ensureName(name);
+        for (Map.Entry<String, Attribute> entry : attributes.entrySet()) {
+            if (entry.getKey().startsWith(name)) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    private void ensureName(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Attribute name must not be null.");
         }
-        return attributes.get(name);
     }
+
 }
