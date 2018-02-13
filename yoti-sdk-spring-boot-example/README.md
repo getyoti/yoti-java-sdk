@@ -16,7 +16,7 @@ Before you start, you'll need to create an Application in [Dashboard](https://ww
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>yoti-sdk-impl</artifactId>
-      <version>1.4-SNAPSHOT</version>
+      <version>1.4</version>
     </dependency>
 ```
 

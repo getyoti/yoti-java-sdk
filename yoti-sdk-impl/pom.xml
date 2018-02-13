@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-impl</artifactId>
-  <version>1.4-SNAPSHOT</version>
+  <version>1.4</version>
   <name>Yoti SDK implementation package</name>
   <description>Java SDK for simple integration with the Yoti platform</description>
   <url>https://github.com/getyoti/yoti-java-sdk</url>
@@ -28,7 +28,7 @@
   </developers>
 
   <properties>
-    <yoti.sdk.version>1.4-SNAPSHOT</yoti.sdk.version>
+    <yoti.sdk.version>1.4</yoti.sdk.version>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <owasp.dependency.check.cvss.limit>4</owasp.dependency.check.cvss.limit>
