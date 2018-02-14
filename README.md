@@ -171,6 +171,7 @@ try {
         String userId = activityDetails.getUserId();
         Image selfie = profile.getSelfie();
         String base64Selfie = activityDetails.getBase64Selfie();
+        String fullName = profile.GetFullName();
         String givenNames = profile.getGivenNames();
         String familyName = profile.getFamilyName();
         String mobileNumber = profile.getPhoneNumber();
