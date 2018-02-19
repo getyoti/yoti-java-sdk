@@ -22,7 +22,7 @@ public interface HumanProfile extends Profile {
     String getGivenNames();
 
     /**
-     * Equal to ${given_names} + " " + ${family_name}.
+     * The full name attribute.
      *
      * @return the full name
      */
@@ -33,7 +33,7 @@ public interface HumanProfile extends Profile {
      *
      * @return the given names + the surname
      * @since 1.2
-     * @deprecated please use {@link #getFullName() instead}
+     * @deprecated
      */
     @Deprecated
     String getGivenAndLastNames();
