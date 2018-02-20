@@ -29,7 +29,7 @@ Description on handling user logons
 Description of network connectivity requirements
 
 1) [AML Integration](#aml-integration) -
-Integrating with Yoti's AML service
+How to integrate with Yoti's AML (Anti Money Laundering) service
 
 1) [Modules](#modules) -
 The Modules above explained
@@ -96,7 +96,7 @@ If you are using Maven, you need to add the following dependency:
 <dependency>
     <groupId>com.yoti</groupId>
     <artifactId>yoti-sdk-impl</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.4.1-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -171,6 +171,7 @@ try {
         String userId = activityDetails.getUserId();
         Image selfie = profile.getSelfie();
         String base64Selfie = activityDetails.getBase64Selfie();
+        String fullName = profile.GetFullName();
         String givenNames = profile.getGivenNames();
         String familyName = profile.getFamilyName();
         String mobileNumber = profile.getPhoneNumber();
@@ -206,38 +207,38 @@ Since version 1.1 of the `yoti-sdk-impl` you can set the following two system pr
 
 ## AML Integration
 
-Yoti provides an AML (Anti Money Laundering) check service to allow a deeper KYC process to prevent fraud. This is a chargeable service, so please contact [sdksupport@yoti.com]('sdksupport@yoti.com') for more information.
+Yoti provides an AML (Anti Money Laundering) check service to allow a deeper KYC process to prevent fraud. This is a chargeable service, so please contact [sdksupport@yoti.com](mailto:sdksupport@yoti.com) for more information.
 
 Yoti will provide a boolean result on the following checks:
+
 * PEP list - Verify against Politically Exposed Persons list
 * Fraud list - Verify against  US Social Security Administration Fraud (SSN Fraud) list
 * Watch list - Verify against watch lists from the Office of Foreign Assets Control
 
-To use this functionality you must ensure:
-* Your application is assigned to your Organisation in the Yoti Dashboard - please see [here](https://www.yoti.com/developers/documentation) for further information.
-* Within your application please ensure that you have selected the 'given names' and 'family name' attributes from the data tab. This is the minimum requirement for the AML check.
+To use this functionality you must ensure your application is assigned to your Organisation in the Yoti Dashboard - please see [here](https://www.yoti.com/developers/documentation) for further information.
 
-The AML check uses a simplified view of the User Profile.  You need only provide the following:
-* profile.givenNames
-* profile.familyName
-* Country of residence - you will need to collect this from the user yourself
+For the AML check you will need to provide the following:
 
-To check a US citizen, you must provide two more attributes in addition to the three above:
-* Social Security Number - you will need to collect this from the user yourself
-* Postcode/Zip code
+* Data provided by Yoti (please ensure you have selected the Given name(s) and Family name attributes from the Data tab in the Yoti Dashboard)
+  * Given name(s)
+  * Family name
+* Data that must be collected from the user:
+  * Country of residence (must be an ISO 3166 3-letter code)
+  * Social Security Number (US citizens only)
+  * Postcode/Zip code (US citizens only)
 
 ### Consent
-Performing an Aml check on a person *requires* their consent.
+
+Performing an AML check on a person *requires* their consent.
 **You must ensure you have user consent *before* using this service.**
 
 ### Code Example
 
-Given a YotiClient initialised with your SDK ID and KeyPair (see Client Initialisation) performing an AML check is a straightforward case of providing basic profile data.
+Given a YotiClient initialised with your SDK ID and KeyPair (see [Client Initialisation](#client-initialisation)) performing an AML check is a straightforward case of providing basic profile data.
 
 ```java
 // POJOs for the data to check
 AmlAddress amlAddress = new AmlAddressBuilder()
-                            .withPostCode(“E1 6DB”)
                             .withCountry("GBR")
                             .build();
 AmlProfile amlProfile = new AmlProfileBuilder()

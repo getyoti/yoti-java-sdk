@@ -42,6 +42,7 @@ public class YotiLoginController {
         }
 
         // load profile data into model
+        model.addAttribute("fullName", profile.getFullName());
         model.addAttribute("givenNames", profile.getGivenNames());
         model.addAttribute("familyName", profile.getFamilyName());
         model.addAttribute("phoneNumber", profile.getPhoneNumber());

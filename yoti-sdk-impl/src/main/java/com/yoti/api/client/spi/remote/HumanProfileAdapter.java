@@ -80,11 +80,11 @@ final class HumanProfileAdapter implements HumanProfile {
     }
 
     @Override
-    @Deprecated
     public String getFullName() {
         return wrapped.getAttribute(ATTRIBUTE_FULL_NAME);
     }
 
+    @Deprecated
     @Override
     public String getGivenAndLastNames() {
         final String givenNames = getGivenNames();
