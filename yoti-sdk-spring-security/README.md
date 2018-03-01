@@ -25,7 +25,7 @@ If you are using Maven, you need to add the following dependencies:
 <dependency>
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-spring-security</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.4.1</version>
 </dependency>
 ```
 
