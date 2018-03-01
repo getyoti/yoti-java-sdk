@@ -1,19 +1,9 @@
 package com.yoti.api.client.spi.remote.util;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.security.GeneralSecurityException;
-import java.security.Key;
-import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.Security;
-import java.security.Signature;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.ASYMMETRIC_CIPHER;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.BOUNCY_CASTLE_PROVIDER;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.SIGNATURE_ALGORITHM;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.SYMMETRIC_CIPHER;
 
 import com.yoti.api.client.spi.remote.Base64;
 import org.bouncycastle.openssl.PEMKeyPair;
@@ -21,10 +11,22 @@ import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.junit.Assert;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.PublicKey;
+import java.security.Security;
+import java.security.Signature;
+
 public class CryptoUtil {
-    private static final String ASYMMETRIC_CIPHER = "RSA/NONE/PKCS1Padding";
+
     private static final String SYMMETRIC_KEY_ALGO = "AES";
-    private static final String SYMMETRIC_CIPHER = "AES/CBC/PKCS7Padding";
     private static final int SYMMETRIC_LENGTH = 256;
 
     public static final String INVALID_KEY_PAIR_PEM = "-----BEGIN RSA PRIVATE KEY-----\n"
@@ -67,22 +69,19 @@ public class CryptoUtil {
             + "laDBX8dDBwBQ3i0FhvuGR/LEjHWr9hj00faKROHOLFim6wbRIkg=\n" //
             + "-----END RSA PRIVATE KEY-----";
 
-    private static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
-    private static final String BOUNCY_CASTLE_PROVIDER = "BC";
-
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
     public static EncryptionResult encryptSymmetric(byte[] data, Key key) throws GeneralSecurityException {
-        Cipher cipher = Cipher.getInstance(SYMMETRIC_CIPHER);
+        Cipher cipher = Cipher.getInstance(SYMMETRIC_CIPHER, BOUNCY_CASTLE_PROVIDER);
         cipher.init(Cipher.ENCRYPT_MODE, key);
 
         return new EncryptionResult(cipher.doFinal(data), cipher.getIV());
     }
 
     public static byte[] encryptAsymmetric(byte[] data, Key key) throws GeneralSecurityException {
-        Cipher cipher = Cipher.getInstance(ASYMMETRIC_CIPHER);
+        Cipher cipher = Cipher.getInstance(ASYMMETRIC_CIPHER, BOUNCY_CASTLE_PROVIDER);
         cipher.init(Cipher.ENCRYPT_MODE, key);
 
         return cipher.doFinal(data);
@@ -103,15 +102,14 @@ public class CryptoUtil {
         return keyPair;
     }
 
-    public static Key generateKey() throws NoSuchAlgorithmException {
-        KeyGenerator keyGen = KeyGenerator.getInstance(SYMMETRIC_KEY_ALGO);
+    public static Key generateKey()  throws GeneralSecurityException {
+        KeyGenerator keyGen = KeyGenerator.getInstance(SYMMETRIC_KEY_ALGO, BOUNCY_CASTLE_PROVIDER);
         keyGen.init(SYMMETRIC_LENGTH);
         return keyGen.generateKey();
     }
 
-    public static void verifyMessage(byte[] message, PublicKey publicKey, byte[] receivedSignature)
-            throws GeneralSecurityException {
-        Signature signature = Signature.getInstance(CryptoUtil.SIGNATURE_ALGORITHM, BOUNCY_CASTLE_PROVIDER);
+    public static void verifyMessage(byte[] message, PublicKey publicKey, byte[] receivedSignature) throws GeneralSecurityException {
+        Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM, BOUNCY_CASTLE_PROVIDER);
         signature.initVerify(publicKey);
         signature.update(message);
         Assert.assertTrue(signature.verify(receivedSignature));
