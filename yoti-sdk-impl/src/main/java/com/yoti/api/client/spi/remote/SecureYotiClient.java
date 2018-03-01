@@ -1,6 +1,9 @@
 package com.yoti.api.client.spi.remote;
 
+import static com.yoti.api.client.spi.remote.call.YotiConstants.ASYMMETRIC_CIPHER;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.BOUNCY_CASTLE_PROVIDER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.SYMMETRIC_CIPHER;
 import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 import static javax.crypto.Cipher.DECRYPT_MODE;
 
@@ -57,8 +60,6 @@ import java.util.Map;
 final class SecureYotiClient implements YotiClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(SecureYotiClient.class);
-    private static final String SYMMETRIC_CIPHER = "AES/CBC/PKCS7Padding";
-    private static final String ASYMMETRIC_CIPHER = "RSA/NONE/PKCS1Padding";
     private static final String RFC3339_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
@@ -235,7 +236,7 @@ final class SecureYotiClient implements YotiClient {
         }
         byte[] result = null;
         try {
-            Cipher cipher = Cipher.getInstance(SYMMETRIC_CIPHER);
+            Cipher cipher = Cipher.getInstance(SYMMETRIC_CIPHER, BOUNCY_CASTLE_PROVIDER);
             cipher.init(DECRYPT_MODE, key, new IvParameterSpec(initVector.toByteArray()));
             result = cipher.doFinal(source.toByteArray());
         } catch (GeneralSecurityException gse) {
@@ -249,7 +250,7 @@ final class SecureYotiClient implements YotiClient {
     private byte[] decrypt(byte[] source, PrivateKey key) throws ProfileException {
         byte[] result = null;
         try {
-            Cipher cipher = Cipher.getInstance(ASYMMETRIC_CIPHER);
+            Cipher cipher = Cipher.getInstance(ASYMMETRIC_CIPHER, BOUNCY_CASTLE_PROVIDER);
             cipher.init(DECRYPT_MODE, key);
             result = cipher.doFinal(source);
         } catch (GeneralSecurityException gse) {

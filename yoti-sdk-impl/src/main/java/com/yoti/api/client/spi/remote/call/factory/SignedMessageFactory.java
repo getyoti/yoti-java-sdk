@@ -1,6 +1,8 @@
 package com.yoti.api.client.spi.remote.call.factory;
 
 import static com.yoti.api.client.spi.remote.Base64.base64;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.BOUNCY_CASTLE_PROVIDER;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.SIGNATURE_ALGORITHM;
 
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
@@ -8,9 +10,6 @@ import java.security.SecureRandom;
 import java.security.Signature;
 
 public class SignedMessageFactory {
-
-    private static final String BOUNCY_CASTLE_PROVIDER = "BC";
-    private static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
 
     private final MessageFactory messageFactory;
 
