@@ -102,7 +102,7 @@ If you are using Maven, you need to add the following dependency:
 
 If you are using Gradle, here is the dependency to add:
 
-`compile group: 'com.yoti', name: 'yoti-sdk-impl', version: '1.3'`
+`compile group: 'com.yoti', name: 'yoti-sdk-impl', version: '1.4.1'`
 
 You will find all classes packaged under `com.yoti.api`
 
@@ -176,6 +176,7 @@ try {
         String familyName = profile.getFamilyName();
         String mobileNumber = profile.getPhoneNumber();
         String emailAddress = profile.getEmailAddress();
+        Boolean isAgeVerified = profile.isAgeVerified();
         Date dateOfBirth = profile.getDateOfBirth();
         Gender gender = profile.getGender();
         String postalAddress = profile.getPostalAddress();
@@ -301,6 +302,20 @@ Combining this with the Spring Boot Auto Configuration can make integration very
 * Windows users - if you see `unmappable character for encoding Cp1252` when running `mvn clean install`, you need to set the default encoding to be UTF-8 before proceeding. This can be done by setting the `JAVA_TOOL_OPTIONS` variable from the Command Prompt: `set JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8`
 
 ## Known Issues
+
+### Age Verification
+
+#### Affects
+
+* Versions prior to 1.4.2
+
+#### Description
+
+A bug in the isAgeVerified() property of the profile meant that isAgeVerified() would always return null (i.e. not checked).
+
+#### How to fix
+
+Use SDK version 1.4.2 or later.
 
 ### Loading Private Keys
 
