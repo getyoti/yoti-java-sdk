@@ -1,5 +1,7 @@
 package com.yoti.api.client.spi.remote;
 
+import static java.lang.Boolean.parseBoolean;
+
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.DocumentDetails;
@@ -103,9 +105,13 @@ final class HumanProfileAdapter implements HumanProfile {
 
     @Override
     public Boolean isAgeVerified() {
-        Boolean isAgeOver = wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_OVER, Boolean.class);
-        Boolean isAgeUnder = wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_UNDER, Boolean.class);
+        Boolean isAgeOver = parseFromStringValue(wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_OVER, String.class));
+        Boolean isAgeUnder = parseFromStringValue(wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_UNDER, String.class));
         return isAgeOver != null ? isAgeOver : isAgeUnder;
+    }
+
+    private Boolean parseFromStringValue(String value) {
+        return value == null ? null : parseBoolean(value);
     }
 
     @Override
