@@ -54,7 +54,7 @@ public class HumanProfileAdapterTest {
 
     @Test
     public void isAgeVerified_shouldReturnValueOfAgeOver() {
-        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, Boolean.class)).thenReturn(TRUE);
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, String.class)).thenReturn("true");
 
         Boolean result = testObj.isAgeVerified();
 
@@ -63,7 +63,7 @@ public class HumanProfileAdapterTest {
 
     @Test
     public void isAgeVerified_shouldReturnValueOfAgeUnder() {
-        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, Boolean.class)).thenReturn(FALSE);
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, String.class)).thenReturn("false");
 
         Boolean result = testObj.isAgeVerified();
 
@@ -73,8 +73,8 @@ public class HumanProfileAdapterTest {
     // This scenario should never happen, but to be pragmatic...
     @Test
     public void isAgeVerified_shouldPreferAgeOverWhenBothAttributesArePresent() {
-        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, Boolean.class)).thenReturn(TRUE);
-        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, Boolean.class)).thenReturn(FALSE);
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, String.class)).thenReturn("true");
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, String.class)).thenReturn("false");
 
         Boolean result = testObj.isAgeVerified();
 
