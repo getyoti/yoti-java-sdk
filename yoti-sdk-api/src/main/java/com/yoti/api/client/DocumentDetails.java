@@ -5,6 +5,7 @@ package com.yoti.api.client;
  *
  */
 public interface DocumentDetails {
+
     /**
      * Return document type.
      * 
@@ -33,7 +34,18 @@ public interface DocumentDetails {
      */
     Date getExpirationDate();
 
+    /**
+     * Either a country code, or the name of the issuing authority
+     *
+     * @return Either a country code, or the name of the issuing authority
+     */
+    String getIssuingAuthority();
+
     static enum DocumentType {
-        PASSPORT
+        PASSPORT,
+        DRIVING_LICENCE,
+        AADHAAR,
+        PASS_CARD
     }
+
 }
