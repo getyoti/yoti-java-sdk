@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
+   <suppress>
+      <notes><![CDATA[
+        The problem is described here: https://nvd.nist.gov/vuln/detail/CVE-2015-5237
+        Google maintain it's fixed from 3.4 onwards: https://github.com/google/protobuf/issues/760
+      ]]></notes>
+      <gav>com.google.protobuf:protobuf-java:3.5.0</gav>
+      <cve>CVE-2015-5237</cve>
+   </suppress>
+   
+   <suppress>
+      <notes><![CDATA[
+        The problem is described here: https://nvd.nist.gov/vuln/detail/CVE-2017-17485#VulnChangeHistoryDiv
+        The jackson-databind devs discuss it here: https://github.com/FasterXML/jackson-databind/issues/1904
+        Recommended reading is here: https://medium.com/@cowtowncoder/on-jackson-cves-dont-panic-here-is-what-you-need-to-know-54cd0d6e8062
+        Our conclusion is in API-360
+        There is now an additional CVE, seemingly for the same issue: https://nvd.nist.gov/vuln/detail/CVE-2018-5968
+      ]]></notes>
+      <gav>com.fasterxml.jackson.core:jackson-databind:2.7.9.1</gav>
+      <cve>CVE-2017-17485</cve>
+      <cve>CVE-2018-5968</cve>
+      <cve>CVE-2017-15095</cve>
+   </suppress>
+</suppressions>
