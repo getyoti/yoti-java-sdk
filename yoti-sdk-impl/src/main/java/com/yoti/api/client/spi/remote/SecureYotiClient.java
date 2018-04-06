@@ -191,21 +191,38 @@ final class SecureYotiClient implements YotiClient {
         return attributeMap;
     }
 
-    private Object mapAttribute(Attribute attribute) throws ParseException, IOException {
+    private com.yoti.api.client.Attribute mapAttribute(Attribute attribute) throws ParseException, IOException {
         if (ContentType.STRING.equals(attribute.getContentType())) {
-            return attribute.getValue().toString(DEFAULT_CHARSET);
+            return new com.yoti.api.client.Attribute(attribute.getName(), 
+                attribute.getValue().toString(DEFAULT_CHARSET), 
+                extractSource(attribute));
         } else if (ContentType.DATE.equals(attribute.getContentType())) {
-            return DateAttributeValue.parseFrom(attribute.getValue().toByteArray());
+            return new com.yoti.api.client.Attribute(attribute.getName(),
+                DateAttributeValue.parseFrom(attribute.getValue().toByteArray()),
+                extractSource(attribute));        
         } else if (ContentType.JPEG.equals(attribute.getContentType())) {
-            return new JpegAttributeValue(attribute.getValue().toByteArray());
+            return new com.yoti.api.client.Attribute(attribute.getName(),
+                new JpegAttributeValue(attribute.getValue().toByteArray()),
+                extractSource(attribute));
         } else if (ContentType.PNG.equals(attribute.getContentType())) {
-            return new PngAttributeValue(attribute.getValue().toByteArray());
+            return new com.yoti.api.client.Attribute(attribute.getName(),
+                new PngAttributeValue(attribute.getValue().toByteArray()),
+                extractSource(attribute));
         } else if (ContentType.JSON.equals(attribute.getContentType())) {
-            return JSON_MAPPER.readValue(attribute.getValue().toString(DEFAULT_CHARSET), Map.class);
+            return new com.yoti.api.client.Attribute(attribute.getName(),
+                JSON_MAPPER.readValue(attribute.getValue().toString(DEFAULT_CHARSET), Map.class),
+                extractSource(attribute));
         }
 
         LOG.error("Unknown type {} for attribute {}", attribute.getContentType(), attribute.getName());
-        return attribute.getValue().toString(DEFAULT_CHARSET);
+        return new com.yoti.api.client.Attribute(attribute.getName(), 
+                attribute.getValue().toString(DEFAULT_CHARSET),
+                extractSource(attribute));
+    }
+
+    private String extractSource(Attribute attribute) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     private Profile createProfile(Map<String, Object> attributeMap) {

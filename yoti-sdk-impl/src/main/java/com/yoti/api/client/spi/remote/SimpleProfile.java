@@ -2,12 +2,13 @@ package com.yoti.api.client.spi.remote;
 
 import static java.util.Collections.unmodifiableMap;
 
-import com.yoti.api.client.Attribute;
-import com.yoti.api.client.Profile;
-
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.yoti.api.client.Attribute;
+import com.yoti.api.client.Profile;
 
 final class SimpleProfile implements Profile {
 
@@ -15,16 +16,16 @@ final class SimpleProfile implements Profile {
     private final Map<String, Attribute> protectedAttributes;
 
     /**
-     * Create a new profile based on an attribute map.
+     * Create a new profile based on a list of attributes
      *
-     * @param objectAttributes
-     *            Map holding the values for the attributes
+     * @param attributeList
+     *            list containing the attributes for this profile
      */
-    public SimpleProfile(Map<String, Object> objectAttributes) {
-        if (objectAttributes == null) {
+    public SimpleProfile(List<Attribute> attributeList) {
+        if (attributeList == null) {
             throw new IllegalArgumentException("Attributes must not be null.");
         }
-        this.attributes = createAttributeMap(objectAttributes);
+        this.attributes = createAttributeMap(attributeList);
         this.protectedAttributes = unmodifiableMap(attributes);
     }
 
@@ -37,8 +38,14 @@ final class SimpleProfile implements Profile {
      */
     @Override
     public String getAttribute(String name) {
-        Attribute attribute = doGetAttribute(name);
+        Attribute attribute = getAttributeObject(name);
         return (attribute == null) ? null : attribute.getValue(String.class);
+    }
+
+    @Override
+    public Attribute getAttributeObject(String name) {
+        ensureName(name);
+        return attributes.get(name);
     }
 
     /**
@@ -52,7 +59,7 @@ final class SimpleProfile implements Profile {
      */
     @Override
     public boolean is(String name, boolean defaultValue) {
-        Attribute attribute = doGetAttribute(name);
+        Attribute attribute = getAttributeObject(name);
         return (attribute == null) ? defaultValue : attribute.getValueOrDefault(Boolean.class, defaultValue);
     }
 
@@ -67,7 +74,7 @@ final class SimpleProfile implements Profile {
      */
     @Override
     public <T> T getAttribute(String name, Class<T> clazz) {
-        Attribute attribute = doGetAttribute(name);
+        Attribute attribute = getAttributeObject(name);
         return (attribute == null) ? null : attribute.getValue(clazz);
     }
 
@@ -82,17 +89,12 @@ final class SimpleProfile implements Profile {
         return protectedAttributes.values();
     }
 
-    private Map<String, Attribute> createAttributeMap(Map<String, Object> objectAttributes) {
+    private Map<String, Attribute> createAttributeMap(List<Attribute> attributes) {
         Map<String, Attribute> result = new HashMap<String, Attribute>();
-        for (Map.Entry<String, Object> e : objectAttributes.entrySet()) {
-            result.put(e.getKey(), new Attribute(e.getKey(), e.getValue()));
+        for (Attribute a : attributes) {
+            result.put(a.getName(), a);
         }
         return result;
-    }
-
-    private Attribute doGetAttribute(String name) {
-        ensureName(name);
-        return attributes.get(name);
     }
 
     private Attribute doFindAttribute(String name) {

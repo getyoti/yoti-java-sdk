@@ -52,6 +52,11 @@ final class HumanProfileAdapter implements HumanProfile {
     }
 
     @Override
+    public Attribute getAttributeObject(String name) {
+       return wrapped.getAttributeObject(name);
+    }
+
+    @Override
     public boolean is(String name, boolean defaultValue) {
         return wrapped.is(name, defaultValue);
     }
@@ -108,10 +113,6 @@ final class HumanProfileAdapter implements HumanProfile {
         Boolean isAgeOver = parseFromStringValue(wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_OVER, String.class));
         Boolean isAgeUnder = parseFromStringValue(wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_UNDER, String.class));
         return isAgeOver != null ? isAgeOver : isAgeUnder;
-    }
-
-    private Boolean parseFromStringValue(String value) {
-        return value == null ? null : parseBoolean(value);
     }
 
     @Override
@@ -199,6 +200,58 @@ final class HumanProfileAdapter implements HumanProfile {
         return true;
     }
 
+    @Override
+    public String getAttributeSource(String name) {
+        Attribute attribute = getAttributeObject(name);
+        return (attribute == null) ? null : attribute.getSource();
+    }
+
+    @Override
+    public String getFamilyNameSource() {
+        return getAttributeSource(ATTRIBUTE_FAMILY_NAME);
+    }
+
+    @Override
+    public String getGivenNamesSource() {
+        return getAttributeSource(ATTRIBUTE_GIVEN_NAMES);
+    }
+
+    @Override
+    public String getFullNameSource() {
+        return getAttributeSource(ATTRIBUTE_FULL_NAME);
+    }
+
+    @Override
+    public String getDateOfBirthSource() {
+        return getAttributeSource(ATTRIBUTE_DOB);
+    }
+
+    @Override
+    public String getGenderSource() {
+        return getAttributeSource(ATTRIBUTE_GENDER);
+    }
+
+    @Override
+    public String getPostalAddressSource() {
+        return getAttributeSource(ATTRIBUTE_POSTAL_ADDRESS);
+    }
+
+    @Override
+    public String getStructuredPostalAddressSource() {
+        return getAttributeSource(ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS);
+    }
+
+    @Override
+    public String getNationalitySource() {
+        return getAttributeSource(ATTRIBUTE_NATIONALITY);
+    }
+
+    private void appendIfNotNull(final StringBuilder builder, final String input) {
+        if (input != null) {
+            builder.append(input);
+        }
+    }
+
     private String buildGivenAndLastNameString(final String givenNames, final String familyName) {
         // in Java 8 a java.util.StringJoiner does this much more nicely - but this is JDK 6 compatible.
         final StringBuilder result = new StringBuilder();
@@ -210,10 +263,8 @@ final class HumanProfileAdapter implements HumanProfile {
         return result.toString();
     }
 
-    private void appendIfNotNull(final StringBuilder builder, final String input) {
-        if (input != null) {
-            builder.append(input);
-        }
+    private Boolean parseFromStringValue(String value) {
+        return value == null ? null : parseBoolean(value);
     }
 
 }

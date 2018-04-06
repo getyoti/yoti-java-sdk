@@ -8,11 +8,26 @@ import java.util.Map;
 public interface HumanProfile extends Profile {
 
     /**
+     * Gets the source document the for the specified attribute
+     * 
+     * @param name the name of the attribute to return the srouce document type for
+     * @return the source document type for the specified attribute. Returns null if the 
+     *            attribute does not come from a document or if the attribute is not in 
+     *            the profile.
+     */
+    String getAttributeSource(String name);
+    
+    /**
      * Corresponds to primary name in passport, and surname in English.
      *
      * @return the surname
      */
     String getFamilyName();
+    
+    /**
+     * @return the source document type for the family name attribute
+     */
+    String getFamilyNameSource();
 
     /**
      * Corresponds to secondary names in passport, and first/middle names in English.
@@ -20,6 +35,11 @@ public interface HumanProfile extends Profile {
      * @return the name
      */
     String getGivenNames();
+    
+    /**
+     * @return the source document type for the given names attribute
+     */
+    String getGivenNamesSource();
 
     /**
      * The full name attribute.
@@ -27,6 +47,11 @@ public interface HumanProfile extends Profile {
      * @return the full name
      */
     String getFullName();
+    
+    /**
+     * @return the source document type for the full name attribute
+     */
+    String getFullNameSource();
 
     /**
      * Equal to ${given_names} + " " + ${family_name}.
@@ -44,6 +69,11 @@ public interface HumanProfile extends Profile {
      * @return Date of birth
      */
     Date getDateOfBirth();
+    
+    /**
+     * @return the source document type for the date of birth attribute
+     */
+    String getDateOfBirthSource();
 
     /**
      * Did the user pass the age verification check?
@@ -60,11 +90,21 @@ public interface HumanProfile extends Profile {
     Gender getGender();
 
     /**
+     * @return the source document type for the gender attribute
+     */
+    String getGenderSource();
+    
+    /**
      * The user's postal address as a String
      *
      * @return the postal address
      */
     String getPostalAddress();
+    
+    /**
+     * @return the source document type for the postal address attribute
+     */
+    String getPostalAddressSource();
     
     /**
      * The user's structured postal address as a Json
@@ -74,11 +114,21 @@ public interface HumanProfile extends Profile {
     Map<?, ?> getStructuredPostalAddress();
     
     /**
+     * @return the source document type for the structured postal address attribute
+     */
+    String getStructuredPostalAddressSource();
+    
+    /**
      * Corresponds to the nationality in the passport.
      *
      * @return the nationality
      */
     String getNationality();
+    
+    /**
+     * @return the source document type for the nationality attribute
+     */
+    String getNationalitySource();
 
     /**
      * The user's phone number, as verified at registration time. This will be a number with + for international prefix
