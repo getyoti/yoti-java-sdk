@@ -37,6 +37,9 @@ The Modules above explained
 1) [Spring Boot Auto Configuration](#spring-boot-auto-configuration) -
 Description of utilising Spring Boot
 
+1) [Running the Example](#running-the-example) -
+Running the Spring example project
+
 1) [Spring Security Integration](#spring-security-integration) -
 Integrating Yoti Authentication with Spring Boot.
 
@@ -286,7 +289,11 @@ A module that can be used in Spring applications that use Spring Security to add
 
 As a convenience, if your application happens to use Spring Boot, you can utilise the Spring Boot auto configuration module that will take care of configuring the Yoti Client and Key Pair for you based on standard application properties.
 
-For more information and to see an example of this in use take a look at the Spring Boot Auto Configuration module and Spring Boot example in this repository.
+For more information and to see an example of this in use take a look at the [Spring Boot Auto Configuration module](/yoti-sdk-spring-boot-auto-config).
+
+## Running the Example
+
+Instructions on how to run the Spring example project can be found in the [yoti-sdk-spring-boot-example](/yoti-sdk-spring-boot-example) folder.
 
 ## Spring Security Integration
 

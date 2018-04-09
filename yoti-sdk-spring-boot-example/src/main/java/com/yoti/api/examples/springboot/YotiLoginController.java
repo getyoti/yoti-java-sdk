@@ -1,18 +1,25 @@
 package com.yoti.api.examples.springboot;
 
+import com.yoti.api.client.ActivityDetails;
+import com.yoti.api.client.HumanProfile;
+import com.yoti.api.client.ProfileException;
+import com.yoti.api.client.YotiClient;
+import com.yoti.api.spring.YotiClientProperties;
+import com.yoti.api.spring.YotiProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.yoti.api.client.ActivityDetails;
-import com.yoti.api.client.HumanProfile;
-import com.yoti.api.client.ProfileException;
-import com.yoti.api.client.YotiClient;
-
+@Configuration
+@ConditionalOnClass(YotiClient.class)
+@EnableConfigurationProperties({YotiClientProperties.class, YotiProperties.class})
 @Controller
 public class YotiLoginController {
 
@@ -21,8 +28,17 @@ public class YotiLoginController {
     private final YotiClient client;
 
     @Autowired
+    private YotiClientProperties properties;
+
+    @Autowired
     public YotiLoginController(final YotiClient client) {
         this.client = client;
+    }
+
+    @RequestMapping("/")
+    public String home(final Model model) {
+        model.addAttribute("applicationId", properties.getApplicationId());
+        return "index";
     }
 
     /**
@@ -47,6 +63,7 @@ public class YotiLoginController {
         model.addAttribute("familyName", profile.getFamilyName());
         model.addAttribute("phoneNumber", profile.getPhoneNumber());
         model.addAttribute("dateOfBirth", profile.getDateOfBirth());
+        model.addAttribute("isAgeVerified", profile.isAgeVerified());
         model.addAttribute("emailAddress", profile.getEmailAddress());
         model.addAttribute("postalAddress", profile.getPostalAddress());
         model.addAttribute("nationality", profile.getNationality());
@@ -54,7 +71,6 @@ public class YotiLoginController {
         model.addAttribute("userId", activityDetails.getUserId());
         model.addAttribute("base64Selfie", activityDetails.getBase64Selfie());
 
-        return "home";
+        return "profile";
     }
-
 }

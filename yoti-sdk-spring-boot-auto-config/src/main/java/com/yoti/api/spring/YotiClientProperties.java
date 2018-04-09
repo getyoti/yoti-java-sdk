@@ -9,6 +9,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class YotiClientProperties {
 
     /**
+     * The Application id provided by Yoti dashboard.
+     */
+    private String applicationId;
+
+    /**
      * The SDK client id provided by Yoti dashboard.
      */
     private String clientSdkId;
@@ -17,6 +22,24 @@ public class YotiClientProperties {
      * The access security key to be used as the Spring resource loader format location to the private key provided by Yoti Dashboard.
      */
     private String accessSecurityKey;
+
+    /**
+     * Gets the Yoti Application id that is provided to the client developer via Yoti dashboard.
+     *
+     * @return the Yoti Application id.
+     */
+    public String getApplicationId() {
+        return applicationId;
+    }
+
+    /**
+     * Sets the Yoti Application id that is provided to the client developer via Yoti portal.
+     *
+     * @param applicationId the Yoti Application id.
+     */
+    public void setApplicationId(final String applicationId) {
+        this.applicationId = applicationId;
+    }
 
     /**
      * Gets the Yoti client SDK id that is provided to the client developer via Yoti dashboard.
@@ -63,21 +86,25 @@ public class YotiClientProperties {
         YotiClientProperties that = (YotiClientProperties) o;
 
         if (clientSdkId != null ? !clientSdkId.equals(that.clientSdkId) : that.clientSdkId != null) return false;
+        if (applicationId != null ? !applicationId.equals(that.applicationId) : that.applicationId != null) return false;
         return accessSecurityKey != null ? accessSecurityKey.equals(that.accessSecurityKey) : that.accessSecurityKey == null;
 
     }
 
     @Override
     public int hashCode() {
+        int prime = 31;
         int result = clientSdkId != null ? clientSdkId.hashCode() : 0;
-        result = 31 * result + (accessSecurityKey != null ? accessSecurityKey.hashCode() : 0);
+        result = prime * result + (applicationId != null ? applicationId.hashCode() : 0);
+        result = prime * result + (accessSecurityKey != null ? accessSecurityKey.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "YotiClientProperties{" +
-                "clientSdkId='" + clientSdkId + '\'' +
+                "applicationId='" + applicationId + '\'' +
+                ", clientSdkId='" + clientSdkId + '\'' +
                 ", accessSecurityKey='" + accessSecurityKey + '\'' +
                 '}';
     }
