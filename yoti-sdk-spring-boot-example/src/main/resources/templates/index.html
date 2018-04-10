@@ -1,0 +1,22 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Home</title>
+        <script src="https://sdk.yoti.com/clients/browser.2.0.1.js"></script>
+    </head>
+    <body>
+    <p th:text="${userId}"/>
+    <!-- This span will create the Yoti button -->
+    <span data-th-attr="data-yoti-application-id=${applicationId}">
+        Use Yoti
+    </span>
+
+    <!-- This script snippet will also be required in your HTML body -->
+    <script>
+        _ybg.init()
+    </script>
+    </body>
+</html>

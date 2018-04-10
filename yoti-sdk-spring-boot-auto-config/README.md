@@ -57,7 +57,8 @@ com.yoti.client.accessSecurityKey=file:~/.yoti/my-key.pem
 com:
     yoti:
         client:
-            clientSdkId: "my-app-id"
+            applicationId: "my-application-id"
+            clientSdkId: "my-client-sdk-id"
             accessSecurityKey: "file:/my-key.pem"
 ```
 

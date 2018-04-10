@@ -9,7 +9,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class YotiClientProperties {
 
     /**
-     * The SDK client id provided by Yoti dashboard.
+     * The Application ID provided by Yoti dashboard.
+     */
+    private String applicationId;
+
+    /**
+     * The SDK client ID provided by Yoti dashboard.
      */
     private String clientSdkId;
 
@@ -19,7 +24,25 @@ public class YotiClientProperties {
     private String accessSecurityKey;
 
     /**
-     * Gets the Yoti client SDK id that is provided to the client developer via Yoti dashboard.
+     * Gets the Yoti Application ID that is provided to the client developer via Yoti Dashboard.
+     *
+     * @return the Yoti Application id.
+     */
+    public String getApplicationId() {
+        return applicationId;
+    }
+
+    /**
+     * Sets the Yoti Application ID that is provided to the client developer via Yoti portal.
+     *
+     * @param applicationId the Yoti Application id.
+     */
+    public void setApplicationId(final String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    /**
+     * Gets the Yoti client SDK ID that is provided to the client developer via Yoti Dashboard.
      *
      * @return the Yoti client SDK id.
      */
@@ -28,7 +51,7 @@ public class YotiClientProperties {
     }
 
     /**
-     * Sets the Yoti Yoti client SDK id that is provided to the client developer via Yoti portal.
+     * Sets the Yoti Yoti client SDK ID that is provided to the client developer via Yoti portal.
      *
      * @param clientSdkId the Yoti client SDK id.
      */
@@ -56,29 +79,33 @@ public class YotiClientProperties {
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         YotiClientProperties that = (YotiClientProperties) o;
 
+        if (applicationId != null ? !applicationId.equals(that.applicationId) : that.applicationId != null)
+            return false;
         if (clientSdkId != null ? !clientSdkId.equals(that.clientSdkId) : that.clientSdkId != null) return false;
         return accessSecurityKey != null ? accessSecurityKey.equals(that.accessSecurityKey) : that.accessSecurityKey == null;
-
     }
 
     @Override
     public int hashCode() {
-        int result = clientSdkId != null ? clientSdkId.hashCode() : 0;
+        int result = applicationId != null ? applicationId.hashCode() : 0;
+        result = 31 * result + (clientSdkId != null ? clientSdkId.hashCode() : 0);
         result = 31 * result + (accessSecurityKey != null ? accessSecurityKey.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "YotiClientProperties{" +
-                "clientSdkId='" + clientSdkId + '\'' +
-                ", accessSecurityKey='" + accessSecurityKey + '\'' +
-                '}';
+        final StringBuffer sb = new StringBuffer("YotiClientProperties{");
+        sb.append("applicationId='").append(applicationId).append('\'');
+        sb.append(", clientSdkId='").append(clientSdkId).append('\'');
+        sb.append(", accessSecurityKey='").append(accessSecurityKey).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

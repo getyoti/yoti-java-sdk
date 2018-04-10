@@ -4,7 +4,7 @@
         xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <title>Home</title>
+        <title>Profile</title>
     </head>
     <body>
         <table>
@@ -29,12 +29,20 @@
                 <td><p th:text="${familyName}"/></td>
             </tr>
             <tr>
+                <td>Full Name:</td>
+                <td><p th:text="${fullName}"/></td>
+            </tr>
+            <tr>
                 <td>Phone Number:</td>
                 <td><p th:text="${phoneNumber}"/></td>
             </tr>
             <tr>
                 <td>Date of Birth:</td>
                 <td><p th:text="${dateOfBirth}"/></td>
+            </tr>
+            <tr>
+                <td>Age Verified:</td>
+                <td><p th:text="${isAgeVerified}"/></td>
             </tr>
             <tr>
                 <td>Email Address:</td>

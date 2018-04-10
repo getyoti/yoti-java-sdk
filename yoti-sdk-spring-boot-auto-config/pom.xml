@@ -29,7 +29,7 @@
   <licenses>
     <license>
       <name>Yoti License</name>
-      <url>https://github.com/getyoti/yoti-java-sdk/LICENSE.txt</url>
+      <url>https://github.com/getyoti/yoti-java-sdk/blob/master/LICENSE.md</url>
     </license>
   </licenses>
 
