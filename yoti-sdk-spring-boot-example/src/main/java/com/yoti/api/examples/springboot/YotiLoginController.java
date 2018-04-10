@@ -26,13 +26,12 @@ public class YotiLoginController {
     private static final Logger LOG = LoggerFactory.getLogger(YotiLoginController.class);
 
     private final YotiClient client;
-
-    @Autowired
     private YotiClientProperties properties;
 
     @Autowired
-    public YotiLoginController(final YotiClient client) {
+    public YotiLoginController(final YotiClient client, YotiClientProperties properties) {
         this.client = client;
+        this.properties = properties;
     }
 
     @RequestMapping("/")
