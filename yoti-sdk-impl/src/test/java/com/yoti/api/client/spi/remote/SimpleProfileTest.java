@@ -1,17 +1,19 @@
 package com.yoti.api.client.spi.remote;
 
 import static java.lang.Boolean.TRUE;
-import static java.util.Collections.singletonMap;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.yoti.api.client.Profile;
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.Test;
 
-import java.util.Collections;
-import java.util.Map;
+import com.yoti.api.client.Attribute;
+import com.yoti.api.client.Profile;
 
 public class SimpleProfileTest {
 
@@ -27,7 +29,7 @@ public class SimpleProfileTest {
 
     @Test
     public void is_shouldReturnBooleanValueForExistingKey() {
-        Profile profile = new SimpleProfile(map(SOME_KEY, TRUE));
+        Profile profile = new SimpleProfile(asList(SOME_KEY, TRUE));
 
         boolean result = profile.is(SOME_KEY, false);
 
@@ -36,8 +38,8 @@ public class SimpleProfileTest {
 
     @Test
     public void is_shouldReturnDefaultBooleanForNonExistingKey() {
-        Map<String, Object> map = Collections.emptyMap();
-        Profile profile = new SimpleProfile(map);
+        List<Attribute> list = Collections.emptyList();
+        Profile profile = new SimpleProfile(list);
 
         boolean result = profile.is(SOME_KEY, false);
 
@@ -46,7 +48,7 @@ public class SimpleProfileTest {
 
     @Test
     public void is_shouldReturnDefaultBooleanForMismatchingType() {
-        Profile p = new SimpleProfile(map(SOME_KEY, "String"));
+        Profile p = new SimpleProfile(asList(SOME_KEY, "String"));
 
         boolean result = p.is(SOME_KEY, false);
 
@@ -55,31 +57,31 @@ public class SimpleProfileTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void is_shouldThrowExceptionForNullAttributeName() {
-        Map<String, Object> m = Collections.emptyMap();
-        Profile profile = new SimpleProfile(m);
+        List<Attribute> list = Collections.emptyList();
+        Profile profile = new SimpleProfile(list);
 
         profile.is(null, false);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getAttribute_shouldThrowExceptionForNullAttributeName() {
-        Map<String, Object> m = Collections.emptyMap();
-        Profile profile = new SimpleProfile(m);
+        List<Attribute> list = Collections.emptyList();
+        Profile profile = new SimpleProfile(list);
 
         profile.getAttribute(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getAttributeTyped_shouldThrowExceptionForNullAttributeName() {
-        Map<String, Object> m = Collections.emptyMap();
-        Profile profile = new SimpleProfile(m);
+        List<Attribute> list = Collections.emptyList();
+        Profile profile = new SimpleProfile(list);
 
         profile.getAttribute(null, String.class);
     }
 
     @Test
     public void getAttribute_shouldReturnStringValueForExistingKey() {
-        Profile profile = new SimpleProfile(map(SOME_KEY, STRING_VALUE));
+        Profile profile = new SimpleProfile(asList(SOME_KEY, STRING_VALUE));
 
         String result = profile.getAttribute(SOME_KEY);
 
@@ -88,8 +90,8 @@ public class SimpleProfileTest {
 
     @Test
     public void getAttribute_shouldReturnNullValueForNonExistingKey() {
-        Map<String, Object> map = Collections.emptyMap();
-        Profile profile = new SimpleProfile(map);
+        List<Attribute> list = Collections.emptyList();
+        Profile profile = new SimpleProfile(list);
 
         assertNull(profile.getAttribute(SOME_KEY));
         assertNull(profile.getAttribute(SOME_KEY, Integer.class));
@@ -97,7 +99,7 @@ public class SimpleProfileTest {
 
     @Test
     public void getAttribute_shouldReturnNullValueForMismatchingType() {
-        Profile profile = new SimpleProfile(map(SOME_KEY, INTEGER_VALUE));
+        Profile profile = new SimpleProfile(asList(SOME_KEY, INTEGER_VALUE));
 
         assertNull(profile.getAttribute(SOME_KEY));
         assertNull(profile.getAttribute(SOME_KEY, String.class));
@@ -105,7 +107,7 @@ public class SimpleProfileTest {
 
     @Test
     public void getAttribute_shouldReturnIntegerValueForExistingKey() {
-        Profile profile = new SimpleProfile(map(SOME_KEY, INTEGER_VALUE));
+        Profile profile = new SimpleProfile(asList(SOME_KEY, INTEGER_VALUE));
 
         Integer result = profile.getAttribute(SOME_KEY, Integer.class);
 
@@ -114,14 +116,14 @@ public class SimpleProfileTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void findAttributeStartingWith_shouldThrowExceptionForNullAttributeName() {
-        Profile profile = new SimpleProfile(map(SOME_KEY, INTEGER_VALUE));
+        Profile profile = new SimpleProfile(asList(SOME_KEY, INTEGER_VALUE));
 
         profile.findAttributeStartingWith(null, Object.class);
     }
 
     @Test
     public void findAttributeStartingWith_shouldReturnNullWhenNoMatchingName() {
-        Profile profile = new SimpleProfile(map(SOME_KEY, INTEGER_VALUE));
+        Profile profile = new SimpleProfile(asList(SOME_KEY, INTEGER_VALUE));
 
         Integer result = profile.findAttributeStartingWith(STARTS_WITH, Integer.class);
 
@@ -130,7 +132,7 @@ public class SimpleProfileTest {
 
     @Test
     public void findAttributeStartingWith_shouldReturnNullForMismatchingType() {
-        Profile profile = new SimpleProfile(map(STARTS_WITH, INTEGER_VALUE));
+        Profile profile = new SimpleProfile(asList(STARTS_WITH, INTEGER_VALUE));
 
         String result = profile.findAttributeStartingWith(STARTS_WITH, String.class);
 
@@ -139,15 +141,15 @@ public class SimpleProfileTest {
 
     @Test
     public void findAttributeStartingWith_shouldReturnValueForMatchingKey() {
-        Profile profile = new SimpleProfile(map(STARTS_WITH + ":restOfKey", INTEGER_VALUE));
+        Profile profile = new SimpleProfile(asList(STARTS_WITH + ":restOfKey", INTEGER_VALUE));
 
         Integer result = profile.findAttributeStartingWith(STARTS_WITH, Integer.class);
 
         assertEquals(INTEGER_VALUE, result);
     }
 
-    private Map<String, Object> map(String key, Object o) {
-        return singletonMap(key, o);
+    private List<Attribute> asList(String key, Object o) {
+        return singletonList(new Attribute(key, o, null));
     }
 
 }

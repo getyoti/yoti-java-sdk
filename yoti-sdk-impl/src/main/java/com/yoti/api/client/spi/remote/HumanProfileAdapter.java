@@ -2,17 +2,18 @@ package com.yoti.api.client.spi.remote;
 
 import static java.lang.Boolean.parseBoolean;
 
+import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.DocumentDetails;
 import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.Image;
 import com.yoti.api.client.Profile;
-
-import java.io.UnsupportedEncodingException;
-import java.text.ParseException;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * Adapter linking Profile and ApplicationProfile together by wrapping the latter and exposing well-known attributes.
@@ -201,49 +202,49 @@ final class HumanProfileAdapter implements HumanProfile {
     }
 
     @Override
-    public String getAttributeSource(String name) {
+    public Set<String> getAttributeSources(String name) {
         Attribute attribute = getAttributeObject(name);
-        return (attribute == null) ? null : attribute.getSource();
+        return (attribute == null) ? null : attribute.getSources();
     }
 
     @Override
-    public String getFamilyNameSource() {
-        return getAttributeSource(ATTRIBUTE_FAMILY_NAME);
+    public Set<String> getFamilyNameSources() {
+        return getAttributeSources(ATTRIBUTE_FAMILY_NAME);
     }
 
     @Override
-    public String getGivenNamesSource() {
-        return getAttributeSource(ATTRIBUTE_GIVEN_NAMES);
+    public Set<String> getGivenNamesSources() {
+        return getAttributeSources(ATTRIBUTE_GIVEN_NAMES);
     }
 
     @Override
-    public String getFullNameSource() {
-        return getAttributeSource(ATTRIBUTE_FULL_NAME);
+    public Set<String> getFullNameSources() {
+        return getAttributeSources(ATTRIBUTE_FULL_NAME);
     }
 
     @Override
-    public String getDateOfBirthSource() {
-        return getAttributeSource(ATTRIBUTE_DOB);
+    public Set<String> getDateOfBirthSources() {
+        return getAttributeSources(ATTRIBUTE_DOB);
     }
 
     @Override
-    public String getGenderSource() {
-        return getAttributeSource(ATTRIBUTE_GENDER);
+    public Set<String> getGenderSources() {
+        return getAttributeSources(ATTRIBUTE_GENDER);
     }
 
     @Override
-    public String getPostalAddressSource() {
-        return getAttributeSource(ATTRIBUTE_POSTAL_ADDRESS);
+    public Set<String> getPostalAddressSources() {
+        return getAttributeSources(ATTRIBUTE_POSTAL_ADDRESS);
     }
 
     @Override
-    public String getStructuredPostalAddressSource() {
-        return getAttributeSource(ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS);
+    public Set<String> getStructuredPostalAddressSources() {
+        return getAttributeSources(ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS);
     }
 
     @Override
-    public String getNationalitySource() {
-        return getAttributeSource(ATTRIBUTE_NATIONALITY);
+    public Set<String> getNationalitySources() {
+        return getAttributeSources(ATTRIBUTE_NATIONALITY);
     }
 
     private void appendIfNotNull(final StringBuilder builder, final String input) {

@@ -1,5 +1,7 @@
 package com.yoti.api.client;
 
+import java.util.Set;
+
 /**
  * Represents a generic, typed key/value pair, a basic building block of
  * {@link Profile} instances.
@@ -8,16 +10,16 @@ package com.yoti.api.client;
 public final class Attribute {
     private final String name;
     private final Object value;
-    private final String source;
+    private final Set<String> sources;
 
     public Attribute(String name, Object value) {
         this(name, value, null);
     }
     
-    public Attribute(String name, Object value, String source) {
+    public Attribute(String name, Object value, Set<String> sources) {
         this.name = name;
         this.value = value;
-        this.source = source;
+        this.sources = sources;
     }
 
     public String getName() {
@@ -34,7 +36,7 @@ public final class Attribute {
         return (result == null) ? defaultValue : result;
     }
 
-    public String getSource() {
-        return source;
+    public Set<String> getSources() {
+        return sources;
     }
 }

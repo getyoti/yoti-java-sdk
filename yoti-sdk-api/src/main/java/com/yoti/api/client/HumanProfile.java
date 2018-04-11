@@ -1,6 +1,7 @@
 package com.yoti.api.client;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Profile of an human user with convenience methods to access well-known attributes.
@@ -8,14 +9,14 @@ import java.util.Map;
 public interface HumanProfile extends Profile {
 
     /**
-     * Gets the source document the for the specified attribute
+     * Gets the source documents for the specified attribute
      * 
-     * @param name the name of the attribute to return the srouce document type for
-     * @return the source document type for the specified attribute. Returns null if the 
-     *            attribute does not come from a document or if the attribute is not in 
+     * @param name the name of the attribute to return the source document types for
+     * @return the source document types for the specified attribute. Returns null if the 
+     *            attribute is not in 
      *            the profile.
      */
-    String getAttributeSource(String name);
+    Set<String> getAttributeSources(String name);
     
     /**
      * Corresponds to primary name in passport, and surname in English.
@@ -25,9 +26,9 @@ public interface HumanProfile extends Profile {
     String getFamilyName();
     
     /**
-     * @return the source document type for the family name attribute
+     * @return the source document types for the family name attribute
      */
-    String getFamilyNameSource();
+    Set<String> getFamilyNameSources();
 
     /**
      * Corresponds to secondary names in passport, and first/middle names in English.
@@ -37,9 +38,9 @@ public interface HumanProfile extends Profile {
     String getGivenNames();
     
     /**
-     * @return the source document type for the given names attribute
+     * @return the source document types for the given names attribute
      */
-    String getGivenNamesSource();
+    Set<String> getGivenNamesSources();
 
     /**
      * The full name attribute.
@@ -49,9 +50,9 @@ public interface HumanProfile extends Profile {
     String getFullName();
     
     /**
-     * @return the source document type for the full name attribute
+     * @return the source document types for the full name attribute
      */
-    String getFullNameSource();
+    Set<String> getFullNameSources();
 
     /**
      * Equal to ${given_names} + " " + ${family_name}.
@@ -71,9 +72,9 @@ public interface HumanProfile extends Profile {
     Date getDateOfBirth();
     
     /**
-     * @return the source document type for the date of birth attribute
+     * @return the source document types for the date of birth attribute
      */
-    String getDateOfBirthSource();
+    Set<String> getDateOfBirthSources();
 
     /**
      * Did the user pass the age verification check?
@@ -90,9 +91,9 @@ public interface HumanProfile extends Profile {
     Gender getGender();
 
     /**
-     * @return the source document type for the gender attribute
+     * @return the source document types for the gender attribute
      */
-    String getGenderSource();
+    Set<String> getGenderSources();
     
     /**
      * The user's postal address as a String
@@ -102,9 +103,9 @@ public interface HumanProfile extends Profile {
     String getPostalAddress();
     
     /**
-     * @return the source document type for the postal address attribute
+     * @return the source document types for the postal address attribute
      */
-    String getPostalAddressSource();
+    Set<String> getPostalAddressSources();
     
     /**
      * The user's structured postal address as a Json
@@ -114,9 +115,9 @@ public interface HumanProfile extends Profile {
     Map<?, ?> getStructuredPostalAddress();
     
     /**
-     * @return the source document type for the structured postal address attribute
+     * @return the source document types for the structured postal address attribute
      */
-    String getStructuredPostalAddressSource();
+    Set<String> getStructuredPostalAddressSources();
     
     /**
      * Corresponds to the nationality in the passport.
@@ -126,9 +127,9 @@ public interface HumanProfile extends Profile {
     String getNationality();
     
     /**
-     * @return the source document type for the nationality attribute
+     * @return the source document types for the nationality attribute
      */
-    String getNationalitySource();
+    Set<String> getNationalitySources();
 
     /**
      * The user's phone number, as verified at registration time. This will be a number with + for international prefix

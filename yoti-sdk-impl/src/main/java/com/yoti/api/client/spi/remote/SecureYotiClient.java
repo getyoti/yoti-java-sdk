@@ -21,8 +21,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -52,10 +54,14 @@ import com.yoti.api.client.aml.AmlResult;
 import com.yoti.api.client.spi.remote.call.ProfileService;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
+import com.yoti.api.client.spi.remote.proto.AttrProto.Anchor;
 import com.yoti.api.client.spi.remote.proto.AttrProto.Attribute;
 import com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList;
 import com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType;
 import com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData;
+import com.yoti.api.client.spi.remote.util.AnchorCertificateUtils;
+import com.yoti.api.client.spi.remote.util.AnchorCertificateUtils.AnchorVerifierSourceData;
+import com.yoti.api.client.spi.remote.util.AnchorType;
 
 /**
  * YotiClient talking to the Yoti Connect API remotely.
@@ -198,34 +204,40 @@ final class SecureYotiClient implements YotiClient {
         if (ContentType.STRING.equals(attribute.getContentType())) {
             return new com.yoti.api.client.Attribute(attribute.getName(), 
                 attribute.getValue().toString(DEFAULT_CHARSET), 
-                extractSource(attribute));
+                extractSources(attribute));
         } else if (ContentType.DATE.equals(attribute.getContentType())) {
             return new com.yoti.api.client.Attribute(attribute.getName(),
                 DateAttributeValue.parseFrom(attribute.getValue().toByteArray()),
-                extractSource(attribute));        
+                extractSources(attribute));        
         } else if (ContentType.JPEG.equals(attribute.getContentType())) {
             return new com.yoti.api.client.Attribute(attribute.getName(),
                 new JpegAttributeValue(attribute.getValue().toByteArray()),
-                extractSource(attribute));
+                extractSources(attribute));
         } else if (ContentType.PNG.equals(attribute.getContentType())) {
             return new com.yoti.api.client.Attribute(attribute.getName(),
                 new PngAttributeValue(attribute.getValue().toByteArray()),
-                extractSource(attribute));
+                extractSources(attribute));
         } else if (ContentType.JSON.equals(attribute.getContentType())) {
             return new com.yoti.api.client.Attribute(attribute.getName(),
                 JSON_MAPPER.readValue(attribute.getValue().toString(DEFAULT_CHARSET), Map.class),
-                extractSource(attribute));
+                extractSources(attribute));
         }
 
         LOG.error("Unknown type {} for attribute {}", attribute.getContentType(), attribute.getName());
         return new com.yoti.api.client.Attribute(attribute.getName(), 
                 attribute.getValue().toString(DEFAULT_CHARSET),
-                extractSource(attribute));
+                extractSources(attribute));
     }
 
-    private String extractSource(Attribute attribute) {
-        // TODO Auto-generated method stub
-        return null;
+    private Set<String> extractSources(Attribute attribute) {
+        Set<String> sources = new HashSet<String>();
+        for (Anchor anchor : attribute.getAnchorsList()) {
+            AnchorVerifierSourceData anchorData = AnchorCertificateUtils.getTypesFromAnchor(anchor);
+            if(anchorData.getType().equals(AnchorType.SOURCE)) {
+                sources.addAll(anchorData.getEntries());
+            }
+        }
+        return sources;
     }
 
     private Profile createProfile(List<com.yoti.api.client.Attribute> attributeList) {
