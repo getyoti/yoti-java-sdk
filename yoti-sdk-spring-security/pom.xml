@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <properties>
-    <yoti.sdk.version>1.4.3-SNAPSHOT</yoti.sdk.version>
+    <yoti.sdk.version>1.5.0-SNAPSHOT</yoti.sdk.version>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <owasp.dependency.check.cvss.limit>4</owasp.dependency.check.cvss.limit>
@@ -15,7 +15,7 @@
 
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-spring-security</artifactId>
-  <version>1.4.3-SNAPSHOT</version>
+  <version>1.5.0-SNAPSHOT</version>
   <name>Spring Security Integration For The Yoti SDK</name>
   <description>Library to integrate the Java Yoti SDK with Spring Security</description>
   <url>https://github.com/getyoti/yoti-java-sdk</url>
