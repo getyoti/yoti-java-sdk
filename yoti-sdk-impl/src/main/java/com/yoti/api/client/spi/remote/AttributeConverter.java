@@ -29,40 +29,46 @@ public class AttributeConverter {
         if (ContentType.STRING.equals(attribute.getContentType())) {
             return new com.yoti.api.client.Attribute(attribute.getName(), 
                 attribute.getValue().toString(DEFAULT_CHARSET), 
-                extractSources(attribute));
+                extractMetadata(attribute, AnchorType.SOURCE),
+                extractMetadata(attribute, AnchorType.VERIFIER));
         } else if (ContentType.DATE.equals(attribute.getContentType())) {
             return new com.yoti.api.client.Attribute(attribute.getName(),
                 DateAttributeValue.parseFrom(attribute.getValue().toByteArray()),
-                extractSources(attribute));        
+                extractMetadata(attribute, AnchorType.SOURCE),
+                extractMetadata(attribute, AnchorType.VERIFIER));        
         } else if (ContentType.JPEG.equals(attribute.getContentType())) {
             return new com.yoti.api.client.Attribute(attribute.getName(),
                 new JpegAttributeValue(attribute.getValue().toByteArray()),
-                extractSources(attribute));
+                extractMetadata(attribute, AnchorType.SOURCE),
+                extractMetadata(attribute, AnchorType.VERIFIER));
         } else if (ContentType.PNG.equals(attribute.getContentType())) {
             return new com.yoti.api.client.Attribute(attribute.getName(),
                 new PngAttributeValue(attribute.getValue().toByteArray()),
-                extractSources(attribute));
+                extractMetadata(attribute, AnchorType.SOURCE),
+                extractMetadata(attribute, AnchorType.VERIFIER));
         } else if (ContentType.JSON.equals(attribute.getContentType())) {
             return new com.yoti.api.client.Attribute(attribute.getName(),
                 JSON_MAPPER.readValue(attribute.getValue().toString(DEFAULT_CHARSET), Map.class),
-                extractSources(attribute));
+                extractMetadata(attribute, AnchorType.SOURCE),
+                extractMetadata(attribute, AnchorType.VERIFIER));
         }
 
         LOG.error("Unknown type {} for attribute {}", attribute.getContentType(), attribute.getName());
         return new com.yoti.api.client.Attribute(attribute.getName(), 
                 attribute.getValue().toString(DEFAULT_CHARSET),
-                extractSources(attribute));
+                extractMetadata(attribute, AnchorType.SOURCE),
+                extractMetadata(attribute, AnchorType.VERIFIER));
     }
 
-    private static Set<String> extractSources(com.yoti.api.client.spi.remote.proto.AttrProto.Attribute attribute) {
-        Set<String> sources = new HashSet<String>();
+    private static Set<String> extractMetadata(com.yoti.api.client.spi.remote.proto.AttrProto.Attribute attribute, AnchorType anchorType) {
+        Set<String> entries = new HashSet<String>();
         for (Anchor anchor : attribute.getAnchorsList()) {
             AnchorVerifierSourceData anchorData = AnchorCertificateUtils.getTypesFromAnchor(anchor);
-            if(anchorData.getType().equals(AnchorType.SOURCE)) {
-                sources.addAll(anchorData.getEntries());
+            if(anchorData.getType().equals(anchorType)) {
+                entries.addAll(anchorData.getEntries());
             }
         }
-        return sources;
+        return entries;
     }
 
     

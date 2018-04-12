@@ -32,7 +32,7 @@ final class HumanProfileAdapter implements HumanProfile {
     private static final String ATTRIBUTE_NATIONALITY = "nationality";
     private static final String ATTRIBUTE_PHONE_NUMBER = "phone_number";
     private static final String ATTRIBUTE_SELFIE = "selfie";
-    private static final String ATTRIBUTE_ADDRESS = "email_address";
+    private static final String ATTRIBUTE_EMAIL_ADDRESS = "email_address";
     private static final String ATTRIBUTE_DOCUMENT_DETAILS = "document_details";
 
     private static final char SPACE = ' ';
@@ -157,7 +157,7 @@ final class HumanProfileAdapter implements HumanProfile {
 
     @Override
     public String getEmailAddress() {
-        return wrapped.getAttribute(ATTRIBUTE_ADDRESS);
+        return wrapped.getAttribute(ATTRIBUTE_EMAIL_ADDRESS);
     }
 
     @Override
@@ -245,6 +245,92 @@ final class HumanProfileAdapter implements HumanProfile {
     @Override
     public Set<String> getNationalitySources() {
         return getAttributeSources(ATTRIBUTE_NATIONALITY);
+    }
+
+    @Override
+    public Set<String> getPhoneNumberSources() {
+        return getAttributeSources(ATTRIBUTE_PHONE_NUMBER);
+    }
+
+    @Override
+    public Set<String> getSelfieSources() {
+        return getAttributeSources(ATTRIBUTE_SELFIE);
+    }
+
+    @Override
+    public Set<String> getEmailAddressSources() {
+        return getAttributeSources(ATTRIBUTE_EMAIL_ADDRESS);
+    }
+
+    @Override
+    public Set<String> getDocumentDetailsSources() {
+        return getAttributeSources(ATTRIBUTE_DOCUMENT_DETAILS);
+    }
+
+    @Override
+    public Set<String> getAttributeVerifiers(String name) {
+        Attribute attribute = getAttributeObject(name);
+        return (attribute == null) ? null : attribute.getVerifiers();
+    }
+
+    @Override
+    public Set<String> getFamilyNameVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_FAMILY_NAME);
+    }
+
+    @Override
+    public Set<String> getGivenNamesVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_GIVEN_NAMES);
+    }
+
+    @Override
+    public Set<String> getFullNameVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_FULL_NAME);
+    }
+
+    @Override
+    public Set<String> getDateOfBirthVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_DOB);
+    }
+
+    @Override
+    public Set<String> getGenderVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_GENDER);
+    }
+
+    @Override
+    public Set<String> getPostalAddressVerifier() {
+        return getAttributeVerifiers(ATTRIBUTE_POSTAL_ADDRESS);
+    }
+
+    @Override
+    public Set<String> getStructuredPostalAddressVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS);
+    }
+
+    @Override
+    public Set<String> getNationalityVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_NATIONALITY);
+    }
+
+    @Override
+    public Set<String> getPhoneNumberVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_PHONE_NUMBER);
+    }
+
+    @Override
+    public Set<String> getSelfieVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_SELFIE);
+    }
+
+    @Override
+    public Set<String> getEmailAddressVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_EMAIL_ADDRESS);
+    }
+
+    @Override
+    public Set<String> getDocumentDetailsVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_DOCUMENT_DETAILS);
     }
 
     private void appendIfNotNull(final StringBuilder builder, final String input) {
