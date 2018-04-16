@@ -12,11 +12,11 @@ import com.yoti.api.client.sandbox.profile.request.attribute.ProfileAttributeNam
 import com.google.common.base.Strings;
 import org.bouncycastle.util.encoders.Base64;
 
-public class SharingTokenRequestMapper {
+public class YotiTokenRequestMapper {
 
     private static final String DOCUMENT_DETAILS_SEPARATOR = " ";
 
-    public static SharingTokenRequest mapSharingTokenRequest(SandboxHumanProfile sandboxHumanProfile, String userId) {
+    public static YotiTokenRequest mapSharingTokenRequest(SandboxHumanProfile sandboxHumanProfile, String userId) {
 
         List<Attribute> attributes = new ArrayList<>();
 
@@ -109,7 +109,7 @@ public class SharingTokenRequestMapper {
                     .value(buildDocumentDetailsAttributeValue(documentDetails)).build());
         }
 
-        return new SharingTokenRequest(userId, Collections.unmodifiableList(attributes));
+        return new YotiTokenRequest(userId, Collections.unmodifiableList(attributes));
     }
 
     private static String buildDocumentDetailsAttributeValue(DocumentDetails documentDetails) {

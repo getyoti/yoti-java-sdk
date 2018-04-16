@@ -20,5 +20,6 @@
       <gav>com.fasterxml.jackson.core:jackson-databind:2.7.9.1</gav>
       <cve>CVE-2017-17485</cve>
       <cve>CVE-2018-5968</cve>
+      <cve>CVE-2017-15095</cve>
    </suppress>
 </suppressions>

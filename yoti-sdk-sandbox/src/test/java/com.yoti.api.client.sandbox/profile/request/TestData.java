@@ -4,7 +4,7 @@ import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.sandbox.profile.request.attribute.Attribute;
 import com.yoti.api.client.sandbox.profile.request.attribute.ProfileAttributeName;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxDateAttribute;
-import com.yoti.api.client.sandbox.profile.request.attribute.derivation.AgeDerivationSupported;
+import com.yoti.api.client.sandbox.profile.request.attribute.derivation.SupportedAgeDerivation;
 import com.yoti.api.client.sandbox.profile.request.attribute.derivation.AgeVerification;
 
 import org.bouncycastle.util.encoders.Base64;
@@ -77,10 +77,10 @@ class TestData {
             .build();
 
     static final Attribute AGE_UNDER_ATTRIBUTE = new AgeVerification(new SandboxDateAttribute(2009, 2, 2),
-            AgeDerivationSupported.AGE_UNDER, "18").buildAttribute();
+            SupportedAgeDerivation.AGE_UNDER, "18").buildAttribute();
 
     static final Attribute AGE_OVER_ATTRIBUTE = new AgeVerification(new SandboxDateAttribute(1978, 2, 2),
-            AgeDerivationSupported.AGE_OVER, "18").buildAttribute();
+            SupportedAgeDerivation.AGE_OVER, "18").buildAttribute();
 
 
 }

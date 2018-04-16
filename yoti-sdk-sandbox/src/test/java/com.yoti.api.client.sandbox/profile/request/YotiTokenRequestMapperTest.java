@@ -33,73 +33,73 @@ import com.yoti.api.client.sandbox.profile.SandboxHumanProfile;
 import com.yoti.api.client.sandbox.profile.SandboxHumanProfileBuilder;
 import com.yoti.api.client.sandbox.profile.request.attribute.Attribute;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxDateAttribute;
-import com.yoti.api.client.sandbox.profile.request.attribute.derivation.AgeDerivationSupported;
+import com.yoti.api.client.sandbox.profile.request.attribute.derivation.SupportedAgeDerivation;
 import com.yoti.api.client.sandbox.profile.request.attribute.derivation.AgeVerification;
 
 import org.junit.*;
 
-public class SharingTokenRequestMapperTest {
+public class YotiTokenRequestMapperTest {
 
 
     @Test
     public void testMapSandboxHumanProfileFamilyName(){
         SandboxHumanProfile sandboxHumanProfile = SandboxHumanProfileBuilder.newInstance()
                 .familyName(FAMILY_NAME).build();
-        SharingTokenRequest sharingTokenRequest = SharingTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
 
-        match(sharingTokenRequest.getAttributes(), Collections.singletonList(FAMILY_NAME_ATTRIBUTE));
+        match(yotiTokenRequest.getAttributes(), Collections.singletonList(FAMILY_NAME_ATTRIBUTE));
     }
 
     @Test
     public void testMapSandboxHumanProfileGivenNames(){
         SandboxHumanProfile sandboxHumanProfile = SandboxHumanProfileBuilder.newInstance()
                 .givenNames(GIVEN_NAMES).build();
-        SharingTokenRequest sharingTokenRequest = SharingTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
 
-        match(sharingTokenRequest.getAttributes(), Collections.singletonList(GIVEN_NAMES_ATTRIBUTE));
+        match(yotiTokenRequest.getAttributes(), Collections.singletonList(GIVEN_NAMES_ATTRIBUTE));
     }
 
     @Test
     public void testMapSandboxHumanProfileFullName(){
         SandboxHumanProfile sandboxHumanProfile = SandboxHumanProfileBuilder.newInstance()
                 .fullName(FULL_NAME).build();
-        SharingTokenRequest sharingTokenRequest = SharingTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
 
-        match(sharingTokenRequest.getAttributes(), Collections.singletonList(FULL_NAME_ATTRIBUTE));
+        match(yotiTokenRequest.getAttributes(), Collections.singletonList(FULL_NAME_ATTRIBUTE));
     }
 
     @Test
     public void testMapSandboxHumanProfileDateOfBirth() {
         SandboxHumanProfile sandboxHumanProfile = SandboxHumanProfileBuilder.newInstance()
                 .dateOfBirth(new SandboxDateAttribute(1902, 2, 2)).build();
-        SharingTokenRequest sharingTokenRequest = SharingTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
 
-        match(sharingTokenRequest.getAttributes(), Collections.singletonList(DATE_OF_BIRTH_ATTRIBUTE));
+        match(yotiTokenRequest.getAttributes(), Collections.singletonList(DATE_OF_BIRTH_ATTRIBUTE));
     }
 
     @Test
     public void testMapSandboxHumanProfileGender(){
         SandboxHumanProfile sandboxHumanProfile = SandboxHumanProfileBuilder.newInstance()
                 .gender(HumanProfile.Gender.MALE).build();
-        SharingTokenRequest sharingTokenRequest = SharingTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
-        match(sharingTokenRequest.getAttributes(), Collections.singletonList(GENDER_ATTRIBUTE));
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
+        match(yotiTokenRequest.getAttributes(), Collections.singletonList(GENDER_ATTRIBUTE));
     }
 
     @Test
     public void testMapSandboxHumanProfileAgeUnderVerification(){
         SandboxHumanProfile sandboxHumanProfile = SandboxHumanProfileBuilder.newInstance()
                 .ageVerification( new AgeVerification(new SandboxDateAttribute(2009, 2, 2),
-                        AgeDerivationSupported.AGE_UNDER, "18")).build();
-        SharingTokenRequest sharingTokenRequest = SharingTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
-        match(sharingTokenRequest.getAttributes(), Collections.singletonList(AGE_UNDER_ATTRIBUTE));
+                        SupportedAgeDerivation.AGE_UNDER, "18")).build();
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
+        match(yotiTokenRequest.getAttributes(), Collections.singletonList(AGE_UNDER_ATTRIBUTE));
     }
 
     @Test
     public void testMapSandboxHumanProfileAgeOverVerification(){
         SandboxHumanProfile sandboxHumanProfile = SandboxHumanProfileBuilder.newInstance()
                 .ageVerification( new AgeVerification(new SandboxDateAttribute(1978, 2, 2),
-                        AgeDerivationSupported.AGE_OVER, "18")).build();
-        SharingTokenRequest sharingTokenRequest = SharingTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
+                        SupportedAgeDerivation.AGE_OVER, "18")).build();
+        YotiTokenRequest sharingTokenRequest = YotiTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
         match(sharingTokenRequest.getAttributes(), Collections.singletonList(AGE_OVER_ATTRIBUTE));
     }
 
@@ -109,52 +109,46 @@ public class SharingTokenRequestMapperTest {
     public void testMapSandboxHumanProfilePostalAddress(){
         SandboxHumanProfile sandboxHumanProfile = SandboxHumanProfileBuilder.newInstance()
                 .postalAddress(POSTAL_ADDRESS).build();
-        SharingTokenRequest sharingTokenRequest = SharingTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
-        match(sharingTokenRequest.getAttributes(), Collections.singletonList(POSTAL_ADDRESS_ATTRIBUTE));
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
+        match(yotiTokenRequest.getAttributes(), Collections.singletonList(POSTAL_ADDRESS_ATTRIBUTE));
     }
 
     @Test
     public void testMapSandboxHumanProfileNationality(){
         SandboxHumanProfile sandboxHumanProfile = SandboxHumanProfileBuilder.newInstance()
                 .nationality(NATIONALITY).build();
-        SharingTokenRequest sharingTokenRequest = SharingTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
-        match(sharingTokenRequest.getAttributes(), Collections.singletonList(NATIONALITY_ATTRIBUTE));
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
+        match(yotiTokenRequest.getAttributes(), Collections.singletonList(NATIONALITY_ATTRIBUTE));
     }
 
     @Test
     public void testMapSandboxHumanProfilePhoneNumber(){
         SandboxHumanProfile sandboxHumanProfile = SandboxHumanProfileBuilder.newInstance()
                 .phoneNumber(PHONE_NUMBER).build();
-        SharingTokenRequest sharingTokenRequest = SharingTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
-        match(sharingTokenRequest.getAttributes(), Collections.singletonList(PHONE_NUMBER_ATTRIBUTE));
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
+        match(yotiTokenRequest.getAttributes(), Collections.singletonList(PHONE_NUMBER_ATTRIBUTE));
     }
 
     @Test
     public void testMapSandboxHumanProfileEmailAddress(){
         SandboxHumanProfile sandboxHumanProfile = SandboxHumanProfileBuilder.newInstance()
                 .emailAddress(EMAIL_ADDRESS).build();
-        SharingTokenRequest sharingTokenRequest = SharingTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
-        match(sharingTokenRequest.getAttributes(), Collections.singletonList(EMAIL_ADDRESS_ATTRIBUTE));
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
+        match(yotiTokenRequest.getAttributes(), Collections.singletonList(EMAIL_ADDRESS_ATTRIBUTE));
     }
 
     @Test
     public void testMapSandboxHumanProfileSelfie(){
         SandboxHumanProfile sandboxHumanProfile = SandboxHumanProfileBuilder.newInstance()
                 .selfie(SELFIE.getBytes()).build();
-        SharingTokenRequest sharingTokenRequest = SharingTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
-        match(sharingTokenRequest.getAttributes(), Collections.singletonList(SELFIE_ATTRIBUTE));
-    }
-
-    @Test
-    //TODO Implement different test for the document details if possible
-    public void testMapSandboxHumanProfileDocumentDetails(){
-
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, "aRandomId");
+        match(yotiTokenRequest.getAttributes(), Collections.singletonList(SELFIE_ATTRIBUTE));
     }
 
     private void match(List<Attribute> producedAttributeList, List<Attribute> expectedAttributeList){
         assertThat(producedAttributeList, hasSize(expectedAttributeList.size()));
-        for (Attribute anExpectedAttributeList : expectedAttributeList) {
-            assertThat(producedAttributeList, containsInAnyOrder(anExpectedAttributeList));
+        for (Attribute anExpectedAttribute : expectedAttributeList) {
+            assertThat(producedAttributeList, containsInAnyOrder(anExpectedAttribute));
         }
     }
 

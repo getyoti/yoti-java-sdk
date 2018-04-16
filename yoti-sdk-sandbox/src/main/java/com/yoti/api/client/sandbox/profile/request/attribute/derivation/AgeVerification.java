@@ -7,12 +7,12 @@ import com.yoti.api.client.sandbox.profile.request.attribute.ProfileAttributeNam
 public class AgeVerification {
 
     private Date dateOfBirth;
-    private AgeDerivationSupported ageDerivationSupported;
+    private SupportedAgeDerivation supportedAgeDerivation;
     private String ageCheckOption;
 
-    public AgeVerification(Date dateOfBirth, AgeDerivationSupported ageDerivationSupported, String ageCheckOption) {
+    public AgeVerification(Date dateOfBirth, SupportedAgeDerivation supportedAgeDerivation, String ageCheckOption) {
         this.dateOfBirth = dateOfBirth;
-        this.ageDerivationSupported = ageDerivationSupported;
+        this.supportedAgeDerivation = supportedAgeDerivation;
         this.ageCheckOption = ageCheckOption;
     }
 
@@ -21,6 +21,6 @@ public class AgeVerification {
         return Attribute.AttributeBuilder.builder()
                 .name(ProfileAttributeName.DATE_OF_BIRTH.getValue())
                 .value(dateOfBirth.toString())
-                .derivation(String.format("%s%s", ageDerivationSupported.getValue(), ageCheckOption)).build();
+                .derivation(String.format("%s%s", supportedAgeDerivation.getValue(), ageCheckOption)).build();
     }
 }

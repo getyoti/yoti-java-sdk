@@ -81,6 +81,11 @@
       <artifactId>yoti-sdk-api</artifactId>
       <version>${yoti.sdk.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.yoti</groupId>
+      <artifactId>yoti-sdk-impl</artifactId>
+      <version>${yoti.sdk.version}</version>
+    </dependency>
     <!-- Testing dependencies -->
     <dependency>
       <groupId>org.hamcrest</groupId>

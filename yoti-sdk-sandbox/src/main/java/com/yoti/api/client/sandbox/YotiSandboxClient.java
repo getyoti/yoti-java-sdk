@@ -16,9 +16,9 @@ import java.util.UUID;
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.sandbox.profile.SandboxHumanProfile;
 import com.yoti.api.client.sandbox.profile.request.HttpUrlConnectionBuilder;
-import com.yoti.api.client.sandbox.profile.request.SharingTokenRequest;
-import com.yoti.api.client.sandbox.profile.request.SharingTokenRequestMapper;
-import com.yoti.api.client.sandbox.profile.response.SharingToken;
+import com.yoti.api.client.sandbox.profile.request.YotiTokenRequest;
+import com.yoti.api.client.sandbox.profile.request.YotiTokenRequestMapper;
+import com.yoti.api.client.sandbox.profile.response.YotiToken;
 import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,11 +52,12 @@ public class YotiSandboxClient {
         String requestPath = String.format(CREATE_SHARING_TOKEN_PATH, appId);
         requestPath = requestPath + addRandomnessToPath(requestPath);
 
-        SharingTokenRequest sharingTokenRequest = SharingTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, userId);
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequestMapper.mapSharingTokenRequest(sandboxHumanProfile, userId);
 
         String requestDigest;
         try {
-            requestDigest = signedMessageFactory.create(keyPair.getPrivate(),"POST", requestPath, mapper.writeValueAsString(sharingTokenRequest).getBytes());
+            requestDigest = signedMessageFactory.create(keyPair.getPrivate(),"POST", requestPath, mapper.writeValueAsString(
+                    yotiTokenRequest).getBytes());
         } catch (GeneralSecurityException gse) {
             throw new ProfileException("Cannot sign request", gse);
         }
@@ -74,7 +75,7 @@ public class YotiSandboxClient {
         connection.setDoOutput(true);
         connection.setInstanceFollowRedirects(false);
 
-        postRequestBody(connection, sharingTokenRequest);
+        postRequestBody(connection, yotiTokenRequest);
 
         return readResponse(connection);
     }
@@ -89,13 +90,13 @@ public class YotiSandboxClient {
         }
 
         bufferedReader.close();
-        return mapper.readValue(responseBody.toString(), SharingToken.class).getToken();
+        return mapper.readValue(responseBody.toString(), YotiToken.class).getToken();
     }
 
-    private void postRequestBody(HttpURLConnection connection, SharingTokenRequest sharingTokenRequest)
+    private void postRequestBody(HttpURLConnection connection, YotiTokenRequest yotiTokenRequest)
             throws IOException {
         DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-        outputStream.write(mapper.writeValueAsString(sharingTokenRequest).getBytes());
+        outputStream.write(mapper.writeValueAsString(yotiTokenRequest).getBytes());
     }
 
     private static String addRandomnessToPath(String path) {

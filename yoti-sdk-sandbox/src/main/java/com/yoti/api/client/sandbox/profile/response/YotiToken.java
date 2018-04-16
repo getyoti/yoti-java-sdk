@@ -3,12 +3,12 @@ package com.yoti.api.client.sandbox.profile.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SharingToken {
+public class YotiToken {
 
     private String token;
 
     @JsonCreator
-    public SharingToken(@JsonProperty("token") String token) {
+    public YotiToken(@JsonProperty("token") String token) {
         this.token = token;
     }
 
