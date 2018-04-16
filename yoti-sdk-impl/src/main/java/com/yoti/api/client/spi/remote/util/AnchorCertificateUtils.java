@@ -1,7 +1,6 @@
 package com.yoti.api.client.spi.remote.util;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -45,12 +44,8 @@ public class AnchorCertificateUtils {
                         break;
                     }
                 }
-
                 types.addAll(extensions);
-
-                
             }
-
         } catch (Exception e) {
             LOG.warn("Could not extract anchor type from certificate.", e);
         }
@@ -76,11 +71,11 @@ public class AnchorCertificateUtils {
                 DLSequence dlSequence = (DLSequence) derAsn1stream.readObject();
 
                 // Enumerate all the objects in the sequence, we expect only one !
-                Enumeration<?> secEnum = dlSequence.getObjects();
-                while (secEnum.hasMoreElements()) {
+                Enumeration<?> seqEnum = dlSequence.getObjects();
+                while (seqEnum.hasMoreElements()) {
 
                     // This object is OctetString we are looking for
-                    ASN1Primitive seqObj = (ASN1Primitive) secEnum.nextElement();
+                    ASN1Primitive seqObj = (ASN1Primitive) seqEnum.nextElement();
                     ASN1OctetString string = DEROctetString.getInstance((ASN1TaggedObject) seqObj, false);
 
                     // Convert to a java String
@@ -94,28 +89,6 @@ public class AnchorCertificateUtils {
         }
 
         return extensionsStrings;
-    }
-
-    
-    public static byte[] combineBinaryCertChain(List<ByteString> certChain) {
-        if (certChain == null || certChain.size() == 0) {
-            return new byte[]{};
-        }
-
-        if (certChain.size() <= 1) {
-            return certChain.get(0).toByteArray();
-        }
-
-        ByteArrayOutputStream combinedBytes = new ByteArrayOutputStream();
-        try {
-            for (ByteString cert : certChain) {
-                combinedBytes.write(cert.toByteArray());
-            }
-        } catch (IOException e) {
-            LOG.warn("Error combining byte data for cert chain", e);
-        }
-
-        return combinedBytes.toByteArray();
     }
 
     public static class AnchorVerifierSourceData {
