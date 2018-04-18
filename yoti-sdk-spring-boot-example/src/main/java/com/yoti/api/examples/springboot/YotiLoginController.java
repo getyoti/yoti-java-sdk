@@ -6,6 +6,7 @@ import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.YotiClient;
 import com.yoti.api.spring.YotiClientProperties;
 import com.yoti.api.spring.YotiProperties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class YotiLoginController {
     private static final Logger LOG = LoggerFactory.getLogger(YotiLoginController.class);
 
     private final YotiClient client;
-    private YotiClientProperties properties;
+    private final YotiClientProperties properties;
 
     @Autowired
     public YotiLoginController(final YotiClient client, YotiClientProperties properties) {

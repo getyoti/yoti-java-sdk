@@ -84,10 +84,9 @@ public class YotiClientProperties {
         if (o == null || getClass() != o.getClass()) return false;
 
         YotiClientProperties that = (YotiClientProperties) o;
-
-        if (applicationId != null ? !applicationId.equals(that.applicationId) : that.applicationId != null)
-            return false;
+        if (applicationId != null ? !applicationId.equals(that.applicationId) : that.applicationId != null) return false;
         if (clientSdkId != null ? !clientSdkId.equals(that.clientSdkId) : that.clientSdkId != null) return false;
+
         return accessSecurityKey != null ? accessSecurityKey.equals(that.accessSecurityKey) : that.accessSecurityKey == null;
     }
 
