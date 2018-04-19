@@ -18,7 +18,7 @@ If you are using Maven, you need to add the following dependencies:
 <dependency>
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-spring-boot-auto-config</artifactId>
-  <version>1.4.1</version>
+  <version>1.5.0</version>
 </dependency>
 ```
 

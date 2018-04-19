@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-api</artifactId>
-  <version>1.5.0-SNAPSHOT</version>
+  <version>1.5.1-SNAPSHOT</version>
   <name>Yoti SDK API</name>
   <description>Java SDK for simple integration with the Yoti platform</description>
   <url>https://github.com/getyoti/yoti-java-sdk</url>
