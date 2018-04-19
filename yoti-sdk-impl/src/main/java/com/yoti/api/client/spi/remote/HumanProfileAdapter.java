@@ -2,17 +2,18 @@ package com.yoti.api.client.spi.remote;
 
 import static java.lang.Boolean.parseBoolean;
 
+import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.DocumentDetails;
 import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.Image;
 import com.yoti.api.client.Profile;
-
-import java.io.UnsupportedEncodingException;
-import java.text.ParseException;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * Adapter linking Profile and ApplicationProfile together by wrapping the latter and exposing well-known attributes.
@@ -31,7 +32,7 @@ final class HumanProfileAdapter implements HumanProfile {
     private static final String ATTRIBUTE_NATIONALITY = "nationality";
     private static final String ATTRIBUTE_PHONE_NUMBER = "phone_number";
     private static final String ATTRIBUTE_SELFIE = "selfie";
-    private static final String ATTRIBUTE_ADDRESS = "email_address";
+    private static final String ATTRIBUTE_EMAIL_ADDRESS = "email_address";
     private static final String ATTRIBUTE_DOCUMENT_DETAILS = "document_details";
 
     private static final char SPACE = ' ';
@@ -49,6 +50,11 @@ final class HumanProfileAdapter implements HumanProfile {
     @Override
     public String getAttribute(String name) {
         return wrapped.getAttribute(name);
+    }
+
+    @Override
+    public Attribute getAttributeObject(String name) {
+       return wrapped.getAttributeObject(name);
     }
 
     @Override
@@ -110,10 +116,6 @@ final class HumanProfileAdapter implements HumanProfile {
         return isAgeOver != null ? isAgeOver : isAgeUnder;
     }
 
-    private Boolean parseFromStringValue(String value) {
-        return value == null ? null : parseBoolean(value);
-    }
-
     @Override
     public Gender getGender() {
         String genderString = wrapped.getAttribute(ATTRIBUTE_GENDER);
@@ -155,7 +157,7 @@ final class HumanProfileAdapter implements HumanProfile {
 
     @Override
     public String getEmailAddress() {
-        return wrapped.getAttribute(ATTRIBUTE_ADDRESS);
+        return wrapped.getAttribute(ATTRIBUTE_EMAIL_ADDRESS);
     }
 
     @Override
@@ -199,6 +201,144 @@ final class HumanProfileAdapter implements HumanProfile {
         return true;
     }
 
+    @Override
+    public Set<String> getAttributeSources(String name) {
+        Attribute attribute = getAttributeObject(name);
+        return (attribute == null) ? null : attribute.getSources();
+    }
+
+    @Override
+    public Set<String> getFamilyNameSources() {
+        return getAttributeSources(ATTRIBUTE_FAMILY_NAME);
+    }
+
+    @Override
+    public Set<String> getGivenNamesSources() {
+        return getAttributeSources(ATTRIBUTE_GIVEN_NAMES);
+    }
+
+    @Override
+    public Set<String> getFullNameSources() {
+        return getAttributeSources(ATTRIBUTE_FULL_NAME);
+    }
+
+    @Override
+    public Set<String> getDateOfBirthSources() {
+        return getAttributeSources(ATTRIBUTE_DOB);
+    }
+
+    @Override
+    public Set<String> getGenderSources() {
+        return getAttributeSources(ATTRIBUTE_GENDER);
+    }
+
+    @Override
+    public Set<String> getPostalAddressSources() {
+        return getAttributeSources(ATTRIBUTE_POSTAL_ADDRESS);
+    }
+
+    @Override
+    public Set<String> getStructuredPostalAddressSources() {
+        return getAttributeSources(ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS);
+    }
+
+    @Override
+    public Set<String> getNationalitySources() {
+        return getAttributeSources(ATTRIBUTE_NATIONALITY);
+    }
+
+    @Override
+    public Set<String> getPhoneNumberSources() {
+        return getAttributeSources(ATTRIBUTE_PHONE_NUMBER);
+    }
+
+    @Override
+    public Set<String> getSelfieSources() {
+        return getAttributeSources(ATTRIBUTE_SELFIE);
+    }
+
+    @Override
+    public Set<String> getEmailAddressSources() {
+        return getAttributeSources(ATTRIBUTE_EMAIL_ADDRESS);
+    }
+
+    @Override
+    public Set<String> getDocumentDetailsSources() {
+        return getAttributeSources(ATTRIBUTE_DOCUMENT_DETAILS);
+    }
+
+    @Override
+    public Set<String> getAttributeVerifiers(String name) {
+        Attribute attribute = getAttributeObject(name);
+        return (attribute == null) ? null : attribute.getVerifiers();
+    }
+
+    @Override
+    public Set<String> getFamilyNameVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_FAMILY_NAME);
+    }
+
+    @Override
+    public Set<String> getGivenNamesVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_GIVEN_NAMES);
+    }
+
+    @Override
+    public Set<String> getFullNameVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_FULL_NAME);
+    }
+
+    @Override
+    public Set<String> getDateOfBirthVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_DOB);
+    }
+
+    @Override
+    public Set<String> getGenderVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_GENDER);
+    }
+
+    @Override
+    public Set<String> getPostalAddressVerifier() {
+        return getAttributeVerifiers(ATTRIBUTE_POSTAL_ADDRESS);
+    }
+
+    @Override
+    public Set<String> getStructuredPostalAddressVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS);
+    }
+
+    @Override
+    public Set<String> getNationalityVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_NATIONALITY);
+    }
+
+    @Override
+    public Set<String> getPhoneNumberVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_PHONE_NUMBER);
+    }
+
+    @Override
+    public Set<String> getSelfieVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_SELFIE);
+    }
+
+    @Override
+    public Set<String> getEmailAddressVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_EMAIL_ADDRESS);
+    }
+
+    @Override
+    public Set<String> getDocumentDetailsVerifiers() {
+        return getAttributeVerifiers(ATTRIBUTE_DOCUMENT_DETAILS);
+    }
+
+    private void appendIfNotNull(final StringBuilder builder, final String input) {
+        if (input != null) {
+            builder.append(input);
+        }
+    }
+
     private String buildGivenAndLastNameString(final String givenNames, final String familyName) {
         // in Java 8 a java.util.StringJoiner does this much more nicely - but this is JDK 6 compatible.
         final StringBuilder result = new StringBuilder();
@@ -210,10 +350,8 @@ final class HumanProfileAdapter implements HumanProfile {
         return result.toString();
     }
 
-    private void appendIfNotNull(final StringBuilder builder, final String input) {
-        if (input != null) {
-            builder.append(input);
-        }
+    private Boolean parseFromStringValue(String value) {
+        return value == null ? null : parseBoolean(value);
     }
 
 }

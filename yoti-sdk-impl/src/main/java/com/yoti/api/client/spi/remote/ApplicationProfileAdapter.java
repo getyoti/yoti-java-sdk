@@ -43,6 +43,11 @@ public final class ApplicationProfileAdapter implements ApplicationProfile {
     }
 
     @Override
+    public Attribute getAttributeObject(String name) {
+        return wrapped.getAttributeObject(name);
+    }
+
+    @Override
     public <T> T findAttributeStartingWith(String name, Class<T> clazz) {
         return wrapped.findAttributeStartingWith(name, clazz);
     }

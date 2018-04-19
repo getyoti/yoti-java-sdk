@@ -7,7 +7,33 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.SYMMETRIC_CIPHER
 import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 import static javax.crypto.Cipher.DECRYPT_MODE;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.Security;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.bouncycastle.openssl.PEMException;
+import org.bouncycastle.openssl.PEMKeyPair;
+import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.yoti.api.client.ActivityDetails;
@@ -26,33 +52,7 @@ import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
 import com.yoti.api.client.spi.remote.proto.AttrProto.Attribute;
 import com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList;
-import com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType;
 import com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData;
-import org.bouncycastle.openssl.PEMException;
-import org.bouncycastle.openssl.PEMKeyPair;
-import org.bouncycastle.openssl.PEMParser;
-import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
-import java.security.Key;
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.Security;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * YotiClient talking to the Yoti Connect API remotely.
@@ -61,7 +61,6 @@ final class SecureYotiClient implements YotiClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(SecureYotiClient.class);
     private static final String RFC3339_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-    private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
     private final String appId;
     private final KeyPair keyPair;
@@ -141,13 +140,13 @@ final class SecureYotiClient implements YotiClient {
     }
 
     private Profile createProfile(byte[] profileBytes, Key secretKey) throws ProfileException {
-        Map<String, Object> attributeMap = new HashMap<String, Object>();
+        List<com.yoti.api.client.Attribute> attributeList = new ArrayList<com.yoti.api.client.Attribute>();
         if (profileBytes != null && profileBytes.length > 0) {
             EncryptedData encryptedData = parseProfileContent(profileBytes);
             byte[] profileData = decrypt(encryptedData.getCipherText(), secretKey, encryptedData.getIv());
-            attributeMap = parseProfile(profileData);
+            attributeList = parseProfile(profileData);
         }
-        return createProfile(attributeMap);
+        return createProfile(attributeList);
     }
 
     private EncryptedData parseProfileContent(byte[] profileContent) throws ProfileException {
@@ -162,25 +161,25 @@ final class SecureYotiClient implements YotiClient {
         return new SecretKeySpec(keyVal, SYMMETRIC_CIPHER);
     }
 
-    private Map<String, Object> parseProfile(byte[] profileData) throws ProfileException {
-        Map<String, Object> attributeMap = null;
+    private List<com.yoti.api.client.Attribute> parseProfile(byte[] profileData) throws ProfileException {
+        List<com.yoti.api.client.Attribute> attributeList = null;
         try {
             AttributeList message = AttributeList.parseFrom(profileData);
-            attributeMap = mapAttributes(message);
-            LOG.debug("{} attribute(s) parsed", attributeMap.size());
+            attributeList = parseAttributes(message);
+            LOG.debug("{} attribute(s) parsed", attributeList.size());
         } catch (InvalidProtocolBufferException e) {
             throw new ProfileException("Cannot parse profile data", e);
         }
-        return attributeMap;
+        return attributeList;
     }
 
-    private Map<String, Object> mapAttributes(AttributeList message) {
-        Map<String, Object> attributeMap = new HashMap<String, Object>();
+    private List<com.yoti.api.client.Attribute> parseAttributes(AttributeList message) {
+        List<com.yoti.api.client.Attribute> parsedAttributes = new ArrayList<com.yoti.api.client.Attribute>();
         for (Attribute attribute : message.getAttributesList()) {
             try {
-                Object attributeValue = mapAttribute(attribute);
-                if (attributeValue != null) {
-                    attributeMap.put(attribute.getName(), attributeValue);
+                com.yoti.api.client.Attribute parsedAttribute = AttributeConverter.convertAttribute(attribute);
+                if (parsedAttribute != null) {
+                    parsedAttributes.add(parsedAttribute);
                 }
             } catch (IOException e) {
                 LOG.info("Cannot decode value for attribute {}", attribute.getName());
@@ -188,28 +187,12 @@ final class SecureYotiClient implements YotiClient {
                 LOG.info("Cannot parse value for attribute {}", attribute.getName());
             }
         }
-        return attributeMap;
+        return parsedAttributes;
     }
 
-    private Object mapAttribute(Attribute attribute) throws ParseException, IOException {
-        if (ContentType.STRING.equals(attribute.getContentType())) {
-            return attribute.getValue().toString(DEFAULT_CHARSET);
-        } else if (ContentType.DATE.equals(attribute.getContentType())) {
-            return DateAttributeValue.parseFrom(attribute.getValue().toByteArray());
-        } else if (ContentType.JPEG.equals(attribute.getContentType())) {
-            return new JpegAttributeValue(attribute.getValue().toByteArray());
-        } else if (ContentType.PNG.equals(attribute.getContentType())) {
-            return new PngAttributeValue(attribute.getValue().toByteArray());
-        } else if (ContentType.JSON.equals(attribute.getContentType())) {
-            return JSON_MAPPER.readValue(attribute.getValue().toString(DEFAULT_CHARSET), Map.class);
-        }
-
-        LOG.error("Unknown type {} for attribute {}", attribute.getContentType(), attribute.getName());
-        return attribute.getValue().toString(DEFAULT_CHARSET);
-    }
-
-    private Profile createProfile(Map<String, Object> attributeMap) {
-        return new SimpleProfile(attributeMap);
+    
+    private Profile createProfile(List<com.yoti.api.client.Attribute> attributeList) {
+        return new SimpleProfile(attributeList);
     }
 
     private ActivityDetails createActivityDetails(Profile userProfile, Profile applicationProfile, Receipt receipt)

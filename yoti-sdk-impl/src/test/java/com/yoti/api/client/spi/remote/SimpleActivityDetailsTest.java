@@ -1,14 +1,15 @@
 package com.yoti.api.client.spi.remote;
 
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
-import java.util.HashMap;
 
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Profile;
 
 public class SimpleActivityDetailsTest {
@@ -77,21 +78,21 @@ public class SimpleActivityDetailsTest {
     
     @Test
     public void shouldReturnBase64SelfieIfSelfieSet() {
-        HashMap<String, Object> attrMap = new HashMap<String, Object>();
-        attrMap.put("selfie", new JpegAttributeValue("selfieTestVal".getBytes()));
-    		
-        SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, new SimpleProfile(attrMap), APP_PROFILE, TIMESTAMP, RECEIPT_ID);
-        String selfie = "data:image/jpeg;base64," + Base64.toBase64String(s.getUserProfile().getSelfie().getContent());
+        Attribute selfie = new Attribute("selfie", new JpegAttributeValue("selfieTestVal".getBytes()), null);
+        SimpleProfile profile = new SimpleProfile(singletonList(selfie));
+
+        SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        String expected = "data:image/jpeg;base64," + Base64.toBase64String(s.getUserProfile().getSelfie().getContent());
         
-        assertEquals(selfie, s.getBase64Selfie());
+        assertEquals(expected, s.getBase64Selfie());
     }
     
     @Test
     public void shouldReturnBlankBase64SelfieIfSelfieNotSet() {
-        HashMap<String, Object> attrMap = new HashMap<String, Object>();
-        attrMap.put("family_name", "Smith");
-    		
-        SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, new SimpleProfile(attrMap), APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        Attribute familyName = new Attribute("family_name", "Smith", null);
+        SimpleProfile profile = new SimpleProfile(singletonList(familyName));
+
+        SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
         
         assertEquals("", s.getBase64Selfie());
     }

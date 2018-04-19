@@ -41,6 +41,14 @@ public interface Profile {
     <T> T getAttribute(String name, Class<T> clazz);
 
     /**
+     * Returns the attribute object for the key
+     * 
+     * @param name
+     * @return the attribute object, null if it is not present in the profile
+     */
+    Attribute getAttributeObject(String name);
+
+    /**
      * Return the value of the first attribute with a name starting with <code>name</code>
      *
      * @param <T> the type parameter indicating the type of the returned value
@@ -60,4 +68,5 @@ public interface Profile {
      *
      */
     Collection<Attribute> getAttributes();
+
 }
