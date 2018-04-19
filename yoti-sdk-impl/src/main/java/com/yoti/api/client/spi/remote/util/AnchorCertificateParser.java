@@ -1,7 +1,10 @@
 package com.yoti.api.client.spi.remote.util;
 
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -10,7 +13,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.bouncycastle.asn1.ASN1InputStream;
+import com.yoti.api.client.spi.remote.proto.AttrProto.Anchor;
+
+import com.google.protobuf.ByteString;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.ASN1TaggedObject;
@@ -19,13 +24,10 @@ import org.bouncycastle.asn1.DLSequence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.protobuf.ByteString;
-import com.yoti.api.client.spi.remote.proto.AttrProto.Anchor;
-
 public class AnchorCertificateParser {
+
     private static final Logger LOG = LoggerFactory.getLogger(AnchorCertificateParser.class);
 
-   
     public static AnchorVerifierSourceData getTypesFromAnchor(Anchor anchor) {
         Set<String> types = new HashSet<String>(anchor.getOriginServerCertsCount());
         AnchorType anchorType = AnchorType.UNKNOWN;
@@ -46,29 +48,29 @@ public class AnchorCertificateParser {
                 }
                 types.addAll(extensions);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
+            LOG.warn("Could not extract anchor type from certificate.", e);
+        } catch (CertificateException e) {
             LOG.warn("Could not extract anchor type from certificate.", e);
         }
 
         return new AnchorVerifierSourceData(types, anchorType);
     }
 
-    
     private static List<String> getListOfStringFromExtension(X509Certificate certificate, String extensionValue) throws IOException {
         List<String> extensionsStrings = new ArrayList<String>();
 
         byte[] extension = certificate.getExtensionValue(extensionValue);
         if (extension != null) {
             // Read the First object
-            ASN1InputStream asn1InputStream = new ASN1InputStream(extension);
-            ASN1Primitive derObject = asn1InputStream.readObject();
+            ASN1Primitive derObject = ASN1Primitive.fromByteArray(extension);
 
             if (derObject != null && derObject instanceof DEROctetString) {
                 DEROctetString derOctetString = (DEROctetString) derObject;
 
                 // Read the sub object which is expected to be a sequence
-                ASN1InputStream derAsn1stream = new ASN1InputStream(derOctetString.getOctets());
-                DLSequence dlSequence = (DLSequence) derAsn1stream.readObject();
+                ASN1Primitive asn1Primitive1 = ASN1Primitive.fromByteArray(derOctetString.getOctets());
+                DLSequence dlSequence = (DLSequence) asn1Primitive1;
 
                 // Enumerate all the objects in the sequence, we expect only one !
                 Enumeration<?> seqEnum = dlSequence.getObjects();
@@ -79,15 +81,12 @@ public class AnchorCertificateParser {
                     ASN1OctetString string = DEROctetString.getInstance(seqObj, false);
 
                     // Convert to a java String
-                    extensionsStrings.add(new String(string.getOctets()));
+                    extensionsStrings.add(new String(string.getOctets(), DEFAULT_CHARSET));
                 }
-                derAsn1stream.close();
+
                 LOG.debug("Anchor certificate types : '{}' for extension: {}", extensionsStrings.toString(), extensionValue);
             }
-            
-            asn1InputStream.close();
         }
-
         return extensionsStrings;
     }
 

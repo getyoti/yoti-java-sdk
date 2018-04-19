@@ -1,11 +1,12 @@
 package com.yoti.api.client.spi.remote;
 
+import static javax.crypto.Cipher.DECRYPT_MODE;
+
 import static com.yoti.api.client.spi.remote.call.YotiConstants.ASYMMETRIC_CIPHER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.BOUNCY_CASTLE_PROVIDER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.SYMMETRIC_CIPHER;
 import static com.yoti.api.client.spi.remote.util.Validation.notNull;
-import static javax.crypto.Cipher.DECRYPT_MODE;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,18 +28,10 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.bouncycastle.openssl.PEMException;
-import org.bouncycastle.openssl.PEMKeyPair;
-import org.bouncycastle.openssl.PEMParser;
-import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.yoti.api.client.ActivityDetails;
 import com.yoti.api.client.ActivityFailureException;
 import com.yoti.api.client.AmlException;
+import com.yoti.api.client.Attribute;
 import com.yoti.api.client.InitialisationException;
 import com.yoti.api.client.KeyPairSource;
 import com.yoti.api.client.KeyPairSource.StreamVisitor;
@@ -50,9 +43,18 @@ import com.yoti.api.client.aml.AmlResult;
 import com.yoti.api.client.spi.remote.call.ProfileService;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
-import com.yoti.api.client.spi.remote.proto.AttrProto.Attribute;
+import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList;
 import com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData;
+
+import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
+import org.bouncycastle.openssl.PEMException;
+import org.bouncycastle.openssl.PEMKeyPair;
+import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * YotiClient talking to the Yoti Connect API remotely.
@@ -140,7 +142,7 @@ final class SecureYotiClient implements YotiClient {
     }
 
     private Profile createProfile(byte[] profileBytes, Key secretKey) throws ProfileException {
-        List<com.yoti.api.client.Attribute> attributeList = new ArrayList<com.yoti.api.client.Attribute>();
+        List<Attribute> attributeList = new ArrayList<Attribute>();
         if (profileBytes != null && profileBytes.length > 0) {
             EncryptedData encryptedData = parseProfileContent(profileBytes);
             byte[] profileData = decrypt(encryptedData.getCipherText(), secretKey, encryptedData.getIv());
@@ -161,26 +163,22 @@ final class SecureYotiClient implements YotiClient {
         return new SecretKeySpec(keyVal, SYMMETRIC_CIPHER);
     }
 
-    private List<com.yoti.api.client.Attribute> parseProfile(byte[] profileData) throws ProfileException {
-        List<com.yoti.api.client.Attribute> attributeList = null;
+    private List<Attribute> parseProfile(byte[] profileData) throws ProfileException {
         try {
             AttributeList message = AttributeList.parseFrom(profileData);
-            attributeList = parseAttributes(message);
+            List<Attribute> attributeList = parseAttributes(message);
             LOG.debug("{} attribute(s) parsed", attributeList.size());
+            return attributeList;
         } catch (InvalidProtocolBufferException e) {
             throw new ProfileException("Cannot parse profile data", e);
         }
-        return attributeList;
     }
 
-    private List<com.yoti.api.client.Attribute> parseAttributes(AttributeList message) {
-        List<com.yoti.api.client.Attribute> parsedAttributes = new ArrayList<com.yoti.api.client.Attribute>();
-        for (Attribute attribute : message.getAttributesList()) {
+    private List<Attribute> parseAttributes(AttributeList message) {
+        List<Attribute> parsedAttributes = new ArrayList<Attribute>();
+        for (AttrProto.Attribute attribute : message.getAttributesList()) {
             try {
-                com.yoti.api.client.Attribute parsedAttribute = AttributeConverter.convertAttribute(attribute);
-                if (parsedAttribute != null) {
-                    parsedAttributes.add(parsedAttribute);
-                }
+                parsedAttributes.add(AttributeConverter.convertAttribute(attribute));
             } catch (IOException e) {
                 LOG.info("Cannot decode value for attribute {}", attribute.getName());
             } catch (ParseException e) {
@@ -191,7 +189,7 @@ final class SecureYotiClient implements YotiClient {
     }
 
     
-    private Profile createProfile(List<com.yoti.api.client.Attribute> attributeList) {
+    private Profile createProfile(List<Attribute> attributeList) {
         return new SimpleProfile(attributeList);
     }
 

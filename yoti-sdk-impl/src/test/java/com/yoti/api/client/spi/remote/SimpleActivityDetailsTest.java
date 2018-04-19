@@ -13,6 +13,7 @@ import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Profile;
 
 public class SimpleActivityDetailsTest {
+
     private static final String USER_ID = "YmFkYWRhZGEtZGFkYWJhZGEK";
     private static final Profile USER_PROFILE = Mockito.mock(Profile.class);
     private static final Profile APP_PROFILE = Mockito.mock(Profile.class);
@@ -21,6 +22,7 @@ public class SimpleActivityDetailsTest {
     private static final byte[] RECEIPT_ID = { 1, 2, 3, 4, 5, 6, 7, 8 };
     private static final String RECEIPT_ID_STRING = Base64.toBase64String(RECEIPT_ID);
     private static final Date TIMESTAMP = new Date();
+    private static final byte[] SOME_SELFIE_BYTES = "selfieTestVal".getBytes();
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailConstructionForNullRememberMeId() {
@@ -78,13 +80,13 @@ public class SimpleActivityDetailsTest {
     
     @Test
     public void shouldReturnBase64SelfieIfSelfieSet() {
-        Attribute selfie = new Attribute("selfie", new JpegAttributeValue("selfieTestVal".getBytes()), null);
+        Attribute selfie = new Attribute("selfie", new JpegAttributeValue(SOME_SELFIE_BYTES), null);
         SimpleProfile profile = new SimpleProfile(singletonList(selfie));
 
-        SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
-        String expected = "data:image/jpeg;base64," + Base64.toBase64String(s.getUserProfile().getSelfie().getContent());
-        
-        assertEquals(expected, s.getBase64Selfie());
+        SimpleActivityDetails result = new SimpleActivityDetails(USER_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+
+        String expected = "data:image/jpeg;base64," + Base64.toBase64String(SOME_SELFIE_BYTES);
+        assertEquals(expected, result.getBase64Selfie());
     }
     
     @Test
@@ -92,8 +94,8 @@ public class SimpleActivityDetailsTest {
         Attribute familyName = new Attribute("family_name", "Smith", null);
         SimpleProfile profile = new SimpleProfile(singletonList(familyName));
 
-        SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        SimpleActivityDetails result = new SimpleActivityDetails(USER_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
         
-        assertEquals("", s.getBase64Selfie());
+        assertEquals("", result.getBase64Selfie());
     }
 }
