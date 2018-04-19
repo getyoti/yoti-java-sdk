@@ -8,7 +8,7 @@
       <gav>com.google.protobuf:protobuf-java:3.5.0</gav>
       <cve>CVE-2015-5237</cve>
    </suppress>
-
+   
    <suppress>
       <notes><![CDATA[
         The problem is described here: https://nvd.nist.gov/vuln/detail/CVE-2017-17485#VulnChangeHistoryDiv
@@ -16,9 +16,13 @@
         Recommended reading is here: https://medium.com/@cowtowncoder/on-jackson-cves-dont-panic-here-is-what-you-need-to-know-54cd0d6e8062
         Our conclusion is in API-360
         There is now an additional CVE, seemingly for the same issue: https://nvd.nist.gov/vuln/detail/CVE-2018-5968
+        And another: https://nvd.nist.gov/vuln/detail/CVE-2018-7489
+        And another: https://nvd.nist.gov/vuln/detail/CVE-2017-15095
       ]]></notes>
       <gav>com.fasterxml.jackson.core:jackson-databind:2.7.9.1</gav>
       <cve>CVE-2017-17485</cve>
       <cve>CVE-2018-5968</cve>
+      <cve>CVE-2018-7489</cve>
+      <cve>CVE-2017-15095</cve>
    </suppress>
 </suppressions>
