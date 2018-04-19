@@ -21,10 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -37,7 +34,6 @@ import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.yoti.api.client.ActivityDetails;
@@ -54,14 +50,9 @@ import com.yoti.api.client.aml.AmlResult;
 import com.yoti.api.client.spi.remote.call.ProfileService;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
-import com.yoti.api.client.spi.remote.proto.AttrProto.Anchor;
 import com.yoti.api.client.spi.remote.proto.AttrProto.Attribute;
 import com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList;
-import com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType;
 import com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData;
-import com.yoti.api.client.spi.remote.util.AnchorCertificateUtils;
-import com.yoti.api.client.spi.remote.util.AnchorCertificateUtils.AnchorVerifierSourceData;
-import com.yoti.api.client.spi.remote.util.AnchorType;
 
 /**
  * YotiClient talking to the Yoti Connect API remotely.
@@ -70,7 +61,6 @@ final class SecureYotiClient implements YotiClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(SecureYotiClient.class);
     private static final String RFC3339_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-    private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
     private final String appId;
     private final KeyPair keyPair;

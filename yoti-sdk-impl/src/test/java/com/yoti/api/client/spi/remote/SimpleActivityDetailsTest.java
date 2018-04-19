@@ -1,11 +1,9 @@
 package com.yoti.api.client.spi.remote;
 
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.Test;
@@ -80,23 +78,21 @@ public class SimpleActivityDetailsTest {
     
     @Test
     public void shouldReturnBase64SelfieIfSelfieSet() {
-        List<Attribute> attrList = new ArrayList<Attribute>();
         Attribute selfie = new Attribute("selfie", new JpegAttributeValue("selfieTestVal".getBytes()), null);
-        attrList.add(selfie);
-    		
-        SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, new SimpleProfile(attrList), APP_PROFILE, TIMESTAMP, RECEIPT_ID);
-        String selfieData = "data:image/jpeg;base64," + Base64.toBase64String(s.getUserProfile().getSelfie().getContent());
+        SimpleProfile profile = new SimpleProfile(singletonList(selfie));
+
+        SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        String expected = "data:image/jpeg;base64," + Base64.toBase64String(s.getUserProfile().getSelfie().getContent());
         
-        assertEquals(selfieData, s.getBase64Selfie());
+        assertEquals(expected, s.getBase64Selfie());
     }
     
     @Test
     public void shouldReturnBlankBase64SelfieIfSelfieNotSet() {
-        List<Attribute> attrList = new ArrayList<Attribute>();
         Attribute familyName = new Attribute("family_name", "Smith", null);
-        attrList.add(familyName);
-    		
-        SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, new SimpleProfile(attrList), APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        SimpleProfile profile = new SimpleProfile(singletonList(familyName));
+
+        SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
         
         assertEquals("", s.getBase64Selfie());
     }

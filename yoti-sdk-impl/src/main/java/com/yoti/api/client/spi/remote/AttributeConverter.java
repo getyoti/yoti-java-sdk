@@ -13,11 +13,12 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yoti.api.client.Attribute;
+import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.AttrProto.Anchor;
 import com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType;
-import com.yoti.api.client.spi.remote.util.AnchorCertificateUtils;
+import com.yoti.api.client.spi.remote.util.AnchorCertificateParser;
 import com.yoti.api.client.spi.remote.util.AnchorType;
-import com.yoti.api.client.spi.remote.util.AnchorCertificateUtils.AnchorVerifierSourceData;
+import com.yoti.api.client.spi.remote.util.AnchorCertificateParser.AnchorVerifierSourceData;
 
 public class AttributeConverter {
 
@@ -25,7 +26,7 @@ public class AttributeConverter {
     private static final Logger LOG = LoggerFactory.getLogger(AttributeConverter.class);
 
     
-    public static Attribute convertAttribute(com.yoti.api.client.spi.remote.proto.AttrProto.Attribute attribute) throws ParseException, IOException{
+    public static Attribute convertAttribute(AttrProto.Attribute attribute) throws ParseException, IOException{
         if (ContentType.STRING.equals(attribute.getContentType())) {
             return new com.yoti.api.client.Attribute(attribute.getName(), 
                 attribute.getValue().toString(DEFAULT_CHARSET), 
@@ -60,10 +61,10 @@ public class AttributeConverter {
                 extractMetadata(attribute, AnchorType.VERIFIER));
     }
 
-    private static Set<String> extractMetadata(com.yoti.api.client.spi.remote.proto.AttrProto.Attribute attribute, AnchorType anchorType) {
+    private static Set<String> extractMetadata(AttrProto.Attribute attribute, AnchorType anchorType) {
         Set<String> entries = new HashSet<String>();
         for (Anchor anchor : attribute.getAnchorsList()) {
-            AnchorVerifierSourceData anchorData = AnchorCertificateUtils.getTypesFromAnchor(anchor);
+            AnchorVerifierSourceData anchorData = AnchorCertificateParser.getTypesFromAnchor(anchor);
             if(anchorData.getType().equals(anchorType)) {
                 entries.addAll(anchorData.getEntries());
             }

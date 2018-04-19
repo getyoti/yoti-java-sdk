@@ -19,6 +19,7 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Profile;
+import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.AttrProto.Anchor;
 
 public class SimpleProfileTest {
@@ -163,7 +164,7 @@ public class SimpleProfileTest {
 
     @Test
     public void getAttributeSourcesShouldIncludeDrivingLicence() throws ParseException, IOException {
-        com.yoti.api.client.spi.remote.proto.AttrProto.Attribute attribute = buildAnchoredAttribute(GIVEN_NAMES_ATTRIBUTE, "A_Given_NAME", TestAnchors.DL_ANCHOR);
+        AttrProto.Attribute attribute = buildAnchoredAttribute(GIVEN_NAMES_ATTRIBUTE, "A_Given_NAME", TestAnchors.DL_ANCHOR);
         
         Profile profile = new SimpleProfile(singletonList(AttributeConverter.convertAttribute(attribute)));
         
@@ -173,7 +174,7 @@ public class SimpleProfileTest {
     
     @Test
     public void getAttributeSourcesShouldIncludePassport() throws ParseException, IOException {
-        com.yoti.api.client.spi.remote.proto.AttrProto.Attribute attribute = buildAnchoredAttribute(GIVEN_NAMES_ATTRIBUTE, "A_Given_NAME", TestAnchors.PP_ANCHOR);
+        AttrProto.Attribute attribute = buildAnchoredAttribute(GIVEN_NAMES_ATTRIBUTE, "A_Given_NAME", TestAnchors.PP_ANCHOR);
         
         Profile profile = new SimpleProfile(singletonList(AttributeConverter.convertAttribute(attribute)));
         
@@ -183,7 +184,7 @@ public class SimpleProfileTest {
     
     @Test
     public void getAttributeVerifiersShouldIncludeYotiAdmin() throws ParseException, IOException {
-        com.yoti.api.client.spi.remote.proto.AttrProto.Attribute attribute = buildAnchoredAttribute(GIVEN_NAMES_ATTRIBUTE, "A_Given_NAME", TestAnchors.YOTI_ADMIN_ANCHOR);
+        AttrProto.Attribute attribute = buildAnchoredAttribute(GIVEN_NAMES_ATTRIBUTE, "A_Given_NAME", TestAnchors.YOTI_ADMIN_ANCHOR);
         
         Profile profile = new SimpleProfile(singletonList(AttributeConverter.convertAttribute(attribute)));
         
@@ -191,10 +192,10 @@ public class SimpleProfileTest {
         assertTrue(sources.contains(YOTI_ADMIN_VERIFIER_TYPE));
     }
 
-    private com.yoti.api.client.spi.remote.proto.AttrProto.Attribute buildAnchoredAttribute(String name, String value, String rawAnchor)
+    private AttrProto.Attribute buildAnchoredAttribute(String name, String value, String rawAnchor)
             throws InvalidProtocolBufferException {
         Anchor anchor = Anchor.parseFrom(Base64.getDecoder().decode(rawAnchor));
-        com.yoti.api.client.spi.remote.proto.AttrProto.Attribute attribute = com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.newBuilder()
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setName(name)
                 .setValue(ByteString.copyFromUtf8(value))
                 .addAnchors(anchor)

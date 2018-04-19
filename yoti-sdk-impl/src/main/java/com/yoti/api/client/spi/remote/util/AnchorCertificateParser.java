@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
 import com.google.protobuf.ByteString;
 import com.yoti.api.client.spi.remote.proto.AttrProto.Anchor;
 
-public class AnchorCertificateUtils {
-    private static final Logger LOG = LoggerFactory.getLogger(AnchorCertificateUtils.class);
+public class AnchorCertificateParser {
+    private static final Logger LOG = LoggerFactory.getLogger(AnchorCertificateParser.class);
 
    
     public static AnchorVerifierSourceData getTypesFromAnchor(Anchor anchor) {
@@ -75,8 +75,8 @@ public class AnchorCertificateUtils {
                 while (seqEnum.hasMoreElements()) {
 
                     // This object is OctetString we are looking for
-                    ASN1Primitive seqObj = (ASN1Primitive) seqEnum.nextElement();
-                    ASN1OctetString string = DEROctetString.getInstance((ASN1TaggedObject) seqObj, false);
+                    ASN1TaggedObject seqObj = (ASN1TaggedObject) seqEnum.nextElement();
+                    ASN1OctetString string = DEROctetString.getInstance(seqObj, false);
 
                     // Convert to a java String
                     extensionsStrings.add(new String(string.getOctets()));
@@ -92,8 +92,8 @@ public class AnchorCertificateUtils {
     }
 
     public static class AnchorVerifierSourceData {
-        private Set<String> entries;
-        private AnchorType type;
+        private final Set<String> entries;
+        private final AnchorType type;
 
         public AnchorVerifierSourceData(Set<String> entries, AnchorType anchorType) {
             this.entries = entries;

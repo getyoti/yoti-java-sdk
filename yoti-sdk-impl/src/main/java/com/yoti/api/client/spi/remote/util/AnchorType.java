@@ -9,8 +9,8 @@ public enum AnchorType {
     public final String stringValue;
     public final String extensionOid;
 
-    AnchorType(String stringValue, String enxtensionOid) {
+    AnchorType(String stringValue, String extensionOid) {
         this.stringValue = stringValue;
-        this.extensionOid = enxtensionOid;
+        this.extensionOid = extensionOid;
     }
 }
