@@ -2,6 +2,11 @@ package com.yoti.api.client;
 
 import com.yoti.api.client.aml.AmlProfile;
 import com.yoti.api.client.aml.AmlResult;
+import com.yoti.api.client.qrcode.DynamicQRCode;
+import com.yoti.api.client.qrcode.DynamicScenario;
+import com.yoti.api.client.qrcode.QRCodeException;
+
+;
 
 /**
  * <p>
@@ -40,5 +45,10 @@ public interface YotiClient {
      *             aggregate exception signalling issues during the call
      */
     AmlResult performAmlCheck(AmlProfile amlProfile) throws AmlException;
+
+    /**
+     *
+     */
+    DynamicQRCode requestQRCode(DynamicScenario dynamicScenario) throws QRCodeException;
 
 }
