@@ -8,6 +8,7 @@ public class PathFactory {
 
     private static final String PROFILE_PATH_TEMPLATE = "/profile/%s?nonce=%s&timestamp=%s&appId=%s";
     private static final String AML_PATH_TEMPLATE = "/aml-check?appId=%s&nonce=%s&timestamp=%s";
+    private static final String QR_CODE_PATH_TEMPLATE = "/qrcodes/apps/%s?nonce=%s&timestamp=%s";
 
     public String createProfilePath(String appId, String connectToken) {
         return format(PROFILE_PATH_TEMPLATE, connectToken, randomUUID(), createTimestamp(), appId);
@@ -15,6 +16,10 @@ public class PathFactory {
 
     public String createAmlPath(String appId) {
         return format(AML_PATH_TEMPLATE, appId, randomUUID(), createTimestamp());
+    }
+
+    public String createQrCodePath(String appId) {
+        return format(QR_CODE_PATH_TEMPLATE, appId, randomUUID(), createTimestamp());
     }
 
     protected long createTimestamp() {
