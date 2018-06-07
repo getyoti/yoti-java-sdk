@@ -63,48 +63,48 @@
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
+  
     <!-- java version -->
     <yoti.java.sdk.version>${project.version}</yoti.java.sdk.version>
-    <supported.java.version>1.6</supported.java.version>
+    <supported.java.version>1.7</supported.java.version>
     <maven.compiler.source>${supported.java.version}</maven.compiler.source>
     <maven.compiler.target>${supported.java.version}</maven.compiler.target>
     
     <!-- sdk dependency versions -->
     <slf4j.version>1.7.25</slf4j.version>
     <bouncy.castle.version>1.59</bouncy.castle.version>
-    <jackson.version>2.7.9.1</jackson.version>
-    <google.protobuf.version>3.5.0</google.protobuf.version>
-
+    <jackson.version>2.9.5</jackson.version>
+    <google.protobuf.version>3.5.1</google.protobuf.version>
+  
     <!-- sping versions -->
     <springboot.version>1.5.10.RELEASE</springboot.version>
     <spring.core.version>4.3.14.RELEASE</spring.core.version>
-    <spring.security.version>4.2.3.RELEASE</spring.security.version>
+    <spring.security.version>4.2.6.RELEASE</spring.security.version>
     <javax.servlet.version>2.5</javax.servlet.version>
 
     <!-- test libraries -->
     <junit.version>4.12</junit.version>
-    <mockito.version>2.8.47</mockito.version>
+    <mockito.version>2.18.3</mockito.version>
     <hamcrest.version>1.3</hamcrest.version>
 
     <!-- maven + plugin versions -->
     <maven.compiler.version>3.0</maven.compiler.version>
     <maven.source.version>2.2.1</maven.source.version>
-    <maven.enforcer.version>1.4.1</maven.enforcer.version>
-    <findbugs.version>3.0.0</findbugs.version>
+    <maven.enforcer.version>3.0.0-M1</maven.enforcer.version>
+    <findbugs.version>3.0.5</findbugs.version>
     <findsecbugs.version>1.7.1</findsecbugs.version>
-    <owasp.version>2.1.0</owasp.version>
+    <owasp.version>3.2.1</owasp.version>
     <owasp.dependency.check.cvss.limit>4</owasp.dependency.check.cvss.limit>
     <owasp.dependency.check.cve.update.limit>24</owasp.dependency.check.cve.update.limit>
-    <maven.reports.version>2.8</maven.reports.version>
-    <animal.sniffer.version>1.15</animal.sniffer.version>
-    <mojo.signature.artefact>java16</mojo.signature.artefact>
+    <maven.reports.version>2.9</maven.reports.version>
+    <animal.sniffer.version>1.16</animal.sniffer.version>
+    <mojo.signature.artefact>java17</mojo.signature.artefact>
     <mojo.signature.version>1.0</mojo.signature.version>
-    <mojo.extra.rules.version>1.0-beta-4</mojo.extra.rules.version>
-    <nexus.plugin.version>1.6.7</nexus.plugin.version>
-    <javadoc.plugin.version>2.9.1</javadoc.plugin.version>
-    <gpg.plugin.version>1.5</gpg.plugin.version>
-
+    <mojo.extra.rules.version>1.0-beta-7</mojo.extra.rules.version>
+    <nexus.plugin.version>1.6.8</nexus.plugin.version>
+    <javadoc.plugin.version>3.0.1</javadoc.plugin.version>
+    <gpg.plugin.version>1.6</gpg.plugin.version>
+    
   </properties>
   
   <dependencyManagement>
@@ -292,7 +292,7 @@
           </configuration>
           <executions>
             <execution>
-              <id>confirm-jdk-6-compatibility</id>
+              <id>confirm-jdk-compatibility</id>
               <phase>verify</phase>
               <goals>
                 <goal>check</goal>

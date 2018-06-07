@@ -64,7 +64,7 @@ public class RemoteAmlService {
             byte[] body = objectMapper.writeValueAsString(amlProfile).getBytes(DEFAULT_CHARSET);
             String digest = signedMessageFactory.create(keyPair.getPrivate(), HTTP_POST, resourcePath, body);
 
-            Map<String, String> headers = new HashMap<String, String>();
+            Map<String, String> headers = new HashMap<>();
             headers.put(DIGEST_HEADER, digest);
             headers.put(YOTI_SDK_HEADER, JAVA);
             headers.put(CONTENT_TYPE, CONTENT_TYPE_JSON);

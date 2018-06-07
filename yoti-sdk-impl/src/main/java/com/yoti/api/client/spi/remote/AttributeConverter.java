@@ -47,7 +47,7 @@ public class AttributeConverter {
     }
 
     private static Set<String> extractMetadata(AttrProto.Attribute attribute, AnchorType anchorType) {
-        Set<String> entries = new HashSet<String>();
+        Set<String> entries = new HashSet<>();
         for (Anchor anchor : attribute.getAnchorsList()) {
             AnchorVerifierSourceData anchorData = AnchorCertificateParser.getTypesFromAnchor(anchor);
             if (anchorData.getType().equals(anchorType)) {

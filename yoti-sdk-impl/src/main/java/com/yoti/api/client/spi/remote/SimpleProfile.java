@@ -90,7 +90,7 @@ final class SimpleProfile implements Profile {
     }
 
     private Map<String, Attribute> createAttributeMap(List<Attribute> attributes) {
-        Map<String, Attribute> result = new HashMap<String, Attribute>();
+        Map<String, Attribute> result = new HashMap<>();
         for (Attribute a : attributes) {
             result.put(a.getName(), a);
         }

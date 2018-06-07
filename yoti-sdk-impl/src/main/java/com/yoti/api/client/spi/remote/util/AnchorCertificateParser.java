@@ -29,7 +29,7 @@ public class AnchorCertificateParser {
     private static final Logger LOG = LoggerFactory.getLogger(AnchorCertificateParser.class);
 
     public static AnchorVerifierSourceData getTypesFromAnchor(Anchor anchor) {
-        Set<String> types = new HashSet<String>(anchor.getOriginServerCertsCount());
+        Set<String> types = new HashSet<>(anchor.getOriginServerCertsCount());
         AnchorType anchorType = AnchorType.UNKNOWN;
 
         try {
@@ -38,7 +38,7 @@ public class AnchorCertificateParser {
             for (ByteString bs : anchor.getOriginServerCertsList()) {
                 X509Certificate certificate = (X509Certificate) factory.generateCertificate(new ByteArrayInputStream(bs.toByteArray()));
 
-                List<String> extensions = new ArrayList<String>();
+                List<String> extensions = new ArrayList<>();
                 for (AnchorType type : AnchorType.values()) {
                     extensions = getListOfStringFromExtension(certificate, type.extensionOid);
                     if (extensions.size() > 0) {
@@ -48,9 +48,7 @@ public class AnchorCertificateParser {
                 }
                 types.addAll(extensions);
             }
-        } catch (IOException e) {
-            LOG.warn("Could not extract anchor type from certificate.", e);
-        } catch (CertificateException e) {
+        } catch (IOException | CertificateException e) {
             LOG.warn("Could not extract anchor type from certificate.", e);
         }
 
@@ -58,7 +56,7 @@ public class AnchorCertificateParser {
     }
 
     private static List<String> getListOfStringFromExtension(X509Certificate certificate, String extensionValue) throws IOException {
-        List<String> extensionsStrings = new ArrayList<String>();
+        List<String> extensionsStrings = new ArrayList<>();
 
         byte[] extension = certificate.getExtensionValue(extensionValue);
         if (extension != null) {

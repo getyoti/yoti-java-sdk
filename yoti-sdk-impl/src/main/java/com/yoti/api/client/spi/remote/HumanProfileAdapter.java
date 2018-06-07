@@ -164,9 +164,7 @@ final class HumanProfileAdapter implements HumanProfile {
     public DocumentDetails getDocumentDetails() {
         try {
             return DocumentDetailsAttributeValue.parseFrom(wrapped.getAttribute(ATTRIBUTE_DOCUMENT_DETAILS));
-        } catch (UnsupportedEncodingException e) {
-            return null;
-        } catch (ParseException e) {
+        } catch (UnsupportedEncodingException | ParseException e) {
             return null;
         }
     }
