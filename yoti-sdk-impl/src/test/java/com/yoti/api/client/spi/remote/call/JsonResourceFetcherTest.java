@@ -34,7 +34,7 @@ public class JsonResourceFetcherTest {
     private static final String ERROR_BODY = "errorBody";
     private static final String TEST_HEADER_KEY = "testHeader";
     private static final String TEST_HEADER_VALUE = "testValue";
-    private static final Map<String, String> TEST_HEADERS = new HashMap<String, String>();
+    private static final Map<String, String> TEST_HEADERS = new HashMap();
 
     @InjectMocks JsonResourceFetcher testObj;
 

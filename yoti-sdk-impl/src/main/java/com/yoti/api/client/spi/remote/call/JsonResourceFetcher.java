@@ -4,15 +4,17 @@ import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.Map;
 import java.util.Scanner;
+
+import com.yoti.api.client.spi.remote.util.QuietCloseable;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class JsonResourceFetcher implements ResourceFetcher {
 
@@ -70,35 +72,25 @@ public final class JsonResourceFetcher implements ResourceFetcher {
     private <T> T parseResponse(HttpURLConnection httpUrlConnection, Class<T> resourceClass) throws ResourceException, IOException {
         int responseCode = httpUrlConnection.getResponseCode();
         if (responseCode >= HttpURLConnection.HTTP_BAD_REQUEST) {
-            String responseBody = readAll(httpUrlConnection.getErrorStream());
+            String responseBody = readError(httpUrlConnection);
             throw new ResourceException(responseCode, responseBody);
         }
-        return parseResource(httpUrlConnection.getInputStream(), resourceClass);
+        return readBody(httpUrlConnection, resourceClass);
     }
 
-    private String readAll(InputStream inputStream) {
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(inputStream, DEFAULT_CHARSET).useDelimiter("\\A");
-            return scanner.hasNext() ? scanner.next() : "";
-        } finally {
-            if (scanner != null) {
-                scanner.close();
-            }
+    private String readError(HttpURLConnection httpURLConnection) throws IOException {
+        try (QuietCloseable<Scanner> scanner = new QuietCloseable(createScanner(httpURLConnection.getErrorStream()))) {
+            return scanner.get().hasNext() ? scanner.get().next() : "";
         }
     }
 
-    private <T> T parseResource(InputStream inputStream, Class<T> clazz) throws IOException {
-        try {
-            return objectMapper.readValue(inputStream, clazz);
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException ioe) {
-                    LOG.error("Cannot close connection to service.");
-                }
-            }
+    private static Scanner createScanner(InputStream inputStream) {
+        return new Scanner(inputStream, DEFAULT_CHARSET).useDelimiter("\\A");
+    }
+
+    private <T> T readBody(HttpURLConnection httpURLConnection, Class<T> clazz) throws IOException {
+        try (QuietCloseable<InputStream> inputStream = new QuietCloseable<>(httpURLConnection.getInputStream())) {
+            return objectMapper.readValue(inputStream.get(), clazz);
         }
     }
 

@@ -109,7 +109,8 @@ public class SecureYotiClientTest {
 
     @Test
     public void getActivityDetails_shouldGetEmptyProfileWithNullContent() throws Exception {
-        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
+        Receipt receipt = new Receipt.Builder()
+                .withRememberMeId(USER_ID)
                 .withWrappedReceiptKey(validReceiptKey)
                 .withOtherPartyProfile(null)
                 .withProfile(null)
@@ -129,7 +130,8 @@ public class SecureYotiClientTest {
     @Test
     public void getActivityDetails_shouldGetEmptyProfileWithEmptyContent() throws Exception {
         byte[] profileContent = new byte[0];
-        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
+        Receipt receipt = new Receipt.Builder()
+                .withRememberMeId(USER_ID)
                 .withWrappedReceiptKey(validReceiptKey)
                 .withOtherPartyProfile(profileContent)
                 .withProfile(profileContent)
@@ -149,7 +151,8 @@ public class SecureYotiClientTest {
     @Test(expected = ProfileException.class)
     public void getActivityDetails_shouldFailWithInvalidTimestamp() throws Exception {
         byte[] profileContent = marshalProfile(encryptionResult.data, encryptionResult.iv);
-        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
+        Receipt receipt = new Receipt.Builder()
+                .withRememberMeId(USER_ID)
                 .withWrappedReceiptKey(validReceiptKey)
                 .withOtherPartyProfile(profileContent)
                 .withProfile(profileContent)
@@ -166,7 +169,8 @@ public class SecureYotiClientTest {
     @Test(expected = ProfileException.class)
     public void getActivityDetails_shouldFailWithNoIV() throws Exception {
         byte[] profileContent = marshalProfile(encryptionResult.data, null);
-        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
+        Receipt receipt = new Receipt.Builder()
+                .withRememberMeId(USER_ID)
                 .withWrappedReceiptKey(validReceiptKey)
                 .withOtherPartyProfile(profileContent)
                 .build();
@@ -179,7 +183,8 @@ public class SecureYotiClientTest {
     @Test(expected = ProfileException.class)
     public void getActivityDetails_shouldFailWithInvalidIV() throws Exception {
         byte[] profileContent = marshalProfile(encryptionResult.data, new byte[] { 1, 2 });
-        Receipt receipt = new Receipt.Builder().withRememberMeId(USER_ID)
+        Receipt receipt = new Receipt.Builder()
+                .withRememberMeId(USER_ID)
                 .withWrappedReceiptKey(validReceiptKey)
                 .withOtherPartyProfile(profileContent)
                 .build();
