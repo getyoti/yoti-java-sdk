@@ -3,27 +3,36 @@ package com.yoti.api.client.qrcode.policy;
 import java.util.List;
 
 /**
- * Attribute
+ * Type and content of an user detail
+ *
  */
 public interface Attribute {
 
     /**
-     * getName
+     * Name identifying the {@link Attribute}
+     *
+     * @return name of the attribute
      */
     String getName();
 
     /**
-     * getAnchors
+     * Links between the attribute and user data sources
+     *
+     * @return list of anchors
      */
     List<String> getAnchors();
 
     /**
-     * getDerivation
+     * Additional derived criteria
+     *
+     * @return derivations
      */
     String getDerivation();
 
     /**
-     * isOptional
+     * Defines the {@link Attribute} as not mandatory
+     *
+     * @return optional
      */
     boolean isOptional();
 
