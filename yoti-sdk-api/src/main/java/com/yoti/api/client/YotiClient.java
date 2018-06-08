@@ -6,8 +6,6 @@ import com.yoti.api.client.qrcode.DynamicQRCode;
 import com.yoti.api.client.qrcode.DynamicScenario;
 import com.yoti.api.client.qrcode.QRCodeException;
 
-;
-
 /**
  * <p>
  * Entry point to interact with the Yoti Connect API.
@@ -15,7 +13,7 @@ import com.yoti.api.client.qrcode.QRCodeException;
  * <p>
  * It can be safely cached and shared even by multiple threads.
  * </p>
- * a
+ *
  */
 public interface YotiClient {
 
@@ -47,7 +45,16 @@ public interface YotiClient {
     AmlResult performAmlCheck(AmlProfile amlProfile) throws AmlException;
 
     /**
+     * Request a dynamic QRCode for a customised policy
      *
+     * @param  dynamicScenario
+     *             Details of the device's callback endpoint, dynamic policy and extensions for the application
+     *
+     * @return an {@link DynamicQRCode}
+     *             QRCode and reference id
+     *
+     * @throws {@link QRCodeException}
+     *             aggregate exception signalling issues during the call
      */
     DynamicQRCode requestQRCode(DynamicScenario dynamicScenario) throws QRCodeException;
 

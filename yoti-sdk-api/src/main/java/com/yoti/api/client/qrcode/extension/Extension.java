@@ -1,22 +1,27 @@
 package com.yoti.api.client.qrcode.extension;
 
 /**
- * Extension
+ * Type and content of a feature for an application
+ *
  */
 public interface Extension {
 
     /**
-     * getType
+     * Get the feature's {@link Type}
+     *
+     * @return the type of the operation
      */
     Type getType();
 
     /**
-     * getContent
+     * Get the feature's details
+     *
+     * @return the payload of the operation
      */
     String getContent();
 
     /**
-     *
+     * Supported features
      */
     static enum Type {
         WORLD_PAY_PAYMENT,
