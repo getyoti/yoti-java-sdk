@@ -38,13 +38,19 @@ final class HumanProfileAdapter implements HumanProfile {
     private static final char SPACE = ' ';
 
     private final Profile wrapped;
+    private final DocumentDetailsAttributeParser documentDetailsAttributeParser;
+    private final GenderParser genderParser;
 
-    private HumanProfileAdapter(Profile wrapped) {
+    private HumanProfileAdapter(Profile wrapped,
+            DocumentDetailsAttributeParser documentDetailsAttributeParser,
+            GenderParser genderParser) {
         this.wrapped = wrapped;
+        this.documentDetailsAttributeParser = documentDetailsAttributeParser;
+        this.genderParser = genderParser;
     }
 
     public static HumanProfile wrap(Profile wrapped) {
-        return new HumanProfileAdapter(wrapped);
+        return new HumanProfileAdapter(wrapped, new DocumentDetailsAttributeParser(), new GenderParser());
     }
 
     @Override
@@ -119,15 +125,7 @@ final class HumanProfileAdapter implements HumanProfile {
     @Override
     public Gender getGender() {
         String genderString = wrapped.getAttribute(ATTRIBUTE_GENDER);
-        if (genderString != null) {
-            try {
-                return Gender.valueOf(genderString);
-            } catch (IllegalArgumentException isa) {
-                return Gender.OTHER;
-            }
-        } else {
-            return null;
-        }
+        return genderParser.parseFrom(genderString);
     }
 
     @Override
@@ -163,7 +161,7 @@ final class HumanProfileAdapter implements HumanProfile {
     @Override
     public DocumentDetails getDocumentDetails() {
         try {
-            return DocumentDetailsAttributeValue.parseFrom(wrapped.getAttribute(ATTRIBUTE_DOCUMENT_DETAILS));
+            return documentDetailsAttributeParser.parseFrom(wrapped.getAttribute(ATTRIBUTE_DOCUMENT_DETAILS));
         } catch (UnsupportedEncodingException | ParseException e) {
             return null;
         }
