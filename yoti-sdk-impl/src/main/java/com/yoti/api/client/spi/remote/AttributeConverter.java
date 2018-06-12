@@ -24,7 +24,7 @@ public class AttributeConverter {
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
     private static final Logger LOG = LoggerFactory.getLogger(AttributeConverter.class);
 
-    public static Attribute convertAttribute(com.yoti.api.client.spi.remote.proto.AttrProto.Attribute attribute) throws ParseException, IOException {
+    public Attribute convertAttribute(AttrProto.Attribute attribute) throws ParseException, IOException {
         switch (attribute.getContentType()) {
             case STRING:
                 return attributeWithMetadata(attribute, attribute.getValue().toString(DEFAULT_CHARSET));

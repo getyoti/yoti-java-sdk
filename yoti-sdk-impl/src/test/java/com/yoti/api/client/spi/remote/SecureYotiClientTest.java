@@ -1,45 +1,13 @@
 package com.yoti.api.client.spi.remote;
 
-import com.google.protobuf.ByteString;
-import com.yoti.api.client.ActivityDetails;
-import com.yoti.api.client.ActivityFailureException;
-import com.yoti.api.client.InitialisationException;
-import com.yoti.api.client.KeyPairSource;
-import com.yoti.api.client.Profile;
-import com.yoti.api.client.ProfileException;
-import com.yoti.api.client.spi.remote.call.ProfileService;
-import com.yoti.api.client.spi.remote.call.Receipt;
-import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
-import com.yoti.api.client.spi.remote.proto.AttrProto.Attribute;
-import com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList;
-import com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType;
-import com.yoti.api.client.spi.remote.proto.EncryptedDataProto;
-import com.yoti.api.client.spi.remote.util.CryptoUtil;
-import com.yoti.api.client.spi.remote.util.CryptoUtil.EncryptionResult;
-import org.hamcrest.Matcher;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.Key;
-import java.security.KeyPair;
-import java.security.PublicKey;
-import java.util.Map;
-
-import static com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.DATE;
-import static com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.JSON;
-import static com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.STRING;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.base64Url;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptAsymmetric;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptSymmetric;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKey;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
+
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -48,17 +16,46 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.PublicKey;
+import java.util.Collection;
+
+import com.yoti.api.client.ActivityDetails;
+import com.yoti.api.client.ActivityFailureException;
+import com.yoti.api.client.Attribute;
+import com.yoti.api.client.InitialisationException;
+import com.yoti.api.client.KeyPairSource;
+import com.yoti.api.client.Profile;
+import com.yoti.api.client.ProfileException;
+import com.yoti.api.client.spi.remote.call.ProfileService;
+import com.yoti.api.client.spi.remote.call.Receipt;
+import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
+import com.yoti.api.client.spi.remote.proto.AttrProto;
+import com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList;
+import com.yoti.api.client.spi.remote.proto.EncryptedDataProto;
+import com.yoti.api.client.spi.remote.util.CryptoUtil;
+import com.yoti.api.client.spi.remote.util.CryptoUtil.EncryptionResult;
+
+import com.google.protobuf.ByteString;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class SecureYotiClientTest {
 
-    private static final String STRING_ATTRIBUTE = "testStringAttr";
-    private static final String STRING_ATTR_VALUE = "someStringValue";
-    private static final String DATE_ATTRIBUTE = "testDateAttr";
-    private static final String DATE_ATTR_VALUE = "1980-08-05";
-    private static final String JSON_KEY = "someKey";
-    private static final String JSON_VALUE = "someValue";
-    private static final String JSON_ATTRIBUTE = "testJsonAttr";
-    private static final String JSON_ATTR_VALUE = "{\"" + JSON_KEY + "\":\"" + JSON_VALUE + "\"}";
+    private static final String STRING_ATTRIBUTE_NAME = "testStringAttr";
+    private static final String DATE_ATTRIBUTE_NAME = "testDateAttr";
+    private static final String JSON_ATTRIBUTE_NAME = "testJsonAttr";
+    private static final AttrProto.Attribute STRING_ATTRIBUTE_PROTO = createAttribute(STRING_ATTRIBUTE_NAME);
+    private static final AttrProto.Attribute DATE_ATTRIBUTE_PROTO = createAttribute(DATE_ATTRIBUTE_NAME);
+    private static final AttrProto.Attribute JSON_ATTRIBUTE_PROTO = createAttribute(JSON_ATTRIBUTE_NAME);
 
     private static final String TOKEN = "test-token-test-test-test";
     private static final String APP_ID = "appId";
@@ -69,6 +66,11 @@ public class SecureYotiClientTest {
 
     @Mock ProfileService profileServiceMock;
     @Mock RemoteAmlService remoteAmlServiceMock;
+    @Mock AttributeConverter attributeConverterMock;
+
+    @Mock Attribute stringAttributeMock;
+    @Mock Attribute dateAttributeMock;
+    @Mock Attribute jsonAttributeMock;
 
     String encryptedToken;
     KeyPairSource validKeyPairSource;
@@ -84,6 +86,13 @@ public class SecureYotiClientTest {
 
         encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
         validKeyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
+
+        when(attributeConverterMock.convertAttribute(STRING_ATTRIBUTE_PROTO)).thenReturn(stringAttributeMock);
+        when(attributeConverterMock.convertAttribute(DATE_ATTRIBUTE_PROTO)).thenReturn(dateAttributeMock);
+        when(attributeConverterMock.convertAttribute(JSON_ATTRIBUTE_PROTO)).thenReturn(jsonAttributeMock);
+        when(stringAttributeMock.getName()).thenReturn(STRING_ATTRIBUTE_NAME);
+        when(dateAttributeMock.getName()).thenReturn(DATE_ATTRIBUTE_NAME);
+        when(jsonAttributeMock.getName()).thenReturn(JSON_ATTRIBUTE_NAME);
     }
 
     @Test
@@ -100,11 +109,12 @@ public class SecureYotiClientTest {
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         ActivityDetails result = testObj.getActivityDetails(encryptedToken);
 
-        assertNotNull(result);
-        validateProfileAttributes(result.getUserProfile());
+        Collection<Attribute> profileAttributes = result.getUserProfile().getAttributes();
+        assertThat(profileAttributes, hasSize(3));
+        assertThat(profileAttributes, hasItems(stringAttributeMock, dateAttributeMock, jsonAttributeMock));
     }
 
     @Test
@@ -120,11 +130,13 @@ public class SecureYotiClientTest {
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         ActivityDetails result = testObj.getActivityDetails(encryptedToken);
 
         assertNotNull(result);
-        validateEmptyProfile(result.getUserProfile());
+        Profile profile = result.getUserProfile();
+        assertNotNull(profile.getAttributes());
+        assertEquals(0, profile.getAttributes().size());
     }
 
     @Test
@@ -141,11 +153,13 @@ public class SecureYotiClientTest {
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         ActivityDetails result = testObj.getActivityDetails(encryptedToken);
 
         assertNotNull(result);
-        validateEmptyProfile(result.getUserProfile());
+        Profile profile = result.getUserProfile();
+        assertNotNull(profile.getAttributes());
+        assertEquals(0, profile.getAttributes().size());
     }
 
     @Test(expected = ProfileException.class)
@@ -162,7 +176,7 @@ public class SecureYotiClientTest {
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
@@ -176,7 +190,7 @@ public class SecureYotiClientTest {
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
@@ -190,7 +204,7 @@ public class SecureYotiClientTest {
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
@@ -198,7 +212,7 @@ public class SecureYotiClientTest {
     public void getActivityDetails_shouldFailWithNoReceipt() throws Exception {
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(null);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
@@ -207,7 +221,7 @@ public class SecureYotiClientTest {
         Receipt receipt = new Receipt.Builder().withOutcome(Receipt.Outcome.FAILURE).build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
@@ -219,7 +233,7 @@ public class SecureYotiClientTest {
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
@@ -232,7 +246,7 @@ public class SecureYotiClientTest {
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
@@ -244,7 +258,7 @@ public class SecureYotiClientTest {
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
@@ -256,7 +270,7 @@ public class SecureYotiClientTest {
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
@@ -264,7 +278,7 @@ public class SecureYotiClientTest {
     public void getActivityDetails_shouldFailWithExceptionFromProfileService() throws Exception {
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenThrow(new ProfileException("Test exception"));
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
@@ -272,7 +286,7 @@ public class SecureYotiClientTest {
     public void getActivityDetails_shouldFailWhenStreamExceptionLoadingKeys() throws Exception {
         KeyPairSource exceptionKeyPairSource = new StaticKeyPairSource(true);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, exceptionKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, exceptionKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
@@ -280,35 +294,35 @@ public class SecureYotiClientTest {
     public void getActivityDetails_shouldFailWhenKeyPairSourceExceptionLoadingKeys() throws Exception {
         KeyPairSource exceptionKeyPairSource = new StaticKeyPairSource(false);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, exceptionKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, exceptionKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructor_shouldFailWithNullApplicationId() throws Exception {
-        new SecureYotiClient(null, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        new SecureYotiClient(null, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructor_shouldFailWithNullKeyPairSource() throws Exception {
-        new SecureYotiClient(APP_ID, null, profileServiceMock, remoteAmlServiceMock);
+        new SecureYotiClient(APP_ID, null, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructor_shouldFailWithNullProfileService() throws Exception {
-        new SecureYotiClient(APP_ID, validKeyPairSource, null, remoteAmlServiceMock);
+        new SecureYotiClient(APP_ID, validKeyPairSource, null, remoteAmlServiceMock, attributeConverterMock);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructor_shouldFailWithNullAmlService() throws Exception {
-        new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, null);
+        new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, null, attributeConverterMock);
     }
 
     @Test(expected = InitialisationException.class)
     public void getActivityDetails_shouldFailWithNoKeyPair() throws Exception {
         KeyPairSource invalidKeyPairSource = new StaticKeyPairSource("no-key-pair-in-file");
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, invalidKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, invalidKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
@@ -316,55 +330,38 @@ public class SecureYotiClientTest {
     public void getActivityDetails_shouldFailWithInvalidKeyPair() throws Exception {
         KeyPairSource invalidKeyPairSource = new StaticKeyPairSource(CryptoUtil.INVALID_KEY_PAIR_PEM);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, invalidKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, invalidKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(encryptedToken);
     }
 
     @Test(expected = ProfileException.class)
     public void getActivityDetails_shouldFailWithInvalidToken() throws Exception {
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(TOKEN);
     }
 
     @Test(expected = ProfileException.class)
     public void getActivityDetails_shouldFailWithNullToken() throws Exception {
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock);
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         testObj.getActivityDetails(null);
-    }
-
-    private void validateProfileAttributes(Profile profile) {
-        assertNotNull(profile.getAttributes());
-
-        assertEquals(STRING_ATTR_VALUE, profile.getAttribute(STRING_ATTRIBUTE));
-        assertEquals(DATE_ATTR_VALUE, profile.getAttribute(DATE_ATTRIBUTE, DateAttributeValue.class).toString());
-        assertEquals(1, profile.getAttribute(JSON_ATTRIBUTE, Map.class).size());
-        assertThat(profile.getAttribute(JSON_ATTRIBUTE, Map.class), (Matcher) hasEntry(JSON_KEY, JSON_VALUE));
-
-        assertEquals(3, profile.getAttributes().size());
-    }
-
-    private void validateEmptyProfile(Profile profile) {
-        assertNotNull(profile.getAttributes());
-        assertEquals(0, profile.getAttributes().size());
     }
 
     private byte[] createProfileData() {
         return AttributeList.newBuilder()
-                .addAttributes(createAttribute(STRING_ATTRIBUTE, STRING_ATTR_VALUE, STRING))
-                .addAttributes(createAttribute(DATE_ATTRIBUTE, DATE_ATTR_VALUE, DATE))
-                .addAttributes(createAttribute(JSON_ATTRIBUTE, JSON_ATTR_VALUE, JSON))
+                .addAttributes(STRING_ATTRIBUTE_PROTO)
+                .addAttributes(DATE_ATTRIBUTE_PROTO)
+                .addAttributes(JSON_ATTRIBUTE_PROTO)
                 .build().toByteArray();
     }
 
-    private static Attribute createAttribute(String name, String value, ContentType contentType) {
-        return Attribute.newBuilder()
-                .setContentType(contentType)
+    private static AttrProto.Attribute createAttribute(String name) {
+        return AttrProto.Attribute.newBuilder()
                 .setName(name)
-                .setValue(ByteString.copyFromUtf8(value))
                 .build();
     }
 
     private static class StaticKeyPairSource implements KeyPairSource {
+
         private String keypair;
         private boolean streamException;
         private boolean sourceException;
@@ -392,6 +389,7 @@ public class SecureYotiClientTest {
                 return streamVisitor.accept(is);
             }
         }
+
     }
 
     private byte[] marshalProfile(byte[] data, byte[] iv) {
