@@ -1,21 +1,23 @@
 package com.yoti.api.client.spi.remote;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
+import java.text.ParseException;
+
 import com.yoti.api.client.DocumentDetails;
 import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.Profile;
-import org.junit.Before;
+
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -31,19 +33,17 @@ public class HumanProfileAdapterTest {
 
     private static final String SOME_GIVEN_NAMES = "Some Given Names";
     private static final String SOME_FAMILY_NAME = "Some Family Name";
-    private static final String GENDER_MALE = "MALE";
-    private static final String GENDER_INVALID = "X";
+    private static final String SOME_GENDER = "someGender";
     private static final String VALID_DOCUMENT_DETAILS = "PASSPORT GBR 12345abc 2016-05-01";
     private static final String INVALID_DOCUMENT_DETAILS = "invalid";
 
-    HumanProfileAdapter testObj;
+    @InjectMocks HumanProfileAdapter testObj;
 
     @Mock Profile profileMock;
+    @Mock DocumentDetailsAttributeParser documentDetailsAttributeParserMock;
+    @Mock GenderParser genderParserMock;
 
-    @Before
-    public void setUp() throws Exception {
-        testObj = (HumanProfileAdapter) HumanProfileAdapter.wrap(profileMock);
-    }
+    @Mock DocumentDetails documentDetailsMock;
 
     @Test
     public void isAgeVerified_shouldReturnNullWhenBothAttributesAreMissing() {
@@ -82,49 +82,39 @@ public class HumanProfileAdapterTest {
     }
 
     @Test
-    public void getGender_shouldReturnGender() {
-        when(profileMock.getAttribute(ATTR_GENDER)).thenReturn(GENDER_MALE);
+    public void getGender_shouldReturnGenderFromParser() {
+        when(profileMock.getAttribute(ATTR_GENDER)).thenReturn(SOME_GENDER);
+        when(genderParserMock.parseFrom(SOME_GENDER)).thenReturn(HumanProfile.Gender.OTHER);
 
         HumanProfile.Gender result = testObj.getGender();
 
-        assertEquals(HumanProfile.Gender.MALE, result);
+        Assert.assertEquals(HumanProfile.Gender.OTHER, result);
     }
 
     @Test
-    public void getGender_shouldNotReturnGenderForNullAttribute() {
-        HumanProfile.Gender result = testObj.getGender();
-
-        assertNull(result);
-    }
-
-    @Test
-    public void getGender_shouldNotReturnGenderForInvalidAttribute() {
-        when(profileMock.getAttribute(ATTR_GENDER)).thenReturn(GENDER_INVALID);
-
-        HumanProfile.Gender result = testObj.getGender();
-
-        assertEquals(HumanProfile.Gender.OTHER, result);
-    }
-
-    @Test
-    public void getDocumentDetails_shouldReturnDocumentDetails() {
+    public void getDocumentDetails_shouldReturnDocumentDetails() throws Exception {
         when(profileMock.getAttribute(ATTR_DOCUMENT_DETAILS)).thenReturn(VALID_DOCUMENT_DETAILS);
+        when(documentDetailsAttributeParserMock.parseFrom(VALID_DOCUMENT_DETAILS)).thenReturn(documentDetailsMock);
 
         DocumentDetails result = testObj.getDocumentDetails();
 
-        assertEquals(DocumentDetails.DocumentType.PASSPORT, result.getType());
+        assertSame(documentDetailsMock, result);
     }
 
     @Test
-    public void getDocumentDetails_shouldNotReturnDocumentDetailsForNullAttribute() {
+    public void getDocumentDetails_shouldNotReturnDocumentDetailsForNullAttribute() throws Exception {
+        when(profileMock.getAttribute(ATTR_DOCUMENT_DETAILS)).thenReturn(null);
+        when(documentDetailsAttributeParserMock.parseFrom(null)).thenReturn(null);
+
         DocumentDetails result = testObj.getDocumentDetails();
 
         assertNull(result);
     }
 
     @Test
-    public void getDocumentDetails_shouldNotReturnDocumentDetailsForInvalidAttribute() {
+    public void getDocumentDetails_shouldSwallowExceptionCausedByInvalidAttribute() throws Exception {
         when(profileMock.getAttribute(ATTR_DOCUMENT_DETAILS)).thenReturn(INVALID_DOCUMENT_DETAILS);
+        when(documentDetailsAttributeParserMock.parseFrom(INVALID_DOCUMENT_DETAILS)).thenThrow(new ParseException("someMessage", 1));
 
         DocumentDetails result = testObj.getDocumentDetails();
 
