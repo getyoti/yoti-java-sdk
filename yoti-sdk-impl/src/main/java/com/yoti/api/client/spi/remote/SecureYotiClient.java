@@ -68,6 +68,7 @@ final class SecureYotiClient implements YotiClient {
     private final KeyPair keyPair;
     private final ProfileService profileService;
     private final RemoteAmlService remoteAmlService;
+    private final AttributeConverter attributeConverter;
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
@@ -76,17 +77,19 @@ final class SecureYotiClient implements YotiClient {
     SecureYotiClient(String applicationId,
                      KeyPairSource kpSource,
                      ProfileService profileService,
-                     RemoteAmlService remoteAmlService) throws InitialisationException {
+                     RemoteAmlService remoteAmlService,
+                     AttributeConverter attributeConverter) throws InitialisationException {
         this.appId = notNull(applicationId, "Application id");
         this.keyPair = loadKeyPair(notNull(kpSource, "Key pair source"));
         this.profileService = notNull(profileService, "Profile service");
         this.remoteAmlService = notNull(remoteAmlService, "Aml service");
+        this.attributeConverter = notNull(attributeConverter, "Attribute Converter");
     }
 
     @Override
     public ActivityDetails getActivityDetails(String encryptedConnectToken) throws ProfileException {
         Receipt receipt = getReceipt(encryptedConnectToken, keyPair);
-        return buildReceipt(receipt, keyPair.getPrivate());
+        return buildActivityDetails(receipt, keyPair.getPrivate());
     }
 
     @Override
@@ -127,7 +130,7 @@ final class SecureYotiClient implements YotiClient {
         return connectToken;
     }
 
-    private ActivityDetails buildReceipt(Receipt receipt, PrivateKey privateKey) throws ProfileException {
+    private ActivityDetails buildActivityDetails(Receipt receipt, PrivateKey privateKey) throws ProfileException {
         validateReceipt(receipt);
         Key secretKey = parseKey(decrypt(receipt.getWrappedReceiptKey(), privateKey));
         Profile userProfile = createProfile(receipt.getOtherPartyProfile(), secretKey);
@@ -137,7 +140,7 @@ final class SecureYotiClient implements YotiClient {
 
     private void validateReceipt(Receipt receipt) throws ActivityFailureException {
         if (receipt.getOutcome() == null || !receipt.getOutcome().isSuccessful()) {
-            throw new ActivityFailureException("Sharing activity uncuccessful for " + receipt.getDisplayReceiptId());
+            throw new ActivityFailureException("Sharing activity unsuccessful for " + receipt.getDisplayReceiptId());
         }
     }
 
@@ -178,7 +181,7 @@ final class SecureYotiClient implements YotiClient {
         List<Attribute> parsedAttributes = new ArrayList<>();
         for (AttrProto.Attribute attribute : message.getAttributesList()) {
             try {
-                parsedAttributes.add(AttributeConverter.convertAttribute(attribute));
+                parsedAttributes.add(attributeConverter.convertAttribute(attribute));
             } catch (IOException e) {
                 LOG.info("Cannot decode value for attribute {}", attribute.getName());
             } catch (ParseException e) {
@@ -188,7 +191,6 @@ final class SecureYotiClient implements YotiClient {
         return parsedAttributes;
     }
 
-    
     private Profile createProfile(List<Attribute> attributeList) {
         return new SimpleProfile(attributeList);
     }

@@ -22,8 +22,11 @@ public final class SecureYotiClientFactory implements YotiClientFactory {
     public YotiClient getInstance(YotiClientConfiguration configuration) throws InitialisationException {
         LOG.debug("Creating SecureYotiClient for application {} from {}", configuration.getApplicationId(),
                 configuration.getKeyPairSource());
-        return new SecureYotiClient(configuration.getApplicationId(), configuration.getKeyPairSource(),
-                RemoteProfileService.newInstance(), RemoteAmlService.newInstance());
+        return new SecureYotiClient(configuration.getApplicationId(),
+                configuration.getKeyPairSource(),
+                RemoteProfileService.newInstance(),
+                RemoteAmlService.newInstance(),
+                new AttributeConverter());
     }
 
 }
