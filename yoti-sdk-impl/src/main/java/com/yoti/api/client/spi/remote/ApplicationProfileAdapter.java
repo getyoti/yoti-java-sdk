@@ -9,7 +9,6 @@ import com.yoti.api.client.Profile;
 
 /**
  * Adapter linking Profile and ApplicationProfile together by wrapping the latter and exposing well-known attributes.
- *
  */
 public final class ApplicationProfileAdapter implements ApplicationProfile {
 
@@ -17,6 +16,7 @@ public final class ApplicationProfileAdapter implements ApplicationProfile {
     private static final String ATTRIBUTE_APPLICATION_LOGO = "application_logo";
     private static final String ATTRIBUTE_APPLICATION_URL = "application_url";
     private static final String ATTRIBUTE_APPLICATION_RECEIPT_BGCOLOR = "application_receipt_bgcolor";
+
     private final Profile wrapped;
 
     private ApplicationProfileAdapter(Profile wrapped) {
@@ -28,52 +28,42 @@ public final class ApplicationProfileAdapter implements ApplicationProfile {
     }
 
     @Override
-    public String getAttribute(String name) {
+    public Attribute getAttribute(String name) {
         return wrapped.getAttribute(name);
     }
 
     @Override
-    public boolean is(String name, boolean defaultValue) {
-        return wrapped.is(name, defaultValue);
-    }
-
-    @Override
-    public <T> T getAttribute(String name, Class<T> clazz) {
+    public <T> Attribute<T> getAttribute(String name, Class<T> clazz) {
         return wrapped.getAttribute(name, clazz);
     }
 
     @Override
-    public Attribute getAttributeObject(String name) {
-        return wrapped.getAttributeObject(name);
-    }
-
-    @Override
-    public <T> T findAttributeStartingWith(String name, Class<T> clazz) {
+    public <T> Attribute<T> findAttributeStartingWith(String name, Class<T> clazz) {
         return wrapped.findAttributeStartingWith(name, clazz);
     }
 
     @Override
-    public Collection<Attribute> getAttributes() {
+    public Collection<Attribute<?>> getAttributes() {
         return wrapped.getAttributes();
     }
 
     @Override
-    public String getApplicationName() {
-        return wrapped.getAttribute(ATTRIBUTE_APPLICATION_NAME);
+    public Attribute<String> getApplicationName() {
+        return wrapped.getAttribute(ATTRIBUTE_APPLICATION_NAME, String.class);
     }
 
     @Override
-    public String getApplicationUrl() {
-        return wrapped.getAttribute(ATTRIBUTE_APPLICATION_URL);
+    public Attribute<String> getApplicationUrl() {
+        return wrapped.getAttribute(ATTRIBUTE_APPLICATION_URL, String.class);
     }
 
     @Override
-    public String getApplicationReceiptBgColor() {
-        return wrapped.getAttribute(ATTRIBUTE_APPLICATION_RECEIPT_BGCOLOR);
+    public Attribute<String> getApplicationReceiptBgColor() {
+        return wrapped.getAttribute(ATTRIBUTE_APPLICATION_RECEIPT_BGCOLOR, String.class);
     }
 
     @Override
-    public Image getApplicationLogo() {
+    public Attribute<Image> getApplicationLogo() {
         return wrapped.getAttribute(ATTRIBUTE_APPLICATION_LOGO, Image.class);
     }
 
@@ -106,4 +96,5 @@ public final class ApplicationProfileAdapter implements ApplicationProfile {
         }
         return true;
     }
+
 }

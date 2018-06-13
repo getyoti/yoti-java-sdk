@@ -7,6 +7,7 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKey;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -22,11 +23,14 @@ import java.io.InputStream;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.PublicKey;
+import java.text.ParseException;
 import java.util.Collection;
+import java.util.Map;
 
 import com.yoti.api.client.ActivityDetails;
 import com.yoti.api.client.ActivityFailureException;
 import com.yoti.api.client.Attribute;
+import com.yoti.api.client.Date;
 import com.yoti.api.client.InitialisationException;
 import com.yoti.api.client.KeyPairSource;
 import com.yoti.api.client.Profile;
@@ -68,9 +72,9 @@ public class SecureYotiClientTest {
     @Mock RemoteAmlService remoteAmlServiceMock;
     @Mock AttributeConverter attributeConverterMock;
 
-    @Mock Attribute stringAttributeMock;
-    @Mock Attribute dateAttributeMock;
-    @Mock Attribute jsonAttributeMock;
+    @Mock Attribute<String> stringAttributeMock;
+    @Mock Attribute<Date> dateAttributeMock;
+    @Mock Attribute<Map> jsonAttributeMock;
 
     String encryptedToken;
     KeyPairSource validKeyPairSource;
@@ -87,9 +91,6 @@ public class SecureYotiClientTest {
         encryptedToken = base64Url(encryptAsymmetric(TOKEN.getBytes(), publicKey));
         validKeyPairSource = new StaticKeyPairSource(CryptoUtil.KEY_PAIR_PEM);
 
-        when(attributeConverterMock.convertAttribute(STRING_ATTRIBUTE_PROTO)).thenReturn(stringAttributeMock);
-        when(attributeConverterMock.convertAttribute(DATE_ATTRIBUTE_PROTO)).thenReturn(dateAttributeMock);
-        when(attributeConverterMock.convertAttribute(JSON_ATTRIBUTE_PROTO)).thenReturn(jsonAttributeMock);
         when(stringAttributeMock.getName()).thenReturn(STRING_ATTRIBUTE_NAME);
         when(dateAttributeMock.getName()).thenReturn(DATE_ATTRIBUTE_NAME);
         when(jsonAttributeMock.getName()).thenReturn(JSON_ATTRIBUTE_NAME);
@@ -108,13 +109,41 @@ public class SecureYotiClientTest {
                 .withOutcome(Receipt.Outcome.SUCCESS)
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
+        when(attributeConverterMock.<String>convertAttribute(STRING_ATTRIBUTE_PROTO)).thenReturn(stringAttributeMock);
+        when(attributeConverterMock.<Date>convertAttribute(DATE_ATTRIBUTE_PROTO)).thenReturn(dateAttributeMock);
+        when(attributeConverterMock.<Map>convertAttribute(JSON_ATTRIBUTE_PROTO)).thenReturn(jsonAttributeMock);
 
         SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
         ActivityDetails result = testObj.getActivityDetails(encryptedToken);
 
-        Collection<Attribute> profileAttributes = result.getUserProfile().getAttributes();
+        Collection<Attribute<?>> profileAttributes = result.getUserProfile().getAttributes();
         assertThat(profileAttributes, hasSize(3));
         assertThat(profileAttributes, hasItems(stringAttributeMock, dateAttributeMock, jsonAttributeMock));
+    }
+
+    @Test
+    public void getActivityDetails_shouldTolerateFailureToParseSomeAttributes() throws Exception {
+        byte[] profileContent = marshalProfile(encryptionResult.data, encryptionResult.iv);
+        Receipt receipt = new Receipt.Builder()
+                .withRememberMeId(USER_ID)
+                .withWrappedReceiptKey(validReceiptKey)
+                .withOtherPartyProfile(profileContent)
+                .withProfile(profileContent)
+                .withTimestamp(TIMESTAMP)
+                .withReceiptId(RECEIPT_ID)
+                .withOutcome(Receipt.Outcome.SUCCESS)
+                .build();
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
+        when(attributeConverterMock.<String>convertAttribute(STRING_ATTRIBUTE_PROTO)).thenReturn(stringAttributeMock);
+        when(attributeConverterMock.<Date>convertAttribute(DATE_ATTRIBUTE_PROTO)).thenThrow(new IOException());
+        when(attributeConverterMock.<Map>convertAttribute(JSON_ATTRIBUTE_PROTO)).thenThrow(new ParseException("some message", 1));
+
+        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+        ActivityDetails result = testObj.getActivityDetails(encryptedToken);
+
+        Collection<Attribute<?>> profileAttributes = result.getUserProfile().getAttributes();
+        assertThat(profileAttributes, hasSize(1));
+        assertThat(profileAttributes, hasItem(stringAttributeMock));
     }
 
     @Test
@@ -164,12 +193,11 @@ public class SecureYotiClientTest {
 
     @Test(expected = ProfileException.class)
     public void getActivityDetails_shouldFailWithInvalidTimestamp() throws Exception {
-        byte[] profileContent = marshalProfile(encryptionResult.data, encryptionResult.iv);
         Receipt receipt = new Receipt.Builder()
                 .withRememberMeId(USER_ID)
                 .withWrappedReceiptKey(validReceiptKey)
-                .withOtherPartyProfile(profileContent)
-                .withProfile(profileContent)
+                .withOtherPartyProfile(null)
+                .withProfile(null)
                 .withTimestamp(INVALID_TIMESTAMP)
                 .withReceiptId(RECEIPT_ID)
                 .withOutcome(Receipt.Outcome.SUCCESS)

@@ -10,6 +10,7 @@ import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.Profile;
 
 final class SimpleActivityDetails implements ActivityDetails {
+
     private final String userId;
     private final ApplicationProfile applicationProfile;
     private final HumanProfile userProfile;
@@ -25,7 +26,7 @@ final class SimpleActivityDetails implements ActivityDetails {
         this.receiptId = toBase64String(notNull(receiptId, "Receipt id"));
         
         if(this.userProfile.getSelfie() != null) {
-            this.base64Selfie = "data:image/jpeg;base64," + toBase64String(this.userProfile.getSelfie().getContent());
+            this.base64Selfie = "data:image/jpeg;base64," + toBase64String(this.userProfile.getSelfie().getValue().getContent());
         } else {
             this.base64Selfie = "";
         }
@@ -67,4 +68,5 @@ final class SimpleActivityDetails implements ActivityDetails {
         }
         return value;
     }
+
 }

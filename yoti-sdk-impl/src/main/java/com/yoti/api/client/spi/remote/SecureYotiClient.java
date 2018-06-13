@@ -49,7 +49,6 @@ import com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import org.bouncycastle.openssl.PEMException;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
@@ -99,19 +98,19 @@ final class SecureYotiClient implements YotiClient {
     }
 
     private Receipt getReceipt(String encryptedConnectToken, KeyPair keyPair) throws ProfileException {
-        LOG.debug("Decrypting connect token: {}", encryptedConnectToken);
+        LOG.debug("Decrypting connect token: '{}'", encryptedConnectToken);
         String connectToken = decryptConnectToken(encryptedConnectToken, keyPair.getPrivate());
-        LOG.debug("Connect token decrypted: {}", connectToken);
+        LOG.debug("Connect token decrypted: '{}'", connectToken);
         Receipt receipt = profileService.getReceipt(keyPair, appId, connectToken);
         if (receipt == null) {
-            throw new ProfileException("No receipt for " + connectToken + " was found");
+            throw new ProfileException("No receipt for '" + connectToken + "' was found");
         }
         return receipt;
     }
 
     private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {
         try {
-            LOG.debug("Loading key pair from " + kpSource);
+            LOG.debug("Loading key pair from '{}'", kpSource);
             return kpSource.getFromStream(new KeyStreamVisitor());
         } catch (IOException e) {
             throw new InitialisationException("Cannot load key pair", e);
@@ -132,7 +131,7 @@ final class SecureYotiClient implements YotiClient {
 
     private ActivityDetails buildActivityDetails(Receipt receipt, PrivateKey privateKey) throws ProfileException {
         validateReceipt(receipt);
-        Key secretKey = parseKey(decrypt(receipt.getWrappedReceiptKey(), privateKey));
+        Key secretKey = new SecretKeySpec(decrypt(receipt.getWrappedReceiptKey(), privateKey), SYMMETRIC_CIPHER);
         Profile userProfile = createProfile(receipt.getOtherPartyProfile(), secretKey);
         Profile applicationProfile = createProfile(receipt.getProfile(), secretKey);
         return createActivityDetails(userProfile, applicationProfile, receipt);
@@ -145,13 +144,13 @@ final class SecureYotiClient implements YotiClient {
     }
 
     private Profile createProfile(byte[] profileBytes, Key secretKey) throws ProfileException {
-        List<Attribute> attributeList = new ArrayList<>();
+        List<Attribute<?>> attributeList = new ArrayList<>();
         if (profileBytes != null && profileBytes.length > 0) {
             EncryptedData encryptedData = parseProfileContent(profileBytes);
             byte[] profileData = decrypt(encryptedData.getCipherText(), secretKey, encryptedData.getIv());
             attributeList = parseProfile(profileData);
         }
-        return createProfile(attributeList);
+        return new SimpleProfile(attributeList);
     }
 
     private EncryptedData parseProfileContent(byte[] profileContent) throws ProfileException {
@@ -162,14 +161,10 @@ final class SecureYotiClient implements YotiClient {
         }
     }
 
-    private Key parseKey(byte[] keyVal) {
-        return new SecretKeySpec(keyVal, SYMMETRIC_CIPHER);
-    }
-
-    private List<Attribute> parseProfile(byte[] profileData) throws ProfileException {
+    private List<Attribute<?>> parseProfile(byte[] profileData) throws ProfileException {
         try {
             AttributeList message = AttributeList.parseFrom(profileData);
-            List<Attribute> attributeList = parseAttributes(message);
+            List<Attribute<?>> attributeList = parseAttributes(message);
             LOG.debug("{} attribute(s) parsed", attributeList.size());
             return attributeList;
         } catch (InvalidProtocolBufferException e) {
@@ -177,32 +172,24 @@ final class SecureYotiClient implements YotiClient {
         }
     }
 
-    private List<Attribute> parseAttributes(AttributeList message) {
-        List<Attribute> parsedAttributes = new ArrayList<>();
+    private List<Attribute<?>> parseAttributes(AttributeList message) {
+        List<Attribute<?>> parsedAttributes = new ArrayList<>();
         for (AttrProto.Attribute attribute : message.getAttributesList()) {
             try {
                 parsedAttributes.add(attributeConverter.convertAttribute(attribute));
-            } catch (IOException e) {
-                LOG.info("Cannot decode value for attribute {}", attribute.getName());
-            } catch (ParseException e) {
-                LOG.info("Cannot parse value for attribute {}", attribute.getName());
+            } catch (IOException | ParseException e) {
+                LOG.warn("Cannot parse value for attribute '{}'", attribute.getName());
             }
         }
         return parsedAttributes;
-    }
-
-    private Profile createProfile(List<Attribute> attributeList) {
-        return new SimpleProfile(attributeList);
     }
 
     private ActivityDetails createActivityDetails(Profile userProfile, Profile applicationProfile, Receipt receipt) throws ProfileException {
         try {
             byte[] rmi = receipt.getRememberMeId();
             String rememberMeId = (rmi == null) ? null : new String(Base64.getEncoder().encode(rmi), DEFAULT_CHARSET);
-
             SimpleDateFormat format = new SimpleDateFormat(RFC3339_PATTERN);
             Date timestamp = format.parse(receipt.getTimestamp());
-
             return new SimpleActivityDetails(rememberMeId, userProfile, applicationProfile, timestamp, receipt.getReceiptId());
         } catch (UnsupportedEncodingException e) {
             throw new ProfileException("Cannot parse user ID", e);
@@ -215,31 +202,27 @@ final class SecureYotiClient implements YotiClient {
         if (initVector == null) {
             throw new ProfileException("Receipt key IV must not be null.");
         }
-        byte[] result = null;
         try {
             Cipher cipher = Cipher.getInstance(SYMMETRIC_CIPHER, BOUNCY_CASTLE_PROVIDER);
             cipher.init(DECRYPT_MODE, key, new IvParameterSpec(initVector.toByteArray()));
-            result = cipher.doFinal(source.toByteArray());
+            return cipher.doFinal(source.toByteArray());
         } catch (GeneralSecurityException gse) {
             throw new ProfileException("Error decrypting data", gse);
         } catch (IllegalArgumentException iae) {
             throw new ProfileException("Base64 encoding error", iae);
         }
-        return result;
     }
 
     private byte[] decrypt(byte[] source, PrivateKey key) throws ProfileException {
-        byte[] result = null;
         try {
             Cipher cipher = Cipher.getInstance(ASYMMETRIC_CIPHER, BOUNCY_CASTLE_PROVIDER);
             cipher.init(DECRYPT_MODE, key);
-            result = cipher.doFinal(source);
+            return cipher.doFinal(source);
         } catch (GeneralSecurityException gse) {
             throw new ProfileException("Error decrypting data", gse);
         } catch (IllegalArgumentException iae) {
             throw new ProfileException("Base64 encoding error", iae);
         }
-        return result;
     }
 
     private static class KeyStreamVisitor implements StreamVisitor {
@@ -254,15 +237,15 @@ final class SecureYotiClient implements YotiClient {
             return keyPair;
         }
 
-        private KeyPair findKeyPair(PEMParser reader) throws IOException, PEMException {
-            KeyPair keyPair = null;
-            for (Object o = null; (o = reader.readObject()) != null; ) {
+        private KeyPair findKeyPair(PEMParser reader) throws IOException {
+            for (Object o; (o = reader.readObject()) != null; ) {
                 if (o instanceof PEMKeyPair) {
-                    keyPair = new JcaPEMKeyConverter().getKeyPair((PEMKeyPair) o);
-                    break;
+                    return new JcaPEMKeyConverter().getKeyPair((PEMKeyPair) o);
                 }
             }
-            return keyPair;
+            return null;
         }
+
     }
+
 }
