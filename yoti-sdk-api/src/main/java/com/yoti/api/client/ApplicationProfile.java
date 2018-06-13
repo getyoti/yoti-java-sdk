@@ -6,23 +6,24 @@ package com.yoti.api.client;
  *
  */
 public interface ApplicationProfile extends Profile {
+
     /**
      * The name of the application.
      * @return The name of the application.
      */
-    String getApplicationName();
+    Attribute<String> getApplicationName();
 
     /**
      * The URI verified by Portal where the application is available at
      * @return The URI verified by Portal where the application is available at
      */
-    String getApplicationUrl();
+    Attribute<String> getApplicationUrl();
 
     /**
      * The logo of the application that will be displayed to those users that perform a sharing with it.
      * @return The logo of the application that will be displayed to those users that perform a sharing with it.
      */
-    Image getApplicationLogo();
+    Attribute<Image> getApplicationLogo();
 
     /**
      * The background colour that will be displayed on each receipt the user gets as a result of a sharing with the
@@ -31,5 +32,6 @@ public interface ApplicationProfile extends Profile {
      * @return The background colour that will be displayed on each receipt the user gets as a result of a sharing with the
      * application.
      */
-    String getApplicationReceiptBgColor();
+    Attribute<String> getApplicationReceiptBgColor();
+
 }

@@ -12,94 +12,63 @@ import com.yoti.api.client.Profile;
 
 final class SimpleProfile implements Profile {
 
-    private final Map<String, Attribute> attributes;
-    private final Map<String, Attribute> protectedAttributes;
+    private final Map<String, Attribute<?>> protectedAttributes;
 
     /**
      * Create a new profile based on a list of attributes
      *
-     * @param attributeList
-     *            list containing the attributes for this profile
+     * @param attributeList list containing the attributes for this profile
      */
-    public SimpleProfile(List<Attribute> attributeList) {
+    public SimpleProfile(List<Attribute<?>> attributeList) {
         if (attributeList == null) {
             throw new IllegalArgumentException("Attributes must not be null.");
         }
-        this.attributes = createAttributeMap(attributeList);
-        this.protectedAttributes = unmodifiableMap(attributes);
-    }
-
-    /**
-     * Get string attribute by its name.
-     *
-     * @param name
-     *            attribute name.
-     * @return String value of attribute, null if the attribute has a different type.
-     */
-    @Override
-    public String getAttribute(String name) {
-        Attribute attribute = getAttributeObject(name);
-        return (attribute == null) ? null : attribute.getValue(String.class);
-    }
-
-    @Override
-    public Attribute getAttributeObject(String name) {
-        ensureName(name);
-        return attributes.get(name);
-    }
-
-    /**
-     * Get boolean attributes by its name.
-     *
-     * @param name
-     *            attribute name.
-     * @param defaultValue
-     *            default value if value is null
-     * @return boolean value of attribute, defaultValue if the specified attribute has a different type.
-     */
-    @Override
-    public boolean is(String name, boolean defaultValue) {
-        Attribute attribute = getAttributeObject(name);
-        return (attribute == null) ? defaultValue : attribute.getValueOrDefault(Boolean.class, defaultValue);
+        this.protectedAttributes = unmodifiableMap(createAttributeMap(attributeList));
     }
 
     /**
      * Return attribute value for a key.
      *
-     * @param name
-     *            attribute name
-     * @param clazz
-     *            attribute type
+     * @param name  attribute name
+     * @param clazz attribute type
      * @return typed attribute value, null if attribute type is not assignable from the specified class
      */
     @Override
-    public <T> T getAttribute(String name, Class<T> clazz) {
-        Attribute attribute = getAttributeObject(name);
-        return (attribute == null) ? null : attribute.getValue(clazz);
+    public <T> Attribute<T> getAttribute(String name, Class<T> clazz) {
+        ensureName(name);
+        Attribute<?> attribute = protectedAttributes.get(name);
+        return castSafely(clazz, attribute);
     }
 
     @Override
-    public <T> T findAttributeStartingWith(String name, Class<T> clazz) {
-        Attribute attribute = doFindAttribute(name);
-        return (attribute == null) ? null : attribute.getValue(clazz);
+    public Attribute getAttribute(String name) {
+        ensureName(name);
+        return protectedAttributes.get(name);
     }
 
     @Override
-    public Collection<Attribute> getAttributes() {
+    public <T> Attribute<T> findAttributeStartingWith(String name, Class<T> clazz) {
+        ensureName(name);
+        Attribute<?> attribute = doFindAttribute(name);
+        return castSafely(clazz, attribute);
+    }
+
+    @Override
+    public Collection<Attribute<?>> getAttributes() {
         return protectedAttributes.values();
     }
 
-    private Map<String, Attribute> createAttributeMap(List<Attribute> attributes) {
-        Map<String, Attribute> result = new HashMap<>();
-        for (Attribute a : attributes) {
+    private Map<String, Attribute<?>> createAttributeMap(List<Attribute<?>> attributes) {
+        Map<String, Attribute<?>> result = new HashMap<>();
+        for (Attribute<?> a : attributes) {
             result.put(a.getName(), a);
         }
         return result;
     }
 
-    private Attribute doFindAttribute(String name) {
+    private Attribute<?> doFindAttribute(String name) {
         ensureName(name);
-        for (Map.Entry<String, Attribute> entry : attributes.entrySet()) {
+        for (Map.Entry<String, Attribute<?>> entry : protectedAttributes.entrySet()) {
             if (entry.getKey().startsWith(name)) {
                 return entry.getValue();
             }
@@ -112,5 +81,17 @@ final class SimpleProfile implements Profile {
             throw new IllegalArgumentException("Attribute name must not be null.");
         }
     }
+
+    @SuppressWarnings("unchecked")
+    private <T> Attribute<T> castSafely(Class<T> clazz, Attribute<?> attribute) {
+        if (attribute != null) {
+            Class valueType = attribute.getValue().getClass();
+            if (!clazz.isAssignableFrom(valueType)) {
+                throw new ClassCastException(String.format("Cannot cast from '%s' to '%s'", valueType.getCanonicalName(), clazz.getCanonicalName()));
+            }
+        }
+        return (Attribute<T>) attribute;
+    }
+
 
 }

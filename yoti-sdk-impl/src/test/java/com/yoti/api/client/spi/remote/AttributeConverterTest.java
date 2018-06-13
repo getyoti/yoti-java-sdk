@@ -1,21 +1,32 @@
 package com.yoti.api.client.spi.remote;
 
+import static com.yoti.api.client.spi.remote.HumanProfileAdapter.ATTRIBUTE_DOCUMENT_DETAILS;
+import static com.yoti.api.client.spi.remote.HumanProfileAdapter.ATTRIBUTE_GENDER;
+
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.util.Map;
 
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Date;
+import com.yoti.api.client.DocumentDetails;
+import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
 
 import com.google.protobuf.ByteString;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class AttributeConverterTest {
 
     private static final String SOME_ATTRIBUTE_NAME = "someAttributeName";
@@ -25,8 +36,13 @@ public class AttributeConverterTest {
     private static final String DRIVING_LICENCE_SOURCE_TYPE = "DRIVING_LICENCE";
     private static final String PASSPORT_SOURCE_TYPE = "PASSPORT";
     private static final String YOTI_ADMIN_VERIFIER_TYPE = "YOTI_ADMIN";
+    private static final String GENDER_MALE = "MALE";
 
-    AttributeConverter testObj = new AttributeConverter();
+    @InjectMocks AttributeConverter testObj;
+
+    @Mock DocumentDetailsAttributeParser documentDetailsAttributeParserMock;
+
+    @Mock DocumentDetails documentDetailsMock;
 
     @Test
     public void shouldParseStringAttribute() throws Exception {
@@ -36,10 +52,10 @@ public class AttributeConverterTest {
                 .setValue(ByteString.copyFromUtf8(SOME_STRING_VALUE))
                 .build();
 
-        Attribute result = testObj.convertAttribute(attribute);
+        Attribute<String> result = testObj.convertAttribute(attribute);
 
         assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
-        assertEquals(SOME_STRING_VALUE, result.getValue(String.class));
+        assertEquals(SOME_STRING_VALUE, result.getValue());
     }
 
     @Test
@@ -50,10 +66,10 @@ public class AttributeConverterTest {
                 .setValue(ByteString.copyFromUtf8(SOME_DATE_VALUE))
                 .build();
 
-        Attribute result = testObj.convertAttribute(attribute);
+        Attribute<Date> result = testObj.convertAttribute(attribute);
 
         assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
-        assertEquals(DateAttributeValue.parseFrom(SOME_DATE_VALUE).toString(), result.getValue(Date.class).toString());
+        assertEquals(DateAttributeValue.parseFrom(SOME_DATE_VALUE).toString(), result.getValue().toString());
     }
 
     @Test
@@ -64,10 +80,10 @@ public class AttributeConverterTest {
                 .setValue(ByteString.copyFrom(SOME_IMAGE_BYTES))
                 .build();
 
-        Attribute result = testObj.convertAttribute(attribute);
+        Attribute<JpegAttributeValue> result = testObj.convertAttribute(attribute);
 
         assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
-        assertArrayEquals(SOME_IMAGE_BYTES, result.getValue(JpegAttributeValue.class).getContent());
+        assertArrayEquals(SOME_IMAGE_BYTES, result.getValue().getContent());
     }
 
     @Test
@@ -78,10 +94,10 @@ public class AttributeConverterTest {
                 .setValue(ByteString.copyFrom(SOME_IMAGE_BYTES))
                 .build();
 
-        Attribute result = testObj.convertAttribute(attribute);
+        Attribute<PngAttributeValue> result = testObj.convertAttribute(attribute);
 
         assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
-        assertArrayEquals(SOME_IMAGE_BYTES, result.getValue(PngAttributeValue.class).getContent());
+        assertArrayEquals(SOME_IMAGE_BYTES, result.getValue().getContent());
     }
 
     @Test
@@ -93,10 +109,10 @@ public class AttributeConverterTest {
                 .setValue(ByteString.copyFromUtf8(json))
                 .build();
 
-        Attribute result = testObj.convertAttribute(attribute);
+        Attribute<Map> result = testObj.convertAttribute(attribute);
 
         assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
-        Map<String, String> value = result.getValue(Map.class);
+        Map<String, String> value = result.getValue();
         assertEquals(1, value.size());
         assertThat(value, hasEntry("someKey", "someValue"));
     }
@@ -109,10 +125,39 @@ public class AttributeConverterTest {
                 .setValue(ByteString.copyFromUtf8(SOME_STRING_VALUE))
                 .build();
 
-        Attribute result = testObj.convertAttribute(attribute);
+        Attribute<String> result = testObj.convertAttribute(attribute);
 
         assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
-        assertEquals(SOME_STRING_VALUE, result.getValue(String.class));
+        assertEquals(SOME_STRING_VALUE, result.getValue());
+    }
+
+    @Test
+    public void shouldParseDocumentDetailsAttribute() throws Exception {
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setContentType(ContentTypeProto.ContentType.STRING)
+                .setName(ATTRIBUTE_DOCUMENT_DETAILS)
+                .setValue(ByteString.copyFromUtf8(SOME_STRING_VALUE))
+                .build();
+        when(documentDetailsAttributeParserMock.parseFrom(SOME_STRING_VALUE)).thenReturn(documentDetailsMock);
+
+        Attribute<DocumentDetails> result = testObj.convertAttribute(attribute);
+
+        assertEquals(ATTRIBUTE_DOCUMENT_DETAILS, result.getName());
+        assertEquals(documentDetailsMock, result.getValue());
+    }
+
+    @Test
+    public void shouldParseGenderAttribute() throws Exception {
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setContentType(ContentTypeProto.ContentType.STRING)
+                .setName(ATTRIBUTE_GENDER)
+                .setValue(ByteString.copyFromUtf8(GENDER_MALE))
+                .build();
+
+        Attribute<HumanProfile.Gender> result = testObj.convertAttribute(attribute);
+
+        assertEquals(ATTRIBUTE_GENDER, result.getName());
+        assertEquals(HumanProfile.Gender.MALE, result.getValue());
     }
 
     @Test
