@@ -199,7 +199,7 @@ final class SecureYotiClient implements YotiClient {
     }
 
     private byte[] decrypt(ByteString source, Key key, ByteString initVector) throws ProfileException {
-        if (initVector == null) {
+        if (initVector == null || initVector.size() == 0) {
             throw new ProfileException("Receipt key IV must not be null.");
         }
         try {
