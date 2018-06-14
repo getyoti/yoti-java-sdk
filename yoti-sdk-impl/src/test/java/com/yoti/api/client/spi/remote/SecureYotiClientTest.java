@@ -6,13 +6,19 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptSymmetric;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKey;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
 
+import static org.bouncycastle.util.encoders.Base64.decode;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -20,6 +26,7 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.PublicKey;
@@ -45,13 +52,14 @@ import com.yoti.api.client.spi.remote.util.CryptoUtil;
 import com.yoti.api.client.spi.remote.util.CryptoUtil.EncryptionResult;
 
 import com.google.protobuf.ByteString;
+import org.bouncycastle.openssl.PEMException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class SecureYotiClientTest {
 
     private static final String STRING_ATTRIBUTE_NAME = "testStringAttr";
@@ -66,7 +74,8 @@ public class SecureYotiClientTest {
     private static final byte[] USER_ID = "YmFkYWRhZGEtZGFkYWJhZGEK".getBytes();
     private static final String TIMESTAMP = "2006-01-02T15:04:05Z07:00";
     private static final String INVALID_TIMESTAMP = "xx2006-01-02T15:04:05Z07:00";
-    private static final byte[] RECEIPT_ID = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    private static final String ENCODED_RECEIPT_STRING = "base64EncodedReceipt";
+    private static final byte[] DECODED_RECEIPT_BYTES = decode(ENCODED_RECEIPT_STRING);
 
     @Mock ProfileService profileServiceMock;
     @Mock RemoteAmlService remoteAmlServiceMock;
@@ -105,7 +114,7 @@ public class SecureYotiClientTest {
                 .withOtherPartyProfile(profileContent)
                 .withProfile(profileContent)
                 .withTimestamp(TIMESTAMP)
-                .withReceiptId(RECEIPT_ID)
+                .withReceiptId(DECODED_RECEIPT_BYTES)
                 .withOutcome(Receipt.Outcome.SUCCESS)
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
@@ -130,7 +139,7 @@ public class SecureYotiClientTest {
                 .withOtherPartyProfile(profileContent)
                 .withProfile(profileContent)
                 .withTimestamp(TIMESTAMP)
-                .withReceiptId(RECEIPT_ID)
+                .withReceiptId(DECODED_RECEIPT_BYTES)
                 .withOutcome(Receipt.Outcome.SUCCESS)
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
@@ -154,7 +163,7 @@ public class SecureYotiClientTest {
                 .withOtherPartyProfile(null)
                 .withProfile(null)
                 .withTimestamp(TIMESTAMP)
-                .withReceiptId(RECEIPT_ID)
+                .withReceiptId(DECODED_RECEIPT_BYTES)
                 .withOutcome(Receipt.Outcome.SUCCESS)
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
@@ -177,7 +186,7 @@ public class SecureYotiClientTest {
                 .withOtherPartyProfile(profileContent)
                 .withProfile(profileContent)
                 .withTimestamp(TIMESTAMP)
-                .withReceiptId(RECEIPT_ID)
+                .withReceiptId(DECODED_RECEIPT_BYTES)
                 .withOutcome(Receipt.Outcome.SUCCESS)
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
@@ -191,7 +200,7 @@ public class SecureYotiClientTest {
         assertEquals(0, profile.getAttributes().size());
     }
 
-    @Test(expected = ProfileException.class)
+    @Test
     public void getActivityDetails_shouldFailWithInvalidTimestamp() throws Exception {
         Receipt receipt = new Receipt.Builder()
                 .withRememberMeId(USER_ID)
@@ -199,179 +208,334 @@ public class SecureYotiClientTest {
                 .withOtherPartyProfile(null)
                 .withProfile(null)
                 .withTimestamp(INVALID_TIMESTAMP)
-                .withReceiptId(RECEIPT_ID)
+                .withReceiptId(DECODED_RECEIPT_BYTES)
                 .withOutcome(Receipt.Outcome.SUCCESS)
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(encryptedToken);
+        } catch (ProfileException e) {
+            assertThat(e.getMessage(), containsString("timestamp"));
+            assertTrue(e.getCause() instanceof ParseException);
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = ProfileException.class)
+    @Test
     public void getActivityDetails_shouldFailWithNoIV() throws Exception {
         byte[] profileContent = marshalProfile(encryptionResult.data, null);
         Receipt receipt = new Receipt.Builder()
                 .withRememberMeId(USER_ID)
                 .withWrappedReceiptKey(validReceiptKey)
                 .withOtherPartyProfile(profileContent)
+                .withOutcome(Receipt.Outcome.SUCCESS)
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(encryptedToken);
+        } catch (ProfileException e) {
+            assertThat(e.getMessage(), containsString("Receipt key IV must not be null."));
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = ProfileException.class)
+    @Test
     public void getActivityDetails_shouldFailWithInvalidIV() throws Exception {
         byte[] profileContent = marshalProfile(encryptionResult.data, new byte[] { 1, 2 });
         Receipt receipt = new Receipt.Builder()
                 .withRememberMeId(USER_ID)
                 .withWrappedReceiptKey(validReceiptKey)
                 .withOtherPartyProfile(profileContent)
+                .withOutcome(Receipt.Outcome.SUCCESS)
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(encryptedToken);
+        } catch (ProfileException e) {
+            assertThat(e.getMessage(), containsString("Error decrypting data"));
+            assertTrue(e.getCause() instanceof GeneralSecurityException);
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = ProfileException.class)
+    @Test
     public void getActivityDetails_shouldFailWithNoReceipt() throws Exception {
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(null);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(encryptedToken);
+        } catch (ProfileException e) {
+            assertThat(e.getMessage(), containsString("No receipt"));
+            assertThat(e.getMessage(), containsString(TOKEN));
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = ActivityFailureException.class)
+    @Test
     public void getActivityDetails_shouldFailWithFailureReceipt() throws Exception {
-        Receipt receipt = new Receipt.Builder().withOutcome(Receipt.Outcome.FAILURE).build();
+        Receipt receipt = new Receipt.Builder()
+                .withReceiptId(DECODED_RECEIPT_BYTES)
+                .withOutcome(Receipt.Outcome.FAILURE)
+                .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(encryptedToken);
+        } catch (ActivityFailureException e) {
+            assertThat(e.getMessage(), containsString(ENCODED_RECEIPT_STRING));
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = ProfileException.class)
+    @Test
     public void getActivityDetails_shouldFailWithInvalidProfileData() throws Exception {
         byte[] profileContent = marshalProfile(new byte[] { 1, 2 }, encryptionResult.iv);
-        Receipt receipt = new Receipt.Builder().withWrappedReceiptKey(validReceiptKey)
+        Receipt receipt = new Receipt.Builder()
+                .withOutcome(Receipt.Outcome.SUCCESS)
+                .withWrappedReceiptKey(validReceiptKey)
                 .withOtherPartyProfile(profileContent)
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(encryptedToken);
+        } catch (ProfileException e) {
+            assertThat(e.getMessage(), containsString("Error decrypting data"));
+            assertTrue(e.getCause() instanceof GeneralSecurityException);
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = ProfileException.class)
+    @Test
     public void getActivityDetails_shouldFailWithInvalidReceiptKey() throws Exception {
         byte[] profileContent = marshalProfile(encryptionResult.data, encryptionResult.iv);
         byte[] invalidReceiptKey = { 1, 2, 3 };
-        Receipt receipt = new Receipt.Builder().withWrappedReceiptKey(invalidReceiptKey)
+        Receipt receipt = new Receipt.Builder()
+                .withOutcome(Receipt.Outcome.SUCCESS)
+                .withWrappedReceiptKey(invalidReceiptKey)
                 .withOtherPartyProfile(profileContent)
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(encryptedToken);
+        } catch (ProfileException e) {
+            assertThat(e.getMessage(), containsString("Error decrypting data"));
+            assertTrue(e.getCause() instanceof GeneralSecurityException);
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = ProfileException.class)
+    @Test
     public void getActivityDetails_shouldFailWithNoReceiptKey() throws Exception {
         byte[] profileContent = marshalProfile(encryptionResult.data, encryptionResult.iv);
-        Receipt receipt = new Receipt.Builder().withWrappedReceiptKey(null)
+        Receipt receipt = new Receipt.Builder()
+                .withOutcome(Receipt.Outcome.SUCCESS)
+                .withWrappedReceiptKey(null)
                 .withOtherPartyProfile(profileContent)
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(encryptedToken);
+        } catch (ProfileException e) {
+            assertThat(e.getMessage(), containsString("Base64 encoding error"));
+            assertTrue(e.getCause() instanceof IllegalArgumentException);
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = ProfileException.class)
+    @Test
     public void getActivityDetails_shouldFailWithNoProfileData() throws Exception {
         byte[] profileContent = marshalProfile(null, encryptionResult.iv);
-        Receipt receipt = new Receipt.Builder().withWrappedReceiptKey(validReceiptKey)
+        Receipt receipt = new Receipt.Builder()
+                .withOutcome(Receipt.Outcome.SUCCESS)
+                .withWrappedReceiptKey(validReceiptKey)
                 .withOtherPartyProfile(profileContent)
                 .build();
         when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(receipt);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(encryptedToken);
+        } catch (ProfileException e) {
+            assertThat(e.getMessage(), containsString("Error decrypting data"));
+            assertTrue(e.getCause() instanceof GeneralSecurityException);
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = ProfileException.class)
+    @Test
     public void getActivityDetails_shouldFailWithExceptionFromProfileService() throws Exception {
-        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenThrow(new ProfileException("Test exception"));
+        ProfileException profileException = new ProfileException("Test exception");
+        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenThrow(profileException);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(encryptedToken);
+        } catch (ProfileException e) {
+            assertSame(profileException, e);
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = InitialisationException.class)
+    @Test
     public void getActivityDetails_shouldFailWhenStreamExceptionLoadingKeys() throws Exception {
         KeyPairSource exceptionKeyPairSource = new StaticKeyPairSource(true);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, exceptionKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, exceptionKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(encryptedToken);
+        } catch (InitialisationException e) {
+            assertTrue(e.getCause() instanceof IOException);
+            assertThat(e.getCause().getMessage(), containsString("Test stream exception"));
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = InitialisationException.class)
+    @Test
     public void getActivityDetails_shouldFailWhenKeyPairSourceExceptionLoadingKeys() throws Exception {
         KeyPairSource exceptionKeyPairSource = new StaticKeyPairSource(false);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, exceptionKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, exceptionKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(encryptedToken);
+        } catch (InitialisationException e) {
+            assertTrue(e.getCause() instanceof IOException);
+            assertThat(e.getCause().getMessage(), containsString("Test source exception"));
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructor_shouldFailWithNullApplicationId() throws Exception {
-        new SecureYotiClient(null, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+        try {
+            new SecureYotiClient(null, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("Application id"));
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructor_shouldFailWithNullKeyPairSource() throws Exception {
-        new SecureYotiClient(APP_ID, null, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+        try {
+            new SecureYotiClient(APP_ID, null, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("Key pair source"));
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructor_shouldFailWithNullProfileService() throws Exception {
-        new SecureYotiClient(APP_ID, validKeyPairSource, null, remoteAmlServiceMock, attributeConverterMock);
+        try {
+            new SecureYotiClient(APP_ID, validKeyPairSource, null, remoteAmlServiceMock, attributeConverterMock);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("Profile service"));
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructor_shouldFailWithNullAmlService() throws Exception {
-        new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, null, attributeConverterMock);
+        try {
+            new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, null, attributeConverterMock);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("Aml service"));
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = InitialisationException.class)
-    public void getActivityDetails_shouldFailWithNoKeyPair() throws Exception {
+    @Test
+    public void constructor_shouldFailWithNullAttributeConverter() throws Exception {
+        try {
+            new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, null);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("Attribute Converter"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void constructor_shouldFailWithNoKeyPair() throws Exception {
         KeyPairSource invalidKeyPairSource = new StaticKeyPairSource("no-key-pair-in-file");
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, invalidKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            new SecureYotiClient(APP_ID, invalidKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+        } catch (InitialisationException e) {
+            assertThat(e.getMessage(), containsString("No key pair found in the provided source"));
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = InitialisationException.class)
-    public void getActivityDetails_shouldFailWithInvalidKeyPair() throws Exception {
+    @Test
+    public void constructor_shouldFailWithInvalidKeyPair() throws Exception {
         KeyPairSource invalidKeyPairSource = new StaticKeyPairSource(CryptoUtil.INVALID_KEY_PAIR_PEM);
 
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, invalidKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(encryptedToken);
+        try {
+            new SecureYotiClient(APP_ID, invalidKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+        } catch (InitialisationException e) {
+            assertThat(e.getMessage(), containsString("Cannot load key pair"));
+            assertTrue(e.getCause() instanceof PEMException);
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = ProfileException.class)
+    @Test
     public void getActivityDetails_shouldFailWithInvalidToken() throws Exception {
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(TOKEN);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(TOKEN);
+        } catch (ProfileException e) {
+            assertThat(e.getMessage(), containsString("Cannot decrypt connect token"));
+            assertTrue(e.getCause() instanceof IllegalArgumentException);
+            return;
+        }
+        fail("Expected an Exception");
     }
 
-    @Test(expected = ProfileException.class)
+    @Test
     public void getActivityDetails_shouldFailWithNullToken() throws Exception {
-        SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
-        testObj.getActivityDetails(null);
+        try {
+            SecureYotiClient testObj = new SecureYotiClient(APP_ID, validKeyPairSource, profileServiceMock, remoteAmlServiceMock, attributeConverterMock);
+            testObj.getActivityDetails(null);
+        } catch (ProfileException e) {
+            assertThat(e.getMessage(), containsString("Cannot decrypt connect token"));
+            assertTrue(e.getCause() instanceof NullPointerException);
+            return;
+        }
+        fail("Expected an Exception");
     }
 
     private byte[] createProfileData() {
@@ -406,12 +570,12 @@ public class SecureYotiClientTest {
         @Override
         public KeyPair getFromStream(StreamVisitor streamVisitor) throws IOException, InitialisationException {
             if (sourceException) {
-                throw new IOException("Test exception");
+                throw new IOException("Test source exception");
             }
             if (streamException) {
-                InputStream is = mock(InputStream.class);
-                when(is.read()).thenThrow(new IOException("Test exception"));
-                return streamVisitor.accept(is);
+                InputStream inputStreamMock = mock(InputStream.class);
+                when(inputStreamMock.read(any(byte[].class), anyInt(), anyInt())).thenThrow(new IOException("Test stream exception"));
+                return streamVisitor.accept(inputStreamMock);
             } else {
                 InputStream is = new ByteArrayInputStream(keypair.getBytes());
                 return streamVisitor.accept(is);
