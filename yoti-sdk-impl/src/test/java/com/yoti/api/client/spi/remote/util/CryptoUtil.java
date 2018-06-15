@@ -102,7 +102,7 @@ public class CryptoUtil {
         return keyPair;
     }
 
-    public static Key generateKey()  throws GeneralSecurityException {
+    public static Key generateSymmetricKey() throws GeneralSecurityException {
         KeyGenerator keyGen = KeyGenerator.getInstance(SYMMETRIC_KEY_ALGO, BOUNCY_CASTLE_PROVIDER);
         keyGen.init(SYMMETRIC_LENGTH);
         return keyGen.generateKey();
