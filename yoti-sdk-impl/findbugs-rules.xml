@@ -7,12 +7,6 @@
 <FindBugsFilter>
 
     <Match>
-        <Class name="com.yoti.api.client.spi.remote.SecureYotiClient"/>
-        <Method name="decryptConnectToken"/>
-        <Bug pattern="REC_CATCH_EXCEPTION"/>
-    </Match>
-
-    <Match>
         <Class name="com.yoti.api.client.spi.remote.call.Receipt"/>
         <Bug pattern="EI_EXPOSE_REP"/>
     </Match>
@@ -23,12 +17,12 @@
     </Match>
 
     <Match>
-        <Class name="com.yoti.api.client.spi.remote.SecureYotiClient"/>
+        <Class name="com.yoti.api.client.spi.remote.ProfileReader"/>
         <Bug pattern="CIPHER_INTEGRITY"/>
     </Match>
 
     <Match>
         <Bug pattern="CRLF_INJECTION_LOGS"/>
     </Match>
-</FindBugsFilter>
 
+</FindBugsFilter>
