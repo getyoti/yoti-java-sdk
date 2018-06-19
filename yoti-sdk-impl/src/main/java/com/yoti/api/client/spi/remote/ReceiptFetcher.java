@@ -10,12 +10,12 @@ import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.call.ProfileService;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.call.RemoteProfileService;
-import com.yoti.api.client.spi.remote.util.Decryption;
+import com.yoti.api.client.spi.remote.util.DecryptionHelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReceiptFetcher {
+class ReceiptFetcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReceiptFetcher.class);
 
@@ -25,11 +25,11 @@ public class ReceiptFetcher {
         this.profileService = profileService;
     }
 
-    public static ReceiptFetcher newInstance() {
+    static ReceiptFetcher newInstance() {
         return new ReceiptFetcher(RemoteProfileService.newInstance());
     }
 
-    public Receipt fetch(String encryptedConnectToken, KeyPair keyPair, String appId) throws ProfileException {
+    Receipt fetch(String encryptedConnectToken, KeyPair keyPair, String appId) throws ProfileException {
         LOG.debug("Decrypting connect token: '{}'", encryptedConnectToken);
         String connectToken = decryptConnectToken(encryptedConnectToken, keyPair.getPrivate());
         LOG.debug("Connect token decrypted: '{}'", connectToken);
@@ -41,7 +41,7 @@ public class ReceiptFetcher {
     private String decryptConnectToken(String encryptedConnectToken, PrivateKey privateKey) throws ProfileException {
         try {
             byte[] byteValue = Base64.getUrlDecoder().decode(encryptedConnectToken);
-            byte[] decryptedToken = Decryption.decryptAsymmetric(byteValue, privateKey);
+            byte[] decryptedToken = DecryptionHelper.decryptAsymmetric(byteValue, privateKey);
             return new String(decryptedToken, DEFAULT_CHARSET);
         } catch (Exception e) {
             throw new ProfileException("Cannot decrypt connect token", e);

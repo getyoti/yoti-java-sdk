@@ -15,7 +15,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AttributeListConverter {
+class AttributeListConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(AttributeListConverter.class);
 
@@ -25,11 +25,11 @@ public class AttributeListConverter {
         this.attributeConverter = attributeConverter;
     }
 
-    public static AttributeListConverter newInstance() {
+    static AttributeListConverter newInstance() {
         return new AttributeListConverter(AttributeConverter.newInstance());
     }
 
-    public List<Attribute<?>> parseAttributeList(byte[] attributeListBytes) throws ProfileException {
+    List<Attribute<?>> parseAttributeList(byte[] attributeListBytes) throws ProfileException {
         if (attributeListBytes == null || attributeListBytes.length == 0) {
             return Collections.emptyList();
         }

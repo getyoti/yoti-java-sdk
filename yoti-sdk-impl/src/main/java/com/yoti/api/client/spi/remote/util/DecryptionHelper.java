@@ -12,7 +12,7 @@ import javax.crypto.Cipher;
 
 import com.yoti.api.client.ProfileException;
 
-public class Decryption {
+public class DecryptionHelper {
 
     public static byte[] decryptAsymmetric(byte[] source, PrivateKey key) throws ProfileException {
         try {
