@@ -21,7 +21,7 @@ import com.yoti.api.client.spi.remote.proto.EncryptedDataProto;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-public class ProfileReader {
+class ProfileReader {
 
     private final AttributeListConverter attributeListConverter;
 
@@ -29,11 +29,11 @@ public class ProfileReader {
         this.attributeListConverter = attributeListConverter;
     }
 
-    public static ProfileReader newInstance() {
+    static ProfileReader newInstance() {
         return new ProfileReader(AttributeListConverter.newInstance());
     }
 
-    public Profile read(byte[] encryptedProfileBytes, Key secretKey) throws ProfileException {
+    Profile read(byte[] encryptedProfileBytes, Key secretKey) throws ProfileException {
         List<Attribute<?>> attributeList = new ArrayList<>();
         if (encryptedProfileBytes != null && encryptedProfileBytes.length > 0) {
             byte[] profileData = decryptProfile(encryptedProfileBytes, secretKey);

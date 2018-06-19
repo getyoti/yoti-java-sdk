@@ -5,9 +5,9 @@ import java.io.UnsupportedEncodingException;
 import static com.yoti.api.client.spi.remote.Base64.base64;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 
-public class MessageFactory {
+class MessageFactory {
 
-    public byte[] create(String httpMethod, String path, byte[] body) {
+    byte[] create(String httpMethod, String path, byte[] body) {
         try {
             String message = httpMethod + "&" + path;
             if (body != null && body.length > 0) {

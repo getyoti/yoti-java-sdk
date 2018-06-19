@@ -6,7 +6,7 @@ import java.text.ParseException;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.DocumentDetails;
 
-public class DocumentDetailsAttributeParser {
+class DocumentDetailsAttributeParser {
 
     private static final String MINIMUM_ACCEPTABLE = "([A-Za-z_]*) ([A-Za-z]{3}) ([A-Za-z0-9]{1}).*";
     private static final int TYPE_INDEX = 0;
@@ -15,7 +15,7 @@ public class DocumentDetailsAttributeParser {
     private static final int EXPIRATION_INDEX = 3;
     private static final int AUTHORITY_INDEX = 4;
 
-    public DocumentDetails parseFrom(String attribute) throws UnsupportedEncodingException, ParseException {
+    DocumentDetails parseFrom(String attribute) throws UnsupportedEncodingException, ParseException {
         if (attribute == null || !attribute.matches(MINIMUM_ACCEPTABLE)) {
             return null;
         }

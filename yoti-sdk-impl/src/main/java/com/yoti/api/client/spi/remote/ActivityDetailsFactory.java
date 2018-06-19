@@ -18,9 +18,9 @@ import com.yoti.api.client.ActivityDetails;
 import com.yoti.api.client.Profile;
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.call.Receipt;
-import com.yoti.api.client.spi.remote.util.Decryption;
+import com.yoti.api.client.spi.remote.util.DecryptionHelper;
 
-public class ActivityDetailsFactory {
+class ActivityDetailsFactory {
 
     private static final String RFC3339_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
@@ -30,12 +30,12 @@ public class ActivityDetailsFactory {
         this.profileReader = notNull(profileReader, "profileReader");
     }
 
-    public static ActivityDetailsFactory newInstance() {
+    static ActivityDetailsFactory newInstance() {
         return new ActivityDetailsFactory(ProfileReader.newInstance());
     }
 
-    public ActivityDetails create(Receipt receipt, PrivateKey privateKey) throws ProfileException {
-        byte[] decryptedKey = Decryption.decryptAsymmetric(receipt.getWrappedReceiptKey(), privateKey);
+    ActivityDetails create(Receipt receipt, PrivateKey privateKey) throws ProfileException {
+        byte[] decryptedKey = DecryptionHelper.decryptAsymmetric(receipt.getWrappedReceiptKey(), privateKey);
         Key secretKey = new SecretKeySpec(decryptedKey, SYMMETRIC_CIPHER);
 
         Profile userProfile = profileReader.read(receipt.getOtherPartyProfile(), secretKey);
