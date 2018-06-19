@@ -90,8 +90,8 @@ final class HumanProfileAdapter implements HumanProfile {
     }
 
     @Override
-    public Attribute<Gender> getGender() {
-        return wrapped.getAttribute(ATTRIBUTE_GENDER, Gender.class);
+    public Attribute<String> getGender() {
+        return wrapped.getAttribute(ATTRIBUTE_GENDER, String.class);
     }
 
     @Override
