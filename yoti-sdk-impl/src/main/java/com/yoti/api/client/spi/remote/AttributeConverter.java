@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AttributeConverter {
+class AttributeConverter {
 
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
     private static final Logger LOG = LoggerFactory.getLogger(AttributeConverter.class);
@@ -32,11 +32,11 @@ public class AttributeConverter {
         this.documentDetailsAttributeParser = documentDetailsAttributeParser;
     }
 
-    public static final AttributeConverter newInstance() {
+    static final AttributeConverter newInstance() {
         return new AttributeConverter(new DocumentDetailsAttributeParser());
     }
 
-    public <T> Attribute<T> convertAttribute(AttrProto.Attribute attribute) throws ParseException, IOException {
+    <T> Attribute<T> convertAttribute(AttrProto.Attribute attribute) throws ParseException, IOException {
         Object value = convertValueFromProto(attribute);
         value = convertSpecialType(attribute, value);
         Set<String> sources = extractMetadata(attribute, AnchorType.SOURCE);
