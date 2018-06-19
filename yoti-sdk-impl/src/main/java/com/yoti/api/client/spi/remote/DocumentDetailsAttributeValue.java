@@ -5,13 +5,13 @@ import com.yoti.api.client.DocumentDetails;
 
 final class DocumentDetailsAttributeValue implements DocumentDetails {
 
-    private final DocumentType type;
+    private final String type;
     private final String issuingCountry;
     private final Date expirationDate;
     private final String number;
     private final String authority;
 
-    public DocumentDetailsAttributeValue(DocumentType type, String issuingCountry, Date expirationDate, String number, String authority) {
+    public DocumentDetailsAttributeValue(String type, String issuingCountry, Date expirationDate, String number, String authority) {
         this.type = type;
         this.issuingCountry = issuingCountry;
         this.expirationDate = expirationDate;
@@ -20,7 +20,7 @@ final class DocumentDetailsAttributeValue implements DocumentDetails {
     }
 
     @Override
-    public DocumentType getType() {
+    public String getType() {
         return type;
     }
 

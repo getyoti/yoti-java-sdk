@@ -7,34 +7,39 @@ import java.util.Map;
  */
 public interface HumanProfile extends Profile {
 
+    String GENDER_MALE = "MALE";
+    String GENDER_FEMALE = "FEMALE";
+    String GENDER_TRANSGENDER = "TRANSGENDER";
+    String GENDER_OTHER = "OTHER";
+
     /**
      * Corresponds to primary name in passport, and surname in English.
      *
      * @return the family name
      */
     Attribute<String> getFamilyName();
-    
+
     /**
      * Corresponds to secondary names in passport, and first/middle names in English.
      *
      * @return the given names
      */
     Attribute<String> getGivenNames();
-    
+
     /**
      * The full name attribute.
      *
      * @return the full name
      */
     Attribute<String> getFullName();
-    
+
     /**
      * Date of birth
      *
      * @return Date of birth
      */
     Attribute<Date> getDateOfBirth();
-    
+
     /**
      * Did the user pass the age verification check?
      *
@@ -47,7 +52,7 @@ public interface HumanProfile extends Profile {
      *
      * @return the gender
      */
-    Attribute<Gender> getGender();
+    Attribute<String> getGender();
 
     /**
      * The user's postal address as a String
@@ -55,21 +60,21 @@ public interface HumanProfile extends Profile {
      * @return the postal address
      */
     Attribute<String> getPostalAddress();
-    
+
     /**
      * The user's structured postal address as a Json
      *
      * @return the postal address
      */
     Attribute<Map<?, ?>> getStructuredPostalAddress();
-    
+
     /**
      * Corresponds to the nationality in the passport.
      *
      * @return the nationality
      */
     Attribute<String> getNationality();
-    
+
     /**
      * The user's phone number, as verified at registration time. This will be a number with + for international prefix
      * and no spaces, e.g. "+447777123456".
@@ -84,23 +89,19 @@ public interface HumanProfile extends Profile {
      * @return the selfie
      */
     Attribute<Image> getSelfie();
-    
+
     /**
      * The user's verified email address.
      *
      * @return the email address
      */
     Attribute<String> getEmailAddress();
-    
+
     /**
      * Document details
      *
      * @return the document details
      */
     Attribute<DocumentDetails> getDocumentDetails();
-    
-    static enum Gender {
-        MALE, FEMALE, OTHER
-    }
 
 }
