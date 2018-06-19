@@ -21,7 +21,7 @@ class DocumentDetailsAttributeParser {
         }
 
         String[] attributes = attribute.split(" ");
-        DocumentDetails.DocumentType documentType = DocumentDetails.DocumentType.valueOf(attributes[TYPE_INDEX]);
+        String documentType = attributes[TYPE_INDEX];
         String issuingCountry = attributes[COUNTRY_INDEX];
         String number = attributes[NUMBER_INDEX];
         Date expirationDate = getDateSafely(attributes, EXPIRATION_INDEX);

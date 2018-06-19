@@ -6,12 +6,17 @@ package com.yoti.api.client;
  */
 public interface DocumentDetails {
 
+    String DOCUMENT_TYPE_PASSPORT = "PASSPORT";
+    String DOCUMENT_TYPE_DRIVING_LICENCE = "DRIVING_LICENCE";
+    String DOCUMENT_TYPE_AADHAAR = "AADHAAR";
+    String DOCUMENT_TYPE_PASS_CARD = "PASS_CARD";
+
     /**
      * Return document type.
      * 
      * @return Return document type
      */
-    DocumentType getType();
+    String getType();
 
     /**
      * Return issuing country
@@ -40,12 +45,5 @@ public interface DocumentDetails {
      * @return Either a country code, or the name of the issuing authority
      */
     String getIssuingAuthority();
-
-    static enum DocumentType {
-        PASSPORT,
-        DRIVING_LICENCE,
-        AADHAAR,
-        PASS_CARD
-    }
 
 }

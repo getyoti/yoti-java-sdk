@@ -1,17 +1,14 @@
 package com.yoti.api.client.spi.remote;
 
-import static com.yoti.api.client.DocumentDetails.DocumentType.AADHAAR;
-import static com.yoti.api.client.DocumentDetails.DocumentType.DRIVING_LICENCE;
-import static com.yoti.api.client.DocumentDetails.DocumentType.PASSPORT;
-import static com.yoti.api.client.DocumentDetails.DocumentType.PASS_CARD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.yoti.api.client.DocumentDetails;
-import org.junit.Test;
-
 import java.text.ParseException;
+
+import com.yoti.api.client.DocumentDetails;
+
+import org.junit.Test;
 
 public class DocumentDetailsAttributeParserTest {
 
@@ -41,7 +38,7 @@ public class DocumentDetailsAttributeParserTest {
         DocumentDetails result = testObj.parseFrom("PASSPORT GBR 1234abc");
 
         assertNotNull(result);
-        assertEquals(PASSPORT, result.getType());
+        assertEquals(DocumentDetails.DOCUMENT_TYPE_PASSPORT, result.getType());
         assertEquals("GBR", result.getIssuingCountry());
         assertEquals("1234abc", result.getDocumentNumber());
         assertNull(result.getExpirationDate());
@@ -53,7 +50,7 @@ public class DocumentDetailsAttributeParserTest {
         DocumentDetails result = testObj.parseFrom("AADHAAR IND 1234abc 2016-05-01");
 
         assertNotNull(result);
-        assertEquals(AADHAAR, result.getType());
+        assertEquals(DocumentDetails.DOCUMENT_TYPE_AADHAAR, result.getType());
         assertEquals("IND", result.getIssuingCountry());
         assertEquals("1234abc", result.getDocumentNumber());
         assertEquals("2016-05-01", result.getExpirationDate().toString());
@@ -65,7 +62,7 @@ public class DocumentDetailsAttributeParserTest {
         DocumentDetails result = testObj.parseFrom("DRIVING_LICENCE GBR 1234abc 2016-05-01 DVLA");
 
         assertNotNull(result);
-        assertEquals(DRIVING_LICENCE, result.getType());
+        assertEquals(DocumentDetails.DOCUMENT_TYPE_DRIVING_LICENCE, result.getType());
         assertEquals("GBR", result.getIssuingCountry());
         assertEquals("1234abc", result.getDocumentNumber());
         assertEquals("2016-05-01", result.getExpirationDate().toString());
@@ -77,16 +74,11 @@ public class DocumentDetailsAttributeParserTest {
         DocumentDetails result = testObj.parseFrom("PASS_CARD GBR 1234abc - DVLA");
 
         assertNotNull(result);
-        assertEquals(PASS_CARD, result.getType());
+        assertEquals(DocumentDetails.DOCUMENT_TYPE_PASS_CARD, result.getType());
         assertEquals("GBR", result.getIssuingCountry());
         assertEquals("1234abc", result.getDocumentNumber());
         assertNull(result.getExpirationDate());
         assertEquals("DVLA", result.getIssuingAuthority());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldFailOnInvalidType() throws Exception {
-        testObj.parseFrom(INVALID_ATTRIBUTE__TYPE);
     }
 
     @Test
@@ -107,4 +99,5 @@ public class DocumentDetailsAttributeParserTest {
 
         assertNull(result);
     }
+
 }

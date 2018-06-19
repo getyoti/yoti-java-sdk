@@ -154,10 +154,10 @@ public class AttributeConverterTest {
                 .setValue(ByteString.copyFromUtf8(GENDER_MALE))
                 .build();
 
-        Attribute<HumanProfile.Gender> result = testObj.convertAttribute(attribute);
+        Attribute<String> result = testObj.convertAttribute(attribute);
 
         assertEquals(ATTRIBUTE_GENDER, result.getName());
-        assertEquals(HumanProfile.Gender.MALE, result.getValue());
+        assertEquals(HumanProfile.GENDER_MALE, result.getValue());
     }
 
     @Test
