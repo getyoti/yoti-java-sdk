@@ -80,7 +80,7 @@ public class SimpleActivityDetailsTest {
 
     @Test
     public void shouldReturnBase64SelfieIfSelfieSet() {
-        Attribute selfie = new SimpleAttribute("selfie", new JpegAttributeValue(SOME_SELFIE_BYTES), null);
+        Attribute selfie = new SimpleAttribute("selfie", new JpegAttributeValue(SOME_SELFIE_BYTES));
         SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>singletonList(selfie));
 
         SimpleActivityDetails result = new SimpleActivityDetails(USER_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
@@ -91,7 +91,7 @@ public class SimpleActivityDetailsTest {
 
     @Test
     public void shouldReturnBlankBase64SelfieIfSelfieNotSet() {
-        Attribute familyName = new SimpleAttribute("family_name", "Smith", null);
+        Attribute familyName = new SimpleAttribute("family_name", "Smith");
         SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>singletonList(familyName));
 
         SimpleActivityDetails result = new SimpleActivityDetails(USER_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);

@@ -1,6 +1,6 @@
 package com.yoti.api.client;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Represents a generic, typed key/value pair, a basic building block of
@@ -13,7 +13,10 @@ public interface Attribute<T> {
 
     T getValue();
 
-    Set<String> getSources();
+    List<Anchor> getSources();
 
-    Set<String> getVerifiers();
+    List<Anchor> getVerifiers();
+
+    List<Anchor> getAnchors();
+
 }

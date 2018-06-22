@@ -6,102 +6,103 @@ package com.yoti.api.client.spi.remote.proto;
 public final class AttributeListProto {
   private AttributeListProto() {}
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
+      com.google.protobuf.ExtensionRegistryLite registry) {
   }
-  public interface AttributeAndIdOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
 
-    // optional .attrpubapi_v1.Attribute attribute = 1;
+  public static void registerAllExtensions(
+      com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions(
+        (com.google.protobuf.ExtensionRegistryLite) registry);
+  }
+  public interface AttributeAndIdOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:attrpubapi_v1.AttributeAndId)
+      com.google.protobuf.MessageOrBuilder {
+
     /**
-     * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-     *
      * <pre>
-     * Attribute holds the value and metadata of the attribute. Clients
+     * SimpleAttribute holds the value and metadata of the attribute. Clients
      * may display this but should not persist it.
      * </pre>
+     *
+     * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
      */
     boolean hasAttribute();
     /**
-     * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-     *
      * <pre>
-     * Attribute holds the value and metadata of the attribute. Clients
+     * SimpleAttribute holds the value and metadata of the attribute. Clients
      * may display this but should not persist it.
      * </pre>
+     *
+     * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
      */
-    com.yoti.api.client.spi.remote.proto.AttrProto.Attribute getAttribute();
+    AttrProto.Attribute getAttribute();
     /**
-     * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-     *
      * <pre>
-     * Attribute holds the value and metadata of the attribute. Clients
+     * SimpleAttribute holds the value and metadata of the attribute. Clients
      * may display this but should not persist it.
      * </pre>
+     *
+     * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
      */
-    com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder getAttributeOrBuilder();
+    AttrProto.AttributeOrBuilder getAttributeOrBuilder();
 
-    // optional bytes attribute_id = 2;
     /**
-     * <code>optional bytes attribute_id = 2;</code>
-     *
      * <pre>
      * AttributeId is used to identify the attribute to the server. Clients
      * must keep this in persistent storage, as it is the only way to ever
      * retrieve or use the attribute in future. The server does not keep a
      * copy of the attribute ID!
      * </pre>
+     *
+     * <code>optional bytes attribute_id = 2;</code>
      */
     boolean hasAttributeId();
     /**
-     * <code>optional bytes attribute_id = 2;</code>
-     *
      * <pre>
      * AttributeId is used to identify the attribute to the server. Clients
      * must keep this in persistent storage, as it is the only way to ever
      * retrieve or use the attribute in future. The server does not keep a
      * copy of the attribute ID!
      * </pre>
+     *
+     * <code>optional bytes attribute_id = 2;</code>
      */
     com.google.protobuf.ByteString getAttributeId();
   }
   /**
-   * Protobuf type {@code attrpubapi_v1.AttributeAndId}
-   *
    * <pre>
    * AttributeAndId is a simple container for holding an attribute's value
    * alongside its ID.
    * </pre>
+   *
+   * Protobuf type {@code attrpubapi_v1.AttributeAndId}
    */
-  public static final class AttributeAndId extends
-      com.google.protobuf.GeneratedMessage
-      implements AttributeAndIdOrBuilder {
+  public  static final class AttributeAndId extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:attrpubapi_v1.AttributeAndId)
+      AttributeAndIdOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use AttributeAndId.newBuilder() to construct.
-    private AttributeAndId(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private AttributeAndId(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private AttributeAndId(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final AttributeAndId defaultInstance;
-    public static AttributeAndId getDefaultInstance() {
-      return defaultInstance;
+    private AttributeAndId() {
+      attributeId_ = com.google.protobuf.ByteString.EMPTY;
     }
 
-    public AttributeAndId getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private AttributeAndId(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
+      if (extensionRegistry == null) {
+        throw new NullPointerException();
+      }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -114,18 +115,18 @@ public final class AttributeListProto {
               done = true;
               break;
             default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
             }
             case 10: {
-              com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder subBuilder = null;
+              AttrProto.Attribute.Builder subBuilder = null;
               if (((bitField0_ & 0x00000001) == 0x00000001)) {
                 subBuilder = attribute_.toBuilder();
               }
-              attribute_ = input.readMessage(com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.PARSER, extensionRegistry);
+              attribute_ = input.readMessage(AttrProto.Attribute.PARSER, extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(attribute_);
                 attribute_ = subBuilder.buildPartial();
@@ -144,7 +145,7 @@ public final class AttributeListProto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -152,107 +153,87 @@ public final class AttributeListProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeAndId_descriptor;
+      return AttributeListProto.internal_static_attrpubapi_v1_AttributeAndId_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeAndId_fieldAccessorTable
+      return AttributeListProto.internal_static_attrpubapi_v1_AttributeAndId_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.class, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<AttributeAndId> PARSER =
-        new com.google.protobuf.AbstractParser<AttributeAndId>() {
-      public AttributeAndId parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new AttributeAndId(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<AttributeAndId> getParserForType() {
-      return PARSER;
+              AttributeAndId.class, Builder.class);
     }
 
     private int bitField0_;
-    // optional .attrpubapi_v1.Attribute attribute = 1;
     public static final int ATTRIBUTE_FIELD_NUMBER = 1;
-    private com.yoti.api.client.spi.remote.proto.AttrProto.Attribute attribute_;
+    private AttrProto.Attribute attribute_;
     /**
-     * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-     *
      * <pre>
-     * Attribute holds the value and metadata of the attribute. Clients
+     * SimpleAttribute holds the value and metadata of the attribute. Clients
      * may display this but should not persist it.
      * </pre>
+     *
+     * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
      */
     public boolean hasAttribute() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-     *
      * <pre>
-     * Attribute holds the value and metadata of the attribute. Clients
+     * SimpleAttribute holds the value and metadata of the attribute. Clients
      * may display this but should not persist it.
      * </pre>
+     *
+     * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
      */
-    public com.yoti.api.client.spi.remote.proto.AttrProto.Attribute getAttribute() {
-      return attribute_;
+    public AttrProto.Attribute getAttribute() {
+      return attribute_ == null ? AttrProto.Attribute.getDefaultInstance() : attribute_;
     }
     /**
-     * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-     *
      * <pre>
-     * Attribute holds the value and metadata of the attribute. Clients
+     * SimpleAttribute holds the value and metadata of the attribute. Clients
      * may display this but should not persist it.
      * </pre>
+     *
+     * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
      */
-    public com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder getAttributeOrBuilder() {
-      return attribute_;
+    public AttrProto.AttributeOrBuilder getAttributeOrBuilder() {
+      return attribute_ == null ? AttrProto.Attribute.getDefaultInstance() : attribute_;
     }
 
-    // optional bytes attribute_id = 2;
     public static final int ATTRIBUTE_ID_FIELD_NUMBER = 2;
     private com.google.protobuf.ByteString attributeId_;
     /**
-     * <code>optional bytes attribute_id = 2;</code>
-     *
      * <pre>
      * AttributeId is used to identify the attribute to the server. Clients
      * must keep this in persistent storage, as it is the only way to ever
      * retrieve or use the attribute in future. The server does not keep a
      * copy of the attribute ID!
      * </pre>
+     *
+     * <code>optional bytes attribute_id = 2;</code>
      */
     public boolean hasAttributeId() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional bytes attribute_id = 2;</code>
-     *
      * <pre>
      * AttributeId is used to identify the attribute to the server. Clients
      * must keep this in persistent storage, as it is the only way to ever
      * retrieve or use the attribute in future. The server does not keep a
      * copy of the attribute ID!
      * </pre>
+     *
+     * <code>optional bytes attribute_id = 2;</code>
      */
     public com.google.protobuf.ByteString getAttributeId() {
       return attributeId_;
     }
 
-    private void initFields() {
-      attribute_ = com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.getDefaultInstance();
-      attributeId_ = com.google.protobuf.ByteString.EMPTY;
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -260,129 +241,188 @@ public final class AttributeListProto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeMessage(1, attribute_);
+        output.writeMessage(1, getAttribute());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeBytes(2, attributeId_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, attribute_);
+          .computeMessageSize(1, getAttribute());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, attributeId_);
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    @Override
+    public boolean equals(final Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof AttributeAndId)) {
+        return super.equals(obj);
+      }
+      AttributeAndId other = (AttributeAndId) obj;
+
+      boolean result = true;
+      result = result && (hasAttribute() == other.hasAttribute());
+      if (hasAttribute()) {
+        result = result && getAttribute()
+            .equals(other.getAttribute());
+      }
+      result = result && (hasAttributeId() == other.hasAttributeId());
+      if (hasAttributeId()) {
+        result = result && getAttributeId()
+            .equals(other.getAttributeId());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
     }
 
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId parseFrom(
+    @Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasAttribute()) {
+        hash = (37 * hash) + ATTRIBUTE_FIELD_NUMBER;
+        hash = (53 * hash) + getAttribute().hashCode();
+      }
+      if (hasAttributeId()) {
+        hash = (37 * hash) + ATTRIBUTE_ID_FIELD_NUMBER;
+        hash = (53 * hash) + getAttributeId().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static AttributeAndId parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static AttributeAndId parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static AttributeAndId parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId parseFrom(
+    public static AttributeAndId parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId parseFrom(byte[] data)
+    public static AttributeAndId parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId parseFrom(
+    public static AttributeAndId parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId parseFrom(java.io.InputStream input)
+    public static AttributeAndId parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId parseFrom(
+    public static AttributeAndId parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId parseDelimitedFrom(java.io.InputStream input)
+    public static AttributeAndId parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId parseDelimitedFrom(
+    public static AttributeAndId parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId parseFrom(
+    public static AttributeAndId parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId parseFrom(
+    public static AttributeAndId parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(AttributeAndId prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
-     * Protobuf type {@code attrpubapi_v1.AttributeAndId}
-     *
      * <pre>
      * AttributeAndId is a simple container for holding an attribute's value
      * alongside its ID.
      * </pre>
+     *
+     * Protobuf type {@code attrpubapi_v1.AttributeAndId}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdOrBuilder {
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:attrpubapi_v1.AttributeAndId)
+        AttributeAndIdOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeAndId_descriptor;
+        return AttributeListProto.internal_static_attrpubapi_v1_AttributeAndId_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeAndId_fieldAccessorTable
+        return AttributeListProto.internal_static_attrpubapi_v1_AttributeAndId_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.class, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.Builder.class);
+                AttributeAndId.class, Builder.class);
       }
 
       // Construct using com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.newBuilder()
@@ -391,23 +431,20 @@ public final class AttributeListProto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
           getAttributeFieldBuilder();
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         if (attributeBuilder_ == null) {
-          attribute_ = com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.getDefaultInstance();
+          attribute_ = null;
         } else {
           attributeBuilder_.clear();
         }
@@ -417,29 +454,25 @@ public final class AttributeListProto {
         return this;
       }
 
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeAndId_descriptor;
+        return AttributeListProto.internal_static_attrpubapi_v1_AttributeAndId_descriptor;
       }
 
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId getDefaultInstanceForType() {
-        return com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.getDefaultInstance();
+      public AttributeAndId getDefaultInstanceForType() {
+        return AttributeAndId.getDefaultInstance();
       }
 
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId build() {
-        com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId result = buildPartial();
+      public AttributeAndId build() {
+        AttributeAndId result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId buildPartial() {
-        com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId result = new com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId(this);
+      public AttributeAndId buildPartial() {
+        AttributeAndId result = new AttributeAndId(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -459,24 +492,51 @@ public final class AttributeListProto {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId) {
-          return mergeFrom((com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId)other);
+        if (other instanceof AttributeAndId) {
+          return mergeFrom((AttributeAndId)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId other) {
-        if (other == com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.getDefaultInstance()) return this;
+      public Builder mergeFrom(AttributeAndId other) {
+        if (other == AttributeAndId.getDefaultInstance()) return this;
         if (other.hasAttribute()) {
           mergeAttribute(other.getAttribute());
         }
         if (other.hasAttributeId()) {
           setAttributeId(other.getAttributeId());
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
@@ -488,12 +548,12 @@ public final class AttributeListProto {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId parsedMessage = null;
+        AttributeAndId parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId) e.getUnfinishedMessage();
-          throw e;
+          parsedMessage = (AttributeAndId) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -503,45 +563,44 @@ public final class AttributeListProto {
       }
       private int bitField0_;
 
-      // optional .attrpubapi_v1.Attribute attribute = 1;
-      private com.yoti.api.client.spi.remote.proto.AttrProto.Attribute attribute_ = com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          com.yoti.api.client.spi.remote.proto.AttrProto.Attribute, com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder, com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder> attributeBuilder_;
+      private AttrProto.Attribute attribute_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          AttrProto.Attribute, AttrProto.Attribute.Builder, AttrProto.AttributeOrBuilder> attributeBuilder_;
       /**
-       * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-       *
        * <pre>
-       * Attribute holds the value and metadata of the attribute. Clients
+       * SimpleAttribute holds the value and metadata of the attribute. Clients
        * may display this but should not persist it.
        * </pre>
+       *
+       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
        */
       public boolean hasAttribute() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-       *
        * <pre>
-       * Attribute holds the value and metadata of the attribute. Clients
+       * SimpleAttribute holds the value and metadata of the attribute. Clients
        * may display this but should not persist it.
        * </pre>
+       *
+       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
        */
-      public com.yoti.api.client.spi.remote.proto.AttrProto.Attribute getAttribute() {
+      public AttrProto.Attribute getAttribute() {
         if (attributeBuilder_ == null) {
-          return attribute_;
+          return attribute_ == null ? AttrProto.Attribute.getDefaultInstance() : attribute_;
         } else {
           return attributeBuilder_.getMessage();
         }
       }
       /**
-       * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-       *
        * <pre>
-       * Attribute holds the value and metadata of the attribute. Clients
+       * SimpleAttribute holds the value and metadata of the attribute. Clients
        * may display this but should not persist it.
        * </pre>
+       *
+       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
        */
-      public Builder setAttribute(com.yoti.api.client.spi.remote.proto.AttrProto.Attribute value) {
+      public Builder setAttribute(AttrProto.Attribute value) {
         if (attributeBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -555,15 +614,15 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-       *
        * <pre>
-       * Attribute holds the value and metadata of the attribute. Clients
+       * SimpleAttribute holds the value and metadata of the attribute. Clients
        * may display this but should not persist it.
        * </pre>
+       *
+       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
        */
       public Builder setAttribute(
-          com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder builderForValue) {
+          AttrProto.Attribute.Builder builderForValue) {
         if (attributeBuilder_ == null) {
           attribute_ = builderForValue.build();
           onChanged();
@@ -574,19 +633,20 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-       *
        * <pre>
-       * Attribute holds the value and metadata of the attribute. Clients
+       * SimpleAttribute holds the value and metadata of the attribute. Clients
        * may display this but should not persist it.
        * </pre>
+       *
+       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
        */
-      public Builder mergeAttribute(com.yoti.api.client.spi.remote.proto.AttrProto.Attribute value) {
+      public Builder mergeAttribute(AttrProto.Attribute value) {
         if (attributeBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
-              attribute_ != com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.getDefaultInstance()) {
+              attribute_ != null &&
+              attribute_ != AttrProto.Attribute.getDefaultInstance()) {
             attribute_ =
-              com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.newBuilder(attribute_).mergeFrom(value).buildPartial();
+              AttrProto.Attribute.newBuilder(attribute_).mergeFrom(value).buildPartial();
           } else {
             attribute_ = value;
           }
@@ -598,16 +658,16 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-       *
        * <pre>
-       * Attribute holds the value and metadata of the attribute. Clients
+       * SimpleAttribute holds the value and metadata of the attribute. Clients
        * may display this but should not persist it.
        * </pre>
+       *
+       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
        */
       public Builder clearAttribute() {
         if (attributeBuilder_ == null) {
-          attribute_ = com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.getDefaultInstance();
+          attribute_ = null;
           onChanged();
         } else {
           attributeBuilder_.clear();
@@ -616,48 +676,49 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-       *
        * <pre>
-       * Attribute holds the value and metadata of the attribute. Clients
+       * SimpleAttribute holds the value and metadata of the attribute. Clients
        * may display this but should not persist it.
        * </pre>
+       *
+       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
        */
-      public com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder getAttributeBuilder() {
+      public AttrProto.Attribute.Builder getAttributeBuilder() {
         bitField0_ |= 0x00000001;
         onChanged();
         return getAttributeFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-       *
        * <pre>
-       * Attribute holds the value and metadata of the attribute. Clients
+       * SimpleAttribute holds the value and metadata of the attribute. Clients
        * may display this but should not persist it.
        * </pre>
+       *
+       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
        */
-      public com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder getAttributeOrBuilder() {
+      public AttrProto.AttributeOrBuilder getAttributeOrBuilder() {
         if (attributeBuilder_ != null) {
           return attributeBuilder_.getMessageOrBuilder();
         } else {
-          return attribute_;
+          return attribute_ == null ?
+              AttrProto.Attribute.getDefaultInstance() : attribute_;
         }
       }
       /**
-       * <code>optional .attrpubapi_v1.Attribute attribute = 1;</code>
-       *
        * <pre>
-       * Attribute holds the value and metadata of the attribute. Clients
+       * SimpleAttribute holds the value and metadata of the attribute. Clients
        * may display this but should not persist it.
        * </pre>
+       *
+       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
        */
-      private com.google.protobuf.SingleFieldBuilder<
-          com.yoti.api.client.spi.remote.proto.AttrProto.Attribute, com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder, com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder> 
+      private com.google.protobuf.SingleFieldBuilderV3<
+          AttrProto.Attribute, AttrProto.Attribute.Builder, AttrProto.AttributeOrBuilder>
           getAttributeFieldBuilder() {
         if (attributeBuilder_ == null) {
-          attributeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              com.yoti.api.client.spi.remote.proto.AttrProto.Attribute, com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder, com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder>(
-                  attribute_,
+          attributeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              AttrProto.Attribute, AttrProto.Attribute.Builder, AttrProto.AttributeOrBuilder>(
+                  getAttribute(),
                   getParentForChildren(),
                   isClean());
           attribute_ = null;
@@ -665,43 +726,42 @@ public final class AttributeListProto {
         return attributeBuilder_;
       }
 
-      // optional bytes attribute_id = 2;
       private com.google.protobuf.ByteString attributeId_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>optional bytes attribute_id = 2;</code>
-       *
        * <pre>
        * AttributeId is used to identify the attribute to the server. Clients
        * must keep this in persistent storage, as it is the only way to ever
        * retrieve or use the attribute in future. The server does not keep a
        * copy of the attribute ID!
        * </pre>
+       *
+       * <code>optional bytes attribute_id = 2;</code>
        */
       public boolean hasAttributeId() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional bytes attribute_id = 2;</code>
-       *
        * <pre>
        * AttributeId is used to identify the attribute to the server. Clients
        * must keep this in persistent storage, as it is the only way to ever
        * retrieve or use the attribute in future. The server does not keep a
        * copy of the attribute ID!
        * </pre>
+       *
+       * <code>optional bytes attribute_id = 2;</code>
        */
       public com.google.protobuf.ByteString getAttributeId() {
         return attributeId_;
       }
       /**
-       * <code>optional bytes attribute_id = 2;</code>
-       *
        * <pre>
        * AttributeId is used to identify the attribute to the server. Clients
        * must keep this in persistent storage, as it is the only way to ever
        * retrieve or use the attribute in future. The server does not keep a
        * copy of the attribute ID!
        * </pre>
+       *
+       * <code>optional bytes attribute_id = 2;</code>
        */
       public Builder setAttributeId(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -713,14 +773,14 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>optional bytes attribute_id = 2;</code>
-       *
        * <pre>
        * AttributeId is used to identify the attribute to the server. Clients
        * must keep this in persistent storage, as it is the only way to ever
        * retrieve or use the attribute in future. The server does not keep a
        * copy of the attribute ID!
        * </pre>
+       *
+       * <code>optional bytes attribute_id = 2;</code>
        */
       public Builder clearAttributeId() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -728,31 +788,68 @@ public final class AttributeListProto {
         onChanged();
         return this;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:attrpubapi_v1.AttributeAndId)
     }
 
+    // @@protoc_insertion_point(class_scope:attrpubapi_v1.AttributeAndId)
+    private static final AttributeAndId DEFAULT_INSTANCE;
     static {
-      defaultInstance = new AttributeAndId(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new AttributeAndId();
     }
 
-    // @@protoc_insertion_point(class_scope:attrpubapi_v1.AttributeAndId)
+    public static AttributeAndId getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @Deprecated public static final com.google.protobuf.Parser<AttributeAndId>
+        PARSER = new com.google.protobuf.AbstractParser<AttributeAndId>() {
+      public AttributeAndId parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new AttributeAndId(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<AttributeAndId> parser() {
+      return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<AttributeAndId> getParserForType() {
+      return PARSER;
+    }
+
+    public AttributeAndId getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
-  public interface AttributeAndIdListOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface AttributeAndIdListOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:attrpubapi_v1.AttributeAndIdList)
+      com.google.protobuf.MessageOrBuilder {
 
-    // repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;
     /**
      * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
      */
-    java.util.List<com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId> 
+    java.util.List<AttributeAndId>
         getAttributeAndIdListList();
     /**
      * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
      */
-    com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId getAttributeAndIdList(int index);
+    AttributeAndId getAttributeAndIdList(int index);
     /**
      * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
      */
@@ -760,53 +857,49 @@ public final class AttributeListProto {
     /**
      * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
      */
-    java.util.List<? extends com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdOrBuilder> 
+    java.util.List<? extends AttributeAndIdOrBuilder>
         getAttributeAndIdListOrBuilderList();
     /**
      * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
      */
-    com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdOrBuilder getAttributeAndIdListOrBuilder(
-        int index);
+    AttributeAndIdOrBuilder getAttributeAndIdListOrBuilder(
+            int index);
   }
   /**
-   * Protobuf type {@code attrpubapi_v1.AttributeAndIdList}
-   *
    * <pre>
    * AttributeAndIdList holds multiple attributes and their associated IDs. This
    * is the type of message that is deposited in the escrow server and returned
    * to clients with type “attribute-list”.
    * </pre>
+   *
+   * Protobuf type {@code attrpubapi_v1.AttributeAndIdList}
    */
-  public static final class AttributeAndIdList extends
-      com.google.protobuf.GeneratedMessage
-      implements AttributeAndIdListOrBuilder {
+  public  static final class AttributeAndIdList extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:attrpubapi_v1.AttributeAndIdList)
+      AttributeAndIdListOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use AttributeAndIdList.newBuilder() to construct.
-    private AttributeAndIdList(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private AttributeAndIdList(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private AttributeAndIdList(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final AttributeAndIdList defaultInstance;
-    public static AttributeAndIdList getDefaultInstance() {
-      return defaultInstance;
+    private AttributeAndIdList() {
+      attributeAndIdList_ = java.util.Collections.emptyList();
     }
 
-    public AttributeAndIdList getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private AttributeAndIdList(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
+      if (extensionRegistry == null) {
+        throw new NullPointerException();
+      }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -819,18 +912,19 @@ public final class AttributeListProto {
               done = true;
               break;
             default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
             }
             case 10: {
               if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                attributeAndIdList_ = new java.util.ArrayList<com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId>();
+                attributeAndIdList_ = new java.util.ArrayList<AttributeAndId>();
                 mutable_bitField0_ |= 0x00000001;
               }
-              attributeAndIdList_.add(input.readMessage(com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.PARSER, extensionRegistry));
+              attributeAndIdList_.add(
+                  input.readMessage(AttributeAndId.PARSER, extensionRegistry));
               break;
             }
           }
@@ -839,7 +933,7 @@ public final class AttributeListProto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
           attributeAndIdList_ = java.util.Collections.unmodifiableList(attributeAndIdList_);
@@ -850,44 +944,28 @@ public final class AttributeListProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeAndIdList_descriptor;
+      return AttributeListProto.internal_static_attrpubapi_v1_AttributeAndIdList_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeAndIdList_fieldAccessorTable
+      return AttributeListProto.internal_static_attrpubapi_v1_AttributeAndIdList_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList.class, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList.Builder.class);
+              AttributeAndIdList.class, Builder.class);
     }
 
-    public static com.google.protobuf.Parser<AttributeAndIdList> PARSER =
-        new com.google.protobuf.AbstractParser<AttributeAndIdList>() {
-      public AttributeAndIdList parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new AttributeAndIdList(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<AttributeAndIdList> getParserForType() {
-      return PARSER;
-    }
-
-    // repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;
     public static final int ATTRIBUTE_AND_ID_LIST_FIELD_NUMBER = 1;
-    private java.util.List<com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId> attributeAndIdList_;
+    private java.util.List<AttributeAndId> attributeAndIdList_;
     /**
      * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
      */
-    public java.util.List<com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId> getAttributeAndIdListList() {
+    public java.util.List<AttributeAndId> getAttributeAndIdListList() {
       return attributeAndIdList_;
     }
     /**
      * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
      */
-    public java.util.List<? extends com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdOrBuilder> 
+    public java.util.List<? extends AttributeAndIdOrBuilder>
         getAttributeAndIdListOrBuilderList() {
       return attributeAndIdList_;
     }
@@ -900,24 +978,22 @@ public final class AttributeListProto {
     /**
      * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
      */
-    public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId getAttributeAndIdList(int index) {
+    public AttributeAndId getAttributeAndIdList(int index) {
       return attributeAndIdList_.get(index);
     }
     /**
      * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
      */
-    public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdOrBuilder getAttributeAndIdListOrBuilder(
+    public AttributeAndIdOrBuilder getAttributeAndIdListOrBuilder(
         int index) {
       return attributeAndIdList_.get(index);
     }
 
-    private void initFields() {
-      attributeAndIdList_ = java.util.Collections.emptyList();
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -925,16 +1001,14 @@ public final class AttributeListProto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       for (int i = 0; i < attributeAndIdList_.size(); i++) {
         output.writeMessage(1, attributeAndIdList_.get(i));
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
@@ -942,106 +1016,155 @@ public final class AttributeListProto {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, attributeAndIdList_.get(i));
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    @Override
+    public boolean equals(final Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof AttributeAndIdList)) {
+        return super.equals(obj);
+      }
+      AttributeAndIdList other = (AttributeAndIdList) obj;
+
+      boolean result = true;
+      result = result && getAttributeAndIdListList()
+          .equals(other.getAttributeAndIdListList());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
     }
 
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList parseFrom(
+    @Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (getAttributeAndIdListCount() > 0) {
+        hash = (37 * hash) + ATTRIBUTE_AND_ID_LIST_FIELD_NUMBER;
+        hash = (53 * hash) + getAttributeAndIdListList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static AttributeAndIdList parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static AttributeAndIdList parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static AttributeAndIdList parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList parseFrom(
+    public static AttributeAndIdList parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList parseFrom(byte[] data)
+    public static AttributeAndIdList parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList parseFrom(
+    public static AttributeAndIdList parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList parseFrom(java.io.InputStream input)
+    public static AttributeAndIdList parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList parseFrom(
+    public static AttributeAndIdList parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList parseDelimitedFrom(java.io.InputStream input)
+    public static AttributeAndIdList parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList parseDelimitedFrom(
+    public static AttributeAndIdList parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList parseFrom(
+    public static AttributeAndIdList parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList parseFrom(
+    public static AttributeAndIdList parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(AttributeAndIdList prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
-     * Protobuf type {@code attrpubapi_v1.AttributeAndIdList}
-     *
      * <pre>
      * AttributeAndIdList holds multiple attributes and their associated IDs. This
      * is the type of message that is deposited in the escrow server and returned
      * to clients with type “attribute-list”.
      * </pre>
+     *
+     * Protobuf type {@code attrpubapi_v1.AttributeAndIdList}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdListOrBuilder {
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:attrpubapi_v1.AttributeAndIdList)
+        AttributeAndIdListOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeAndIdList_descriptor;
+        return AttributeListProto.internal_static_attrpubapi_v1_AttributeAndIdList_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeAndIdList_fieldAccessorTable
+        return AttributeListProto.internal_static_attrpubapi_v1_AttributeAndIdList_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList.class, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList.Builder.class);
+                AttributeAndIdList.class, Builder.class);
       }
 
       // Construct using com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList.newBuilder()
@@ -1050,19 +1173,16 @@ public final class AttributeListProto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
           getAttributeAndIdListFieldBuilder();
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         if (attributeAndIdListBuilder_ == null) {
@@ -1074,29 +1194,25 @@ public final class AttributeListProto {
         return this;
       }
 
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeAndIdList_descriptor;
+        return AttributeListProto.internal_static_attrpubapi_v1_AttributeAndIdList_descriptor;
       }
 
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList getDefaultInstanceForType() {
-        return com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList.getDefaultInstance();
+      public AttributeAndIdList getDefaultInstanceForType() {
+        return AttributeAndIdList.getDefaultInstance();
       }
 
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList build() {
-        com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList result = buildPartial();
+      public AttributeAndIdList build() {
+        AttributeAndIdList result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList buildPartial() {
-        com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList result = new com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList(this);
+      public AttributeAndIdList buildPartial() {
+        AttributeAndIdList result = new AttributeAndIdList(this);
         int from_bitField0_ = bitField0_;
         if (attributeAndIdListBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001)) {
@@ -1111,17 +1227,43 @@ public final class AttributeListProto {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList) {
-          return mergeFrom((com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList)other);
+        if (other instanceof AttributeAndIdList) {
+          return mergeFrom((AttributeAndIdList)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList other) {
-        if (other == com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList.getDefaultInstance()) return this;
+      public Builder mergeFrom(AttributeAndIdList other) {
+        if (other == AttributeAndIdList.getDefaultInstance()) return this;
         if (attributeAndIdListBuilder_ == null) {
           if (!other.attributeAndIdList_.isEmpty()) {
             if (attributeAndIdList_.isEmpty()) {
@@ -1140,15 +1282,16 @@ public final class AttributeListProto {
               attributeAndIdListBuilder_ = null;
               attributeAndIdList_ = other.attributeAndIdList_;
               bitField0_ = (bitField0_ & ~0x00000001);
-              attributeAndIdListBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+              attributeAndIdListBuilder_ =
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getAttributeAndIdListFieldBuilder() : null;
             } else {
               attributeAndIdListBuilder_.addAllMessages(other.attributeAndIdList_);
             }
           }
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
@@ -1160,12 +1303,12 @@ public final class AttributeListProto {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList parsedMessage = null;
+        AttributeAndIdList parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdList) e.getUnfinishedMessage();
-          throw e;
+          parsedMessage = (AttributeAndIdList) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -1175,23 +1318,22 @@ public final class AttributeListProto {
       }
       private int bitField0_;
 
-      // repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;
-      private java.util.List<com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId> attributeAndIdList_ =
+      private java.util.List<AttributeAndId> attributeAndIdList_ =
         java.util.Collections.emptyList();
       private void ensureAttributeAndIdListIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          attributeAndIdList_ = new java.util.ArrayList<com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId>(attributeAndIdList_);
+          attributeAndIdList_ = new java.util.ArrayList<AttributeAndId>(attributeAndIdList_);
           bitField0_ |= 0x00000001;
          }
       }
 
-      private com.google.protobuf.RepeatedFieldBuilder<
-          com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.Builder, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdOrBuilder> attributeAndIdListBuilder_;
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          AttributeAndId, AttributeAndId.Builder, AttributeAndIdOrBuilder> attributeAndIdListBuilder_;
 
       /**
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
-      public java.util.List<com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId> getAttributeAndIdListList() {
+      public java.util.List<AttributeAndId> getAttributeAndIdListList() {
         if (attributeAndIdListBuilder_ == null) {
           return java.util.Collections.unmodifiableList(attributeAndIdList_);
         } else {
@@ -1211,7 +1353,7 @@ public final class AttributeListProto {
       /**
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId getAttributeAndIdList(int index) {
+      public AttributeAndId getAttributeAndIdList(int index) {
         if (attributeAndIdListBuilder_ == null) {
           return attributeAndIdList_.get(index);
         } else {
@@ -1222,7 +1364,7 @@ public final class AttributeListProto {
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
       public Builder setAttributeAndIdList(
-          int index, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId value) {
+          int index, AttributeAndId value) {
         if (attributeAndIdListBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1239,7 +1381,7 @@ public final class AttributeListProto {
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
       public Builder setAttributeAndIdList(
-          int index, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.Builder builderForValue) {
+          int index, AttributeAndId.Builder builderForValue) {
         if (attributeAndIdListBuilder_ == null) {
           ensureAttributeAndIdListIsMutable();
           attributeAndIdList_.set(index, builderForValue.build());
@@ -1252,7 +1394,7 @@ public final class AttributeListProto {
       /**
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
-      public Builder addAttributeAndIdList(com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId value) {
+      public Builder addAttributeAndIdList(AttributeAndId value) {
         if (attributeAndIdListBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1269,7 +1411,7 @@ public final class AttributeListProto {
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
       public Builder addAttributeAndIdList(
-          int index, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId value) {
+          int index, AttributeAndId value) {
         if (attributeAndIdListBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1286,7 +1428,7 @@ public final class AttributeListProto {
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
       public Builder addAttributeAndIdList(
-          com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.Builder builderForValue) {
+          AttributeAndId.Builder builderForValue) {
         if (attributeAndIdListBuilder_ == null) {
           ensureAttributeAndIdListIsMutable();
           attributeAndIdList_.add(builderForValue.build());
@@ -1300,7 +1442,7 @@ public final class AttributeListProto {
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
       public Builder addAttributeAndIdList(
-          int index, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.Builder builderForValue) {
+          int index, AttributeAndId.Builder builderForValue) {
         if (attributeAndIdListBuilder_ == null) {
           ensureAttributeAndIdListIsMutable();
           attributeAndIdList_.add(index, builderForValue.build());
@@ -1314,10 +1456,11 @@ public final class AttributeListProto {
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
       public Builder addAllAttributeAndIdList(
-          java.lang.Iterable<? extends com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId> values) {
+          Iterable<? extends AttributeAndId> values) {
         if (attributeAndIdListBuilder_ == null) {
           ensureAttributeAndIdListIsMutable();
-          super.addAll(values, attributeAndIdList_);
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, attributeAndIdList_);
           onChanged();
         } else {
           attributeAndIdListBuilder_.addAllMessages(values);
@@ -1353,14 +1496,14 @@ public final class AttributeListProto {
       /**
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.Builder getAttributeAndIdListBuilder(
+      public AttributeAndId.Builder getAttributeAndIdListBuilder(
           int index) {
         return getAttributeAndIdListFieldBuilder().getBuilder(index);
       }
       /**
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdOrBuilder getAttributeAndIdListOrBuilder(
+      public AttributeAndIdOrBuilder getAttributeAndIdListOrBuilder(
           int index) {
         if (attributeAndIdListBuilder_ == null) {
           return attributeAndIdList_.get(index);  } else {
@@ -1370,7 +1513,7 @@ public final class AttributeListProto {
       /**
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
-      public java.util.List<? extends com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdOrBuilder> 
+      public java.util.List<? extends AttributeAndIdOrBuilder>
            getAttributeAndIdListOrBuilderList() {
         if (attributeAndIdListBuilder_ != null) {
           return attributeAndIdListBuilder_.getMessageOrBuilderList();
@@ -1381,31 +1524,31 @@ public final class AttributeListProto {
       /**
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.Builder addAttributeAndIdListBuilder() {
+      public AttributeAndId.Builder addAttributeAndIdListBuilder() {
         return getAttributeAndIdListFieldBuilder().addBuilder(
-            com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.getDefaultInstance());
+            AttributeAndId.getDefaultInstance());
       }
       /**
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.Builder addAttributeAndIdListBuilder(
+      public AttributeAndId.Builder addAttributeAndIdListBuilder(
           int index) {
         return getAttributeAndIdListFieldBuilder().addBuilder(
-            index, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.getDefaultInstance());
+            index, AttributeAndId.getDefaultInstance());
       }
       /**
        * <code>repeated .attrpubapi_v1.AttributeAndId attribute_and_id_list = 1;</code>
        */
-      public java.util.List<com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.Builder> 
+      public java.util.List<AttributeAndId.Builder>
            getAttributeAndIdListBuilderList() {
         return getAttributeAndIdListFieldBuilder().getBuilderList();
       }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.Builder, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdOrBuilder> 
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          AttributeAndId, AttributeAndId.Builder, AttributeAndIdOrBuilder>
           getAttributeAndIdListFieldBuilder() {
         if (attributeAndIdListBuilder_ == null) {
-          attributeAndIdListBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndId.Builder, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeAndIdOrBuilder>(
+          attributeAndIdListBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              AttributeAndId, AttributeAndId.Builder, AttributeAndIdOrBuilder>(
                   attributeAndIdList_,
                   ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
@@ -1414,85 +1557,118 @@ public final class AttributeListProto {
         }
         return attributeAndIdListBuilder_;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:attrpubapi_v1.AttributeAndIdList)
     }
 
+    // @@protoc_insertion_point(class_scope:attrpubapi_v1.AttributeAndIdList)
+    private static final AttributeAndIdList DEFAULT_INSTANCE;
     static {
-      defaultInstance = new AttributeAndIdList(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new AttributeAndIdList();
     }
 
-    // @@protoc_insertion_point(class_scope:attrpubapi_v1.AttributeAndIdList)
+    public static AttributeAndIdList getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @Deprecated public static final com.google.protobuf.Parser<AttributeAndIdList>
+        PARSER = new com.google.protobuf.AbstractParser<AttributeAndIdList>() {
+      public AttributeAndIdList parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new AttributeAndIdList(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<AttributeAndIdList> parser() {
+      return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<AttributeAndIdList> getParserForType() {
+      return PARSER;
+    }
+
+    public AttributeAndIdList getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
-  public interface AttributeListOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface AttributeListOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:attrpubapi_v1.AttributeList)
+      com.google.protobuf.MessageOrBuilder {
 
-    // repeated .attrpubapi_v1.Attribute attributes = 1;
     /**
-     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
      */
-    java.util.List<com.yoti.api.client.spi.remote.proto.AttrProto.Attribute> 
+    java.util.List<AttrProto.Attribute>
         getAttributesList();
     /**
-     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
      */
-    com.yoti.api.client.spi.remote.proto.AttrProto.Attribute getAttributes(int index);
+    AttrProto.Attribute getAttributes(int index);
     /**
-     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
      */
     int getAttributesCount();
     /**
-     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
      */
-    java.util.List<? extends com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder> 
+    java.util.List<? extends AttrProto.AttributeOrBuilder>
         getAttributesOrBuilderList();
     /**
-     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
      */
-    com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder getAttributesOrBuilder(
-        int index);
+    AttrProto.AttributeOrBuilder getAttributesOrBuilder(
+            int index);
   }
   /**
-   * Protobuf type {@code attrpubapi_v1.AttributeList}
-   *
    * <pre>
    * AttributeList holds a number of attributes. It is the type of message that is
    * sent to clients when a sharing operation is completed. Sometimes this has
    * been called a “profile”.
    * </pre>
+   *
+   * Protobuf type {@code attrpubapi_v1.AttributeList}
    */
-  public static final class AttributeList extends
-      com.google.protobuf.GeneratedMessage
-      implements AttributeListOrBuilder {
+  public  static final class AttributeList extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:attrpubapi_v1.AttributeList)
+      AttributeListOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use AttributeList.newBuilder() to construct.
-    private AttributeList(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private AttributeList(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private AttributeList(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final AttributeList defaultInstance;
-    public static AttributeList getDefaultInstance() {
-      return defaultInstance;
+    private AttributeList() {
+      attributes_ = java.util.Collections.emptyList();
     }
 
-    public AttributeList getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private AttributeList(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
+      if (extensionRegistry == null) {
+        throw new NullPointerException();
+      }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -1505,18 +1681,19 @@ public final class AttributeListProto {
               done = true;
               break;
             default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
             }
             case 10: {
               if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                attributes_ = new java.util.ArrayList<com.yoti.api.client.spi.remote.proto.AttrProto.Attribute>();
+                attributes_ = new java.util.ArrayList<AttrProto.Attribute>();
                 mutable_bitField0_ |= 0x00000001;
               }
-              attributes_.add(input.readMessage(com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.PARSER, extensionRegistry));
+              attributes_.add(
+                  input.readMessage(AttrProto.Attribute.PARSER, extensionRegistry));
               break;
             }
           }
@@ -1525,7 +1702,7 @@ public final class AttributeListProto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
           attributes_ = java.util.Collections.unmodifiableList(attributes_);
@@ -1536,74 +1713,56 @@ public final class AttributeListProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeList_descriptor;
+      return AttributeListProto.internal_static_attrpubapi_v1_AttributeList_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeList_fieldAccessorTable
+      return AttributeListProto.internal_static_attrpubapi_v1_AttributeList_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList.class, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList.Builder.class);
+              AttributeList.class, Builder.class);
     }
 
-    public static com.google.protobuf.Parser<AttributeList> PARSER =
-        new com.google.protobuf.AbstractParser<AttributeList>() {
-      public AttributeList parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new AttributeList(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<AttributeList> getParserForType() {
-      return PARSER;
-    }
-
-    // repeated .attrpubapi_v1.Attribute attributes = 1;
     public static final int ATTRIBUTES_FIELD_NUMBER = 1;
-    private java.util.List<com.yoti.api.client.spi.remote.proto.AttrProto.Attribute> attributes_;
+    private java.util.List<AttrProto.Attribute> attributes_;
     /**
-     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
      */
-    public java.util.List<com.yoti.api.client.spi.remote.proto.AttrProto.Attribute> getAttributesList() {
+    public java.util.List<AttrProto.Attribute> getAttributesList() {
       return attributes_;
     }
     /**
-     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
      */
-    public java.util.List<? extends com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder> 
+    public java.util.List<? extends AttrProto.AttributeOrBuilder>
         getAttributesOrBuilderList() {
       return attributes_;
     }
     /**
-     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
      */
     public int getAttributesCount() {
       return attributes_.size();
     }
     /**
-     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
      */
-    public com.yoti.api.client.spi.remote.proto.AttrProto.Attribute getAttributes(int index) {
+    public AttrProto.Attribute getAttributes(int index) {
       return attributes_.get(index);
     }
     /**
-     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
      */
-    public com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder getAttributesOrBuilder(
+    public AttrProto.AttributeOrBuilder getAttributesOrBuilder(
         int index) {
       return attributes_.get(index);
     }
 
-    private void initFields() {
-      attributes_ = java.util.Collections.emptyList();
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -1611,16 +1770,14 @@ public final class AttributeListProto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       for (int i = 0; i < attributes_.size(); i++) {
         output.writeMessage(1, attributes_.get(i));
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
@@ -1628,106 +1785,155 @@ public final class AttributeListProto {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, attributes_.get(i));
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    @Override
+    public boolean equals(final Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof AttributeList)) {
+        return super.equals(obj);
+      }
+      AttributeList other = (AttributeList) obj;
+
+      boolean result = true;
+      result = result && getAttributesList()
+          .equals(other.getAttributesList());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
     }
 
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList parseFrom(
+    @Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (getAttributesCount() > 0) {
+        hash = (37 * hash) + ATTRIBUTES_FIELD_NUMBER;
+        hash = (53 * hash) + getAttributesList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static AttributeList parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static AttributeList parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static AttributeList parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList parseFrom(
+    public static AttributeList parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList parseFrom(byte[] data)
+    public static AttributeList parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList parseFrom(
+    public static AttributeList parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList parseFrom(java.io.InputStream input)
+    public static AttributeList parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList parseFrom(
+    public static AttributeList parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList parseDelimitedFrom(java.io.InputStream input)
+    public static AttributeList parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList parseDelimitedFrom(
+    public static AttributeList parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList parseFrom(
+    public static AttributeList parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
-    public static com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList parseFrom(
+    public static AttributeList parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(AttributeList prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
-     * Protobuf type {@code attrpubapi_v1.AttributeList}
-     *
      * <pre>
      * AttributeList holds a number of attributes. It is the type of message that is
      * sent to clients when a sharing operation is completed. Sometimes this has
      * been called a “profile”.
      * </pre>
+     *
+     * Protobuf type {@code attrpubapi_v1.AttributeList}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeListOrBuilder {
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:attrpubapi_v1.AttributeList)
+        AttributeListOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeList_descriptor;
+        return AttributeListProto.internal_static_attrpubapi_v1_AttributeList_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeList_fieldAccessorTable
+        return AttributeListProto.internal_static_attrpubapi_v1_AttributeList_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList.class, com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList.Builder.class);
+                AttributeList.class, Builder.class);
       }
 
       // Construct using com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList.newBuilder()
@@ -1736,19 +1942,16 @@ public final class AttributeListProto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
           getAttributesFieldBuilder();
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         if (attributesBuilder_ == null) {
@@ -1760,29 +1963,25 @@ public final class AttributeListProto {
         return this;
       }
 
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.yoti.api.client.spi.remote.proto.AttributeListProto.internal_static_attrpubapi_v1_AttributeList_descriptor;
+        return AttributeListProto.internal_static_attrpubapi_v1_AttributeList_descriptor;
       }
 
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList getDefaultInstanceForType() {
-        return com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList.getDefaultInstance();
+      public AttributeList getDefaultInstanceForType() {
+        return AttributeList.getDefaultInstance();
       }
 
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList build() {
-        com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList result = buildPartial();
+      public AttributeList build() {
+        AttributeList result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList buildPartial() {
-        com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList result = new com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList(this);
+      public AttributeList buildPartial() {
+        AttributeList result = new AttributeList(this);
         int from_bitField0_ = bitField0_;
         if (attributesBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001)) {
@@ -1797,17 +1996,43 @@ public final class AttributeListProto {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList) {
-          return mergeFrom((com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList)other);
+        if (other instanceof AttributeList) {
+          return mergeFrom((AttributeList)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList other) {
-        if (other == com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList.getDefaultInstance()) return this;
+      public Builder mergeFrom(AttributeList other) {
+        if (other == AttributeList.getDefaultInstance()) return this;
         if (attributesBuilder_ == null) {
           if (!other.attributes_.isEmpty()) {
             if (attributes_.isEmpty()) {
@@ -1826,15 +2051,16 @@ public final class AttributeListProto {
               attributesBuilder_ = null;
               attributes_ = other.attributes_;
               bitField0_ = (bitField0_ & ~0x00000001);
-              attributesBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+              attributesBuilder_ =
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getAttributesFieldBuilder() : null;
             } else {
               attributesBuilder_.addAllMessages(other.attributes_);
             }
           }
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
@@ -1846,12 +2072,12 @@ public final class AttributeListProto {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList parsedMessage = null;
+        AttributeList parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.yoti.api.client.spi.remote.proto.AttributeListProto.AttributeList) e.getUnfinishedMessage();
-          throw e;
+          parsedMessage = (AttributeList) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -1861,23 +2087,22 @@ public final class AttributeListProto {
       }
       private int bitField0_;
 
-      // repeated .attrpubapi_v1.Attribute attributes = 1;
-      private java.util.List<com.yoti.api.client.spi.remote.proto.AttrProto.Attribute> attributes_ =
+      private java.util.List<AttrProto.Attribute> attributes_ =
         java.util.Collections.emptyList();
       private void ensureAttributesIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          attributes_ = new java.util.ArrayList<com.yoti.api.client.spi.remote.proto.AttrProto.Attribute>(attributes_);
+          attributes_ = new java.util.ArrayList<AttrProto.Attribute>(attributes_);
           bitField0_ |= 0x00000001;
          }
       }
 
-      private com.google.protobuf.RepeatedFieldBuilder<
-          com.yoti.api.client.spi.remote.proto.AttrProto.Attribute, com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder, com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder> attributesBuilder_;
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          AttrProto.Attribute, AttrProto.Attribute.Builder, AttrProto.AttributeOrBuilder> attributesBuilder_;
 
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
-      public java.util.List<com.yoti.api.client.spi.remote.proto.AttrProto.Attribute> getAttributesList() {
+      public java.util.List<AttrProto.Attribute> getAttributesList() {
         if (attributesBuilder_ == null) {
           return java.util.Collections.unmodifiableList(attributes_);
         } else {
@@ -1885,7 +2110,7 @@ public final class AttributeListProto {
         }
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
       public int getAttributesCount() {
         if (attributesBuilder_ == null) {
@@ -1895,9 +2120,9 @@ public final class AttributeListProto {
         }
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
-      public com.yoti.api.client.spi.remote.proto.AttrProto.Attribute getAttributes(int index) {
+      public AttrProto.Attribute getAttributes(int index) {
         if (attributesBuilder_ == null) {
           return attributes_.get(index);
         } else {
@@ -1905,10 +2130,10 @@ public final class AttributeListProto {
         }
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
       public Builder setAttributes(
-          int index, com.yoti.api.client.spi.remote.proto.AttrProto.Attribute value) {
+          int index, AttrProto.Attribute value) {
         if (attributesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1922,10 +2147,10 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
       public Builder setAttributes(
-          int index, com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder builderForValue) {
+          int index, AttrProto.Attribute.Builder builderForValue) {
         if (attributesBuilder_ == null) {
           ensureAttributesIsMutable();
           attributes_.set(index, builderForValue.build());
@@ -1936,9 +2161,9 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
-      public Builder addAttributes(com.yoti.api.client.spi.remote.proto.AttrProto.Attribute value) {
+      public Builder addAttributes(AttrProto.Attribute value) {
         if (attributesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1952,10 +2177,10 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
       public Builder addAttributes(
-          int index, com.yoti.api.client.spi.remote.proto.AttrProto.Attribute value) {
+          int index, AttrProto.Attribute value) {
         if (attributesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1969,10 +2194,10 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
       public Builder addAttributes(
-          com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder builderForValue) {
+          AttrProto.Attribute.Builder builderForValue) {
         if (attributesBuilder_ == null) {
           ensureAttributesIsMutable();
           attributes_.add(builderForValue.build());
@@ -1983,10 +2208,10 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
       public Builder addAttributes(
-          int index, com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder builderForValue) {
+          int index, AttrProto.Attribute.Builder builderForValue) {
         if (attributesBuilder_ == null) {
           ensureAttributesIsMutable();
           attributes_.add(index, builderForValue.build());
@@ -1997,13 +2222,14 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
       public Builder addAllAttributes(
-          java.lang.Iterable<? extends com.yoti.api.client.spi.remote.proto.AttrProto.Attribute> values) {
+          Iterable<? extends AttrProto.Attribute> values) {
         if (attributesBuilder_ == null) {
           ensureAttributesIsMutable();
-          super.addAll(values, attributes_);
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, attributes_);
           onChanged();
         } else {
           attributesBuilder_.addAllMessages(values);
@@ -2011,7 +2237,7 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
       public Builder clearAttributes() {
         if (attributesBuilder_ == null) {
@@ -2024,7 +2250,7 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
       public Builder removeAttributes(int index) {
         if (attributesBuilder_ == null) {
@@ -2037,16 +2263,16 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
-      public com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder getAttributesBuilder(
+      public AttrProto.Attribute.Builder getAttributesBuilder(
           int index) {
         return getAttributesFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
-      public com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder getAttributesOrBuilder(
+      public AttrProto.AttributeOrBuilder getAttributesOrBuilder(
           int index) {
         if (attributesBuilder_ == null) {
           return attributes_.get(index);  } else {
@@ -2054,9 +2280,9 @@ public final class AttributeListProto {
         }
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
-      public java.util.List<? extends com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder> 
+      public java.util.List<? extends AttrProto.AttributeOrBuilder>
            getAttributesOrBuilderList() {
         if (attributesBuilder_ != null) {
           return attributesBuilder_.getMessageOrBuilderList();
@@ -2065,33 +2291,33 @@ public final class AttributeListProto {
         }
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
-      public com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder addAttributesBuilder() {
+      public AttrProto.Attribute.Builder addAttributesBuilder() {
         return getAttributesFieldBuilder().addBuilder(
-            com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.getDefaultInstance());
+            AttrProto.Attribute.getDefaultInstance());
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
-      public com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder addAttributesBuilder(
+      public AttrProto.Attribute.Builder addAttributesBuilder(
           int index) {
         return getAttributesFieldBuilder().addBuilder(
-            index, com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.getDefaultInstance());
+            index, AttrProto.Attribute.getDefaultInstance());
       }
       /**
-       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
        */
-      public java.util.List<com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder> 
+      public java.util.List<AttrProto.Attribute.Builder>
            getAttributesBuilderList() {
         return getAttributesFieldBuilder().getBuilderList();
       }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          com.yoti.api.client.spi.remote.proto.AttrProto.Attribute, com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder, com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder> 
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          AttrProto.Attribute, AttrProto.Attribute.Builder, AttrProto.AttributeOrBuilder>
           getAttributesFieldBuilder() {
         if (attributesBuilder_ == null) {
-          attributesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              com.yoti.api.client.spi.remote.proto.AttrProto.Attribute, com.yoti.api.client.spi.remote.proto.AttrProto.Attribute.Builder, com.yoti.api.client.spi.remote.proto.AttrProto.AttributeOrBuilder>(
+          attributesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              AttrProto.Attribute, AttrProto.Attribute.Builder, AttrProto.AttributeOrBuilder>(
                   attributes_,
                   ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
@@ -2100,83 +2326,121 @@ public final class AttributeListProto {
         }
         return attributesBuilder_;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:attrpubapi_v1.AttributeList)
     }
 
+    // @@protoc_insertion_point(class_scope:attrpubapi_v1.AttributeList)
+    private static final AttributeList DEFAULT_INSTANCE;
     static {
-      defaultInstance = new AttributeList(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new AttributeList();
     }
 
-    // @@protoc_insertion_point(class_scope:attrpubapi_v1.AttributeList)
+    public static AttributeList getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @Deprecated public static final com.google.protobuf.Parser<AttributeList>
+        PARSER = new com.google.protobuf.AbstractParser<AttributeList>() {
+      public AttributeList parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new AttributeList(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<AttributeList> parser() {
+      return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<AttributeList> getParserForType() {
+      return PARSER;
+    }
+
+    public AttributeList getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_attrpubapi_v1_AttributeAndId_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_attrpubapi_v1_AttributeAndId_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_attrpubapi_v1_AttributeAndIdList_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_attrpubapi_v1_AttributeAndIdList_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_attrpubapi_v1_AttributeList_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_attrpubapi_v1_AttributeList_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
   }
-  private static com.google.protobuf.Descriptors.FileDescriptor
+  private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    java.lang.String[] descriptorData = {
+    String[] descriptorData = {
       "\n\nList.proto\022\rattrpubapi_v1\032\017Attribute.p" +
       "roto\"S\n\016AttributeAndId\022+\n\tattribute\030\001 \001(" +
-      "\0132\030.attrpubapi_v1.Attribute\022\024\n\014attribute" +
+      "\0132\030.attrpubapi_v1.SimpleAttribute\022\024\n\014attribute" +
       "_id\030\002 \001(\014\"R\n\022AttributeAndIdList\022<\n\025attri" +
       "bute_and_id_list\030\001 \003(\0132\035.attrpubapi_v1.A" +
       "ttributeAndId\"=\n\rAttributeList\022,\n\nattrib" +
-      "utes\030\001 \003(\0132\030.attrpubapi_v1.AttributeB,\n\026" +
-      "com.yoti.api.client.spi.remote.protoB\022AttributeListPro" +
-      "to"
+      "utes\030\001 \003(\0132\030.attrpubapi_v1.AttributeB:\n$" +
+      "com.yoti.api.client.spi.remote.protoB\022At" +
+      "tributeListProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_attrpubapi_v1_AttributeAndId_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_attrpubapi_v1_AttributeAndId_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_attrpubapi_v1_AttributeAndId_descriptor,
-              new java.lang.String[] { "Attribute", "AttributeId", });
-          internal_static_attrpubapi_v1_AttributeAndIdList_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_attrpubapi_v1_AttributeAndIdList_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_attrpubapi_v1_AttributeAndIdList_descriptor,
-              new java.lang.String[] { "AttributeAndIdList", });
-          internal_static_attrpubapi_v1_AttributeList_descriptor =
-            getDescriptor().getMessageTypes().get(2);
-          internal_static_attrpubapi_v1_AttributeList_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_attrpubapi_v1_AttributeList_descriptor,
-              new java.lang.String[] { "Attributes", });
-          return null;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          com.yoti.api.client.spi.remote.proto.AttrProto.getDescriptor(),
+          AttrProto.getDescriptor(),
         }, assigner);
+    internal_static_attrpubapi_v1_AttributeAndId_descriptor =
+      getDescriptor().getMessageTypes().get(0);
+    internal_static_attrpubapi_v1_AttributeAndId_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_attrpubapi_v1_AttributeAndId_descriptor,
+        new String[] { "SimpleAttribute", "AttributeId", });
+    internal_static_attrpubapi_v1_AttributeAndIdList_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_attrpubapi_v1_AttributeAndIdList_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_attrpubapi_v1_AttributeAndIdList_descriptor,
+        new String[] { "AttributeAndIdList", });
+    internal_static_attrpubapi_v1_AttributeList_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_attrpubapi_v1_AttributeList_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_attrpubapi_v1_AttributeList_descriptor,
+        new String[] { "Attributes", });
+    AttrProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)
