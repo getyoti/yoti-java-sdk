@@ -149,7 +149,7 @@ public class ProfileReaderTest {
 
     @Test
     public void shouldDecodeProfileCorrectly() throws Exception {
-        Attribute<String> stringAttribute = new Attribute<>("someName", "someValue");
+        Attribute<String> stringAttribute = new SimpleAttribute<>("someName", "someValue");
         byte[] profileContent = EncryptedDataProto.EncryptedData.newBuilder()
                 .setCipherText(ByteString.copyFrom(validProfileEncryptionResult.data))
                 .setIv(ByteString.copyFrom(validProfileEncryptionResult.iv))

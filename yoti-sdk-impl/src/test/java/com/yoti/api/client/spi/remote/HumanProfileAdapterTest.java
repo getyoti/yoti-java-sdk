@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Profile;
 
 import org.junit.Test;
@@ -33,7 +32,7 @@ public class HumanProfileAdapterTest {
 
     @Test
     public void isAgeVerified_shouldReturnValueOfAgeOver() {
-        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, String.class)).thenReturn(new Attribute(ATTR_AGE_OVER, "true"));
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, String.class)).thenReturn(new SimpleAttribute(ATTR_AGE_OVER, "true"));
 
         Boolean result = testObj.isAgeVerified();
 
@@ -42,7 +41,7 @@ public class HumanProfileAdapterTest {
 
     @Test
     public void isAgeVerified_shouldReturnValueOfAgeUnder() {
-        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, String.class)).thenReturn(new Attribute(ATTR_AGE_UNDER, "false"));
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, String.class)).thenReturn(new SimpleAttribute(ATTR_AGE_UNDER, "false"));
 
         Boolean result = testObj.isAgeVerified();
 
@@ -52,8 +51,8 @@ public class HumanProfileAdapterTest {
     // This scenario should never happen, but to be pragmatic...
     @Test
     public void isAgeVerified_shouldPreferAgeOverWhenBothAttributesArePresent() {
-        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, String.class)).thenReturn(new Attribute(ATTR_AGE_OVER, "true"));
-        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, String.class)).thenReturn(new Attribute(ATTR_AGE_UNDER, "false"));
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, String.class)).thenReturn(new SimpleAttribute(ATTR_AGE_OVER, "true"));
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, String.class)).thenReturn(new SimpleAttribute(ATTR_AGE_UNDER, "false"));
 
         Boolean result = testObj.isAgeVerified();
 
