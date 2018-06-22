@@ -5,11 +5,11 @@ package com.yoti.api.client;
  *
  */
 public interface Date {
+
     int getYear();
 
     int getMonth();
 
     int getDay();
-    
-    String toString();
+
 }
