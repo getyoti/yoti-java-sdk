@@ -40,7 +40,7 @@ class AttributeConverter {
         value = convertSpecialType(attribute, value);
         Set<String> sources = extractMetadata(attribute, AnchorType.SOURCE);
         Set<String> verifiers = extractMetadata(attribute, AnchorType.VERIFIER);
-        return new Attribute(attribute.getName(), value, sources, verifiers);
+        return new SimpleAttribute(attribute.getName(), value, sources, verifiers);
     }
 
     private Object convertValueFromProto(AttrProto.Attribute attribute) throws ParseException, IOException {
