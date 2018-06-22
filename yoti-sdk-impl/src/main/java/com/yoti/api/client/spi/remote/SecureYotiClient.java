@@ -142,7 +142,7 @@ final class SecureYotiClient implements YotiClient {
     }
 
     private Profile createProfile(byte[] profileBytes, Key secretKey) throws ProfileException {
-        List<Attribute> attributeList = new ArrayList<Attribute>();
+        List<Attribute> attributeList = new ArrayList<>();
         if (profileBytes != null && profileBytes.length > 0) {
             EncryptedData encryptedData = parseProfileContent(profileBytes);
             byte[] profileData = decrypt(encryptedData.getCipherText(), secretKey, encryptedData.getIv());
@@ -175,7 +175,7 @@ final class SecureYotiClient implements YotiClient {
     }
 
     private List<Attribute> parseAttributes(AttributeList message) {
-        List<Attribute> parsedAttributes = new ArrayList<Attribute>();
+        List<Attribute> parsedAttributes = new ArrayList<>();
         for (AttrProto.Attribute attribute : message.getAttributesList()) {
             try {
                 parsedAttributes.add(AttributeConverter.convertAttribute(attribute));
@@ -193,8 +193,7 @@ final class SecureYotiClient implements YotiClient {
         return new SimpleProfile(attributeList);
     }
 
-    private ActivityDetails createActivityDetails(Profile userProfile, Profile applicationProfile, Receipt receipt)
-            throws ProfileException {
+    private ActivityDetails createActivityDetails(Profile userProfile, Profile applicationProfile, Receipt receipt) throws ProfileException {
         try {
             byte[] rmi = receipt.getRememberMeId();
             String rememberMeId = (rmi == null) ? null : new String(Base64.getEncoder().encode(rmi), DEFAULT_CHARSET);
@@ -202,8 +201,7 @@ final class SecureYotiClient implements YotiClient {
             SimpleDateFormat format = new SimpleDateFormat(RFC3339_PATTERN);
             Date timestamp = format.parse(receipt.getTimestamp());
 
-            return new SimpleActivityDetails(rememberMeId, userProfile, applicationProfile, timestamp,
-                    receipt.getReceiptId());
+            return new SimpleActivityDetails(rememberMeId, userProfile, applicationProfile, timestamp, receipt.getReceiptId());
         } catch (UnsupportedEncodingException e) {
             throw new ProfileException("Cannot parse user ID", e);
         } catch (ParseException e) {

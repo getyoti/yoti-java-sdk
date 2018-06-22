@@ -37,11 +37,18 @@ public class ReceiptTest {
     }
 
     static Receipt createReceipt() {
-        Receipt receipt = new Receipt.Builder().withProfile(VALID_CONTENT).withReceiptId(VALID_CONTENT)
-                .withOtherPartyExtraData(VALID_CONTENT).withOtherPartyProfile(VALID_CONTENT)
-                .withExtraData(VALID_CONTENT).withWrappedReceiptKey(VALID_CONTENT).withPolicyUri(VALID_STRING)
-                .withOutcome(Outcome.SUCCESS).withPersonalKey(VALID_CONTENT)
-                .withRememberMeId(VALID_CONTENT).withTimestamp(VALID_STRING).build();
-        return receipt;
+        return new Receipt.Builder()
+                .withProfile(VALID_CONTENT)
+                .withReceiptId(VALID_CONTENT)
+                .withOtherPartyExtraData(VALID_CONTENT)
+                .withOtherPartyProfile(VALID_CONTENT)
+                .withExtraData(VALID_CONTENT)
+                .withWrappedReceiptKey(VALID_CONTENT)
+                .withPolicyUri(VALID_STRING)
+                .withOutcome(Outcome.SUCCESS)
+                .withPersonalKey(VALID_CONTENT)
+                .withRememberMeId(VALID_CONTENT)
+                .withTimestamp(VALID_STRING)
+                .build();
     }
 }

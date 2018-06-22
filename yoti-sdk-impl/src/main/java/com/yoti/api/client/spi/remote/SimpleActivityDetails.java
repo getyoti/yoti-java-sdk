@@ -17,8 +17,7 @@ final class SimpleActivityDetails implements ActivityDetails {
     private final String receiptId;
     private final String base64Selfie;
 
-    public SimpleActivityDetails(String userId, Profile userProfile, Profile applicationProfile, Date timestamp,
-            byte[] receiptId) {
+    public SimpleActivityDetails(String userId, Profile userProfile, Profile applicationProfile, Date timestamp, byte[] receiptId) {
         this.userId = notNull(userId, "User id");
         this.userProfile = HumanProfileAdapter.wrap(notNull(userProfile, "User profile"));
         this.applicationProfile = ApplicationProfileAdapter.wrap(notNull(applicationProfile, "Application profile"));
