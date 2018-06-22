@@ -69,7 +69,7 @@ public class AttributeConverterTest {
         Attribute<Date> result = testObj.convertAttribute(attribute);
 
         assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
-        assertEquals(DateAttributeValue.parseFrom(SOME_DATE_VALUE).toString(), result.getValue().toString());
+        assertEquals(DateValue.parseFrom(SOME_DATE_VALUE).toString(), result.getValue().toString());
     }
 
     @Test
