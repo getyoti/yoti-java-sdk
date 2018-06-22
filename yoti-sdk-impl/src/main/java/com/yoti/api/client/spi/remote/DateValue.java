@@ -13,30 +13,30 @@ import static java.lang.String.format;
  * Attribute value holding a year/month/day tuple.
  *
  */
-final class DateAttributeValue implements com.yoti.api.client.Date {
+final class DateValue implements com.yoti.api.client.Date {
 
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private final int year;
     private final int month;
     private final int day;
 
-    private DateAttributeValue(int year, int month, int day) {
+    private DateValue(int year, int month, int day) {
         this.year = year;
         this.month = month;
         this.day = day;
     }
 
-    public static DateAttributeValue parseFrom(byte[] content) throws UnsupportedEncodingException, ParseException {
+    public static DateValue parseFrom(byte[] content) throws UnsupportedEncodingException, ParseException {
         String source = new String(content, DEFAULT_CHARSET);
         return parseFrom(source);
     }
 
-    public static DateAttributeValue parseFrom(String source) throws UnsupportedEncodingException, ParseException {
+    public static DateValue parseFrom(String source) throws UnsupportedEncodingException, ParseException {
         Calendar calendar = parseDate(source);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        return new DateAttributeValue(year, month, day);
+        return new DateValue(year, month, day);
     }
 
     private static Calendar parseDate(String source) throws ParseException {

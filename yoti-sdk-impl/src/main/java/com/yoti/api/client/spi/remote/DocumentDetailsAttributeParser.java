@@ -31,7 +31,7 @@ class DocumentDetailsAttributeParser {
 
     private static Date getDateSafely(String[] attributes, int index) throws UnsupportedEncodingException, ParseException {
         String expirationDate = getSafely(attributes, index);
-        return expirationDate == null ? null : DateAttributeValue.parseFrom(expirationDate);
+        return expirationDate == null ? null : DateValue.parseFrom(expirationDate);
     }
 
     private static String getSafely(String[] attributes, int index) {
