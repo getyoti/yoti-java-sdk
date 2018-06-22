@@ -48,7 +48,7 @@ class AttributeConverter {
             case STRING:
                 return attribute.getValue().toString(DEFAULT_CHARSET);
             case DATE:
-                return DateAttributeValue.parseFrom(attribute.getValue().toByteArray());
+                return DateValue.parseFrom(attribute.getValue().toByteArray());
             case JPEG:
                 return new JpegAttributeValue(attribute.getValue().toByteArray());
             case PNG:

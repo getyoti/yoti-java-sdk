@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.yoti.api.client.Date;
 
-public class DateAttributeValueTest {
+public class DateValueTest {
 
     private static final String VALID_DATE_STRING = "2016-05-01";
     private byte[] VALID_DATE_BYTES;
@@ -24,29 +24,29 @@ public class DateAttributeValueTest {
 
     @Test
     public void parseFrom_shouldParseValidString() throws UnsupportedEncodingException, ParseException {
-        DateAttributeValue date = DateAttributeValue.parseFrom(VALID_DATE_STRING);
+        DateValue date = DateValue.parseFrom(VALID_DATE_STRING);
         assertDate(date);
     }
 
     @Test
     public void parseFrom_shouldParseValidArray() throws UnsupportedEncodingException, ParseException {
-        DateAttributeValue date = DateAttributeValue.parseFrom(VALID_DATE_BYTES);
+        DateValue date = DateValue.parseFrom(VALID_DATE_BYTES);
         assertDate(date);
     }
 
     @Test(expected = ParseException.class)
     public void parseFrom_shouldNotParseInvalidDateFormat() throws UnsupportedEncodingException, ParseException {
-        DateAttributeValue.parseFrom(INVALID_DATE_FORMAT_STRING);
+        DateValue.parseFrom(INVALID_DATE_FORMAT_STRING);
     }
 
     @Test(expected = ParseException.class)
     public void parseFrom_shouldNotParseInvalidDateValue() throws UnsupportedEncodingException, ParseException {
-        DateAttributeValue.parseFrom(INVALID_DATE_VALUE_STRING);
+        DateValue.parseFrom(INVALID_DATE_VALUE_STRING);
     }
 
     @Test
     public void toString_shouldFormatDateCorrectly() throws UnsupportedEncodingException, ParseException {
-        DateAttributeValue date = DateAttributeValue.parseFrom(VALID_DATE_STRING);
+        DateValue date = DateValue.parseFrom(VALID_DATE_STRING);
 
         String result = date.toString();
 
