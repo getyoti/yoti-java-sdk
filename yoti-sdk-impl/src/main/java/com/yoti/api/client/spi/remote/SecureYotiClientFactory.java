@@ -1,14 +1,13 @@
 package com.yoti.api.client.spi.remote;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.yoti.api.client.InitialisationException;
 import com.yoti.api.client.YotiClient;
 import com.yoti.api.client.YotiClientConfiguration;
 import com.yoti.api.client.YotiClientFactory;
-import com.yoti.api.client.spi.remote.call.RemoteProfileService;
 import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class SecureYotiClientFactory implements YotiClientFactory {
 
@@ -24,9 +23,10 @@ public final class SecureYotiClientFactory implements YotiClientFactory {
         LOG.debug("Creating SecureYotiClient for application '{}' from '{}'", configuration.getApplicationId(), configuration.getKeyPairSource());
         return new SecureYotiClient(configuration.getApplicationId(),
                 configuration.getKeyPairSource(),
-                RemoteProfileService.newInstance(),
-                RemoteAmlService.newInstance(),
-                AttributeConverter.newInstance());
+                ReceiptFetcher.newInstance(),
+                ActivityDetailsFactory.newInstance(),
+                RemoteAmlService.newInstance()
+        );
     }
 
 }
