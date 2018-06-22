@@ -11,6 +11,7 @@ import com.yoti.api.client.spi.remote.call.RemoteProfileService;
 import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
 
 public final class SecureYotiClientFactory implements YotiClientFactory {
+
     private static final Logger LOG = LoggerFactory.getLogger(SecureYotiClientFactory.class);
 
     @Override
@@ -20,10 +21,12 @@ public final class SecureYotiClientFactory implements YotiClientFactory {
 
     @Override
     public YotiClient getInstance(YotiClientConfiguration configuration) throws InitialisationException {
-        LOG.debug("Creating SecureYotiClient for application {} from {}", configuration.getApplicationId(),
-                configuration.getKeyPairSource());
-        return new SecureYotiClient(configuration.getApplicationId(), configuration.getKeyPairSource(),
-                RemoteProfileService.newInstance(), RemoteAmlService.newInstance());
+        LOG.debug("Creating SecureYotiClient for application '{}' from '{}'", configuration.getApplicationId(), configuration.getKeyPairSource());
+        return new SecureYotiClient(configuration.getApplicationId(),
+                configuration.getKeyPairSource(),
+                RemoteProfileService.newInstance(),
+                RemoteAmlService.newInstance(),
+                AttributeConverter.newInstance());
     }
 
 }

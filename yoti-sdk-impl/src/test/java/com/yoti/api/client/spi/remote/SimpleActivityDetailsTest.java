@@ -1,16 +1,16 @@
 package com.yoti.api.client.spi.remote;
 
-import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collections;
 import java.util.Date;
+
+import com.yoti.api.client.Attribute;
+import com.yoti.api.client.Profile;
 
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import com.yoti.api.client.Attribute;
-import com.yoti.api.client.Profile;
 
 public class SimpleActivityDetailsTest {
 
@@ -77,25 +77,25 @@ public class SimpleActivityDetailsTest {
         SimpleActivityDetails s = new SimpleActivityDetails(USER_ID, USER_PROFILE, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
         assertEquals(RECEIPT_ID_STRING, s.getReceiptId());
     }
-    
+
     @Test
     public void shouldReturnBase64SelfieIfSelfieSet() {
         Attribute selfie = new Attribute("selfie", new JpegAttributeValue(SOME_SELFIE_BYTES), null);
-        SimpleProfile profile = new SimpleProfile(singletonList(selfie));
+        SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>singletonList(selfie));
 
         SimpleActivityDetails result = new SimpleActivityDetails(USER_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
 
         String expected = "data:image/jpeg;base64," + Base64.toBase64String(SOME_SELFIE_BYTES);
         assertEquals(expected, result.getBase64Selfie());
     }
-    
+
     @Test
     public void shouldReturnBlankBase64SelfieIfSelfieNotSet() {
         Attribute familyName = new Attribute("family_name", "Smith", null);
-        SimpleProfile profile = new SimpleProfile(singletonList(familyName));
+        SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>singletonList(familyName));
 
         SimpleActivityDetails result = new SimpleActivityDetails(USER_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
-        
+
         assertEquals("", result.getBase64Selfie());
     }
 }

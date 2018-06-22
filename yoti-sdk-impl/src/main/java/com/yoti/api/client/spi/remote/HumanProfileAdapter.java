@@ -2,11 +2,8 @@ package com.yoti.api.client.spi.remote;
 
 import static java.lang.Boolean.parseBoolean;
 
-import java.io.UnsupportedEncodingException;
-import java.text.ParseException;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Date;
@@ -26,16 +23,14 @@ final class HumanProfileAdapter implements HumanProfile {
     private static final String ATTRIBUTE_DOB = "date_of_birth";
     private static final String ATTRIBUTE_AGE_OVER = "age_over:";
     private static final String ATTRIBUTE_AGE_UNDER = "age_under:";
-    private static final String ATTRIBUTE_GENDER = "gender";
+    public static final String ATTRIBUTE_GENDER = "gender";
     private static final String ATTRIBUTE_POSTAL_ADDRESS = "postal_address";
-    private static final String ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS = "structured_postal_address";
+    public static final String ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS = "structured_postal_address";
     private static final String ATTRIBUTE_NATIONALITY = "nationality";
     private static final String ATTRIBUTE_PHONE_NUMBER = "phone_number";
     private static final String ATTRIBUTE_SELFIE = "selfie";
     private static final String ATTRIBUTE_EMAIL_ADDRESS = "email_address";
-    private static final String ATTRIBUTE_DOCUMENT_DETAILS = "document_details";
-
-    private static final char SPACE = ' ';
+    public static final String ATTRIBUTE_DOCUMENT_DETAILS = "document_details";
 
     private final Profile wrapped;
 
@@ -48,125 +43,91 @@ final class HumanProfileAdapter implements HumanProfile {
     }
 
     @Override
-    public String getAttribute(String name) {
+    public Attribute getAttribute(String name) {
         return wrapped.getAttribute(name);
     }
 
     @Override
-    public Attribute getAttributeObject(String name) {
-       return wrapped.getAttributeObject(name);
-    }
-
-    @Override
-    public boolean is(String name, boolean defaultValue) {
-        return wrapped.is(name, defaultValue);
-    }
-
-    @Override
-    public <T> T getAttribute(String name, Class<T> clazz) {
+    public <T> Attribute<T> getAttribute(String name, Class<T> clazz) {
         return wrapped.getAttribute(name, clazz);
     }
 
     @Override
-    public <T> T findAttributeStartingWith(String name, Class<T> clazz) {
+    public <T> Attribute<T> findAttributeStartingWith(String name, Class<T> clazz) {
         return wrapped.findAttributeStartingWith(name, clazz);
     }
 
     @Override
-    public Collection<Attribute> getAttributes() {
+    public Collection<Attribute<?>> getAttributes() {
         return wrapped.getAttributes();
     }
 
     @Override
-    public String getFamilyName() {
-        return wrapped.getAttribute(ATTRIBUTE_FAMILY_NAME);
+    public Attribute<String> getFamilyName() {
+        return wrapped.getAttribute(ATTRIBUTE_FAMILY_NAME, String.class);
     }
 
     @Override
-    public String getGivenNames() {
-        return wrapped.getAttribute(ATTRIBUTE_GIVEN_NAMES);
+    public Attribute<String> getGivenNames() {
+        return wrapped.getAttribute(ATTRIBUTE_GIVEN_NAMES, String.class);
     }
 
     @Override
-    public String getFullName() {
-        return wrapped.getAttribute(ATTRIBUTE_FULL_NAME);
-    }
-
-    @Deprecated
-    @Override
-    public String getGivenAndLastNames() {
-        final String givenNames = getGivenNames();
-        final String familyName = getFamilyName();
-        if (givenNames == null && familyName == null) {
-            return null;
-        } else {
-            return buildGivenAndLastNameString(givenNames, familyName);
-        }
+    public Attribute<String> getFullName() {
+        return wrapped.getAttribute(ATTRIBUTE_FULL_NAME, String.class);
     }
 
     @Override
-    public Date getDateOfBirth() {
+    public Attribute<Date> getDateOfBirth() {
         return wrapped.getAttribute(ATTRIBUTE_DOB, Date.class);
     }
 
     @Override
     public Boolean isAgeVerified() {
-        Boolean isAgeOver = parseFromStringValue(wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_OVER, String.class));
-        Boolean isAgeUnder = parseFromStringValue(wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_UNDER, String.class));
+        Boolean isAgeOver = parseFromStringAttribute(wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_OVER, String.class));
+        Boolean isAgeUnder = parseFromStringAttribute(wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_UNDER, String.class));
         return isAgeOver != null ? isAgeOver : isAgeUnder;
     }
 
     @Override
-    public Gender getGender() {
-        String genderString = wrapped.getAttribute(ATTRIBUTE_GENDER);
-        if (genderString != null) {
-            try {
-                return Gender.valueOf(genderString);
-            } catch (IllegalArgumentException isa) {
-                return Gender.OTHER;
-            }
-        } else {
-            return null;
-        }
+    public Attribute<Gender> getGender() {
+        return wrapped.getAttribute(ATTRIBUTE_GENDER, Gender.class);
     }
 
     @Override
-    public String getPostalAddress() {
-        return wrapped.getAttribute(ATTRIBUTE_POSTAL_ADDRESS);
+    public Attribute<String> getPostalAddress() {
+        return wrapped.getAttribute(ATTRIBUTE_POSTAL_ADDRESS, String.class);
     }
 
     @Override
-    public Map<?, ?> getStructuredPostalAddress() {
-        return wrapped.getAttribute(ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS, Map.class);
+    @SuppressWarnings("unchecked")
+    public Attribute<Map<?, ?>> getStructuredPostalAddress() {
+        return wrapped.getAttribute(ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS, (Class) Map.class);
     }
 
     @Override
-    public String getNationality() {
-        return wrapped.getAttribute(ATTRIBUTE_NATIONALITY);
+    public Attribute<String> getNationality() {
+        return wrapped.getAttribute(ATTRIBUTE_NATIONALITY, String.class);
     }
 
     @Override
-    public String getPhoneNumber() {
-        return wrapped.getAttribute(ATTRIBUTE_PHONE_NUMBER);
+    public Attribute<String> getPhoneNumber() {
+        return wrapped.getAttribute(ATTRIBUTE_PHONE_NUMBER, String.class);
     }
 
     @Override
-    public Image getSelfie() {
+    public Attribute<Image> getSelfie() {
         return wrapped.getAttribute(ATTRIBUTE_SELFIE, Image.class);
     }
 
     @Override
-    public String getEmailAddress() {
-        return wrapped.getAttribute(ATTRIBUTE_EMAIL_ADDRESS);
+    public Attribute<String> getEmailAddress() {
+        return wrapped.getAttribute(ATTRIBUTE_EMAIL_ADDRESS, String.class);
     }
 
     @Override
-    public DocumentDetails getDocumentDetails() {
-        try {
-            return DocumentDetailsAttributeValue.parseFrom(wrapped.getAttribute(ATTRIBUTE_DOCUMENT_DETAILS));
-        } catch (UnsupportedEncodingException | ParseException e) {
-            return null;
-        }
+    public Attribute<DocumentDetails> getDocumentDetails() {
+        return wrapped.getAttribute(ATTRIBUTE_DOCUMENT_DETAILS, DocumentDetails.class);
     }
 
     @Override
@@ -199,157 +160,8 @@ final class HumanProfileAdapter implements HumanProfile {
         return true;
     }
 
-    @Override
-    public Set<String> getAttributeSources(String name) {
-        Attribute attribute = getAttributeObject(name);
-        return (attribute == null) ? null : attribute.getSources();
-    }
-
-    @Override
-    public Set<String> getFamilyNameSources() {
-        return getAttributeSources(ATTRIBUTE_FAMILY_NAME);
-    }
-
-    @Override
-    public Set<String> getGivenNamesSources() {
-        return getAttributeSources(ATTRIBUTE_GIVEN_NAMES);
-    }
-
-    @Override
-    public Set<String> getFullNameSources() {
-        return getAttributeSources(ATTRIBUTE_FULL_NAME);
-    }
-
-    @Override
-    public Set<String> getDateOfBirthSources() {
-        return getAttributeSources(ATTRIBUTE_DOB);
-    }
-
-    @Override
-    public Set<String> getGenderSources() {
-        return getAttributeSources(ATTRIBUTE_GENDER);
-    }
-
-    @Override
-    public Set<String> getPostalAddressSources() {
-        return getAttributeSources(ATTRIBUTE_POSTAL_ADDRESS);
-    }
-
-    @Override
-    public Set<String> getStructuredPostalAddressSources() {
-        return getAttributeSources(ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS);
-    }
-
-    @Override
-    public Set<String> getNationalitySources() {
-        return getAttributeSources(ATTRIBUTE_NATIONALITY);
-    }
-
-    @Override
-    public Set<String> getPhoneNumberSources() {
-        return getAttributeSources(ATTRIBUTE_PHONE_NUMBER);
-    }
-
-    @Override
-    public Set<String> getSelfieSources() {
-        return getAttributeSources(ATTRIBUTE_SELFIE);
-    }
-
-    @Override
-    public Set<String> getEmailAddressSources() {
-        return getAttributeSources(ATTRIBUTE_EMAIL_ADDRESS);
-    }
-
-    @Override
-    public Set<String> getDocumentDetailsSources() {
-        return getAttributeSources(ATTRIBUTE_DOCUMENT_DETAILS);
-    }
-
-    @Override
-    public Set<String> getAttributeVerifiers(String name) {
-        Attribute attribute = getAttributeObject(name);
-        return (attribute == null) ? null : attribute.getVerifiers();
-    }
-
-    @Override
-    public Set<String> getFamilyNameVerifiers() {
-        return getAttributeVerifiers(ATTRIBUTE_FAMILY_NAME);
-    }
-
-    @Override
-    public Set<String> getGivenNamesVerifiers() {
-        return getAttributeVerifiers(ATTRIBUTE_GIVEN_NAMES);
-    }
-
-    @Override
-    public Set<String> getFullNameVerifiers() {
-        return getAttributeVerifiers(ATTRIBUTE_FULL_NAME);
-    }
-
-    @Override
-    public Set<String> getDateOfBirthVerifiers() {
-        return getAttributeVerifiers(ATTRIBUTE_DOB);
-    }
-
-    @Override
-    public Set<String> getGenderVerifiers() {
-        return getAttributeVerifiers(ATTRIBUTE_GENDER);
-    }
-
-    @Override
-    public Set<String> getPostalAddressVerifier() {
-        return getAttributeVerifiers(ATTRIBUTE_POSTAL_ADDRESS);
-    }
-
-    @Override
-    public Set<String> getStructuredPostalAddressVerifiers() {
-        return getAttributeVerifiers(ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS);
-    }
-
-    @Override
-    public Set<String> getNationalityVerifiers() {
-        return getAttributeVerifiers(ATTRIBUTE_NATIONALITY);
-    }
-
-    @Override
-    public Set<String> getPhoneNumberVerifiers() {
-        return getAttributeVerifiers(ATTRIBUTE_PHONE_NUMBER);
-    }
-
-    @Override
-    public Set<String> getSelfieVerifiers() {
-        return getAttributeVerifiers(ATTRIBUTE_SELFIE);
-    }
-
-    @Override
-    public Set<String> getEmailAddressVerifiers() {
-        return getAttributeVerifiers(ATTRIBUTE_EMAIL_ADDRESS);
-    }
-
-    @Override
-    public Set<String> getDocumentDetailsVerifiers() {
-        return getAttributeVerifiers(ATTRIBUTE_DOCUMENT_DETAILS);
-    }
-
-    private void appendIfNotNull(final StringBuilder builder, final String input) {
-        if (input != null) {
-            builder.append(input);
-        }
-    }
-
-    private String buildGivenAndLastNameString(final String givenNames, final String familyName) {
-        // in Java 8 a java.util.StringJoiner does this much more nicely - but this is JDK 6 compatible.
-        final StringBuilder result = new StringBuilder();
-        appendIfNotNull(result, givenNames);
-        if (givenNames != null && familyName != null) {
-            result.append(SPACE);
-        }
-        appendIfNotNull(result, familyName);
-        return result.toString();
-    }
-
-    private Boolean parseFromStringValue(String value) {
-        return value == null ? null : parseBoolean(value);
+    private Boolean parseFromStringAttribute(Attribute<String> attribute) {
+        return attribute == null ? null : parseBoolean(attribute.getValue());
     }
 
 }

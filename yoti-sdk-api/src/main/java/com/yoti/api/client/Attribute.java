@@ -7,21 +7,22 @@ import java.util.Set;
  * {@link Profile} instances.
  *
  */
-public final class Attribute {
+public final class Attribute<T> {
+
     private final String name;
-    private final Object value;
+    private final T value;
     private final Set<String> sources;
     private final Set<String> verifiers;
 
-    public Attribute(String name, Object value) {
+    public Attribute(String name, T value) {
         this(name, value, null);
     }
     
-    public Attribute(String name, Object value, Set<String> sources) {
+    public Attribute(String name, T value, Set<String> sources) {
         this(name, value, sources, null);
     }
 
-    public Attribute(String name, Object value, Set<String> sources, Set<String> verifiers) {
+    public Attribute(String name, T value, Set<String> sources, Set<String> verifiers) {
         this.name = name;
         this.value = value;
         this.sources = sources;
@@ -32,14 +33,8 @@ public final class Attribute {
         return name;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T getValue(Class<T> clazz) {
-        return value != null ? (clazz.isAssignableFrom(value.getClass()) ? (T) value : null) : null;
-    }
-
-    public <T> T getValueOrDefault(Class<T> clazz, T defaultValue) {
-        T result = getValue(clazz);
-        return (result == null) ? defaultValue : result;
+    public T getValue() {
+        return value;
     }
 
     public Set<String> getSources() {
@@ -49,4 +44,5 @@ public final class Attribute {
     public Set<String> getVerifiers() {
         return verifiers;
     }
+
 }
