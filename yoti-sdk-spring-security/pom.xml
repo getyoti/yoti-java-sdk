@@ -2,332 +2,104 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
-
-  <properties>
-    <yoti.sdk.version>1.5.1-SNAPSHOT</yoti.sdk.version>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
-    <owasp.dependency.check.cvss.limit>4</owasp.dependency.check.cvss.limit>
-    <owasp.dependency.check.cve.update.limit>24</owasp.dependency.check.cve.update.limit>
-    <findbugs.version>3.0.0</findbugs.version>
-    <spring.core.version>4.3.14.RELEASE</spring.core.version>
-  </properties>
-
-  <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-spring-security</artifactId>
-  <version>1.5.1-SNAPSHOT</version>
   <name>Spring Security Integration For The Yoti SDK</name>
   <description>Library to integrate the Java Yoti SDK with Spring Security</description>
   <url>https://github.com/getyoti/yoti-java-sdk</url>
-
-  <developers>
-    <developer>
-      <name>David Goaté</name>
-    </developer>
-  </developers>
-
-  <licenses>
-    <license>
-      <name>Yoti License</name>
-      <url>https://github.com/getyoti/yoti-java-sdk/blob/master/LICENSE.md</url>
-    </license>
-  </licenses>
-
-  <scm>
-    <connection>scm:http://github.com/getyoti/yoti-java-sdk.git</connection>
-    <developerConnection>scm:http://github.com/getyoti/yoti-java-sdk.git</developerConnection>
-    <url>http://github.com/getyoti/yoti-java-sdk.git</url>
-  </scm>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.hamcrest</groupId>
-        <artifactId>hamcrest-core</artifactId>
-        <version>1.3</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-core</artifactId>
-        <version>${spring.core.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-aop</artifactId>
-        <version>${spring.core.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-beans</artifactId>
-        <version>${spring.core.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-web</artifactId>
-        <version>${spring.core.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>${spring.core.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-expression</artifactId>
-        <version>${spring.core.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+  
+  <parent>
+    <groupId>com.yoti</groupId>
+    <artifactId>yoti-sdk-parent</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <relativePath>../yoti-sdk-parent</relativePath>
+  </parent>
 
   <dependencies>
 
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>yoti-sdk-api</artifactId>
-      <version>${yoti.sdk.version}</version>
     </dependency>
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>yoti-sdk-impl</artifactId>
-      <version>${yoti.sdk.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-web</artifactId>
-      <version>4.2.3.RELEASE</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
-      <version>1.7.25</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
       <scope>provided</scope>
     </dependency>
-
+  
+    <!-- Test dependencies -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.12</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>1.10.19</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
-      <version>1.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-library</artifactId>
-      <version>1.3</version>
       <scope>test</scope>
     </dependency>
 
   </dependencies>
 
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.owasp</groupId>
-          <artifactId>dependency-check-maven</artifactId>
-          <version>2.1.0</version>
-          <configuration>
-            <failBuildOnCVSS>${owasp.dependency.check.cvss.limit}</failBuildOnCVSS>
-            <cveValidForHours>${owasp.dependency.check.cve.update.limit}</cveValidForHours>
-            <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>2.8</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>findbugs-maven-plugin</artifactId>
-          <version>${findbugs.version}</version>
-          <configuration>
-            <effort>Max</effort>
-            <threshold>Low</threshold>
-            <excludeFilterFile>findbugs-rules.xml</excludeFilterFile>
-            <plugins>
-              <plugin>
-                <groupId>com.h3xstream.findsecbugs</groupId>
-                <artifactId>findsecbugs-plugin</artifactId>
-                <version>1.7.1</version>
-              </plugin>
-            </plugins>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.7</version>
-        <extensions>true</extensions>
-        <configuration>
-          <serverId>ossrh</serverId>
-          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-          <autoReleaseAfterClose>true</autoReleaseAfterClose>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.2.1</version>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9.1</version>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.5</version>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.owasp</groupId>
         <artifactId>dependency-check-maven</artifactId>
-        <configuration>
-          <suppressionFile>${basedir}/suppressed-cves.xml</suppressionFile>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <phase>verify</phase>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>animal-sniffer-maven-plugin</artifactId>
-        <version>1.15</version>
-        <configuration>
-          <signature>
-            <groupId>org.codehaus.mojo.signature</groupId>
-            <artifactId>java16</artifactId>
-            <version>1.0</version>
-          </signature>
-        </configuration>
-        <executions>
-          <execution>
-            <id>confirm-jdk-6-compatibility</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>1.4.1</version>
-        <executions>
-          <execution>
-            <id>enforce-bytecode-version</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <phase>verify</phase>
-            <configuration>
-              <rules>
-                <enforceBytecodeVersion>
-                  <maxJdkVersion>1.6</maxJdkVersion>
-                  <excludes>
-                    <exclude>com.google.code.findbugs:annotations</exclude>
-                  </excludes>
-                </enforceBytecodeVersion>
-              </rules>
-              <fail>true</fail>
-            </configuration>
-          </execution>
-          <execution>
-            <id>enforce-dependency-versions</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <dependencyConvergence/>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>extra-enforcer-rules</artifactId>
-            <version>1.0-beta-4</version>
-          </dependency>
-        </dependencies>
       </plugin>
     </plugins>
   </build>
-
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
 
 </project>
