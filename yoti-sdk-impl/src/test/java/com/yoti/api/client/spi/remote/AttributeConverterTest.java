@@ -2,9 +2,6 @@ package com.yoti.api.client.spi.remote;
 
 import static java.util.Arrays.asList;
 
-import static com.yoti.api.client.spi.remote.HumanProfileAdapter.ATTRIBUTE_DOCUMENT_DETAILS;
-import static com.yoti.api.client.spi.remote.HumanProfileAdapter.ATTRIBUTE_GENDER;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
@@ -18,6 +15,7 @@ import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.Map;
 
+import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.Anchor;
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Date;
@@ -155,14 +153,14 @@ public class AttributeConverterTest {
     public void shouldParseDocumentDetailsAttribute() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setContentType(ContentTypeProto.ContentType.STRING)
-                .setName(ATTRIBUTE_DOCUMENT_DETAILS)
+                .setName(AttributeConstants.HumanProfileAttributes.DOCUMENT_DETAILS)
                 .setValue(ByteString.copyFromUtf8(SOME_STRING_VALUE))
                 .build();
         when(documentDetailsAttributeParserMock.parseFrom(SOME_STRING_VALUE)).thenReturn(documentDetailsMock);
 
         Attribute<DocumentDetails> result = testObj.convertAttribute(attribute);
 
-        assertEquals(ATTRIBUTE_DOCUMENT_DETAILS, result.getName());
+        assertEquals(AttributeConstants.HumanProfileAttributes.DOCUMENT_DETAILS, result.getName());
         assertEquals(documentDetailsMock, result.getValue());
     }
 
@@ -170,13 +168,13 @@ public class AttributeConverterTest {
     public void shouldParseGenderAttribute() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setContentType(ContentTypeProto.ContentType.STRING)
-                .setName(ATTRIBUTE_GENDER)
+                .setName(AttributeConstants.HumanProfileAttributes.GENDER)
                 .setValue(ByteString.copyFromUtf8(GENDER_MALE))
                 .build();
 
         Attribute<String> result = testObj.convertAttribute(attribute);
 
-        assertEquals(ATTRIBUTE_GENDER, result.getName());
+        assertEquals(AttributeConstants.HumanProfileAttributes.GENDER, result.getName());
         assertEquals(HumanProfile.GENDER_MALE, result.getValue());
     }
 

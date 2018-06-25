@@ -2,6 +2,7 @@ package com.yoti.api.client.spi.remote;
 
 import java.util.Collection;
 
+import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.ApplicationProfile;
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Image;
@@ -11,11 +12,6 @@ import com.yoti.api.client.Profile;
  * Adapter linking Profile and ApplicationProfile together by wrapping the latter and exposing well-known attributes.
  */
 public final class ApplicationProfileAdapter implements ApplicationProfile {
-
-    private static final String ATTRIBUTE_APPLICATION_NAME = "application_name";
-    private static final String ATTRIBUTE_APPLICATION_LOGO = "application_logo";
-    private static final String ATTRIBUTE_APPLICATION_URL = "application_url";
-    private static final String ATTRIBUTE_APPLICATION_RECEIPT_BGCOLOR = "application_receipt_bgcolor";
 
     private final Profile wrapped;
 
@@ -49,22 +45,22 @@ public final class ApplicationProfileAdapter implements ApplicationProfile {
 
     @Override
     public Attribute<String> getApplicationName() {
-        return wrapped.getAttribute(ATTRIBUTE_APPLICATION_NAME, String.class);
+        return wrapped.getAttribute(AttributeConstants.ApplicationProfileAttributes.ATTRIBUTE_APPLICATION_NAME, String.class);
     }
 
     @Override
     public Attribute<String> getApplicationUrl() {
-        return wrapped.getAttribute(ATTRIBUTE_APPLICATION_URL, String.class);
+        return wrapped.getAttribute(AttributeConstants.ApplicationProfileAttributes.ATTRIBUTE_APPLICATION_URL, String.class);
     }
 
     @Override
     public Attribute<String> getApplicationReceiptBgColor() {
-        return wrapped.getAttribute(ATTRIBUTE_APPLICATION_RECEIPT_BGCOLOR, String.class);
+        return wrapped.getAttribute(AttributeConstants.ApplicationProfileAttributes.ATTRIBUTE_APPLICATION_RECEIPT_BGCOLOR, String.class);
     }
 
     @Override
     public Attribute<Image> getApplicationLogo() {
-        return wrapped.getAttribute(ATTRIBUTE_APPLICATION_LOGO, Image.class);
+        return wrapped.getAttribute(AttributeConstants.ApplicationProfileAttributes.ATTRIBUTE_APPLICATION_LOGO, Image.class);
     }
 
     @Override
