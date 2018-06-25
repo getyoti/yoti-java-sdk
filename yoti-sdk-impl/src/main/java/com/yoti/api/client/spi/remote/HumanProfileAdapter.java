@@ -5,6 +5,7 @@ import static java.lang.Boolean.parseBoolean;
 import java.util.Collection;
 import java.util.Map;
 
+import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.DocumentDetails;
@@ -16,21 +17,6 @@ import com.yoti.api.client.Profile;
  * Adapter linking Profile and ApplicationProfile together by wrapping the latter and exposing well-known attributes.
  */
 final class HumanProfileAdapter implements HumanProfile {
-
-    private static final String ATTRIBUTE_FAMILY_NAME = "family_name";
-    private static final String ATTRIBUTE_GIVEN_NAMES = "given_names";
-    private static final String ATTRIBUTE_FULL_NAME = "full_name";
-    private static final String ATTRIBUTE_DOB = "date_of_birth";
-    private static final String ATTRIBUTE_AGE_OVER = "age_over:";
-    private static final String ATTRIBUTE_AGE_UNDER = "age_under:";
-    static final String ATTRIBUTE_GENDER = "gender";
-    private static final String ATTRIBUTE_POSTAL_ADDRESS = "postal_address";
-    private static final String ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS = "structured_postal_address";
-    private static final String ATTRIBUTE_NATIONALITY = "nationality";
-    private static final String ATTRIBUTE_PHONE_NUMBER = "phone_number";
-    private static final String ATTRIBUTE_SELFIE = "selfie";
-    private static final String ATTRIBUTE_EMAIL_ADDRESS = "email_address";
-    static final String ATTRIBUTE_DOCUMENT_DETAILS = "document_details";
 
     private final Profile wrapped;
 
@@ -64,70 +50,70 @@ final class HumanProfileAdapter implements HumanProfile {
 
     @Override
     public Attribute<String> getFamilyName() {
-        return wrapped.getAttribute(ATTRIBUTE_FAMILY_NAME, String.class);
+        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.FAMILY_NAME, String.class);
     }
 
     @Override
     public Attribute<String> getGivenNames() {
-        return wrapped.getAttribute(ATTRIBUTE_GIVEN_NAMES, String.class);
+        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.GIVEN_NAMES, String.class);
     }
 
     @Override
     public Attribute<String> getFullName() {
-        return wrapped.getAttribute(ATTRIBUTE_FULL_NAME, String.class);
+        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.FULL_NAME, String.class);
     }
 
     @Override
     public Attribute<Date> getDateOfBirth() {
-        return wrapped.getAttribute(ATTRIBUTE_DOB, Date.class);
+        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.DATE_OF_BIRTH, Date.class);
     }
 
     @Override
     public Boolean isAgeVerified() {
-        Boolean isAgeOver = parseFromStringAttribute(wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_OVER, String.class));
-        Boolean isAgeUnder = parseFromStringAttribute(wrapped.findAttributeStartingWith(ATTRIBUTE_AGE_UNDER, String.class));
+        Boolean isAgeOver = parseFromStringAttribute(wrapped.findAttributeStartingWith(AttributeConstants.HumanProfileAttributes.AGE_OVER, String.class));
+        Boolean isAgeUnder = parseFromStringAttribute(wrapped.findAttributeStartingWith(AttributeConstants.HumanProfileAttributes.AGE_UNDER, String.class));
         return isAgeOver != null ? isAgeOver : isAgeUnder;
     }
 
     @Override
     public Attribute<String> getGender() {
-        return wrapped.getAttribute(ATTRIBUTE_GENDER, String.class);
+        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.GENDER, String.class);
     }
 
     @Override
     public Attribute<String> getPostalAddress() {
-        return wrapped.getAttribute(ATTRIBUTE_POSTAL_ADDRESS, String.class);
+        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.POSTAL_ADDRESS, String.class);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public Attribute<Map<?, ?>> getStructuredPostalAddress() {
-        return wrapped.getAttribute(ATTRIBUTE_STRUCTURED_POSTAL_ADDRESS, (Class) Map.class);
+        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS, (Class) Map.class);
     }
 
     @Override
     public Attribute<String> getNationality() {
-        return wrapped.getAttribute(ATTRIBUTE_NATIONALITY, String.class);
+        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.NATIONALITY, String.class);
     }
 
     @Override
     public Attribute<String> getPhoneNumber() {
-        return wrapped.getAttribute(ATTRIBUTE_PHONE_NUMBER, String.class);
+        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.PHONE_NUMBER, String.class);
     }
 
     @Override
     public Attribute<Image> getSelfie() {
-        return wrapped.getAttribute(ATTRIBUTE_SELFIE, Image.class);
+        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.SELFIE, Image.class);
     }
 
     @Override
     public Attribute<String> getEmailAddress() {
-        return wrapped.getAttribute(ATTRIBUTE_EMAIL_ADDRESS, String.class);
+        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.EMAIL_ADDRESS, String.class);
     }
 
     @Override
     public Attribute<DocumentDetails> getDocumentDetails() {
-        return wrapped.getAttribute(ATTRIBUTE_DOCUMENT_DETAILS, DocumentDetails.class);
+        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.DOCUMENT_DETAILS, DocumentDetails.class);
     }
 
     @Override

@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.Anchor;
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.spi.remote.proto.AttrProto;
@@ -65,7 +66,7 @@ class AttributeConverter {
 
     private Object convertSpecialType(AttrProto.Attribute attribute, Object value) throws UnsupportedEncodingException, ParseException {
         switch (attribute.getName()) {
-            case HumanProfileAdapter.ATTRIBUTE_DOCUMENT_DETAILS:
+            case AttributeConstants.HumanProfileAttributes.DOCUMENT_DETAILS:
                 return documentDetailsAttributeParser.parseFrom((String) value);
             default:
                 return value;

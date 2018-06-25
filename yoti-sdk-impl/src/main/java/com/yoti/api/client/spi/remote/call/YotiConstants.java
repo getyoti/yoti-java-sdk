@@ -1,6 +1,8 @@
 package com.yoti.api.client.spi.remote.call;
 
-public class YotiConstants {
+public final class YotiConstants {
+
+    private YotiConstants() {}
 
     public static final String PROPERTY_YOTI_API_URL = "yoti.api.url";
 
