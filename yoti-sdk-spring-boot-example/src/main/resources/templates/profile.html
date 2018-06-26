@@ -8,6 +8,10 @@
     </head>
     <body>
         <table>
+                <th>Attribute Name</th>
+                <th>Attribute Value</th>
+                <th>Sources</th>
+                <th>Verifiers</th>
             <tr>
                 <td>User ID:</td>
                 <td><p th:text="${userId}"/></td>
@@ -19,47 +23,66 @@
                     <br />
                     <a th:href="${base64Selfie}" download="selfie.jpg">Download Selfie</a>          
                 </td>
-            </tr>                
-            <tr>
-                <td>Given Names:</td>
-                <td><p th:text="${givenNames}"/></td>
             </tr>
-            <tr>
+
+            <tr th:if="${familyName != null}">
                 <td>Family Name:</td>
                 <td><p th:text="${familyName}"/></td>
+                <td th:replace="fragments :: anchorDisplay(${familyNameSources})" />
+                <td th:replace="fragments :: anchorDisplay(${familyNameVerifiers})" />
             </tr>
-            <tr>
+            <tr th:if="${givenNames != null}">
+                <td>Given Names:</td>
+                <td><p th:text="${givenNames}"/></td>
+                <td th:replace="fragments :: anchorDisplay(${givenNamesSources})" />
+                <td th:replace="fragments :: anchorDisplay(${givenNamesVerifiers})" />
+            </tr>
+            <tr th:if="${fullName != null}">
                 <td>Full Name:</td>
                 <td><p th:text="${fullName}"/></td>
+                <td th:replace="fragments :: anchorDisplay(${fullNameSources})" />
+                <td th:replace="fragments :: anchorDisplay(${fullNameVerifiers})" />
             </tr>
-            <tr>
-                <td>Phone Number:</td>
-                <td><p th:text="${phoneNumber}"/></td>
-            </tr>
-            <tr>
+            <tr th:if="${dateOfBirth != null}">
                 <td>Date of Birth:</td>
                 <td><p th:text="${dateOfBirth}"/></td>
+                <td th:replace="fragments :: anchorDisplay(${dateOfBirthSources})" />
+                <td th:replace="fragments :: anchorDisplay(${dateOfBirthVerifiers})" />
             </tr>
-            <tr>
+            <tr th:if="${isAgeVerified != null}">
                 <td>Age Verified:</td>
                 <td><p th:text="${isAgeVerified}"/></td>
             </tr>
-            <tr>
-                <td>Email Address:</td>
-                <td><p th:text="${emailAddress}"/></td>
-            </tr>
-            <tr>
-            <td>Postal Address:</td>
-                <td><p th:text="${postalAddress}"/></td>
-            </tr>
-            <tr>
-            <td>Nationality:</td>
-                <td><p th:text="${nationality}"/></td>
-            </tr>
-            <tr>
+            <tr th:if="${gender != null}">
                 <td>Gender:</td>
                 <td><p th:text="${gender}"/></td>
+                <td th:replace="fragments :: anchorDisplay(${genderSources})" />
+                <td th:replace="fragments :: anchorDisplay(${genderVerifiers})" />
             </tr>
-        </table>    
+            <tr th:if="${postalAddress != null}">
+                <td>Postal Address:</td>
+                <td><p th:text="${postalAddress}"/></td>
+                <td th:replace="fragments :: anchorDisplay(${postalAddressSources})" />
+                <td th:replace="fragments :: anchorDisplay(${postalAddressVerifiers})" />
+            </tr>
+            <tr th:if="${nationality != null}">
+                <td>Nationality:</td>
+                <td><p th:text="${nationality}"/></td>
+                <td th:replace="fragments :: anchorDisplay(${nationalitySources})" />
+                <td th:replace="fragments :: anchorDisplay(${nationalityVerifiers})" />
+            </tr>
+            <tr th:if="${phoneNumber != null}">
+                <td>Phone Number:</td>
+                <td><p th:text="${phoneNumber}"/></td>
+                <td th:replace="fragments :: anchorDisplay(${phoneNumberSources})" />
+                <td th:replace="fragments :: anchorDisplay(${phoneNumberVerifiers})" />
+            </tr>
+            <tr th:if="${emailAddress != null}">
+                <td>Email Address:</td>
+                <td><p th:text="${emailAddress}"/></td>
+                <td th:replace="fragments :: anchorDisplay(${emailAddressSources})" />
+                <td th:replace="fragments :: anchorDisplay(${emailAddressVerifiers})" />
+            </tr>
+        </table>
     </body>
 </html>
