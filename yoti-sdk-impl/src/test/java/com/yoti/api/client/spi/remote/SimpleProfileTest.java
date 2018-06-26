@@ -125,7 +125,7 @@ public class SimpleProfileTest {
     }
 
     private static <T> List<Attribute<?>> asAttributeList(String key, T o) {
-        Attribute<?> a = new Attribute<>(key, o, null);
+        Attribute<?> a = new SimpleAttribute(key, o);
         return Collections.<Attribute<?>>singletonList(a);
     }
 

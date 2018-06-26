@@ -1,50 +1,56 @@
 package com.yoti.api.client.spi.remote;
 
+import static java.lang.String.format;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
+
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
+
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
-import static java.lang.String.format;
+import com.yoti.api.client.Date;
 
 /**
  * Attribute value holding a year/month/day tuple.
  *
  */
-final class DateAttributeValue implements com.yoti.api.client.Date {
+final class DateValue implements Date {
 
     private static final String DATE_PATTERN = "yyyy-MM-dd";
+
     private final int year;
     private final int month;
     private final int day;
 
-    private DateAttributeValue(int year, int month, int day) {
+    private DateValue(int year, int month, int day) {
         this.year = year;
         this.month = month;
         this.day = day;
     }
 
-    public static DateAttributeValue parseFrom(byte[] content) throws UnsupportedEncodingException, ParseException {
+    public static DateValue from(Calendar calendar) {
+        return new DateValue(calendar.get(YEAR), calendar.get(MONTH) + 1, calendar.get(DAY_OF_MONTH));
+    }
+
+    public static DateValue parseFrom(byte[] content) throws UnsupportedEncodingException, ParseException {
         String source = new String(content, DEFAULT_CHARSET);
         return parseFrom(source);
     }
 
-    public static DateAttributeValue parseFrom(String source) throws UnsupportedEncodingException, ParseException {
+    public static DateValue parseFrom(String source) throws UnsupportedEncodingException, ParseException {
         Calendar calendar = parseDate(source);
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        return new DateAttributeValue(year, month, day);
+        return from(calendar);
     }
 
     private static Calendar parseDate(String source) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
-        sdf.setLenient(false);
-        Date date = sdf.parse(source);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_PATTERN);
+        simpleDateFormat.setLenient(false);
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+        calendar.setTime(simpleDateFormat.parse(source));
         return calendar;
     }
 

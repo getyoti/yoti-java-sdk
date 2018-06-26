@@ -2,15 +2,14 @@ package com.yoti.api.client.spi.remote.util;
 
 public enum AnchorType {
 
-    SOURCE("SOURCE", "1.3.6.1.4.1.47127.1.1.1"),
-    VERIFIER("VERIFIER", "1.3.6.1.4.1.47127.1.1.2"),
-    UNKNOWN("UNKNOWN", "");
+    SOURCE("1.3.6.1.4.1.47127.1.1.1"),
+    VERIFIER("1.3.6.1.4.1.47127.1.1.2"),
+    UNKNOWN("");
 
-    public final String stringValue;
     public final String extensionOid;
 
-    AnchorType(String stringValue, String extensionOid) {
-        this.stringValue = stringValue;
+    AnchorType(String extensionOid) {
         this.extensionOid = extensionOid;
     }
+
 }

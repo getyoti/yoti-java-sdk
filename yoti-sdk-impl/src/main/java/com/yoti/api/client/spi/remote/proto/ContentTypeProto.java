@@ -16,7 +16,7 @@ public final class ContentTypeProto {
   }
   /**
    * <pre>
-   * ContentType indicates how to interpret the ‘Value’ field of an Attribute.
+   * ContentType indicates how to interpret the ‘Value’ field of an SimpleAttribute.
    * </pre>
    *
    * Protobuf enum {@code attrpubapi_v1.ContentType}
@@ -171,7 +171,7 @@ public final class ContentTypeProto {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return com.yoti.api.client.spi.remote.proto.ContentTypeProto.getDescriptor().getEnumTypes().get(0);
+      return ContentTypeProto.getDescriptor().getEnumTypes().get(0);
     }
 
     private static final ContentType[] VALUES = values();
@@ -205,8 +205,9 @@ public final class ContentTypeProto {
     String[] descriptorData = {
       "\n\021ContentType.proto\022\rattrpubapi_v1*O\n\013Co" +
       "ntentType\022\r\n\tUNDEFINED\020\000\022\n\n\006STRING\020\001\022\010\n\004" +
-      "JPEG\020\002\022\010\n\004DATE\020\003\022\007\n\003PNG\020\004\022\010\n\004JSON\020\005B*\n\026c" +
-      "om.yoti.attrpubapi_v1B\020ContentTypeProto"
+      "JPEG\020\002\022\010\n\004DATE\020\003\022\007\n\003PNG\020\004\022\010\n\004JSON\020\005B8\n$c" +
+      "om.yoti.api.client.spi.remote.protoB\020Con" +
+      "tentTypeProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

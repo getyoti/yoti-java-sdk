@@ -1,25 +1,34 @@
 package com.yoti.api.client.spi.remote;
 
+import static java.util.Arrays.asList;
+
 import static com.yoti.api.client.spi.remote.HumanProfileAdapter.ATTRIBUTE_DOCUMENT_DETAILS;
 import static com.yoti.api.client.spi.remote.HumanProfileAdapter.ATTRIBUTE_GENDER;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
+import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+import java.security.cert.CertificateException;
+import java.util.List;
 import java.util.Map;
 
+import com.yoti.api.client.Anchor;
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.DocumentDetails;
 import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
+import com.yoti.api.client.spi.remote.util.AnchorType;
 
 import com.google.protobuf.ByteString;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -33,16 +42,27 @@ public class AttributeConverterTest {
     private static final String SOME_STRING_VALUE = "someStringValue";
     private static final String SOME_DATE_VALUE = "1980-08-05";
     private static final byte[] SOME_IMAGE_BYTES = "someImageBytes".getBytes();
-    private static final String DRIVING_LICENCE_SOURCE_TYPE = "DRIVING_LICENCE";
-    private static final String PASSPORT_SOURCE_TYPE = "PASSPORT";
-    private static final String YOTI_ADMIN_VERIFIER_TYPE = "YOTI_ADMIN";
     private static final String GENDER_MALE = "MALE";
 
     @InjectMocks AttributeConverter testObj;
 
     @Mock DocumentDetailsAttributeParser documentDetailsAttributeParserMock;
+    @Mock AnchorConverter anchorConverterMock;
 
     @Mock DocumentDetails documentDetailsMock;
+    @Mock AttrProto.Anchor verifierProtoMock;
+    @Mock AttrProto.Anchor sourceProtoMock;
+    @Mock AttrProto.Anchor unknownProtoMock;
+    @Mock Anchor verifierAnchorMock;
+    @Mock Anchor sourceAnchorMock;
+    @Mock Anchor unknownAnchorMock;
+
+    @Before
+    public void setUp() throws Exception {
+        when(verifierAnchorMock.getType()).thenReturn(AnchorType.VERIFIER.name());
+        when(sourceAnchorMock.getType()).thenReturn(AnchorType.SOURCE.name());
+        when(unknownAnchorMock.getType()).thenReturn(AnchorType.UNKNOWN.name());
+    }
 
     @Test
     public void shouldParseStringAttribute() throws Exception {
@@ -69,7 +89,7 @@ public class AttributeConverterTest {
         Attribute<Date> result = testObj.convertAttribute(attribute);
 
         assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
-        assertEquals(DateAttributeValue.parseFrom(SOME_DATE_VALUE).toString(), result.getValue().toString());
+        assertEquals(DateValue.parseFrom(SOME_DATE_VALUE).toString(), result.getValue().toString());
     }
 
     @Test
@@ -161,45 +181,64 @@ public class AttributeConverterTest {
     }
 
     @Test
-    public void getAttributeSourcesShouldIncludeDrivingLicence() throws Exception {
-        AttrProto.Anchor anchor = AttrProto.Anchor.parseFrom(Base64.getDecoder().decode(TestAnchors.DL_ANCHOR));
+    public void shouldParseAllAnchorsSuccessfully() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(SOME_STRING_VALUE))
-                .addAnchors(anchor)
+                .addAllAnchors(asList(verifierProtoMock, sourceProtoMock, unknownProtoMock))
                 .build();
+        when(anchorConverterMock.convert(verifierProtoMock)).thenReturn(verifierAnchorMock);
+        when(anchorConverterMock.convert(sourceProtoMock)).thenReturn(sourceAnchorMock);
+        when(anchorConverterMock.convert(unknownProtoMock)).thenReturn(unknownAnchorMock);
 
-        Attribute result = testObj.convertAttribute(attribute);
+        Attribute<String> result = testObj.convertAttribute(attribute);
 
-        assertTrue(result.getSources().contains(DRIVING_LICENCE_SOURCE_TYPE));
+        assertListContains(result.getAnchors(), asList(verifierAnchorMock, sourceAnchorMock, unknownAnchorMock));
+        assertListContains(result.getVerifiers(), asList(verifierAnchorMock));
+        assertListContains(result.getSources(), asList(sourceAnchorMock));
     }
 
     @Test
-    public void getAttributeSourcesShouldIncludePassport() throws Exception {
-        AttrProto.Anchor anchor = AttrProto.Anchor.parseFrom(Base64.getDecoder().decode(TestAnchors.PP_ANCHOR));
+    public void shouldTolerateFailureToParseAnAnchor() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(SOME_STRING_VALUE))
-                .addAnchors(anchor)
+                .addAllAnchors(asList(verifierProtoMock, sourceProtoMock, unknownProtoMock))
                 .build();
+        when(anchorConverterMock.convert(verifierProtoMock)).thenReturn(verifierAnchorMock);
+        when(anchorConverterMock.convert(sourceProtoMock)).thenReturn(sourceAnchorMock);
+        when(anchorConverterMock.convert(unknownProtoMock)).thenThrow(new CertificateException());
 
-        Attribute result = testObj.convertAttribute(attribute);
+        Attribute<String> result = testObj.convertAttribute(attribute);
 
-        assertTrue(result.getSources().contains(PASSPORT_SOURCE_TYPE));
+        assertListContains(result.getAnchors(), asList(verifierAnchorMock, sourceAnchorMock));
+        assertListContains(result.getVerifiers(), asList(verifierAnchorMock));
+        assertListContains(result.getSources(), asList(sourceAnchorMock));
     }
 
     @Test
-    public void getAttributeVerifiersShouldIncludeYotiAdmin() throws Exception {
-        AttrProto.Anchor anchor = AttrProto.Anchor.parseFrom(Base64.getDecoder().decode(TestAnchors.YOTI_ADMIN_ANCHOR));
+    public void shouldTolerateFailureToParseAnyAnchors() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(SOME_STRING_VALUE))
-                .addAnchors(anchor)
+                .addAllAnchors(asList(verifierProtoMock, sourceProtoMock, unknownProtoMock))
                 .build();
+        when(anchorConverterMock.convert(verifierProtoMock)).thenThrow(new RuntimeException());
+        when(anchorConverterMock.convert(sourceProtoMock)).thenThrow(new IOException());
+        when(anchorConverterMock.convert(unknownProtoMock)).thenThrow(new CertificateException());
 
-        Attribute result = testObj.convertAttribute(attribute);
+        Attribute<String> result = testObj.convertAttribute(attribute);
 
-        assertTrue(result.getVerifiers().contains(YOTI_ADMIN_VERIFIER_TYPE));
+        assertThat(result.getAnchors(), hasSize(0));
+        assertThat(result.getVerifiers(), hasSize(0));
+        assertThat(result.getSources(), hasSize(0));
+    }
+
+    private <T> void assertListContains(List<T> result, List<T> expected) {
+        assertThat(result, hasSize(expected.size()));
+        if (expected.size() > 0) {
+            assertThat(result, hasItems((T[]) expected.toArray()));
+        }
     }
 
 }
