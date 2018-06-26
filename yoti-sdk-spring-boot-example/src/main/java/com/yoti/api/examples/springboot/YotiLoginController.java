@@ -1,12 +1,19 @@
 package com.yoti.api.examples.springboot;
 
+import java.util.List;
+
 import com.yoti.api.client.ActivityDetails;
+import com.yoti.api.client.Anchor;
+import com.yoti.api.client.Attribute;
+import com.yoti.api.client.DateTime;
 import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.YotiClient;
 import com.yoti.api.spring.YotiClientProperties;
 import com.yoti.api.spring.YotiProperties;
 
+import com.google.common.base.CaseFormat;
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Configuration
 @ConditionalOnClass(YotiClient.class)
-@EnableConfigurationProperties({YotiClientProperties.class, YotiProperties.class})
+@EnableConfigurationProperties({ YotiClientProperties.class, YotiProperties.class })
 @Controller
 public class YotiLoginController {
 
@@ -48,29 +55,43 @@ public class YotiLoginController {
     @RequestMapping("/login")
     public String doLogin(@RequestParam("token") final String token, final Model model) {
         ActivityDetails activityDetails;
-        HumanProfile profile;
+        HumanProfile humanProfile;
         try {
             activityDetails = client.getActivityDetails(token);
-            profile = activityDetails.getUserProfile();
+            humanProfile = activityDetails.getUserProfile();
         } catch (final ProfileException profileException) {
             LOG.info("Could not get profile", profileException);
             return "error";
         }
 
-        // load profile data into model
-        model.addAttribute("fullName", profile.getFullName());
-        model.addAttribute("givenNames", profile.getGivenNames());
-        model.addAttribute("familyName", profile.getFamilyName());
-        model.addAttribute("phoneNumber", profile.getPhoneNumber());
-        model.addAttribute("dateOfBirth", profile.getDateOfBirth());
-        model.addAttribute("isAgeVerified", profile.isAgeVerified());
-        model.addAttribute("emailAddress", profile.getEmailAddress());
-        model.addAttribute("postalAddress", profile.getPostalAddress());
-        model.addAttribute("nationality", profile.getNationality());
-        model.addAttribute("gender", profile.getGender());
+        // load activityDetails into ui model
         model.addAttribute("userId", activityDetails.getUserId());
         model.addAttribute("base64Selfie", activityDetails.getBase64Selfie());
 
+        // load humanProfile data into ui model
+        addAttributeToModel(model, humanProfile.getFamilyName());
+        addAttributeToModel(model, humanProfile.getGivenNames());
+        addAttributeToModel(model, humanProfile.getFullName());
+        addAttributeToModel(model, humanProfile.getDateOfBirth());
+        addAttributeToModel(model, humanProfile.getGender());
+        addAttributeToModel(model, humanProfile.getPostalAddress());
+        addAttributeToModel(model, humanProfile.getNationality());
+        addAttributeToModel(model, humanProfile.getPhoneNumber());
+        addAttributeToModel(model, humanProfile.getEmailAddress());
+
+        // load derived properties into ui model
+        model.addAttribute("isAgeVerified", humanProfile.isAgeVerified());
+
         return "profile";
     }
+
+    private void addAttributeToModel(Model model, Attribute attribute) {
+        if (attribute != null) {
+            String attributeName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, attribute.getName());
+            model.addAttribute(attributeName, attribute.getValue());
+            model.addAttribute(attributeName + "Sources", attribute.getSources());
+            model.addAttribute(attributeName + "Verifiers", attribute.getVerifiers());
+        }
+    }
+
 }
