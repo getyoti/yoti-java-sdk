@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.yoti.api.client.Attribute;
-import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.AttrProto.Anchor;
 import com.yoti.api.client.spi.remote.util.AnchorCertificateParser;
@@ -66,8 +65,6 @@ class AttributeConverter {
         switch (attribute.getName()) {
             case HumanProfileAdapter.ATTRIBUTE_DOCUMENT_DETAILS:
                 return documentDetailsAttributeParser.parseFrom((String) value);
-            case HumanProfileAdapter.ATTRIBUTE_GENDER:
-                return HumanProfile.Gender.valueOf((String) value);
             default:
                 return value;
         }

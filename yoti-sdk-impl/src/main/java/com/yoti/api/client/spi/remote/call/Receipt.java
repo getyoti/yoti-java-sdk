@@ -95,12 +95,12 @@ public final class Receipt {
         }
     }
 
-    public static enum Outcome {
+    public enum Outcome {
         SUCCESS(true), FAILURE(false);
 
         private final boolean successful;
 
-        private Outcome(boolean successful) {
+        Outcome(boolean successful) {
             this.successful = successful;
         }
 
