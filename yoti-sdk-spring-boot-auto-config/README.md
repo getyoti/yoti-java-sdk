@@ -6,7 +6,7 @@ This module aims to make integration of the Yoti SDK client into Spring Boot pro
 ## Requirements
 
 - Spring Boot
-- Java 6 or newer
+- Java 7 or newer
 
 ## Usage
 
@@ -18,7 +18,7 @@ If you are using Maven, you need to add the following dependencies:
 <dependency>
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-spring-boot-auto-config</artifactId>
-  <version>1.5.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
@@ -26,7 +26,7 @@ If you are using Maven, you need to add the following dependencies:
 If you are using Gradle, here is the dependency to add:
 
 ```
-compile group: 'com.yoti', name: 'yoti-sdk-spring-boot-auto-config', version: '1.5.0'
+compile group: 'com.yoti', name: 'yoti-sdk-spring-boot-auto-config', version: '2.0.0'
 ```
 
 
@@ -67,7 +67,3 @@ Expecting more? That's all that you need to integrate Yoti into your Spring Boot
 
 # Authors
 * [David Goaté](https://github.com/davidgoate)
-
-
-
-

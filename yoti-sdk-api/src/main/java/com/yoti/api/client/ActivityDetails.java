@@ -7,6 +7,7 @@ import java.util.Date;
  *
  */
 public interface ActivityDetails {
+
     /**
      * Get the profile associated with the user.
      *
@@ -50,4 +51,5 @@ public interface ActivityDetails {
      * @return JPEG selfie image in Base64 string format
      */
     String getBase64Selfie();
+
 }

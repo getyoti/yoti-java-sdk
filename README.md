@@ -40,6 +40,9 @@ Description of utilising Spring Boot
 1) [Running the Example](#running-the-example) -
 Running the Spring example project
 
+1) [Breaking changes and enhancements made in v2.0.0](#breaking-changes-and-enhancements-made-in-v2.0.0) -
+Things you need to know when migrating from 1.x to 2.x
+
 1) [Spring Security Integration](#spring-security-integration) -
 Integrating Yoti Authentication with Spring Boot.
 
@@ -58,7 +61,7 @@ To integrate your application with Yoti, your back-end must expose a GET endpoin
 The endpoint can be configured in Yoti Dashboard when you create/update your application.
 
 The image below shows how your application back-end and Yoti integrate in the context of a Login flow.
-Yoti SDK carries out steps 6 through 9 for you, including profile decryption and communication with backend services.
+Use the Yoti SDK to complete steps 6 through 9 for you, including profile decryption and communication with backend services.
 
 ![alt text](login_flow.png "Login flow")
 
@@ -66,20 +69,20 @@ Yoti also allows you to enable user details verification from your mobile app by
 
 ## Requirements
 
-* Java 1.6 or higher
+* Java 1.7 or higher
 * SLF4J
 
 ## Building From Source
 
-Building from source is generally not necessary for third parties since artifacts are published in Maven Central. However, if you want to build from source you can do so using the [Maven Wrapper](https://github.com/takari/maven-wrapper) that is bundled with this distribution. For those familiar with Gradle this is much like the Gradle Wrapper and ensures that the correct version of Maven is being used.
+Building from source is not necessary since artifacts are published in Maven Central. However, if you want to build from source use the [Maven Wrapper](https://github.com/takari/maven-wrapper) bundled with this distribution. For those familiar with Gradle this is much like the Gradle Wrapper and ensures that the correct version of Maven is being used.
 
 From the top level directory:
 
 ```bash
-./mvnw clean install
+./mvnw clean install -Dgpg.skip=true
 ```
 
-Notable flags that you may wish to use to skip certain static analysis/code quality tools are listed below. This is only recommended if you find that these tools are taking too long during development or are flagging false positives that you are yet to exclude. **They should not be ignored when building a candidate for a release unless you are sure that the issues being raised are not a cause for concern.**
+Notable flags that you may wish to use to skip certain static analysis/code quality tools are listed below.
 
 * `-Dfindbugs.skip=true`: skips findbugs and the findbugs security extension.
 * `-Ddependency-check.skip=true`: skips the OWASP dependency scanner.
@@ -92,26 +95,26 @@ Notable flags that you may wish to use to skip certain static analysis/code qual
 
 ## Enabling the SDK
 
-To import the Yoti SDK inside your project, you can use your favourite dependency management system.
+To include the Yoti SDK in your project, you can use your favourite dependency management system.
 If you are using Maven, you need to add the following dependency:
 
 ```xml
 <dependency>
     <groupId>com.yoti</groupId>
     <artifactId>yoti-sdk-impl</artifactId>
-    <version>1.5.0</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
 If you are using Gradle, here is the dependency to add:
 
-`compile group: 'com.yoti', name: 'yoti-sdk-impl', version: '1.5.0'`
+`compile group: 'com.yoti', name: 'yoti-sdk-impl', version: '2.0.0'`
 
 You will find all classes packaged under `com.yoti.api`
 
 ## Client Initialisation
 
-The YotiClient is the SDK entry point. To initialise it you need include the following snippet inside your endpoint initialisation section:
+The entry point of the SDK is `com.yoti.api.client.YotiClient`.  To initialise it you need to include the following snippet:
 
 ```java
 import com.yoti.api.client.YotiClient;
@@ -120,7 +123,8 @@ import static com.yoti.api.client.FileKeyPairSource.fromFile;
 
 YotiClient client = YotiClientBuilder.newInstance()
     .forApplication(<YOUR_CLIENT_SDK_ID>)
-    .withKeyPair(fromFile(new java.io.File("<PATH/TO/YOUR/APPLICATION/KEY_PAIR.pem>"))).build();
+    .withKeyPair(fromFile(new java.io.File("<PATH/TO/YOUR/APPLICATION/KEY_PAIR.pem>")))
+    .build();
 ```
 
 Where:
@@ -130,7 +134,19 @@ Where:
 
 ## Profile Retrieval
 
-When your application receives a token via the exposed endpoint (it will be assigned to a query string parameter named `token`), you can easily retrieve the user profile by adding the following to your endpoint handler:
+### Callback URl
+
+To allow sharing a Users profile with your application, you must expose a GET endpoint over HTTPS that Yoti will use to push a one time use token to your back end.
+
+You can use any public domain name or localhost, as well as any path or port, but the resulting url must be served over HTTPS. Your endpoint must consume a query string parameter named 'token' - that's the value you will need for retrieving the shared profile.
+
+You configure the callback URL for your application on the Integration page of the Yoti Dashboard.
+
+**Important: these tokens only allow a single use. You cannot retrieve a profile using the same token more than once.**
+
+### ActivityDetails
+
+When your application receives a one time use token from Yoti, you retrieve details of the share with the following:
 
 ```java
 import com.yoti.api.client.ActivityDetails;
@@ -149,21 +165,21 @@ import com.yoti.api.client.ProfileException;
 try {
     final ActivityDetails activityDetails = client.getActivityDetails(token);
     final HumanProfile profile = activityDetails.getUserProfile();
-    //use the profile to extract attributes.
+    //use the profile to extract attributes
 } catch (ProfileException e) {
     LOG.info("Could not get profile", e);
-    // do something meaningful.
+    // do something meaningful
 }
 ```
 
-**Important: encrypted tokens are intended for single use only. You must not invoke the client using the same token more than once.**
+`com.yoti.api.client.ActivityDetails` gives you access to the `com.yoti.api.client.HumanProfile` of the user that has shared with you. 
 
 ## Handling Users
 
-When you retrieve the user profile, you receive a user ID generated by Yoti exclusively for your application.
-This means that if the same individual logs into another app, Yoti will assign her/him a different ID.
-You can use this ID to verify whether (for your application) the retrieved profile identifies a new or an existing user.
-Here is an example of how this works:
+### Profiles
+
+User profiles are returned to applications with a user ID unique to that application.  This user ID will be fixed for your app,
+so can use it to determine whether a user is new to you.  For example:
 
 ```java
 ActivityDetails activityDetails;
@@ -172,18 +188,19 @@ try {
     Optional<YourAppUserClass> user = yourUserSearchMethod(activityDetails.getUserId());
     if (user.isPresent()) {
         String userId = activityDetails.getUserId();
-        Image selfie = profile.getSelfie();
         String base64Selfie = activityDetails.getBase64Selfie();
-        String fullName = profile.GetFullName();
-        String givenNames = profile.getGivenNames();
-        String familyName = profile.getFamilyName();
-        String mobileNumber = profile.getPhoneNumber();
-        String emailAddress = profile.getEmailAddress();
+        Attribute<Image> selfie = profile.getSelfie();
+        Image selfieValue = selfie.getValue();
+        Attribute<String> fullName = profile.getFullName();
+        Attribute<String> givenNames = profile.getGivenNames();
+        Attribute<String> familyName = profile.getFamilyName();
+        Attribute<String> phoneNumber = profile.getPhoneNumber();
+        Attribute<String> emailAddress = profile.getEmailAddress();
         Boolean isAgeVerified = profile.isAgeVerified();
-        Date dateOfBirth = profile.getDateOfBirth();
-        Gender gender = profile.getGender();
-        String postalAddress = profile.getPostalAddress();
-        String nationality = profile.getNationality();
+        Attribute<Date> dateOfBirth = profile.getDateOfBirth();
+        Attribute<String> gender = profile.getGender();
+        Attribute<String> postalAddress = profile.getPostalAddress();
+        Attribute<String> nationality = profile.getNationality();
   } else {
       // handle registration
   }
@@ -193,14 +210,31 @@ try {
 }
 ```
 
-Where `yourUserSearchMethod` is a piece of logic in your app that is supposed to find a user, given a userId.
-No matter if the user is a new or an existing one, Yoti will always provide her/his profile, so you don't necessarily need to store it.
+Where `yourUserSearchMethod` is a method in your app that finds the user for the given userId.
+Regardless of whether the user is new to your app, Yoti will always provide the profile.  So you don't necessarily need to store it.
 
-The `com.yoti.api.client.HumanProfile` class provides a set of methods to retrieve different user attributes. Whether the attributes are present or not depends on the settings you have applied to your app on Yoti Dashboard.
+### Attributes
+
+User details are provided by a list of attributes on the `com.yoti.api.client.HumanProfile` class.  Whether a given attribute is present or not depends on the settings you have applied on Yoti Dashboard.
+
+Attributes are returned as an instance of `com.yoti.api.client.Attribute<T>`.  Since v2.0.0 of the SDK, Attribute is a generic class where <T> represents the type of the Attribute value returned.
+
+### Anchors, Sources and Verifiers
+
+`com.yoti.api.client.Anchor` represents how a given `Attribute<T>` has been _sourced_ or _verified_.  These values are created and signed whenever a Profile Attribute is created, or verified with an external party.
+
+For example, an attribute value that was _sourced_ from a Passport might have the following values:
+| anchor.getType | SOURCE |
+| anchor.getValue | PASSPORT |
+| anchor.getTimestamp | 2017-10-31, 19:45:59.123789 |
+
+Similarly, an attribute _verified_ against the data held by an external party will have an `Anchor` of type _VERIFIER_, naming the party that verified it. 
+
+Attribute Anchors are returned as `List<Anchor>` from `Attribute<T>.getSources` and `Attribute<T>.getVerifiers`.    
 
 ## Connectivity Requirements
 
-Interacting with the `com.yoti.api.client.YotiClient` to get `com.yoti.api.client.ActivityDetails` is not an offline operation. Your application will need to be able to establish an outbound TCP connection to port 443 to the Yoti servers at `https://api.yoti.com` (by default - see the [Misc](#misc) section).
+Using the `com.yoti.api.client.YotiClient` to get `com.yoti.api.client.ActivityDetails` requires your app to establish an outbound TCP connection to port 443 on the Yoti servers at `https://api.yoti.com` (by default - see the [Misc](#misc) section).
 
 By default the Yoti Client will block indefinitely when connecting to the remote server or reading data. Consequently it is **possible that your application thread could be blocked**.
 
@@ -264,6 +298,8 @@ System.out.println(amlResult.isOnPepList());
 
 The SDK is split into a number of modules for easier use and future extensibility.
 
+### yoti-sdk-api
+
 Being the only interface, you need to explicitly couple your code to this module. Exposes the core classes:
 
 Class | Description
@@ -294,6 +330,27 @@ For more information and to see an example of this in use take a look at the [Sp
 ## Running the Example
 
 Instructions on how to run the Spring example project can be found in the [yoti-sdk-spring-boot-example](/yoti-sdk-spring-boot-example) folder.
+
+## Breaking changes and enhancements made in v2.0.0
+
+As well as exposing significant new functionality, we've taken this opportunity to clean up and simplify our public API.
+
+### Dropped support for Java 6
+Minimum supported Java version is now 7.
+
+### New interfaces - Attribute<T> and Anchor
+The old `com.yoti.api.client.Attribute` class has been replaced with `com.yoti.api.client.Attribute<T>`, which now exposes a `List<Anchor>` for the sources and verifiers of the attribute.
+The old `Set<String> getSources()` and `Set<String> getVerifiers()` methods have been replaced with `List<Anchor> getSources()` and `List<Anchor> getVerifiers()`.
+
+### Changes to HumanProfile and ApplicationProfile
+All attributes are now returned as an an instance of `Attribute<T>`.  Use the `Attribute<T>.getValue()` method to determine the actual value of an attribute.
+Consequently, all the `getXXXSources` and `getXXXVerifiers ` methods have been removed, as well as the `is(name, defaultValue)` helper method
+
+### No Enums returned by the public API
+Yoti are adding new functionality all the time.  To avoid the risk the new values returned to the SDK will cause it to break, the SDK will no longer try to map returned values to Enums.  Each SDK release will define String constants in the public api for the possible values known at the time of release. 
+The two Enums removed are:
+* DocumentType - the `DocumentDetails.getType()` method now returns a String.  The possible values are exposed as constants on the `com.yoti.api.client.DocumentDetails` interface.
+* HumanProfile.Gender - `HumanProfile.getGender()` now returns an `Attribute<String>`.  Possible values are defined in `com.yoti.api.client.HumanProfile`.
 
 ## Spring Security Integration
 
@@ -393,11 +450,3 @@ Please provide the following to get you up and working as quickly as possible:
 * Screenshot
 
 Once we have answered your question we may contact you again to discuss Yoti products and services. If you’d prefer us not to do this, please let us know when you e-mail.
-
-## Authors
-
-* [Andras Bulla](https://github.com/lopihe)
-* [Radoslaw Busz](https://github.com/gitplaneta)
-* [David Goaté](https://github.com/davidgoate)
-* [Attila Kiss](https://github.com/atkiss)
-* [Quirino Zagarese](https://github.com/qzagarese)
