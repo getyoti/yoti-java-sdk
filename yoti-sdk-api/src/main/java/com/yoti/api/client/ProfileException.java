@@ -1,7 +1,7 @@
 package com.yoti.api.client;
 
 /**
- * Signals an issue during the getting the profile.
+ * Signals an issue during profile retrieval
  *
  */
 public class ProfileException extends Exception {
