@@ -13,7 +13,7 @@ This will allow you to rely on built in Spring semantics and mechanisms such as 
 ## Requirements
 
 - Spring Security
-- Java 6 or newer
+- Java 7 or newer
 
 ## Usage
 
@@ -25,14 +25,14 @@ If you are using Maven, you need to add the following dependencies:
 <dependency>
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-spring-security</artifactId>
-  <version>1.5.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
 If you are using Gradle, here is the dependency to add:
 
 ```
-compile group: 'com.yoti', name: 'yoti-sdk-spring-security', version: '1.5.0'
+compile group: 'com.yoti', name: 'yoti-sdk-spring-security', version: '2.0.0'
 ```
 
 ### Provide a `YotiClient` instance
