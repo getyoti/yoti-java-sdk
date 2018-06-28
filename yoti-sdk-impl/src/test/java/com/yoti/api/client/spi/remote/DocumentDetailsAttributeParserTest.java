@@ -12,25 +12,26 @@ import org.junit.Test;
 
 public class DocumentDetailsAttributeParserTest {
 
-    private static final String INVALID_ATTRIBUTE__TYPE = "XXXPORT GBR 1234abc 2016-05-01";
-    private static final String INVALID_ATTRIBUTE__NUMBER = "PASSPORT GBR $%^$%^£ 2016-05-01";
-    private static final String INVALID_ATTRIBUTE__COUNTRY = "PASSPORT 13 1234abc 2016-05-01";
-    private static final String INVALID_ATTRIBUTE__DATE = "PASSPORT GBR 1234abc" + " X016-05-01";
-
     DocumentDetailsAttributeParser testObj = new DocumentDetailsAttributeParser();
 
-    @Test
-    public void shouldReturnNullForNullAttribute() throws Exception {
-        DocumentDetails result = testObj.parseFrom(null);
-
-        assertNull(result);
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionForNullAttribute() throws Exception {
+        testObj.parseFrom(null);
     }
 
-    @Test
-    public void shouldReturnNullWhenAttributesAreMissing() throws Exception {
-        DocumentDetails result = testObj.parseFrom("PASSPORT GBR");
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionWhenAttributesAreMissing() throws Exception {
+        testObj.parseFrom("PASSPORT GBR");
+    }
 
-        assertNull(result);
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionForInvalidNumber() throws Exception {
+        testObj.parseFrom("PASSPORT GBR $%^$%^£ 2016-05-01");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionForInvalidCountry() throws Exception {
+        testObj.parseFrom("PASSPORT 13 1234abc 2016-05-01");
     }
 
     @Test
@@ -81,23 +82,9 @@ public class DocumentDetailsAttributeParserTest {
         assertEquals("DVLA", result.getIssuingAuthority());
     }
 
-    @Test
-    public void shouldFailOnInvalidNumber() throws Exception {
-        DocumentDetails result = testObj.parseFrom(INVALID_ATTRIBUTE__NUMBER);
-
-        assertNull(result);
-    }
-
     @Test(expected = ParseException.class)
-    public void shouldFailOnInvalidDate() throws Exception {
-        testObj.parseFrom(INVALID_ATTRIBUTE__DATE);
-    }
-
-    @Test
-    public void shouldFailOnInvalidCountry() throws Exception {
-        DocumentDetails result = testObj.parseFrom(INVALID_ATTRIBUTE__COUNTRY);
-
-        assertNull(result);
+    public void shouldThrowExceptionForInvalidDate() throws Exception {
+        testObj.parseFrom("PASSPORT GBR 1234abc" + " X016-05-01");
     }
 
 }

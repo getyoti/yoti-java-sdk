@@ -81,7 +81,7 @@ public class RemoteAmlService {
         }
     }
 
-    private AmlException createExceptionFromStatusCode(ResourceException e) throws AmlException {
+    private AmlException createExceptionFromStatusCode(ResourceException e) {
         switch (e.getResponseCode()) {
             case HTTP_BAD_REQUEST:
                 return new AmlException("Failed validation:\n" + e.getResponseBody(), e);
