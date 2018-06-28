@@ -59,7 +59,7 @@ class AttributeConverter {
             case JSON:
                 return JSON_MAPPER.readValue(attribute.getValue().toString(DEFAULT_CHARSET), Map.class);
             default:
-                LOG.error("Unknown type {} for attribute {}", attribute.getContentType(), attribute.getName());
+                LOG.warn("Unknown type {} for attribute {}.  Attempting to parse it as a String", attribute.getContentType(), attribute.getName());
                 return attribute.getValue().toString(DEFAULT_CHARSET);
         }
     }

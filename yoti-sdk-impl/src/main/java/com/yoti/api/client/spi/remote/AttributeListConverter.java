@@ -54,7 +54,7 @@ class AttributeListConverter {
             try {
                 parsedAttributes.add(attributeConverter.convertAttribute(attribute));
             } catch (IOException | ParseException e) {
-                LOG.warn("Cannot parse value for attribute '{}'", attribute.getName());
+                LOG.warn("Failed to parse attribute '{}'", attribute.getName());
             }
         }
         return parsedAttributes;

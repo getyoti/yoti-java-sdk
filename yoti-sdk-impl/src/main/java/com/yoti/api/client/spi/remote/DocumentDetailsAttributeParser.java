@@ -15,12 +15,11 @@ class DocumentDetailsAttributeParser {
     private static final int EXPIRATION_INDEX = 3;
     private static final int AUTHORITY_INDEX = 4;
 
-    DocumentDetails parseFrom(String attribute) throws UnsupportedEncodingException, ParseException {
-        if (attribute == null || !attribute.matches(MINIMUM_ACCEPTABLE)) {
-            return null;
+    DocumentDetails parseFrom(String attributeValue) throws UnsupportedEncodingException, ParseException {
+        if (attributeValue == null || !attributeValue.matches(MINIMUM_ACCEPTABLE)) {
+            throw new IllegalArgumentException("Unable to parse attribute value to a DocumentDetails");
         }
-
-        String[] attributes = attribute.split(" ");
+        String[] attributes = attributeValue.split(" ");
         String documentType = attributes[TYPE_INDEX];
         String issuingCountry = attributes[COUNTRY_INDEX];
         String number = attributes[NUMBER_INDEX];
