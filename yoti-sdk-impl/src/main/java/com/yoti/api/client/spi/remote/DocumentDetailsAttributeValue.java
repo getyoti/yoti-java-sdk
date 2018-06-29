@@ -44,15 +44,4 @@ final class DocumentDetailsAttributeValue implements DocumentDetails {
         return authority;
     }
 
-    @Override
-    public String toString() {
-        return "DocumentDetailsAttributeValue{" +
-                "type=" + type +
-                ", issuingCountry='" + issuingCountry + '\'' +
-                ", number='" + number + '\'' +
-                ", expirationDate=" + expirationDate +
-                ", issuingAuthority='" + authority + '\'' +
-                '}';
-    }
-
 }

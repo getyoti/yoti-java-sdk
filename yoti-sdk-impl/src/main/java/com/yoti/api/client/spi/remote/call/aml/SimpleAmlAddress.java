@@ -24,12 +24,4 @@ public class SimpleAmlAddress implements AmlAddress {
         return country;
     }
 
-    @Override
-    public String toString() {
-        return "SimpleAmlAddress{" +
-                "postCode='" + postCode + '\'' +
-                ", country='" + country + '\'' +
-                '}';
-    }
-
 }

@@ -227,21 +227,6 @@ public final class Receipt {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "Receipt [receiptId=" + getDisplayReceiptId()
-                + ", otherPartyProfile=" + Arrays.toString(otherPartyProfile)
-                + ", profile=" + Arrays.toString(profile)
-                + ", otherPartyExtraData=" + Arrays.toString(otherPartyExtraData)
-                + ", extraData=" + Arrays.toString(extraData)
-                + ", wrappedReceiptKey=" + Arrays.toString(wrappedReceiptKey)
-                + ", policyUri=" + policyUri
-                + ", personalKey=" + Arrays.toString(personalKey)
-                + ", rememberMeId=" + Arrays.toString(rememberMeId)
-                + ", outcome=" + outcome
-                + ", timestamp=" + timestamp + "]";
-    }
-
     public String getDisplayReceiptId() {
         return receiptId != null ? toBase64String(receiptId) : "<>";
     }
