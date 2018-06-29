@@ -22,7 +22,7 @@ public class QuietCloseable<T extends AutoCloseable> implements AutoCloseable {
         try {
             autoCloseable.close();
         } catch (Exception e) {
-            LOG.error("Failed to close " + autoCloseable.getClass().getCanonicalName(), e);
+            LOG.error("Failed to close '{}'", autoCloseable.getClass().getCanonicalName(), e);
         }
     }
 

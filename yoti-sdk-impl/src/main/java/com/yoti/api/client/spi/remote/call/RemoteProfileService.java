@@ -73,7 +73,7 @@ public final class RemoteProfileService implements ProfileService {
     }
 
     private Receipt fetchReceipt(String resourcePath, String digest, String authKey) throws IOException, ProfileException {
-        LOG.info("Fetching profile from resource at {}", resourcePath);
+        LOG.info("Fetching profile from resource at '{}'", resourcePath);
         Map<String, String> headers = new HashMap<>();
         headers.put(AUTH_KEY_HEADER, authKey);
         headers.put(DIGEST_HEADER, digest);

@@ -46,7 +46,7 @@ public final class JsonResourceFetcher implements ResourceFetcher {
     }
 
     private HttpURLConnection openConnection(UrlConnector urlConnector, String httpMethod, Map<String, String> headers) throws IOException {
-        LOG.debug("Connecting to: " + urlConnector.getUrlString());
+        LOG.debug("Connecting to: '{}'", urlConnector.getUrlString());
         HttpURLConnection httpUrlConnection = urlConnector.getHttpUrlConnection();
         httpUrlConnection.setRequestMethod(httpMethod);
         setHeaders(headers, httpUrlConnection);

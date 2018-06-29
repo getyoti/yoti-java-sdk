@@ -36,7 +36,7 @@ class AttributeListConverter {
 
         AttributeListProto.AttributeList attributeList = parseProto(attributeListBytes);
         List<Attribute<?>> attributes = parseAttributes(attributeList);
-        LOG.debug("{} attribute(s) parsed", attributes.size());
+        LOG.debug("{} out of {} attribute(s) parsed successfully ", attributes.size(), attributeList.getAttributesCount());
         return attributes;
     }
 

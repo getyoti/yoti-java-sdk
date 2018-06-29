@@ -54,14 +54,6 @@ class ProfileResponse {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "ProfileResponse{" +
-                "sessionData='" + sessionData + '\'' +
-                ", receipt=" + receipt +
-                '}';
-    }
-
     public static class ProfileResponseBuilder {
         private String sessionData;
         private Receipt receipt;
