@@ -352,6 +352,9 @@ The two Enums removed are:
 * DocumentType - the `DocumentDetails.getType()` method now returns a String.  The possible values are exposed as constants on the `com.yoti.api.client.DocumentDetails` interface.
 * HumanProfile.Gender - `HumanProfile.getGender()` now returns an `Attribute<String>`.  Possible values are defined in `com.yoti.api.client.HumanProfile`.
 
+### Removed toString() methods
+We've removed implementations of toString() from all the DTOs returned through the public api.
+
 ## Spring Security Integration
 
 If you use Spring Security you can use the `yoti-sdk-spring-security` module to make integration easier. You are provided with some classes that fit into Spring Security's existing authentication model.

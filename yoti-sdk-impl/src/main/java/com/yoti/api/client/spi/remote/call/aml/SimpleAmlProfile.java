@@ -45,14 +45,4 @@ public class SimpleAmlProfile implements AmlProfile {
         return amlAddress;
     }
 
-    @Override
-    public String toString() {
-        return "SimpleAmlProfile{" +
-                "givenNames='" + givenNames + '\'' +
-                ", familyName='" + familyName + '\'' +
-                ", ssn='" + ssn + '\'' +
-                ", amlAddress=" + amlAddress +
-                '}';
-    }
-
 }

@@ -40,12 +40,4 @@ public class SimpleAmlResult implements AmlResult {
         this.onWatchList = onWatchList;
     }
 
-    @Override
-    public String toString() {
-        return "SimpleAmlResult{" +
-                "onFraudList=" + onFraudList +
-                ", onPepList=" + onPepList +
-                ", onWatchList=" + onWatchList +
-                '}';
-    }
 }

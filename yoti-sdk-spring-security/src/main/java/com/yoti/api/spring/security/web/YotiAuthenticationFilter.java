@@ -30,7 +30,7 @@ public class YotiAuthenticationFilter extends AbstractAuthenticationProcessingFi
                                                 final HttpServletResponse response) throws AuthenticationException {
         LOG.debug("Yoti Auth Filter Running....");
         final String token = obtainToken(request);
-        LOG.debug("Found token {}.", token);
+        LOG.debug("Found token '{}'.", token);
 
         final YotiAuthenticationToken authRequest = new YotiAuthenticationToken(token);
 
