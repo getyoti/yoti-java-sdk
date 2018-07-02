@@ -21,7 +21,7 @@ Before you start, you'll need to create an Application in [Dashboard](https://ww
 ```
 
 ## Building your example server-app
-1. In the [Yoti Dashboard](https://www.yoti.com/dashboard/applications) set the application domain of your app to `https://localhost:8443/`. Note that your endpoint must be accessible on the Internet.
+1. In the [Yoti Dashboard](https://www.yoti.com/dashboard/applications) set the application domain of your app to `https://localhost:8443/`. Note that your endpoint must be accessible from the machine that is displaying the QR code.
 1. Still in the dashboard, set the scenario callback URL to `/login`. 
 1. Edit the [resources/application.yml](src/main/resources/application.yml) and replace the `yoti-client-sdk-id-from-dashboard` value with the `Yoti client SDK ID` you can find in Dashboard.
 1. Download your Application's key pair from Yoti-Dashboard and copy it to `resources/app-keypair.pem`.
