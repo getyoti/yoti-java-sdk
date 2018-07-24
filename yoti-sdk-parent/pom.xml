@@ -56,6 +56,10 @@
       <activation>
         <activeByDefault>false</activeByDefault>
       </activation>
+      <properties>
+        <gpg.skip>false</gpg.skip>
+        <dependency-check.skip>false</dependency-check.skip>
+      </properties>
       <distributionManagement>
         <snapshotRepository>
           <id>ossrh</id>
@@ -72,6 +76,10 @@
       <activation>
         <activeByDefault>false</activeByDefault>
       </activation>
+      <properties>
+        <gpg.skip>true</gpg.skip>
+        <dependency-check.skip>true</dependency-check.skip>
+      </properties>
       <distributionManagement>
         <snapshotRepository>
           <id>yoti-snapshots</id>
