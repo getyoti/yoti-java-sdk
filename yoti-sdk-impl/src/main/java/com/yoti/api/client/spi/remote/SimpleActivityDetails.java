@@ -1,5 +1,7 @@
 package com.yoti.api.client.spi.remote;
 
+import static com.yoti.api.client.spi.remote.util.Validation.notNull;
+
 import static org.bouncycastle.util.encoders.Base64.toBase64String;
 
 import java.util.Date;
@@ -8,6 +10,7 @@ import com.yoti.api.client.ActivityDetails;
 import com.yoti.api.client.ApplicationProfile;
 import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.Profile;
+import com.yoti.api.client.spi.remote.util.Validation;
 
 final class SimpleActivityDetails implements ActivityDetails {
 
@@ -67,13 +70,6 @@ final class SimpleActivityDetails implements ActivityDetails {
     @Deprecated
     public String getBase64Selfie() {
         return base64Selfie;
-    }
-
-    private <T> T notNull(T value, String name) {
-        if (value == null) {
-            throw new IllegalArgumentException(name + " is null");
-        }
-        return value;
     }
 
 }
