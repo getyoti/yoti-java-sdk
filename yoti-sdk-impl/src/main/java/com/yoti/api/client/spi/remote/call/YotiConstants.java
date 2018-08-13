@@ -6,7 +6,7 @@ public final class YotiConstants {
 
     public static final String PROPERTY_YOTI_API_URL = "yoti.api.url";
 
-    private static final String DEFAULT_YOTI_HOST = "https://api.yoti.com";
+    public static final String DEFAULT_YOTI_HOST = "https://api.yoti.com";
     public static final String YOTI_API_PATH_PREFIX = "/api/v1";
     public static final String DEFAULT_YOTI_API_URL = DEFAULT_YOTI_HOST + YOTI_API_PATH_PREFIX;
 
