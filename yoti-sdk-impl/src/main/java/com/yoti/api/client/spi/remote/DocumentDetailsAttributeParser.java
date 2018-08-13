@@ -20,12 +20,14 @@ class DocumentDetailsAttributeParser {
             throw new IllegalArgumentException("Unable to parse attribute value to a DocumentDetails");
         }
         String[] attributes = attributeValue.split(" ");
-        String documentType = attributes[TYPE_INDEX];
-        String issuingCountry = attributes[COUNTRY_INDEX];
-        String number = attributes[NUMBER_INDEX];
-        Date expirationDate = getDateSafely(attributes, EXPIRATION_INDEX);
-        String issuingAuthority = getSafely(attributes, AUTHORITY_INDEX);
-        return new DocumentDetailsAttributeValue(documentType, issuingCountry, expirationDate, number, issuingAuthority);
+
+        return DocumentDetailsAttributeValue.builder()
+                .withType(attributes[TYPE_INDEX])
+                .withIssuingCountry(attributes[COUNTRY_INDEX])
+                .withNumber(attributes[NUMBER_INDEX])
+                .withDate(getDateSafely(attributes, EXPIRATION_INDEX))
+                .withAuthority(getSafely(attributes, AUTHORITY_INDEX))
+                .build();
     }
 
     private static Date getDateSafely(String[] attributes, int index) throws UnsupportedEncodingException, ParseException {
