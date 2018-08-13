@@ -105,7 +105,7 @@ public class RemoteAmlServiceTest {
 
     @Test
     public void shouldWrapResourceException() throws Exception {
-        ResourceException resourceException = new ResourceException(HTTP_UNAUTHORIZED, "failed verification");
+        ResourceException resourceException = new ResourceException(HTTP_UNAUTHORIZED, "Unauthorized", "failed verification");
         when(objectMapperMock.writeValueAsString(amlProfileMock)).thenReturn(SERIALIZED_BODY);
         when(signedMessageFactoryMock.create(keyPair.getPrivate(), HTTP_POST, GENERATED_PATH, SERIALIZED_BODY.getBytes())).thenReturn(SOME_SIGNATURE);
         when(resourceFetcherMock.postResource(any(UrlConnector.class), any(byte[].class), any(Map.class), eq(SimpleAmlResult.class)))
