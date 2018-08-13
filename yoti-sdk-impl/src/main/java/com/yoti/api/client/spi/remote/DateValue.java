@@ -18,7 +18,7 @@ import com.yoti.api.client.Date;
  * Attribute value holding a year/month/day tuple.
  *
  */
-final class DateValue implements Date {
+public final class DateValue implements Date {
 
     private static final String DATE_PATTERN = "yyyy-MM-dd";
 

@@ -17,7 +17,7 @@ public class PathFactory {
         return format(AML_PATH_TEMPLATE, appId, randomUUID(), createTimestamp());
     }
 
-    private long createTimestamp() {
+    protected long createTimestamp() {
         return nanoTime() / 1000;
     }
 
