@@ -104,7 +104,6 @@
     <bouncy.castle.version>1.59</bouncy.castle.version>
     <jackson.version>2.9.5</jackson.version>
     <google.protobuf.version>3.5.1</google.protobuf.version>
-    <guava.version>25.1-jre</guava.version>
   
     <!-- spring versions -->
     <springboot.version>1.5.10.RELEASE</springboot.version>
@@ -156,11 +155,6 @@
         <groupId>com.google.protobuf</groupId>
         <artifactId>protobuf-java</artifactId>
         <version>${google.protobuf.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
-        <version>${guava.version}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
