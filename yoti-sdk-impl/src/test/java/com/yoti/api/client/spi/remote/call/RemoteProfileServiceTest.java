@@ -1,25 +1,5 @@
 package com.yoti.api.client.spi.remote.call;
 
-import com.yoti.api.client.ProfileException;
-import com.yoti.api.client.spi.remote.call.factory.PathFactory;
-import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.GeneralSecurityException;
-import java.security.KeyPair;
-import java.security.Security;
-import java.util.Map;
-
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.AUTH_KEY_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DIGEST_HEADER;
@@ -29,6 +9,7 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_HEADER;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.KEY_PAIR_PEM;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.base64;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
@@ -36,6 +17,27 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+import java.security.Security;
+import java.util.Map;
+
+import com.yoti.api.client.ProfileException;
+import com.yoti.api.client.spi.remote.call.factory.PathFactory;
+import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RemoteProfileServiceTest {
@@ -137,7 +139,7 @@ public class RemoteProfileServiceTest {
 
     @Test
     public void shouldThrowExceptionWithResourceExceptionCause() throws Throwable {
-        ResourceException resourceException = new ResourceException(404, "Test exception");
+        ResourceException resourceException = new ResourceException(404, "Not Found", "Test exception");
         when(resourceFetcherMock.fetchResource(any(UrlConnector.class), any(Map.class), eq(ProfileResponse.class))).thenThrow(resourceException);
 
         try {
