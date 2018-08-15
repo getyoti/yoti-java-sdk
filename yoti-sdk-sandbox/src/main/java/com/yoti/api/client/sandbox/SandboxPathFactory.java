@@ -7,10 +7,10 @@ import com.yoti.api.client.spi.remote.call.factory.PathFactory;
 
 public class SandboxPathFactory extends PathFactory {
 
-    private static final String CREATE_SHARING_TOKEN_PATH = "/apps/%s/tokens?timestamp=%s&nonce=%s";
+    private static final String CREATE_SANDBOX_TOKEN_PATH = "/apps/%s/tokens?timestamp=%s&nonce=%s";
 
     public String createSandboxPath(String appId) {
-        return format(CREATE_SHARING_TOKEN_PATH, appId, createTimestamp(), randomUUID());
+        return format(CREATE_SANDBOX_TOKEN_PATH, appId, createTimestamp(), randomUUID());
     }
 
 }
