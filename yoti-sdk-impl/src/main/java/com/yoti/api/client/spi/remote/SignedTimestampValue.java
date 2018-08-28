@@ -21,4 +21,33 @@ public class SignedTimestampValue implements SignedTimestamp {
         return timestamp;
     }
 
+    @Override
+    public String toString() {
+        return String.format("SignedTimestampValue{version=%s, timestamp=%s}", version, timestamp);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        SignedTimestampValue that = (SignedTimestampValue) o;
+
+        if (version != that.version) {
+            return false;
+        }
+        return timestamp != null ? timestamp.equals(that.timestamp) : that.timestamp == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = version;
+        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
+        return result;
+    }
+
 }
