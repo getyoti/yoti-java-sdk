@@ -1,6 +1,8 @@
 package com.yoti.api.client.spi.remote;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,7 +33,7 @@ public class DateTimeValueTest {
     public void from_shouldWorkForAnActualTimeWithMicros() throws Exception {
         TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        simpleDateFormat.setTimeZone(utcTimeZone);
         Calendar calendar = GregorianCalendar.getInstance(utcTimeZone);
         calendar.setTime(simpleDateFormat.parse("1980-Aug-05 13:15:45"));
         long microseconds = calendar.getTimeInMillis() * 1000;
@@ -47,6 +49,53 @@ public class DateTimeValueTest {
         assertEquals(15, result.getTime().getMinute());
         assertEquals(45, result.getTime().getSecond());
         assertEquals(123456, result.getTime().getMicrosecond());
+    }
+
+    @Test
+    public void equals_returnsFalseWhenComparedToNull() {
+        DateTime dateTime = DateTimeValue.from(123456789);
+
+        assertFalse(dateTime.equals(null));
+    }
+
+    @Test
+    public void equals_shouldBeReflexive() {
+        DateTime dateTime = DateTimeValue.from(123456789);
+
+        assertTrue(dateTime.equals(dateTime));
+        assertTrue(dateTime.hashCode() == dateTime.hashCode());
+    }
+
+    @Test
+    public void equals_shouldBeSymmetricWhenValuesMatch() {
+        DateTime dateTime1 = DateTimeValue.from(123456789);
+        DateTime dateTime2 = DateTimeValue.from(123456789);
+
+        assertTrue(dateTime1.equals(dateTime2));
+        assertTrue(dateTime2.equals(dateTime1));
+        assertTrue(dateTime1.hashCode() == dateTime2.hashCode());
+    }
+
+    @Test
+    public void equals_shouldBeSymmetricWhenValuesDoNotMatch() {
+        DateTime dateTime1 = DateTimeValue.from(987654321);
+        DateTime dateTime2 = DateTimeValue.from(123456789);
+
+        assertFalse(dateTime1.equals(dateTime2));
+        assertFalse(dateTime2.equals(dateTime1));
+    }
+
+    @Test
+    public void equals_shouldBeTransitive() {
+        DateTime dateTime1 = DateTimeValue.from(123456789);
+        DateTime dateTime2 = DateTimeValue.from(123456789);
+        DateTime dateTime3 = DateTimeValue.from(123456789);
+
+        assertTrue(dateTime1.equals(dateTime2));
+        assertTrue(dateTime1.equals(dateTime3));
+        assertTrue(dateTime2.equals(dateTime3));
+        assertTrue(dateTime1.hashCode() == dateTime2.hashCode());
+        assertTrue(dateTime2.hashCode() == dateTime3.hashCode());
     }
 
 }

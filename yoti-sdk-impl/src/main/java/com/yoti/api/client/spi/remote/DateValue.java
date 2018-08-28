@@ -74,4 +74,32 @@ public final class DateValue implements Date {
         return format("%04d-%02d-%02d", year, month, day);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        DateValue dateValue = (DateValue) o;
+
+        if (year != dateValue.year) {
+            return false;
+        }
+        if (month != dateValue.month) {
+            return false;
+        }
+        return day == dateValue.day;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = year;
+        result = 31 * result + month;
+        result = 31 * result + day;
+        return result;
+    }
+
 }
