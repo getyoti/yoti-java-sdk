@@ -224,9 +224,13 @@ Attributes are returned as an instance of `com.yoti.api.client.Attribute<T>`.  S
 `com.yoti.api.client.Anchor` represents how a given `Attribute<T>` has been _sourced_ or _verified_.  These values are created and signed whenever a Profile Attribute is created, or verified with an external party.
 
 For example, an attribute value that was _sourced_ from a Passport might have the following values:
-| anchor.getType | SOURCE |
-| anchor.getValue | PASSPORT |
-| anchor.getTimestamp | 2017-10-31, 19:45:59.123789 |
+
+`Anchor` property | Example value
+-----|------
+type | SOURCE
+value | PASSPORT
+subType | OCR
+signedTimestamp | 2017-10-31, 19:45:59.123789
 
 Similarly, an attribute _verified_ against the data held by an external party will have an `Anchor` of type _VERIFIER_, naming the party that verified it. 
 
