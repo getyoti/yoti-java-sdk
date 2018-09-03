@@ -4,6 +4,7 @@ import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAttribute;
 import com.yoti.api.client.spi.remote.DateValue;
+import com.yoti.api.client.spi.remote.util.Validation;
 
 public class AgeVerification {
 
@@ -42,6 +43,7 @@ public class AgeVerification {
         }
 
         public AgeVerificationBuilder withDateOfBirth(Date value) {
+            Validation.notNull(value, "dateOfBirth");
             this.dateOfBirth = value;
             return this;
         }
@@ -55,11 +57,19 @@ public class AgeVerification {
         }
 
         public AgeVerificationBuilder withDerivation(String value) {
+            Validation.notNullOrEmpty(value, "derivation");
             this.derivation = value;
             return this;
         }
 
         public AgeVerification build() {
+            if (dateOfBirth == null) {
+                throw new IllegalStateException("'dateOfBirth' may not be null");
+            }
+            if (Validation.isNullOrEmpty(derivation)) {
+                throw new IllegalStateException("'derivation' may not be null or empty");
+            }
+
             return new AgeVerification(dateOfBirth, derivation);
         }
 
