@@ -54,6 +54,119 @@ public class TimeValueTest {
     }
 
     @Test
+    public void builder_appliesMinLimitOnHour() {
+        try {
+            TimeValue.builder().withHour(-1);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("hour"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_appliesMaxLimitOnHour() {
+        try {
+            TimeValue.builder().withHour(24);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("hour"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_appliesMinLimitOnMinute() {
+        try {
+            TimeValue.builder().withMinute(-1);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("minute"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_appliesMaxLimitOnMinute() {
+        try {
+            TimeValue.builder().withMinute(60);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("minute"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_appliesMinLimitOnSecond() {
+        try {
+            TimeValue.builder().withSecond(-1);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("second"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_appliesMaxLimitOnSecond() {
+        try {
+            TimeValue.builder().withSecond(60);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("second"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_appliesMinLimitOnMicrosecond() {
+        try {
+            TimeValue.builder().withMicrosecond(-1);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("microsecond"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_appliesMaxLimitOnMicrosecond() {
+        try {
+            TimeValue.builder().withMicrosecond(1000000);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("microsecond"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_buildsATimeValueWithDefaults() {
+        TimeValue result = TimeValue.builder().build();
+
+        assertEquals(0, result.getHour());
+        assertEquals(0, result.getMinute());
+        assertEquals(0, result.getSecond());
+        assertEquals(0, result.getMicrosecond());
+    }
+
+    @Test
+    public void builder_buildsATimeValueWithGivenValues() {
+        TimeValue result = TimeValue.builder()
+                .withHour(1)
+                .withMinute(2)
+                .withSecond(3)
+                .withMicrosecond(4)
+                .build();
+
+        assertEquals(1, result.getHour());
+        assertEquals(2, result.getMinute());
+        assertEquals(3, result.getSecond());
+        assertEquals(4, result.getMicrosecond());
+    }
+
+    @Test
     public void toString_shouldFormatDateCorrectly() {
         TimeValue timeValue = TimeValue.from(calendar, 999);
 
