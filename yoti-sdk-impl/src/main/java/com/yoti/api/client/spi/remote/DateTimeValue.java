@@ -7,6 +7,7 @@ import java.util.TimeZone;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.DateTime;
 import com.yoti.api.client.Time;
+import com.yoti.api.client.spi.remote.util.Validation;
 
 public class DateTimeValue implements DateTime {
 
@@ -16,6 +17,8 @@ public class DateTimeValue implements DateTime {
     private final Time time;
 
     public DateTimeValue(Date date, Time time) {
+        Validation.notNull(date, "date");
+        Validation.notNull(time, "time");
         this.date = date;
         this.time = time;
     }
@@ -54,10 +57,7 @@ public class DateTimeValue implements DateTime {
 
         DateTimeValue that = (DateTimeValue) o;
 
-        if (date != null ? !date.equals(that.date) : that.date != null) {
-            return false;
-        }
-        return time != null ? time.equals(that.time) : that.time == null;
+        return date.equals(that.date) && time.equals(that.time);
     }
 
     @Override

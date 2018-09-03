@@ -1,8 +1,11 @@
 package com.yoti.api.client.spi.remote;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,6 +55,100 @@ public class DateValueTest {
     @Test(expected = ParseException.class)
     public void parseFrom_shouldNotParseInvalidDateValue() throws Exception {
         DateValue.parseFrom(INVALID_DATE_VALUE_STRING);
+    }
+
+    @Test
+    public void builder_shouldNotAllowYearZero() {
+        try {
+            DateValue.builder().withYear(0);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("year"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_shouldApplyMinLimitToMonth() {
+        try {
+            DateValue.builder().withMonth(0);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("month"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_shouldApplyMaxLimitToMonth() {
+        try {
+            DateValue.builder().withMonth(13);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("month"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_shouldApplyMinLimitToDay() {
+        try {
+            DateValue.builder().withDay(0);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("day"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_shouldApplyMaxLimitToDay() {
+        try {
+            DateValue.builder().withDay(32);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("day"));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_shouldFailForAnInvalidDate() throws Exception {
+        try {
+            DateValue.builder()
+                    .withYear(2015)
+                    .withMonth(2)
+                    .withDay(29)
+                    .build();
+        } catch (IllegalStateException e) {
+            assertTrue(e.getCause() instanceof ParseException);
+            assertThat(e.getMessage(), containsString("2015-2-29"));
+            assertThat(e.getMessage(), containsString(e.getCause().getMessage()));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void builder_shouldBuildDateWithDefaultValues() throws Exception {
+        DateValue result = DateValue.builder().build();
+
+        assertEquals(1, result.getYear());
+        assertEquals(1, result.getMonth());
+        assertEquals(1, result.getDay());
+    }
+
+    @Test
+    public void builder_shouldBuildDateWithGivenValues() throws Exception {
+        DateValue result = DateValue.builder()
+                .withYear(1999)
+                .withMonth(12)
+                .withDay(31)
+                .build();
+
+        assertEquals(1999, result.getYear());
+        assertEquals(12, result.getMonth());
+        assertEquals(31, result.getDay());
     }
 
     @Test

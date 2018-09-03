@@ -13,10 +13,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.yoti.api.client.Date;
+import com.yoti.api.client.spi.remote.util.Validation;
 
 /**
  * Attribute value holding a year/month/day tuple.
- *
  */
 public final class DateValue implements Date {
 
@@ -100,6 +100,47 @@ public final class DateValue implements Date {
         result = 31 * result + month;
         result = 31 * result + day;
         return result;
+    }
+
+    public static DateValueBuilder builder() {
+        return new DateValueBuilder();
+    }
+
+    public static class DateValueBuilder {
+
+        private int year = 1;
+        private int month = 1;
+        private int day = 1;
+
+        private DateValueBuilder() {
+        }
+
+        public DateValueBuilder withYear(int year) {
+            Validation.notEqualTo(year, 0, "year");
+            this.year = year;
+            return this;
+        }
+
+        public DateValueBuilder withMonth(int month) {
+            Validation.withinRange(month, 1, 12, "month");
+            this.month = month;
+            return this;
+        }
+
+        public DateValueBuilder withDay(int day) {
+            Validation.withinRange(day, 1, 31, "day");
+            this.day = day;
+            return this;
+        }
+
+        public DateValue build() {
+            try {
+                return DateValue.parseFrom(String.format("%s-%s-%s", year, month, day));
+            } catch (ParseException | UnsupportedEncodingException e) {
+                throw new IllegalStateException(e);
+            }
+        }
+
     }
 
 }
