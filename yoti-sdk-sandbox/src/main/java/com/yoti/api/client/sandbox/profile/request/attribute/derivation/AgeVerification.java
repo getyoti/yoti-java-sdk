@@ -1,7 +1,11 @@
 package com.yoti.api.client.sandbox.profile.request.attribute.derivation;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.Date;
+import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAnchor;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAttribute;
 import com.yoti.api.client.spi.remote.DateValue;
 import com.yoti.api.client.spi.remote.util.Validation;
@@ -10,20 +14,26 @@ public class AgeVerification {
 
     private final Date dateOfBirth;
     private final String supportedAgeDerivation;
+    private final List<SandboxAnchor> anchors;
 
-    private AgeVerification(Date dateOfBirth, String supportedAgeDerivation) {
+    private AgeVerification(Date dateOfBirth, String supportedAgeDerivation, List<SandboxAnchor> anchors) {
+        Validation.notNull(dateOfBirth, "dateOfBirth");
+        Validation.notNullOrEmpty(supportedAgeDerivation, "derivation");
+
         this.dateOfBirth = dateOfBirth;
         this.supportedAgeDerivation = supportedAgeDerivation;
+        this.anchors = anchors;
     }
 
     public SandboxAttribute toAttribute() {
         return SandboxAttribute.builder()
-                .name(AttributeConstants.HumanProfileAttributes.DATE_OF_BIRTH)
-                .value(dateOfBirth.toString())
-                .derivation(supportedAgeDerivation)
+                .withName(AttributeConstants.HumanProfileAttributes.DATE_OF_BIRTH)
+                .withValue(dateOfBirth.toString())
+                .withDerivation(supportedAgeDerivation)
+                .withAnchors(anchors)
                 .build();
     }
-    
+
     public static AgeVerificationBuilder builder() {
         return new AgeVerificationBuilder();
     }
@@ -32,6 +42,7 @@ public class AgeVerification {
 
         private Date dateOfBirth;
         private String derivation;
+        private List<SandboxAnchor> anchors = Collections.emptyList();
 
         public AgeVerificationBuilder withDateOfBirth(String value) {
             try {
@@ -62,17 +73,20 @@ public class AgeVerification {
             return this;
         }
 
-        public AgeVerification build() {
-            if (dateOfBirth == null) {
-                throw new IllegalStateException("'dateOfBirth' may not be null");
-            }
-            if (Validation.isNullOrEmpty(derivation)) {
-                throw new IllegalStateException("'derivation' may not be null or empty");
-            }
+        public AgeVerificationBuilder withAnchors(List<SandboxAnchor> anchors) {
+            Validation.notNull(anchors, "anchors");
+            this.anchors = anchors;
+            return this;
+        }
 
-            return new AgeVerification(dateOfBirth, derivation);
+        public AgeVerification build() {
+            try {
+                return new AgeVerification(dateOfBirth, derivation, anchors);
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
         }
 
     }
-    
+
 }

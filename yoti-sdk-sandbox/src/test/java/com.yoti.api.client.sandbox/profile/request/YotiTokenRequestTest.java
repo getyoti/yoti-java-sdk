@@ -7,10 +7,13 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes;
 import com.yoti.api.client.DocumentDetails;
+import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAnchor;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAttribute;
 import com.yoti.api.client.sandbox.profile.request.attribute.derivation.AgeVerification;
 import com.yoti.api.client.spi.remote.DateValue;
@@ -24,7 +27,7 @@ public class YotiTokenRequestTest {
 
     private static final String SOME_ATTRIBUTE_NAME = "someAttributeName";
     private static final SandboxAttribute SOME_ATTRIBUTE = SandboxAttribute.builder()
-            .name(SOME_ATTRIBUTE_NAME)
+            .withName(SOME_ATTRIBUTE_NAME)
             .build();
 
     private static final String SOME_FAMILY_NAME = "someFamilyName";
@@ -40,6 +43,8 @@ public class YotiTokenRequestTest {
     private static final String SOME_EMAIL_ADDRESS = "someEmailAddress";
     private static final String SOME_BASE_64_SELFIE = "someBase64Selfie";
     private static final String SOME_DOCUMENT_DETAILS = "someDocumentDetails";
+
+    private static final List<SandboxAnchor> anchors = Arrays.asList(SandboxAnchor.builder().build());
 
     @Test
     public void shouldAddAnAttribute() {
@@ -90,6 +95,18 @@ public class YotiTokenRequestTest {
     }
 
     @Test
+    public void shouldCreateRequestWithFamilyNameAndAnchors() {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withFamilyName(SOME_FAMILY_NAME, anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.FAMILY_NAME, SOME_FAMILY_NAME, anchors)));
+    }
+
+    @Test
     public void shouldCreateRequestWithGivenNames() {
         YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
                 .withGivenNames(SOME_GIVEN_NAMES)
@@ -99,6 +116,18 @@ public class YotiTokenRequestTest {
 
         assertThat(result, hasSize(1));
         assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.GIVEN_NAMES, SOME_GIVEN_NAMES)));
+    }
+
+    @Test
+    public void shouldCreateRequestWithGivenNamesAndAnchors() {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withGivenNames(SOME_GIVEN_NAMES, anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.GIVEN_NAMES, SOME_GIVEN_NAMES, anchors)));
     }
 
     @Test
@@ -114,6 +143,18 @@ public class YotiTokenRequestTest {
     }
 
     @Test
+    public void shouldCreateRequestWithFullNameAndAnchors() {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withFullName(SOME_FULL_NAME, anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.FULL_NAME, SOME_FULL_NAME, anchors)));
+    }
+
+    @Test
     public void shouldCreateRequestWithGender() {
         YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
                 .withGender(SOME_GENDER)
@@ -123,6 +164,18 @@ public class YotiTokenRequestTest {
 
         assertThat(result, hasSize(1));
         assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.GENDER, SOME_GENDER)));
+    }
+
+    @Test
+    public void shouldCreateRequestWithGenderAndAnchors() {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withGender(SOME_GENDER, anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.GENDER, SOME_GENDER, anchors)));
     }
 
     @Test
@@ -138,6 +191,18 @@ public class YotiTokenRequestTest {
     }
 
     @Test
+    public void shouldCreateRequestWithDateOfBirthFromStringAndAnchors() {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withDateOfBirth(SOME_DOB, anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.DATE_OF_BIRTH, SOME_DOB, anchors)));
+    }
+
+    @Test
     public void shouldCreateRequestWithDateOfBirthFromDate() throws Exception {
         YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
                 .withDateOfBirth(DateValue.parseFrom(SOME_DOB))
@@ -147,6 +212,18 @@ public class YotiTokenRequestTest {
 
         assertThat(result, hasSize(1));
         assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.DATE_OF_BIRTH, SOME_DOB)));
+    }
+
+    @Test
+    public void shouldCreateRequestWithDateOfBirthFromDateAndAnchors() throws Exception {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withDateOfBirth(DateValue.parseFrom(SOME_DOB), anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.DATE_OF_BIRTH, SOME_DOB, anchors)));
     }
 
     @Test
@@ -194,6 +271,18 @@ public class YotiTokenRequestTest {
     }
 
     @Test
+    public void shouldCreateRequestWithPostalAddressAndAnchors() {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withPostalAddress(SOME_POSTAL_ADDRESS, anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.POSTAL_ADDRESS, SOME_POSTAL_ADDRESS, anchors)));
+    }
+
+    @Test
     public void shouldCreateRequestWithStructuredAddress() {
         YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
                 .withStructuredPostalAddress(SOME_POSTAL_ADDRESS)
@@ -203,6 +292,18 @@ public class YotiTokenRequestTest {
 
         assertThat(result, hasSize(1));
         assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS, SOME_POSTAL_ADDRESS)));
+    }
+
+    @Test
+    public void shouldCreateRequestWithStructuredAddressAndAnchors() {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withStructuredPostalAddress(SOME_POSTAL_ADDRESS, anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS, SOME_POSTAL_ADDRESS, anchors)));
     }
 
     @Test
@@ -218,6 +319,18 @@ public class YotiTokenRequestTest {
     }
 
     @Test
+    public void shouldCreateRequestWithNationalityAndAnchors() {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withNationality(SOME_NATIONALITY, anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.NATIONALITY, SOME_NATIONALITY, anchors)));
+    }
+
+    @Test
     public void shouldCreateRequestWithPhoneNumber() {
         YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
                 .withPhoneNumber(SOME_PHONE_NUMBER)
@@ -230,6 +343,18 @@ public class YotiTokenRequestTest {
     }
 
     @Test
+    public void shouldCreateRequestWithPhoneNumberAndAnchors() {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withPhoneNumber(SOME_PHONE_NUMBER, anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.PHONE_NUMBER, SOME_PHONE_NUMBER, anchors)));
+    }
+
+    @Test
     public void shouldCreateRequestWithEmailAddress() {
         YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
                 .withEmailAddress(SOME_EMAIL_ADDRESS)
@@ -239,6 +364,18 @@ public class YotiTokenRequestTest {
 
         assertThat(result, hasSize(1));
         assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.EMAIL_ADDRESS, SOME_EMAIL_ADDRESS)));
+    }
+
+    @Test
+    public void shouldCreateRequestWithEmailAddressAndAnchors() {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withEmailAddress(SOME_EMAIL_ADDRESS, anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.EMAIL_ADDRESS, SOME_EMAIL_ADDRESS, anchors)));
     }
 
     @Test
@@ -259,6 +396,23 @@ public class YotiTokenRequestTest {
     }
 
     @Test
+    public void shouldCreateRequestWithDocumentDetailsAndAnchors() {
+        DocumentDetails documentDetails = DocumentDetailsAttributeValue.builder()
+                .withType("type")
+                .withIssuingCountry("country")
+                .withNumber("number")
+                .build();
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withDocumentDetails(documentDetails, anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.optionalAttribute(HumanProfileAttributes.DOCUMENT_DETAILS, "type country number", anchors)));
+    }
+
+    @Test
     public void shouldCreateRequestWithDocumentDetailsString() {
         YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
                 .withDocumentDetails(SOME_DOCUMENT_DETAILS)
@@ -268,6 +422,18 @@ public class YotiTokenRequestTest {
 
         assertThat(result, hasSize(1));
         assertThat(result, hasItem(AttributeMatcher.optionalAttribute(HumanProfileAttributes.DOCUMENT_DETAILS, SOME_DOCUMENT_DETAILS)));
+    }
+
+    @Test
+    public void shouldCreateRequestWithDocumentDetailsStringAndAnchors() {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withDocumentDetails(SOME_DOCUMENT_DETAILS, anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.optionalAttribute(HumanProfileAttributes.DOCUMENT_DETAILS, SOME_DOCUMENT_DETAILS, anchors)));
     }
 
     @Test
@@ -283,6 +449,18 @@ public class YotiTokenRequestTest {
     }
 
     @Test
+    public void shouldCreateRequestWithSelfieBytesAndAnchors() {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withSelfie(SOME_BASE_64_SELFIE.getBytes(), anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.SELFIE, toBase64String(SOME_BASE_64_SELFIE.getBytes()), anchors)));
+    }
+
+    @Test
     public void shouldCreateRequestWithBase64Selfie() {
         YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
                 .withBase64Selfie(SOME_BASE_64_SELFIE)
@@ -294,18 +472,32 @@ public class YotiTokenRequestTest {
         assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.SELFIE, SOME_BASE_64_SELFIE)));
     }
 
+    @Test
+    public void shouldCreateRequestWithBase64SelfieAndAnchors() {
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withBase64Selfie(SOME_BASE_64_SELFIE, anchors)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(AttributeMatcher.requiredAttribute(HumanProfileAttributes.SELFIE, SOME_BASE_64_SELFIE, anchors)));
+    }
+
     private static class AttributeMatcher extends TypeSafeDiagnosingMatcher<SandboxAttribute> {
 
         private final String name;
         private final String value;
         private final String derivation;
         private final String optional;
+        private final List<SandboxAnchor> anchors;
 
-        private AttributeMatcher(String name, String value, String derivation, String optional) {
+        private AttributeMatcher(String name, String value, String derivation, String optional, List<SandboxAnchor> anchors) {
             this.name = name;
             this.value = value;
             this.derivation = derivation;
             this.optional = optional;
+            this.anchors = anchors;
         }
 
         @Override
@@ -313,8 +505,9 @@ public class YotiTokenRequestTest {
             description.appendText(buildDescription(sandboxAttribute));
             return name.equals(sandboxAttribute.getName())
                     && value.equals(sandboxAttribute.getValue())
-                    && derivation.equals(sandboxAttribute.getDerivation())
-                    && optional.equals(sandboxAttribute.getOptional());
+                    && (derivation == sandboxAttribute.getDerivation() || derivation.equals(sandboxAttribute.getDerivation()))
+                    && optional.equals(sandboxAttribute.getOptional())
+                    && anchors.equals(sandboxAttribute.getAnchors());
         }
 
         private static String buildDescription(SandboxAttribute sandboxAttribute) {
@@ -337,16 +530,25 @@ public class YotiTokenRequestTest {
         }
 
         public static AttributeMatcher requiredAttribute(String name, String value) {
-            return new AttributeMatcher(name, value, "", "false");
+            return requiredAttribute(name, value, Collections.<SandboxAnchor>emptyList());
+        }
+
+        public static AttributeMatcher requiredAttribute(String name, String value, List<SandboxAnchor> anchors) {
+            return new AttributeMatcher(name, value, null, "false", anchors);
         }
 
         public static AttributeMatcher derivedAttribute(String name, String value, String derivation) {
-            return new AttributeMatcher(name, value, derivation, "false");
+            return new AttributeMatcher(name, value, derivation, "false", Collections.<SandboxAnchor>emptyList());
         }
 
         public static AttributeMatcher optionalAttribute(String name, String value) {
-            return new AttributeMatcher(name, value, "", "true");
+            return optionalAttribute(name, value, Collections.<SandboxAnchor>emptyList());
         }
+
+        public static AttributeMatcher optionalAttribute(String name, String value, List<SandboxAnchor> anchors) {
+            return new AttributeMatcher(name, value, null, "true", anchors);
+        }
+
 
     }
 

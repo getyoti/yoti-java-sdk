@@ -2,6 +2,7 @@ package com.yoti.api.client.spi.remote;
 
 import com.yoti.api.client.DateTime;
 import com.yoti.api.client.SignedTimestamp;
+import com.yoti.api.client.spi.remote.util.Validation;
 
 public class SignedTimestampValue implements SignedTimestamp {
 
@@ -9,6 +10,7 @@ public class SignedTimestampValue implements SignedTimestamp {
     private final DateTime timestamp;
 
     public SignedTimestampValue(int version, DateTime timestamp) {
+        Validation.notNull(timestamp, "timestamp");
         this.version = version;
         this.timestamp = timestamp;
     }
@@ -40,7 +42,7 @@ public class SignedTimestampValue implements SignedTimestamp {
         if (version != that.version) {
             return false;
         }
-        return timestamp != null ? timestamp.equals(that.timestamp) : that.timestamp == null;
+        return timestamp.equals(that.timestamp);
     }
 
     @Override

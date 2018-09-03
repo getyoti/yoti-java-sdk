@@ -1,5 +1,7 @@
 package com.yoti.api.client.sandbox.profile.request.attribute.derivation;
 
+import static java.util.Arrays.asList;
+
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -9,10 +11,10 @@ import static org.junit.Assert.fail;
 import java.text.ParseException;
 
 import com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes;
+import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAnchor;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAttribute;
 import com.yoti.api.client.spi.remote.DateValue;
 
-import org.hamcrest.core.StringContains;
 import org.junit.Test;
 
 public class AgeVerificationTest {
@@ -35,11 +37,24 @@ public class AgeVerificationTest {
     }
 
     @Test
+    public void shouldErrorForNullAnchors() {
+        try {
+            AgeVerification.builder()
+                    .withAnchors(null);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("'anchors' must not be null"));
+            return;
+        }
+
+        fail("Expected an Exception");
+    }
+
+    @Test
     public void shouldErrorForMissingDateOfBirth() {
         try {
             AgeVerification.builder().build();
         } catch (IllegalStateException e) {
-            assertThat(e.getMessage(), containsString("'dateOfBirth' may not be null"));
+            assertThat(e.getMessage(), containsString("'dateOfBirth' must not be null"));
             return;
         }
 
@@ -53,7 +68,7 @@ public class AgeVerificationTest {
                     .withDateOfBirth(VALID_DATE_STRING)
                     .build();
         } catch (IllegalStateException e) {
-            assertThat(e.getMessage(), containsString("'derivation' may not be null or empty"));
+            assertThat(e.getMessage(), containsString("'derivation' must not be empty or null"));
             return;
         }
 
@@ -82,6 +97,7 @@ public class AgeVerificationTest {
         assertEquals(VALID_DATE_STRING, result.getValue());
         assertEquals(HumanProfileAttributes.AGE_OVER + 21, result.getDerivation());
         assertEquals("false", result.getOptional());
+        assertTrue(result.getAnchors().isEmpty());
     }
 
     @Test
@@ -96,6 +112,24 @@ public class AgeVerificationTest {
         assertEquals(VALID_DATE_STRING, result.getValue());
         assertEquals(HumanProfileAttributes.AGE_UNDER + 16, result.getDerivation());
         assertEquals("false", result.getOptional());
+        assertTrue(result.getAnchors().isEmpty());
+    }
+
+    @Test
+    public void shouldCreateAgeVerificationWithAnchors() throws Exception{
+        SandboxAnchor sandboxAnchor = SandboxAnchor.builder().build();
+        SandboxAttribute result = AgeVerification.builder()
+                .withDateOfBirth(DateValue.parseFrom(VALID_DATE_STRING))
+                .withAgeUnder(16)
+                .withAnchors(asList(sandboxAnchor))
+                .build()
+                .toAttribute();
+
+        assertEquals(HumanProfileAttributes.DATE_OF_BIRTH, result.getName());
+        assertEquals(VALID_DATE_STRING, result.getValue());
+        assertEquals(HumanProfileAttributes.AGE_UNDER + 16, result.getDerivation());
+        assertEquals("false", result.getOptional());
+        assertEquals(result.getAnchors(), asList(sandboxAnchor));
     }
 
 }
