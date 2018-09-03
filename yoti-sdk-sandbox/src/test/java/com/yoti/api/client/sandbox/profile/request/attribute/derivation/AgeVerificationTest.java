@@ -1,5 +1,6 @@
 package com.yoti.api.client.sandbox.profile.request.attribute.derivation;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -25,8 +26,34 @@ public class AgeVerificationTest {
                     .withDateOfBirth("2011-15-35")
                     .build();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), StringContains.containsString("Unparseable date: \"2011-15-35\""));
+            assertThat(e.getMessage(), containsString("Unparseable date: \"2011-15-35\""));
             assertTrue(e.getCause() instanceof ParseException);
+            return;
+        }
+
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void shouldErrorForMissingDateOfBirth() {
+        try {
+            AgeVerification.builder().build();
+        } catch (IllegalStateException e) {
+            assertThat(e.getMessage(), containsString("'dateOfBirth' may not be null"));
+            return;
+        }
+
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void shouldErrorForMissingDerivation() {
+        try {
+            AgeVerification.builder()
+                    .withDateOfBirth(VALID_DATE_STRING)
+                    .build();
+        } catch (IllegalStateException e) {
+            assertThat(e.getMessage(), containsString("'derivation' may not be null or empty"));
             return;
         }
 
@@ -37,6 +64,7 @@ public class AgeVerificationTest {
     public void shouldParseDateOfBirthSuccessfully() {
         AgeVerification result = AgeVerification.builder()
                 .withDateOfBirth(VALID_DATE_STRING)
+                .withAgeOver(7)
                 .build();
 
         assertEquals(VALID_DATE_STRING, result.toAttribute().getValue());
