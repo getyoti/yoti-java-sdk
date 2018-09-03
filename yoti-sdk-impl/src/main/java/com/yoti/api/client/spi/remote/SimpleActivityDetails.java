@@ -10,7 +10,6 @@ import com.yoti.api.client.ActivityDetails;
 import com.yoti.api.client.ApplicationProfile;
 import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.Profile;
-import com.yoti.api.client.spi.remote.util.Validation;
 
 final class SimpleActivityDetails implements ActivityDetails {
 

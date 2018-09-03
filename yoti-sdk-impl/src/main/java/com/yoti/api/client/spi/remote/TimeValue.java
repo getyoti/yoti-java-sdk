@@ -10,6 +10,7 @@ import static com.yoti.api.client.spi.remote.util.Validation.notGreaterThan;
 import java.util.Calendar;
 
 import com.yoti.api.client.Time;
+import com.yoti.api.client.spi.remote.util.Validation;
 
 public class TimeValue implements Time {
 
@@ -89,6 +90,50 @@ public class TimeValue implements Time {
         result = 31 * result + second;
         result = 31 * result + microsecond;
         return result;
+    }
+
+    public static TimeValueBuilder builder() {
+        return new TimeValueBuilder();
+    }
+
+    public static class TimeValueBuilder {
+
+        private int hour;
+        private int minute;
+        private int second;
+        private int microsecond;
+
+        private TimeValueBuilder() {
+        }
+
+        public TimeValueBuilder withHour(int hour) {
+            Validation.withinRange(hour, 0, 23, "hour");
+            this.hour = hour;
+            return this;
+        }
+
+        public TimeValueBuilder withMinute(int minute) {
+            Validation.withinRange(minute, 0, 59, "minute");
+            this.minute = minute;
+            return this;
+        }
+
+        public TimeValueBuilder withSecond(int second) {
+            Validation.withinRange(second, 0, 59, "second");
+            this.second = second;
+            return this;
+        }
+
+        public TimeValueBuilder withMicrosecond(int microsecond) {
+            Validation.withinRange(microsecond, 0, 999999, "microsecond");
+            this.microsecond = microsecond;
+            return this;
+        }
+
+        public TimeValue build() {
+            return new TimeValue(hour, minute, second, microsecond);
+        }
+
     }
 
 }

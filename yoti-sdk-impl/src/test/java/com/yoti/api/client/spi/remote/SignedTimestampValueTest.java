@@ -1,7 +1,10 @@
 package com.yoti.api.client.spi.remote;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import com.yoti.api.client.DateTime;
 
@@ -11,6 +14,18 @@ public class SignedTimestampValueTest {
 
     private static final DateTime DATE_TIME_1 = DateTimeValue.from(123456789);
     private static final DateTime DATE_TIME_2 = DateTimeValue.from(987654321);
+
+    @Test
+    public void constructor_willNotAllowNullTimestamp() {
+        try {
+            new SignedTimestampValue(1, null);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("timestamp"));
+            return;
+        }
+
+        fail("Expected an Exception");
+    }
 
     @Test
     public void equals_returnsFalseWhenComparedToNull() {

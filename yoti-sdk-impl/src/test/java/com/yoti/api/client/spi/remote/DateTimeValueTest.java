@@ -1,8 +1,11 @@
 package com.yoti.api.client.spi.remote;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,6 +17,30 @@ import com.yoti.api.client.DateTime;
 import org.junit.Test;
 
 public class DateTimeValueTest {
+
+    @Test
+    public void constructor_willNotAllowNullDate() {
+        try {
+            new DateTimeValue(null, null);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("date"));
+            return;
+        }
+
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void constructor_willNotAllowNullTime() throws Exception {
+        try {
+            new DateTimeValue(DateValue.parseFrom("1984-10-31"), null);
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("time"));
+            return;
+        }
+
+        fail("Expected an Exception");
+    }
 
     @Test
     public void from_shouldWorkForEpochBeginning() {

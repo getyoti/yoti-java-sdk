@@ -13,9 +13,9 @@ public class SandboxAttributeTest {
     @Test
     public void shouldNotBeOptionalByDefault() {
         SandboxAttribute result = SandboxAttribute.builder()
-                .name(SOME_NAME)
-                .derivation(SOME_DERIVATION)
-                .value(SOME_VALUE)
+                .withName(SOME_NAME)
+                .withDerivation(SOME_DERIVATION)
+                .withValue(SOME_VALUE)
                 .build();
 
         assertEquals(SOME_NAME, result.getName());
@@ -27,10 +27,10 @@ public class SandboxAttributeTest {
     @Test
     public void shouldBeOptionalWhenSpecified() {
         SandboxAttribute result = SandboxAttribute.builder()
-                .name(SOME_NAME)
-                .derivation(SOME_DERIVATION)
-                .value(SOME_VALUE)
-                .optional(true)
+                .withName(SOME_NAME)
+                .withDerivation(SOME_DERIVATION)
+                .withValue(SOME_VALUE)
+                .withOptional(true)
                 .build();
 
         assertEquals(SOME_NAME, result.getName());
