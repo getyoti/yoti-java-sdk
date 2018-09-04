@@ -107,7 +107,7 @@
   
     <!-- sping versions -->
     <springboot.version>1.5.10.RELEASE</springboot.version>
-    <spring.core.version>4.3.17.RELEASE</spring.core.version>
+    <spring.core.version>4.3.18.RELEASE</spring.core.version>
     <spring.security.version>4.2.6.RELEASE</spring.security.version>
     <javax.servlet.version>2.5</javax.servlet.version>
 
