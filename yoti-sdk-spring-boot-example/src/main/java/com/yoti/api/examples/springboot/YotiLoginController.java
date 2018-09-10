@@ -65,7 +65,7 @@ public class YotiLoginController {
         }
 
         // load activityDetails into ui model
-        model.addAttribute("userId", activityDetails.getUserId());
+        model.addAttribute("rememberMeId", activityDetails.getRememberMeId());
         model.addAttribute("base64Selfie", activityDetails.getBase64Selfie());
 
         // load humanProfile data into ui model
