@@ -11,15 +11,15 @@ import com.yoti.api.client.Profile;
 
 final class SimpleActivityDetails implements ActivityDetails {
 
-    private final String userId;
+    private final String rememberMeId;
     private final ApplicationProfile applicationProfile;
     private final HumanProfile userProfile;
     private final Date timestamp;
     private final String receiptId;
     private final String base64Selfie;
 
-    public SimpleActivityDetails(String userId, Profile userProfile, Profile applicationProfile, Date timestamp, byte[] receiptId) {
-        this.userId = notNull(userId, "User id");
+    public SimpleActivityDetails(String rememberMeId, Profile userProfile, Profile applicationProfile, Date timestamp, byte[] receiptId) {
+        this.rememberMeId = notNull(rememberMeId, "Remember Me id");
         this.userProfile = HumanProfileAdapter.wrap(notNull(userProfile, "User profile"));
         this.applicationProfile = ApplicationProfileAdapter.wrap(notNull(applicationProfile, "Application profile"));
         this.timestamp = notNull(timestamp, "Timestamp");
@@ -43,8 +43,14 @@ final class SimpleActivityDetails implements ActivityDetails {
     }
 
     @Override
+    @Deprecated
     public String getUserId() {
-        return userId;
+        return getRememberMeId();
+    }
+
+    @Override
+    public String getRememberMeId() {
+        return rememberMeId;
     }
 
     @Override

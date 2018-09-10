@@ -23,13 +23,22 @@ public interface ActivityDetails {
     ApplicationProfile getApplicationProfile();
 
     /**
-     * Return the user ID, which is a unique, stable identifier for a user in the context of an application/user
+     * Deprecated.  Please use getRememberMeId() instead.
+     *
+     * @return user ID.
+     */
+    @Deprecated
+    String getUserId();
+
+    /**
+     * Return the remember-me ID, which is a unique, stable identifier for a user in the context of an application/user
      * interaction. You can be use it to identify returning users. Note that it is different for the same user in
      * different applications.
      *
      * @return user ID.
      */
-    String getUserId();
+    String getRememberMeId();
+
 
     /**
      * Time and date of the activity.
