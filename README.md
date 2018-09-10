@@ -185,9 +185,9 @@ so can use it to determine whether a user is new to you.  For example:
 ActivityDetails activityDetails;
 try {
     activityDetails = client.getActivityDetails(token);
-    Optional<YourAppUserClass> user = yourUserSearchMethod(activityDetails.getUserId());
+    Optional<YourAppUserClass> user = yourUserSearchMethod(activityDetails.getRememberMeId());
     if (user.isPresent()) {
-        String userId = activityDetails.getUserId();
+        String rememberMeId = activityDetails.getRememberMeId();
         String base64Selfie = activityDetails.getBase64Selfie();
         Attribute<Image> selfie = profile.getSelfie();
         Image selfieValue = selfie.getValue();
@@ -210,7 +210,7 @@ try {
 }
 ```
 
-Where `yourUserSearchMethod` is a method in your app that finds the user for the given userId.
+Where `yourUserSearchMethod` is a method in your app that finds the user for the given rememberMeId.
 Regardless of whether the user is new to your app, Yoti will always provide the profile.  So you don't necessarily need to store it.
 
 ### Attributes
