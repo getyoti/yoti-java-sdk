@@ -5,6 +5,7 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateSymmetricKey;
 
 import static org.bouncycastle.util.encoders.Base64.decode;
+import static org.bouncycastle.util.encoders.Base64.toBase64String;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -52,8 +53,8 @@ public class ActivityDetailsFactoryTest {
     private static final DateFormat RFC3339_FORMAT = new SimpleDateFormat(RFC3339_PATTERN);
     private static final String VALID_TIMESTAMP = RFC3339_FORMAT.format(DATE);
 
-    private static final String SOME_USER_ID_STRING = "aBase64EncodedUserId";
-    private static final byte[] SOME_USER_ID_BYTES = decode(SOME_USER_ID_STRING);
+    private static final String SOME_REMEMBER_ME_ID_STRING = toBase64String("aBase64EncodedRememberMeId".getBytes());
+    private static final byte[] SOME_REMEMBER_ME_ID_BYTES = decode(SOME_REMEMBER_ME_ID_STRING);
     private static final String ENCODED_RECEIPT_STRING = "base64EncodedReceipt";
     private static final byte[] DECODED_RECEIPT_BYTES = decode(ENCODED_RECEIPT_STRING);
 
@@ -128,7 +129,7 @@ public class ActivityDetailsFactoryTest {
         Receipt receipt = new Receipt.Builder()
                 .withWrappedReceiptKey(validReceiptKey)
                 .withTimestamp(VALID_TIMESTAMP)
-                .withRememberMeId(SOME_USER_ID_BYTES)
+                .withRememberMeId(SOME_REMEMBER_ME_ID_BYTES)
                 .withProfile(PROFILE_CONTENT)
                 .withOtherPartyProfile(OTHER_PROFILE_CONTENT)
                 .withReceiptId(DECODED_RECEIPT_BYTES)
@@ -140,7 +141,8 @@ public class ActivityDetailsFactoryTest {
 
         assertSame(otherProfileMock, getWrappedProfile(result.getUserProfile()));
         assertSame(profileMock, getWrappedProfile(result.getApplicationProfile()));
-        assertEquals(SOME_USER_ID_STRING, result.getUserId());
+        assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getRememberMeId());
+        assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getUserId());
         assertEquals(ENCODED_RECEIPT_STRING, result.getReceiptId());
         assertEquals(DATE, result.getTimestamp());
     }
