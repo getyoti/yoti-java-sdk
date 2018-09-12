@@ -27,7 +27,7 @@ public interface Profile {
     Attribute getAttribute(String name);
 
     /**
-     * Return a list of all the {@link Attribute} with a name starting with <code>name</code>
+     * Return a list of all the {@link Attribute}s with a name starting with <code>name</code>
      *
      * @param <T>   the type parameter indicating the type of the returned value
      * @param name  attribute name
@@ -47,9 +47,9 @@ public interface Profile {
     <T> Attribute<T> findAttributeStartingWith(String name, Class<T> clazz);
 
     /**
-     * Return all attributes for the profile.
+     * Return all {@link Attribute}s for the profile.
      *
-     * @return an unsorted collection of {@link Attribute}
+     * @return an unsorted collection of {@link Attribute}s
      */
     Collection<Attribute<?>> getAttributes();
 
