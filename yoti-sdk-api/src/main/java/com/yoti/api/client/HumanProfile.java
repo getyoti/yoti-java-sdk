@@ -1,9 +1,10 @@
 package com.yoti.api.client;
 
+import java.util.List;
 import java.util.Map;
 
 /**
- * Profile of an human user with convenience methods to access well-known attributes.
+ * Profile of a human user with convenience methods to access well-known attributes.
  */
 public interface HumanProfile extends Profile {
 
@@ -41,10 +42,34 @@ public interface HumanProfile extends Profile {
     Attribute<Date> getDateOfBirth();
 
     /**
-     * Did the user pass the age verification check?
+     * Finds all the 'Age Over' and 'Age Under' derived attributes returned with the profile, and returns them wrapped in {@link AgeVerification}
+     * objects
+     *
+     * @return A list of all the {@link AgeVerification} objects returned for this profile
+     */
+    List<AgeVerification> getAgeVerifications();
+
+    /**
+     * Searches for an {@link AgeVerification} corresponding to an 'Age Over' check for the given age
+     *
+     * @return age_over {@link AgeVerification} for the given age, or <code>null</code> if no match was found
+     */
+    AgeVerification findAgeOverVerification(int age);
+
+    /**
+     * Searches for an {@link AgeVerification} corresponding to an 'Age Under' check for the given age
+     *
+     * @return age_under {@link AgeVerification} for the given age, or <code>null</code> if no match was found
+     */
+    AgeVerification findAgeUnderVerification(int age);
+
+    /**
+     * @deprecated  Did the user pass the age verification check?  From SDK 2.1 onwards use getAgeVerifications(), findAgeOverVerification(int age)
+     * or findAgeUnderVerification(int age)
      *
      * @return <code>TRUE</code> if they passed, <code>FALSE</code> if they failed, <code>null</code> if there was no check
      */
+    @Deprecated
     Boolean isAgeVerified();
 
     /**

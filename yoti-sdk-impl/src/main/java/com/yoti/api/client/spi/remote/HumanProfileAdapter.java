@@ -2,10 +2,14 @@ package com.yoti.api.client.spi.remote;
 
 import static java.lang.Boolean.parseBoolean;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
-import com.yoti.api.attributes.AttributeConstants;
+import com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes;
+import com.yoti.api.client.AgeVerification;
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.DocumentDetails;
@@ -19,6 +23,7 @@ import com.yoti.api.client.Profile;
 final class HumanProfileAdapter implements HumanProfile {
 
     private final Profile wrapped;
+    private List<AgeVerification> ageVerifications;
 
     private HumanProfileAdapter(Profile wrapped) {
         this.wrapped = wrapped;
@@ -39,6 +44,11 @@ final class HumanProfileAdapter implements HumanProfile {
     }
 
     @Override
+    public <T> List<Attribute<T>> findAttributesStartingWith(String name, Class<T> clazz) {
+        return wrapped.findAttributesStartingWith(name, clazz);
+    }
+
+    @Override
     public <T> Attribute<T> findAttributeStartingWith(String name, Class<T> clazz) {
         return wrapped.findAttributeStartingWith(name, clazz);
     }
@@ -50,70 +60,110 @@ final class HumanProfileAdapter implements HumanProfile {
 
     @Override
     public Attribute<String> getFamilyName() {
-        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.FAMILY_NAME, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.FAMILY_NAME, String.class);
     }
 
     @Override
     public Attribute<String> getGivenNames() {
-        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.GIVEN_NAMES, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.GIVEN_NAMES, String.class);
     }
 
     @Override
     public Attribute<String> getFullName() {
-        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.FULL_NAME, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.FULL_NAME, String.class);
     }
 
     @Override
     public Attribute<Date> getDateOfBirth() {
-        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.DATE_OF_BIRTH, Date.class);
+        return wrapped.getAttribute(HumanProfileAttributes.DATE_OF_BIRTH, Date.class);
     }
 
     @Override
+    public List<AgeVerification> getAgeVerifications() {
+        findAllAgeVerifications();
+        return ageVerifications;
+    }
+
+    @Override
+    public AgeVerification findAgeOverVerification(int age) {
+        return findAgeVerification(HumanProfileAttributes.AGE_OVER.replace(":", ""), age);
+    }
+
+    @Override
+    public AgeVerification findAgeUnderVerification(int age) {
+        return findAgeVerification(HumanProfileAttributes.AGE_UNDER.replace(":", ""), age);
+    }
+
+    private AgeVerification findAgeVerification(String checkPerformed, int age) {
+        findAllAgeVerifications();
+        for (AgeVerification ageVerification : ageVerifications) {
+            if (ageVerification.getAgeVerified() == age && ageVerification.getCheckPerformed().equals(checkPerformed)) {
+                return ageVerification;
+            }
+        }
+        return null;
+    }
+
+    private void findAllAgeVerifications() {
+        if (ageVerifications == null) {
+            List<AgeVerification> verifications = new ArrayList<>();
+            for (Attribute<String> ageOver : wrapped.findAttributesStartingWith(HumanProfileAttributes.AGE_OVER, String.class)) {
+                verifications.add(new SimpleAgeVerification(ageOver));
+            }
+            for (Attribute<String> ageUnder : wrapped.findAttributesStartingWith(HumanProfileAttributes.AGE_UNDER, String.class)) {
+                verifications.add(new SimpleAgeVerification(ageUnder));
+            }
+            ageVerifications = Collections.unmodifiableList(verifications);
+        }
+    }
+
+    @Override
+    @Deprecated
     public Boolean isAgeVerified() {
-        Boolean isAgeOver = parseFromStringAttribute(wrapped.findAttributeStartingWith(AttributeConstants.HumanProfileAttributes.AGE_OVER, String.class));
-        Boolean isAgeUnder = parseFromStringAttribute(wrapped.findAttributeStartingWith(AttributeConstants.HumanProfileAttributes.AGE_UNDER, String.class));
+        Boolean isAgeOver = parseFromStringAttribute(wrapped.findAttributeStartingWith(HumanProfileAttributes.AGE_OVER, String.class));
+        Boolean isAgeUnder = parseFromStringAttribute(wrapped.findAttributeStartingWith(HumanProfileAttributes.AGE_UNDER, String.class));
         return isAgeOver != null ? isAgeOver : isAgeUnder;
     }
 
     @Override
     public Attribute<String> getGender() {
-        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.GENDER, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.GENDER, String.class);
     }
 
     @Override
     public Attribute<String> getPostalAddress() {
-        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.POSTAL_ADDRESS, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.POSTAL_ADDRESS, String.class);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public Attribute<Map<?, ?>> getStructuredPostalAddress() {
-        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS, (Class) Map.class);
+        return wrapped.getAttribute(HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS, (Class) Map.class);
     }
 
     @Override
     public Attribute<String> getNationality() {
-        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.NATIONALITY, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.NATIONALITY, String.class);
     }
 
     @Override
     public Attribute<String> getPhoneNumber() {
-        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.PHONE_NUMBER, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.PHONE_NUMBER, String.class);
     }
 
     @Override
     public Attribute<Image> getSelfie() {
-        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.SELFIE, Image.class);
+        return wrapped.getAttribute(HumanProfileAttributes.SELFIE, Image.class);
     }
 
     @Override
     public Attribute<String> getEmailAddress() {
-        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.EMAIL_ADDRESS, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.EMAIL_ADDRESS, String.class);
     }
 
     @Override
     public Attribute<DocumentDetails> getDocumentDetails() {
-        return wrapped.getAttribute(AttributeConstants.HumanProfileAttributes.DOCUMENT_DETAILS, DocumentDetails.class);
+        return wrapped.getAttribute(HumanProfileAttributes.DOCUMENT_DETAILS, DocumentDetails.class);
     }
 
     @Override

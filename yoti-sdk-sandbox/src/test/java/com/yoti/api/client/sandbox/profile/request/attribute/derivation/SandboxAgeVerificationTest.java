@@ -17,14 +17,14 @@ import com.yoti.api.client.spi.remote.DateValue;
 
 import org.junit.Test;
 
-public class AgeVerificationTest {
+public class SandboxAgeVerificationTest {
 
     private static final String VALID_DATE_STRING = "1980-08-05";
 
     @Test
     public void shouldErrorForBadDateOfBirth() {
         try {
-            AgeVerification.builder()
+            SandboxAgeVerification.builder()
                     .withDateOfBirth("2011-15-35")
                     .build();
         } catch (IllegalArgumentException e) {
@@ -39,7 +39,7 @@ public class AgeVerificationTest {
     @Test
     public void shouldErrorForNullAnchors() {
         try {
-            AgeVerification.builder()
+            SandboxAgeVerification.builder()
                     .withAnchors(null);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("'anchors' must not be null"));
@@ -52,7 +52,7 @@ public class AgeVerificationTest {
     @Test
     public void shouldErrorForMissingDateOfBirth() {
         try {
-            AgeVerification.builder().build();
+            SandboxAgeVerification.builder().build();
         } catch (IllegalStateException e) {
             assertThat(e.getMessage(), containsString("'dateOfBirth' must not be null"));
             return;
@@ -64,7 +64,7 @@ public class AgeVerificationTest {
     @Test
     public void shouldErrorForMissingDerivation() {
         try {
-            AgeVerification.builder()
+            SandboxAgeVerification.builder()
                     .withDateOfBirth(VALID_DATE_STRING)
                     .build();
         } catch (IllegalStateException e) {
@@ -77,7 +77,7 @@ public class AgeVerificationTest {
 
     @Test
     public void shouldParseDateOfBirthSuccessfully() {
-        AgeVerification result = AgeVerification.builder()
+        SandboxAgeVerification result = SandboxAgeVerification.builder()
                 .withDateOfBirth(VALID_DATE_STRING)
                 .withAgeOver(7)
                 .build();
@@ -87,7 +87,7 @@ public class AgeVerificationTest {
 
     @Test
     public void shouldCreateAgeOverSandboxAttribute() throws Exception {
-        SandboxAttribute result = AgeVerification.builder()
+        SandboxAttribute result = SandboxAgeVerification.builder()
                 .withDateOfBirth(DateValue.parseFrom(VALID_DATE_STRING))
                 .withAgeOver(21)
                 .build()
@@ -102,7 +102,7 @@ public class AgeVerificationTest {
 
     @Test
     public void shouldCreateAgeUnderSandboxAttribute() throws Exception {
-        SandboxAttribute result = AgeVerification.builder()
+        SandboxAttribute result = SandboxAgeVerification.builder()
                 .withDateOfBirth(DateValue.parseFrom(VALID_DATE_STRING))
                 .withAgeUnder(16)
                 .build()
@@ -118,7 +118,7 @@ public class AgeVerificationTest {
     @Test
     public void shouldCreateAgeVerificationWithAnchors() throws Exception{
         SandboxAnchor sandboxAnchor = SandboxAnchor.builder().build();
-        SandboxAttribute result = AgeVerification.builder()
+        SandboxAttribute result = SandboxAgeVerification.builder()
                 .withDateOfBirth(DateValue.parseFrom(VALID_DATE_STRING))
                 .withAgeUnder(16)
                 .withAnchors(asList(sandboxAnchor))

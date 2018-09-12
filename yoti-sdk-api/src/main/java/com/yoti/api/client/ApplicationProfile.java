@@ -2,8 +2,6 @@ package com.yoti.api.client;
 
 /**
  * Profile of an application with convenience methods to access well-known attributes.
- *
- *
  */
 public interface ApplicationProfile extends Profile {
 
