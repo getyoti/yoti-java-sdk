@@ -4,7 +4,7 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 
 /**
- * Anchors represent where, when and how a profile {@link Attribute} value was acquired or verified.  For example, Attributes sourced from a backing
+ * Anchors represent where, when and how, a profile {@link Attribute} value was acquired or verified. For example, Attributes sourced from a backing
  * document such as a Passport will have a signed, timestamped anchor identifying that source
  */
 public interface Anchor {
