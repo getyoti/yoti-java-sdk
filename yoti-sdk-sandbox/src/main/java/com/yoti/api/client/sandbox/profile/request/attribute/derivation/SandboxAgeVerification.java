@@ -10,13 +10,13 @@ import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAttribute;
 import com.yoti.api.client.spi.remote.DateValue;
 import com.yoti.api.client.spi.remote.util.Validation;
 
-public class AgeVerification {
+public class SandboxAgeVerification {
 
     private final Date dateOfBirth;
     private final String supportedAgeDerivation;
     private final List<SandboxAnchor> anchors;
 
-    private AgeVerification(Date dateOfBirth, String supportedAgeDerivation, List<SandboxAnchor> anchors) {
+    private SandboxAgeVerification(Date dateOfBirth, String supportedAgeDerivation, List<SandboxAnchor> anchors) {
         Validation.notNull(dateOfBirth, "dateOfBirth");
         Validation.notNullOrEmpty(supportedAgeDerivation, "derivation");
 
@@ -34,17 +34,17 @@ public class AgeVerification {
                 .build();
     }
 
-    public static AgeVerificationBuilder builder() {
-        return new AgeVerificationBuilder();
+    public static SandboxAgeVerificationBuilder builder() {
+        return new SandboxAgeVerificationBuilder();
     }
 
-    public static class AgeVerificationBuilder {
+    public static class SandboxAgeVerificationBuilder {
 
         private Date dateOfBirth;
         private String derivation;
         private List<SandboxAnchor> anchors = Collections.emptyList();
 
-        public AgeVerificationBuilder withDateOfBirth(String value) {
+        public SandboxAgeVerificationBuilder withDateOfBirth(String value) {
             try {
                 this.dateOfBirth = DateValue.parseFrom(value);
                 return this;
@@ -53,35 +53,35 @@ public class AgeVerification {
             }
         }
 
-        public AgeVerificationBuilder withDateOfBirth(Date value) {
+        public SandboxAgeVerificationBuilder withDateOfBirth(Date value) {
             Validation.notNull(value, "dateOfBirth");
             this.dateOfBirth = value;
             return this;
         }
 
-        public AgeVerificationBuilder withAgeOver(int value) {
+        public SandboxAgeVerificationBuilder withAgeOver(int value) {
             return withDerivation(AttributeConstants.HumanProfileAttributes.AGE_OVER + value);
         }
 
-        public AgeVerificationBuilder withAgeUnder(int value) {
+        public SandboxAgeVerificationBuilder withAgeUnder(int value) {
             return withDerivation(AttributeConstants.HumanProfileAttributes.AGE_UNDER + value);
         }
 
-        public AgeVerificationBuilder withDerivation(String value) {
+        public SandboxAgeVerificationBuilder withDerivation(String value) {
             Validation.notNullOrEmpty(value, "derivation");
             this.derivation = value;
             return this;
         }
 
-        public AgeVerificationBuilder withAnchors(List<SandboxAnchor> anchors) {
+        public SandboxAgeVerificationBuilder withAnchors(List<SandboxAnchor> anchors) {
             Validation.notNull(anchors, "anchors");
             this.anchors = anchors;
             return this;
         }
 
-        public AgeVerification build() {
+        public SandboxAgeVerification build() {
             try {
-                return new AgeVerification(dateOfBirth, derivation, anchors);
+                return new SandboxAgeVerification(dateOfBirth, derivation, anchors);
             } catch (Exception e) {
                 throw new IllegalStateException(e);
             }
