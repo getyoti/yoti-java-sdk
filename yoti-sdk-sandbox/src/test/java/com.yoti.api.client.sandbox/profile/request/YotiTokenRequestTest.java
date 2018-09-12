@@ -4,7 +4,6 @@ import static org.bouncycastle.util.encoders.Base64.toBase64String;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
@@ -47,13 +46,19 @@ public class YotiTokenRequestTest {
     private static final List<SandboxAnchor> anchors = Arrays.asList(SandboxAnchor.builder().build());
 
     @Test
-    public void shouldAddAnAttribute() {
-        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
-                .withAttribute(SOME_ATTRIBUTE)
+    public void shouldAddAttributes() {
+        SandboxAttribute otherAttribute = SandboxAttribute.builder()
+                .withName("otherAttributeName")
                 .build();
 
-        assertEquals(1, yotiTokenRequest.getSandboxAttributes().size());
-        assertEquals(SOME_ATTRIBUTE_NAME, yotiTokenRequest.getSandboxAttributes().get(0).getName());
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withAttribute(SOME_ATTRIBUTE)
+                .withAttribute(otherAttribute)
+                .build();
+
+        assertThat(yotiTokenRequest.getSandboxAttributes(), hasSize(2));
+        assertThat(yotiTokenRequest.getSandboxAttributes(), hasItem(SOME_ATTRIBUTE));
+        assertThat(yotiTokenRequest.getSandboxAttributes(), hasItem(otherAttribute));
     }
 
     @Test
@@ -78,8 +83,25 @@ public class YotiTokenRequestTest {
                 .withAttribute(SOME_ATTRIBUTE)
                 .build();
 
-        assertEquals(1, yotiTokenRequest.getSandboxAttributes().size());
-        assertEquals(SOME_ATTRIBUTE_NAME, yotiTokenRequest.getSandboxAttributes().get(0).getName());
+        assertThat(yotiTokenRequest.getSandboxAttributes(), hasSize(1));
+        assertThat(yotiTokenRequest.getSandboxAttributes(), hasItem(SOME_ATTRIBUTE));
+    }
+
+    @Test
+    public void shouldAllowSameAttributeWithDifferingDerivationNames() {
+        SandboxAttribute derivationAttribute = SandboxAttribute.builder()
+                .withName(SOME_ATTRIBUTE_NAME)
+                .withDerivation("derivation1")
+                .build();
+
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withAttribute(SOME_ATTRIBUTE)
+                .withAttribute(derivationAttribute)
+                .build();
+
+        assertThat(yotiTokenRequest.getSandboxAttributes(), hasSize(2));
+        assertThat(yotiTokenRequest.getSandboxAttributes(), hasItem(SOME_ATTRIBUTE));
+        assertThat(yotiTokenRequest.getSandboxAttributes(), hasItem(derivationAttribute));
     }
 
     @Test
