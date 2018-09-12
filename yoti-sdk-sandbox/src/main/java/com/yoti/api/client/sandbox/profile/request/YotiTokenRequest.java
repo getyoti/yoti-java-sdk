@@ -11,7 +11,7 @@ import com.yoti.api.client.Date;
 import com.yoti.api.client.DocumentDetails;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAnchor;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAttribute;
-import com.yoti.api.client.sandbox.profile.request.attribute.derivation.AgeVerification;
+import com.yoti.api.client.sandbox.profile.request.attribute.derivation.SandboxAgeVerification;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bouncycastle.util.encoders.Base64;
@@ -108,8 +108,8 @@ public class YotiTokenRequest {
             return withAttribute(sandboxAttribute);
         }
 
-        public YotiTokenRequestBuilder withAgeVerification(AgeVerification ageVerification) {
-            return withAttribute(ageVerification.toAttribute());
+        public YotiTokenRequestBuilder withAgeVerification(SandboxAgeVerification sandboxAgeVerification) {
+            return withAttribute(sandboxAgeVerification.toAttribute());
         }
 
         public YotiTokenRequestBuilder withGender(String value) {

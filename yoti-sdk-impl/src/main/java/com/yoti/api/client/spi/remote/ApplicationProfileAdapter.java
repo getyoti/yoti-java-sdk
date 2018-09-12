@@ -1,6 +1,7 @@
 package com.yoti.api.client.spi.remote;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.ApplicationProfile;
@@ -31,6 +32,11 @@ public final class ApplicationProfileAdapter implements ApplicationProfile {
     @Override
     public <T> Attribute<T> getAttribute(String name, Class<T> clazz) {
         return wrapped.getAttribute(name, clazz);
+    }
+
+    @Override
+    public <T> List<Attribute<T>> findAttributesStartingWith(String name, Class<T> clazz) {
+        return wrapped.findAttributesStartingWith(name, clazz);
     }
 
     @Override

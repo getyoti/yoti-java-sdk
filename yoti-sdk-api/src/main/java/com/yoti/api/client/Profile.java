@@ -1,6 +1,7 @@
 package com.yoti.api.client;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Yoti profile for a connect token and application. You can get a hold of one of these by using a {@link YotiClient}.
@@ -8,17 +9,17 @@ import java.util.Collection;
 public interface Profile {
 
     /**
-     * Return typed attribute value for a key.
+     * Return typed {@link Attribute} object for a key.
      *
      * @param <T> the type parameter indicating the type of the returned value
      * @param name attribute name
      * @param clazz attribute type
-     * @return typed attribute, null if attribute type is not assignable from the specified class
+     * @return typed attribute, null if it is not present in the profile
      */
     <T> Attribute<T> getAttribute(String name, Class<T> clazz);
 
     /**
-     * Returns the attribute object for the key
+     * Returns the {@link Attribute} object for the key
      *
      * @param name
      * @return the attribute object, null if it is not present in the profile
@@ -26,19 +27,29 @@ public interface Profile {
     Attribute getAttribute(String name);
 
     /**
-     * Return the value of the first attribute with a name starting with <code>name</code>
+     * Return a list of all the {@link Attribute} with a name starting with <code>name</code>
      *
      * @param <T>   the type parameter indicating the type of the returned value
      * @param name  attribute name
      * @param clazz attribute type
-     * @return typed attribute value, null if there was no match or attribute type is not assignable from the specified class
+     * @return typed attribute value, <code>null</code> if there was no match
+     */
+    <T> List<Attribute<T>> findAttributesStartingWith(String name, Class<T> clazz);
+
+    /**
+     * Return the first {@link Attribute} with a name starting with <code>name</code>
+     *
+     * @param <T>   the type parameter indicating the type of the returned value
+     * @param name  attribute name
+     * @param clazz attribute type
+     * @return typed attribute value, <code>null</code> if there was no match
      */
     <T> Attribute<T> findAttributeStartingWith(String name, Class<T> clazz);
 
     /**
      * Return all attributes for the profile.
      *
-     * @return an unsorted collection of attributes
+     * @return an unsorted collection of {@link Attribute}
      */
     Collection<Attribute<?>> getAttributes();
 
