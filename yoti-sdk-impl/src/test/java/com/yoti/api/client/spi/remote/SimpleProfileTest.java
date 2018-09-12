@@ -85,6 +85,47 @@ public class SimpleProfileTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void findAttributesStartingWith_shouldThrowExceptionForNullAttributeName() {
+        SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, INTEGER_VALUE));
+
+        profile.findAttributesStartingWith(null, Integer.class);
+    }
+
+    @Test
+    public void findAttributesStartingWith_shouldReturnEmptyListWhenNoMatches() {
+        SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, INTEGER_VALUE));
+
+        List<Attribute<Integer>> result = profile.findAttributesStartingWith(STARTS_WITH, Integer.class);
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void findAttributesStartingWith_shouldThrowExceptionForMismatchingType() {
+        SimpleProfile profile = new SimpleProfile(asAttributeList(STARTS_WITH, INTEGER_VALUE));
+
+        try {
+            profile.findAttributesStartingWith(STARTS_WITH, String.class);
+        } catch (ClassCastException e) {
+            assertTrue(e.getMessage().contains("java.lang.String"));
+            assertTrue(e.getMessage().contains("java.lang.Integer"));
+            return;
+        }
+
+        fail("Expected an exception");
+    }
+
+    @Test
+    public void findAttributesStartingWith_shouldReturnTypedValuesForMatchingKey() {
+        SimpleProfile profile = new SimpleProfile(asAttributeList(STARTS_WITH + ":restOfKey", INTEGER_VALUE));
+
+        List<Attribute<Integer>> result = profile.findAttributesStartingWith(STARTS_WITH, Integer.class);
+
+        assertEquals(result.size(), 1);
+        assertEquals(INTEGER_VALUE, result.get(0).getValue());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void findAttributeStartingWith_shouldThrowExceptionForNullAttributeName() {
         SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, INTEGER_VALUE));
 

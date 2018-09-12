@@ -51,4 +51,10 @@ public class Validation {
         notGreaterThan(value, maxLimit, name);
     }
 
+    public static void matchesPattern(String value, String regex, String name) {
+        if (value == null || ! value.matches(regex)) {
+            throw new IllegalArgumentException(format("'%s' value '%s' does not match format '%s'", name, value, regex));
+        }
+    }
+
 }
