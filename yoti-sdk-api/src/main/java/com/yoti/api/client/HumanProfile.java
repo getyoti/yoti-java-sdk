@@ -64,7 +64,7 @@ public interface HumanProfile extends Profile {
     AgeVerification findAgeUnderVerification(int age);
 
     /**
-     * @deprecated  Did the user pass the age verification check?  From SDK 2.1 onwards use getAgeVerifications(), findAgeOverVerification(int age)
+     * @deprecated Did the user pass the age verification check?  From SDK 2.1 onwards use getAgeVerifications(), findAgeOverVerification(int age)
      * or findAgeUnderVerification(int age)
      *
      * @return <code>TRUE</code> if they passed, <code>FALSE</code> if they failed, <code>null</code> if there was no check

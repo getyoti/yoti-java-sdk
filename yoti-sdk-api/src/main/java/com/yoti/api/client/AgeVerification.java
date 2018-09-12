@@ -6,7 +6,7 @@ package com.yoti.api.client;
 public interface AgeVerification {
 
     /**
-     * The type of age check performed, as specified on dashboard.  Currently this might be 'age_over' or 'age_under'
+     * The type of age check performed, as specified on dashboard. Currently this might be 'age_over' or 'age_under'
      *
      * @return The type of age check performed
      */
@@ -27,7 +27,7 @@ public interface AgeVerification {
     boolean getResult();
 
     /**
-     * The wrapped profile attribute.  Use this if you need access to the underlying List of {@link Anchor}s
+     * The wrapped profile attribute. Use this if you need access to the underlying List of {@link Anchor}s
      *
      * @return The wrapped profile attribute
      */
