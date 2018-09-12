@@ -15,7 +15,7 @@ import com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes;
 import com.yoti.api.client.DocumentDetails;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAnchor;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAttribute;
-import com.yoti.api.client.sandbox.profile.request.attribute.derivation.AgeVerification;
+import com.yoti.api.client.sandbox.profile.request.attribute.derivation.SandboxAgeVerification;
 import com.yoti.api.client.spi.remote.DateValue;
 import com.yoti.api.client.spi.remote.DocumentDetailsAttributeValue;
 
@@ -228,12 +228,12 @@ public class YotiTokenRequestTest {
 
     @Test
     public void shouldCreateRequestWithAgeUnderVerification() {
-        AgeVerification ageVerification = AgeVerification.builder()
+        SandboxAgeVerification sandboxAgeVerification = SandboxAgeVerification.builder()
                 .withDateOfBirth(DOB_UNDER_18)
                 .withAgeUnder(18)
                 .build();
         YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
-                .withAgeVerification(ageVerification)
+                .withAgeVerification(sandboxAgeVerification)
                 .build();
 
         List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
@@ -244,12 +244,12 @@ public class YotiTokenRequestTest {
 
     @Test
     public void shouldCreateRequestWithAgeOverVerification() {
-        AgeVerification ageVerification = AgeVerification.builder()
+        SandboxAgeVerification sandboxAgeVerification = SandboxAgeVerification.builder()
                 .withDateOfBirth(DOB_OVER_18)
                 .withAgeOver(18)
                 .build();
         YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
-                .withAgeVerification(ageVerification)
+                .withAgeVerification(sandboxAgeVerification)
                 .build();
 
         List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();

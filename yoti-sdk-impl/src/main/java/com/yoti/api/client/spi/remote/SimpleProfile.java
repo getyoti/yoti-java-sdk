@@ -2,6 +2,7 @@ package com.yoti.api.client.spi.remote;
 
 import static java.util.Collections.unmodifiableMap;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +45,19 @@ final class SimpleProfile implements Profile {
     public Attribute getAttribute(String name) {
         ensureName(name);
         return protectedAttributes.get(name);
+    }
+
+    @Override
+    public <T> List<Attribute<T>> findAttributesStartingWith(String name, Class<T> clazz) {
+        ensureName(name);
+        List<Attribute<T>> matches = new ArrayList<>();
+        for (Map.Entry<String, Attribute<?>> entry : protectedAttributes.entrySet()) {
+            if (entry.getKey().startsWith(name)) {
+                Attribute<T> value = castSafely(clazz, entry.getValue());
+                matches.add(value);
+            }
+        }
+        return matches;
     }
 
     @Override

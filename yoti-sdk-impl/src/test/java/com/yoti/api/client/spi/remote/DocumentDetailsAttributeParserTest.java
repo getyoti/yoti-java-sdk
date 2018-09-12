@@ -71,6 +71,18 @@ public class DocumentDetailsAttributeParserTest {
     }
 
     @Test
+    public void shouldIgnoreAThirdOptionalAttribute() throws Exception {
+        DocumentDetails result = testObj.parseFrom("DRIVING_LICENCE GBR 1234abc 2016-05-01 DVLA someThirdAttribute");
+
+        assertNotNull(result);
+        assertEquals(DocumentDetails.DOCUMENT_TYPE_DRIVING_LICENCE, result.getType());
+        assertEquals("GBR", result.getIssuingCountry());
+        assertEquals("1234abc", result.getDocumentNumber());
+        assertEquals("2016-05-01", result.getExpirationDate().toString());
+        assertEquals("DVLA", result.getIssuingAuthority());
+    }
+
+    @Test
     public void shouldParseWhenOneOptionalAttributeIsMissing() throws Exception {
         DocumentDetails result = testObj.parseFrom("PASS_CARD GBR 1234abc - DVLA");
 
