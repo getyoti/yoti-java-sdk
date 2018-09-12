@@ -54,7 +54,8 @@ public class YotiTokenRequest {
         }
 
         public YotiTokenRequestBuilder withAttribute(SandboxAttribute sandboxAttribute) {
-            attributes.put(sandboxAttribute.getName(), sandboxAttribute);
+            String key = sandboxAttribute.getDerivation() != null ? sandboxAttribute.getDerivation() : sandboxAttribute.getName();
+            attributes.put(key, sandboxAttribute);
             return this;
         }
 
