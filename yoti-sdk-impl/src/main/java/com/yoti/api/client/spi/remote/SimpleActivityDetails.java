@@ -66,6 +66,7 @@ final class SimpleActivityDetails implements ActivityDetails {
     }
     
     @Override
+    @Deprecated
     public String getBase64Selfie() {
         return base64Selfie;
     }
