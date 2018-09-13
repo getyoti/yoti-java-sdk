@@ -188,10 +188,11 @@ try {
     Optional<YourAppUserClass> user = yourUserSearchMethod(activityDetails.getRememberMeId());
     if (user.isPresent()) {
         String rememberMeId = activityDetails.getRememberMeId();
-        String base64Selfie = activityDetails.getBase64Selfie();
+
         Attribute<Image> selfie = profile.getSelfie();
         if (selfie != null) {
             Image selfieValue = selfie.getValue();
+            String base64Selfie = selfieValue.getBase64Content();
         }
         Attribute<String> fullName = profile.getFullName();
         Attribute<String> givenNames = profile.getGivenNames();

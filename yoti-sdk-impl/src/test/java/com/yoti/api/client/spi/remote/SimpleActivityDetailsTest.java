@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 
 import com.yoti.api.client.Attribute;
+import com.yoti.api.client.Image;
 import com.yoti.api.client.Profile;
 
 import org.bouncycastle.util.encoders.Base64;
@@ -81,13 +82,14 @@ public class SimpleActivityDetailsTest {
 
     @Test
     public void shouldReturnBase64SelfieIfSelfieSet() {
-        Attribute selfie = new SimpleAttribute("selfie", new JpegAttributeValue(SOME_SELFIE_BYTES));
+        Attribute<Image> selfie = new SimpleAttribute("selfie", new JpegAttributeValue(SOME_SELFIE_BYTES));
         SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>singletonList(selfie));
 
         SimpleActivityDetails result = new SimpleActivityDetails(REMEMBER_ME_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
 
         String expected = "data:image/jpeg;base64," + Base64.toBase64String(SOME_SELFIE_BYTES);
         assertEquals(expected, result.getBase64Selfie());
+        assertEquals(selfie.getValue().getBase64Content(), result.getBase64Selfie());
     }
 
     @Test
@@ -99,4 +101,5 @@ public class SimpleActivityDetailsTest {
 
         assertEquals("", result.getBase64Selfie());
     }
+
 }

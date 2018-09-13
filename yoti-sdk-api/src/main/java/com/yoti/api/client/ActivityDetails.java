@@ -55,10 +55,12 @@ public interface ActivityDetails {
     String getReceiptId();
     
     /**
-     * JPEG selfie in Base64 string
-     * 
+     * @deprecated From v2.1 onwards you should use getUserProfile().getSelfie()
+     * JPEG selfie in Base64 string.
+     *
      * @return JPEG selfie image in Base64 string format
      */
+    @Deprecated
     String getBase64Selfie();
 
 }
