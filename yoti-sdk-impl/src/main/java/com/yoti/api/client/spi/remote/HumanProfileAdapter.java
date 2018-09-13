@@ -5,6 +5,7 @@ import static java.lang.Boolean.parseBoolean;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ import com.yoti.api.client.Profile;
 final class HumanProfileAdapter implements HumanProfile {
 
     private final Profile wrapped;
-    private List<AgeVerification> ageVerifications;
+    private Map<String, AgeVerification> verificationsMap;
 
     private HumanProfileAdapter(Profile wrapped) {
         this.wrapped = wrapped;
@@ -81,39 +82,31 @@ final class HumanProfileAdapter implements HumanProfile {
     @Override
     public List<AgeVerification> getAgeVerifications() {
         findAllAgeVerifications();
-        return ageVerifications;
+        return Collections.unmodifiableList(new ArrayList<>(verificationsMap.values()));
     }
 
     @Override
     public AgeVerification findAgeOverVerification(int age) {
-        return findAgeVerification(HumanProfileAttributes.AGE_OVER.replace(":", ""), age);
+        findAllAgeVerifications();
+        return verificationsMap.get(HumanProfileAttributes.AGE_OVER + age);
     }
 
     @Override
     public AgeVerification findAgeUnderVerification(int age) {
-        return findAgeVerification(HumanProfileAttributes.AGE_UNDER.replace(":", ""), age);
-    }
-
-    private AgeVerification findAgeVerification(String checkPerformed, int age) {
         findAllAgeVerifications();
-        for (AgeVerification ageVerification : ageVerifications) {
-            if (ageVerification.getAgeVerified() == age && ageVerification.getCheckPerformed().equals(checkPerformed)) {
-                return ageVerification;
-            }
-        }
-        return null;
+        return verificationsMap.get(HumanProfileAttributes.AGE_UNDER + age);
     }
 
     private void findAllAgeVerifications() {
-        if (ageVerifications == null) {
-            List<AgeVerification> verifications = new ArrayList<>();
+        if (verificationsMap == null) {
+            Map<String, AgeVerification> verifications = new HashMap<>();
             for (Attribute<String> ageOver : wrapped.findAttributesStartingWith(HumanProfileAttributes.AGE_OVER, String.class)) {
-                verifications.add(new SimpleAgeVerification(ageOver));
+                verifications.put(ageOver.getName(), new SimpleAgeVerification(ageOver));
             }
             for (Attribute<String> ageUnder : wrapped.findAttributesStartingWith(HumanProfileAttributes.AGE_UNDER, String.class)) {
-                verifications.add(new SimpleAgeVerification(ageUnder));
+                verifications.put(ageUnder.getName(), new SimpleAgeVerification(ageUnder));
             }
-            ageVerifications = Collections.unmodifiableList(verifications);
+            this.verificationsMap = verifications;
         }
     }
 
