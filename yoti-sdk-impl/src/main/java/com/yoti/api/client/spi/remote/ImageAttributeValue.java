@@ -1,10 +1,11 @@
 package com.yoti.api.client.spi.remote;
 
+import static org.bouncycastle.util.encoders.Base64.toBase64String;
+
 import com.yoti.api.client.Image;
 
 /**
  * Image attribute values.
- *
  */
 abstract class ImageAttributeValue implements Image {
 
@@ -24,9 +25,9 @@ abstract class ImageAttributeValue implements Image {
     @Override
     public abstract byte[] getContent();
 
-    protected byte[] newArray(byte[] source) {
-        byte[] result = new byte[source.length];
-        System.arraycopy(source, 0, result, 0, source.length);
-        return result;
+    @Override
+    public String getBase64Content() {
+        return String.format("data:%s;base64,%s", getMimeType(), toBase64String(getContent()));
     }
+
 }

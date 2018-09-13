@@ -188,15 +188,21 @@ try {
     Optional<YourAppUserClass> user = yourUserSearchMethod(activityDetails.getRememberMeId());
     if (user.isPresent()) {
         String rememberMeId = activityDetails.getRememberMeId();
-        String base64Selfie = activityDetails.getBase64Selfie();
+
         Attribute<Image> selfie = profile.getSelfie();
-        Image selfieValue = selfie.getValue();
+        if (selfie != null) {
+            Image selfieValue = selfie.getValue();
+            String base64Selfie = selfieValue.getBase64Content();
+        }
         Attribute<String> fullName = profile.getFullName();
         Attribute<String> givenNames = profile.getGivenNames();
         Attribute<String> familyName = profile.getFamilyName();
         Attribute<String> phoneNumber = profile.getPhoneNumber();
         Attribute<String> emailAddress = profile.getEmailAddress();
-        Boolean isAgeVerified = profile.isAgeVerified();
+        AgeVerification over18Verification = profile.findAgeOverVerification(18);
+        if (over18Verification != null) {
+            boolean isAgedOver18 = over18Verification.getResult();
+        }
         Attribute<Date> dateOfBirth = profile.getDateOfBirth();
         Attribute<String> gender = profile.getGender();
         Attribute<String> postalAddress = profile.getPostalAddress();

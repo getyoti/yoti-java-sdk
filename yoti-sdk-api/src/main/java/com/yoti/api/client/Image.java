@@ -5,6 +5,7 @@ package com.yoti.api.client;
  *
  */
 public interface Image {
+
     /**
      * Get mime type of the content.
      *
@@ -18,4 +19,12 @@ public interface Image {
      * @return image as byte[]
      */
     byte[] getContent();
+
+    /**
+     * Base64 encoded image
+     *
+     * @return image as Base64 encoded String
+     */
+    String getBase64Content();
+
 }

@@ -11,7 +11,7 @@ final class JpegAttributeValue extends ImageAttributeValue {
     private final byte[] content;
 
     public JpegAttributeValue(byte[] content) {
-        this.content = newArray(content);
+        this.content = content;
     }
 
     @Override
@@ -21,6 +21,7 @@ final class JpegAttributeValue extends ImageAttributeValue {
 
     @Override
     public byte[] getContent() {
-        return newArray(content);
+        return content.clone();
     }
+
 }
