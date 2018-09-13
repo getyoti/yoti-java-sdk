@@ -7,6 +7,7 @@ import com.yoti.api.client.Anchor;
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.DateTime;
 import com.yoti.api.client.HumanProfile;
+import com.yoti.api.client.Image;
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.YotiClient;
 import com.yoti.api.spring.YotiClientProperties;
@@ -66,9 +67,11 @@ public class YotiLoginController {
 
         // load activityDetails into ui model
         model.addAttribute("rememberMeId", activityDetails.getRememberMeId());
-        model.addAttribute("base64Selfie", activityDetails.getBase64Selfie());
 
         // load humanProfile data into ui model
+        Attribute<Image> selfie = humanProfile.getSelfie();
+        model.addAttribute("base64Selfie", selfie == null ? "" : selfie.getValue().getBase64Content());
+
         addAttributeToModel(model, humanProfile.getFamilyName());
         addAttributeToModel(model, humanProfile.getGivenNames());
         addAttributeToModel(model, humanProfile.getFullName());
