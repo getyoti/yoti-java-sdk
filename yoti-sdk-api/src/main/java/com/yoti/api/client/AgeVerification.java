@@ -10,14 +10,14 @@ public interface AgeVerification {
      *
      * @return The type of age check performed
      */
-    String getCheckPerformed();
+    String getCheckType();
 
     /**
      * The age that was that checked, as specified on dashboard.
      *
      * @return The age that was that checked
      */
-    int getAgeVerified();
+    int getAge();
 
     /**
      * Whether or not the profile passed the age check
