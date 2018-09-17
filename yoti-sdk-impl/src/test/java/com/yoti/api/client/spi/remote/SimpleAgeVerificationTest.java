@@ -43,8 +43,8 @@ public class SimpleAgeVerificationTest {
 
         SimpleAgeVerification result = new SimpleAgeVerification(attribute);
 
-        assertEquals(result.getCheckPerformed(), "any_string_here");
-        assertEquals(result.getAgeVerified(), 21);
+        assertEquals(result.getCheckType(), "any_string_here");
+        assertEquals(result.getAge(), 21);
         assertEquals(result.getResult(), true);
     }
 
