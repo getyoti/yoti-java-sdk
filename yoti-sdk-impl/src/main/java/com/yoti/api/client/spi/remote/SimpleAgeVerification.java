@@ -25,12 +25,12 @@ public class SimpleAgeVerification implements AgeVerification {
     }
 
     @Override
-    public int getAgeVerified() {
+    public int getAge() {
         return ageVerified;
     }
 
     @Override
-    public String getCheckPerformed() {
+    public String getCheckType() {
         return checkPerformed;
     }
 
