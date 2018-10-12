@@ -1,5 +1,8 @@
 package com.yoti.api.client.spi.remote;
 
+import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.POSTAL_ADDRESS;
+import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -20,13 +23,15 @@ class AttributeListConverter {
     private static final Logger LOG = LoggerFactory.getLogger(AttributeListConverter.class);
 
     private final AttributeConverter attributeConverter;
+    private final AddressTransformer addressTransformer;
 
-    private AttributeListConverter(AttributeConverter attributeConverter) {
+    private AttributeListConverter(AttributeConverter attributeConverter, AddressTransformer addressTransformer) {
         this.attributeConverter = attributeConverter;
+        this.addressTransformer = addressTransformer;
     }
 
     static AttributeListConverter newInstance() {
-        return new AttributeListConverter(AttributeConverter.newInstance());
+        return new AttributeListConverter(AttributeConverter.newInstance(), AddressTransformer.newInstance());
     }
 
     List<Attribute<?>> parseAttributeList(byte[] attributeListBytes) throws ProfileException {
@@ -37,6 +42,7 @@ class AttributeListConverter {
         AttributeListProto.AttributeList attributeList = parseProto(attributeListBytes);
         List<Attribute<?>> attributes = parseAttributes(attributeList);
         LOG.debug("{} out of {} attribute(s) parsed successfully ", attributes.size(), attributeList.getAttributesCount());
+        ensurePostalAddress(attributes);
         return attributes;
     }
 
@@ -54,10 +60,32 @@ class AttributeListConverter {
             try {
                 parsedAttributes.add(attributeConverter.convertAttribute(attribute));
             } catch (IOException | ParseException e) {
-                LOG.warn("Failed to parse attribute '{}'", attribute.getName());
+                LOG.warn("Failed to parse attribute '{}' due to '{}'", attribute.getName(), e.getMessage());
             }
         }
         return parsedAttributes;
+    }
+
+    private void ensurePostalAddress(List<Attribute<?>> attributes) {
+        if (findAttribute(POSTAL_ADDRESS, attributes) == null) {
+            Attribute<?> structuredAddress = findAttribute(STRUCTURED_POSTAL_ADDRESS, attributes);
+            if (structuredAddress != null) {
+                Attribute<String> transformedAddress = addressTransformer.transform(structuredAddress);
+                if (transformedAddress != null) {
+                    LOG.debug("Substituting '{}' in place of missing '{}'", STRUCTURED_POSTAL_ADDRESS, POSTAL_ADDRESS);
+                    attributes.add(transformedAddress);
+                }
+            }
+        }
+    }
+
+    private Attribute<?> findAttribute(String name, List<Attribute<?>> attributes) {
+        for (Attribute<?> attribute : attributes) {
+            if (name.equals(attribute.getName())) {
+                return attribute;
+            }
+        }
+        return null;
     }
 
 }
