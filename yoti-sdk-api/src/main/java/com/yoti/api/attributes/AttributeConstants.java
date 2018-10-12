@@ -22,6 +22,12 @@ public final class AttributeConstants {
         public static final String SELFIE = "selfie";
         public static final String EMAIL_ADDRESS = "email_address";
         public static final String DOCUMENT_DETAILS = "document_details";
+
+        public static final class Keys {
+
+            public static final String FORMATTED_ADDRESS = "formatted_address";
+        }
+
     }
 
     public static final class ApplicationProfileAttributes {
