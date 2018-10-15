@@ -68,9 +68,9 @@ class AttributeListConverter {
 
     private void ensurePostalAddress(List<Attribute<?>> attributes) {
         if (findAttribute(POSTAL_ADDRESS, attributes) == null) {
-            Attribute<?> structuredAddress = findAttribute(STRUCTURED_POSTAL_ADDRESS, attributes);
-            if (structuredAddress != null) {
-                Attribute<String> transformedAddress = addressTransformer.transform(structuredAddress);
+            Attribute<?> structuredPostalAddress = findAttribute(STRUCTURED_POSTAL_ADDRESS, attributes);
+            if (structuredPostalAddress != null) {
+                Attribute<String> transformedAddress = addressTransformer.transform(structuredPostalAddress);
                 if (transformedAddress != null) {
                     LOG.debug("Substituting '{}' in place of missing '{}'", STRUCTURED_POSTAL_ADDRESS, POSTAL_ADDRESS);
                     attributes.add(transformedAddress);

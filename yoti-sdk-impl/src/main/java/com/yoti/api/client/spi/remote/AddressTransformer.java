@@ -18,22 +18,22 @@ class AddressTransformer {
         return new AddressTransformer();
     }
 
-    public Attribute<String> transform(Attribute<?> structuredAddress) {
+    Attribute<String> transform(Attribute<?> structuredPostalAddress) {
         Attribute<String> transformedAddress = null;
         try {
-            Attribute<Map<?, ?>> address = (Attribute<Map<?, ?>>) structuredAddress;
-            if (address.getValue() != null) {
-                Object formattedAddress = address.getValue().get(HumanProfileAttributes.Keys.FORMATTED_ADDRESS);
+            if (structuredPostalAddress.getValue() != null) {
+                final Map<?, ?> structuredAddressValue = (Map<?, ?>) structuredPostalAddress.getValue();
+                final Object formattedAddress = structuredAddressValue.get(HumanProfileAttributes.Keys.FORMATTED_ADDRESS);
                 if (formattedAddress != null) {
                     transformedAddress = new SimpleAttribute(HumanProfileAttributes.POSTAL_ADDRESS,
                             String.valueOf(formattedAddress),
-                            structuredAddress.getSources(),
-                            structuredAddress.getVerifiers(),
-                            structuredAddress.getAnchors());
+                            structuredPostalAddress.getSources(),
+                            structuredPostalAddress.getVerifiers(),
+                            structuredPostalAddress.getAnchors());
                 }
             }
         } catch (Exception e) {
-            LOG.warn("Failed to transform attribute '{}' in place of missing '{}' due to '{}'", structuredAddress.getName(),
+            LOG.warn("Failed to transform attribute '{}' in place of missing '{}' due to '{}'", structuredPostalAddress.getName(),
                     HumanProfileAttributes.POSTAL_ADDRESS, e.getMessage());
         }
         return transformedAddress;
