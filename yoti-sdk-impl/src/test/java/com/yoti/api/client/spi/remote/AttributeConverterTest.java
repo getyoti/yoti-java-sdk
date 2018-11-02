@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -120,7 +121,7 @@ public class AttributeConverterTest {
 
     @Test
     public void shouldParseJsonAttribute() throws Exception {
-        String json = "{ \"someKey\": \"someValue\" }";
+        String json = "{ \"simpleKey\": \"simpleValue\", \"objectKey\": { \"nestedKey\" : \"nestedValue\" } }";
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setContentType(ContentTypeProto.ContentType.JSON)
                 .setName(SOME_ATTRIBUTE_NAME)
@@ -130,9 +131,10 @@ public class AttributeConverterTest {
         Attribute<Map> result = testObj.convertAttribute(attribute);
 
         assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
-        Map<String, String> value = result.getValue();
-        assertEquals(1, value.size());
-        assertThat(value, hasEntry("someKey", "someValue"));
+        Map<String, Object> value = result.getValue();
+        assertEquals(2, value.size());
+        assertThat(value, hasEntry("simpleKey", (Object)"simpleValue"));
+        assertThat(value, hasEntry("objectKey", (Object) Collections.singletonMap("nestedKey", "nestedValue")));
     }
 
     @Test
