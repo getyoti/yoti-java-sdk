@@ -4,7 +4,9 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JSON;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_HOST;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.JAVA;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.SDK_VERSION;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_HEADER;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_VERSION_HEADER;
 import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 import static com.yoti.api.client.spi.remote.util.Validation.notNullOrEmpty;
 
@@ -75,6 +77,7 @@ public class YotiSandboxClient {
             Map<String, String> headers = new HashMap<>();
             headers.put(YotiConstants.DIGEST_HEADER, requestDigest);
             headers.put(YOTI_SDK_HEADER, JAVA);
+            headers.put(YOTI_SDK_VERSION_HEADER, SDK_VERSION);
             headers.put(CONTENT_TYPE, CONTENT_TYPE_JSON);
 
             UrlConnector urlConnector = UrlConnector.get(sandboxBasePath + requestPath);
