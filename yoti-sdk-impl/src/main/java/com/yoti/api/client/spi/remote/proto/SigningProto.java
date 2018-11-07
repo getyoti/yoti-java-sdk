@@ -3,8 +3,8 @@
 
 package com.yoti.api.client.spi.remote.proto;
 
-public final class AttrSigningProto {
-  private AttrSigningProto() {}
+public final class SigningProto {
+  private SigningProto() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -19,149 +19,56 @@ public final class AttrSigningProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <pre>
-     * Name is copied from SimpleAttribute.Name.
-     * </pre>
-     *
-     * <code>optional string name = 1;</code>
-     */
-    boolean hasName();
-    /**
-     * <pre>
-     * Name is copied from SimpleAttribute.Name.
-     * </pre>
-     *
-     * <code>optional string name = 1;</code>
+     * <code>string name = 1;</code>
      */
     String getName();
     /**
-     * <pre>
-     * Name is copied from SimpleAttribute.Name.
-     * </pre>
-     *
-     * <code>optional string name = 1;</code>
+     * <code>string name = 1;</code>
      */
     com.google.protobuf.ByteString
         getNameBytes();
 
     /**
-     * <pre>
-     * Value is copied from SimpleAttribute.Value.
-     * </pre>
-     *
-     * <code>optional bytes value = 2;</code>
-     */
-    boolean hasValue();
-    /**
-     * <pre>
-     * Value is copied from SimpleAttribute.Value.
-     * </pre>
-     *
-     * <code>optional bytes value = 2;</code>
+     * <code>bytes value = 2;</code>
      */
     com.google.protobuf.ByteString getValue();
 
     /**
-     * <pre>
-     * ContentType is copied from SimpleAttribute.ContentType.
-     * </pre>
-     *
-     * <code>optional .attrpubapi_v1.ContentType content_type = 3;</code>
+     * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
      */
-    boolean hasContentType();
+    int getContentTypeValue();
     /**
-     * <pre>
-     * ContentType is copied from SimpleAttribute.ContentType.
-     * </pre>
-     *
-     * <code>optional .attrpubapi_v1.ContentType content_type = 3;</code>
+     * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
      */
     ContentTypeProto.ContentType getContentType();
 
     /**
-     * <pre>
-     * ArtifactSignature is copied from Anchor.ArtifactSignature.
-     * </pre>
-     *
-     * <code>optional bytes artifact_signature = 4;</code>
-     */
-    boolean hasArtifactSignature();
-    /**
-     * <pre>
-     * ArtifactSignature is copied from Anchor.ArtifactSignature.
-     * </pre>
-     *
-     * <code>optional bytes artifact_signature = 4;</code>
+     * <code>bytes artifact_signature = 4;</code>
      */
     com.google.protobuf.ByteString getArtifactSignature();
 
     /**
-     * <pre>
-     * SubType is copied from Anchor.SubType.
-     * </pre>
-     *
-     * <code>optional string sub_type = 5;</code>
-     */
-    boolean hasSubType();
-    /**
-     * <pre>
-     * SubType is copied from Anchor.SubType.
-     * </pre>
-     *
-     * <code>optional string sub_type = 5;</code>
+     * <code>string sub_type = 5;</code>
      */
     String getSubType();
     /**
-     * <pre>
-     * SubType is copied from Anchor.SubType.
-     * </pre>
-     *
-     * <code>optional string sub_type = 5;</code>
+     * <code>string sub_type = 5;</code>
      */
     com.google.protobuf.ByteString
         getSubTypeBytes();
 
     /**
-     * <pre>
-     * AssociatedSource is copied from Anchor.AssociatedSource.
-     * </pre>
-     *
-     * <code>optional string associated_source = 7;</code>
+     * <code>bytes signed_time_stamp = 6;</code>
      */
-    boolean hasAssociatedSource();
-    /**
-     * <pre>
-     * AssociatedSource is copied from Anchor.AssociatedSource.
-     * </pre>
-     *
-     * <code>optional string associated_source = 7;</code>
-     */
-    String getAssociatedSource();
-    /**
-     * <pre>
-     * AssociatedSource is copied from Anchor.AssociatedSource.
-     * </pre>
-     *
-     * <code>optional string associated_source = 7;</code>
-     */
-    com.google.protobuf.ByteString
-        getAssociatedSourceBytes();
+    com.google.protobuf.ByteString getSignedTimeStamp();
   }
   /**
-   * <pre>
-   * AttributeSigning is an intermediate protobuf used to generate
-   * Anchor.signature . The relevant fields from an Anchor and its
-   * associated SimpleAttribute are copied into this message and serialised. The
-   * resultant message is then signed (SHA512WithRSA).
-   * </pre>
-   *
    * Protobuf type {@code attrpubapi_v1.AttributeSigning}
    */
   public  static final class AttributeSigning extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:attrpubapi_v1.AttributeSigning)
       AttributeSigningOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use AttributeSigning.newBuilder() to construct.
     private AttributeSigning(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -172,25 +79,20 @@ public final class AttrSigningProto {
       contentType_ = 0;
       artifactSignature_ = com.google.protobuf.ByteString.EMPTY;
       subType_ = "";
-      associatedSource_ = "";
+      signedTimeStamp_ = com.google.protobuf.ByteString.EMPTY;
     }
 
     @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private AttributeSigning(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -200,49 +102,42 @@ public final class AttrSigningProto {
               done = true;
               break;
             default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
+              if (!input.skipField(tag)) {
                 done = true;
               }
               break;
             }
             case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000001;
-              name_ = bs;
+              String s = input.readStringRequireUtf8();
+
+              name_ = s;
               break;
             }
             case 18: {
-              bitField0_ |= 0x00000002;
+
               value_ = input.readBytes();
               break;
             }
             case 24: {
               int rawValue = input.readEnum();
-              ContentTypeProto.ContentType value = ContentTypeProto.ContentType.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(3, rawValue);
-              } else {
-                bitField0_ |= 0x00000004;
-                contentType_ = rawValue;
-              }
+
+              contentType_ = rawValue;
               break;
             }
             case 34: {
-              bitField0_ |= 0x00000008;
+
               artifactSignature_ = input.readBytes();
               break;
             }
             case 42: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000010;
-              subType_ = bs;
+              String s = input.readStringRequireUtf8();
+
+              subType_ = s;
               break;
             }
-            case 58: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000020;
-              associatedSource_ = bs;
+            case 50: {
+
+              signedTimeStamp_ = input.readBytes();
               break;
             }
           }
@@ -253,68 +148,46 @@ public final class AttrSigningProto {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return AttrSigningProto.internal_static_attrpubapi_v1_AttributeSigning_descriptor;
+      return SigningProto.internal_static_attrpubapi_v1_AttributeSigning_descriptor;
     }
 
     protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return AttrSigningProto.internal_static_attrpubapi_v1_AttributeSigning_fieldAccessorTable
+      return SigningProto.internal_static_attrpubapi_v1_AttributeSigning_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               AttributeSigning.class, Builder.class);
     }
 
-    private int bitField0_;
     public static final int NAME_FIELD_NUMBER = 1;
     private volatile Object name_;
     /**
-     * <pre>
-     * Name is copied from SimpleAttribute.Name.
-     * </pre>
-     *
-     * <code>optional string name = 1;</code>
-     */
-    public boolean hasName() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <pre>
-     * Name is copied from SimpleAttribute.Name.
-     * </pre>
-     *
-     * <code>optional string name = 1;</code>
+     * <code>string name = 1;</code>
      */
     public String getName() {
       Object ref = name_;
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
+        com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          name_ = s;
-        }
+        name_ = s;
         return s;
       }
     }
     /**
-     * <pre>
-     * Name is copied from SimpleAttribute.Name.
-     * </pre>
-     *
-     * <code>optional string name = 1;</code>
+     * <code>string name = 1;</code>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
       Object ref = name_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         name_ = b;
@@ -327,21 +200,7 @@ public final class AttrSigningProto {
     public static final int VALUE_FIELD_NUMBER = 2;
     private com.google.protobuf.ByteString value_;
     /**
-     * <pre>
-     * Value is copied from SimpleAttribute.Value.
-     * </pre>
-     *
-     * <code>optional bytes value = 2;</code>
-     */
-    public boolean hasValue() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <pre>
-     * Value is copied from SimpleAttribute.Value.
-     * </pre>
-     *
-     * <code>optional bytes value = 2;</code>
+     * <code>bytes value = 2;</code>
      */
     public com.google.protobuf.ByteString getValue() {
       return value_;
@@ -350,45 +209,23 @@ public final class AttrSigningProto {
     public static final int CONTENT_TYPE_FIELD_NUMBER = 3;
     private int contentType_;
     /**
-     * <pre>
-     * ContentType is copied from SimpleAttribute.ContentType.
-     * </pre>
-     *
-     * <code>optional .attrpubapi_v1.ContentType content_type = 3;</code>
+     * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
      */
-    public boolean hasContentType() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+    public int getContentTypeValue() {
+      return contentType_;
     }
     /**
-     * <pre>
-     * ContentType is copied from SimpleAttribute.ContentType.
-     * </pre>
-     *
-     * <code>optional .attrpubapi_v1.ContentType content_type = 3;</code>
+     * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
      */
     public ContentTypeProto.ContentType getContentType() {
       ContentTypeProto.ContentType result = ContentTypeProto.ContentType.valueOf(contentType_);
-      return result == null ? ContentTypeProto.ContentType.UNDEFINED : result;
+      return result == null ? ContentTypeProto.ContentType.UNRECOGNIZED : result;
     }
 
     public static final int ARTIFACT_SIGNATURE_FIELD_NUMBER = 4;
     private com.google.protobuf.ByteString artifactSignature_;
     /**
-     * <pre>
-     * ArtifactSignature is copied from Anchor.ArtifactSignature.
-     * </pre>
-     *
-     * <code>optional bytes artifact_signature = 4;</code>
-     */
-    public boolean hasArtifactSignature() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <pre>
-     * ArtifactSignature is copied from Anchor.ArtifactSignature.
-     * </pre>
-     *
-     * <code>optional bytes artifact_signature = 4;</code>
+     * <code>bytes artifact_signature = 4;</code>
      */
     public com.google.protobuf.ByteString getArtifactSignature() {
       return artifactSignature_;
@@ -397,48 +234,28 @@ public final class AttrSigningProto {
     public static final int SUB_TYPE_FIELD_NUMBER = 5;
     private volatile Object subType_;
     /**
-     * <pre>
-     * SubType is copied from Anchor.SubType.
-     * </pre>
-     *
-     * <code>optional string sub_type = 5;</code>
-     */
-    public boolean hasSubType() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <pre>
-     * SubType is copied from Anchor.SubType.
-     * </pre>
-     *
-     * <code>optional string sub_type = 5;</code>
+     * <code>string sub_type = 5;</code>
      */
     public String getSubType() {
       Object ref = subType_;
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
+        com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          subType_ = s;
-        }
+        subType_ = s;
         return s;
       }
     }
     /**
-     * <pre>
-     * SubType is copied from Anchor.SubType.
-     * </pre>
-     *
-     * <code>optional string sub_type = 5;</code>
+     * <code>string sub_type = 5;</code>
      */
     public com.google.protobuf.ByteString
         getSubTypeBytes() {
       Object ref = subType_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         subType_ = b;
@@ -448,58 +265,13 @@ public final class AttrSigningProto {
       }
     }
 
-    public static final int ASSOCIATED_SOURCE_FIELD_NUMBER = 7;
-    private volatile Object associatedSource_;
+    public static final int SIGNED_TIME_STAMP_FIELD_NUMBER = 6;
+    private com.google.protobuf.ByteString signedTimeStamp_;
     /**
-     * <pre>
-     * AssociatedSource is copied from Anchor.AssociatedSource.
-     * </pre>
-     *
-     * <code>optional string associated_source = 7;</code>
+     * <code>bytes signed_time_stamp = 6;</code>
      */
-    public boolean hasAssociatedSource() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <pre>
-     * AssociatedSource is copied from Anchor.AssociatedSource.
-     * </pre>
-     *
-     * <code>optional string associated_source = 7;</code>
-     */
-    public String getAssociatedSource() {
-      Object ref = associatedSource_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          associatedSource_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * AssociatedSource is copied from Anchor.AssociatedSource.
-     * </pre>
-     *
-     * <code>optional string associated_source = 7;</code>
-     */
-    public com.google.protobuf.ByteString
-        getAssociatedSourceBytes() {
-      Object ref = associatedSource_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        associatedSource_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public com.google.protobuf.ByteString getSignedTimeStamp() {
+      return signedTimeStamp_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -514,25 +286,24 @@ public final class AttrSigningProto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (!getNameBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (!value_.isEmpty()) {
         output.writeBytes(2, value_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (contentType_ != ContentTypeProto.ContentType.UNDEFINED.getNumber()) {
         output.writeEnum(3, contentType_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (!artifactSignature_.isEmpty()) {
         output.writeBytes(4, artifactSignature_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (!getSubTypeBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, subType_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, associatedSource_);
+      if (!signedTimeStamp_.isEmpty()) {
+        output.writeBytes(6, signedTimeStamp_);
       }
-      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -540,32 +311,33 @@ public final class AttrSigningProto {
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (!getNameBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (!value_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, value_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (contentType_ != ContentTypeProto.ContentType.UNDEFINED.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(3, contentType_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (!artifactSignature_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(4, artifactSignature_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (!getSubTypeBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, subType_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, associatedSource_);
+      if (!signedTimeStamp_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(6, signedTimeStamp_);
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
@@ -577,36 +349,17 @@ public final class AttrSigningProto {
       AttributeSigning other = (AttributeSigning) obj;
 
       boolean result = true;
-      result = result && (hasName() == other.hasName());
-      if (hasName()) {
-        result = result && getName()
-            .equals(other.getName());
-      }
-      result = result && (hasValue() == other.hasValue());
-      if (hasValue()) {
-        result = result && getValue()
-            .equals(other.getValue());
-      }
-      result = result && (hasContentType() == other.hasContentType());
-      if (hasContentType()) {
-        result = result && contentType_ == other.contentType_;
-      }
-      result = result && (hasArtifactSignature() == other.hasArtifactSignature());
-      if (hasArtifactSignature()) {
-        result = result && getArtifactSignature()
-            .equals(other.getArtifactSignature());
-      }
-      result = result && (hasSubType() == other.hasSubType());
-      if (hasSubType()) {
-        result = result && getSubType()
-            .equals(other.getSubType());
-      }
-      result = result && (hasAssociatedSource() == other.hasAssociatedSource());
-      if (hasAssociatedSource()) {
-        result = result && getAssociatedSource()
-            .equals(other.getAssociatedSource());
-      }
-      result = result && unknownFields.equals(other.unknownFields);
+      result = result && getName()
+          .equals(other.getName());
+      result = result && getValue()
+          .equals(other.getValue());
+      result = result && contentType_ == other.contentType_;
+      result = result && getArtifactSignature()
+          .equals(other.getArtifactSignature());
+      result = result && getSubType()
+          .equals(other.getSubType());
+      result = result && getSignedTimeStamp()
+          .equals(other.getSignedTimeStamp());
       return result;
     }
 
@@ -617,46 +370,23 @@ public final class AttrSigningProto {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasName()) {
-        hash = (37 * hash) + NAME_FIELD_NUMBER;
-        hash = (53 * hash) + getName().hashCode();
-      }
-      if (hasValue()) {
-        hash = (37 * hash) + VALUE_FIELD_NUMBER;
-        hash = (53 * hash) + getValue().hashCode();
-      }
-      if (hasContentType()) {
-        hash = (37 * hash) + CONTENT_TYPE_FIELD_NUMBER;
-        hash = (53 * hash) + contentType_;
-      }
-      if (hasArtifactSignature()) {
-        hash = (37 * hash) + ARTIFACT_SIGNATURE_FIELD_NUMBER;
-        hash = (53 * hash) + getArtifactSignature().hashCode();
-      }
-      if (hasSubType()) {
-        hash = (37 * hash) + SUB_TYPE_FIELD_NUMBER;
-        hash = (53 * hash) + getSubType().hashCode();
-      }
-      if (hasAssociatedSource()) {
-        hash = (37 * hash) + ASSOCIATED_SOURCE_FIELD_NUMBER;
-        hash = (53 * hash) + getAssociatedSource().hashCode();
-      }
+      hash = (37 * hash) + NAME_FIELD_NUMBER;
+      hash = (53 * hash) + getName().hashCode();
+      hash = (37 * hash) + VALUE_FIELD_NUMBER;
+      hash = (53 * hash) + getValue().hashCode();
+      hash = (37 * hash) + CONTENT_TYPE_FIELD_NUMBER;
+      hash = (53 * hash) + contentType_;
+      hash = (37 * hash) + ARTIFACT_SIGNATURE_FIELD_NUMBER;
+      hash = (53 * hash) + getArtifactSignature().hashCode();
+      hash = (37 * hash) + SUB_TYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getSubType().hashCode();
+      hash = (37 * hash) + SIGNED_TIME_STAMP_FIELD_NUMBER;
+      hash = (53 * hash) + getSignedTimeStamp().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static AttributeSigning parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static AttributeSigning parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static AttributeSigning parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -735,13 +465,6 @@ public final class AttrSigningProto {
       return builder;
     }
     /**
-     * <pre>
-     * AttributeSigning is an intermediate protobuf used to generate
-     * Anchor.signature . The relevant fields from an Anchor and its
-     * associated SimpleAttribute are copied into this message and serialised. The
-     * resultant message is then signed (SHA512WithRSA).
-     * </pre>
-     *
      * Protobuf type {@code attrpubapi_v1.AttributeSigning}
      */
     public static final class Builder extends
@@ -750,17 +473,17 @@ public final class AttrSigningProto {
         AttributeSigningOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return AttrSigningProto.internal_static_attrpubapi_v1_AttributeSigning_descriptor;
+        return SigningProto.internal_static_attrpubapi_v1_AttributeSigning_descriptor;
       }
 
       protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return AttrSigningProto.internal_static_attrpubapi_v1_AttributeSigning_fieldAccessorTable
+        return SigningProto.internal_static_attrpubapi_v1_AttributeSigning_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 AttributeSigning.class, Builder.class);
       }
 
-      // Construct using com.yoti.api.client.spi.remote.proto.AttrSigningProto.AttributeSigning.newBuilder()
+      // Construct using com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -778,23 +501,23 @@ public final class AttrSigningProto {
       public Builder clear() {
         super.clear();
         name_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
+
         value_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000002);
+
         contentType_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
+
         artifactSignature_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000008);
+
         subType_ = "";
-        bitField0_ = (bitField0_ & ~0x00000010);
-        associatedSource_ = "";
-        bitField0_ = (bitField0_ & ~0x00000020);
+
+        signedTimeStamp_ = com.google.protobuf.ByteString.EMPTY;
+
         return this;
       }
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return AttrSigningProto.internal_static_attrpubapi_v1_AttributeSigning_descriptor;
+        return SigningProto.internal_static_attrpubapi_v1_AttributeSigning_descriptor;
       }
 
       public AttributeSigning getDefaultInstanceForType() {
@@ -811,33 +534,12 @@ public final class AttrSigningProto {
 
       public AttributeSigning buildPartial() {
         AttributeSigning result = new AttributeSigning(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
         result.name_ = name_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
         result.value_ = value_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
         result.contentType_ = contentType_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
         result.artifactSignature_ = artifactSignature_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
         result.subType_ = subType_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.associatedSource_ = associatedSource_;
-        result.bitField0_ = to_bitField0_;
+        result.signedTimeStamp_ = signedTimeStamp_;
         onBuilt();
         return result;
       }
@@ -879,31 +581,26 @@ public final class AttrSigningProto {
 
       public Builder mergeFrom(AttributeSigning other) {
         if (other == AttributeSigning.getDefaultInstance()) return this;
-        if (other.hasName()) {
-          bitField0_ |= 0x00000001;
+        if (!other.getName().isEmpty()) {
           name_ = other.name_;
           onChanged();
         }
-        if (other.hasValue()) {
+        if (other.getValue() != com.google.protobuf.ByteString.EMPTY) {
           setValue(other.getValue());
         }
-        if (other.hasContentType()) {
-          setContentType(other.getContentType());
+        if (other.contentType_ != 0) {
+          setContentTypeValue(other.getContentTypeValue());
         }
-        if (other.hasArtifactSignature()) {
+        if (other.getArtifactSignature() != com.google.protobuf.ByteString.EMPTY) {
           setArtifactSignature(other.getArtifactSignature());
         }
-        if (other.hasSubType()) {
-          bitField0_ |= 0x00000010;
+        if (!other.getSubType().isEmpty()) {
           subType_ = other.subType_;
           onChanged();
         }
-        if (other.hasAssociatedSource()) {
-          bitField0_ |= 0x00000020;
-          associatedSource_ = other.associatedSource_;
-          onChanged();
+        if (other.getSignedTimeStamp() != com.google.protobuf.ByteString.EMPTY) {
+          setSignedTimeStamp(other.getSignedTimeStamp());
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -929,25 +626,10 @@ public final class AttrSigningProto {
         }
         return this;
       }
-      private int bitField0_;
 
       private Object name_ = "";
       /**
-       * <pre>
-       * Name is copied from SimpleAttribute.Name.
-       * </pre>
-       *
-       * <code>optional string name = 1;</code>
-       */
-      public boolean hasName() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <pre>
-       * Name is copied from SimpleAttribute.Name.
-       * </pre>
-       *
-       * <code>optional string name = 1;</code>
+       * <code>string name = 1;</code>
        */
       public String getName() {
         Object ref = name_;
@@ -955,26 +637,20 @@ public final class AttrSigningProto {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            name_ = s;
-          }
+          name_ = s;
           return s;
         } else {
           return (String) ref;
         }
       }
       /**
-       * <pre>
-       * Name is copied from SimpleAttribute.Name.
-       * </pre>
-       *
-       * <code>optional string name = 1;</code>
+       * <code>string name = 1;</code>
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
         Object ref = name_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (String) ref);
           name_ = b;
@@ -984,48 +660,37 @@ public final class AttrSigningProto {
         }
       }
       /**
-       * <pre>
-       * Name is copied from SimpleAttribute.Name.
-       * </pre>
-       *
-       * <code>optional string name = 1;</code>
+       * <code>string name = 1;</code>
        */
       public Builder setName(
           String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000001;
+  
         name_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * Name is copied from SimpleAttribute.Name.
-       * </pre>
-       *
-       * <code>optional string name = 1;</code>
+       * <code>string name = 1;</code>
        */
       public Builder clearName() {
-        bitField0_ = (bitField0_ & ~0x00000001);
+        
         name_ = getDefaultInstance().getName();
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * Name is copied from SimpleAttribute.Name.
-       * </pre>
-       *
-       * <code>optional string name = 1;</code>
+       * <code>string name = 1;</code>
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000001;
+  checkByteStringIsUtf8(value);
+        
         name_ = value;
         onChanged();
         return this;
@@ -1033,50 +698,28 @@ public final class AttrSigningProto {
 
       private com.google.protobuf.ByteString value_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <pre>
-       * Value is copied from SimpleAttribute.Value.
-       * </pre>
-       *
-       * <code>optional bytes value = 2;</code>
-       */
-      public boolean hasValue() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <pre>
-       * Value is copied from SimpleAttribute.Value.
-       * </pre>
-       *
-       * <code>optional bytes value = 2;</code>
+       * <code>bytes value = 2;</code>
        */
       public com.google.protobuf.ByteString getValue() {
         return value_;
       }
       /**
-       * <pre>
-       * Value is copied from SimpleAttribute.Value.
-       * </pre>
-       *
-       * <code>optional bytes value = 2;</code>
+       * <code>bytes value = 2;</code>
        */
       public Builder setValue(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
+  
         value_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * Value is copied from SimpleAttribute.Value.
-       * </pre>
-       *
-       * <code>optional bytes value = 2;</code>
+       * <code>bytes value = 2;</code>
        */
       public Builder clearValue() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        
         value_ = getDefaultInstance().getValue();
         onChanged();
         return this;
@@ -1084,51 +727,43 @@ public final class AttrSigningProto {
 
       private int contentType_ = 0;
       /**
-       * <pre>
-       * ContentType is copied from SimpleAttribute.ContentType.
-       * </pre>
-       *
-       * <code>optional .attrpubapi_v1.ContentType content_type = 3;</code>
+       * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
        */
-      public boolean hasContentType() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+      public int getContentTypeValue() {
+        return contentType_;
       }
       /**
-       * <pre>
-       * ContentType is copied from SimpleAttribute.ContentType.
-       * </pre>
-       *
-       * <code>optional .attrpubapi_v1.ContentType content_type = 3;</code>
+       * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
+       */
+      public Builder setContentTypeValue(int value) {
+        contentType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
        */
       public ContentTypeProto.ContentType getContentType() {
         ContentTypeProto.ContentType result = ContentTypeProto.ContentType.valueOf(contentType_);
-        return result == null ? ContentTypeProto.ContentType.UNDEFINED : result;
+        return result == null ? ContentTypeProto.ContentType.UNRECOGNIZED : result;
       }
       /**
-       * <pre>
-       * ContentType is copied from SimpleAttribute.ContentType.
-       * </pre>
-       *
-       * <code>optional .attrpubapi_v1.ContentType content_type = 3;</code>
+       * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
        */
       public Builder setContentType(ContentTypeProto.ContentType value) {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000004;
+        
         contentType_ = value.getNumber();
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * ContentType is copied from SimpleAttribute.ContentType.
-       * </pre>
-       *
-       * <code>optional .attrpubapi_v1.ContentType content_type = 3;</code>
+       * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
        */
       public Builder clearContentType() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        
         contentType_ = 0;
         onChanged();
         return this;
@@ -1136,50 +771,28 @@ public final class AttrSigningProto {
 
       private com.google.protobuf.ByteString artifactSignature_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <pre>
-       * ArtifactSignature is copied from Anchor.ArtifactSignature.
-       * </pre>
-       *
-       * <code>optional bytes artifact_signature = 4;</code>
-       */
-      public boolean hasArtifactSignature() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <pre>
-       * ArtifactSignature is copied from Anchor.ArtifactSignature.
-       * </pre>
-       *
-       * <code>optional bytes artifact_signature = 4;</code>
+       * <code>bytes artifact_signature = 4;</code>
        */
       public com.google.protobuf.ByteString getArtifactSignature() {
         return artifactSignature_;
       }
       /**
-       * <pre>
-       * ArtifactSignature is copied from Anchor.ArtifactSignature.
-       * </pre>
-       *
-       * <code>optional bytes artifact_signature = 4;</code>
+       * <code>bytes artifact_signature = 4;</code>
        */
       public Builder setArtifactSignature(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000008;
+  
         artifactSignature_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * ArtifactSignature is copied from Anchor.ArtifactSignature.
-       * </pre>
-       *
-       * <code>optional bytes artifact_signature = 4;</code>
+       * <code>bytes artifact_signature = 4;</code>
        */
       public Builder clearArtifactSignature() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        
         artifactSignature_ = getDefaultInstance().getArtifactSignature();
         onChanged();
         return this;
@@ -1187,21 +800,7 @@ public final class AttrSigningProto {
 
       private Object subType_ = "";
       /**
-       * <pre>
-       * SubType is copied from Anchor.SubType.
-       * </pre>
-       *
-       * <code>optional string sub_type = 5;</code>
-       */
-      public boolean hasSubType() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <pre>
-       * SubType is copied from Anchor.SubType.
-       * </pre>
-       *
-       * <code>optional string sub_type = 5;</code>
+       * <code>string sub_type = 5;</code>
        */
       public String getSubType() {
         Object ref = subType_;
@@ -1209,26 +808,20 @@ public final class AttrSigningProto {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            subType_ = s;
-          }
+          subType_ = s;
           return s;
         } else {
           return (String) ref;
         }
       }
       /**
-       * <pre>
-       * SubType is copied from Anchor.SubType.
-       * </pre>
-       *
-       * <code>optional string sub_type = 5;</code>
+       * <code>string sub_type = 5;</code>
        */
       public com.google.protobuf.ByteString
           getSubTypeBytes() {
         Object ref = subType_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (String) ref);
           subType_ = b;
@@ -1238,160 +831,78 @@ public final class AttrSigningProto {
         }
       }
       /**
-       * <pre>
-       * SubType is copied from Anchor.SubType.
-       * </pre>
-       *
-       * <code>optional string sub_type = 5;</code>
+       * <code>string sub_type = 5;</code>
        */
       public Builder setSubType(
           String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000010;
+  
         subType_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * SubType is copied from Anchor.SubType.
-       * </pre>
-       *
-       * <code>optional string sub_type = 5;</code>
+       * <code>string sub_type = 5;</code>
        */
       public Builder clearSubType() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        
         subType_ = getDefaultInstance().getSubType();
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * SubType is copied from Anchor.SubType.
-       * </pre>
-       *
-       * <code>optional string sub_type = 5;</code>
+       * <code>string sub_type = 5;</code>
        */
       public Builder setSubTypeBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000010;
+  checkByteStringIsUtf8(value);
+        
         subType_ = value;
         onChanged();
         return this;
       }
 
-      private Object associatedSource_ = "";
+      private com.google.protobuf.ByteString signedTimeStamp_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <pre>
-       * AssociatedSource is copied from Anchor.AssociatedSource.
-       * </pre>
-       *
-       * <code>optional string associated_source = 7;</code>
+       * <code>bytes signed_time_stamp = 6;</code>
        */
-      public boolean hasAssociatedSource() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+      public com.google.protobuf.ByteString getSignedTimeStamp() {
+        return signedTimeStamp_;
       }
       /**
-       * <pre>
-       * AssociatedSource is copied from Anchor.AssociatedSource.
-       * </pre>
-       *
-       * <code>optional string associated_source = 7;</code>
+       * <code>bytes signed_time_stamp = 6;</code>
        */
-      public String getAssociatedSource() {
-        Object ref = associatedSource_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            associatedSource_ = s;
-          }
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <pre>
-       * AssociatedSource is copied from Anchor.AssociatedSource.
-       * </pre>
-       *
-       * <code>optional string associated_source = 7;</code>
-       */
-      public com.google.protobuf.ByteString
-          getAssociatedSourceBytes() {
-        Object ref = associatedSource_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          associatedSource_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * AssociatedSource is copied from Anchor.AssociatedSource.
-       * </pre>
-       *
-       * <code>optional string associated_source = 7;</code>
-       */
-      public Builder setAssociatedSource(
-          String value) {
+      public Builder setSignedTimeStamp(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
-        associatedSource_ = value;
+  
+        signedTimeStamp_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * AssociatedSource is copied from Anchor.AssociatedSource.
-       * </pre>
-       *
-       * <code>optional string associated_source = 7;</code>
+       * <code>bytes signed_time_stamp = 6;</code>
        */
-      public Builder clearAssociatedSource() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        associatedSource_ = getDefaultInstance().getAssociatedSource();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * AssociatedSource is copied from Anchor.AssociatedSource.
-       * </pre>
-       *
-       * <code>optional string associated_source = 7;</code>
-       */
-      public Builder setAssociatedSourceBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000020;
-        associatedSource_ = value;
+      public Builder clearSignedTimeStamp() {
+        
+        signedTimeStamp_ = getDefaultInstance().getSignedTimeStamp();
         onChanged();
         return this;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -1408,13 +919,13 @@ public final class AttrSigningProto {
       return DEFAULT_INSTANCE;
     }
 
-    @Deprecated public static final com.google.protobuf.Parser<AttributeSigning>
+    private static final com.google.protobuf.Parser<AttributeSigning>
         PARSER = new com.google.protobuf.AbstractParser<AttributeSigning>() {
       public AttributeSigning parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new AttributeSigning(input, extensionRegistry);
+          return new AttributeSigning(input, extensionRegistry);
       }
     };
 
@@ -1435,7 +946,7 @@ public final class AttrSigningProto {
 
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_attrpubapi_v1_AttributeSigning_descriptor;
-  private static final
+  private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_attrpubapi_v1_AttributeSigning_fieldAccessorTable;
 
@@ -1451,9 +962,10 @@ public final class AttrSigningProto {
       "ype.proto\"\252\001\n\020AttributeSigning\022\014\n\004name\030\001" +
       " \001(\t\022\r\n\005value\030\002 \001(\014\0220\n\014content_type\030\003 \001(" +
       "\0162\032.attrpubapi_v1.ContentType\022\032\n\022artifac" +
-      "t_signature\030\004 \001(\014\022\020\n\010sub_type\030\005 \001(\t\022\031\n\021a" +
-      "ssociated_source\030\007 \001(\tB8\n$com.yoti.api.c" +
-      "lient.spi.remote.protoB\020AttrSigningProto"
+      "t_signature\030\004 \001(\014\022\020\n\010sub_type\030\005 \001(\t\022\031\n\021s" +
+      "igned_time_stamp\030\006 \001(\014BC\n$com.yoti.api.c" +
+      "lient.spi.remote.protoB\014SigningProtoZ\ryo" +
+      "tiprotoattrb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1473,7 +985,7 @@ public final class AttrSigningProto {
     internal_static_attrpubapi_v1_AttributeSigning_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_attrpubapi_v1_AttributeSigning_descriptor,
-        new String[] { "Name", "Value", "ContentType", "ArtifactSignature", "SubType", "AssociatedSource", });
+        new String[] { "Name", "Value", "ContentType", "ArtifactSignature", "SubType", "SignedTimeStamp", });
     ContentTypeProto.getDescriptor();
   }
 

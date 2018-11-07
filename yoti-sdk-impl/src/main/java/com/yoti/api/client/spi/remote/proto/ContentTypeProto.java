@@ -15,117 +15,68 @@ public final class ContentTypeProto {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   /**
-   * <pre>
-   * ContentType indicates how to interpret the ‘Value’ field of an SimpleAttribute.
-   * </pre>
-   *
    * Protobuf enum {@code attrpubapi_v1.ContentType}
    */
   public enum ContentType
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
-     * <pre>
-     * UNDEFINED should not be seen, and is used as an error placeholder
-     * value.
-     * </pre>
-     *
      * <code>UNDEFINED = 0;</code>
      */
     UNDEFINED(0),
     /**
-     * <pre>
-     * STRING means the value is UTF-8 encoded text.
-     * </pre>
-     *
      * <code>STRING = 1;</code>
      */
     STRING(1),
     /**
-     * <pre>
-     * JPEG indicates a standard .jpeg image.
-     * </pre>
-     *
      * <code>JPEG = 2;</code>
      */
     JPEG(2),
     /**
-     * <pre>
-     * Date as string in RFC3339 format (YYYY-MM-DD).
-     * </pre>
-     *
      * <code>DATE = 3;</code>
      */
     DATE(3),
     /**
-     * <pre>
-     * PNG indicates a standard .png image.
-     * </pre>
-     *
      * <code>PNG = 4;</code>
      */
     PNG(4),
     /**
-     * <pre>
-     * JSON means the value is encoded using JSON.
-     * </pre>
-     *
      * <code>JSON = 5;</code>
      */
     JSON(5),
+    UNRECOGNIZED(-1),
     ;
 
     /**
-     * <pre>
-     * UNDEFINED should not be seen, and is used as an error placeholder
-     * value.
-     * </pre>
-     *
      * <code>UNDEFINED = 0;</code>
      */
     public static final int UNDEFINED_VALUE = 0;
     /**
-     * <pre>
-     * STRING means the value is UTF-8 encoded text.
-     * </pre>
-     *
      * <code>STRING = 1;</code>
      */
     public static final int STRING_VALUE = 1;
     /**
-     * <pre>
-     * JPEG indicates a standard .jpeg image.
-     * </pre>
-     *
      * <code>JPEG = 2;</code>
      */
     public static final int JPEG_VALUE = 2;
     /**
-     * <pre>
-     * Date as string in RFC3339 format (YYYY-MM-DD).
-     * </pre>
-     *
      * <code>DATE = 3;</code>
      */
     public static final int DATE_VALUE = 3;
     /**
-     * <pre>
-     * PNG indicates a standard .png image.
-     * </pre>
-     *
      * <code>PNG = 4;</code>
      */
     public static final int PNG_VALUE = 4;
     /**
-     * <pre>
-     * JSON means the value is encoded using JSON.
-     * </pre>
-     *
      * <code>JSON = 5;</code>
      */
     public static final int JSON_VALUE = 5;
 
 
     public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
       return value;
     }
 
@@ -182,6 +133,9 @@ public final class ContentTypeProto {
         throw new IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
       return VALUES[desc.getIndex()];
     }
 
@@ -205,9 +159,9 @@ public final class ContentTypeProto {
     String[] descriptorData = {
       "\n\021ContentType.proto\022\rattrpubapi_v1*O\n\013Co" +
       "ntentType\022\r\n\tUNDEFINED\020\000\022\n\n\006STRING\020\001\022\010\n\004" +
-      "JPEG\020\002\022\010\n\004DATE\020\003\022\007\n\003PNG\020\004\022\010\n\004JSON\020\005B8\n$c" +
+      "JPEG\020\002\022\010\n\004DATE\020\003\022\007\n\003PNG\020\004\022\010\n\004JSON\020\005BG\n$c" +
       "om.yoti.api.client.spi.remote.protoB\020Con" +
-      "tentTypeProto"
+      "tentTypeProtoZ\ryotiprotoattrb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
