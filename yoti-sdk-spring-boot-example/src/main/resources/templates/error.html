@@ -1,12 +1,14 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>Error</title>
-</head>
-<body>
-Could not login user
-</body>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Welcome</title>
+		<link rel="stylesheet" type="text/css" th:href="@{/static/style.css}" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	</head>
+
+	<body>
+		<h2><a href="/">Home</a></h2>
+		<h3>Could not login user for the following reason: <span th:text="${error} "/> </h3>
+	</body>
 </html>
