@@ -2,7 +2,6 @@ package com.yoti.api.client.spi.remote;
 
 import static javax.crypto.Cipher.DECRYPT_MODE;
 
-import static com.yoti.api.client.spi.remote.call.YotiConstants.BOUNCY_CASTLE_PROVIDER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.SYMMETRIC_CIPHER;
 
 import java.security.GeneralSecurityException;
@@ -20,6 +19,7 @@ import com.yoti.api.client.spi.remote.proto.EncryptedDataProto;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 class ProfileReader {
 
@@ -61,7 +61,7 @@ class ProfileReader {
             throw new ProfileException("Receipt key IV must not be null.");
         }
         try {
-            Cipher cipher = Cipher.getInstance(SYMMETRIC_CIPHER, BOUNCY_CASTLE_PROVIDER);
+            Cipher cipher = Cipher.getInstance(SYMMETRIC_CIPHER, BouncyCastleProvider.PROVIDER_NAME);
             cipher.init(DECRYPT_MODE, secretKey, new IvParameterSpec(initVector.toByteArray()));
             return cipher.doFinal(encryptedData.getCipherText().toByteArray());
         } catch (GeneralSecurityException gse) {
