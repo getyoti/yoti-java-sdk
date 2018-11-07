@@ -1,11 +1,12 @@
 package com.yoti.api.client.spi.remote.util;
 
 import static com.yoti.api.client.spi.remote.call.YotiConstants.ASYMMETRIC_CIPHER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.BOUNCY_CASTLE_PROVIDER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.SIGNATURE_ALGORITHM;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.SYMMETRIC_CIPHER;
 
 import com.yoti.api.client.spi.remote.Base64;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
@@ -74,14 +75,14 @@ public class CryptoUtil {
     }
 
     public static EncryptionResult encryptSymmetric(byte[] data, Key key) throws GeneralSecurityException {
-        Cipher cipher = Cipher.getInstance(SYMMETRIC_CIPHER, BOUNCY_CASTLE_PROVIDER);
+        Cipher cipher = Cipher.getInstance(SYMMETRIC_CIPHER, BouncyCastleProvider.PROVIDER_NAME);
         cipher.init(Cipher.ENCRYPT_MODE, key);
 
         return new EncryptionResult(cipher.doFinal(data), cipher.getIV());
     }
 
     public static byte[] encryptAsymmetric(byte[] data, Key key) throws GeneralSecurityException {
-        Cipher cipher = Cipher.getInstance(ASYMMETRIC_CIPHER, BOUNCY_CASTLE_PROVIDER);
+        Cipher cipher = Cipher.getInstance(ASYMMETRIC_CIPHER, BouncyCastleProvider.PROVIDER_NAME);
         cipher.init(Cipher.ENCRYPT_MODE, key);
 
         return cipher.doFinal(data);
@@ -103,13 +104,13 @@ public class CryptoUtil {
     }
 
     public static Key generateSymmetricKey() throws GeneralSecurityException {
-        KeyGenerator keyGen = KeyGenerator.getInstance(SYMMETRIC_KEY_ALGO, BOUNCY_CASTLE_PROVIDER);
+        KeyGenerator keyGen = KeyGenerator.getInstance(SYMMETRIC_KEY_ALGO, BouncyCastleProvider.PROVIDER_NAME);
         keyGen.init(SYMMETRIC_LENGTH);
         return keyGen.generateKey();
     }
 
     public static void verifyMessage(byte[] message, PublicKey publicKey, byte[] receivedSignature) throws GeneralSecurityException {
-        Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM, BOUNCY_CASTLE_PROVIDER);
+        Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM, BouncyCastleProvider.PROVIDER_NAME);
         signature.initVerify(publicKey);
         signature.update(message);
         Assert.assertTrue(signature.verify(receivedSignature));
