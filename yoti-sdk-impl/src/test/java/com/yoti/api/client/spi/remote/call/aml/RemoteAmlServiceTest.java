@@ -3,8 +3,10 @@ package com.yoti.api.client.spi.remote.call.aml;
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DIGEST_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.JAVA;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.SDK_VERSION;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_API_PATH_PREFIX;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_HEADER;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_VERSION_HEADER;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.KEY_PAIR_PEM;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
@@ -81,6 +83,7 @@ public class RemoteAmlServiceTest {
         assertEquals(YOTI_API_PATH_PREFIX + GENERATED_PATH, getPath(urlConnectorCaptor.getValue()));
         assertEquals(SOME_SIGNATURE, headersCaptor.getValue().get(DIGEST_HEADER));
         assertEquals(JAVA, headersCaptor.getValue().get(YOTI_SDK_HEADER));
+        assertEquals(SDK_VERSION, headersCaptor.getValue().get(YOTI_SDK_VERSION_HEADER));
         assertSame(result, simpleAmlResultMock);
     }
 

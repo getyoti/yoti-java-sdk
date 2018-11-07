@@ -4,8 +4,10 @@ import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.AUTH_KEY_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DIGEST_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.JAVA;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.SDK_VERSION;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_API_PATH_PREFIX;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_HEADER;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_VERSION_HEADER;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.KEY_PAIR_PEM;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.base64;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
@@ -89,21 +91,10 @@ public class RemoteProfileServiceTest {
     }
 
     private void assertHeaders(Map<String, String> headers) throws Exception {
-        assertAuthKey(headers.get(AUTH_KEY_HEADER));
-        assertDigest(headers.get(DIGEST_HEADER));
-        assertYotiSDK(headers.get(YOTI_SDK_HEADER));
-    }
-
-    private void assertDigest(String digestValue) throws Exception {
-        assertEquals(SOME_SIGNATURE, digestValue);
-    }
-
-    private void assertAuthKey(String authKeyValue) {
-        assertEquals(base64(keyPair.getPublic().getEncoded()), authKeyValue);
-    }
-
-    private void assertYotiSDK(String sdkValue) {
-        assertEquals(JAVA, sdkValue);
+        assertEquals(base64(keyPair.getPublic().getEncoded()), headers.get(AUTH_KEY_HEADER));
+        assertEquals(SOME_SIGNATURE, headers.get(DIGEST_HEADER));
+        assertEquals(JAVA, headers.get(YOTI_SDK_HEADER));
+        assertEquals(SDK_VERSION, headers.get(YOTI_SDK_VERSION_HEADER));
     }
 
     private void assertUrl(UrlConnector urlConnector) throws MalformedURLException {

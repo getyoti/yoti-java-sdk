@@ -4,7 +4,9 @@ import static com.yoti.api.client.sandbox.YotiSandboxClient.YOTI_SANDBOX_PATH_PR
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DIGEST_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.JAVA;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.SDK_VERSION;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_HEADER;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_VERSION_HEADER;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -167,6 +169,7 @@ public class YotiSandboxClientTest {
         assertEquals(YOTI_SANDBOX_PATH_PREFIX + SOME_PATH, getPath(urlConnectorCaptor.getValue()));
         assertEquals(SOME_SIGNATURE, headersCaptor.getValue().get(DIGEST_HEADER));
         assertEquals(JAVA, headersCaptor.getValue().get(YOTI_SDK_HEADER));
+        assertEquals(SDK_VERSION, headersCaptor.getValue().get(YOTI_SDK_VERSION_HEADER));
         assertEquals(SOME_TOKEN, result);
     }
 
