@@ -1,88 +1,99 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <title>Profile</title>
-    </head>
-    <body>
-        <table>
-                <th>Attribute Name</th>
-                <th>Attribute Value</th>
-                <th>Sources</th>
-                <th>Verifiers</th>
-            <tr>
-                <td>User ID:</td>
-                <td><p th:text="${rememberMeId}"/></td>
-            </tr>
-            <tr>
-                <td>Selfie:</td>
-                <td>
-                    <img th:src="${base64Selfie}" />
-                    <br />
-                    <a th:href="${base64Selfie}" download="selfie.jpg">Download Selfie</a>          
-                </td>
-            </tr>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="yoti-html">
 
-            <tr th:if="${familyName != null}">
-                <td>Family Name:</td>
-                <td><p th:text="${familyName}"/></td>
-                <td th:replace="fragments :: anchorDisplay(${familyNameSources})" />
-                <td th:replace="fragments :: anchorDisplay(${familyNameVerifiers})" />
-            </tr>
-            <tr th:if="${givenNames != null}">
-                <td>Given Names:</td>
-                <td><p th:text="${givenNames}"/></td>
-                <td th:replace="fragments :: anchorDisplay(${givenNamesSources})" />
-                <td th:replace="fragments :: anchorDisplay(${givenNamesVerifiers})" />
-            </tr>
-            <tr th:if="${fullName != null}">
-                <td>Full Name:</td>
-                <td><p th:text="${fullName}"/></td>
-                <td th:replace="fragments :: anchorDisplay(${fullNameSources})" />
-                <td th:replace="fragments :: anchorDisplay(${fullNameVerifiers})" />
-            </tr>
-            <tr th:if="${dateOfBirth != null}">
-                <td>Date of Birth:</td>
-                <td><p th:text="${dateOfBirth}"/></td>
-                <td th:replace="fragments :: anchorDisplay(${dateOfBirthSources})" />
-                <td th:replace="fragments :: anchorDisplay(${dateOfBirthVerifiers})" />
-            </tr>
-            <tr th:if="${isAgeVerified != null}">
-                <td>Age Verified:</td>
-                <td><p th:text="${isAgeVerified}"/></td>
-            </tr>
-            <tr th:if="${gender != null}">
-                <td>Gender:</td>
-                <td><p th:text="${gender}"/></td>
-                <td th:replace="fragments :: anchorDisplay(${genderSources})" />
-                <td th:replace="fragments :: anchorDisplay(${genderVerifiers})" />
-            </tr>
-            <tr th:if="${postalAddress != null}">
-                <td>Postal Address:</td>
-                <td><p th:text="${postalAddress}"/></td>
-                <td th:replace="fragments :: anchorDisplay(${postalAddressSources})" />
-                <td th:replace="fragments :: anchorDisplay(${postalAddressVerifiers})" />
-            </tr>
-            <tr th:if="${nationality != null}">
-                <td>Nationality:</td>
-                <td><p th:text="${nationality}"/></td>
-                <td th:replace="fragments :: anchorDisplay(${nationalitySources})" />
-                <td th:replace="fragments :: anchorDisplay(${nationalityVerifiers})" />
-            </tr>
-            <tr th:if="${phoneNumber != null}">
-                <td>Phone Number:</td>
-                <td><p th:text="${phoneNumber}"/></td>
-                <td th:replace="fragments :: anchorDisplay(${phoneNumberSources})" />
-                <td th:replace="fragments :: anchorDisplay(${phoneNumberVerifiers})" />
-            </tr>
-            <tr th:if="${emailAddress != null}">
-                <td>Email Address:</td>
-                <td><p th:text="${emailAddress}"/></td>
-                <td th:replace="fragments :: anchorDisplay(${emailAddressSources})" />
-                <td th:replace="fragments :: anchorDisplay(${emailAddressVerifiers})" />
-            </tr>
-        </table>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Yoti client example</title>
+        <link rel="stylesheet" type="text/css" th:href="@{/static/profile.css}" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
+    </head>
+
+    <body class="yoti-body">
+        <main class="yoti-profile-layout">
+
+            <section class="yoti-profile-user-section">
+                <div class="yoti-profile-picture-powered-section">
+                    <span class="yoti-profile-picture-powered">Powered by</span>
+                    <img class="yoti-logo-image" th:src="@{/static/assets/logo.png}" th:srcset="@{/static/assets/logo@2x.png}" alt="Yoti" />
+                </div>
+
+                <div class="yoti-profile-picture-section">
+
+                    <div class="yoti-profile-picture-area" th:if="${base64Selfie != null}">
+                        <img th:src="${base64Selfie}" class="yoti-profile-picture-image" alt="Yoti" />
+                        <i class="yoti-profile-picture-verified-icon"></i>
+                    </div>
+
+                    <div class="yoti-profile-name" th:if="${fullName != null}">
+                        <span th:text="${fullName}" />
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="yoti-attributes-section">
+
+                <div th:if="${appLogo == null}">
+                    <img class="yoti-company-logo" th:src="@{/static/assets/company-logo.jpg}" alt="company logo" />
+                </div>
+                <div th:if="${appLogo != null}">
+                    <img class="yoti-company-logo" th:src="${appLogo}" alt="company logo" />
+                </div>
+
+                <div class="yoti-attribute-list-header">
+                    <div class="yoti-attribute-list-header-attribute">Attribute</div>
+                    <div class="yoti-attribute-list-header-value">Value</div>
+                    <div>Anchors</div>
+                </div>
+
+                <div class="yoti-attribute-list-subheader">
+                    <div class="yoti-attribute-list-subhead-layout">
+                        <div>S / V</div>
+                        <div>Value</div>
+                        <div>Sub type</div>
+                    </div>
+                </div>
+
+                <div class="yoti-attribute-list">
+
+                    <div th:each="attribute : ${displayAttributes}" class="yoti-attribute-list-item">
+
+                        <div class="yoti-attribute-name">
+                            <div class="yoti-attribute-name-cell">
+                                <i th:class="${attribute.icon}" />
+                                <span class="yoti-attribute-name-cell-text" th:text="${attribute.displayName}" />
+                            </div>
+                        </div>
+
+                        <div class="yoti-attribute-value">
+                            <div class="yoti-attribute-value-text" th:text="${attribute.displayValue}" />
+                        </div>
+
+                        <div class="yoti-attribute-anchors-layout">
+                            <div class="yoti-attribute-anchors-head -s-v">S / V</div>
+                            <div class="yoti-attribute-anchors-head -value">Value</div>
+                            <div class="yoti-attribute-anchors-head -subtype">Sub type</div>
+
+                            <div th:each="anchor : ${attribute.attribute.sources}">
+                                <div class="yoti-attribute-anchors -s-v">Source</div>
+                                <div class="yoti-attribute-anchors -value" th:text="${anchor.value}" />
+                                <div class="yoti-attribute-anchors -subtype" th:text="${anchor.subType}" />
+                            </div>
+
+                            <div th:each="anchor : ${attribute.attribute.verifiers}">
+                                <div class="yoti-attribute-anchors -s-v">Verifier</div>
+                                <div class="yoti-attribute-anchors -value" th:text="${anchor.value}" />
+                                <div class="yoti-attribute-anchors -subtype" th:text="${anchor.subType}" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
     </body>
 </html>

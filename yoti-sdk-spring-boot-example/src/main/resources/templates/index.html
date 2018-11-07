@@ -1,22 +1,62 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="yoti-html">
+
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <title>Home</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Yoti client example</title>
+        <link rel="stylesheet" type="text/css" th:href="@{/static/index.css}" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
         <script src="https://sdk.yoti.com/clients/browser.2.2.0.js"></script>
     </head>
-    <body>
-    <p th:text="${rememberMeId}"/>
-    <!-- This span will create the Yoti button -->
-    <span data-th-attr="data-yoti-application-id=${applicationId}">
-        Use Yoti
-    </span>
 
-    <!-- This script snippet will also be required in your HTML body -->
-    <script>
-        _ybg.init()
-    </script>
+    <body class="yoti-body">
+
+        <main>
+            <section class="yoti-top-section">
+                <div class="yoti-logo-section">
+                    <img class="yoti-logo-image" th:src="@{/static/assets/logo.png}" th:srcset="@{/static/assets/logo@2x.png 2x}" alt="Yoti"/>
+                </div>
+
+                <h1 class="yoti-top-header">We now accept Yoti</h1>
+                <div class="yoti-sdk-integration-section">
+                    <!-- This will create the Yoti button -->
+                    <button data-th-attr="data-yoti-application-id=${applicationId}">Use Yoti</button>
+                </div>
+
+                <div class="yoti-login-or-separator">or</div>
+
+                <div class="yoti-login-dialog">
+                    <h2 class="yoti-login-dialog-header">Login with your email:</h2>
+                    <input class="yoti-input" type="text" placeholder="Name"/>
+                    <input class="yoti-input" type="text" placeholder="Email address"/>
+                    <div class="yoti-login-actions">
+                        <span class="yoti-login-forgot-button">forgot password?</span>
+                        <button class="yoti-login-button">login</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="yoti-sponsor-app-section">
+                <h3 class="yoti-sponsor-app-header">The Yoti app is free to download and use:</h3>
+                <div class="yoti-store-buttons-section">
+                    <a href="https://itunes.apple.com/us/app/yoti/id983980808?ls=1" class="yoti-app-button-link">
+                        <img th:src="@{/static/assets/app-store-badge.png}" th:srcset="@{/static/assets/app-store-badge@2x.png}" alt="Download on the App Store"/>
+                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=com.yoti.mobile.android.live" class="yoti-app-button-link">
+                        <img th:src="@{/static/assets/google-play-badge.png}" th:srcset="@{/static/assets/google-play-badge@2x.png}" alt="get it on Google Play"/>
+                    </a>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- This script snippet will also be required in your HTML body -->
+        <script>
+            _ybg.init()
+        </script>
+
     </body>
+
 </html>
