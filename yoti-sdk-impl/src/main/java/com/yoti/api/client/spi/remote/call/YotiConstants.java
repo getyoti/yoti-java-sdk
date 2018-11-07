@@ -13,11 +13,13 @@ public final class YotiConstants {
     public static final String AUTH_KEY_HEADER = "X-Yoti-Auth-Key";
     public static final String DIGEST_HEADER = "X-Yoti-Auth-Digest";
     public static final String YOTI_SDK_HEADER = "X-Yoti-SDK";
+    public static final String YOTI_SDK_VERSION_HEADER = YOTI_SDK_HEADER + "-Version";
 
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_TYPE_JSON = "application/json";
 
     public static final String JAVA = "Java";
+    public static final String SDK_VERSION = JAVA + "-2.2.0";
     public static final String BOUNCY_CASTLE_PROVIDER = "BC";
     public static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
     public static final String ASYMMETRIC_CIPHER = "RSA/NONE/PKCS1Padding";
