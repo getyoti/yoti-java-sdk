@@ -19,146 +19,42 @@ public final class SignedTimestampProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <pre>
-     * Version indicates how the digests within this object are calculated.
-     * </pre>
-     *
-     * <code>optional int32 version = 1;</code>
-     */
-    boolean hasVersion();
-    /**
-     * <pre>
-     * Version indicates how the digests within this object are calculated.
-     * </pre>
-     *
-     * <code>optional int32 version = 1;</code>
+     * <code>int32 version = 1;</code>
      */
     int getVersion();
 
     /**
-     * <pre>
-     * Timestamp is the time this SignedTimestamp was issued. It is in UTC,
-     * as µseconds elapsed since the epoch (µs from 1970-01-01T00:00:00Z).
-     * </pre>
-     *
-     * <code>optional uint64 timestamp = 2;</code>
-     */
-    boolean hasTimestamp();
-    /**
-     * <pre>
-     * Timestamp is the time this SignedTimestamp was issued. It is in UTC,
-     * as µseconds elapsed since the epoch (µs from 1970-01-01T00:00:00Z).
-     * </pre>
-     *
-     * <code>optional uint64 timestamp = 2;</code>
+     * <code>uint64 timestamp = 2;</code>
      */
     long getTimestamp();
 
     /**
-     * <pre>
-     * MessageDigest is the digest of the message this timestamp is
-     * associated with. The first step in verifying the timestamp is
-     * ensuring the MessageDigest matches the original message data.
-     * For version 1 objects, the message digest algorithm is SHA-512/224.
-     * </pre>
-     *
-     * <code>optional bytes message_digest = 3;</code>
-     */
-    boolean hasMessageDigest();
-    /**
-     * <pre>
-     * MessageDigest is the digest of the message this timestamp is
-     * associated with. The first step in verifying the timestamp is
-     * ensuring the MessageDigest matches the original message data.
-     * For version 1 objects, the message digest algorithm is SHA-512/224.
-     * </pre>
-     *
-     * <code>optional bytes message_digest = 3;</code>
+     * <code>bytes message_digest = 3;</code>
      */
     com.google.protobuf.ByteString getMessageDigest();
 
     /**
-     * <pre>
-     * ChainDigest is the digest of the previous SignedTimestamp message
-     * in the chain. The second step in verifying the timestamp is walking
-     * back over the chain and checking each SignedTimestamp's ChainDigest
-     * field. The SignedTimestamp at the beginning of the chain has this
-     * field set to a specific, publish value.
-     * For version 1 objects, the chain digest algorithm is HMAC-SHA-512/224,
-     * with the secret being equal to the MessageDigest field.
-     * </pre>
-     *
-     * <code>optional bytes chain_digest = 4;</code>
-     */
-    boolean hasChainDigest();
-    /**
-     * <pre>
-     * ChainDigest is the digest of the previous SignedTimestamp message
-     * in the chain. The second step in verifying the timestamp is walking
-     * back over the chain and checking each SignedTimestamp's ChainDigest
-     * field. The SignedTimestamp at the beginning of the chain has this
-     * field set to a specific, publish value.
-     * For version 1 objects, the chain digest algorithm is HMAC-SHA-512/224,
-     * with the secret being equal to the MessageDigest field.
-     * </pre>
-     *
-     * <code>optional bytes chain_digest = 4;</code>
+     * <code>bytes chain_digest = 4;</code>
      */
     com.google.protobuf.ByteString getChainDigest();
 
     /**
-     * <pre>
-     * ChainDigestSkip1 is only populated once every 500 nodes. It is the
-     * ChainDigest value of the timestamp 500 nodes previously.
-     * </pre>
-     *
-     * <code>optional bytes chain_digest_skip1 = 5;</code>
-     */
-    boolean hasChainDigestSkip1();
-    /**
-     * <pre>
-     * ChainDigestSkip1 is only populated once every 500 nodes. It is the
-     * ChainDigest value of the timestamp 500 nodes previously.
-     * </pre>
-     *
-     * <code>optional bytes chain_digest_skip1 = 5;</code>
+     * <code>bytes chain_digest_skip1 = 5;</code>
      */
     com.google.protobuf.ByteString getChainDigestSkip1();
 
     /**
-     * <pre>
-     * ChainDigestSkip2 is only populated once every 250000 nodes (or once
-     * every 500 nodes that have ChainDigestSkip1 populated). It is the
-     * ChainDigest value of the timestamp 250000 nodes previously.
-     * </pre>
-     *
-     * <code>optional bytes chain_digest_skip2 = 6;</code>
-     */
-    boolean hasChainDigestSkip2();
-    /**
-     * <pre>
-     * ChainDigestSkip2 is only populated once every 250000 nodes (or once
-     * every 500 nodes that have ChainDigestSkip1 populated). It is the
-     * ChainDigest value of the timestamp 250000 nodes previously.
-     * </pre>
-     *
-     * <code>optional bytes chain_digest_skip2 = 6;</code>
+     * <code>bytes chain_digest_skip2 = 6;</code>
      */
     com.google.protobuf.ByteString getChainDigestSkip2();
   }
   /**
-   * <pre>
-   * SignedTimestamp is a timestamp associated with a message that has a
-   * cryptographic signature proving that it was issued by the correct authority.
-   * </pre>
-   *
    * Protobuf type {@code compubapi_v1.SignedTimestamp}
    */
   public  static final class SignedTimestamp extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:compubapi_v1.SignedTimestamp)
       SignedTimestampOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use SignedTimestamp.newBuilder() to construct.
     private SignedTimestamp(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -175,19 +71,14 @@ public final class SignedTimestampProto {
     @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private SignedTimestamp(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -197,39 +88,38 @@ public final class SignedTimestampProto {
               done = true;
               break;
             default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
+              if (!input.skipField(tag)) {
                 done = true;
               }
               break;
             }
             case 8: {
-              bitField0_ |= 0x00000001;
+
               version_ = input.readInt32();
               break;
             }
             case 16: {
-              bitField0_ |= 0x00000002;
+
               timestamp_ = input.readUInt64();
               break;
             }
             case 26: {
-              bitField0_ |= 0x00000004;
+
               messageDigest_ = input.readBytes();
               break;
             }
             case 34: {
-              bitField0_ |= 0x00000008;
+
               chainDigest_ = input.readBytes();
               break;
             }
             case 42: {
-              bitField0_ |= 0x00000010;
+
               chainDigestSkip1_ = input.readBytes();
               break;
             }
             case 50: {
-              bitField0_ |= 0x00000020;
+
               chainDigestSkip2_ = input.readBytes();
               break;
             }
@@ -241,7 +131,6 @@ public final class SignedTimestampProto {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -257,25 +146,10 @@ public final class SignedTimestampProto {
               SignedTimestamp.class, Builder.class);
     }
 
-    private int bitField0_;
     public static final int VERSION_FIELD_NUMBER = 1;
     private int version_;
     /**
-     * <pre>
-     * Version indicates how the digests within this object are calculated.
-     * </pre>
-     *
-     * <code>optional int32 version = 1;</code>
-     */
-    public boolean hasVersion() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <pre>
-     * Version indicates how the digests within this object are calculated.
-     * </pre>
-     *
-     * <code>optional int32 version = 1;</code>
+     * <code>int32 version = 1;</code>
      */
     public int getVersion() {
       return version_;
@@ -284,23 +158,7 @@ public final class SignedTimestampProto {
     public static final int TIMESTAMP_FIELD_NUMBER = 2;
     private long timestamp_;
     /**
-     * <pre>
-     * Timestamp is the time this SignedTimestamp was issued. It is in UTC,
-     * as µseconds elapsed since the epoch (µs from 1970-01-01T00:00:00Z).
-     * </pre>
-     *
-     * <code>optional uint64 timestamp = 2;</code>
-     */
-    public boolean hasTimestamp() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <pre>
-     * Timestamp is the time this SignedTimestamp was issued. It is in UTC,
-     * as µseconds elapsed since the epoch (µs from 1970-01-01T00:00:00Z).
-     * </pre>
-     *
-     * <code>optional uint64 timestamp = 2;</code>
+     * <code>uint64 timestamp = 2;</code>
      */
     public long getTimestamp() {
       return timestamp_;
@@ -309,27 +167,7 @@ public final class SignedTimestampProto {
     public static final int MESSAGE_DIGEST_FIELD_NUMBER = 3;
     private com.google.protobuf.ByteString messageDigest_;
     /**
-     * <pre>
-     * MessageDigest is the digest of the message this timestamp is
-     * associated with. The first step in verifying the timestamp is
-     * ensuring the MessageDigest matches the original message data.
-     * For version 1 objects, the message digest algorithm is SHA-512/224.
-     * </pre>
-     *
-     * <code>optional bytes message_digest = 3;</code>
-     */
-    public boolean hasMessageDigest() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <pre>
-     * MessageDigest is the digest of the message this timestamp is
-     * associated with. The first step in verifying the timestamp is
-     * ensuring the MessageDigest matches the original message data.
-     * For version 1 objects, the message digest algorithm is SHA-512/224.
-     * </pre>
-     *
-     * <code>optional bytes message_digest = 3;</code>
+     * <code>bytes message_digest = 3;</code>
      */
     public com.google.protobuf.ByteString getMessageDigest() {
       return messageDigest_;
@@ -338,33 +176,7 @@ public final class SignedTimestampProto {
     public static final int CHAIN_DIGEST_FIELD_NUMBER = 4;
     private com.google.protobuf.ByteString chainDigest_;
     /**
-     * <pre>
-     * ChainDigest is the digest of the previous SignedTimestamp message
-     * in the chain. The second step in verifying the timestamp is walking
-     * back over the chain and checking each SignedTimestamp's ChainDigest
-     * field. The SignedTimestamp at the beginning of the chain has this
-     * field set to a specific, publish value.
-     * For version 1 objects, the chain digest algorithm is HMAC-SHA-512/224,
-     * with the secret being equal to the MessageDigest field.
-     * </pre>
-     *
-     * <code>optional bytes chain_digest = 4;</code>
-     */
-    public boolean hasChainDigest() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <pre>
-     * ChainDigest is the digest of the previous SignedTimestamp message
-     * in the chain. The second step in verifying the timestamp is walking
-     * back over the chain and checking each SignedTimestamp's ChainDigest
-     * field. The SignedTimestamp at the beginning of the chain has this
-     * field set to a specific, publish value.
-     * For version 1 objects, the chain digest algorithm is HMAC-SHA-512/224,
-     * with the secret being equal to the MessageDigest field.
-     * </pre>
-     *
-     * <code>optional bytes chain_digest = 4;</code>
+     * <code>bytes chain_digest = 4;</code>
      */
     public com.google.protobuf.ByteString getChainDigest() {
       return chainDigest_;
@@ -373,23 +185,7 @@ public final class SignedTimestampProto {
     public static final int CHAIN_DIGEST_SKIP1_FIELD_NUMBER = 5;
     private com.google.protobuf.ByteString chainDigestSkip1_;
     /**
-     * <pre>
-     * ChainDigestSkip1 is only populated once every 500 nodes. It is the
-     * ChainDigest value of the timestamp 500 nodes previously.
-     * </pre>
-     *
-     * <code>optional bytes chain_digest_skip1 = 5;</code>
-     */
-    public boolean hasChainDigestSkip1() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <pre>
-     * ChainDigestSkip1 is only populated once every 500 nodes. It is the
-     * ChainDigest value of the timestamp 500 nodes previously.
-     * </pre>
-     *
-     * <code>optional bytes chain_digest_skip1 = 5;</code>
+     * <code>bytes chain_digest_skip1 = 5;</code>
      */
     public com.google.protobuf.ByteString getChainDigestSkip1() {
       return chainDigestSkip1_;
@@ -398,25 +194,7 @@ public final class SignedTimestampProto {
     public static final int CHAIN_DIGEST_SKIP2_FIELD_NUMBER = 6;
     private com.google.protobuf.ByteString chainDigestSkip2_;
     /**
-     * <pre>
-     * ChainDigestSkip2 is only populated once every 250000 nodes (or once
-     * every 500 nodes that have ChainDigestSkip1 populated). It is the
-     * ChainDigest value of the timestamp 250000 nodes previously.
-     * </pre>
-     *
-     * <code>optional bytes chain_digest_skip2 = 6;</code>
-     */
-    public boolean hasChainDigestSkip2() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <pre>
-     * ChainDigestSkip2 is only populated once every 250000 nodes (or once
-     * every 500 nodes that have ChainDigestSkip1 populated). It is the
-     * ChainDigest value of the timestamp 250000 nodes previously.
-     * </pre>
-     *
-     * <code>optional bytes chain_digest_skip2 = 6;</code>
+     * <code>bytes chain_digest_skip2 = 6;</code>
      */
     public com.google.protobuf.ByteString getChainDigestSkip2() {
       return chainDigestSkip2_;
@@ -434,25 +212,24 @@ public final class SignedTimestampProto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (version_ != 0) {
         output.writeInt32(1, version_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (timestamp_ != 0L) {
         output.writeUInt64(2, timestamp_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (!messageDigest_.isEmpty()) {
         output.writeBytes(3, messageDigest_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (!chainDigest_.isEmpty()) {
         output.writeBytes(4, chainDigest_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (!chainDigestSkip1_.isEmpty()) {
         output.writeBytes(5, chainDigestSkip1_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (!chainDigestSkip2_.isEmpty()) {
         output.writeBytes(6, chainDigestSkip2_);
       }
-      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -460,35 +237,35 @@ public final class SignedTimestampProto {
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (version_ != 0) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(1, version_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (timestamp_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(2, timestamp_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (!messageDigest_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(3, messageDigest_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (!chainDigest_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(4, chainDigest_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (!chainDigestSkip1_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(5, chainDigestSkip1_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (!chainDigestSkip2_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(6, chainDigestSkip2_);
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
@@ -500,37 +277,18 @@ public final class SignedTimestampProto {
       SignedTimestamp other = (SignedTimestamp) obj;
 
       boolean result = true;
-      result = result && (hasVersion() == other.hasVersion());
-      if (hasVersion()) {
-        result = result && (getVersion()
-            == other.getVersion());
-      }
-      result = result && (hasTimestamp() == other.hasTimestamp());
-      if (hasTimestamp()) {
-        result = result && (getTimestamp()
-            == other.getTimestamp());
-      }
-      result = result && (hasMessageDigest() == other.hasMessageDigest());
-      if (hasMessageDigest()) {
-        result = result && getMessageDigest()
-            .equals(other.getMessageDigest());
-      }
-      result = result && (hasChainDigest() == other.hasChainDigest());
-      if (hasChainDigest()) {
-        result = result && getChainDigest()
-            .equals(other.getChainDigest());
-      }
-      result = result && (hasChainDigestSkip1() == other.hasChainDigestSkip1());
-      if (hasChainDigestSkip1()) {
-        result = result && getChainDigestSkip1()
-            .equals(other.getChainDigestSkip1());
-      }
-      result = result && (hasChainDigestSkip2() == other.hasChainDigestSkip2());
-      if (hasChainDigestSkip2()) {
-        result = result && getChainDigestSkip2()
-            .equals(other.getChainDigestSkip2());
-      }
-      result = result && unknownFields.equals(other.unknownFields);
+      result = result && (getVersion()
+          == other.getVersion());
+      result = result && (getTimestamp()
+          == other.getTimestamp());
+      result = result && getMessageDigest()
+          .equals(other.getMessageDigest());
+      result = result && getChainDigest()
+          .equals(other.getChainDigest());
+      result = result && getChainDigestSkip1()
+          .equals(other.getChainDigestSkip1());
+      result = result && getChainDigestSkip2()
+          .equals(other.getChainDigestSkip2());
       return result;
     }
 
@@ -541,47 +299,24 @@ public final class SignedTimestampProto {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasVersion()) {
-        hash = (37 * hash) + VERSION_FIELD_NUMBER;
-        hash = (53 * hash) + getVersion();
-      }
-      if (hasTimestamp()) {
-        hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-            getTimestamp());
-      }
-      if (hasMessageDigest()) {
-        hash = (37 * hash) + MESSAGE_DIGEST_FIELD_NUMBER;
-        hash = (53 * hash) + getMessageDigest().hashCode();
-      }
-      if (hasChainDigest()) {
-        hash = (37 * hash) + CHAIN_DIGEST_FIELD_NUMBER;
-        hash = (53 * hash) + getChainDigest().hashCode();
-      }
-      if (hasChainDigestSkip1()) {
-        hash = (37 * hash) + CHAIN_DIGEST_SKIP1_FIELD_NUMBER;
-        hash = (53 * hash) + getChainDigestSkip1().hashCode();
-      }
-      if (hasChainDigestSkip2()) {
-        hash = (37 * hash) + CHAIN_DIGEST_SKIP2_FIELD_NUMBER;
-        hash = (53 * hash) + getChainDigestSkip2().hashCode();
-      }
+      hash = (37 * hash) + VERSION_FIELD_NUMBER;
+      hash = (53 * hash) + getVersion();
+      hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getTimestamp());
+      hash = (37 * hash) + MESSAGE_DIGEST_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageDigest().hashCode();
+      hash = (37 * hash) + CHAIN_DIGEST_FIELD_NUMBER;
+      hash = (53 * hash) + getChainDigest().hashCode();
+      hash = (37 * hash) + CHAIN_DIGEST_SKIP1_FIELD_NUMBER;
+      hash = (53 * hash) + getChainDigestSkip1().hashCode();
+      hash = (37 * hash) + CHAIN_DIGEST_SKIP2_FIELD_NUMBER;
+      hash = (53 * hash) + getChainDigestSkip2().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static SignedTimestamp parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static SignedTimestamp parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static SignedTimestamp parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -660,11 +395,6 @@ public final class SignedTimestampProto {
       return builder;
     }
     /**
-     * <pre>
-     * SignedTimestamp is a timestamp associated with a message that has a
-     * cryptographic signature proving that it was issued by the correct authority.
-     * </pre>
-     *
      * Protobuf type {@code compubapi_v1.SignedTimestamp}
      */
     public static final class Builder extends
@@ -701,17 +431,17 @@ public final class SignedTimestampProto {
       public Builder clear() {
         super.clear();
         version_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
+
         timestamp_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000002);
+
         messageDigest_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000004);
+
         chainDigest_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000008);
+
         chainDigestSkip1_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000010);
+
         chainDigestSkip2_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000020);
+
         return this;
       }
 
@@ -734,33 +464,12 @@ public final class SignedTimestampProto {
 
       public SignedTimestamp buildPartial() {
         SignedTimestamp result = new SignedTimestamp(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
         result.version_ = version_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
         result.timestamp_ = timestamp_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
         result.messageDigest_ = messageDigest_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
         result.chainDigest_ = chainDigest_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
         result.chainDigestSkip1_ = chainDigestSkip1_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
-        }
         result.chainDigestSkip2_ = chainDigestSkip2_;
-        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -802,25 +511,24 @@ public final class SignedTimestampProto {
 
       public Builder mergeFrom(SignedTimestamp other) {
         if (other == SignedTimestamp.getDefaultInstance()) return this;
-        if (other.hasVersion()) {
+        if (other.getVersion() != 0) {
           setVersion(other.getVersion());
         }
-        if (other.hasTimestamp()) {
+        if (other.getTimestamp() != 0L) {
           setTimestamp(other.getTimestamp());
         }
-        if (other.hasMessageDigest()) {
+        if (other.getMessageDigest() != com.google.protobuf.ByteString.EMPTY) {
           setMessageDigest(other.getMessageDigest());
         }
-        if (other.hasChainDigest()) {
+        if (other.getChainDigest() != com.google.protobuf.ByteString.EMPTY) {
           setChainDigest(other.getChainDigest());
         }
-        if (other.hasChainDigestSkip1()) {
+        if (other.getChainDigestSkip1() != com.google.protobuf.ByteString.EMPTY) {
           setChainDigestSkip1(other.getChainDigestSkip1());
         }
-        if (other.hasChainDigestSkip2()) {
+        if (other.getChainDigestSkip2() != com.google.protobuf.ByteString.EMPTY) {
           setChainDigestSkip2(other.getChainDigestSkip2());
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -846,51 +554,28 @@ public final class SignedTimestampProto {
         }
         return this;
       }
-      private int bitField0_;
 
       private int version_ ;
       /**
-       * <pre>
-       * Version indicates how the digests within this object are calculated.
-       * </pre>
-       *
-       * <code>optional int32 version = 1;</code>
-       */
-      public boolean hasVersion() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <pre>
-       * Version indicates how the digests within this object are calculated.
-       * </pre>
-       *
-       * <code>optional int32 version = 1;</code>
+       * <code>int32 version = 1;</code>
        */
       public int getVersion() {
         return version_;
       }
       /**
-       * <pre>
-       * Version indicates how the digests within this object are calculated.
-       * </pre>
-       *
-       * <code>optional int32 version = 1;</code>
+       * <code>int32 version = 1;</code>
        */
       public Builder setVersion(int value) {
-        bitField0_ |= 0x00000001;
+        
         version_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * Version indicates how the digests within this object are calculated.
-       * </pre>
-       *
-       * <code>optional int32 version = 1;</code>
+       * <code>int32 version = 1;</code>
        */
       public Builder clearVersion() {
-        bitField0_ = (bitField0_ & ~0x00000001);
+        
         version_ = 0;
         onChanged();
         return this;
@@ -898,51 +583,25 @@ public final class SignedTimestampProto {
 
       private long timestamp_ ;
       /**
-       * <pre>
-       * Timestamp is the time this SignedTimestamp was issued. It is in UTC,
-       * as µseconds elapsed since the epoch (µs from 1970-01-01T00:00:00Z).
-       * </pre>
-       *
-       * <code>optional uint64 timestamp = 2;</code>
-       */
-      public boolean hasTimestamp() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <pre>
-       * Timestamp is the time this SignedTimestamp was issued. It is in UTC,
-       * as µseconds elapsed since the epoch (µs from 1970-01-01T00:00:00Z).
-       * </pre>
-       *
-       * <code>optional uint64 timestamp = 2;</code>
+       * <code>uint64 timestamp = 2;</code>
        */
       public long getTimestamp() {
         return timestamp_;
       }
       /**
-       * <pre>
-       * Timestamp is the time this SignedTimestamp was issued. It is in UTC,
-       * as µseconds elapsed since the epoch (µs from 1970-01-01T00:00:00Z).
-       * </pre>
-       *
-       * <code>optional uint64 timestamp = 2;</code>
+       * <code>uint64 timestamp = 2;</code>
        */
       public Builder setTimestamp(long value) {
-        bitField0_ |= 0x00000002;
+        
         timestamp_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * Timestamp is the time this SignedTimestamp was issued. It is in UTC,
-       * as µseconds elapsed since the epoch (µs from 1970-01-01T00:00:00Z).
-       * </pre>
-       *
-       * <code>optional uint64 timestamp = 2;</code>
+       * <code>uint64 timestamp = 2;</code>
        */
       public Builder clearTimestamp() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        
         timestamp_ = 0L;
         onChanged();
         return this;
@@ -950,62 +609,28 @@ public final class SignedTimestampProto {
 
       private com.google.protobuf.ByteString messageDigest_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <pre>
-       * MessageDigest is the digest of the message this timestamp is
-       * associated with. The first step in verifying the timestamp is
-       * ensuring the MessageDigest matches the original message data.
-       * For version 1 objects, the message digest algorithm is SHA-512/224.
-       * </pre>
-       *
-       * <code>optional bytes message_digest = 3;</code>
-       */
-      public boolean hasMessageDigest() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <pre>
-       * MessageDigest is the digest of the message this timestamp is
-       * associated with. The first step in verifying the timestamp is
-       * ensuring the MessageDigest matches the original message data.
-       * For version 1 objects, the message digest algorithm is SHA-512/224.
-       * </pre>
-       *
-       * <code>optional bytes message_digest = 3;</code>
+       * <code>bytes message_digest = 3;</code>
        */
       public com.google.protobuf.ByteString getMessageDigest() {
         return messageDigest_;
       }
       /**
-       * <pre>
-       * MessageDigest is the digest of the message this timestamp is
-       * associated with. The first step in verifying the timestamp is
-       * ensuring the MessageDigest matches the original message data.
-       * For version 1 objects, the message digest algorithm is SHA-512/224.
-       * </pre>
-       *
-       * <code>optional bytes message_digest = 3;</code>
+       * <code>bytes message_digest = 3;</code>
        */
       public Builder setMessageDigest(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  
         messageDigest_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * MessageDigest is the digest of the message this timestamp is
-       * associated with. The first step in verifying the timestamp is
-       * ensuring the MessageDigest matches the original message data.
-       * For version 1 objects, the message digest algorithm is SHA-512/224.
-       * </pre>
-       *
-       * <code>optional bytes message_digest = 3;</code>
+       * <code>bytes message_digest = 3;</code>
        */
       public Builder clearMessageDigest() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        
         messageDigest_ = getDefaultInstance().getMessageDigest();
         onChanged();
         return this;
@@ -1013,74 +638,28 @@ public final class SignedTimestampProto {
 
       private com.google.protobuf.ByteString chainDigest_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <pre>
-       * ChainDigest is the digest of the previous SignedTimestamp message
-       * in the chain. The second step in verifying the timestamp is walking
-       * back over the chain and checking each SignedTimestamp's ChainDigest
-       * field. The SignedTimestamp at the beginning of the chain has this
-       * field set to a specific, publish value.
-       * For version 1 objects, the chain digest algorithm is HMAC-SHA-512/224,
-       * with the secret being equal to the MessageDigest field.
-       * </pre>
-       *
-       * <code>optional bytes chain_digest = 4;</code>
-       */
-      public boolean hasChainDigest() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <pre>
-       * ChainDigest is the digest of the previous SignedTimestamp message
-       * in the chain. The second step in verifying the timestamp is walking
-       * back over the chain and checking each SignedTimestamp's ChainDigest
-       * field. The SignedTimestamp at the beginning of the chain has this
-       * field set to a specific, publish value.
-       * For version 1 objects, the chain digest algorithm is HMAC-SHA-512/224,
-       * with the secret being equal to the MessageDigest field.
-       * </pre>
-       *
-       * <code>optional bytes chain_digest = 4;</code>
+       * <code>bytes chain_digest = 4;</code>
        */
       public com.google.protobuf.ByteString getChainDigest() {
         return chainDigest_;
       }
       /**
-       * <pre>
-       * ChainDigest is the digest of the previous SignedTimestamp message
-       * in the chain. The second step in verifying the timestamp is walking
-       * back over the chain and checking each SignedTimestamp's ChainDigest
-       * field. The SignedTimestamp at the beginning of the chain has this
-       * field set to a specific, publish value.
-       * For version 1 objects, the chain digest algorithm is HMAC-SHA-512/224,
-       * with the secret being equal to the MessageDigest field.
-       * </pre>
-       *
-       * <code>optional bytes chain_digest = 4;</code>
+       * <code>bytes chain_digest = 4;</code>
        */
       public Builder setChainDigest(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000008;
+  
         chainDigest_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * ChainDigest is the digest of the previous SignedTimestamp message
-       * in the chain. The second step in verifying the timestamp is walking
-       * back over the chain and checking each SignedTimestamp's ChainDigest
-       * field. The SignedTimestamp at the beginning of the chain has this
-       * field set to a specific, publish value.
-       * For version 1 objects, the chain digest algorithm is HMAC-SHA-512/224,
-       * with the secret being equal to the MessageDigest field.
-       * </pre>
-       *
-       * <code>optional bytes chain_digest = 4;</code>
+       * <code>bytes chain_digest = 4;</code>
        */
       public Builder clearChainDigest() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        
         chainDigest_ = getDefaultInstance().getChainDigest();
         onChanged();
         return this;
@@ -1088,54 +667,28 @@ public final class SignedTimestampProto {
 
       private com.google.protobuf.ByteString chainDigestSkip1_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <pre>
-       * ChainDigestSkip1 is only populated once every 500 nodes. It is the
-       * ChainDigest value of the timestamp 500 nodes previously.
-       * </pre>
-       *
-       * <code>optional bytes chain_digest_skip1 = 5;</code>
-       */
-      public boolean hasChainDigestSkip1() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <pre>
-       * ChainDigestSkip1 is only populated once every 500 nodes. It is the
-       * ChainDigest value of the timestamp 500 nodes previously.
-       * </pre>
-       *
-       * <code>optional bytes chain_digest_skip1 = 5;</code>
+       * <code>bytes chain_digest_skip1 = 5;</code>
        */
       public com.google.protobuf.ByteString getChainDigestSkip1() {
         return chainDigestSkip1_;
       }
       /**
-       * <pre>
-       * ChainDigestSkip1 is only populated once every 500 nodes. It is the
-       * ChainDigest value of the timestamp 500 nodes previously.
-       * </pre>
-       *
-       * <code>optional bytes chain_digest_skip1 = 5;</code>
+       * <code>bytes chain_digest_skip1 = 5;</code>
        */
       public Builder setChainDigestSkip1(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000010;
+  
         chainDigestSkip1_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * ChainDigestSkip1 is only populated once every 500 nodes. It is the
-       * ChainDigest value of the timestamp 500 nodes previously.
-       * </pre>
-       *
-       * <code>optional bytes chain_digest_skip1 = 5;</code>
+       * <code>bytes chain_digest_skip1 = 5;</code>
        */
       public Builder clearChainDigestSkip1() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        
         chainDigestSkip1_ = getDefaultInstance().getChainDigestSkip1();
         onChanged();
         return this;
@@ -1143,70 +696,40 @@ public final class SignedTimestampProto {
 
       private com.google.protobuf.ByteString chainDigestSkip2_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <pre>
-       * ChainDigestSkip2 is only populated once every 250000 nodes (or once
-       * every 500 nodes that have ChainDigestSkip1 populated). It is the
-       * ChainDigest value of the timestamp 250000 nodes previously.
-       * </pre>
-       *
-       * <code>optional bytes chain_digest_skip2 = 6;</code>
-       */
-      public boolean hasChainDigestSkip2() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <pre>
-       * ChainDigestSkip2 is only populated once every 250000 nodes (or once
-       * every 500 nodes that have ChainDigestSkip1 populated). It is the
-       * ChainDigest value of the timestamp 250000 nodes previously.
-       * </pre>
-       *
-       * <code>optional bytes chain_digest_skip2 = 6;</code>
+       * <code>bytes chain_digest_skip2 = 6;</code>
        */
       public com.google.protobuf.ByteString getChainDigestSkip2() {
         return chainDigestSkip2_;
       }
       /**
-       * <pre>
-       * ChainDigestSkip2 is only populated once every 250000 nodes (or once
-       * every 500 nodes that have ChainDigestSkip1 populated). It is the
-       * ChainDigest value of the timestamp 250000 nodes previously.
-       * </pre>
-       *
-       * <code>optional bytes chain_digest_skip2 = 6;</code>
+       * <code>bytes chain_digest_skip2 = 6;</code>
        */
       public Builder setChainDigestSkip2(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
+  
         chainDigestSkip2_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * ChainDigestSkip2 is only populated once every 250000 nodes (or once
-       * every 500 nodes that have ChainDigestSkip1 populated). It is the
-       * ChainDigest value of the timestamp 250000 nodes previously.
-       * </pre>
-       *
-       * <code>optional bytes chain_digest_skip2 = 6;</code>
+       * <code>bytes chain_digest_skip2 = 6;</code>
        */
       public Builder clearChainDigestSkip2() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        
         chainDigestSkip2_ = getDefaultInstance().getChainDigestSkip2();
         onChanged();
         return this;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -1223,13 +746,13 @@ public final class SignedTimestampProto {
       return DEFAULT_INSTANCE;
     }
 
-    @Deprecated public static final com.google.protobuf.Parser<SignedTimestamp>
+    private static final com.google.protobuf.Parser<SignedTimestamp>
         PARSER = new com.google.protobuf.AbstractParser<SignedTimestamp>() {
       public SignedTimestamp parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new SignedTimestamp(input, extensionRegistry);
+          return new SignedTimestamp(input, extensionRegistry);
       }
     };
 
@@ -1250,7 +773,7 @@ public final class SignedTimestampProto {
 
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_compubapi_v1_SignedTimestamp_descriptor;
-  private static final
+  private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_compubapi_v1_SignedTimestamp_fieldAccessorTable;
 
@@ -1266,9 +789,9 @@ public final class SignedTimestampProto {
       "\n\017SignedTimestamp\022\017\n\007version\030\001 \001(\005\022\021\n\tti" +
       "mestamp\030\002 \001(\004\022\026\n\016message_digest\030\003 \001(\014\022\024\n" +
       "\014chain_digest\030\004 \001(\014\022\032\n\022chain_digest_skip" +
-      "1\030\005 \001(\014\022\032\n\022chain_digest_skip2\030\006 \001(\014B<\n$c" +
+      "1\030\005 \001(\014\022\032\n\022chain_digest_skip2\030\006 \001(\014BJ\n$c" +
       "om.yoti.api.client.spi.remote.protoB\024Sig" +
-      "nedTimestampProto"
+      "nedTimestampProtoZ\014yotiprotocomb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
