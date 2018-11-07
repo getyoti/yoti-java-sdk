@@ -19,38 +19,12 @@ public final class EncryptedDataProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <pre>
-     * the iv will be used in conjunction with the secret key
-     * received via other channel in order to decrypt the cipher_text
-     * </pre>
-     *
-     * <code>optional bytes iv = 1;</code>
-     */
-    boolean hasIv();
-    /**
-     * <pre>
-     * the iv will be used in conjunction with the secret key
-     * received via other channel in order to decrypt the cipher_text
-     * </pre>
-     *
-     * <code>optional bytes iv = 1;</code>
+     * <code>bytes iv = 1;</code>
      */
     com.google.protobuf.ByteString getIv();
 
     /**
-     * <pre>
-     * block of bytes to be decrypted
-     * </pre>
-     *
-     * <code>optional bytes cipher_text = 2;</code>
-     */
-    boolean hasCipherText();
-    /**
-     * <pre>
-     * block of bytes to be decrypted
-     * </pre>
-     *
-     * <code>optional bytes cipher_text = 2;</code>
+     * <code>bytes cipher_text = 2;</code>
      */
     com.google.protobuf.ByteString getCipherText();
   }
@@ -61,7 +35,6 @@ public final class EncryptedDataProto {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:compubapi_v1.EncryptedData)
       EncryptedDataOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use EncryptedData.newBuilder() to construct.
     private EncryptedData(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -74,19 +47,14 @@ public final class EncryptedDataProto {
     @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private EncryptedData(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -96,19 +64,18 @@ public final class EncryptedDataProto {
               done = true;
               break;
             default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
+              if (!input.skipField(tag)) {
                 done = true;
               }
               break;
             }
             case 10: {
-              bitField0_ |= 0x00000001;
+
               iv_ = input.readBytes();
               break;
             }
             case 18: {
-              bitField0_ |= 0x00000002;
+
               cipherText_ = input.readBytes();
               break;
             }
@@ -120,7 +87,6 @@ public final class EncryptedDataProto {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -136,27 +102,10 @@ public final class EncryptedDataProto {
               EncryptedData.class, Builder.class);
     }
 
-    private int bitField0_;
     public static final int IV_FIELD_NUMBER = 1;
     private com.google.protobuf.ByteString iv_;
     /**
-     * <pre>
-     * the iv will be used in conjunction with the secret key
-     * received via other channel in order to decrypt the cipher_text
-     * </pre>
-     *
-     * <code>optional bytes iv = 1;</code>
-     */
-    public boolean hasIv() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <pre>
-     * the iv will be used in conjunction with the secret key
-     * received via other channel in order to decrypt the cipher_text
-     * </pre>
-     *
-     * <code>optional bytes iv = 1;</code>
+     * <code>bytes iv = 1;</code>
      */
     public com.google.protobuf.ByteString getIv() {
       return iv_;
@@ -165,21 +114,7 @@ public final class EncryptedDataProto {
     public static final int CIPHER_TEXT_FIELD_NUMBER = 2;
     private com.google.protobuf.ByteString cipherText_;
     /**
-     * <pre>
-     * block of bytes to be decrypted
-     * </pre>
-     *
-     * <code>optional bytes cipher_text = 2;</code>
-     */
-    public boolean hasCipherText() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <pre>
-     * block of bytes to be decrypted
-     * </pre>
-     *
-     * <code>optional bytes cipher_text = 2;</code>
+     * <code>bytes cipher_text = 2;</code>
      */
     public com.google.protobuf.ByteString getCipherText() {
       return cipherText_;
@@ -197,13 +132,12 @@ public final class EncryptedDataProto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (!iv_.isEmpty()) {
         output.writeBytes(1, iv_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (!cipherText_.isEmpty()) {
         output.writeBytes(2, cipherText_);
       }
-      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -211,19 +145,19 @@ public final class EncryptedDataProto {
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (!iv_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(1, iv_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (!cipherText_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, cipherText_);
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
@@ -235,17 +169,10 @@ public final class EncryptedDataProto {
       EncryptedData other = (EncryptedData) obj;
 
       boolean result = true;
-      result = result && (hasIv() == other.hasIv());
-      if (hasIv()) {
-        result = result && getIv()
-            .equals(other.getIv());
-      }
-      result = result && (hasCipherText() == other.hasCipherText());
-      if (hasCipherText()) {
-        result = result && getCipherText()
-            .equals(other.getCipherText());
-      }
-      result = result && unknownFields.equals(other.unknownFields);
+      result = result && getIv()
+          .equals(other.getIv());
+      result = result && getCipherText()
+          .equals(other.getCipherText());
       return result;
     }
 
@@ -256,30 +183,15 @@ public final class EncryptedDataProto {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasIv()) {
-        hash = (37 * hash) + IV_FIELD_NUMBER;
-        hash = (53 * hash) + getIv().hashCode();
-      }
-      if (hasCipherText()) {
-        hash = (37 * hash) + CIPHER_TEXT_FIELD_NUMBER;
-        hash = (53 * hash) + getCipherText().hashCode();
-      }
+      hash = (37 * hash) + IV_FIELD_NUMBER;
+      hash = (53 * hash) + getIv().hashCode();
+      hash = (37 * hash) + CIPHER_TEXT_FIELD_NUMBER;
+      hash = (53 * hash) + getCipherText().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static EncryptedData parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static EncryptedData parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static EncryptedData parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -394,9 +306,9 @@ public final class EncryptedDataProto {
       public Builder clear() {
         super.clear();
         iv_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000001);
+
         cipherText_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000002);
+
         return this;
       }
 
@@ -419,17 +331,8 @@ public final class EncryptedDataProto {
 
       public EncryptedData buildPartial() {
         EncryptedData result = new EncryptedData(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
         result.iv_ = iv_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
         result.cipherText_ = cipherText_;
-        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -471,13 +374,12 @@ public final class EncryptedDataProto {
 
       public Builder mergeFrom(EncryptedData other) {
         if (other == EncryptedData.getDefaultInstance()) return this;
-        if (other.hasIv()) {
+        if (other.getIv() != com.google.protobuf.ByteString.EMPTY) {
           setIv(other.getIv());
         }
-        if (other.hasCipherText()) {
+        if (other.getCipherText() != com.google.protobuf.ByteString.EMPTY) {
           setCipherText(other.getCipherText());
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -503,58 +405,31 @@ public final class EncryptedDataProto {
         }
         return this;
       }
-      private int bitField0_;
 
       private com.google.protobuf.ByteString iv_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <pre>
-       * the iv will be used in conjunction with the secret key
-       * received via other channel in order to decrypt the cipher_text
-       * </pre>
-       *
-       * <code>optional bytes iv = 1;</code>
-       */
-      public boolean hasIv() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <pre>
-       * the iv will be used in conjunction with the secret key
-       * received via other channel in order to decrypt the cipher_text
-       * </pre>
-       *
-       * <code>optional bytes iv = 1;</code>
+       * <code>bytes iv = 1;</code>
        */
       public com.google.protobuf.ByteString getIv() {
         return iv_;
       }
       /**
-       * <pre>
-       * the iv will be used in conjunction with the secret key
-       * received via other channel in order to decrypt the cipher_text
-       * </pre>
-       *
-       * <code>optional bytes iv = 1;</code>
+       * <code>bytes iv = 1;</code>
        */
       public Builder setIv(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000001;
+  
         iv_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * the iv will be used in conjunction with the secret key
-       * received via other channel in order to decrypt the cipher_text
-       * </pre>
-       *
-       * <code>optional bytes iv = 1;</code>
+       * <code>bytes iv = 1;</code>
        */
       public Builder clearIv() {
-        bitField0_ = (bitField0_ & ~0x00000001);
+        
         iv_ = getDefaultInstance().getIv();
         onChanged();
         return this;
@@ -562,62 +437,40 @@ public final class EncryptedDataProto {
 
       private com.google.protobuf.ByteString cipherText_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <pre>
-       * block of bytes to be decrypted
-       * </pre>
-       *
-       * <code>optional bytes cipher_text = 2;</code>
-       */
-      public boolean hasCipherText() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <pre>
-       * block of bytes to be decrypted
-       * </pre>
-       *
-       * <code>optional bytes cipher_text = 2;</code>
+       * <code>bytes cipher_text = 2;</code>
        */
       public com.google.protobuf.ByteString getCipherText() {
         return cipherText_;
       }
       /**
-       * <pre>
-       * block of bytes to be decrypted
-       * </pre>
-       *
-       * <code>optional bytes cipher_text = 2;</code>
+       * <code>bytes cipher_text = 2;</code>
        */
       public Builder setCipherText(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
+  
         cipherText_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * block of bytes to be decrypted
-       * </pre>
-       *
-       * <code>optional bytes cipher_text = 2;</code>
+       * <code>bytes cipher_text = 2;</code>
        */
       public Builder clearCipherText() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        
         cipherText_ = getDefaultInstance().getCipherText();
         onChanged();
         return this;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -634,13 +487,13 @@ public final class EncryptedDataProto {
       return DEFAULT_INSTANCE;
     }
 
-    @Deprecated public static final com.google.protobuf.Parser<EncryptedData>
+    private static final com.google.protobuf.Parser<EncryptedData>
         PARSER = new com.google.protobuf.AbstractParser<EncryptedData>() {
       public EncryptedData parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new EncryptedData(input, extensionRegistry);
+          return new EncryptedData(input, extensionRegistry);
       }
     };
 
@@ -661,7 +514,7 @@ public final class EncryptedDataProto {
 
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_compubapi_v1_EncryptedData_descriptor;
-  private static final
+  private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_compubapi_v1_EncryptedData_fieldAccessorTable;
 
@@ -675,8 +528,9 @@ public final class EncryptedDataProto {
     String[] descriptorData = {
       "\n\023EncryptedData.proto\022\014compubapi_v1\"0\n\rE" +
       "ncryptedData\022\n\n\002iv\030\001 \001(\014\022\023\n\013cipher_text\030" +
-      "\002 \001(\014B:\n$com.yoti.api.client.spi.remote." +
-      "protoB\022EncryptedDataProto"
+      "\002 \001(\014BH\n$com.yoti.api.client.spi.remote." +
+      "protoB\022EncryptedDataProtoZ\014yotiprotocomb" +
+      "\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

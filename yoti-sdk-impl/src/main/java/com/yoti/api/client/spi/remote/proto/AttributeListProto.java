@@ -19,69 +19,30 @@ public final class AttributeListProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <pre>
-     * SimpleAttribute holds the value and metadata of the attribute. Clients
-     * may display this but should not persist it.
-     * </pre>
-     *
-     * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+     * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
      */
     boolean hasAttribute();
     /**
-     * <pre>
-     * SimpleAttribute holds the value and metadata of the attribute. Clients
-     * may display this but should not persist it.
-     * </pre>
-     *
-     * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+     * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
      */
     AttrProto.Attribute getAttribute();
     /**
-     * <pre>
-     * SimpleAttribute holds the value and metadata of the attribute. Clients
-     * may display this but should not persist it.
-     * </pre>
-     *
-     * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+     * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
      */
     AttrProto.AttributeOrBuilder getAttributeOrBuilder();
 
     /**
-     * <pre>
-     * AttributeId is used to identify the attribute to the server. Clients
-     * must keep this in persistent storage, as it is the only way to ever
-     * retrieve or use the attribute in future. The server does not keep a
-     * copy of the attribute ID!
-     * </pre>
-     *
-     * <code>optional bytes attribute_id = 2;</code>
-     */
-    boolean hasAttributeId();
-    /**
-     * <pre>
-     * AttributeId is used to identify the attribute to the server. Clients
-     * must keep this in persistent storage, as it is the only way to ever
-     * retrieve or use the attribute in future. The server does not keep a
-     * copy of the attribute ID!
-     * </pre>
-     *
-     * <code>optional bytes attribute_id = 2;</code>
+     * <code>bytes attribute_id = 2;</code>
      */
     com.google.protobuf.ByteString getAttributeId();
   }
   /**
-   * <pre>
-   * AttributeAndId is a simple container for holding an attribute's value
-   * alongside its ID.
-   * </pre>
-   *
    * Protobuf type {@code attrpubapi_v1.AttributeAndId}
    */
   public  static final class AttributeAndId extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:attrpubapi_v1.AttributeAndId)
       AttributeAndIdOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use AttributeAndId.newBuilder() to construct.
     private AttributeAndId(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -93,19 +54,14 @@ public final class AttributeListProto {
     @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private AttributeAndId(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -115,27 +71,26 @@ public final class AttributeListProto {
               done = true;
               break;
             default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
+              if (!input.skipField(tag)) {
                 done = true;
               }
               break;
             }
             case 10: {
               AttrProto.Attribute.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000001) == 0x00000001)) {
+              if (attribute_ != null) {
                 subBuilder = attribute_.toBuilder();
               }
-              attribute_ = input.readMessage(AttrProto.Attribute.PARSER, extensionRegistry);
+              attribute_ = input.readMessage(AttrProto.Attribute.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(attribute_);
                 attribute_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000001;
+
               break;
             }
             case 18: {
-              bitField0_ |= 0x00000002;
+
               attributeId_ = input.readBytes();
               break;
             }
@@ -147,7 +102,6 @@ public final class AttributeListProto {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -163,67 +117,31 @@ public final class AttributeListProto {
               AttributeAndId.class, Builder.class);
     }
 
-    private int bitField0_;
     public static final int ATTRIBUTE_FIELD_NUMBER = 1;
     private AttrProto.Attribute attribute_;
     /**
-     * <pre>
-     * SimpleAttribute holds the value and metadata of the attribute. Clients
-     * may display this but should not persist it.
-     * </pre>
-     *
-     * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+     * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
      */
     public boolean hasAttribute() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+      return attribute_ != null;
     }
     /**
-     * <pre>
-     * SimpleAttribute holds the value and metadata of the attribute. Clients
-     * may display this but should not persist it.
-     * </pre>
-     *
-     * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+     * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
      */
     public AttrProto.Attribute getAttribute() {
       return attribute_ == null ? AttrProto.Attribute.getDefaultInstance() : attribute_;
     }
     /**
-     * <pre>
-     * SimpleAttribute holds the value and metadata of the attribute. Clients
-     * may display this but should not persist it.
-     * </pre>
-     *
-     * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+     * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
      */
     public AttrProto.AttributeOrBuilder getAttributeOrBuilder() {
-      return attribute_ == null ? AttrProto.Attribute.getDefaultInstance() : attribute_;
+      return getAttribute();
     }
 
     public static final int ATTRIBUTE_ID_FIELD_NUMBER = 2;
     private com.google.protobuf.ByteString attributeId_;
     /**
-     * <pre>
-     * AttributeId is used to identify the attribute to the server. Clients
-     * must keep this in persistent storage, as it is the only way to ever
-     * retrieve or use the attribute in future. The server does not keep a
-     * copy of the attribute ID!
-     * </pre>
-     *
-     * <code>optional bytes attribute_id = 2;</code>
-     */
-    public boolean hasAttributeId() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <pre>
-     * AttributeId is used to identify the attribute to the server. Clients
-     * must keep this in persistent storage, as it is the only way to ever
-     * retrieve or use the attribute in future. The server does not keep a
-     * copy of the attribute ID!
-     * </pre>
-     *
-     * <code>optional bytes attribute_id = 2;</code>
+     * <code>bytes attribute_id = 2;</code>
      */
     public com.google.protobuf.ByteString getAttributeId() {
       return attributeId_;
@@ -241,13 +159,12 @@ public final class AttributeListProto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (attribute_ != null) {
         output.writeMessage(1, getAttribute());
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (!attributeId_.isEmpty()) {
         output.writeBytes(2, attributeId_);
       }
-      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -255,19 +172,19 @@ public final class AttributeListProto {
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (attribute_ != null) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, getAttribute());
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (!attributeId_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, attributeId_);
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
@@ -284,12 +201,8 @@ public final class AttributeListProto {
         result = result && getAttribute()
             .equals(other.getAttribute());
       }
-      result = result && (hasAttributeId() == other.hasAttributeId());
-      if (hasAttributeId()) {
-        result = result && getAttributeId()
-            .equals(other.getAttributeId());
-      }
-      result = result && unknownFields.equals(other.unknownFields);
+      result = result && getAttributeId()
+          .equals(other.getAttributeId());
       return result;
     }
 
@@ -304,26 +217,13 @@ public final class AttributeListProto {
         hash = (37 * hash) + ATTRIBUTE_FIELD_NUMBER;
         hash = (53 * hash) + getAttribute().hashCode();
       }
-      if (hasAttributeId()) {
-        hash = (37 * hash) + ATTRIBUTE_ID_FIELD_NUMBER;
-        hash = (53 * hash) + getAttributeId().hashCode();
-      }
+      hash = (37 * hash) + ATTRIBUTE_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getAttributeId().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static AttributeAndId parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static AttributeAndId parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static AttributeAndId parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -402,11 +302,6 @@ public final class AttributeListProto {
       return builder;
     }
     /**
-     * <pre>
-     * AttributeAndId is a simple container for holding an attribute's value
-     * alongside its ID.
-     * </pre>
-     *
      * Protobuf type {@code attrpubapi_v1.AttributeAndId}
      */
     public static final class Builder extends
@@ -438,7 +333,6 @@ public final class AttributeListProto {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
-          getAttributeFieldBuilder();
         }
       }
       public Builder clear() {
@@ -446,11 +340,11 @@ public final class AttributeListProto {
         if (attributeBuilder_ == null) {
           attribute_ = null;
         } else {
-          attributeBuilder_.clear();
+          attribute_ = null;
+          attributeBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000001);
         attributeId_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000002);
+
         return this;
       }
 
@@ -473,21 +367,12 @@ public final class AttributeListProto {
 
       public AttributeAndId buildPartial() {
         AttributeAndId result = new AttributeAndId(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
         if (attributeBuilder_ == null) {
           result.attribute_ = attribute_;
         } else {
           result.attribute_ = attributeBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
         result.attributeId_ = attributeId_;
-        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -532,10 +417,9 @@ public final class AttributeListProto {
         if (other.hasAttribute()) {
           mergeAttribute(other.getAttribute());
         }
-        if (other.hasAttributeId()) {
+        if (other.getAttributeId() != com.google.protobuf.ByteString.EMPTY) {
           setAttributeId(other.getAttributeId());
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -561,29 +445,18 @@ public final class AttributeListProto {
         }
         return this;
       }
-      private int bitField0_;
 
       private AttrProto.Attribute attribute_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
           AttrProto.Attribute, AttrProto.Attribute.Builder, AttrProto.AttributeOrBuilder> attributeBuilder_;
       /**
-       * <pre>
-       * SimpleAttribute holds the value and metadata of the attribute. Clients
-       * may display this but should not persist it.
-       * </pre>
-       *
-       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+       * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
        */
       public boolean hasAttribute() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+        return attributeBuilder_ != null || attribute_ != null;
       }
       /**
-       * <pre>
-       * SimpleAttribute holds the value and metadata of the attribute. Clients
-       * may display this but should not persist it.
-       * </pre>
-       *
-       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+       * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
        */
       public AttrProto.Attribute getAttribute() {
         if (attributeBuilder_ == null) {
@@ -593,12 +466,7 @@ public final class AttributeListProto {
         }
       }
       /**
-       * <pre>
-       * SimpleAttribute holds the value and metadata of the attribute. Clients
-       * may display this but should not persist it.
-       * </pre>
-       *
-       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+       * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
        */
       public Builder setAttribute(AttrProto.Attribute value) {
         if (attributeBuilder_ == null) {
@@ -610,16 +478,11 @@ public final class AttributeListProto {
         } else {
           attributeBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000001;
+
         return this;
       }
       /**
-       * <pre>
-       * SimpleAttribute holds the value and metadata of the attribute. Clients
-       * may display this but should not persist it.
-       * </pre>
-       *
-       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+       * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
        */
       public Builder setAttribute(
           AttrProto.Attribute.Builder builderForValue) {
@@ -629,22 +492,15 @@ public final class AttributeListProto {
         } else {
           attributeBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000001;
+
         return this;
       }
       /**
-       * <pre>
-       * SimpleAttribute holds the value and metadata of the attribute. Clients
-       * may display this but should not persist it.
-       * </pre>
-       *
-       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+       * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
        */
       public Builder mergeAttribute(AttrProto.Attribute value) {
         if (attributeBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001) &&
-              attribute_ != null &&
-              attribute_ != AttrProto.Attribute.getDefaultInstance()) {
+          if (attribute_ != null) {
             attribute_ =
               AttrProto.Attribute.newBuilder(attribute_).mergeFrom(value).buildPartial();
           } else {
@@ -654,47 +510,33 @@ public final class AttributeListProto {
         } else {
           attributeBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000001;
+
         return this;
       }
       /**
-       * <pre>
-       * SimpleAttribute holds the value and metadata of the attribute. Clients
-       * may display this but should not persist it.
-       * </pre>
-       *
-       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+       * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
        */
       public Builder clearAttribute() {
         if (attributeBuilder_ == null) {
           attribute_ = null;
           onChanged();
         } else {
-          attributeBuilder_.clear();
+          attribute_ = null;
+          attributeBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000001);
+
         return this;
       }
       /**
-       * <pre>
-       * SimpleAttribute holds the value and metadata of the attribute. Clients
-       * may display this but should not persist it.
-       * </pre>
-       *
-       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+       * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
        */
       public AttrProto.Attribute.Builder getAttributeBuilder() {
-        bitField0_ |= 0x00000001;
+        
         onChanged();
         return getAttributeFieldBuilder().getBuilder();
       }
       /**
-       * <pre>
-       * SimpleAttribute holds the value and metadata of the attribute. Clients
-       * may display this but should not persist it.
-       * </pre>
-       *
-       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+       * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
        */
       public AttrProto.AttributeOrBuilder getAttributeOrBuilder() {
         if (attributeBuilder_ != null) {
@@ -705,12 +547,7 @@ public final class AttributeListProto {
         }
       }
       /**
-       * <pre>
-       * SimpleAttribute holds the value and metadata of the attribute. Clients
-       * may display this but should not persist it.
-       * </pre>
-       *
-       * <code>optional .attrpubapi_v1.SimpleAttribute attribute = 1;</code>
+       * <code>.attrpubapi_v1.Attribute attribute = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
           AttrProto.Attribute, AttrProto.Attribute.Builder, AttrProto.AttributeOrBuilder>
@@ -728,74 +565,40 @@ public final class AttributeListProto {
 
       private com.google.protobuf.ByteString attributeId_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <pre>
-       * AttributeId is used to identify the attribute to the server. Clients
-       * must keep this in persistent storage, as it is the only way to ever
-       * retrieve or use the attribute in future. The server does not keep a
-       * copy of the attribute ID!
-       * </pre>
-       *
-       * <code>optional bytes attribute_id = 2;</code>
-       */
-      public boolean hasAttributeId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <pre>
-       * AttributeId is used to identify the attribute to the server. Clients
-       * must keep this in persistent storage, as it is the only way to ever
-       * retrieve or use the attribute in future. The server does not keep a
-       * copy of the attribute ID!
-       * </pre>
-       *
-       * <code>optional bytes attribute_id = 2;</code>
+       * <code>bytes attribute_id = 2;</code>
        */
       public com.google.protobuf.ByteString getAttributeId() {
         return attributeId_;
       }
       /**
-       * <pre>
-       * AttributeId is used to identify the attribute to the server. Clients
-       * must keep this in persistent storage, as it is the only way to ever
-       * retrieve or use the attribute in future. The server does not keep a
-       * copy of the attribute ID!
-       * </pre>
-       *
-       * <code>optional bytes attribute_id = 2;</code>
+       * <code>bytes attribute_id = 2;</code>
        */
       public Builder setAttributeId(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
+  
         attributeId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * AttributeId is used to identify the attribute to the server. Clients
-       * must keep this in persistent storage, as it is the only way to ever
-       * retrieve or use the attribute in future. The server does not keep a
-       * copy of the attribute ID!
-       * </pre>
-       *
-       * <code>optional bytes attribute_id = 2;</code>
+       * <code>bytes attribute_id = 2;</code>
        */
       public Builder clearAttributeId() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        
         attributeId_ = getDefaultInstance().getAttributeId();
         onChanged();
         return this;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -812,13 +615,13 @@ public final class AttributeListProto {
       return DEFAULT_INSTANCE;
     }
 
-    @Deprecated public static final com.google.protobuf.Parser<AttributeAndId>
+    private static final com.google.protobuf.Parser<AttributeAndId>
         PARSER = new com.google.protobuf.AbstractParser<AttributeAndId>() {
       public AttributeAndId parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new AttributeAndId(input, extensionRegistry);
+          return new AttributeAndId(input, extensionRegistry);
       }
     };
 
@@ -866,19 +669,12 @@ public final class AttributeListProto {
             int index);
   }
   /**
-   * <pre>
-   * AttributeAndIdList holds multiple attributes and their associated IDs. This
-   * is the type of message that is deposited in the escrow server and returned
-   * to clients with type “attribute-list”.
-   * </pre>
-   *
    * Protobuf type {@code attrpubapi_v1.AttributeAndIdList}
    */
   public  static final class AttributeAndIdList extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:attrpubapi_v1.AttributeAndIdList)
       AttributeAndIdListOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use AttributeAndIdList.newBuilder() to construct.
     private AttributeAndIdList(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -890,19 +686,14 @@ public final class AttributeListProto {
     @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private AttributeAndIdList(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -912,8 +703,7 @@ public final class AttributeListProto {
               done = true;
               break;
             default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
+              if (!input.skipField(tag)) {
                 done = true;
               }
               break;
@@ -924,7 +714,7 @@ public final class AttributeListProto {
                 mutable_bitField0_ |= 0x00000001;
               }
               attributeAndIdList_.add(
-                  input.readMessage(AttributeAndId.PARSER, extensionRegistry));
+                  input.readMessage(AttributeAndId.parser(), extensionRegistry));
               break;
             }
           }
@@ -938,7 +728,6 @@ public final class AttributeListProto {
         if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
           attributeAndIdList_ = java.util.Collections.unmodifiableList(attributeAndIdList_);
         }
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -1004,7 +793,6 @@ public final class AttributeListProto {
       for (int i = 0; i < attributeAndIdList_.size(); i++) {
         output.writeMessage(1, attributeAndIdList_.get(i));
       }
-      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -1016,11 +804,11 @@ public final class AttributeListProto {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, attributeAndIdList_.get(i));
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
@@ -1034,7 +822,6 @@ public final class AttributeListProto {
       boolean result = true;
       result = result && getAttributeAndIdListList()
           .equals(other.getAttributeAndIdListList());
-      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -1054,17 +841,6 @@ public final class AttributeListProto {
       return hash;
     }
 
-    public static AttributeAndIdList parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static AttributeAndIdList parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static AttributeAndIdList parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1143,12 +919,6 @@ public final class AttributeListProto {
       return builder;
     }
     /**
-     * <pre>
-     * AttributeAndIdList holds multiple attributes and their associated IDs. This
-     * is the type of message that is deposited in the escrow server and returned
-     * to clients with type “attribute-list”.
-     * </pre>
-     *
      * Protobuf type {@code attrpubapi_v1.AttributeAndIdList}
      */
     public static final class Builder extends
@@ -1282,7 +1052,7 @@ public final class AttributeListProto {
               attributeAndIdListBuilder_ = null;
               attributeAndIdList_ = other.attributeAndIdList_;
               bitField0_ = (bitField0_ & ~0x00000001);
-              attributeAndIdListBuilder_ =
+              attributeAndIdListBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getAttributeAndIdListFieldBuilder() : null;
             } else {
@@ -1290,7 +1060,6 @@ public final class AttributeListProto {
             }
           }
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -1559,12 +1328,12 @@ public final class AttributeListProto {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -1581,13 +1350,13 @@ public final class AttributeListProto {
       return DEFAULT_INSTANCE;
     }
 
-    @Deprecated public static final com.google.protobuf.Parser<AttributeAndIdList>
+    private static final com.google.protobuf.Parser<AttributeAndIdList>
         PARSER = new com.google.protobuf.AbstractParser<AttributeAndIdList>() {
       public AttributeAndIdList parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new AttributeAndIdList(input, extensionRegistry);
+          return new AttributeAndIdList(input, extensionRegistry);
       }
     };
 
@@ -1611,43 +1380,36 @@ public final class AttributeListProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
      */
     java.util.List<AttrProto.Attribute>
         getAttributesList();
     /**
-     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
      */
     AttrProto.Attribute getAttributes(int index);
     /**
-     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
      */
     int getAttributesCount();
     /**
-     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
      */
     java.util.List<? extends AttrProto.AttributeOrBuilder>
         getAttributesOrBuilderList();
     /**
-     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
      */
     AttrProto.AttributeOrBuilder getAttributesOrBuilder(
             int index);
   }
   /**
-   * <pre>
-   * AttributeList holds a number of attributes. It is the type of message that is
-   * sent to clients when a sharing operation is completed. Sometimes this has
-   * been called a “profile”.
-   * </pre>
-   *
    * Protobuf type {@code attrpubapi_v1.AttributeList}
    */
   public  static final class AttributeList extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:attrpubapi_v1.AttributeList)
       AttributeListOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use AttributeList.newBuilder() to construct.
     private AttributeList(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -1659,19 +1421,14 @@ public final class AttributeListProto {
     @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private AttributeList(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -1681,8 +1438,7 @@ public final class AttributeListProto {
               done = true;
               break;
             default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
+              if (!input.skipField(tag)) {
                 done = true;
               }
               break;
@@ -1693,7 +1449,7 @@ public final class AttributeListProto {
                 mutable_bitField0_ |= 0x00000001;
               }
               attributes_.add(
-                  input.readMessage(AttrProto.Attribute.PARSER, extensionRegistry));
+                  input.readMessage(AttrProto.Attribute.parser(), extensionRegistry));
               break;
             }
           }
@@ -1707,7 +1463,6 @@ public final class AttributeListProto {
         if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
           attributes_ = java.util.Collections.unmodifiableList(attributes_);
         }
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -1726,32 +1481,32 @@ public final class AttributeListProto {
     public static final int ATTRIBUTES_FIELD_NUMBER = 1;
     private java.util.List<AttrProto.Attribute> attributes_;
     /**
-     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
      */
     public java.util.List<AttrProto.Attribute> getAttributesList() {
       return attributes_;
     }
     /**
-     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
      */
     public java.util.List<? extends AttrProto.AttributeOrBuilder>
         getAttributesOrBuilderList() {
       return attributes_;
     }
     /**
-     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
      */
     public int getAttributesCount() {
       return attributes_.size();
     }
     /**
-     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
      */
     public AttrProto.Attribute getAttributes(int index) {
       return attributes_.get(index);
     }
     /**
-     * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+     * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
      */
     public AttrProto.AttributeOrBuilder getAttributesOrBuilder(
         int index) {
@@ -1773,7 +1528,6 @@ public final class AttributeListProto {
       for (int i = 0; i < attributes_.size(); i++) {
         output.writeMessage(1, attributes_.get(i));
       }
-      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -1785,11 +1539,11 @@ public final class AttributeListProto {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, attributes_.get(i));
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
@@ -1803,7 +1557,6 @@ public final class AttributeListProto {
       boolean result = true;
       result = result && getAttributesList()
           .equals(other.getAttributesList());
-      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -1823,17 +1576,6 @@ public final class AttributeListProto {
       return hash;
     }
 
-    public static AttributeList parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static AttributeList parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static AttributeList parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1912,12 +1654,6 @@ public final class AttributeListProto {
       return builder;
     }
     /**
-     * <pre>
-     * AttributeList holds a number of attributes. It is the type of message that is
-     * sent to clients when a sharing operation is completed. Sometimes this has
-     * been called a “profile”.
-     * </pre>
-     *
      * Protobuf type {@code attrpubapi_v1.AttributeList}
      */
     public static final class Builder extends
@@ -2051,7 +1787,7 @@ public final class AttributeListProto {
               attributesBuilder_ = null;
               attributes_ = other.attributes_;
               bitField0_ = (bitField0_ & ~0x00000001);
-              attributesBuilder_ =
+              attributesBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getAttributesFieldBuilder() : null;
             } else {
@@ -2059,7 +1795,6 @@ public final class AttributeListProto {
             }
           }
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -2100,7 +1835,7 @@ public final class AttributeListProto {
           AttrProto.Attribute, AttrProto.Attribute.Builder, AttrProto.AttributeOrBuilder> attributesBuilder_;
 
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public java.util.List<AttrProto.Attribute> getAttributesList() {
         if (attributesBuilder_ == null) {
@@ -2110,7 +1845,7 @@ public final class AttributeListProto {
         }
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public int getAttributesCount() {
         if (attributesBuilder_ == null) {
@@ -2120,7 +1855,7 @@ public final class AttributeListProto {
         }
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public AttrProto.Attribute getAttributes(int index) {
         if (attributesBuilder_ == null) {
@@ -2130,7 +1865,7 @@ public final class AttributeListProto {
         }
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public Builder setAttributes(
           int index, AttrProto.Attribute value) {
@@ -2147,7 +1882,7 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public Builder setAttributes(
           int index, AttrProto.Attribute.Builder builderForValue) {
@@ -2161,7 +1896,7 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public Builder addAttributes(AttrProto.Attribute value) {
         if (attributesBuilder_ == null) {
@@ -2177,7 +1912,7 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public Builder addAttributes(
           int index, AttrProto.Attribute value) {
@@ -2194,7 +1929,7 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public Builder addAttributes(
           AttrProto.Attribute.Builder builderForValue) {
@@ -2208,7 +1943,7 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public Builder addAttributes(
           int index, AttrProto.Attribute.Builder builderForValue) {
@@ -2222,7 +1957,7 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public Builder addAllAttributes(
           Iterable<? extends AttrProto.Attribute> values) {
@@ -2237,7 +1972,7 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public Builder clearAttributes() {
         if (attributesBuilder_ == null) {
@@ -2250,7 +1985,7 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public Builder removeAttributes(int index) {
         if (attributesBuilder_ == null) {
@@ -2263,14 +1998,14 @@ public final class AttributeListProto {
         return this;
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public AttrProto.Attribute.Builder getAttributesBuilder(
           int index) {
         return getAttributesFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public AttrProto.AttributeOrBuilder getAttributesOrBuilder(
           int index) {
@@ -2280,7 +2015,7 @@ public final class AttributeListProto {
         }
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public java.util.List<? extends AttrProto.AttributeOrBuilder>
            getAttributesOrBuilderList() {
@@ -2291,14 +2026,14 @@ public final class AttributeListProto {
         }
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public AttrProto.Attribute.Builder addAttributesBuilder() {
         return getAttributesFieldBuilder().addBuilder(
             AttrProto.Attribute.getDefaultInstance());
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public AttrProto.Attribute.Builder addAttributesBuilder(
           int index) {
@@ -2306,7 +2041,7 @@ public final class AttributeListProto {
             index, AttrProto.Attribute.getDefaultInstance());
       }
       /**
-       * <code>repeated .attrpubapi_v1.SimpleAttribute attributes = 1;</code>
+       * <code>repeated .attrpubapi_v1.Attribute attributes = 1;</code>
        */
       public java.util.List<AttrProto.Attribute.Builder>
            getAttributesBuilderList() {
@@ -2328,12 +2063,12 @@ public final class AttributeListProto {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -2350,13 +2085,13 @@ public final class AttributeListProto {
       return DEFAULT_INSTANCE;
     }
 
-    @Deprecated public static final com.google.protobuf.Parser<AttributeList>
+    private static final com.google.protobuf.Parser<AttributeList>
         PARSER = new com.google.protobuf.AbstractParser<AttributeList>() {
       public AttributeList parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new AttributeList(input, extensionRegistry);
+          return new AttributeList(input, extensionRegistry);
       }
     };
 
@@ -2377,17 +2112,17 @@ public final class AttributeListProto {
 
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_attrpubapi_v1_AttributeAndId_descriptor;
-  private static final
+  private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_attrpubapi_v1_AttributeAndId_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_attrpubapi_v1_AttributeAndIdList_descriptor;
-  private static final
+  private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_attrpubapi_v1_AttributeAndIdList_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_attrpubapi_v1_AttributeList_descriptor;
-  private static final
+  private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_attrpubapi_v1_AttributeList_fieldAccessorTable;
 
@@ -2401,13 +2136,13 @@ public final class AttributeListProto {
     String[] descriptorData = {
       "\n\nList.proto\022\rattrpubapi_v1\032\017Attribute.p" +
       "roto\"S\n\016AttributeAndId\022+\n\tattribute\030\001 \001(" +
-      "\0132\030.attrpubapi_v1.SimpleAttribute\022\024\n\014attribute" +
+      "\0132\030.attrpubapi_v1.Attribute\022\024\n\014attribute" +
       "_id\030\002 \001(\014\"R\n\022AttributeAndIdList\022<\n\025attri" +
       "bute_and_id_list\030\001 \003(\0132\035.attrpubapi_v1.A" +
       "ttributeAndId\"=\n\rAttributeList\022,\n\nattrib" +
-      "utes\030\001 \003(\0132\030.attrpubapi_v1.AttributeB:\n$" +
+      "utes\030\001 \003(\0132\030.attrpubapi_v1.AttributeBI\n$" +
       "com.yoti.api.client.spi.remote.protoB\022At" +
-      "tributeListProto"
+      "tributeListProtoZ\ryotiprotoattrb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2427,7 +2162,7 @@ public final class AttributeListProto {
     internal_static_attrpubapi_v1_AttributeAndId_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_attrpubapi_v1_AttributeAndId_descriptor,
-        new String[] { "SimpleAttribute", "AttributeId", });
+        new String[] { "Attribute", "AttributeId", });
     internal_static_attrpubapi_v1_AttributeAndIdList_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_attrpubapi_v1_AttributeAndIdList_fieldAccessorTable = new
