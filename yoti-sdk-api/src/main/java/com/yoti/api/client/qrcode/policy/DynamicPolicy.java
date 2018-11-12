@@ -6,7 +6,7 @@ import java.util.List;
  * Set of data required to request a sharing transaction
  *
  */
-public interface Policy {
+public interface DynamicPolicy {
 
     /**
      * Set of required {@link Attribute}
@@ -23,7 +23,7 @@ public interface Policy {
     List<Integer> getWantedAuthTypes();
 
     /**
-     * Allows to remember the {@link Policy}
+     * Allows to remember the {@link DynamicPolicy}
      *
      * @return RememberMe
      */

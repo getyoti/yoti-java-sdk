@@ -3,13 +3,13 @@ package com.yoti.api.client.qrcode;
 import java.util.List;
 import java.util.ServiceLoader;
 import com.yoti.api.client.qrcode.extension.Extension;
-import com.yoti.api.client.qrcode.policy.Policy;
+import com.yoti.api.client.qrcode.policy.DynamicPolicy;
 
 public class DynamicScenarioBuilder {
 
     private String callbackEndpoint;
 
-    private Policy policy;
+    private DynamicPolicy dynamicPolicy;
 
     private List<Extension> extensions;
 
@@ -18,8 +18,8 @@ public class DynamicScenarioBuilder {
         return this;
     }
 
-    public DynamicScenarioBuilder policy(Policy policy) {
-        this.policy = policy;
+    public DynamicScenarioBuilder policy(DynamicPolicy dynamicPolicy) {
+        this.dynamicPolicy = dynamicPolicy;
         return this;
     }
 
@@ -34,7 +34,7 @@ public class DynamicScenarioBuilder {
             throw new IllegalStateException("Cannot find any implementation of DynamicScenarioFactory");
         }
         DynamicScenarioFactory dynamicScenarioFactory = factoryLoader.iterator().next();
-        return dynamicScenarioFactory.create(callbackEndpoint, policy, extensions);
+        return dynamicScenarioFactory.create(callbackEndpoint, dynamicPolicy, extensions);
     }
 
 }
