@@ -18,20 +18,21 @@ import java.security.KeyPair;
 import java.security.Security;
 import java.util.HashMap;
 import java.util.Map;
+
 import com.yoti.api.client.qrcode.DynamicScenario;
 import com.yoti.api.client.qrcode.QRCodeException;
 import com.yoti.api.client.spi.remote.call.JsonResourceFetcher;
-import com.yoti.api.client.spi.remote.call.QrCodeService;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.ResourceFetcher;
 import com.yoti.api.client.spi.remote.call.UrlConnector;
 import com.yoti.api.client.spi.remote.call.factory.PathFactory;
 import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RemoteQrCodeService implements QrCodeService {
+public class RemoteQrCodeService {
 
     public static RemoteQrCodeService newInstance() {
         return new RemoteQrCodeService(
@@ -66,7 +67,6 @@ public class RemoteQrCodeService implements QrCodeService {
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
 
-    @Override
     public SimpleQrCode requestQRCode(String appId, KeyPair keyPair, DynamicScenario dynamicScenario) throws QRCodeException {
         notNull(appId, "Application id");
         notNull(keyPair, "Application key Pair");
