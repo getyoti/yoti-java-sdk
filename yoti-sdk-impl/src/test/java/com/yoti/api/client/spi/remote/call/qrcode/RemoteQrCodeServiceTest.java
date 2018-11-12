@@ -55,7 +55,7 @@ public class RemoteQrCodeServiceTest {
     @Mock
     private SimpleDynamicScenario simpleDynamicScenarioMock;
     @Mock
-    private SimpleDynamicQRCode simpleDynamicQrCodeMock;
+    private SimpleQrCode simpleQrCodeMock;
 
     @Captor
     private ArgumentCaptor<Map<String, String>> headersCaptor;
@@ -72,17 +72,17 @@ public class RemoteQrCodeServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWithNullAppId() throws QRCodeException {
-        service.requestDynamicQRCode(null, keyPair, simpleDynamicScenarioMock);
+        service.requestQRCode(null, keyPair, simpleDynamicScenarioMock);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWithNullKeyPair() throws QRCodeException {
-        service.requestDynamicQRCode(APP_ID, null, simpleDynamicScenarioMock);
+        service.requestQRCode(APP_ID, null, simpleDynamicScenarioMock);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWithNullDynamicScenario() throws QRCodeException {
-        service.requestDynamicQRCode(APP_ID, keyPair, null);
+        service.requestQRCode(APP_ID, keyPair, null);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class RemoteQrCodeServiceTest {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenThrow(new JsonProcessingException("") {});
 
         try {
-            service.requestDynamicQRCode(APP_ID, keyPair, simpleDynamicScenarioMock);
+            service.requestQRCode(APP_ID, keyPair, simpleDynamicScenarioMock);
             fail("Expected a QRCodeException");
         } catch (QRCodeException ex) {
             assertTrue(ex.getCause() instanceof JsonProcessingException);
@@ -106,7 +106,7 @@ public class RemoteQrCodeServiceTest {
                 .thenThrow(generalSecurityEx);
 
         try {
-            service.requestDynamicQRCode(APP_ID, keyPair, simpleDynamicScenarioMock);
+            service.requestQRCode(APP_ID, keyPair, simpleDynamicScenarioMock);
             fail("Expected a QRCodeException");
         } catch (QRCodeException ex) {
             assertSame(generalSecurityEx, ex.getCause());
@@ -118,11 +118,11 @@ public class RemoteQrCodeServiceTest {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
 
         IOException ioEx = new IOException("Test Exception");
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY.getBytes()), any(Map.class), eq(SimpleDynamicQRCode.class)))
+        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY.getBytes()), any(Map.class), eq(SimpleQrCode.class)))
                 .thenThrow(ioEx);
 
         try {
-            service.requestDynamicQRCode(APP_ID, keyPair, simpleDynamicScenarioMock);
+            service.requestQRCode(APP_ID, keyPair, simpleDynamicScenarioMock);
             fail("Expected a QRCodeException");
         } catch (QRCodeException ex) {
             assertSame(ioEx, ex.getCause());
@@ -134,11 +134,11 @@ public class RemoteQrCodeServiceTest {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
 
         ResourceException resourceEx = new ResourceException(HTTP_NOT_FOUND, "Test exception");
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY.getBytes()), any(Map.class), eq(SimpleDynamicQRCode.class)))
+        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY.getBytes()), any(Map.class), eq(SimpleQrCode.class)))
                 .thenThrow(resourceEx);
 
         try {
-            service.requestDynamicQRCode(APP_ID, keyPair, simpleDynamicScenarioMock);
+            service.requestQRCode(APP_ID, keyPair, simpleDynamicScenarioMock);
             fail("Expected a QRCodeException");
         } catch (QRCodeException ex) {
             assertSame(resourceEx, ex.getCause());
@@ -151,19 +151,19 @@ public class RemoteQrCodeServiceTest {
         when(signedMessageFactoryMock.create(keyPair.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY.getBytes()))
                 .thenReturn(SOME_SIGNATURE);
 
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY.getBytes()), any(Map.class), eq(SimpleDynamicQRCode.class)))
-                .thenReturn(simpleDynamicQrCodeMock);
+        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY.getBytes()), any(Map.class), eq(SimpleQrCode.class)))
+                .thenReturn(simpleQrCodeMock);
 
-        SimpleDynamicQRCode response = service.requestDynamicQRCode(APP_ID, keyPair, simpleDynamicScenarioMock);
+        SimpleQrCode response = service.requestQRCode(APP_ID, keyPair, simpleDynamicScenarioMock);
 
-        verify(resourceFetcherMock).postResource(urlConnectorCaptor.capture(), eq(SOME_BODY.getBytes()), headersCaptor.capture(), eq(SimpleDynamicQRCode.class));
+        verify(resourceFetcherMock).postResource(urlConnectorCaptor.capture(), eq(SOME_BODY.getBytes()), headersCaptor.capture(), eq(SimpleQrCode.class));
 
         assertEquals(YOTI_API_PATH_PREFIX + DYNAMIC_QRCODE_PATH, new URL(urlConnectorCaptor.getValue().getUrlString()).getPath());
 
         assertEquals(SOME_SIGNATURE, headersCaptor.getValue().get(DIGEST_HEADER));
         assertEquals(JAVA, headersCaptor.getValue().get(YOTI_SDK_HEADER));
 
-        assertSame(simpleDynamicQrCodeMock, response);
+        assertSame(simpleQrCodeMock, response);
     }
 
 }

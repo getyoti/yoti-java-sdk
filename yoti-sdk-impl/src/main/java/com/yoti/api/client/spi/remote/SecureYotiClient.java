@@ -14,7 +14,7 @@ import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.YotiClient;
 import com.yoti.api.client.aml.AmlProfile;
 import com.yoti.api.client.aml.AmlResult;
-import com.yoti.api.client.qrcode.DynamicQRCode;
+import com.yoti.api.client.qrcode.QrCode;
 import com.yoti.api.client.qrcode.DynamicScenario;
 import com.yoti.api.client.qrcode.QRCodeException;
 import com.yoti.api.client.spi.remote.call.Receipt;
@@ -69,9 +69,9 @@ final class SecureYotiClient implements YotiClient {
     }
 
     @Override
-    public DynamicQRCode requestQRCode(DynamicScenario dynamicScenario) throws QRCodeException {
-        LOG.debug("Requesting a Dynamic QRCode...");
-        return remoteQrCodeService.requestDynamicQRCode(appId, keyPair, dynamicScenario);
+    public QrCode requestQRCode(DynamicScenario dynamicScenario) throws QRCodeException {
+        LOG.debug("Requesting a QRCode...");
+        return remoteQrCodeService.requestQRCode(appId, keyPair, dynamicScenario);
     }
 
     private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {
