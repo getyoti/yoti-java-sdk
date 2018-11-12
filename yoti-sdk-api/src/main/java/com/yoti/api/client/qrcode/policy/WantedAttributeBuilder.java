@@ -3,7 +3,7 @@ package com.yoti.api.client.qrcode.policy;
 import java.util.List;
 import java.util.ServiceLoader;
 
-public class AttributeBuilder {
+public class WantedAttributeBuilder {
 
     private String name;
 
@@ -13,22 +13,22 @@ public class AttributeBuilder {
 
     private boolean optional;
 
-    public AttributeBuilder name(String name) {
+    public WantedAttributeBuilder name(String name) {
         this.name = name;
         return this;
     }
 
-    public AttributeBuilder anchors(List<String> anchors) {
+    public WantedAttributeBuilder anchors(List<String> anchors) {
         this.anchors = anchors;
         return this;
     }
 
-    public AttributeBuilder derivation(String derivation) {
+    public WantedAttributeBuilder derivation(String derivation) {
         this.derivation = derivation;
         return this;
     }
 
-    public AttributeBuilder optional(boolean optional) {
+    public WantedAttributeBuilder optional(boolean optional) {
         this.optional = optional;
         return this;
     }
