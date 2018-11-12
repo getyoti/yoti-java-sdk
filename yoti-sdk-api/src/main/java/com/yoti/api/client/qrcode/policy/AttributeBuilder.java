@@ -33,7 +33,7 @@ public class AttributeBuilder {
         return this;
     }
 
-    public Attribute build() {
+    public WantedAttribute build() {
         ServiceLoader<AttributeFactory> factoryLoader = ServiceLoader.load(AttributeFactory.class);
         if (!factoryLoader.iterator().hasNext()) {
             throw new IllegalStateException("Cannot find any implementation of AttributeFactory");

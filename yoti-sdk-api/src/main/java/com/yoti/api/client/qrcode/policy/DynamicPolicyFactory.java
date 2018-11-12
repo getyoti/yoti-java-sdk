@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface DynamicPolicyFactory {
 
-    DynamicPolicy create(List<Attribute> wantedAttributes, List<Integer> wantedAuthTypes, boolean wantedRememberMe, boolean wantedRememberMeOptional);
+    DynamicPolicy create(List<WantedAttribute> wantedAttributes, List<Integer> wantedAuthTypes, boolean wantedRememberMe, boolean wantedRememberMeOptional);
 
 }
