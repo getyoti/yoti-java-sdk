@@ -67,7 +67,7 @@ public class RemoteQrCodeService implements QrCodeService {
     }
 
     @Override
-    public SimpleDynamicQRCode requestDynamicQRCode(String appId, KeyPair keyPair, DynamicScenario dynamicScenario) throws QRCodeException {
+    public SimpleQrCode requestQRCode(String appId, KeyPair keyPair, DynamicScenario dynamicScenario) throws QRCodeException {
         notNull(appId, "Application id");
         notNull(keyPair, "Application key Pair");
         notNull(dynamicScenario, "Dynamic scenario");
@@ -85,7 +85,7 @@ public class RemoteQrCodeService implements QrCodeService {
             headers.put(CONTENT_TYPE, CONTENT_TYPE_JSON);
 
             UrlConnector urlConnector = UrlConnector.get(apiUrl + path);
-            return resourceFetcher.postResource(urlConnector, body, headers, SimpleDynamicQRCode.class);
+            return resourceFetcher.postResource(urlConnector, body, headers, SimpleQrCode.class);
 
         } catch (GeneralSecurityException ex) {
             throw new QRCodeException("Error signing the request: ", ex);

@@ -1,11 +1,11 @@
 package com.yoti.api.client.spi.remote.call.qrcode;
 
-import com.yoti.api.client.qrcode.DynamicQRCode;
+import com.yoti.api.client.qrcode.QrCode;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleDynamicQRCode implements DynamicQRCode {
+public class SimpleQrCode implements QrCode {
 
     @JsonProperty("qrcode")
     private String qrCode;
@@ -23,7 +23,7 @@ public class SimpleDynamicQRCode implements DynamicQRCode {
 
     @Override
     public String toString() {
-        return "SimpleDynamicQRCode{" +
+        return "SimpleQrCode{" +
                 "qrCode='" + qrCode + '\'' +
                 ", refId='" + refId + '\'' +
                 '}';
