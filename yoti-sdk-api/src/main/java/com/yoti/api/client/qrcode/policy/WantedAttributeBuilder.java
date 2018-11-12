@@ -34,12 +34,12 @@ public class WantedAttributeBuilder {
     }
 
     public WantedAttribute build() {
-        ServiceLoader<AttributeFactory> factoryLoader = ServiceLoader.load(AttributeFactory.class);
+        ServiceLoader<WantedAttributeFactory> factoryLoader = ServiceLoader.load(WantedAttributeFactory.class);
         if (!factoryLoader.iterator().hasNext()) {
-            throw new IllegalStateException("Cannot find any implementation of AttributeFactory");
+            throw new IllegalStateException("Cannot find any implementation of WantedAttributeFactory");
         }
-        AttributeFactory attributeFactory = factoryLoader.iterator().next();
-        return attributeFactory.create(name, anchors, derivation, optional);
+        WantedAttributeFactory wantedAttributeFactory = factoryLoader.iterator().next();
+        return wantedAttributeFactory.create(name, anchors, derivation, optional);
     }
 
 }
