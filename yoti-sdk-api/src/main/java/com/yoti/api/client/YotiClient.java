@@ -53,7 +53,7 @@ public interface YotiClient {
      * @return an {@link DynamicQRCode}
      *             QRCode and reference id
      *
-     * @throws {@link QRCodeException}
+     * @throws QRCodeException
      *             aggregate exception signalling issues during the call
      */
     DynamicQRCode requestQRCode(DynamicScenario dynamicScenario) throws QRCodeException;
