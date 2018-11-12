@@ -9,11 +9,11 @@ import java.util.List;
 public interface DynamicPolicy {
 
     /**
-     * Set of required {@link Attribute}
+     * Set of required {@link WantedAttribute}
      *
      * @return attributes
      */
-    List<Attribute> getWantedAttributes();
+    List<WantedAttribute> getWantedAttributes();
 
     /**
      * Type of authentications

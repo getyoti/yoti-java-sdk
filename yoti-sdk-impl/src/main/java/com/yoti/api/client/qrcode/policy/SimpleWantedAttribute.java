@@ -4,10 +4,10 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * @see Attribute
+ * @see WantedAttribute
  *
  */
-public class SimpleAttribute implements Attribute {
+public class SimpleWantedAttribute implements WantedAttribute {
 
     @JsonProperty("name")
     private final String name;
@@ -21,7 +21,7 @@ public class SimpleAttribute implements Attribute {
     @JsonProperty("optional")
     private final boolean optional;
 
-    public SimpleAttribute(String name, List<String> anchors, String derivation, boolean optional) {
+    public SimpleWantedAttribute(String name, List<String> anchors, String derivation, boolean optional) {
         this.name = name;
         this.anchors = anchors;
         this.derivation = derivation;
@@ -29,7 +29,7 @@ public class SimpleAttribute implements Attribute {
     }
 
     /**
-     * @see Attribute#getName()
+     * @see WantedAttribute#getName()
      *
      */
     @Override
@@ -38,7 +38,7 @@ public class SimpleAttribute implements Attribute {
     }
 
     /**
-     * @see Attribute#getAnchors()
+     * @see WantedAttribute#getAnchors()
      *
      */
     @Override
@@ -47,7 +47,7 @@ public class SimpleAttribute implements Attribute {
     }
 
     /**
-     * @see Attribute#getDerivation()
+     * @see WantedAttribute#getDerivation()
      *
      */
     @Override
@@ -56,7 +56,7 @@ public class SimpleAttribute implements Attribute {
     }
 
     /**
-     * @see Attribute#isOptional()
+     * @see WantedAttribute#isOptional()
      *
      */
     @Override
