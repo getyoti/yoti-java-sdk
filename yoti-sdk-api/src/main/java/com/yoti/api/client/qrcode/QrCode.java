@@ -4,7 +4,7 @@ package com.yoti.api.client.qrcode;
  * Dynamic QRCode for a customised policy for an application
  *
  */
-public interface DynamicQRCode {
+public interface QrCode {
 
     /**
      * Get the dynamic QRCode URL
