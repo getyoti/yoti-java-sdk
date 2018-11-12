@@ -5,15 +5,12 @@ import java.util.ServiceLoader;
 
 public class DynamicPolicyBuilder {
 
-    private List<Attribute> wantedAttributes;
-
+    private List<WantedAttribute> wantedAttributes;
     private List<Integer> wantedAuthTypes;
-
     private boolean wantedRememberMe;
-
     private boolean wantedRememberMeOptional;
 
-    public DynamicPolicyBuilder wantedAttributes(List<Attribute> wantedAttributes) {
+    public DynamicPolicyBuilder wantedAttributes(List<WantedAttribute> wantedAttributes) {
         this.wantedAttributes = wantedAttributes;
         return this;
     }

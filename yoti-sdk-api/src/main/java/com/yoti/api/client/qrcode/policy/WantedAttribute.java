@@ -6,10 +6,10 @@ import java.util.List;
  * Type and content of an user detail
  *
  */
-public interface Attribute {
+public interface WantedAttribute {
 
     /**
-     * Name identifying the {@link Attribute}
+     * Name identifying the {@link WantedAttribute}
      *
      * @return name of the attribute
      */
@@ -30,7 +30,7 @@ public interface Attribute {
     String getDerivation();
 
     /**
-     * Defines the {@link Attribute} as not mandatory
+     * Defines the {@link WantedAttribute} as not mandatory
      *
      * @return optional
      */
