@@ -4,10 +4,10 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * @see Policy
+ * @see DynamicPolicy
  *
  */
-public class SimplePolicy implements Policy {
+public class SimpleDynamicPolicy implements DynamicPolicy {
 
     @JsonProperty("wanted")
     private final List<Attribute> wantedAttributes;
@@ -21,7 +21,7 @@ public class SimplePolicy implements Policy {
     @JsonProperty("wanted_remember_me_optional")
     private final boolean wantedRememberMeOptional;
 
-    public SimplePolicy(List<Attribute> wantedAttributes,
+    public SimpleDynamicPolicy(List<Attribute> wantedAttributes,
             List<Integer> wantedAuthTypes,
             boolean wantedRememberMe,
             boolean wantedRememberMeOptional) {
@@ -32,7 +32,7 @@ public class SimplePolicy implements Policy {
     }
 
     /**
-     * @see Policy#getWantedAttributes()
+     * @see DynamicPolicy#getWantedAttributes()
      *
      */
     @Override
@@ -41,7 +41,7 @@ public class SimplePolicy implements Policy {
     }
 
     /**
-     * @see Policy#getWantedAuthTypes()
+     * @see DynamicPolicy#getWantedAuthTypes()
      *
      */
     @Override
@@ -50,7 +50,7 @@ public class SimplePolicy implements Policy {
     }
 
     /**
-     * @see Policy#isWantedRememberMe()
+     * @see DynamicPolicy#isWantedRememberMe()
      *
      */
     @Override
@@ -59,7 +59,7 @@ public class SimplePolicy implements Policy {
     }
 
     /**
-     * @see Policy#isWantedRememberMeOptional()
+     * @see DynamicPolicy#isWantedRememberMeOptional()
      *
      */
     @Override
