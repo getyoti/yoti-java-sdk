@@ -9,7 +9,7 @@ public interface DynamicQRCode {
     /**
      * Get the dynamic QRCode URL
      *
-     * @Return base64 QRCode URL
+     * @return base64 QRCode URL
      */
     String getQrCode();
 
