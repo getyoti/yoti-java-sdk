@@ -1,1 +1,1 @@
-com.yoti.api.client.qrcode.policy.SimpleAttributeFactory
+com.yoti.api.client.qrcode.dynamicPolicy.SimpleAttributeFactory
