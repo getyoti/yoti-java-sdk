@@ -1,6 +1,8 @@
 package com.yoti.api.client.qrcode.policy;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -10,10 +12,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SimpleDynamicPolicy implements DynamicPolicy {
 
     @JsonProperty("wanted")
-    private final List<WantedAttribute> wantedAttributes;
+    private final Collection<WantedAttribute> wantedAttributes;
 
     @JsonProperty("wanted_auth_types")
-    private final List<Integer> wantedAuthTypes;
+    private final Set<Integer> wantedAuthTypes;
 
     @JsonProperty("wanted_remember_me")
     private final boolean wantedRememberMe;
@@ -21,8 +23,9 @@ public class SimpleDynamicPolicy implements DynamicPolicy {
     @JsonProperty("wanted_remember_me_optional")
     private final boolean wantedRememberMeOptional;
 
-    public SimpleDynamicPolicy(List<WantedAttribute> wantedAttributes,
-            List<Integer> wantedAuthTypes,
+    // FIXME: Should this be public?
+    public SimpleDynamicPolicy(Collection<WantedAttribute> wantedAttributes,
+            Set<Integer> wantedAuthTypes,
             boolean wantedRememberMe,
             boolean wantedRememberMeOptional) {
         this.wantedAttributes = wantedAttributes;
@@ -36,7 +39,7 @@ public class SimpleDynamicPolicy implements DynamicPolicy {
      *
      */
     @Override
-    public List<WantedAttribute> getWantedAttributes() {
+    public Collection<WantedAttribute> getWantedAttributes() {
         return wantedAttributes;
     }
 
@@ -45,7 +48,7 @@ public class SimpleDynamicPolicy implements DynamicPolicy {
      *
      */
     @Override
-    public List<Integer> getWantedAuthTypes() {
+    public Set<Integer> getWantedAuthTypes() {
         return wantedAuthTypes;
     }
 
