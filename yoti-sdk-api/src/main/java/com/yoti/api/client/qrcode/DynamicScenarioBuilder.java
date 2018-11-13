@@ -1,30 +1,30 @@
 package com.yoti.api.client.qrcode;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
+
 import com.yoti.api.client.qrcode.extension.Extension;
 import com.yoti.api.client.qrcode.policy.DynamicPolicy;
 
 public class DynamicScenarioBuilder {
 
     private String callbackEndpoint;
-
     private DynamicPolicy dynamicPolicy;
+    private final List<Extension> extensions = new ArrayList<>(); // FIXME: Should this be a list?  Or a map?
 
-    private List<Extension> extensions;
-
-    public DynamicScenarioBuilder callbackEndpoint(String callbackEndpoint) {
+    public DynamicScenarioBuilder withCallbackEndpoint(String callbackEndpoint) {
         this.callbackEndpoint = callbackEndpoint;
         return this;
     }
 
-    public DynamicScenarioBuilder policy(DynamicPolicy dynamicPolicy) {
+    public DynamicScenarioBuilder withPolicy(DynamicPolicy dynamicPolicy) {
         this.dynamicPolicy = dynamicPolicy;
         return this;
     }
 
-    public DynamicScenarioBuilder extensions(List<Extension> extensions) {
-        this.extensions = extensions;
+    public DynamicScenarioBuilder withExtension(Extension extension) {
+        this.extensions.add(extension);
         return this;
     }
 
