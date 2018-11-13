@@ -1,7 +1,5 @@
 package com.yoti.api.client.qrcode.policy;
 
-import java.util.List;
-
 /**
  * Type and content of an user detail
  *
@@ -14,13 +12,6 @@ public interface WantedAttribute {
      * @return name of the attribute
      */
     String getName();
-
-    /**
-     * Links between the attribute and user data sources
-     *
-     * @return list of anchors
-     */
-    List<String> getAnchors();
 
     /**
      * Additional derived criteria
