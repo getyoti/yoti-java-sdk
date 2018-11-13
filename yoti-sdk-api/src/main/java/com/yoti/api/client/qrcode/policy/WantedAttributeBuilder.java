@@ -5,22 +5,20 @@ import java.util.ServiceLoader;
 public class WantedAttributeBuilder {
 
     private String name;
-
     private String derivation;
-
     private boolean optional;
 
-    public WantedAttributeBuilder name(String name) {
+    public WantedAttributeBuilder withName(String name) {
         this.name = name;
         return this;
     }
 
-    public WantedAttributeBuilder derivation(String derivation) {
+    public WantedAttributeBuilder withDerivation(String derivation) {
         this.derivation = derivation;
         return this;
     }
 
-    public WantedAttributeBuilder optional(boolean optional) {
+    public WantedAttributeBuilder withOptional(boolean optional) {
         this.optional = optional;
         return this;
     }
