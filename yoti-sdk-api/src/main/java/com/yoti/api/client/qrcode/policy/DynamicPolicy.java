@@ -1,10 +1,10 @@
 package com.yoti.api.client.qrcode.policy;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * Set of data required to request a sharing transaction
- *
  */
 public interface DynamicPolicy {
 
@@ -13,14 +13,14 @@ public interface DynamicPolicy {
      *
      * @return attributes
      */
-    List<WantedAttribute> getWantedAttributes();
+    Collection<WantedAttribute> getWantedAttributes();
 
     /**
      * Type of authentications
      *
      * @return authentication types
      */
-    List<Integer> getWantedAuthTypes();
+    Set<Integer> getWantedAuthTypes();
 
     /**
      * Allows to remember the {@link DynamicPolicy}

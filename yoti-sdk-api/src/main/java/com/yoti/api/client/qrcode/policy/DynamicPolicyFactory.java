@@ -1,9 +1,10 @@
 package com.yoti.api.client.qrcode.policy;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Set;
 
 public interface DynamicPolicyFactory {
 
-    DynamicPolicy create(List<WantedAttribute> wantedAttributes, List<Integer> wantedAuthTypes, boolean wantedRememberMe, boolean wantedRememberMeOptional);
+    DynamicPolicy create(Collection<WantedAttribute> wantedAttributes, Set<Integer> wantedAuthTypes, boolean wantedRememberMe, boolean wantedRememberMeOptional);
 
 }
