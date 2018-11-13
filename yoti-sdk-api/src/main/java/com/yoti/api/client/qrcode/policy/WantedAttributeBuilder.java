@@ -1,13 +1,10 @@
 package com.yoti.api.client.qrcode.policy;
 
-import java.util.List;
 import java.util.ServiceLoader;
 
 public class WantedAttributeBuilder {
 
     private String name;
-
-    private List<String> anchors;
 
     private String derivation;
 
@@ -15,11 +12,6 @@ public class WantedAttributeBuilder {
 
     public WantedAttributeBuilder name(String name) {
         this.name = name;
-        return this;
-    }
-
-    public WantedAttributeBuilder anchors(List<String> anchors) {
-        this.anchors = anchors;
         return this;
     }
 
@@ -39,7 +31,7 @@ public class WantedAttributeBuilder {
             throw new IllegalStateException("Cannot find any implementation of WantedAttributeFactory");
         }
         WantedAttributeFactory wantedAttributeFactory = factoryLoader.iterator().next();
-        return wantedAttributeFactory.create(name, anchors, derivation, optional);
+        return wantedAttributeFactory.create(name, derivation, optional);
     }
 
 }
