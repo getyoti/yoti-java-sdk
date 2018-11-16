@@ -1,7 +1,5 @@
 package com.yoti.api.client.spi.remote.call;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 public final class YotiConstants {
 
     private YotiConstants() {}
