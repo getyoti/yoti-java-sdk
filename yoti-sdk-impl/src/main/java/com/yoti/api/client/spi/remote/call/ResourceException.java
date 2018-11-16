@@ -5,6 +5,7 @@ public class ResourceException extends Exception {
     private final int responseCode;
     private final String responseBody;
 
+    @Deprecated
     public ResourceException(int responseCode, String responseBody) {
         this.responseCode = responseCode;
         this.responseBody = responseBody;
@@ -22,6 +23,11 @@ public class ResourceException extends Exception {
 
     public int getResponseCode() {
         return responseCode;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s, code: %s, body: %s", super.toString(), responseCode, responseBody);
     }
 
 }
