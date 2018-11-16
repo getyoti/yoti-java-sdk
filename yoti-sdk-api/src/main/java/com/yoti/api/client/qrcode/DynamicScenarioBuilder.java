@@ -1,40 +1,29 @@
 package com.yoti.api.client.qrcode;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ServiceLoader;
 
 import com.yoti.api.client.qrcode.extension.Extension;
 import com.yoti.api.client.qrcode.policy.DynamicPolicy;
 
-public class DynamicScenarioBuilder {
+public abstract class DynamicScenarioBuilder {
 
-    private String callbackEndpoint;
-    private DynamicPolicy dynamicPolicy;
-    private final List<Extension> extensions = new ArrayList<>(); // FIXME: Should this be a list?  Or a map?
-
-    public DynamicScenarioBuilder withCallbackEndpoint(String callbackEndpoint) {
-        this.callbackEndpoint = callbackEndpoint;
-        return this;
-    }
-
-    public DynamicScenarioBuilder withPolicy(DynamicPolicy dynamicPolicy) {
-        this.dynamicPolicy = dynamicPolicy;
-        return this;
-    }
-
-    public DynamicScenarioBuilder withExtension(Extension extension) {
-        this.extensions.add(extension);
-        return this;
-    }
-
-    public DynamicScenario build() {
-        ServiceLoader<DynamicScenarioFactory> factoryLoader = ServiceLoader.load(DynamicScenarioFactory.class);
-        if (!factoryLoader.iterator().hasNext()) {
-            throw new IllegalStateException("Cannot find any implementation of DynamicScenarioFactory");
+    public static final DynamicScenarioBuilder newInstance() {
+        ServiceLoader<DynamicScenarioBuilder> dynamicScenarioBuilderLoader = ServiceLoader.load(DynamicScenarioBuilder.class);
+        if (!dynamicScenarioBuilderLoader.iterator().hasNext()) {
+            throw new IllegalStateException("Cannot find any implementation of DynamicScenarioBuilder");
         }
-        DynamicScenarioFactory dynamicScenarioFactory = factoryLoader.iterator().next();
-        return dynamicScenarioFactory.create(callbackEndpoint, dynamicPolicy, extensions);
+        DynamicScenarioBuilder dynamicScenarioBuilder = dynamicScenarioBuilderLoader.iterator().next();
+        return dynamicScenarioBuilder.createDynamicScenarioBuilder();
     }
+
+    protected abstract DynamicScenarioBuilder createDynamicScenarioBuilder();
+
+    public abstract DynamicScenarioBuilder withCallbackEndpoint(String callbackEndpoint);
+
+    public abstract DynamicScenarioBuilder withPolicy(DynamicPolicy dynamicPolicy);
+
+    public abstract DynamicScenarioBuilder withExtension(Extension extension);
+
+    public abstract DynamicScenario build();
 
 }

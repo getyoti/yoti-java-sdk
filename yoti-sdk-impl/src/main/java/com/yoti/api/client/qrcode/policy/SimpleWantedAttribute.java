@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @see WantedAttribute
  *
  */
-public class SimpleWantedAttribute implements WantedAttribute {
+class SimpleWantedAttribute implements WantedAttribute {
 
     @JsonProperty("name")
     private final String name;
@@ -17,7 +17,7 @@ public class SimpleWantedAttribute implements WantedAttribute {
     @JsonProperty("optional")
     private final boolean optional;
 
-    public SimpleWantedAttribute(String name, String derivation, boolean optional) {
+    SimpleWantedAttribute(String name, String derivation, boolean optional) {
         this.name = name;
         this.derivation = derivation;
         this.optional = optional;
