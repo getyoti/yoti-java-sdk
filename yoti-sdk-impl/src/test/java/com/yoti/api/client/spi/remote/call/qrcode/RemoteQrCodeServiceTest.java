@@ -3,12 +3,7 @@ package com.yoti.api.client.spi.remote.call.qrcode;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DIGEST_HEADER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.JAVA;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.SDK_VERSION;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_API_PATH_PREFIX;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_HEADER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_VERSION_HEADER;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -23,6 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.yoti.api.client.qrcode.DynamicScenario;
@@ -30,12 +26,14 @@ import com.yoti.api.client.qrcode.QRCodeException;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.ResourceFetcher;
 import com.yoti.api.client.spi.remote.call.UrlConnector;
+import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
 import com.yoti.api.client.spi.remote.call.factory.PathFactory;
 import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -52,10 +50,12 @@ public class RemoteQrCodeServiceTest {
     private static final String SOME_BODY = "someBody";
     private static final byte[] SOME_BODY_BYTES = SOME_BODY.getBytes();
     private static final String SOME_SIGNATURE = "someSignature";
+    private static final Map<String, String> SOME_HEADERS = new HashMap<>();
 
     @InjectMocks RemoteQrCodeService testObj;
 
     @Mock PathFactory pathFactoryMock;
+    @Mock HeadersFactory headersFactoryMock;
     @Mock ObjectMapper objectMapperMock;
     @Mock ResourceFetcher resourceFetcherMock;
     @Mock SignedMessageFactory signedMessageFactoryMock;
@@ -64,12 +64,17 @@ public class RemoteQrCodeServiceTest {
     @Mock SimpleQrCode simpleQrCodeMock;
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPairMock;
 
-    @Captor ArgumentCaptor<Map<String, String>> headersCaptor;
     @Captor ArgumentCaptor<UrlConnector> urlConnectorCaptor;
+
+    @BeforeClass
+    public static void setUpClass() {
+        SOME_HEADERS.put("someKey", "someValue");
+    }
 
     @Before
     public void setUp() {
         when(pathFactoryMock.createQrCodePath(APP_ID)).thenReturn(DYNAMIC_QRCODE_PATH);
+        when(headersFactoryMock.create(SOME_SIGNATURE)).thenReturn(SOME_HEADERS);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -88,7 +93,7 @@ public class RemoteQrCodeServiceTest {
     }
 
     @Test
-    public void shouldThrowQRCodeExceptionWhenParsingFails() throws JsonProcessingException {
+    public void shouldThrowQRCodeExceptionWhenParsingFails() throws Exception {
         JsonProcessingException jsonProcessingException = new JsonProcessingException("") {};
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenThrow(jsonProcessingException);
 
@@ -117,8 +122,9 @@ public class RemoteQrCodeServiceTest {
     @Test
     public void shouldThrowExceptionForIOError() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
+        when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenReturn(SOME_SIGNATURE);
         IOException ioException = new IOException();
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), any(Map.class), eq(SimpleQrCode.class))).thenThrow(ioException);
+        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCode.class))).thenThrow(ioException);
 
         try {
             testObj.requestQRCode(APP_ID, keyPairMock, simpleDynamicScenarioMock);
@@ -131,8 +137,9 @@ public class RemoteQrCodeServiceTest {
     @Test
     public void shouldThrowExceptionWithResourceExceptionCause() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
+        when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenReturn(SOME_SIGNATURE);
         ResourceException resourceEx = new ResourceException(HTTP_NOT_FOUND, "Test exception");
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), any(Map.class), eq(SimpleQrCode.class))).thenThrow(resourceEx);
+        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCode.class))).thenThrow(resourceEx);
 
         try {
             testObj.requestQRCode(APP_ID, keyPairMock, simpleDynamicScenarioMock);
@@ -146,16 +153,13 @@ public class RemoteQrCodeServiceTest {
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenReturn(SOME_SIGNATURE);
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), any(Map.class), eq(SimpleQrCode.class))).thenReturn(
-                simpleQrCodeMock);
+        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCode.class)))
+                .thenReturn(simpleQrCodeMock);
 
         SimpleQrCode result = testObj.requestQRCode(APP_ID, keyPairMock, simpleDynamicScenarioMock);
 
-        verify(resourceFetcherMock).postResource(urlConnectorCaptor.capture(), eq(SOME_BODY_BYTES), headersCaptor.capture(), eq(SimpleQrCode.class));
+        verify(resourceFetcherMock).postResource(urlConnectorCaptor.capture(), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCode.class));
         assertEquals(YOTI_API_PATH_PREFIX + DYNAMIC_QRCODE_PATH, getPath(urlConnectorCaptor.getValue()));
-        assertEquals(SOME_SIGNATURE, headersCaptor.getValue().get(DIGEST_HEADER));
-        assertEquals(JAVA, headersCaptor.getValue().get(YOTI_SDK_HEADER));
-        assertEquals(SDK_VERSION, headersCaptor.getValue().get(YOTI_SDK_VERSION_HEADER));
         assertSame(simpleQrCodeMock, result);
     }
 
