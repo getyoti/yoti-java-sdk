@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @see DynamicScenario
  *
  */
-public class SimpleDynamicScenario implements DynamicScenario {
+class SimpleDynamicScenario implements DynamicScenario {
 
     @JsonProperty("callback_endpoint")
     private final String callbackEndpoint;
@@ -21,7 +21,7 @@ public class SimpleDynamicScenario implements DynamicScenario {
     @JsonProperty("extensions")
     private final List<Extension> extensions;
 
-    public SimpleDynamicScenario(String callbackEndpoint, DynamicPolicy dynamicPolicy, List<Extension> extensions) {
+    SimpleDynamicScenario(String callbackEndpoint, DynamicPolicy dynamicPolicy, List<Extension> extensions) {
         this.callbackEndpoint = callbackEndpoint;
         this.dynamicPolicy = dynamicPolicy;
         this.extensions = extensions;
