@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @see DynamicPolicy
  *
  */
-public class SimpleDynamicPolicy implements DynamicPolicy {
+class SimpleDynamicPolicy implements DynamicPolicy {
 
     @JsonProperty("wanted")
     private final Collection<WantedAttribute> wantedAttributes;
@@ -23,8 +23,7 @@ public class SimpleDynamicPolicy implements DynamicPolicy {
     @JsonProperty("wanted_remember_me_optional")
     private final boolean wantedRememberMeOptional;
 
-    // FIXME: Should this be public?
-    public SimpleDynamicPolicy(Collection<WantedAttribute> wantedAttributes,
+    SimpleDynamicPolicy(Collection<WantedAttribute> wantedAttributes,
             Set<Integer> wantedAuthTypes,
             boolean wantedRememberMe,
             boolean wantedRememberMeOptional) {
