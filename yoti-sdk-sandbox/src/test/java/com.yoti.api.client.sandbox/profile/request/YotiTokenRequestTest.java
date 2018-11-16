@@ -280,6 +280,29 @@ public class YotiTokenRequestTest {
         assertThat(result, hasItem(AttributeMatcher.derivedAttribute(HumanProfileAttributes.DATE_OF_BIRTH, DOB_OVER_18, "age_over:18")));
     }
 
+
+    @Test
+    public void shouldCreateRequestWithMultipleAgeVerifications() {
+        SandboxAgeVerification ageOver = SandboxAgeVerification.builder()
+                .withDateOfBirth(DOB_OVER_18)
+                .withAgeOver(18)
+                .build();
+        SandboxAgeVerification ageUnder = SandboxAgeVerification.builder()
+                .withDateOfBirth(DOB_OVER_18)
+                .withAgeUnder(18)
+                .build();
+        YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
+                .withAgeVerification(ageOver)
+                .withAgeVerification(ageUnder)
+                .build();
+
+        List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
+
+        assertThat(result, hasSize(2));
+        assertThat(result, hasItem(AttributeMatcher.derivedAttribute(HumanProfileAttributes.DATE_OF_BIRTH, DOB_OVER_18, "age_over:18")));
+        assertThat(result, hasItem(AttributeMatcher.derivedAttribute(HumanProfileAttributes.DATE_OF_BIRTH, DOB_OVER_18, "age_under:18")));
+    }
+
     @Test
     public void shouldCreateRequestWithPostalAddress() {
         YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()

@@ -34,19 +34,19 @@ public class Validation {
         return notAllowed.equals(value);
     }
 
-    public static void notGreaterThan(long value, long limit, String name) {
-        if (value > limit) {
+    public static <T extends Comparable> void notGreaterThan(T value, T limit, String name) {
+        if (value.compareTo(limit) > 0) {
             throw new IllegalArgumentException(format("'%s' value '%s' is greater than '%s'", name, value, limit));
         }
     }
 
-    public static void notLessThan(long value, long limit, String name) {
-        if (value < limit) {
+    public static <T extends Comparable> void notLessThan(T value, T limit, String name) {
+        if (value.compareTo(limit) < 0) {
             throw new IllegalArgumentException(format("'%s' value '%s' is less than '%s'", name, value, limit));
         }
     }
 
-    public static void withinRange(long value, long minLimit, long maxLimit, String name) {
+    public static <T extends Comparable> void withinRange(T value, T minLimit, T maxLimit, String name) {
         notLessThan(value, minLimit, name);
         notGreaterThan(value, maxLimit, name);
     }

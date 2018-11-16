@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @see Extension
  *
  */
-public class SimpleExtension implements Extension {
+class SimpleExtension implements Extension {
 
     @JsonProperty("type")
     private final String type;
@@ -16,7 +16,7 @@ public class SimpleExtension implements Extension {
     @JsonProperty("content")
     private final Map<String,?> content;
 
-    public SimpleExtension(String type, Map<String,?> content) {
+    SimpleExtension(String type, Map<String,?> content) {
         this.type = type;
         this.content = content;
     }
