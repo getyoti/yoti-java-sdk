@@ -1,33 +1,27 @@
 package com.yoti.api.client.spi.remote.call;
 
-import static com.yoti.api.client.spi.remote.Base64.base64;
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.AUTH_KEY_HEADER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JSON;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DIGEST_HEADER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.JAVA;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_API_URL;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.SDK_VERSION;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_HEADER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_VERSION_HEADER;
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
-import static org.bouncycastle.cms.CMSAttributeTableGenerator.CONTENT_TYPE;
 
-import com.yoti.api.client.ProfileException;
-import com.yoti.api.client.spi.remote.call.factory.PathFactory;
-import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static com.yoti.api.client.spi.remote.Base64.base64;
+import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_API_URL;
+import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.Security;
-import java.util.HashMap;
 import java.util.Map;
+
+import com.yoti.api.client.ProfileException;
+import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
+import com.yoti.api.client.spi.remote.call.factory.PathFactory;
+import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class RemoteProfileService implements ProfileService {
 
@@ -35,6 +29,7 @@ public final class RemoteProfileService implements ProfileService {
 
     private final ResourceFetcher resourceFetcher;
     private final PathFactory pathFactory;
+    private final HeadersFactory headersFactory;
     private final SignedMessageFactory signedMessageFactory;
     private final String apiUrl;
 
@@ -43,14 +38,20 @@ public final class RemoteProfileService implements ProfileService {
     }
 
     public static RemoteProfileService newInstance() {
-        return new RemoteProfileService(JsonResourceFetcher.newInstance(), new PathFactory(), SignedMessageFactory.newInstance());
+        return new RemoteProfileService(
+                JsonResourceFetcher.newInstance(),
+                new PathFactory(),
+                new HeadersFactory(),
+                SignedMessageFactory.newInstance());
     }
 
     RemoteProfileService(ResourceFetcher resourceFetcher,
                          PathFactory profilePathFactory,
+                         HeadersFactory headersFactory,
                          SignedMessageFactory signedMessageFactory) {
         this.resourceFetcher = resourceFetcher;
         this.pathFactory = profilePathFactory;
+        this.headersFactory = headersFactory;
         this.signedMessageFactory = signedMessageFactory;
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
@@ -76,13 +77,7 @@ public final class RemoteProfileService implements ProfileService {
 
     private Receipt fetchReceipt(String resourcePath, String digest, String authKey) throws IOException, ProfileException {
         LOG.info("Fetching profile from resource at '{}'", resourcePath);
-        Map<String, String> headers = new HashMap<>();
-        headers.put(AUTH_KEY_HEADER, authKey);
-        headers.put(DIGEST_HEADER, digest);
-        headers.put(YOTI_SDK_HEADER, JAVA);
-        headers.put(YOTI_SDK_VERSION_HEADER, SDK_VERSION);
-        headers.put(CONTENT_TYPE, CONTENT_TYPE_JSON);
-
+        Map<String, String> headers = headersFactory.create(digest, authKey);
         UrlConnector urlConnector = UrlConnector.get(apiUrl + resourcePath);
 
         try {
