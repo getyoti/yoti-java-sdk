@@ -138,7 +138,7 @@ public class DynamicSharingServiceTest {
     public void shouldThrowExceptionWithResourceExceptionCause() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenReturn(SOME_SIGNATURE);
-        ResourceException resourceEx = new ResourceException(HTTP_NOT_FOUND, "Test exception");
+        ResourceException resourceEx = new ResourceException(HTTP_NOT_FOUND, "Not found", "Test exception");
         when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleShareUrlResult.class))).thenThrow(resourceEx);
 
         try {
