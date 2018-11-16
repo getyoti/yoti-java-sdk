@@ -1,13 +1,7 @@
 package com.yoti.api.client.spi.remote.call;
 
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.AUTH_KEY_HEADER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DIGEST_HEADER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.JAVA;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.SDK_VERSION;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_API_PATH_PREFIX;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_HEADER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_VERSION_HEADER;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.KEY_PAIR_PEM;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.base64;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
@@ -25,14 +19,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
-import java.security.Security;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.yoti.api.client.ProfileException;
+import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
 import com.yoti.api.client.spi.remote.call.factory.PathFactory;
 import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -55,46 +51,40 @@ public class RemoteProfileServiceTest {
     private static final String TOKEN = "test-token";
     private static final String GENERATED_PROFILE_PATH = "generatedProfilePath";
     private static final String SOME_SIGNATURE = "someSignature";
-
-    static {
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-    }
+    private static final Map<String, String> SOME_HEADERS = new HashMap<>();
+    private static KeyPair KEY_PAIR;
 
     @InjectMocks RemoteProfileService testObj;
 
     @Mock ResourceFetcher resourceFetcherMock;
     @Mock PathFactory pathFactoryMock;
+    @Mock HeadersFactory headersFactoryMock;
     @Mock SignedMessageFactory signedMessageFactoryMock;
 
-    @Captor ArgumentCaptor<Map<String, String>> headersCaptor;
     @Captor ArgumentCaptor<UrlConnector> urlConnectorCaptor;
-    KeyPair keyPair;
+
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+        KEY_PAIR = generateKeyPairFrom(KEY_PAIR_PEM);
+        SOME_HEADERS.put("someKey", "someValue");
+    }
 
     @Before
-    public void setUp() throws Exception {
-        keyPair = generateKeyPairFrom(KEY_PAIR_PEM);
-
+    public void setUp() {
         when(pathFactoryMock.createProfilePath(APP_ID, TOKEN)).thenReturn(GENERATED_PROFILE_PATH);
+        when(headersFactoryMock.create(SOME_SIGNATURE, base64(KEY_PAIR.getPublic().getEncoded()))).thenReturn(SOME_HEADERS);
     }
 
     @Test
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
-        when(signedMessageFactoryMock.create(keyPair.getPrivate(), HTTP_GET, GENERATED_PROFILE_PATH)).thenReturn(SOME_SIGNATURE);
-        when(resourceFetcherMock.fetchResource(any(UrlConnector.class), any(Map.class), eq(ProfileResponse.class))).thenReturn(PROFILE_RESPONSE);
+        when(signedMessageFactoryMock.create(KEY_PAIR.getPrivate(), HTTP_GET, GENERATED_PROFILE_PATH)).thenReturn(SOME_SIGNATURE);
+        when(resourceFetcherMock.fetchResource(any(UrlConnector.class), eq(SOME_HEADERS), eq(ProfileResponse.class))).thenReturn(PROFILE_RESPONSE);
 
-        Receipt result = testObj.getReceipt(keyPair, APP_ID, TOKEN);
+        Receipt result = testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);
 
-        verify(resourceFetcherMock).fetchResource(urlConnectorCaptor.capture(), headersCaptor.capture(), eq(ProfileResponse.class));
+        verify(resourceFetcherMock).fetchResource(urlConnectorCaptor.capture(), eq(SOME_HEADERS), eq(ProfileResponse.class));
         assertUrl(urlConnectorCaptor.getValue());
-        assertHeaders(headersCaptor.getValue());
         assertSame(RECEIPT, result);
-    }
-
-    private void assertHeaders(Map<String, String> headers) throws Exception {
-        assertEquals(base64(keyPair.getPublic().getEncoded()), headers.get(AUTH_KEY_HEADER));
-        assertEquals(SOME_SIGNATURE, headers.get(DIGEST_HEADER));
-        assertEquals(JAVA, headers.get(YOTI_SDK_HEADER));
-        assertEquals(SDK_VERSION, headers.get(YOTI_SDK_VERSION_HEADER));
     }
 
     private void assertUrl(UrlConnector urlConnector) throws MalformedURLException {
@@ -105,10 +95,10 @@ public class RemoteProfileServiceTest {
     @Test
     public void shouldWrapSecurityExceptionInProfileException() throws Exception {
         GeneralSecurityException securityException = new GeneralSecurityException();
-        when(signedMessageFactoryMock.create(keyPair.getPrivate(), HTTP_GET, GENERATED_PROFILE_PATH)).thenThrow(securityException);
+        when(signedMessageFactoryMock.create(KEY_PAIR.getPrivate(), HTTP_GET, GENERATED_PROFILE_PATH)).thenThrow(securityException);
 
         try {
-            testObj.getReceipt(keyPair, APP_ID, TOKEN);
+            testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);
             fail("Expected a ProfileException");
         } catch (ProfileException e) {
             assertSame(securityException, e.getCause());
@@ -116,12 +106,13 @@ public class RemoteProfileServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionForIOError() throws IOException, GeneralSecurityException, ProfileException, ResourceException {
+    public void shouldThrowExceptionForIOError() throws Exception {
         IOException ioException = new IOException("Test exception");
-        when(resourceFetcherMock.fetchResource(any(UrlConnector.class), any(Map.class), eq(ProfileResponse.class))).thenThrow(ioException);
+        when(signedMessageFactoryMock.create(KEY_PAIR.getPrivate(), HTTP_GET, GENERATED_PROFILE_PATH)).thenReturn(SOME_SIGNATURE);
+        when(resourceFetcherMock.fetchResource(any(UrlConnector.class), eq(SOME_HEADERS), eq(ProfileResponse.class))).thenThrow(ioException);
 
         try {
-            testObj.getReceipt(keyPair, APP_ID, TOKEN);
+            testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);
             fail("Expected a ProfileException");
         } catch (ProfileException e) {
             assertSame(ioException, e.getCause());
@@ -131,10 +122,11 @@ public class RemoteProfileServiceTest {
     @Test
     public void shouldThrowExceptionWithResourceExceptionCause() throws Throwable {
         ResourceException resourceException = new ResourceException(404, "Not Found", "Test exception");
-        when(resourceFetcherMock.fetchResource(any(UrlConnector.class), any(Map.class), eq(ProfileResponse.class))).thenThrow(resourceException);
+        when(signedMessageFactoryMock.create(KEY_PAIR.getPrivate(), HTTP_GET, GENERATED_PROFILE_PATH)).thenReturn(SOME_SIGNATURE);
+        when(resourceFetcherMock.fetchResource(any(UrlConnector.class), eq(SOME_HEADERS), eq(ProfileResponse.class))).thenThrow(resourceException);
 
         try {
-            testObj.getReceipt(keyPair, APP_ID, TOKEN);
+            testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);
             fail("Expected a ProfileException");
         } catch (ProfileException e) {
             assertSame(resourceException, e.getCause());
@@ -142,18 +134,18 @@ public class RemoteProfileServiceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shouldFailWithNullKeyPair() throws IOException, GeneralSecurityException, ProfileException {
+    public void shouldFailWithNullKeyPair() throws Exception {
         testObj.getReceipt(null, APP_ID, TOKEN);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shouldFailWithNullAppId() throws IOException, GeneralSecurityException, ProfileException {
-        testObj.getReceipt(keyPair, null, TOKEN);
+    public void shouldFailWithNullAppId() throws Exception {
+        testObj.getReceipt(KEY_PAIR, null, TOKEN);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shouldFailWithNullConnectToken() throws IOException, GeneralSecurityException, ProfileException {
-        testObj.getReceipt(keyPair, APP_ID, null);
+    public void shouldFailWithNullConnectToken() throws Exception {
+        testObj.getReceipt(KEY_PAIR, APP_ID, null);
     }
 
 }
