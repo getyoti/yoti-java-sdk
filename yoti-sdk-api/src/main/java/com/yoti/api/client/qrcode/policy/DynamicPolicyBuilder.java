@@ -19,29 +19,55 @@ public abstract class DynamicPolicyBuilder {
 
     public abstract DynamicPolicyBuilder withFamilyName(boolean optional);
 
+    public abstract DynamicPolicyBuilder withFamilyName();
+
     public abstract DynamicPolicyBuilder withGivenNames(boolean optional);
+
+    public abstract DynamicPolicyBuilder withGivenNames();
 
     public abstract DynamicPolicyBuilder withFullName(boolean optional);
 
+    public abstract DynamicPolicyBuilder withFullName();
+
     public abstract DynamicPolicyBuilder withDateOfBirth(boolean optional);
+
+    public abstract DynamicPolicyBuilder withDateOfBirth();
 
     public abstract DynamicPolicyBuilder withAgeOver(boolean optional, int age);
 
+    public abstract DynamicPolicyBuilder withAgeOver(int age);
+
     public abstract DynamicPolicyBuilder withAgeUnder(boolean optional, int age);
+
+    public abstract DynamicPolicyBuilder withAgeUnder(int age);
 
     public abstract DynamicPolicyBuilder withGender(boolean optional);
 
+    public abstract DynamicPolicyBuilder withGender();
+
     public abstract DynamicPolicyBuilder withPostalAddress(boolean optional);
+
+    public abstract DynamicPolicyBuilder withPostalAddress();
 
     public abstract DynamicPolicyBuilder withStructuredPostalAddress(boolean optional);
 
+    public abstract DynamicPolicyBuilder withStructuredPostalAddress();
+
     public abstract DynamicPolicyBuilder withNationality(boolean optional);
+
+    public abstract DynamicPolicyBuilder withNationality();
 
     public abstract DynamicPolicyBuilder withPhoneNumber(boolean optional);
 
+    public abstract DynamicPolicyBuilder withPhoneNumber();
+
     public abstract DynamicPolicyBuilder withSelfie(boolean optional);
 
+    public abstract DynamicPolicyBuilder withSelfie();
+
     public abstract DynamicPolicyBuilder withEmail(boolean optional);
+
+    public abstract DynamicPolicyBuilder withEmail();
 
     public abstract DynamicPolicyBuilder withSelfieAuthorisation();
 
