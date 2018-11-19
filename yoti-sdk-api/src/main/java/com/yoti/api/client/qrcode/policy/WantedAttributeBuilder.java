@@ -7,7 +7,7 @@ public abstract class WantedAttributeBuilder {
     public static final WantedAttributeBuilder newInstance() {
         ServiceLoader<WantedAttributeBuilder> wantedAttributeBuilderLoader = ServiceLoader.load(WantedAttributeBuilder.class);
         if (!wantedAttributeBuilderLoader.iterator().hasNext()) {
-            throw new IllegalStateException("Cannot find any implementation of WantedAttributeBuilder");
+            throw new IllegalStateException("Cannot find any implementation of " + WantedAttributeBuilder.class.getSimpleName());
         }
         WantedAttributeBuilder wantedAttributeBuilder = wantedAttributeBuilderLoader.iterator().next();
         return wantedAttributeBuilder.createWantedAttributeBuilder();

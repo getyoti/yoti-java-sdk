@@ -6,7 +6,7 @@ import java.util.Map;
  * Type and content of a feature for an application
  *
  */
-public interface Extension {
+public interface Extension <T> {
 
     /**
      * Get the feature's type
@@ -20,6 +20,6 @@ public interface Extension {
      *
      * @return the payload of the operation
      */
-    Map<String, ?> getContent();
+    T getContent();
 
 }
