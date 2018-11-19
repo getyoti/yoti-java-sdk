@@ -47,6 +47,36 @@ public class SimpleDynamicPolicyBuilderTest {
     @Test
     public void buildsWithSimpleAttributes() {
         DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+                .withFamilyName()
+                .withGivenNames()
+                .withFullName()
+                .withDateOfBirth()
+                .withGender()
+                .withPostalAddress()
+                .withStructuredPostalAddress()
+                .withNationality()
+                .withPhoneNumber()
+                .withSelfie()
+                .withEmail()
+                .build();
+
+        assertThat(result.getWantedAttributes(), hasSize(11));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(FAMILY_NAME, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(GIVEN_NAMES, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(FULL_NAME, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(DATE_OF_BIRTH, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(GENDER, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(POSTAL_ADDRESS, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(STRUCTURED_POSTAL_ADDRESS, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(NATIONALITY, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(PHONE_NUMBER, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(SELFIE, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(EMAIL_ADDRESS, false)));
+    }
+
+    @Test
+    public void buildsWithSimpleAttributesAndOptionalFlag() {
+        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
                 .withFamilyName(true)
                 .withGivenNames(true)
                 .withFullName(true)
@@ -77,17 +107,33 @@ public class SimpleDynamicPolicyBuilderTest {
     @Test
     public void buildsWithMultipleAgeDerivedAttributes() {
         DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+                .withDateOfBirth()
+                .withAgeOver(18)
+                .withAgeUnder(30)
+                .withAgeUnder(40)
+                .build();
+
+        assertThat(result.getWantedAttributes(), hasSize(4));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(DATE_OF_BIRTH, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(DATE_OF_BIRTH, AGE_OVER + 18, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(DATE_OF_BIRTH, AGE_UNDER + 30, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(DATE_OF_BIRTH, AGE_UNDER + 40, false)));
+    }
+
+    @Test
+    public void buildsWithMultipleAgeDerivedAttributesAndOptionalFlag() {
+        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
                 .withDateOfBirth(true)
-                .withAgeOver(false, 18)
+                .withAgeOver(true, 18)
                 .withAgeUnder(true, 30)
-                .withAgeUnder(false, 40)
+                .withAgeUnder(true, 40)
                 .build();
 
         assertThat(result.getWantedAttributes(), hasSize(4));
         assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(DATE_OF_BIRTH, true)));
-        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(DATE_OF_BIRTH, AGE_OVER + 18, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(DATE_OF_BIRTH, AGE_OVER + 18, true)));
         assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(DATE_OF_BIRTH, AGE_UNDER + 30, true)));
-        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(DATE_OF_BIRTH, AGE_UNDER + 40, false)));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(DATE_OF_BIRTH, AGE_UNDER + 40, true)));
     }
 
     @Test
