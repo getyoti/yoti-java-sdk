@@ -38,8 +38,18 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
     }
 
     @Override
+    public DynamicPolicyBuilder withFamilyName() {
+        return withFamilyName(false);
+    }
+
+    @Override
     public DynamicPolicyBuilder withFamilyName(boolean optional) {
         return withWantedAttribute(optional, AttributeConstants.HumanProfileAttributes.FAMILY_NAME);
+    }
+
+    @Override
+    public DynamicPolicyBuilder withGivenNames() {
+        return withGivenNames(false);
     }
 
     @Override
@@ -48,8 +58,18 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
     }
 
     @Override
+    public DynamicPolicyBuilder withFullName() {
+        return withFullName(false);
+    }
+
+    @Override
     public DynamicPolicyBuilder withFullName(boolean optional) {
         return withWantedAttribute(optional, AttributeConstants.HumanProfileAttributes.FULL_NAME);
+    }
+
+    @Override
+    public DynamicPolicyBuilder withDateOfBirth() {
+        return withDateOfBirth(false);
     }
 
     @Override
@@ -58,8 +78,18 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
     }
 
     @Override
+    public DynamicPolicyBuilder withAgeOver(int age) {
+        return withAgeOver(false, age);
+    }
+
+    @Override
     public DynamicPolicyBuilder withAgeOver(boolean optional, int age) {
         return withAgeDerivedAttribute(optional, AttributeConstants.HumanProfileAttributes.AGE_OVER + age);
+    }
+
+    @Override
+    public DynamicPolicyBuilder withAgeUnder(int age) {
+        return withAgeUnder(false, age);
     }
 
     @Override
@@ -77,8 +107,18 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
     }
 
     @Override
+    public DynamicPolicyBuilder withGender() {
+        return withGender(false);
+    }
+
+    @Override
     public DynamicPolicyBuilder withGender(boolean optional) {
         return withWantedAttribute(optional, AttributeConstants.HumanProfileAttributes.GENDER);
+    }
+
+    @Override
+    public DynamicPolicyBuilder withPostalAddress() {
+        return withPostalAddress(false);
     }
 
     @Override
@@ -87,8 +127,18 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
     }
 
     @Override
+    public DynamicPolicyBuilder withStructuredPostalAddress() {
+        return withStructuredPostalAddress(false);
+    }
+
+    @Override
     public DynamicPolicyBuilder withStructuredPostalAddress(boolean optional) {
         return withWantedAttribute(optional, AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS);
+    }
+
+    @Override
+    public DynamicPolicyBuilder withNationality() {
+        return withNationality(false);
     }
 
     @Override
@@ -97,13 +147,28 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
     }
 
     @Override
+    public DynamicPolicyBuilder withPhoneNumber() {
+        return withPhoneNumber(false);
+    }
+
+    @Override
     public DynamicPolicyBuilder withPhoneNumber(boolean optional) {
         return withWantedAttribute(optional, AttributeConstants.HumanProfileAttributes.PHONE_NUMBER);
     }
 
     @Override
+    public DynamicPolicyBuilder withSelfie() {
+        return withSelfie(false);
+    }
+
+    @Override
     public DynamicPolicyBuilder withSelfie(boolean optional) {
         return withWantedAttribute(optional, AttributeConstants.HumanProfileAttributes.SELFIE);
+    }
+
+    @Override
+    public DynamicPolicyBuilder withEmail() {
+        return withEmail(false);
     }
 
     @Override
