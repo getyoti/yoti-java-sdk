@@ -2,7 +2,7 @@ package com.yoti.api.client;
 
 import com.yoti.api.client.aml.AmlProfile;
 import com.yoti.api.client.aml.AmlResult;
-import com.yoti.api.client.qrcode.QrCode;
+import com.yoti.api.client.qrcode.QrCodeResult;
 import com.yoti.api.client.qrcode.DynamicScenario;
 import com.yoti.api.client.qrcode.QRCodeException;
 
@@ -50,12 +50,12 @@ public interface YotiClient {
      * @param  dynamicScenario
      *             Details of the device's callback endpoint, dynamic policy and extensions for the application
      *
-     * @return an {@link QrCode}
+     * @return an {@link QrCodeResult}
      *             QRCode and reference id
      *
      * @throws QRCodeException
      *             aggregate exception signalling issues during the call
      */
-    QrCode requestQRCode(DynamicScenario dynamicScenario) throws QRCodeException;
+    QrCodeResult requestQRCode(DynamicScenario dynamicScenario) throws QRCodeException;
 
 }

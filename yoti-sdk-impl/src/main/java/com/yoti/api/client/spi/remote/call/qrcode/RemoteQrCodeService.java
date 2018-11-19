@@ -60,7 +60,7 @@ public class RemoteQrCodeService {
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
 
-    public SimpleQrCode requestQRCode(String appId, KeyPair keyPair, DynamicScenario dynamicScenario) throws QRCodeException {
+    public SimpleQrCodeResult requestQRCode(String appId, KeyPair keyPair, DynamicScenario dynamicScenario) throws QRCodeException {
         notNull(appId, "Application id");
         notNull(keyPair, "Application key Pair");
         notNull(dynamicScenario, "Dynamic scenario");
@@ -73,7 +73,7 @@ public class RemoteQrCodeService {
             String digest = signedMessageFactory.create(keyPair.getPrivate(), HTTP_POST, path, body);
             Map<String, String> headers = headersFactory.create(digest);
             UrlConnector urlConnector = UrlConnector.get(apiUrl + path);
-            return resourceFetcher.postResource(urlConnector, body, headers, SimpleQrCode.class);
+            return resourceFetcher.postResource(urlConnector, body, headers, SimpleQrCodeResult.class);
 
         } catch (GeneralSecurityException ex) {
             throw new QRCodeException("Error signing the request: ", ex);

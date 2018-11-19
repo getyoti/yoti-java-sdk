@@ -61,7 +61,7 @@ public class RemoteQrCodeServiceTest {
     @Mock SignedMessageFactory signedMessageFactoryMock;
 
     @Mock DynamicScenario simpleDynamicScenarioMock;
-    @Mock SimpleQrCode simpleQrCodeMock;
+    @Mock SimpleQrCodeResult simpleQrCodeResultMock;
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPairMock;
 
     @Captor ArgumentCaptor<UrlConnector> urlConnectorCaptor;
@@ -124,7 +124,7 @@ public class RemoteQrCodeServiceTest {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenReturn(SOME_SIGNATURE);
         IOException ioException = new IOException();
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCode.class))).thenThrow(ioException);
+        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCodeResult.class))).thenThrow(ioException);
 
         try {
             testObj.requestQRCode(APP_ID, keyPairMock, simpleDynamicScenarioMock);
@@ -139,7 +139,7 @@ public class RemoteQrCodeServiceTest {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenReturn(SOME_SIGNATURE);
         ResourceException resourceEx = new ResourceException(HTTP_NOT_FOUND, "Test exception");
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCode.class))).thenThrow(resourceEx);
+        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCodeResult.class))).thenThrow(resourceEx);
 
         try {
             testObj.requestQRCode(APP_ID, keyPairMock, simpleDynamicScenarioMock);
@@ -153,14 +153,14 @@ public class RemoteQrCodeServiceTest {
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenReturn(SOME_SIGNATURE);
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCode.class)))
-                .thenReturn(simpleQrCodeMock);
+        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCodeResult.class)))
+                .thenReturn(simpleQrCodeResultMock);
 
-        SimpleQrCode result = testObj.requestQRCode(APP_ID, keyPairMock, simpleDynamicScenarioMock);
+        SimpleQrCodeResult result = testObj.requestQRCode(APP_ID, keyPairMock, simpleDynamicScenarioMock);
 
-        verify(resourceFetcherMock).postResource(urlConnectorCaptor.capture(), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCode.class));
+        verify(resourceFetcherMock).postResource(urlConnectorCaptor.capture(), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCodeResult.class));
         assertEquals(YOTI_API_PATH_PREFIX + DYNAMIC_QRCODE_PATH, getPath(urlConnectorCaptor.getValue()));
-        assertSame(simpleQrCodeMock, result);
+        assertSame(simpleQrCodeResultMock, result);
     }
 
     private String getPath(UrlConnector urlConnector) throws Exception {

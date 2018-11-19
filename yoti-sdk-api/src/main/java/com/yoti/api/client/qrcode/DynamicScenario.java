@@ -5,7 +5,7 @@ import com.yoti.api.client.qrcode.extension.Extension;
 import com.yoti.api.client.qrcode.policy.DynamicPolicy;
 
 /**
- * Data required for the {@link QrCode} generation
+ * Data required for the QrCode generation
  *
  */
 public interface DynamicScenario {
@@ -17,7 +17,7 @@ public interface DynamicScenario {
     String callbackEndpoint();
 
     /**
-     * The customisable {@link DynamicPolicy} for the {@link QrCode}
+     * The customisable {@link DynamicPolicy} for the QrCode
      *
      */
     DynamicPolicy policy();
