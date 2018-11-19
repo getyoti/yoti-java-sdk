@@ -7,7 +7,7 @@ public abstract class DynamicPolicyBuilder {
     public static final DynamicPolicyBuilder newInstance() {
         ServiceLoader<DynamicPolicyBuilder> dynamicPolicyBuilderLoader = ServiceLoader.load(DynamicPolicyBuilder.class);
         if (!dynamicPolicyBuilderLoader.iterator().hasNext()) {
-            throw new IllegalStateException("Cannot find any implementation of DynamicPolicyBuilder");
+            throw new IllegalStateException("Cannot find any implementation of " + DynamicPolicyBuilder.class.getSimpleName());
         }
         DynamicPolicyBuilder dynamicPolicyBuilder = dynamicPolicyBuilderLoader.iterator().next();
         return dynamicPolicyBuilder.createDynamicPolicyBuilder();

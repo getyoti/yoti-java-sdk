@@ -1,22 +1,20 @@
 package com.yoti.api.client.qrcode.extension;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @see Extension
  *
  */
-class SimpleExtension implements Extension {
+class SimpleExtension<T> implements Extension<T> {
 
     @JsonProperty("type")
     private final String type;
 
     @JsonProperty("content")
-    private final Map<String,?> content;
+    private final T content;
 
-    SimpleExtension(String type, Map<String,?> content) {
+    SimpleExtension(String type, T content) {
         this.type = type;
         this.content = content;
     }
@@ -35,7 +33,7 @@ class SimpleExtension implements Extension {
      *
      */
     @Override
-    public Map<String, ?> getContent() {
+    public T getContent() {
         return content;
     }
 
