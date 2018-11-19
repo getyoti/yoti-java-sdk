@@ -10,7 +10,7 @@ public abstract class DynamicScenarioBuilder {
     public static final DynamicScenarioBuilder newInstance() {
         ServiceLoader<DynamicScenarioBuilder> dynamicScenarioBuilderLoader = ServiceLoader.load(DynamicScenarioBuilder.class);
         if (!dynamicScenarioBuilderLoader.iterator().hasNext()) {
-            throw new IllegalStateException("Cannot find any implementation of DynamicScenarioBuilder");
+            throw new IllegalStateException("Cannot find any implementation of " + DynamicScenarioBuilder.class.getSimpleName());
         }
         DynamicScenarioBuilder dynamicScenarioBuilder = dynamicScenarioBuilderLoader.iterator().next();
         return dynamicScenarioBuilder.createDynamicScenarioBuilder();
