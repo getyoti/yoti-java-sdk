@@ -1,20 +1,21 @@
 package com.yoti.api.client.spi.remote.call.qrcode;
 
-import com.yoti.api.client.qrcode.QrCodeResult;
+import com.yoti.api.client.qrcode.ShareUrlResult;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleQrCodeResult implements QrCodeResult {
+public class SimpleShareUrlResult implements ShareUrlResult {
 
     @JsonProperty("qrcode")
-    private String qrCodeUrl;
+    private String shareUrl;
 
     @JsonProperty("ref_id")
     private String refId;
 
-    public String getQrCodeUrl() {
-        return qrCodeUrl;
+    public String getShareUrl() {
+        return shareUrl;
     }
 
     public String getRefId() {
@@ -23,8 +24,8 @@ public class SimpleQrCodeResult implements QrCodeResult {
 
     @Override
     public String toString() {
-        return "SimpleQrCodeResult{" +
-                "qrCodeUrl='" + qrCodeUrl + '\'' +
+        return "SimpleShareUrlResult{" +
+                "shareUrl='" + shareUrl + '\'' +
                 ", refId='" + refId + '\'' +
                 '}';
     }

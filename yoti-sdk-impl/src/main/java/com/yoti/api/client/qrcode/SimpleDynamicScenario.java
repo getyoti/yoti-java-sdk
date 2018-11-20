@@ -15,7 +15,7 @@ class SimpleDynamicScenario implements DynamicScenario {
     @JsonProperty("callback_endpoint")
     private final String callbackEndpoint;
 
-    @JsonProperty("dynamicPolicy")
+    @JsonProperty("policy")
     private final DynamicPolicy dynamicPolicy;
 
     @JsonProperty("extensions")

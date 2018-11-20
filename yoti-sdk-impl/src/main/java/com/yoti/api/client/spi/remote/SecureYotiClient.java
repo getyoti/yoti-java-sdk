@@ -14,12 +14,12 @@ import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.YotiClient;
 import com.yoti.api.client.aml.AmlProfile;
 import com.yoti.api.client.aml.AmlResult;
-import com.yoti.api.client.qrcode.QrCodeResult;
+import com.yoti.api.client.qrcode.DynamicShareException;
+import com.yoti.api.client.qrcode.ShareUrlResult;
 import com.yoti.api.client.qrcode.DynamicScenario;
-import com.yoti.api.client.qrcode.QRCodeException;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
-import com.yoti.api.client.spi.remote.call.qrcode.RemoteQrCodeService;
+import com.yoti.api.client.spi.remote.call.qrcode.DynamicSharingService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ final class SecureYotiClient implements YotiClient {
     private final ReceiptFetcher receiptFetcher;
     private final RemoteAmlService remoteAmlService;
     private final ActivityDetailsFactory activityDetailsFactory;
-    private final RemoteQrCodeService remoteQrCodeService;
+    private final DynamicSharingService dynamicSharingService;
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
@@ -47,13 +47,13 @@ final class SecureYotiClient implements YotiClient {
             ReceiptFetcher receiptFetcher,
             ActivityDetailsFactory activityDetailsFactory,
             RemoteAmlService remoteAmlService,
-            RemoteQrCodeService remoteQrCodeService) throws InitialisationException {
+            DynamicSharingService dynamicSharingService) throws InitialisationException {
         this.appId = notNull(applicationId, "Application id");
         this.keyPair = loadKeyPair(notNull(kpSource, "Key pair source"));
         this.receiptFetcher = notNull(receiptFetcher, "receiptFetcher");
         this.remoteAmlService = notNull(remoteAmlService, "amlService");
         this.activityDetailsFactory = notNull(activityDetailsFactory, "activityDetailsFactory");
-        this.remoteQrCodeService = notNull(remoteQrCodeService, "QR Code service");
+        this.dynamicSharingService = notNull(dynamicSharingService, "QR Code service");
     }
 
     @Override
@@ -69,9 +69,9 @@ final class SecureYotiClient implements YotiClient {
     }
 
     @Override
-    public QrCodeResult requestQRCode(DynamicScenario dynamicScenario) throws QRCodeException {
-        LOG.debug("Requesting a QRCode...");
-        return remoteQrCodeService.requestQRCode(appId, keyPair, dynamicScenario);
+    public ShareUrlResult createShareUrl(DynamicScenario dynamicScenario) throws DynamicShareException {
+        LOG.debug("Request a share url for a dynamicScenario...");
+        return dynamicSharingService.createShareUrl(appId, keyPair, dynamicScenario);
     }
 
     private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {

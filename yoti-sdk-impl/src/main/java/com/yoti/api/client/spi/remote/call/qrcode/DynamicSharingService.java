@@ -12,7 +12,7 @@ import java.security.KeyPair;
 import java.util.Map;
 
 import com.yoti.api.client.qrcode.DynamicScenario;
-import com.yoti.api.client.qrcode.QRCodeException;
+import com.yoti.api.client.qrcode.DynamicShareException;
 import com.yoti.api.client.spi.remote.call.JsonResourceFetcher;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.ResourceFetcher;
@@ -25,10 +25,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RemoteQrCodeService {
+public class DynamicSharingService {
 
-    public static RemoteQrCodeService newInstance() {
-        return new RemoteQrCodeService(
+    public static DynamicSharingService newInstance() {
+        return new DynamicSharingService(
                 new PathFactory(),
                 new HeadersFactory(),
                 new ObjectMapper(),
@@ -36,7 +36,7 @@ public class RemoteQrCodeService {
                 SignedMessageFactory.newInstance());
     }
 
-    private static final Logger LOG = LoggerFactory.getLogger(RemoteQrCodeService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DynamicSharingService.class);
 
     private final PathFactory pathFactory;
     private final HeadersFactory headersFactory;
@@ -46,7 +46,7 @@ public class RemoteQrCodeService {
 
     private final String apiUrl;
 
-    public RemoteQrCodeService(PathFactory pathFactory,
+    public DynamicSharingService(PathFactory pathFactory,
             HeadersFactory headersFactory,
             ObjectMapper objectMapper,
             ResourceFetcher resourceFetcher,
@@ -60,12 +60,12 @@ public class RemoteQrCodeService {
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
 
-    public SimpleQrCodeResult requestQRCode(String appId, KeyPair keyPair, DynamicScenario dynamicScenario) throws QRCodeException {
+    public SimpleShareUrlResult createShareUrl(String appId, KeyPair keyPair, DynamicScenario dynamicScenario) throws DynamicShareException {
         notNull(appId, "Application id");
         notNull(keyPair, "Application key Pair");
         notNull(dynamicScenario, "Dynamic scenario");
 
-        String path = pathFactory.createQrCodePath(appId);
+        String path = pathFactory.createDynamicSharingPath(appId);
         LOG.info("Requesting Dynamic QR Code at {}", path);
 
         try {
@@ -73,16 +73,16 @@ public class RemoteQrCodeService {
             String digest = signedMessageFactory.create(keyPair.getPrivate(), HTTP_POST, path, body);
             Map<String, String> headers = headersFactory.create(digest);
             UrlConnector urlConnector = UrlConnector.get(apiUrl + path);
-            return resourceFetcher.postResource(urlConnector, body, headers, SimpleQrCodeResult.class);
+            return resourceFetcher.postResource(urlConnector, body, headers, SimpleShareUrlResult.class);
 
         } catch (GeneralSecurityException ex) {
-            throw new QRCodeException("Error signing the request: ", ex);
+            throw new DynamicShareException("Error signing the request: ", ex);
         } catch (ResourceException ex) {
-            throw new QRCodeException("Error posting the request: ", ex);
+            throw new DynamicShareException("Error posting the request: ", ex);
         } catch (IOException ex) {
-            throw new QRCodeException("Error building the request: ", ex);
+            throw new DynamicShareException("Error building the request: ", ex);
         } catch (Exception ex) {
-            throw new QRCodeException("Error requesting the Dynamic QRCode: ", ex);
+            throw new DynamicShareException("Error initiating the share: ", ex);
         }
     }
 

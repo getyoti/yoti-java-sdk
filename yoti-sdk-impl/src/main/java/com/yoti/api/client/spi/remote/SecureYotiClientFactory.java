@@ -5,7 +5,7 @@ import com.yoti.api.client.YotiClient;
 import com.yoti.api.client.YotiClientConfiguration;
 import com.yoti.api.client.YotiClientFactory;
 import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
-import com.yoti.api.client.spi.remote.call.qrcode.RemoteQrCodeService;
+import com.yoti.api.client.spi.remote.call.qrcode.DynamicSharingService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ public final class SecureYotiClientFactory implements YotiClientFactory {
                 ReceiptFetcher.newInstance(),
                 ActivityDetailsFactory.newInstance(),
                 RemoteAmlService.newInstance(),
-                RemoteQrCodeService.newInstance()
+                DynamicSharingService.newInstance()
         );
     }
 
