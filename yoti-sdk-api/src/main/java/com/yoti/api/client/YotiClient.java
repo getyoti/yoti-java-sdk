@@ -2,9 +2,9 @@ package com.yoti.api.client;
 
 import com.yoti.api.client.aml.AmlProfile;
 import com.yoti.api.client.aml.AmlResult;
-import com.yoti.api.client.qrcode.QrCodeResult;
+import com.yoti.api.client.qrcode.DynamicShareException;
+import com.yoti.api.client.qrcode.ShareUrlResult;
 import com.yoti.api.client.qrcode.DynamicScenario;
-import com.yoti.api.client.qrcode.QRCodeException;
 
 /**
  * <p>
@@ -45,17 +45,17 @@ public interface YotiClient {
     AmlResult performAmlCheck(AmlProfile amlProfile) throws AmlException;
 
     /**
-     * Request a dynamic QRCode for a customised policy
+     * Initiate a sharing process based on a dynamic scenario and policy
      *
      * @param  dynamicScenario
      *             Details of the device's callback endpoint, dynamic policy and extensions for the application
      *
-     * @return an {@link QrCodeResult}
-     *             QRCode and reference id
+     * @return an {@link ShareUrlResult}
+     *             sharing url and reference id
      *
-     * @throws QRCodeException
+     * @throws DynamicShareException
      *             aggregate exception signalling issues during the call
      */
-    QrCodeResult requestQRCode(DynamicScenario dynamicScenario) throws QRCodeException;
+    ShareUrlResult createShareUrl(DynamicScenario dynamicScenario) throws DynamicShareException;
 
 }

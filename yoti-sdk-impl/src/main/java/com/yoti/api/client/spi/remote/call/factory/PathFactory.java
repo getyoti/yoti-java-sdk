@@ -18,7 +18,7 @@ public class PathFactory {
         return format(AML_PATH_TEMPLATE, appId, randomUUID(), createTimestamp());
     }
 
-    public String createQrCodePath(String appId) {
+    public String createDynamicSharingPath(String appId) {
         return format(QR_CODE_PATH_TEMPLATE, appId, randomUUID(), createTimestamp());
     }
 

@@ -5,19 +5,19 @@ import com.yoti.api.client.qrcode.extension.Extension;
 import com.yoti.api.client.qrcode.policy.DynamicPolicy;
 
 /**
- * Data required for the QrCode generation
+ * Data required when initiating a dynamic share
  *
  */
 public interface DynamicScenario {
 
     /**
-     * The device's callback endpoint
+     * The device's callback endpoint.  Must be a URL relative to the Application Domain specified in your Dashboard
      *
      */
     String callbackEndpoint();
 
     /**
-     * The customisable {@link DynamicPolicy} for the QrCode
+     * The customisable {@link DynamicPolicy} to use in the share
      *
      */
     DynamicPolicy policy();

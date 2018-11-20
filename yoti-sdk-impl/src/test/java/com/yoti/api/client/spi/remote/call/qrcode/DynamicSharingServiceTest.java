@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.yoti.api.client.qrcode.DynamicScenario;
-import com.yoti.api.client.qrcode.QRCodeException;
+import com.yoti.api.client.qrcode.DynamicShareException;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.ResourceFetcher;
 import com.yoti.api.client.spi.remote.call.UrlConnector;
@@ -43,7 +43,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RemoteQrCodeServiceTest {
+public class DynamicSharingServiceTest {
 
     private static final String APP_ID = "appId";
     private static final String DYNAMIC_QRCODE_PATH = "dynamicQRCodePath";
@@ -52,7 +52,7 @@ public class RemoteQrCodeServiceTest {
     private static final String SOME_SIGNATURE = "someSignature";
     private static final Map<String, String> SOME_HEADERS = new HashMap<>();
 
-    @InjectMocks RemoteQrCodeService testObj;
+    @InjectMocks DynamicSharingService testObj;
 
     @Mock PathFactory pathFactoryMock;
     @Mock HeadersFactory headersFactoryMock;
@@ -61,7 +61,7 @@ public class RemoteQrCodeServiceTest {
     @Mock SignedMessageFactory signedMessageFactoryMock;
 
     @Mock DynamicScenario simpleDynamicScenarioMock;
-    @Mock SimpleQrCodeResult simpleQrCodeResultMock;
+    @Mock SimpleShareUrlResult simpleShareUrlResultMock;
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPairMock;
 
     @Captor ArgumentCaptor<UrlConnector> urlConnectorCaptor;
@@ -73,48 +73,48 @@ public class RemoteQrCodeServiceTest {
 
     @Before
     public void setUp() {
-        when(pathFactoryMock.createQrCodePath(APP_ID)).thenReturn(DYNAMIC_QRCODE_PATH);
+        when(pathFactoryMock.createDynamicSharingPath(APP_ID)).thenReturn(DYNAMIC_QRCODE_PATH);
         when(headersFactoryMock.create(SOME_SIGNATURE)).thenReturn(SOME_HEADERS);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWithNullAppId() throws Exception {
-        testObj.requestQRCode(null, keyPairMock, simpleDynamicScenarioMock);
+        testObj.createShareUrl(null, keyPairMock, simpleDynamicScenarioMock);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWithNullKeyPair() throws Exception {
-        testObj.requestQRCode(APP_ID, null, simpleDynamicScenarioMock);
+        testObj.createShareUrl(APP_ID, null, simpleDynamicScenarioMock);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWithNullDynamicScenario() throws Exception {
-        testObj.requestQRCode(APP_ID, keyPairMock, null);
+        testObj.createShareUrl(APP_ID, keyPairMock, null);
     }
 
     @Test
-    public void shouldThrowQRCodeExceptionWhenParsingFails() throws Exception {
+    public void shouldThrowDynamicShareExceptionWhenParsingFails() throws Exception {
         JsonProcessingException jsonProcessingException = new JsonProcessingException("") {};
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenThrow(jsonProcessingException);
 
         try {
-            testObj.requestQRCode(APP_ID, keyPairMock, simpleDynamicScenarioMock);
-            fail("Expected a QRCodeException");
-        } catch (QRCodeException ex) {
+            testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
+            fail("Expected a DynamicShareException");
+        } catch (DynamicShareException ex) {
             assertSame(jsonProcessingException, ex.getCause());
         }
     }
 
     @Test
-    public void shouldWrapSecurityExceptionInQRCodeException() throws Exception {
+    public void shouldWrapSecurityExceptionInDynamicShareException() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         GeneralSecurityException securityException = new GeneralSecurityException();
         when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenThrow(securityException);
 
         try {
-            testObj.requestQRCode(APP_ID, keyPairMock, simpleDynamicScenarioMock);
-            fail("Expected a QRCodeException");
-        } catch (QRCodeException ex) {
+            testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
+            fail("Expected a DynamicShareException");
+        } catch (DynamicShareException ex) {
             assertSame(securityException, ex.getCause());
         }
     }
@@ -124,12 +124,12 @@ public class RemoteQrCodeServiceTest {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenReturn(SOME_SIGNATURE);
         IOException ioException = new IOException();
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCodeResult.class))).thenThrow(ioException);
+        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleShareUrlResult.class))).thenThrow(ioException);
 
         try {
-            testObj.requestQRCode(APP_ID, keyPairMock, simpleDynamicScenarioMock);
-            fail("Expected a QRCodeException");
-        } catch (QRCodeException ex) {
+            testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
+            fail("Expected a DynamicShareException");
+        } catch (DynamicShareException ex) {
             assertSame(ioException, ex.getCause());
         }
     }
@@ -139,12 +139,12 @@ public class RemoteQrCodeServiceTest {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenReturn(SOME_SIGNATURE);
         ResourceException resourceEx = new ResourceException(HTTP_NOT_FOUND, "Test exception");
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCodeResult.class))).thenThrow(resourceEx);
+        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleShareUrlResult.class))).thenThrow(resourceEx);
 
         try {
-            testObj.requestQRCode(APP_ID, keyPairMock, simpleDynamicScenarioMock);
-            fail("Expected a QRCodeException");
-        } catch (QRCodeException ex) {
+            testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
+            fail("Expected a DynamicShareException");
+        } catch (DynamicShareException ex) {
             assertSame(resourceEx, ex.getCause());
         }
     }
@@ -153,14 +153,14 @@ public class RemoteQrCodeServiceTest {
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenReturn(SOME_SIGNATURE);
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCodeResult.class)))
-                .thenReturn(simpleQrCodeResultMock);
+        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleShareUrlResult.class)))
+                .thenReturn(simpleShareUrlResultMock);
 
-        SimpleQrCodeResult result = testObj.requestQRCode(APP_ID, keyPairMock, simpleDynamicScenarioMock);
+        SimpleShareUrlResult result = testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
 
-        verify(resourceFetcherMock).postResource(urlConnectorCaptor.capture(), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleQrCodeResult.class));
+        verify(resourceFetcherMock).postResource(urlConnectorCaptor.capture(), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleShareUrlResult.class));
         assertEquals(YOTI_API_PATH_PREFIX + DYNAMIC_QRCODE_PATH, getPath(urlConnectorCaptor.getValue()));
-        assertSame(simpleQrCodeResultMock, result);
+        assertSame(simpleShareUrlResultMock, result);
     }
 
     private String getPath(UrlConnector urlConnector) throws Exception {
