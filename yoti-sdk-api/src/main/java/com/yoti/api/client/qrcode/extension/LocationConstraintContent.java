@@ -15,7 +15,6 @@ public class LocationConstraintContent {
         return expectedDeviceLocation;
     }
 
-    // FIXME: I don't like this being in here
     public static final class DeviceLocation {
 
         private final double latitude;
@@ -40,11 +39,17 @@ public class LocationConstraintContent {
             return longitude;
         }
 
+        /**
+         * Acceptable distance from the given lat/long position, in metres
+         */
         @JsonProperty("radius")
         public double getRadius() {
             return radius;
         }
 
+        /**
+         * Maximum acceptable margin of error, in metres
+         */
         @JsonProperty("max_uncertainty_radius")
         public double getMaxUncertainty() {
             return maxUncertainty;
