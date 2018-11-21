@@ -11,8 +11,8 @@ import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.util.Map;
 
-import com.yoti.api.client.qrcode.DynamicScenario;
-import com.yoti.api.client.qrcode.DynamicShareException;
+import com.yoti.api.client.shareurl.DynamicScenario;
+import com.yoti.api.client.shareurl.DynamicShareException;
 import com.yoti.api.client.spi.remote.call.JsonResourceFetcher;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.ResourceFetcher;

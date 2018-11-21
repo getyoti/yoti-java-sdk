@@ -1,6 +1,6 @@
 package com.yoti.api.client.spi.remote.call.qrcode;
 
-import com.yoti.api.client.qrcode.ShareUrlResult;
+import com.yoti.api.client.shareurl.ShareUrlResult;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
