@@ -7,11 +7,11 @@ package com.yoti.api.client.qrcode;
 public interface ShareUrlResult {
 
     /**
-     * The URL the 3rd party should use for the share
+     * The URL that the 3rd party should use for the share
      *
      * @return The share URL
      */
-    String getShareUrl();
+    String getUrl();
 
     /**
      * Get the Yoti reference id for the share

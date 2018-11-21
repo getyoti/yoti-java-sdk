@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DynamicSharingService {
+public final class DynamicSharingService {
 
     public static DynamicSharingService newInstance() {
         return new DynamicSharingService(
@@ -46,7 +46,7 @@ public class DynamicSharingService {
 
     private final String apiUrl;
 
-    public DynamicSharingService(PathFactory pathFactory,
+    private DynamicSharingService(PathFactory pathFactory,
             HeadersFactory headersFactory,
             ObjectMapper objectMapper,
             ResourceFetcher resourceFetcher,
