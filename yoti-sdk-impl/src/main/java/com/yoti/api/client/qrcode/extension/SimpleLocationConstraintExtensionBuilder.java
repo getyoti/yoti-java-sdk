@@ -6,8 +6,8 @@ public class SimpleLocationConstraintExtensionBuilder implements LocationConstra
 
     private double latitude;
     private double longitude;
-    private double radius;
-    private double maxUncertainty;
+    private double radius = 150d;
+    private double maxUncertainty = 150d;
 
     @Override
     public LocationConstraintExtensionBuilder withLatitude(double latitude) {
