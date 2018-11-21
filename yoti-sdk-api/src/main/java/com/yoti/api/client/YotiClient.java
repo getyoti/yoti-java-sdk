@@ -2,9 +2,9 @@ package com.yoti.api.client;
 
 import com.yoti.api.client.aml.AmlProfile;
 import com.yoti.api.client.aml.AmlResult;
-import com.yoti.api.client.qrcode.DynamicShareException;
-import com.yoti.api.client.qrcode.ShareUrlResult;
-import com.yoti.api.client.qrcode.DynamicScenario;
+import com.yoti.api.client.shareurl.DynamicShareException;
+import com.yoti.api.client.shareurl.ShareUrlResult;
+import com.yoti.api.client.shareurl.DynamicScenario;
 
 /**
  * <p>
