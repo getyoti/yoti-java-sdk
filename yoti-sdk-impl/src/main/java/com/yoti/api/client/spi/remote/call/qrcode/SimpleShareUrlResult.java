@@ -14,7 +14,7 @@ public class SimpleShareUrlResult implements ShareUrlResult {
     @JsonProperty("ref_id")
     private String refId;
 
-    public String getShareUrl() {
+    public String getUrl() {
         return shareUrl;
     }
 

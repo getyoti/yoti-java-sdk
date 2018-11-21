@@ -18,11 +18,6 @@ public class SimpleExtensionBuilderFactory extends ExtensionBuilderFactory {
     }
 
     @Override
-    public AgeVerificationSecretExtensionBuilder createAgeVerificationSecretExtensionBuilder() {
-        return new SimpleAgeVerificationSecretExtensionBuilder();
-    }
-
-    @Override
     public TransactionalFlowExtensionBuilder createTransactionalFlowExtensionBuilder() {
         return new SimpleTransactionalFlowExtensionBuilder();
     }
