@@ -93,7 +93,7 @@ public class SimpleLocationConstraintExtensionBuilderTest {
     }
 
     @Test
-    public void shouldBuildLocationConstraint() {
+    public void shouldBuildLocationConstraintWithGivenValues() {
         Extension<LocationConstraintContent> extension = new SimpleLocationConstraintExtensionBuilder()
                 .withLatitude(SOME_LATITUDE)
                 .withLongitude(SOME_LONGITUDE)
@@ -107,6 +107,21 @@ public class SimpleLocationConstraintExtensionBuilderTest {
         assertEquals(SOME_LONGITUDE, expectedDeviceLocation.getLongitude(), 0d);
         assertEquals(SOME_RADIUS, expectedDeviceLocation.getRadius(), 0d);
         assertEquals(SOME_UNCERTAINTY, expectedDeviceLocation.getMaxUncertainty(), 0d);
+    }
+
+    @Test
+    public void shouldBuildLocationConstraintWithDefaultValues() {
+        Extension<LocationConstraintContent> extension = new SimpleLocationConstraintExtensionBuilder()
+                .withLatitude(SOME_LATITUDE)
+                .withLongitude(SOME_LONGITUDE)
+                .build();
+
+        assertEquals(ExtensionConstants.LOCATION_CONSTRAINT, extension.getType());
+        LocationConstraintContent.DeviceLocation expectedDeviceLocation = extension.getContent().getExpectedDeviceLocation();
+        assertEquals(SOME_LATITUDE, expectedDeviceLocation.getLatitude(), 0d);
+        assertEquals(SOME_LONGITUDE, expectedDeviceLocation.getLongitude(), 0d);
+        assertEquals(SOME_RADIUS, expectedDeviceLocation.getRadius(), 150d);
+        assertEquals(SOME_UNCERTAINTY, expectedDeviceLocation.getMaxUncertainty(), 150d);
     }
 
 }
