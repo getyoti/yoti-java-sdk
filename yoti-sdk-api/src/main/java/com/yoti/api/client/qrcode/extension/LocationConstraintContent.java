@@ -29,11 +29,17 @@ public class LocationConstraintContent {
             this.maxUncertainty = maxUncertainty;
         }
 
+        /**
+         * Latitude of the user's expected location
+         */
         @JsonProperty("latitude")
         public double getLatitude() {
             return latitude;
         }
 
+        /**
+         * Longitude of the user's expected location
+         */
         @JsonProperty("longitude")
         public double getLongitude() {
             return longitude;
