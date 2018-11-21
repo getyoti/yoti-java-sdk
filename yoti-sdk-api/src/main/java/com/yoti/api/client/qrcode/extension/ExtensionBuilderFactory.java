@@ -19,8 +19,6 @@ public abstract class ExtensionBuilderFactory {
 
     public abstract LocationConstraintExtensionBuilder createLocationConstraintExtensionBuilder();
 
-    public abstract AgeVerificationSecretExtensionBuilder createAgeVerificationSecretExtensionBuilder();
-
     public abstract TransactionalFlowExtensionBuilder createTransactionalFlowExtensionBuilder();
 
 }

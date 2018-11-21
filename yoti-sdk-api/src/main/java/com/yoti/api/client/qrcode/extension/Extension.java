@@ -1,12 +1,10 @@
 package com.yoti.api.client.qrcode.extension;
 
-import java.util.Map;
-
 /**
  * Type and content of a feature for an application
  *
  */
-public interface Extension <T> {
+public interface Extension<T> {
 
     /**
      * Get the feature's type
