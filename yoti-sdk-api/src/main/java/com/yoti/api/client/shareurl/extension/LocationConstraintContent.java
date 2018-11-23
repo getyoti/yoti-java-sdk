@@ -46,7 +46,7 @@ public class LocationConstraintContent {
         }
 
         /**
-         * Acceptable distance from the given lat/long position, in metres
+         * Radius of the circle, centred on the specified location coordinates, where the device is allowed to perform the share
          */
         @JsonProperty("radius")
         public double getRadius() {
@@ -54,7 +54,7 @@ public class LocationConstraintContent {
         }
 
         /**
-         * Maximum acceptable margin of error, in metres
+         * Maximum acceptable distance, in metres, of the area of uncertainty associated with the device location coordinates
          */
         @JsonProperty("max_uncertainty_radius")
         public double getMaxUncertainty() {

@@ -80,7 +80,7 @@ public class SimpleLocationConstraintExtensionBuilderTest {
     }
 
     @Test
-    public void shouldFailForUncertaintyThanZero() {
+    public void shouldFailForUncertaintyLessThanZero() {
         try {
             new SimpleLocationConstraintExtensionBuilder()
                     .withMaxUncertainty(-1)
