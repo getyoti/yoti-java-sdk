@@ -199,10 +199,7 @@ try {
         Attribute<String> familyName = profile.getFamilyName();
         Attribute<String> phoneNumber = profile.getPhoneNumber();
         Attribute<String> emailAddress = profile.getEmailAddress();
-        AgeVerification over18Verification = profile.findAgeOverVerification(18);
-        if (over18Verification != null) {
-            boolean isAgedOver18 = over18Verification.getResult();
-        }
+        Boolean isAgeVerified = profile.isAgeVerified();
         Attribute<Date> dateOfBirth = profile.getDateOfBirth();
         Attribute<String> gender = profile.getGender();
         Attribute<String> postalAddress = profile.getPostalAddress();
