@@ -15,7 +15,8 @@ import org.mockito.Mockito;
 
 public class SimpleActivityDetailsTest {
 
-    private static final String REMEMBER_ME_ID = "YmFkYWRhZGEtZGFkYWJhZGEK";
+    private static final String REMEMBER_ME = "someRememberMeId";
+    private static final String PARENT_REMEMBER_ME = "someParentRememberMeId";
     private static final Profile USER_PROFILE = Mockito.mock(Profile.class);
     private static final Profile APP_PROFILE = Mockito.mock(Profile.class);
     private static final Profile USER_PROFILE_WRAPPER = HumanProfileAdapter.wrap(USER_PROFILE);
@@ -27,56 +28,56 @@ public class SimpleActivityDetailsTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailConstructionForNullRememberMeId() {
-        new SimpleActivityDetails(null, USER_PROFILE, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        new SimpleActivityDetails(null, null, USER_PROFILE, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailConstructionForNullUserProfile() {
-        new SimpleActivityDetails(REMEMBER_ME_ID, null, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        new SimpleActivityDetails(REMEMBER_ME, null, null, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailConstructionForNullAppProfile() {
-        new SimpleActivityDetails(REMEMBER_ME_ID, USER_PROFILE, null, TIMESTAMP, RECEIPT_ID);
+        new SimpleActivityDetails(REMEMBER_ME, null, USER_PROFILE, null, TIMESTAMP, RECEIPT_ID);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailConstructionForNullTimestamp() {
-        new SimpleActivityDetails(REMEMBER_ME_ID, USER_PROFILE, APP_PROFILE, null, RECEIPT_ID);
+        new SimpleActivityDetails(REMEMBER_ME, null, USER_PROFILE, APP_PROFILE, null, RECEIPT_ID);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailConstructionForNullReceiptId() {
-        new SimpleActivityDetails(REMEMBER_ME_ID, USER_PROFILE, APP_PROFILE, TIMESTAMP, null);
+        new SimpleActivityDetails(REMEMBER_ME, null, USER_PROFILE, APP_PROFILE, TIMESTAMP, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailConstructionForNullProfile() {
-        new SimpleActivityDetails(REMEMBER_ME_ID, null, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        new SimpleActivityDetails(REMEMBER_ME, null, null, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
     }
 
     @Test
     public void shouldReturnUserId() {
-        SimpleActivityDetails s = new SimpleActivityDetails(REMEMBER_ME_ID, USER_PROFILE, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
-        assertEquals(REMEMBER_ME_ID, s.getRememberMeId());
-        assertEquals(REMEMBER_ME_ID, s.getUserId());
+        SimpleActivityDetails s = new SimpleActivityDetails(REMEMBER_ME, PARENT_REMEMBER_ME, USER_PROFILE, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        assertEquals(REMEMBER_ME, s.getRememberMeId());
+        assertEquals(REMEMBER_ME, s.getUserId());
     }
 
     @Test
     public void shouldReturnUserProfile() {
-        SimpleActivityDetails s = new SimpleActivityDetails(REMEMBER_ME_ID, USER_PROFILE, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        SimpleActivityDetails s = new SimpleActivityDetails(REMEMBER_ME, PARENT_REMEMBER_ME, USER_PROFILE, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
         assertEquals(USER_PROFILE_WRAPPER, s.getUserProfile());
     }
 
     @Test
     public void shouldReturnAppProfile() {
-        SimpleActivityDetails s = new SimpleActivityDetails(REMEMBER_ME_ID, APP_PROFILE, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        SimpleActivityDetails s = new SimpleActivityDetails(REMEMBER_ME, PARENT_REMEMBER_ME, APP_PROFILE, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
         assertEquals(APP_PROFILE_WRAPPER, s.getApplicationProfile());
     }
 
     @Test
     public void shouldReturnReceiptId() {
-        SimpleActivityDetails s = new SimpleActivityDetails(REMEMBER_ME_ID, USER_PROFILE, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        SimpleActivityDetails s = new SimpleActivityDetails(REMEMBER_ME, PARENT_REMEMBER_ME, USER_PROFILE, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
         assertEquals(RECEIPT_ID_STRING, s.getReceiptId());
     }
 
@@ -85,7 +86,7 @@ public class SimpleActivityDetailsTest {
         Attribute<Image> selfie = new SimpleAttribute("selfie", new JpegAttributeValue(SOME_SELFIE_BYTES));
         SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>singletonList(selfie));
 
-        SimpleActivityDetails result = new SimpleActivityDetails(REMEMBER_ME_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        SimpleActivityDetails result = new SimpleActivityDetails(REMEMBER_ME, PARENT_REMEMBER_ME, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
 
         String expected = "data:image/jpeg;base64," + Base64.toBase64String(SOME_SELFIE_BYTES);
         assertEquals(expected, result.getBase64Selfie());
@@ -97,7 +98,7 @@ public class SimpleActivityDetailsTest {
         Attribute familyName = new SimpleAttribute("family_name", "Smith");
         SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>singletonList(familyName));
 
-        SimpleActivityDetails result = new SimpleActivityDetails(REMEMBER_ME_ID, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
+        SimpleActivityDetails result = new SimpleActivityDetails(REMEMBER_ME, PARENT_REMEMBER_ME, profile, APP_PROFILE, TIMESTAMP, RECEIPT_ID);
 
         assertEquals("", result.getBase64Selfie());
     }

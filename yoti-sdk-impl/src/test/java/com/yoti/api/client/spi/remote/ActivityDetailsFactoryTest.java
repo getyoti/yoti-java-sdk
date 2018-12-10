@@ -55,6 +55,8 @@ public class ActivityDetailsFactoryTest {
 
     private static final String SOME_REMEMBER_ME_ID_STRING = toBase64String("aBase64EncodedRememberMeId".getBytes());
     private static final byte[] SOME_REMEMBER_ME_ID_BYTES = decode(SOME_REMEMBER_ME_ID_STRING);
+    private static final String SOME_PARENT_REMEMBER_ME_ID_STRING = toBase64String("aB64ParentRememberMeId".getBytes());
+    private static final byte[] SOME_PARENT_REMEMBER_ME_ID_BYTES = decode(SOME_PARENT_REMEMBER_ME_ID_STRING);
     private static final String ENCODED_RECEIPT_STRING = "base64EncodedReceipt";
     private static final byte[] DECODED_RECEIPT_BYTES = decode(ENCODED_RECEIPT_STRING);
 
@@ -125,7 +127,7 @@ public class ActivityDetailsFactoryTest {
     }
 
     @Test
-    public void shouldGetCorrectProfilesFromProfileReader() throws Exception {
+    public void shouldGetCorrectProfilesFromProfileReaderWithoutParentRememberMe() throws Exception {
         Receipt receipt = new Receipt.Builder()
                 .withWrappedReceiptKey(validReceiptKey)
                 .withTimestamp(VALID_TIMESTAMP)
@@ -143,6 +145,32 @@ public class ActivityDetailsFactoryTest {
         assertSame(profileMock, getWrappedProfile(result.getApplicationProfile()));
         assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getRememberMeId());
         assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getUserId());
+        assertEquals(null, result.getParentRememberMeId());
+        assertEquals(ENCODED_RECEIPT_STRING, result.getReceiptId());
+        assertEquals(DATE, result.getTimestamp());
+    }
+
+    @Test
+    public void shouldGetCorrectProfilesFromProfileReader() throws Exception {
+        Receipt receipt = new Receipt.Builder()
+                .withWrappedReceiptKey(validReceiptKey)
+                .withTimestamp(VALID_TIMESTAMP)
+                .withRememberMeId(SOME_REMEMBER_ME_ID_BYTES)
+                .withParentRememberMeId(SOME_PARENT_REMEMBER_ME_ID_BYTES)
+                .withProfile(PROFILE_CONTENT)
+                .withOtherPartyProfile(OTHER_PROFILE_CONTENT)
+                .withReceiptId(DECODED_RECEIPT_BYTES)
+                .build();
+        when(profileReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(profileMock);
+        when(profileReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(otherProfileMock);
+
+        ActivityDetails result = testObj.create(receipt, keyPair.getPrivate());
+
+        assertSame(otherProfileMock, getWrappedProfile(result.getUserProfile()));
+        assertSame(profileMock, getWrappedProfile(result.getApplicationProfile()));
+        assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getRememberMeId());
+        assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getUserId());
+        assertEquals(SOME_PARENT_REMEMBER_ME_ID_STRING, result.getParentRememberMeId());
         assertEquals(ENCODED_RECEIPT_STRING, result.getReceiptId());
         assertEquals(DATE, result.getTimestamp());
     }
