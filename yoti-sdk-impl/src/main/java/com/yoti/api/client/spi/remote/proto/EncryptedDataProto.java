@@ -35,6 +35,7 @@ public final class EncryptedDataProto {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:compubapi_v1.EncryptedData)
       EncryptedDataOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use EncryptedData.newBuilder() to construct.
     private EncryptedData(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -47,14 +48,19 @@ public final class EncryptedDataProto {
     @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private EncryptedData(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new NullPointerException();
+      }
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -63,12 +69,6 @@ public final class EncryptedDataProto {
             case 0:
               done = true;
               break;
-            default: {
-              if (!input.skipField(tag)) {
-                done = true;
-              }
-              break;
-            }
             case 10: {
 
               iv_ = input.readBytes();
@@ -79,6 +79,13 @@ public final class EncryptedDataProto {
               cipherText_ = input.readBytes();
               break;
             }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -87,6 +94,7 @@ public final class EncryptedDataProto {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -95,6 +103,7 @@ public final class EncryptedDataProto {
       return EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_descriptor;
     }
 
+    @Override
     protected FieldAccessorTable
         internalGetFieldAccessorTable() {
       return EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_fieldAccessorTable
@@ -121,6 +130,7 @@ public final class EncryptedDataProto {
     }
 
     private byte memoizedIsInitialized = -1;
+    @Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -130,6 +140,7 @@ public final class EncryptedDataProto {
       return true;
     }
 
+    @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (!iv_.isEmpty()) {
@@ -138,8 +149,10 @@ public final class EncryptedDataProto {
       if (!cipherText_.isEmpty()) {
         output.writeBytes(2, cipherText_);
       }
+      unknownFields.writeTo(output);
     }
 
+    @Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -153,11 +166,11 @@ public final class EncryptedDataProto {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, cipherText_);
       }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
@@ -173,6 +186,7 @@ public final class EncryptedDataProto {
           .equals(other.getIv());
       result = result && getCipherText()
           .equals(other.getCipherText());
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -192,6 +206,17 @@ public final class EncryptedDataProto {
       return hash;
     }
 
+    public static EncryptedData parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static EncryptedData parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
     public static EncryptedData parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -251,6 +276,7 @@ public final class EncryptedDataProto {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -258,6 +284,7 @@ public final class EncryptedDataProto {
     public static Builder newBuilder(EncryptedData prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -281,6 +308,7 @@ public final class EncryptedDataProto {
         return EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_descriptor;
       }
 
+      @Override
       protected FieldAccessorTable
           internalGetFieldAccessorTable() {
         return EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_fieldAccessorTable
@@ -303,6 +331,7 @@ public final class EncryptedDataProto {
                 .alwaysUseFieldBuilders) {
         }
       }
+      @Override
       public Builder clear() {
         super.clear();
         iv_ = com.google.protobuf.ByteString.EMPTY;
@@ -312,15 +341,18 @@ public final class EncryptedDataProto {
         return this;
       }
 
+      @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_descriptor;
       }
 
+      @Override
       public EncryptedData getDefaultInstanceForType() {
         return EncryptedData.getDefaultInstance();
       }
 
+      @Override
       public EncryptedData build() {
         EncryptedData result = buildPartial();
         if (!result.isInitialized()) {
@@ -329,6 +361,7 @@ public final class EncryptedDataProto {
         return result;
       }
 
+      @Override
       public EncryptedData buildPartial() {
         EncryptedData result = new EncryptedData(this);
         result.iv_ = iv_;
@@ -337,32 +370,39 @@ public final class EncryptedDataProto {
         return result;
       }
 
+      @Override
       public Builder clone() {
         return (Builder) super.clone();
       }
+      @Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.setField(field, value);
       }
+      @Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+      @Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+      @Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+      @Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
+      @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof EncryptedData) {
           return mergeFrom((EncryptedData)other);
@@ -380,14 +420,17 @@ public final class EncryptedDataProto {
         if (other.getCipherText() != com.google.protobuf.ByteString.EMPTY) {
           setCipherText(other.getCipherText());
         }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
+      @Override
       public final boolean isInitialized() {
         return true;
       }
 
+      @Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -463,14 +506,16 @@ public final class EncryptedDataProto {
         onChanged();
         return this;
       }
+      @Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
+      @Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -489,11 +534,12 @@ public final class EncryptedDataProto {
 
     private static final com.google.protobuf.Parser<EncryptedData>
         PARSER = new com.google.protobuf.AbstractParser<EncryptedData>() {
+      @Override
       public EncryptedData parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new EncryptedData(input, extensionRegistry);
+        return new EncryptedData(input, extensionRegistry);
       }
     };
 
@@ -506,6 +552,7 @@ public final class EncryptedDataProto {
       return PARSER;
     }
 
+    @Override
     public EncryptedData getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
