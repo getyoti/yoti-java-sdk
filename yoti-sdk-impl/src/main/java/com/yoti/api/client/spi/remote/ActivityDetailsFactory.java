@@ -41,9 +41,10 @@ class ActivityDetailsFactory {
         Profile userProfile = profileReader.read(receipt.getOtherPartyProfile(), secretKey);
         Profile applicationProfile = profileReader.read(receipt.getProfile(), secretKey);
         String rememberMeId = parseRememberMeId(receipt.getRememberMeId());
+        String parentRememberMeId = parseRememberMeId(receipt.getParentRememberMeId());
         Date timestamp = parseTimestamp(receipt.getTimestamp());
 
-        return new SimpleActivityDetails(rememberMeId, userProfile, applicationProfile, timestamp, receipt.getReceiptId());
+        return new SimpleActivityDetails(rememberMeId, parentRememberMeId, userProfile, applicationProfile, timestamp, receipt.getReceiptId());
     }
 
     private String parseRememberMeId(byte[] rmi) throws ProfileException {

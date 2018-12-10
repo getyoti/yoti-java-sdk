@@ -27,6 +27,8 @@ public final class Receipt {
     private byte[] personalKey;
     @JsonProperty("remember_me_id")
     private byte[] rememberMeId;
+    @JsonProperty("parent_remember_me_id")
+    private byte[] parentRememberMeId;
     @JsonProperty("sharing_outcome")
     private Outcome outcome;
     @JsonProperty("timestamp")
@@ -82,6 +84,11 @@ public final class Receipt {
 
         public Builder withRememberMeId(byte[] rememberMeId) {
             receipt.rememberMeId = rememberMeId;
+            return this;
+        }
+
+        public Builder withParentRememberMeId(byte[] parentRememberMeId) {
+            receipt.parentRememberMeId = parentRememberMeId;
             return this;
         }
 
@@ -147,6 +154,10 @@ public final class Receipt {
 
     public byte[] getRememberMeId() {
         return rememberMeId;
+    }
+
+    public byte[] getParentRememberMeId() {
+        return parentRememberMeId;
     }
 
     public String getTimestamp() {
