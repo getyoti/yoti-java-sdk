@@ -55,6 +55,7 @@ public final class SignedTimestampProto {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:compubapi_v1.SignedTimestamp)
       SignedTimestampOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use SignedTimestamp.newBuilder() to construct.
     private SignedTimestamp(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -71,14 +72,19 @@ public final class SignedTimestampProto {
     @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private SignedTimestamp(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new NullPointerException();
+      }
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -87,12 +93,6 @@ public final class SignedTimestampProto {
             case 0:
               done = true;
               break;
-            default: {
-              if (!input.skipField(tag)) {
-                done = true;
-              }
-              break;
-            }
             case 8: {
 
               version_ = input.readInt32();
@@ -123,6 +123,13 @@ public final class SignedTimestampProto {
               chainDigestSkip2_ = input.readBytes();
               break;
             }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -131,6 +138,7 @@ public final class SignedTimestampProto {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -139,6 +147,7 @@ public final class SignedTimestampProto {
       return SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_descriptor;
     }
 
+    @Override
     protected FieldAccessorTable
         internalGetFieldAccessorTable() {
       return SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_fieldAccessorTable
@@ -201,6 +210,7 @@ public final class SignedTimestampProto {
     }
 
     private byte memoizedIsInitialized = -1;
+    @Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -210,6 +220,7 @@ public final class SignedTimestampProto {
       return true;
     }
 
+    @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (version_ != 0) {
@@ -230,8 +241,10 @@ public final class SignedTimestampProto {
       if (!chainDigestSkip2_.isEmpty()) {
         output.writeBytes(6, chainDigestSkip2_);
       }
+      unknownFields.writeTo(output);
     }
 
+    @Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -261,11 +274,11 @@ public final class SignedTimestampProto {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(6, chainDigestSkip2_);
       }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @Override
     public boolean equals(final Object obj) {
       if (obj == this) {
@@ -289,6 +302,7 @@ public final class SignedTimestampProto {
           .equals(other.getChainDigestSkip1());
       result = result && getChainDigestSkip2()
           .equals(other.getChainDigestSkip2());
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -317,6 +331,17 @@ public final class SignedTimestampProto {
       return hash;
     }
 
+    public static SignedTimestamp parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static SignedTimestamp parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
     public static SignedTimestamp parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -376,6 +401,7 @@ public final class SignedTimestampProto {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -383,6 +409,7 @@ public final class SignedTimestampProto {
     public static Builder newBuilder(SignedTimestamp prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -406,6 +433,7 @@ public final class SignedTimestampProto {
         return SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_descriptor;
       }
 
+      @Override
       protected FieldAccessorTable
           internalGetFieldAccessorTable() {
         return SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_fieldAccessorTable
@@ -428,6 +456,7 @@ public final class SignedTimestampProto {
                 .alwaysUseFieldBuilders) {
         }
       }
+      @Override
       public Builder clear() {
         super.clear();
         version_ = 0;
@@ -445,15 +474,18 @@ public final class SignedTimestampProto {
         return this;
       }
 
+      @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_descriptor;
       }
 
+      @Override
       public SignedTimestamp getDefaultInstanceForType() {
         return SignedTimestamp.getDefaultInstance();
       }
 
+      @Override
       public SignedTimestamp build() {
         SignedTimestamp result = buildPartial();
         if (!result.isInitialized()) {
@@ -462,6 +494,7 @@ public final class SignedTimestampProto {
         return result;
       }
 
+      @Override
       public SignedTimestamp buildPartial() {
         SignedTimestamp result = new SignedTimestamp(this);
         result.version_ = version_;
@@ -474,32 +507,39 @@ public final class SignedTimestampProto {
         return result;
       }
 
+      @Override
       public Builder clone() {
         return (Builder) super.clone();
       }
+      @Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.setField(field, value);
       }
+      @Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+      @Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+      @Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+      @Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
+      @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof SignedTimestamp) {
           return mergeFrom((SignedTimestamp)other);
@@ -529,14 +569,17 @@ public final class SignedTimestampProto {
         if (other.getChainDigestSkip2() != com.google.protobuf.ByteString.EMPTY) {
           setChainDigestSkip2(other.getChainDigestSkip2());
         }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
+      @Override
       public final boolean isInitialized() {
         return true;
       }
 
+      @Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -722,14 +765,16 @@ public final class SignedTimestampProto {
         onChanged();
         return this;
       }
+      @Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
+      @Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -748,11 +793,12 @@ public final class SignedTimestampProto {
 
     private static final com.google.protobuf.Parser<SignedTimestamp>
         PARSER = new com.google.protobuf.AbstractParser<SignedTimestamp>() {
+      @Override
       public SignedTimestamp parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new SignedTimestamp(input, extensionRegistry);
+        return new SignedTimestamp(input, extensionRegistry);
       }
     };
 
@@ -765,6 +811,7 @@ public final class SignedTimestampProto {
       return PARSER;
     }
 
+    @Override
     public SignedTimestamp getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
