@@ -84,7 +84,7 @@
         <snapshotRepository>
           <id>yoti-snapshots</id>
           <name>yoti-snapshots</name>
-          <url>https://nexus.internal.yoti.com/repository/maven-snaphosts/</url>
+          <url>https://nexus.internal.yoti.com/repository/maven-snapshots/</url>
         </snapshotRepository>
       </distributionManagement>
     </profile>
