@@ -1012,9 +1012,10 @@ public final class SigningProto {
       " \001(\t\022\r\n\005value\030\002 \001(\014\0220\n\014content_type\030\003 \001(" +
       "\0162\032.attrpubapi_v1.ContentType\022\032\n\022artifac" +
       "t_signature\030\004 \001(\014\022\020\n\010sub_type\030\005 \001(\t\022\031\n\021s" +
-      "igned_time_stamp\030\006 \001(\014BC\n$com.yoti.api.c" +
+      "igned_time_stamp\030\006 \001(\014Bo\n$com.yoti.api.c" +
       "lient.spi.remote.protoB\014SigningProtoZ\ryo" +
-      "tiprotoattrb\006proto3"
+      "tiprotoattr\252\002\034Yoti.Auth.ProtoBuf.Attribu" +
+      "te\312\002\nAttrpubapib\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

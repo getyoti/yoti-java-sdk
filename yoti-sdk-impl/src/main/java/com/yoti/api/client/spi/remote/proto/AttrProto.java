@@ -2069,6 +2069,1361 @@ public final class AttrProto {
 
   }
 
+  public interface MultiValueOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:attrpubapi_v1.MultiValue)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+     */
+    java.util.List<MultiValue.Value>
+        getValuesList();
+    /**
+     * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+     */
+    MultiValue.Value getValues(int index);
+    /**
+     * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+     */
+    int getValuesCount();
+    /**
+     * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+     */
+    java.util.List<? extends MultiValue.ValueOrBuilder>
+        getValuesOrBuilderList();
+    /**
+     * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+     */
+    MultiValue.ValueOrBuilder getValuesOrBuilder(
+            int index);
+  }
+  /**
+   * Protobuf type {@code attrpubapi_v1.MultiValue}
+   */
+  public  static final class MultiValue extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:attrpubapi_v1.MultiValue)
+      MultiValueOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use MultiValue.newBuilder() to construct.
+    private MultiValue(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private MultiValue() {
+      values_ = java.util.Collections.emptyList();
+    }
+
+    @Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private MultiValue(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                values_ = new java.util.ArrayList<Value>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              values_.add(
+                  input.readMessage(Value.parser(), extensionRegistry));
+              break;
+            }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          values_ = java.util.Collections.unmodifiableList(values_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return AttrProto.internal_static_attrpubapi_v1_MultiValue_descriptor;
+    }
+
+    @Override
+    protected FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return AttrProto.internal_static_attrpubapi_v1_MultiValue_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              MultiValue.class, Builder.class);
+    }
+
+    public interface ValueOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:attrpubapi_v1.MultiValue.Value)
+        com.google.protobuf.MessageOrBuilder {
+
+      /**
+       * <code>.attrpubapi_v1.ContentType content_type = 1;</code>
+       */
+      int getContentTypeValue();
+      /**
+       * <code>.attrpubapi_v1.ContentType content_type = 1;</code>
+       */
+      com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType getContentType();
+
+      /**
+       * <code>bytes data = 2;</code>
+       */
+      com.google.protobuf.ByteString getData();
+    }
+    /**
+     * Protobuf type {@code attrpubapi_v1.MultiValue.Value}
+     */
+    public  static final class Value extends
+        com.google.protobuf.GeneratedMessageV3 implements
+        // @@protoc_insertion_point(message_implements:attrpubapi_v1.MultiValue.Value)
+        ValueOrBuilder {
+    private static final long serialVersionUID = 0L;
+      // Use Value.newBuilder() to construct.
+      private Value(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+        super(builder);
+      }
+      private Value() {
+        contentType_ = 0;
+        data_ = com.google.protobuf.ByteString.EMPTY;
+      }
+
+      @Override
+      public final com.google.protobuf.UnknownFieldSet
+      getUnknownFields() {
+        return this.unknownFields;
+      }
+      private Value(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        this();
+        if (extensionRegistry == null) {
+          throw new NullPointerException();
+        }
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                int rawValue = input.readEnum();
+
+                contentType_ = rawValue;
+                break;
+              }
+              case 18: {
+
+                data_ = input.readBytes();
+                break;
+              }
+              default: {
+                if (!parseUnknownFieldProto3(
+                    input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return AttrProto.internal_static_attrpubapi_v1_MultiValue_Value_descriptor;
+      }
+
+      @Override
+      protected FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return AttrProto.internal_static_attrpubapi_v1_MultiValue_Value_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                Value.class, Builder.class);
+      }
+
+      public static final int CONTENT_TYPE_FIELD_NUMBER = 1;
+      private int contentType_;
+      /**
+       * <code>.attrpubapi_v1.ContentType content_type = 1;</code>
+       */
+      public int getContentTypeValue() {
+        return contentType_;
+      }
+      /**
+       * <code>.attrpubapi_v1.ContentType content_type = 1;</code>
+       */
+      public com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType getContentType() {
+        @SuppressWarnings("deprecation")
+        com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType result = com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.valueOf(contentType_);
+        return result == null ? com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.UNRECOGNIZED : result;
+      }
+
+      public static final int DATA_FIELD_NUMBER = 2;
+      private com.google.protobuf.ByteString data_;
+      /**
+       * <code>bytes data = 2;</code>
+       */
+      public com.google.protobuf.ByteString getData() {
+        return data_;
+      }
+
+      private byte memoizedIsInitialized = -1;
+      @Override
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
+
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      @Override
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        if (contentType_ != com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.UNDEFINED.getNumber()) {
+          output.writeEnum(1, contentType_);
+        }
+        if (!data_.isEmpty()) {
+          output.writeBytes(2, data_);
+        }
+        unknownFields.writeTo(output);
+      }
+
+      @Override
+      public int getSerializedSize() {
+        int size = memoizedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (contentType_ != com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.UNDEFINED.getNumber()) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeEnumSize(1, contentType_);
+        }
+        if (!data_.isEmpty()) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(2, data_);
+        }
+        size += unknownFields.getSerializedSize();
+        memoizedSize = size;
+        return size;
+      }
+
+      @Override
+      public boolean equals(final Object obj) {
+        if (obj == this) {
+         return true;
+        }
+        if (!(obj instanceof Value)) {
+          return super.equals(obj);
+        }
+        Value other = (Value) obj;
+
+        boolean result = true;
+        result = result && contentType_ == other.contentType_;
+        result = result && getData()
+            .equals(other.getData());
+        result = result && unknownFields.equals(other.unknownFields);
+        return result;
+      }
+
+      @Override
+      public int hashCode() {
+        if (memoizedHashCode != 0) {
+          return memoizedHashCode;
+        }
+        int hash = 41;
+        hash = (19 * hash) + getDescriptor().hashCode();
+        hash = (37 * hash) + CONTENT_TYPE_FIELD_NUMBER;
+        hash = (53 * hash) + contentType_;
+        hash = (37 * hash) + DATA_FIELD_NUMBER;
+        hash = (53 * hash) + getData().hashCode();
+        hash = (29 * hash) + unknownFields.hashCode();
+        memoizedHashCode = hash;
+        return hash;
+      }
+
+      public static Value parseFrom(
+          java.nio.ByteBuffer data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static Value parseFrom(
+          java.nio.ByteBuffer data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static Value parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static Value parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static Value parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static Value parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static Value parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static Value parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static Value parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input);
+      }
+      public static Value parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static Value parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static Value parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+
+      @Override
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder() {
+        return DEFAULT_INSTANCE.toBuilder();
+      }
+      public static Builder newBuilder(Value prototype) {
+        return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+      }
+      @Override
+      public Builder toBuilder() {
+        return this == DEFAULT_INSTANCE
+            ? new Builder() : new Builder().mergeFrom(this);
+      }
+
+      @Override
+      protected Builder newBuilderForType(
+          BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code attrpubapi_v1.MultiValue.Value}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:attrpubapi_v1.MultiValue.Value)
+          ValueOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return AttrProto.internal_static_attrpubapi_v1_MultiValue_Value_descriptor;
+        }
+
+        @Override
+        protected FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return AttrProto.internal_static_attrpubapi_v1_MultiValue_Value_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  Value.class, Builder.class);
+        }
+
+        // Construct using com.yoti.api.client.spi.remote.proto.AttrProto.MultiValue.Value.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessageV3
+                  .alwaysUseFieldBuilders) {
+          }
+        }
+        @Override
+        public Builder clear() {
+          super.clear();
+          contentType_ = 0;
+
+          data_ = com.google.protobuf.ByteString.EMPTY;
+
+          return this;
+        }
+
+        @Override
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return AttrProto.internal_static_attrpubapi_v1_MultiValue_Value_descriptor;
+        }
+
+        @Override
+        public Value getDefaultInstanceForType() {
+          return Value.getDefaultInstance();
+        }
+
+        @Override
+        public Value build() {
+          Value result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        @Override
+        public Value buildPartial() {
+          Value result = new Value(this);
+          result.contentType_ = contentType_;
+          result.data_ = data_;
+          onBuilt();
+          return result;
+        }
+
+        @Override
+        public Builder clone() {
+          return (Builder) super.clone();
+        }
+        @Override
+        public Builder setField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            Object value) {
+          return (Builder) super.setField(field, value);
+        }
+        @Override
+        public Builder clearField(
+            com.google.protobuf.Descriptors.FieldDescriptor field) {
+          return (Builder) super.clearField(field);
+        }
+        @Override
+        public Builder clearOneof(
+            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          return (Builder) super.clearOneof(oneof);
+        }
+        @Override
+        public Builder setRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            int index, Object value) {
+          return (Builder) super.setRepeatedField(field, index, value);
+        }
+        @Override
+        public Builder addRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            Object value) {
+          return (Builder) super.addRepeatedField(field, value);
+        }
+        @Override
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof Value) {
+            return mergeFrom((Value)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(Value other) {
+          if (other == Value.getDefaultInstance()) return this;
+          if (other.contentType_ != 0) {
+            setContentTypeValue(other.getContentTypeValue());
+          }
+          if (other.getData() != com.google.protobuf.ByteString.EMPTY) {
+            setData(other.getData());
+          }
+          this.mergeUnknownFields(other.unknownFields);
+          onChanged();
+          return this;
+        }
+
+        @Override
+        public final boolean isInitialized() {
+          return true;
+        }
+
+        @Override
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          Value parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (Value) e.getUnfinishedMessage();
+            throw e.unwrapIOException();
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+
+        private int contentType_ = 0;
+        /**
+         * <code>.attrpubapi_v1.ContentType content_type = 1;</code>
+         */
+        public int getContentTypeValue() {
+          return contentType_;
+        }
+        /**
+         * <code>.attrpubapi_v1.ContentType content_type = 1;</code>
+         */
+        public Builder setContentTypeValue(int value) {
+          contentType_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>.attrpubapi_v1.ContentType content_type = 1;</code>
+         */
+        public com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType getContentType() {
+          @SuppressWarnings("deprecation")
+          com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType result = com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.valueOf(contentType_);
+          return result == null ? com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.UNRECOGNIZED : result;
+        }
+        /**
+         * <code>.attrpubapi_v1.ContentType content_type = 1;</code>
+         */
+        public Builder setContentType(com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType value) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          
+          contentType_ = value.getNumber();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>.attrpubapi_v1.ContentType content_type = 1;</code>
+         */
+        public Builder clearContentType() {
+          
+          contentType_ = 0;
+          onChanged();
+          return this;
+        }
+
+        private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
+        /**
+         * <code>bytes data = 2;</code>
+         */
+        public com.google.protobuf.ByteString getData() {
+          return data_;
+        }
+        /**
+         * <code>bytes data = 2;</code>
+         */
+        public Builder setData(com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  
+          data_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>bytes data = 2;</code>
+         */
+        public Builder clearData() {
+          
+          data_ = getDefaultInstance().getData();
+          onChanged();
+          return this;
+        }
+        @Override
+        public final Builder setUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.setUnknownFieldsProto3(unknownFields);
+        }
+
+        @Override
+        public final Builder mergeUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.mergeUnknownFields(unknownFields);
+        }
+
+
+        // @@protoc_insertion_point(builder_scope:attrpubapi_v1.MultiValue.Value)
+      }
+
+      // @@protoc_insertion_point(class_scope:attrpubapi_v1.MultiValue.Value)
+      private static final Value DEFAULT_INSTANCE;
+      static {
+        DEFAULT_INSTANCE = new Value();
+      }
+
+      public static Value getDefaultInstance() {
+        return DEFAULT_INSTANCE;
+      }
+
+      private static final com.google.protobuf.Parser<Value>
+          PARSER = new com.google.protobuf.AbstractParser<Value>() {
+        @Override
+        public Value parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Value(input, extensionRegistry);
+        }
+      };
+
+      public static com.google.protobuf.Parser<Value> parser() {
+        return PARSER;
+      }
+
+      @Override
+      public com.google.protobuf.Parser<Value> getParserForType() {
+        return PARSER;
+      }
+
+      @Override
+      public Value getDefaultInstanceForType() {
+        return DEFAULT_INSTANCE;
+      }
+
+    }
+
+    public static final int VALUES_FIELD_NUMBER = 1;
+    private java.util.List<Value> values_;
+    /**
+     * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+     */
+    public java.util.List<Value> getValuesList() {
+      return values_;
+    }
+    /**
+     * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+     */
+    public java.util.List<? extends ValueOrBuilder>
+        getValuesOrBuilderList() {
+      return values_;
+    }
+    /**
+     * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+     */
+    public int getValuesCount() {
+      return values_.size();
+    }
+    /**
+     * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+     */
+    public Value getValues(int index) {
+      return values_.get(index);
+    }
+    /**
+     * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+     */
+    public ValueOrBuilder getValuesOrBuilder(
+        int index) {
+      return values_.get(index);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      for (int i = 0; i < values_.size(); i++) {
+        output.writeMessage(1, values_.get(i));
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < values_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, values_.get(i));
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof MultiValue)) {
+        return super.equals(obj);
+      }
+      MultiValue other = (MultiValue) obj;
+
+      boolean result = true;
+      result = result && getValuesList()
+          .equals(other.getValuesList());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (getValuesCount() > 0) {
+        hash = (37 * hash) + VALUES_FIELD_NUMBER;
+        hash = (53 * hash) + getValuesList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static MultiValue parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static MultiValue parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static MultiValue parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static MultiValue parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static MultiValue parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static MultiValue parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static MultiValue parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static MultiValue parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static MultiValue parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static MultiValue parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static MultiValue parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static MultiValue parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(MultiValue prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @Override
+    protected Builder newBuilderForType(
+        BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code attrpubapi_v1.MultiValue}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:attrpubapi_v1.MultiValue)
+        MultiValueOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return AttrProto.internal_static_attrpubapi_v1_MultiValue_descriptor;
+      }
+
+      @Override
+      protected FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return AttrProto.internal_static_attrpubapi_v1_MultiValue_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                MultiValue.class, Builder.class);
+      }
+
+      // Construct using com.yoti.api.client.spi.remote.proto.AttrProto.MultiValue.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getValuesFieldBuilder();
+        }
+      }
+      @Override
+      public Builder clear() {
+        super.clear();
+        if (valuesBuilder_ == null) {
+          values_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          valuesBuilder_.clear();
+        }
+        return this;
+      }
+
+      @Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return AttrProto.internal_static_attrpubapi_v1_MultiValue_descriptor;
+      }
+
+      @Override
+      public MultiValue getDefaultInstanceForType() {
+        return MultiValue.getDefaultInstance();
+      }
+
+      @Override
+      public MultiValue build() {
+        MultiValue result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @Override
+      public MultiValue buildPartial() {
+        MultiValue result = new MultiValue(this);
+        int from_bitField0_ = bitField0_;
+        if (valuesBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            values_ = java.util.Collections.unmodifiableList(values_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.values_ = values_;
+        } else {
+          result.values_ = valuesBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      @Override
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      @Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      @Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      @Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      @Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      @Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      @Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof MultiValue) {
+          return mergeFrom((MultiValue)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(MultiValue other) {
+        if (other == MultiValue.getDefaultInstance()) return this;
+        if (valuesBuilder_ == null) {
+          if (!other.values_.isEmpty()) {
+            if (values_.isEmpty()) {
+              values_ = other.values_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureValuesIsMutable();
+              values_.addAll(other.values_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.values_.isEmpty()) {
+            if (valuesBuilder_.isEmpty()) {
+              valuesBuilder_.dispose();
+              valuesBuilder_ = null;
+              values_ = other.values_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              valuesBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getValuesFieldBuilder() : null;
+            } else {
+              valuesBuilder_.addAllMessages(other.values_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        MultiValue parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (MultiValue) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.util.List<Value> values_ =
+        java.util.Collections.emptyList();
+      private void ensureValuesIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          values_ = new java.util.ArrayList<Value>(values_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          Value, Value.Builder, ValueOrBuilder> valuesBuilder_;
+
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public java.util.List<Value> getValuesList() {
+        if (valuesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(values_);
+        } else {
+          return valuesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public int getValuesCount() {
+        if (valuesBuilder_ == null) {
+          return values_.size();
+        } else {
+          return valuesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public Value getValues(int index) {
+        if (valuesBuilder_ == null) {
+          return values_.get(index);
+        } else {
+          return valuesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public Builder setValues(
+          int index, Value value) {
+        if (valuesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureValuesIsMutable();
+          values_.set(index, value);
+          onChanged();
+        } else {
+          valuesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public Builder setValues(
+          int index, Value.Builder builderForValue) {
+        if (valuesBuilder_ == null) {
+          ensureValuesIsMutable();
+          values_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          valuesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public Builder addValues(Value value) {
+        if (valuesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureValuesIsMutable();
+          values_.add(value);
+          onChanged();
+        } else {
+          valuesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public Builder addValues(
+          int index, Value value) {
+        if (valuesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureValuesIsMutable();
+          values_.add(index, value);
+          onChanged();
+        } else {
+          valuesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public Builder addValues(
+          Value.Builder builderForValue) {
+        if (valuesBuilder_ == null) {
+          ensureValuesIsMutable();
+          values_.add(builderForValue.build());
+          onChanged();
+        } else {
+          valuesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public Builder addValues(
+          int index, Value.Builder builderForValue) {
+        if (valuesBuilder_ == null) {
+          ensureValuesIsMutable();
+          values_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          valuesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public Builder addAllValues(
+          Iterable<? extends Value> values) {
+        if (valuesBuilder_ == null) {
+          ensureValuesIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, values_);
+          onChanged();
+        } else {
+          valuesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public Builder clearValues() {
+        if (valuesBuilder_ == null) {
+          values_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          valuesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public Builder removeValues(int index) {
+        if (valuesBuilder_ == null) {
+          ensureValuesIsMutable();
+          values_.remove(index);
+          onChanged();
+        } else {
+          valuesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public Value.Builder getValuesBuilder(
+          int index) {
+        return getValuesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public ValueOrBuilder getValuesOrBuilder(
+          int index) {
+        if (valuesBuilder_ == null) {
+          return values_.get(index);  } else {
+          return valuesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public java.util.List<? extends ValueOrBuilder>
+           getValuesOrBuilderList() {
+        if (valuesBuilder_ != null) {
+          return valuesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(values_);
+        }
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public Value.Builder addValuesBuilder() {
+        return getValuesFieldBuilder().addBuilder(
+            Value.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public Value.Builder addValuesBuilder(
+          int index) {
+        return getValuesFieldBuilder().addBuilder(
+            index, Value.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .attrpubapi_v1.MultiValue.Value values = 1;</code>
+       */
+      public java.util.List<Value.Builder>
+           getValuesBuilderList() {
+        return getValuesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          Value, Value.Builder, ValueOrBuilder>
+          getValuesFieldBuilder() {
+        if (valuesBuilder_ == null) {
+          valuesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              Value, Value.Builder, ValueOrBuilder>(
+                  values_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          values_ = null;
+        }
+        return valuesBuilder_;
+      }
+      @Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      @Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:attrpubapi_v1.MultiValue)
+    }
+
+    // @@protoc_insertion_point(class_scope:attrpubapi_v1.MultiValue)
+    private static final MultiValue DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new MultiValue();
+    }
+
+    public static MultiValue getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<MultiValue>
+        PARSER = new com.google.protobuf.AbstractParser<MultiValue>() {
+      @Override
+      public MultiValue parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new MultiValue(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<MultiValue> parser() {
+      return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<MultiValue> getParserForType() {
+      return PARSER;
+    }
+
+    @Override
+    public MultiValue getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_attrpubapi_v1_Attribute_descriptor;
   private static final 
@@ -2079,6 +3434,16 @@ public final class AttrProto {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_attrpubapi_v1_Anchor_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_attrpubapi_v1_MultiValue_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_attrpubapi_v1_MultiValue_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_attrpubapi_v1_MultiValue_Value_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_attrpubapi_v1_MultiValue_Value_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2096,9 +3461,13 @@ public final class AttrProto {
       "rtifact_link\030\001 \001(\014\022\033\n\023origin_server_cert" +
       "s\030\002 \003(\014\022\032\n\022artifact_signature\030\003 \001(\014\022\020\n\010s" +
       "ub_type\030\004 \001(\t\022\021\n\tsignature\030\005 \001(\014\022\031\n\021sign" +
-      "ed_time_stamp\030\006 \001(\014B@\n$com.yoti.api.clie" +
-      "nt.spi.remote.protoB\tAttrProtoZ\ryotiprot" +
-      "oattrb\006proto3"
+      "ed_time_stamp\030\006 \001(\014\"\206\001\n\nMultiValue\022/\n\006va" +
+      "lues\030\001 \003(\0132\037.attrpubapi_v1.MultiValue.Va" +
+      "lue\032G\n\005Value\0220\n\014content_type\030\001 \001(\0162\032.att" +
+      "rpubapi_v1.ContentType\022\014\n\004data\030\002 \001(\014Bl\n$" +
+      "com.yoti.api.client.spi.remote.protoB\tAt" +
+      "trProtoZ\ryotiprotoattr\252\002\034Yoti.Auth.Proto" +
+      "Buf.Attribute\312\002\nAttrpubapib\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2125,6 +3494,18 @@ public final class AttrProto {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_attrpubapi_v1_Anchor_descriptor,
         new String[] { "ArtifactLink", "OriginServerCerts", "ArtifactSignature", "SubType", "Signature", "SignedTimeStamp", });
+    internal_static_attrpubapi_v1_MultiValue_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_attrpubapi_v1_MultiValue_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_attrpubapi_v1_MultiValue_descriptor,
+        new String[] { "Values", });
+    internal_static_attrpubapi_v1_MultiValue_Value_descriptor =
+      internal_static_attrpubapi_v1_MultiValue_descriptor.getNestedTypes().get(0);
+    internal_static_attrpubapi_v1_MultiValue_Value_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_attrpubapi_v1_MultiValue_Value_descriptor,
+        new String[] { "ContentType", "Data", });
     com.yoti.api.client.spi.remote.proto.ContentTypeProto.getDescriptor();
   }
 

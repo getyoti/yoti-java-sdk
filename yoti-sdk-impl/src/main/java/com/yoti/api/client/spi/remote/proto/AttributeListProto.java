@@ -2281,9 +2281,11 @@ public final class AttributeListProto {
       "_id\030\002 \001(\014\"R\n\022AttributeAndIdList\022<\n\025attri" +
       "bute_and_id_list\030\001 \003(\0132\035.attrpubapi_v1.A" +
       "ttributeAndId\"=\n\rAttributeList\022,\n\nattrib" +
-      "utes\030\001 \003(\0132\030.attrpubapi_v1.AttributeBI\n$" +
+      "utes\030\001 \003(\0132\030.attrpubapi_v1.AttributeBu\n$" +
       "com.yoti.api.client.spi.remote.protoB\022At" +
-      "tributeListProtoZ\ryotiprotoattrb\006proto3"
+      "tributeListProtoZ\ryotiprotoattr\252\002\034Yoti.A" +
+      "uth.ProtoBuf.Attribute\312\002\nAttrpubapib\006pro" +
+      "to3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
