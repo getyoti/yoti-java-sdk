@@ -575,8 +575,9 @@ public final class EncryptedDataProto {
     String[] descriptorData = {
       "\n\023EncryptedData.proto\022\014compubapi_v1\"0\n\rE" +
       "ncryptedData\022\n\n\002iv\030\001 \001(\014\022\023\n\013cipher_text\030" +
-      "\002 \001(\014BH\n$com.yoti.api.client.spi.remote." +
-      "protoB\022EncryptedDataProtoZ\014yotiprotocomb" +
+      "\002 \001(\014Bp\n$com.yoti.api.client.spi.remote." +
+      "protoB\022EncryptedDataProtoZ\014yotiprotocom\252" +
+      "\002\031Yoti.Auth.ProtoBuf.Common\312\002\tCompubapib" +
       "\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
