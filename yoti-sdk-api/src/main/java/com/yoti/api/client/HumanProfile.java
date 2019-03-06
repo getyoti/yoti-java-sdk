@@ -129,4 +129,11 @@ public interface HumanProfile extends Profile {
      */
     Attribute<DocumentDetails> getDocumentDetails();
 
+    /**
+     * Document images
+     *
+     * @return images of the document
+     */
+    Attribute<List<Image>> getDocumentImages();
+
 }

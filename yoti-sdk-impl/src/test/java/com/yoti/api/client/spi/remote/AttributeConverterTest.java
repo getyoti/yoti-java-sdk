@@ -5,6 +5,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -22,6 +23,7 @@ import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.DocumentDetails;
 import com.yoti.api.client.HumanProfile;
+import com.yoti.api.client.Image;
 import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
 import com.yoti.api.client.spi.remote.util.AnchorType;
@@ -133,7 +135,7 @@ public class AttributeConverterTest {
         assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
         Map<String, Object> value = result.getValue();
         assertEquals(2, value.size());
-        assertThat(value, hasEntry("simpleKey", (Object)"simpleValue"));
+        assertThat(value, hasEntry("simpleKey", (Object) "simpleValue"));
         assertThat(value, hasEntry("objectKey", (Object) Collections.singletonMap("nestedKey", "nestedValue")));
     }
 
@@ -234,7 +236,71 @@ public class AttributeConverterTest {
         assertThat(result.getSources(), hasSize(0));
     }
 
-    private <T> void assertListContains(List<T> result, List<T> expected) {
+    @Test
+    public void shouldParseMultiValueAttributeWithAnyContent() throws Exception {
+        AttrProto.MultiValue outer = createMultiValueTestData();
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setName(SOME_ATTRIBUTE_NAME)
+                .setContentType(ContentTypeProto.ContentType.MULTI_VALUE)
+                .setValue(outer.toByteString())
+                .build();
+
+        Attribute<List<Object>> result = testObj.convertAttribute(attribute);
+
+        assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
+        List<Object> outerList = result.getValue();
+        assertThat(outerList.size(), is(2));
+        assertImageValue(outerList.get(0), "image/png", SOME_IMAGE_BYTES);
+        List<Object> innerList = (List<Object>) outerList.get(1);
+        assertImageValue(innerList.get(0), "image/jpeg", SOME_IMAGE_BYTES);
+    }
+
+    @Test
+    public void shouldParseDocumentImages() throws Exception {
+        AttrProto.MultiValue outer = createMultiValueTestData();
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setContentType(ContentTypeProto.ContentType.MULTI_VALUE)
+                .setName(AttributeConstants.HumanProfileAttributes.DOCUMENT_IMAGES)
+                .setValue(outer.toByteString())
+                .build();
+
+        Attribute<List<Object>> result = testObj.convertAttribute(attribute);
+
+        assertEquals(AttributeConstants.HumanProfileAttributes.DOCUMENT_IMAGES, result.getName());
+        List<Object> list = result.getValue();
+        assertThat(list.size(), is(1));
+        assertImageValue(list.get(0), "image/png", SOME_IMAGE_BYTES);
+    }
+
+    private static void assertImageValue(Object result, String mimeType, byte[] content) {
+        Image image = (Image) result;
+        assertThat(image.getMimeType(), is(mimeType));
+        assertThat(image.getContent(), is(content));
+    }
+
+    private static AttrProto.MultiValue createMultiValueTestData() {
+        AttrProto.MultiValue.Value jpgImageValue = createMultiValueValue(ContentTypeProto.ContentType.JPEG, ByteString.copyFrom(SOME_IMAGE_BYTES));
+        AttrProto.MultiValue inner = createMultiValue(jpgImageValue);
+        AttrProto.MultiValue.Value innerValue = createMultiValueValue(ContentTypeProto.ContentType.MULTI_VALUE, inner.toByteString());
+        AttrProto.MultiValue.Value pngImageValue = createMultiValueValue(ContentTypeProto.ContentType.PNG, ByteString.copyFrom(SOME_IMAGE_BYTES));
+        AttrProto.MultiValue outer = createMultiValue(pngImageValue, innerValue);
+        return outer;
+    }
+
+    private static AttrProto.MultiValue.Value createMultiValueValue(ContentTypeProto.ContentType contentType, ByteString byteString) {
+        return AttrProto.MultiValue.Value.newBuilder()
+                .setContentType(contentType)
+                .setData(byteString)
+                .build();
+    }
+
+    private static AttrProto.MultiValue createMultiValue(AttrProto.MultiValue.Value... values) {
+        return AttrProto.MultiValue.newBuilder()
+                .addAllValues(asList(values))
+                .build();
+    }
+
+    private static <T> void assertListContains(List<T> result, List<T> expected) {
         assertThat(result, hasSize(expected.size()));
         if (expected.size() > 0) {
             assertThat(result, hasItems((T[]) expected.toArray()));

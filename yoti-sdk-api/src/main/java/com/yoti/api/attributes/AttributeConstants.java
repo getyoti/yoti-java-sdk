@@ -22,6 +22,7 @@ public final class AttributeConstants {
         public static final String SELFIE = "selfie";
         public static final String EMAIL_ADDRESS = "email_address";
         public static final String DOCUMENT_DETAILS = "document_details";
+        public static final String DOCUMENT_IMAGES = "document_images";
 
         public static final class Keys {
 
