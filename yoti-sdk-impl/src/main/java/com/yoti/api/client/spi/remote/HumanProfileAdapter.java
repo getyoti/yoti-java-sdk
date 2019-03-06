@@ -160,6 +160,12 @@ final class HumanProfileAdapter implements HumanProfile {
     }
 
     @Override
+    public Attribute<List<Image>> getDocumentImages() {
+        Attribute<?> a = wrapped.getAttribute(HumanProfileAttributes.DOCUMENT_IMAGES, List.class);
+        return (Attribute<List<Image>>) a;
+    }
+
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;

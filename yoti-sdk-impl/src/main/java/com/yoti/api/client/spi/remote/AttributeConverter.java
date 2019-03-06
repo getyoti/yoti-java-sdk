@@ -13,10 +13,13 @@ import java.util.Map;
 import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.Anchor;
 import com.yoti.api.client.Attribute;
+import com.yoti.api.client.Image;
 import com.yoti.api.client.spi.remote.proto.AttrProto;
+import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
 import com.yoti.api.client.spi.remote.util.AnchorType;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.protobuf.ByteString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,30 +50,57 @@ class AttributeConverter {
     }
 
     private Object convertValueFromProto(AttrProto.Attribute attribute) throws ParseException, IOException {
-        switch (attribute.getContentType()) {
+        return convertValue(attribute.getContentType(), attribute.getValue());
+    }
+
+    private Object convertValue(ContentTypeProto.ContentType contentType, ByteString value) throws ParseException, IOException {
+        switch (contentType) {
             case STRING:
-                return attribute.getValue().toString(DEFAULT_CHARSET);
+                return value.toString(DEFAULT_CHARSET);
             case DATE:
-                return DateValue.parseFrom(attribute.getValue().toByteArray());
+                return DateValue.parseFrom(value.toByteArray());
             case JPEG:
-                return new JpegAttributeValue(attribute.getValue().toByteArray());
+                return new JpegAttributeValue(value.toByteArray());
             case PNG:
-                return new PngAttributeValue(attribute.getValue().toByteArray());
+                return new PngAttributeValue(value.toByteArray());
             case JSON:
-                return JSON_MAPPER.readValue(attribute.getValue().toString(DEFAULT_CHARSET), Map.class);
+                return JSON_MAPPER.readValue(value.toString(DEFAULT_CHARSET), Map.class);
+            case MULTI_VALUE:
+                return convertMultiValue(value);
             default:
-                LOG.warn("Unknown type '{}' for attribute '{}'.  Attempting to parse it as a String", attribute.getContentType(), attribute.getName());
-                return attribute.getValue().toString(DEFAULT_CHARSET);
+                LOG.warn("Unknown type '{}', attempting to parse it as a String", contentType);
+                return value.toString(DEFAULT_CHARSET);
         }
+    }
+
+    private List<Object> convertMultiValue(ByteString value) throws IOException, ParseException {
+        List<Object> list = new ArrayList<>();
+        for (AttrProto.MultiValue.Value thisValue : AttrProto.MultiValue.parseFrom(value).getValuesList()) {
+            Object o = convertValue(thisValue.getContentType(), thisValue.getData());
+            list.add(o);
+        }
+        return list;
     }
 
     private Object convertSpecialType(AttrProto.Attribute attribute, Object value) throws UnsupportedEncodingException, ParseException {
         switch (attribute.getName()) {
             case AttributeConstants.HumanProfileAttributes.DOCUMENT_DETAILS:
                 return documentDetailsAttributeParser.parseFrom((String) value);
+            case AttributeConstants.HumanProfileAttributes.DOCUMENT_IMAGES:
+                return filterForImages((List<Object>) value);
             default:
                 return value;
         }
+    }
+
+    private List<Image> filterForImages(List<Object> values) {
+        List<Image> list = new ArrayList<>();
+        for (Object value : values) {
+            if (value instanceof Image) {
+                list.add((Image) value);
+            }
+        }
+        return list;
     }
 
     private List<Anchor> convertAnchors(AttrProto.Attribute attrProto) {
