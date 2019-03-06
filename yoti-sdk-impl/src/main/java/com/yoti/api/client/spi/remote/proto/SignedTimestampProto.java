@@ -836,9 +836,10 @@ public final class SignedTimestampProto {
       "\n\017SignedTimestamp\022\017\n\007version\030\001 \001(\005\022\021\n\tti" +
       "mestamp\030\002 \001(\004\022\026\n\016message_digest\030\003 \001(\014\022\024\n" +
       "\014chain_digest\030\004 \001(\014\022\032\n\022chain_digest_skip" +
-      "1\030\005 \001(\014\022\032\n\022chain_digest_skip2\030\006 \001(\014BJ\n$c" +
+      "1\030\005 \001(\014\022\032\n\022chain_digest_skip2\030\006 \001(\014Br\n$c" +
       "om.yoti.api.client.spi.remote.protoB\024Sig" +
-      "nedTimestampProtoZ\014yotiprotocomb\006proto3"
+      "nedTimestampProtoZ\014yotiprotocom\252\002\031Yoti.A" +
+      "uth.ProtoBuf.Common\312\002\tCompubapib\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

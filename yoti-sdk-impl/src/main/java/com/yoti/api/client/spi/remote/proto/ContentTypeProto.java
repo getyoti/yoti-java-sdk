@@ -43,6 +43,14 @@ public final class ContentTypeProto {
      * <code>JSON = 5;</code>
      */
     JSON(5),
+    /**
+     * <code>MULTI_VALUE = 6;</code>
+     */
+    MULTI_VALUE(6),
+    /**
+     * <code>INT = 7;</code>
+     */
+    INT(7),
     UNRECOGNIZED(-1),
     ;
 
@@ -70,6 +78,14 @@ public final class ContentTypeProto {
      * <code>JSON = 5;</code>
      */
     public static final int JSON_VALUE = 5;
+    /**
+     * <code>MULTI_VALUE = 6;</code>
+     */
+    public static final int MULTI_VALUE_VALUE = 6;
+    /**
+     * <code>INT = 7;</code>
+     */
+    public static final int INT_VALUE = 7;
 
 
     public final int getNumber() {
@@ -96,6 +112,8 @@ public final class ContentTypeProto {
         case 3: return DATE;
         case 4: return PNG;
         case 5: return JSON;
+        case 6: return MULTI_VALUE;
+        case 7: return INT;
         default: return null;
       }
     }
@@ -157,11 +175,13 @@ public final class ContentTypeProto {
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\021ContentType.proto\022\rattrpubapi_v1*O\n\013Co" +
+      "\n\021ContentType.proto\022\rattrpubapi_v1*i\n\013Co" +
       "ntentType\022\r\n\tUNDEFINED\020\000\022\n\n\006STRING\020\001\022\010\n\004" +
-      "JPEG\020\002\022\010\n\004DATE\020\003\022\007\n\003PNG\020\004\022\010\n\004JSON\020\005BG\n$c" +
-      "om.yoti.api.client.spi.remote.protoB\020Con" +
-      "tentTypeProtoZ\ryotiprotoattrb\006proto3"
+      "JPEG\020\002\022\010\n\004DATE\020\003\022\007\n\003PNG\020\004\022\010\n\004JSON\020\005\022\017\n\013M" +
+      "ULTI_VALUE\020\006\022\007\n\003INT\020\007Bs\n$com.yoti.api.cl" +
+      "ient.spi.remote.protoB\020ContentTypeProtoZ" +
+      "\ryotiprotoattr\252\002\034Yoti.Auth.ProtoBuf.Attr" +
+      "ibute\312\002\nAttrpubapib\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
