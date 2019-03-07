@@ -77,7 +77,7 @@ public class ActivityDetailsFactoryTest {
     }
 
     @Test
-    public void shouldFailWithNoReceiptKey() throws Exception {
+    public void shouldFailWithNoReceiptKey() {
         Receipt receipt = new Receipt.Builder()
                 .withWrappedReceiptKey(null)
                 .build();
@@ -93,7 +93,7 @@ public class ActivityDetailsFactoryTest {
     }
 
     @Test
-    public void shouldFailWithInvalidReceiptKey() throws Exception {
+    public void shouldFailWithInvalidReceiptKey() {
         byte[] invalidReceiptKey = { 1, 2, 3 };
         Receipt receipt = new Receipt.Builder()
                 .withWrappedReceiptKey(invalidReceiptKey)
@@ -110,7 +110,7 @@ public class ActivityDetailsFactoryTest {
     }
 
     @Test
-    public void shouldFailWithInvalidTimestamp() throws Exception {
+    public void shouldFailWithInvalidTimestamp() {
         Receipt receipt = new Receipt.Builder()
                 .withWrappedReceiptKey(validReceiptKey)
                 .withTimestamp("someInvalidValue")
@@ -127,11 +127,11 @@ public class ActivityDetailsFactoryTest {
     }
 
     @Test
-    public void shouldGetCorrectProfilesFromProfileReaderWithoutParentRememberMe() throws Exception {
+    public void shouldGetCorrectProfilesFromProfileReaderWithoutAnyRememberMeIds() throws Exception {
         Receipt receipt = new Receipt.Builder()
                 .withWrappedReceiptKey(validReceiptKey)
                 .withTimestamp(VALID_TIMESTAMP)
-                .withRememberMeId(SOME_REMEMBER_ME_ID_BYTES)
+                .withRememberMeId(new byte[0])
                 .withProfile(PROFILE_CONTENT)
                 .withOtherPartyProfile(OTHER_PROFILE_CONTENT)
                 .withReceiptId(DECODED_RECEIPT_BYTES)
@@ -143,8 +143,8 @@ public class ActivityDetailsFactoryTest {
 
         assertSame(otherProfileMock, getWrappedProfile(result.getUserProfile()));
         assertSame(profileMock, getWrappedProfile(result.getApplicationProfile()));
-        assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getRememberMeId());
-        assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getUserId());
+        assertEquals("", result.getRememberMeId());
+        assertEquals("", result.getUserId());
         assertEquals(null, result.getParentRememberMeId());
         assertEquals(ENCODED_RECEIPT_STRING, result.getReceiptId());
         assertEquals(DATE, result.getTimestamp());
