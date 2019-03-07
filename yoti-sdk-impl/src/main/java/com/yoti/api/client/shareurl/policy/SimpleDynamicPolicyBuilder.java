@@ -177,13 +177,31 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
     }
 
     @Override
+    @Deprecated
     public DynamicPolicyBuilder withSelfieAuthorisation() {
-        return withWantedAuthType(SELFIE_AUTH_TYPE);
+        return withSelfieAuthorisation(true);
     }
 
     @Override
+    public DynamicPolicyBuilder withSelfieAuthorisation(boolean enabled) {
+        if (enabled) {
+            return withWantedAuthType(SELFIE_AUTH_TYPE);
+        }
+        return this;
+    }
+
+    @Override
+    @Deprecated
     public DynamicPolicyBuilder withPinAuthorisation() {
-        return withWantedAuthType(PIN_AUTH_TYPE);
+        return withPinAuthorisation(true);
+    }
+
+    @Override
+    public DynamicPolicyBuilder withPinAuthorisation(boolean enabled) {
+        if (enabled) {
+            return withWantedAuthType(PIN_AUTH_TYPE);
+        }
+        return this;
     }
 
     @Override
