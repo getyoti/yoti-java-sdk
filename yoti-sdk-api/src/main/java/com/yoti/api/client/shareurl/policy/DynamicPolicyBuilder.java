@@ -69,9 +69,21 @@ public abstract class DynamicPolicyBuilder {
 
     public abstract DynamicPolicyBuilder withEmail();
 
+    /**
+     * Deprecated.  Please use withSelfieAuthorisation(boolean enabled) instead.
+     */
+    @Deprecated
     public abstract DynamicPolicyBuilder withSelfieAuthorisation();
 
+    public abstract DynamicPolicyBuilder withSelfieAuthorisation(boolean enabled);
+
+    /**
+     * Deprecated.  Please use withPinAuthorisation(boolean enabled) instead.
+     */
+    @Deprecated
     public abstract DynamicPolicyBuilder withPinAuthorisation();
+
+    public abstract DynamicPolicyBuilder withPinAuthorisation(boolean enabled);
 
     public abstract DynamicPolicyBuilder withWantedAuthType(int wantedAuthType);
 

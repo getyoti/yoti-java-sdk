@@ -160,6 +160,28 @@ public class SimpleDynamicPolicyBuilderTest {
     }
 
     @Test
+    public void buildsWithAuthTypesTrue() {
+        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+                .withSelfieAuthorisation(true)
+                .withPinAuthorisation(true)
+                .withWantedAuthType(99)
+                .build();
+
+        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(3));
+        assertThat(result.getWantedAuthTypes(), hasItems(1, 2, 99));
+    }
+
+    @Test
+    public void buildsWithAuthTypesFalse() {
+        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+                .withSelfieAuthorisation(false)
+                .withPinAuthorisation(false)
+                .build();
+
+        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(0));
+    }
+
+    @Test
     public void buildWithRememberMeFlags() {
         DynamicPolicy result = new SimpleDynamicPolicyBuilder()
                 .withWantedRememberMe(true)
