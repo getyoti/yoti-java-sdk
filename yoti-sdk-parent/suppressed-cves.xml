@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
-  
-  <suppress>
-    <notes><![CDATA[
-        The CVE is described here: https://access.redhat.com/security/cve/cve-2018-8088, and also here: https://www.cvedetails.com/cve/CVE-2018-8088/
-        Our findings are in SDK-718.  Briefly, we already use the latest version of slf4j (at the time of release) and even the latest Beta builds
-        are still affected.
-      ]]></notes>
-    <gav>org.slf4j:slf4j-api:1.7.25</gav>
-    <cve>CVE-2018-8088</cve>
-  </suppress>
-  <suppress>
-    <notes><![CDATA[
-        See above.  The jcl-over-slf4j jar is used by the Yoti Spring Security module.
-      ]]></notes>
-    <gav>org.slf4j:jcl-over-slf4j:1.7.25</gav>
-    <cve>CVE-2018-8088</cve>
-  </suppress>
 
-  
 </suppressions>
