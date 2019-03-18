@@ -100,7 +100,7 @@ class AttributeConverter {
                 list.add((Image) value);
             }
         }
-        return list;
+        return Collections.unmodifiableList(list);
     }
 
     private List<Anchor> convertAnchors(AttrProto.Attribute attrProto) {
