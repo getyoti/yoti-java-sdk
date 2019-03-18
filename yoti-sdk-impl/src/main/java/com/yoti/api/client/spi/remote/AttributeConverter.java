@@ -87,17 +87,19 @@ class AttributeConverter {
             case AttributeConstants.HumanProfileAttributes.DOCUMENT_DETAILS:
                 return documentDetailsAttributeParser.parseFrom((String) value);
             case AttributeConstants.HumanProfileAttributes.DOCUMENT_IMAGES:
-                return filterForImages((List<Object>) value);
+                return filterForType((List<Object>) value, Image.class, AttributeConstants.HumanProfileAttributes.DOCUMENT_IMAGES);
             default:
                 return value;
         }
     }
 
-    private List<Image> filterForImages(List<Object> values) {
-        List<Image> list = new ArrayList<>();
+    private <T> List<T> filterForType(List<Object> values, Class<T> clazz, String attributeName) {
+        List<T> list = new ArrayList<>();
         for (Object value : values) {
-            if (value instanceof Image) {
-                list.add((Image) value);
+            if (clazz.isInstance(value)) {
+                list.add((T) value);
+            } else {
+                LOG.warn("Filtering out unexpected instance of '{}' from '{}' multi-value", value.getClass().getCanonicalName(), attributeName);
             }
         }
         return Collections.unmodifiableList(list);
