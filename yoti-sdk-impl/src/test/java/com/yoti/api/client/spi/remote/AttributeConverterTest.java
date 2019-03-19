@@ -44,6 +44,7 @@ public class AttributeConverterTest {
     private static final String SOME_DATE_VALUE = "1980-08-05";
     private static final byte[] SOME_IMAGE_BYTES = "someImageBytes".getBytes();
     private static final String GENDER_MALE = "MALE";
+    public static final Integer SOME_INT_VALUE = 123;
 
     @InjectMocks AttributeConverter testObj;
 
@@ -272,12 +273,6 @@ public class AttributeConverterTest {
         assertImageValue(list.get(0), "image/png", SOME_IMAGE_BYTES);
     }
 
-    private static void assertImageValue(Object result, String mimeType, byte[] content) {
-        Image image = (Image) result;
-        assertThat(image.getMimeType(), is(mimeType));
-        assertThat(image.getContent(), is(content));
-    }
-
     private static AttrProto.MultiValue createMultiValueTestData() {
         AttrProto.MultiValue.Value jpgImageValue = createMultiValueValue(ContentTypeProto.ContentType.JPEG, ByteString.copyFrom(SOME_IMAGE_BYTES));
         AttrProto.MultiValue inner = createMultiValue(jpgImageValue);
@@ -298,6 +293,26 @@ public class AttributeConverterTest {
         return AttrProto.MultiValue.newBuilder()
                 .addAllValues(asList(values))
                 .build();
+    }
+
+    private static void assertImageValue(Object result, String mimeType, byte[] content) {
+        Image image = (Image) result;
+        assertThat(image.getMimeType(), is(mimeType));
+        assertThat(image.getContent(), is(content));
+    }
+
+    @Test
+    public void shouldParseAnIntValue() throws Exception {
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setContentType(ContentTypeProto.ContentType.INT)
+                .setName(SOME_ATTRIBUTE_NAME)
+                .setValue(ByteString.copyFromUtf8(String.valueOf(SOME_INT_VALUE)))
+                .build();
+
+        Attribute<Integer> result = testObj.convertAttribute(attribute);
+
+        assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
+        assertEquals(SOME_INT_VALUE, result.getValue());
     }
 
     private static <T> void assertListContains(List<T> result, List<T> expected) {
