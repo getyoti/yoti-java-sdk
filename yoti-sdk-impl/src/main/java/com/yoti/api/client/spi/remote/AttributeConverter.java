@@ -67,6 +67,8 @@ class AttributeConverter {
                 return JSON_MAPPER.readValue(value.toString(DEFAULT_CHARSET), Map.class);
             case MULTI_VALUE:
                 return convertMultiValue(value);
+            case INT:
+                return Integer.parseInt(value.toString(DEFAULT_CHARSET));
             default:
                 LOG.warn("Unknown type '{}', attempting to parse it as a String", contentType);
                 return value.toString(DEFAULT_CHARSET);
