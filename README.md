@@ -207,6 +207,8 @@ try {
         Attribute<String> gender = profile.getGender();
         Attribute<String> postalAddress = profile.getPostalAddress();
         Attribute<String> nationality = profile.getNationality();
+        Attribute<Map<?, ?>> structuredPostalAddress = profile.getStructuredPostalAddress();
+        Attribute<DocumentDetails> documentDetails = profile.getDocumentDetails();
   } else {
       // handle registration
   }
@@ -451,6 +453,35 @@ openssl rsa -in input-file.pem -out fixed-input-file.pem
 ```
 
 Using the new (correctly encoded) file should now be compatible with versions 1.1 onwards (as well as older versions like `1.0` prior to this).
+
+## API Coverage
+
+* Activity Details
+  * [X] Remember Me Id `getRememberMeId()`
+  * [X] Parent Remember Me Id `getParentRememberMeId()`
+  * [X] Timestamp `getTimestamp()`
+  * [X] Receipt ID `getReceiptId()`
+  * [X] User Profile `getUserProfile()`
+    * [X] Selfie `getSelfie()`
+    * [X] Given Names `getGivenNames()`
+    * [X] Family Name `getFamilyName()`
+    * [X] Full Name `getFullName()`
+    * [X] Mobile Number `getPhoneNumber()`
+    * [X] Email Address `getEmailAddress()`
+    * [X] Date of Birth `getDateOfBirth()`
+    * [X] Postal Address `getPostalAddress()`
+    * [X] Structured Postal Address `getStructuredPostalAddress()`
+    * [X] Gender `getGender()`
+    * [X] Nationality `getNationality()`
+    * [X] Age Verifications `getAgeVerifications()`
+    * [X] Age Over Verification `findAgeOverVerification(int age)`
+    * [X] Age Under Verification `findAgeUnderVerification(int age)`
+    * [X] Document Details `getDocumentDetails()`
+  * [X] Application Profile `getApplicationProfile()`
+    * [X] Name `getApplicationName()`
+    * [X] URL `getApplicationUrl()`
+    * [X] Logo `getApplicationLogo()`
+    * [X] Receipt Background Color `getApplicationReceiptBgColor()`
 
 ## Support
 
