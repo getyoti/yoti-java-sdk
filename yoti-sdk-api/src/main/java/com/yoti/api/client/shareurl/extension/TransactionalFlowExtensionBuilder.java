@@ -4,7 +4,6 @@ public interface TransactionalFlowExtensionBuilder extends ExtensionBuilder<Obje
 
     /**
      * Allows you to provide a non-null object representing the content to be submitted in the TRANSACTIONAL_FLOW extension.
-     * The object will be mapped to a Json representation using Jackson ObjectMapper.
      *
      * @return this TransactionalFlowExtensionBuilder
      */
