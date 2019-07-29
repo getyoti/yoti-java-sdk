@@ -23,7 +23,6 @@ Before you start, you'll need to create an Application in [Yoti Hub](https://hub
 ## Building your example server-app
 1. In the [Yoti Hub](https://hub.yoti.com) set the application domain of your app to `https://localhost:8443/`. Note that your endpoint must be accessible from the machine that is displaying the QR code.
 1. Still in the Hub, set the scenario callback URL to `/login`. 
-<<<<<<< HEAD
 1. Edit the [resources/application.yml](src/main/resources/application.yml) and replace the `yoti-client-sdk-id-from-hub` value with the `Yoti client SDK ID` you can find in Yoti Hub.
 1. Download your Application's key pair from Yoti Hub and copy it to `resources/app-keypair.pem`.
 1. Run `mvn clean package` to build the project.
