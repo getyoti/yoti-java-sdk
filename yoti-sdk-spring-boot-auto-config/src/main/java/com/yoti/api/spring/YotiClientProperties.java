@@ -19,7 +19,7 @@ public class YotiClientProperties {
     private String scenarioId;
 
     /**
-     * The access security key to be used as the Spring resource loader format location to the private key provided by Yoti Dashboard.
+     * The access security key to be used as the Spring resource loader format location to the private key provided by Yoti Hub.
      */
     private String accessSecurityKey;
 
