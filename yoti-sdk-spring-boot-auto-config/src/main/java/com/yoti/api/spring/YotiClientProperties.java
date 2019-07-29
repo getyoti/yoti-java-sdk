@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class YotiClientProperties {
 
     /**
-     * The SDK client ID provided by Yoti dashboard.
+     * The SDK client ID provided by Yoti Hub.
      */
     private String clientSdkId;
 
@@ -24,7 +24,7 @@ public class YotiClientProperties {
     private String accessSecurityKey;
 
     /**
-     * Gets the Yoti client SDK ID that is provided to the client developer via Yoti Dashboard.
+     * Gets the Yoti client SDK ID that is provided to the client developer via Yoti Hub.
      *
      * @return the Yoti client SDK ID.
      */
@@ -42,7 +42,7 @@ public class YotiClientProperties {
     }
 
     /**
-     * Gets the Yoti scenario ID that is provided to the client developer via Yoti Dashboard.
+     * Gets the Yoti scenario ID that is provided to the client developer via Yoti Hub.
      *
      * @return the Yoti scenario ID.
      */
