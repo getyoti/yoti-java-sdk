@@ -3,13 +3,13 @@
 This project shows an example implementation of a server-app with an endpoint which will be called by Yoti with a `token`.
 You will need to pass this token to Yoti-SDK in order to retrieve the profile of a user which has been logged in by Yoti.
 
-Before you start, you'll need to create an Application in [Dashboard](https://www.yoti.com/dashboard) and verify the domain.
+Before you start, you'll need to create an Application in [Yoti Hub](https://hub.yoti.com) and verify the domain.
 
-**NOTE: While creating Application in Dashboard, some of the attributes (except phone number and selfie) require users to have a Yoti with a verified passport. If your application, for instance, requires the user's date of birth and she/he has not added their passport to their Yoti account, this will lead to a failed login.**
+**NOTE: While creating Application in Yoti Hub, some of the attributes (except phone number and selfie) require users to have a Yoti with a verified passport. If your application, for instance, requires the user's date of birth and she/he has not added their passport to their Yoti account, this will lead to a failed login.**
 
 ## Project Structure
 * The logic for retrieving the profile can be found in `com.yoti.api.examples.springboot.YotiLoginController#doLogin`.
-* `resources/app-keypair.pem` is the keypair you can get from Dashboard.
+* `resources/app-keypair.pem` is the keypair you can get from Yoti Hub.
 * `resource/application.yml` contains the configuration that enforces SSL usage by your server-app (in case you are not using a proxy server like NGINX). Make sure that you update the SDK Application ID and the configuration points to the right path to the java keystore with an SSL key (there is an already one included in the project ``` server.keystore.jks ```).
 * This project contains a Spring-boot server application. In this example we used the current SDK version by including the specific Maven dependency with its repository:
 ```xml
@@ -21,10 +21,10 @@ Before you start, you'll need to create an Application in [Dashboard](https://ww
 ```
 
 ## Building your example server-app
-1. In the [Yoti Dashboard](https://www.yoti.com/dashboard/applications) set the application domain of your app to `https://localhost:8443/`. Note that your endpoint must be accessible from the machine that is displaying the QR code.
-1. Still in the dashboard, set the scenario callback URL to `/login`. 
-1. Edit the [resources/application.yml](src/main/resources/application.yml) and replace the `yoti-client-sdk-id-from-dashboard` value with the `Yoti client SDK ID` you can find in Dashboard.
-1. Download your Application's key pair from Yoti-Dashboard and copy it to `resources/app-keypair.pem`.
+1. In the [Yoti Hub](https://hub.yoti.com) set the application domain of your app to `https://localhost:8443/`. Note that your endpoint must be accessible from the machine that is displaying the QR code.
+1. Still in the Hub, set the scenario callback URL to `/login`. 
+1. Edit the [resources/application.yml](src/main/resources/application.yml) and replace the `yoti-client-sdk-id-from-dashboard` value with the `Yoti client SDK ID` you can find in Yoti Hub.
+1. Download your Application's key pair from Yoti-Hub and copy it to `resources/app-keypair.pem`.
 1. Run `mvn clean package` to build the project.
 
 ## Running

@@ -11,7 +11,7 @@ import com.yoti.api.client.shareurl.policy.DynamicPolicy;
 public interface DynamicScenario {
 
     /**
-     * The device's callback endpoint. Must be a URL relative to the Application Domain specified in your Dashboard
+     * The device's callback endpoint. Must be a URL relative to the Application Domain specified in your Hub
      *
      */
     String callbackEndpoint();

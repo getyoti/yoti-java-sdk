@@ -9,17 +9,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class YotiProperties {
 
     /**
-     * The Yoti Dashboard Application ID.
+     * The Yoti Hub Application ID.
      */
     private String applicationId;
 
     /**
-     * The Yoti Dashboard Scenario ID.
+     * The Yoti Hub Scenario ID.
      */
     private String scenarioId;
 
     /**
-     * Gets the Yoti Dashboard Application ID.
+     * Gets the Yoti Hub Application ID.
      *
      * @return the Application ID.
      */
@@ -28,7 +28,7 @@ public class YotiProperties {
     }
 
     /**
-     * Sets the Yoti Dashboard Application ID.
+     * Sets the Yoti Hub Application ID.
      *
      * @param applicationId the new Application ID.
      */
@@ -37,7 +37,7 @@ public class YotiProperties {
     }
 
     /**
-     * Gets the Yoti Dashboard Scenario ID.
+     * Gets the Yoti Hub Scenario ID.
      *
      * @return the scenario ID.
      */
@@ -46,7 +46,7 @@ public class YotiProperties {
     }
 
     /**
-     * Sets the scenario ID given to you by Yoti Dashboard.
+     * Sets the scenario ID given to you by Yoti Hub.
      *
      * @param scenarioId the scenario ID.
      */
