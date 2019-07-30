@@ -186,6 +186,8 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
     public DynamicPolicyBuilder withSelfieAuthorisation(boolean enabled) {
         if (enabled) {
             return withWantedAuthType(SELFIE_AUTH_TYPE);
+        } else {
+            this.wantedAuthTypes.remove(SELFIE_AUTH_TYPE);
         }
         return this;
     }
@@ -200,6 +202,8 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
     public DynamicPolicyBuilder withPinAuthorisation(boolean enabled) {
         if (enabled) {
             return withWantedAuthType(PIN_AUTH_TYPE);
+        } else {
+            this.wantedAuthTypes.remove(PIN_AUTH_TYPE);
         }
         return this;
     }
