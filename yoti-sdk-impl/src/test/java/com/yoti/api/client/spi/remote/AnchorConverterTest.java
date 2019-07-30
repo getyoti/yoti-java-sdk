@@ -39,6 +39,7 @@ public class AnchorConverterTest {
     private static final String PASSPORT_SOURCE_TYPE = "PASSPORT";
     private static final String DRIVING_LICENCE_SOURCE_TYPE = "DRIVING_LICENCE";
     private static final String YOTI_ADMIN_VERIFIER_TYPE = "YOTI_ADMIN";
+    private static final String YOTI_UNKNOWN_ISSUER = "CN=document-registration-server";
     private static final String SHA256_ALGO = "SHA256withRSA";
     private static final String CRITICAL_EXT_ID = "2.5.29.15";
 
@@ -81,6 +82,20 @@ public class AnchorConverterTest {
         assertEquals(YOTI_ADMIN_VERIFIER_TYPE, result.getValue());
         verifyCertificates(result.getOriginCertificates(), DRIVING_LICENCE_ISSUER, AnchorType.VERIFIER.extensionOid);
         verifyTimestamp(result.getSignedTimestamp(), TestAnchors.YOTI_ADMIN_ANCHOR_TIMESTAMP);
+    }
+
+    @Test
+    public void shouldConvertYotiUnknownAnchor() throws Exception {
+        AttrProto.Anchor anchorProto = AttrProto.Anchor.parseFrom(Base64.getDecoder().decode(TestAnchors.YOTI_UNKNOWN_ANCHOR));
+
+        Anchor result = testObj.convert(anchorProto);
+
+        assertEquals(TestAnchors.YOTI_UNKNOWN_ANCHOR_TYPE, result.getType());
+        assertEquals(TestAnchors.YOTI_UNKNOWN_ANCHOR_SUBTYPE, result.getSubType());
+        assertEquals(TestAnchors.YOTI_UNKNOWN_ANCHOR_VALUE, result.getValue());
+        assertEquals(TestAnchors.YOTI_UNKNOWN_ANCHOR_SERIAL, result.getOriginCertificates().get(0).getSerialNumber().toString());
+        assertEquals(YOTI_UNKNOWN_ISSUER, result.getOriginCertificates().get(0).getIssuerDN());
+        verifyTimestamp(result.getSignedTimestamp(), TestAnchors.YOTI_UNKNOWN_ANCHOR_TIMESTAMP);
     }
 
     private void verifyCertificates(List<X509Certificate> certificates, String issuer, String nonCriticalExtIds) {
@@ -162,3 +177,4 @@ public class AnchorConverterTest {
     }
 
 }
+
