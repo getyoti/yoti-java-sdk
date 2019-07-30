@@ -204,6 +204,16 @@ public class SimpleDynamicPolicyBuilderTest {
     }
 
     @Test
+    public void buildWithSelfieAuthorisationDisabledThenEnabled() {
+        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+                .withSelfieAuthorisation(false)
+                .withSelfieAuthorisation(true)
+                .build();
+
+        assertThat(result.getWantedAuthTypes(), hasItem(1));
+    }
+
+    @Test
     public void buildWithPinAuthorisationEnabledThenDisabled() {
         DynamicPolicy result = new SimpleDynamicPolicyBuilder()
                 .withPinAuthorisation(true)
@@ -212,6 +222,18 @@ public class SimpleDynamicPolicyBuilderTest {
 
         assertThat(result.getWantedAuthTypes(), not(hasItem(2)));
     }
+
+    @Test
+    public void buildWithPinAuthorisationDisabledThenEnabled() {
+        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+                .withPinAuthorisation(false)
+                .withPinAuthorisation(true)
+                .build();
+
+        assertThat(result.getWantedAuthTypes(), hasItem(2));
+    }
+
+
 
     private static class WantedAttributeMatcher extends TypeSafeDiagnosingMatcher<WantedAttribute> {
 
