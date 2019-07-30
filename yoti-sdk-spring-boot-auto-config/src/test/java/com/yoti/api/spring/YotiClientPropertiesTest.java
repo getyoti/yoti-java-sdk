@@ -9,16 +9,16 @@ import static org.hamcrest.Matchers.nullValue;
 
 public class YotiClientPropertiesTest {
 
-    private static final String APPLICATION_ID = "app-id-123";
+    private static final String SCENARIO_ID = "scenario-id-123";
     private static final String CLIENT_SDK_ID = "abc-123";
     private static final String ACCESS_SECURITY_KEY = "classpath:/my-key.pem";
     private static final String YOTI_PREFIX = "com.yoti.client";
 
     @Test
-    public void applicationIdShouldBeSet() throws Exception {
+    public void scenarioIdShouldBeSet() throws Exception {
         final YotiClientProperties properties = new YotiClientProperties();
-        properties.setApplicationId(APPLICATION_ID);
-        assertThat(properties.getApplicationId(), is(APPLICATION_ID));
+        properties.setScenarioId(SCENARIO_ID);
+        assertThat(properties.getScenarioId(), is(SCENARIO_ID));
     }
 
     @Test
@@ -40,7 +40,7 @@ public class YotiClientPropertiesTest {
         final YotiClientProperties properties = new YotiClientProperties();
         assertThat(properties.getAccessSecurityKey(), nullValue());
         assertThat(properties.getClientSdkId(), nullValue());
-        assertThat(properties.getApplicationId(), nullValue());
+        assertThat(properties.getScenarioId(), nullValue());
     }
 
     /**

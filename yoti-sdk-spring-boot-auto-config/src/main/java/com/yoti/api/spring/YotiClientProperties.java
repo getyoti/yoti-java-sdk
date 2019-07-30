@@ -9,37 +9,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class YotiClientProperties {
 
     /**
-     * The Application ID provided by Yoti dashboard.
-     */
-    private String applicationId;
-
-    /**
      * The SDK client ID provided by Yoti dashboard.
      */
     private String clientSdkId;
 
     /**
+     * The scenario ID provided by Yoti Hub
+     */
+    private String scenarioId;
+
+    /**
      * The access security key to be used as the Spring resource loader format location to the private key provided by Yoti Dashboard.
      */
     private String accessSecurityKey;
-
-    /**
-     * Gets the Yoti Application ID that is provided to the client developer via Yoti Dashboard.
-     *
-     * @return the Yoti Application id.
-     */
-    public String getApplicationId() {
-        return applicationId;
-    }
-
-    /**
-     * Sets the Yoti Application ID that is provided to the client developer via Yoti portal.
-     *
-     * @param applicationId the Yoti Application id.
-     */
-    public void setApplicationId(final String applicationId) {
-        this.applicationId = applicationId;
-    }
 
     /**
      * Gets the Yoti client SDK ID that is provided to the client developer via Yoti Dashboard.
@@ -51,13 +33,27 @@ public class YotiClientProperties {
     }
 
     /**
-     * Sets the Yoti Yoti client SDK ID that is provided to the client developer via Yoti portal.
+     * Sets the Yoti client SDK ID that is provided to the client developer via Yoti portal.
      *
      * @param clientSdkId the Yoti client SDK id.
      */
     public void setClientSdkId(final String clientSdkId) {
         this.clientSdkId = clientSdkId;
     }
+
+    /**
+     * Gets the Yoti scenario ID that is provided to the client developer via Yoti Hub.
+     *
+     * @return the Yoti scenario id.
+     */
+    public String getScenarioId() { return scenarioId; };
+
+    /**
+     * Sets the Yoti scenario ID that is provided to the client developer via Yoti Hub.
+     *
+     * @param scenarioId the Yoti scenario id.
+     */
+    public void setScenarioId(final String scenarioId) { this.scenarioId = scenarioId; }
 
     /**
      * Gets the location for the key pair.
@@ -84,7 +80,7 @@ public class YotiClientProperties {
         if (o == null || getClass() != o.getClass()) return false;
 
         YotiClientProperties that = (YotiClientProperties) o;
-        if (applicationId != null ? !applicationId.equals(that.applicationId) : that.applicationId != null) return false;
+        if (scenarioId != null ? !scenarioId.equals(that.scenarioId) : that.scenarioId != null) return false;
         if (clientSdkId != null ? !clientSdkId.equals(that.clientSdkId) : that.clientSdkId != null) return false;
 
         return accessSecurityKey != null ? accessSecurityKey.equals(that.accessSecurityKey) : that.accessSecurityKey == null;
@@ -92,7 +88,7 @@ public class YotiClientProperties {
 
     @Override
     public int hashCode() {
-        int result = applicationId != null ? applicationId.hashCode() : 0;
+        int result = scenarioId != null ? scenarioId.hashCode() : 0;
         result = 31 * result + (clientSdkId != null ? clientSdkId.hashCode() : 0);
         result = 31 * result + (accessSecurityKey != null ? accessSecurityKey.hashCode() : 0);
         return result;
@@ -101,7 +97,7 @@ public class YotiClientProperties {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("YotiClientProperties{");
-        sb.append("applicationId='").append(applicationId).append('\'');
+        sb.append("scenarioId='").append(scenarioId).append('\'');
         sb.append(", clientSdkId='").append(clientSdkId).append('\'');
         sb.append(", accessSecurityKey='").append(accessSecurityKey).append('\'');
         sb.append('}');
