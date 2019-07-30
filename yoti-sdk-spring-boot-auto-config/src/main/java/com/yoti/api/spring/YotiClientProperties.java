@@ -14,7 +14,7 @@ public class YotiClientProperties {
     private String clientSdkId;
 
     /**
-     * The scenario ID provided by Yoti Hub
+     * The scenario ID provided by Yoti dashboard
      */
     private String scenarioId;
 
@@ -26,7 +26,7 @@ public class YotiClientProperties {
     /**
      * Gets the Yoti client SDK ID that is provided to the client developer via Yoti Dashboard.
      *
-     * @return the Yoti client SDK id.
+     * @return the Yoti client SDK ID.
      */
     public String getClientSdkId() {
         return clientSdkId;
@@ -35,23 +35,23 @@ public class YotiClientProperties {
     /**
      * Sets the Yoti client SDK ID that is provided to the client developer via Yoti portal.
      *
-     * @param clientSdkId the Yoti client SDK id.
+     * @param clientSdkId the Yoti client SDK ID.
      */
     public void setClientSdkId(final String clientSdkId) {
         this.clientSdkId = clientSdkId;
     }
 
     /**
-     * Gets the Yoti scenario ID that is provided to the client developer via Yoti Hub.
+     * Gets the Yoti scenario ID that is provided to the client developer via Yoti Dashboard.
      *
-     * @return the Yoti scenario id.
+     * @return the Yoti scenario ID.
      */
     public String getScenarioId() { return scenarioId; };
 
     /**
      * Sets the Yoti scenario ID that is provided to the client developer via Yoti Hub.
      *
-     * @param scenarioId the Yoti scenario id.
+     * @param scenarioId the Yoti scenario ID.
      */
     public void setScenarioId(final String scenarioId) { this.scenarioId = scenarioId; }
 
