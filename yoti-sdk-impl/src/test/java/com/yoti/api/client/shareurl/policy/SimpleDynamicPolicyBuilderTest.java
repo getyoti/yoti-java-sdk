@@ -19,6 +19,7 @@ import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -190,6 +191,26 @@ public class SimpleDynamicPolicyBuilderTest {
 
         assertTrue(result.isWantedRememberMe());
         assertTrue(result.isWantedRememberMeOptional());
+    }
+
+    @Test
+    public void buildWithSelfieAuthorisationEnabledThenDisabled() {
+        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+                .withSelfieAuthorisation(true)
+                .withSelfieAuthorisation(false)
+                .build();
+
+        assertThat(result.getWantedAuthTypes(), not(hasItem(1)));
+    }
+
+    @Test
+    public void buildWithPinAuthorisationEnabledThenDisabled() {
+        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+                .withPinAuthorisation(true)
+                .withPinAuthorisation(false)
+                .build();
+
+        assertThat(result.getWantedAuthTypes(), not(hasItem(2)));
     }
 
     private static class WantedAttributeMatcher extends TypeSafeDiagnosingMatcher<WantedAttribute> {
