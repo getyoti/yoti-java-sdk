@@ -53,7 +53,8 @@ public class YotiLoginController extends WebMvcConfigurerAdapter {
 
     @RequestMapping("/")
     public String home(final Model model) {
-        model.addAttribute("applicationId", properties.getApplicationId());
+        model.addAttribute("clientSdkId", properties.getClientSdkId());
+        model.addAttribute("scenarioId", properties.getScenarioId());
         return "index";
     }
 
