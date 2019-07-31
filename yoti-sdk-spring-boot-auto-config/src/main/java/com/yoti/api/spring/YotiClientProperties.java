@@ -14,7 +14,7 @@ public class YotiClientProperties {
     private String clientSdkId;
 
     /**
-     * The scenario ID provided by Yoti dashboard
+     * The scenario ID provided by Yoti Hub
      */
     private String scenarioId;
 
