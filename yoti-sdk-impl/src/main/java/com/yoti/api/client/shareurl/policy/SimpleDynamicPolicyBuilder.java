@@ -184,12 +184,7 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
 
     @Override
     public DynamicPolicyBuilder withSelfieAuthorisation(boolean enabled) {
-        if (enabled) {
-            return withWantedAuthType(SELFIE_AUTH_TYPE);
-        } else {
-            this.wantedAuthTypes.remove(SELFIE_AUTH_TYPE);
-        }
-        return this;
+        return this.withWantedAuthType(SELFIE_AUTH_TYPE, enabled);
     }
 
     @Override
@@ -200,18 +195,23 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
 
     @Override
     public DynamicPolicyBuilder withPinAuthorisation(boolean enabled) {
-        if (enabled) {
-            return withWantedAuthType(PIN_AUTH_TYPE);
-        } else {
-            this.wantedAuthTypes.remove(PIN_AUTH_TYPE);
-        }
-        return this;
+        return this.withWantedAuthType(PIN_AUTH_TYPE, enabled);
     }
 
     @Override
     public DynamicPolicyBuilder withWantedAuthType(int wantedAuthType) {
         this.wantedAuthTypes.add(wantedAuthType);
         return this;
+    }
+
+    @Override
+    public DynamicPolicyBuilder withWantedAuthType(int wantedAuthType, boolean enabled) {
+        if (enabled) {
+            return this.withWantedAuthType(wantedAuthType);
+        } else {
+            this.wantedAuthTypes.remove(wantedAuthType);
+            return this;
+        }
     }
 
     @Override
