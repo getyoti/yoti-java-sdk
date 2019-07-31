@@ -289,7 +289,7 @@ public class AttributeConverterTest {
     }
 
     @Test(expected = Exception.class)
-    public void shouldNotParseNonStringAttributeWithEmptyValue() throws Exception {
+    public void shouldNotParseDateWithEmptyValue() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setContentType(ContentTypeProto.ContentType.DATE)
                 .setName(SOME_ATTRIBUTE_NAME)
@@ -297,6 +297,61 @@ public class AttributeConverterTest {
                 .build();
 
         Attribute<Date> result = testObj.convertAttribute(attribute);
+    }
+
+    @Test(expected = Exception.class)
+    public void shouldNotParseJpegAttributeWithEmptyValue() throws Exception {
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setContentType(ContentTypeProto.ContentType.JPEG)
+                .setName(SOME_ATTRIBUTE_NAME)
+                .setValue(ByteString.copyFromUtf8(EMPTY_STRING))
+                .build();
+
+        Attribute<JpegAttributeValue> result = testObj.convertAttribute(attribute);
+    }
+
+    @Test(expected = Exception.class)
+    public void shouldNotParsePngAttributeWithEmptyValue() throws Exception {
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setContentType(ContentTypeProto.ContentType.PNG)
+                .setName(SOME_ATTRIBUTE_NAME)
+                .setValue(ByteString.copyFromUtf8(EMPTY_STRING))
+                .build();
+
+        Attribute<PngAttributeValue> result = testObj.convertAttribute(attribute);
+    }
+
+    @Test(expected = Exception.class)
+    public void shouldNotParseJsonAttributeWithEmptyValue() throws Exception {
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setContentType(ContentTypeProto.ContentType.JSON)
+                .setName(SOME_ATTRIBUTE_NAME)
+                .setValue(ByteString.copyFromUtf8(EMPTY_STRING))
+                .build();
+
+        Attribute<Map> result = testObj.convertAttribute(attribute);
+    }
+
+    @Test(expected = Exception.class)
+    public void shouldNotParseMultiValueAttributeWithEmptyValue() throws Exception {
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setContentType(ContentTypeProto.ContentType.MULTI_VALUE)
+                .setName(SOME_ATTRIBUTE_NAME)
+                .setValue(ByteString.copyFromUtf8(EMPTY_STRING))
+                .build();
+
+        Attribute<List<Object>> result = testObj.convertAttribute(attribute);
+    }
+
+    @Test(expected = Exception.class)
+    public void shouldNotParseIntAttributeWithEmptyValue() throws Exception {
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setContentType(ContentTypeProto.ContentType.INT)
+                .setName(SOME_ATTRIBUTE_NAME)
+                .setValue(ByteString.copyFromUtf8(EMPTY_STRING))
+                .build();
+
+        Attribute<Integer> result = testObj.convertAttribute(attribute);
     }
 
     private static AttrProto.MultiValue createMultiValueTestData() {

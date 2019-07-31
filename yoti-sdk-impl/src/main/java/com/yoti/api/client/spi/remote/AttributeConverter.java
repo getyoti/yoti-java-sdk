@@ -54,6 +54,11 @@ class AttributeConverter {
     }
 
     private Object convertValue(ContentTypeProto.ContentType contentType, ByteString value) throws ParseException, IOException {
+        boolean isInvalid = (contentType != ContentTypeProto.ContentType.STRING && value.isEmpty());
+        if (isInvalid) {
+            throw new ParseException("Only STRING attributes can have an empty value", 0);
+        }
+
         switch (contentType) {
             case STRING:
                 return value.toString(DEFAULT_CHARSET);
