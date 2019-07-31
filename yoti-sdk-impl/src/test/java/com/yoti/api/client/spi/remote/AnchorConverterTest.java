@@ -36,10 +36,10 @@ public class AnchorConverterTest {
 
     private static final String PASSPORT_ISSUER = "CN=passport-registration-server";
     private static final String DRIVING_LICENCE_ISSUER = "CN=driving-licence-registration-server";
+    private static final String DOCUMENT_REGISTRATION_ISSUER = "CN=document-registration-server";
     private static final String PASSPORT_SOURCE_TYPE = "PASSPORT";
     private static final String DRIVING_LICENCE_SOURCE_TYPE = "DRIVING_LICENCE";
     private static final String YOTI_ADMIN_VERIFIER_TYPE = "YOTI_ADMIN";
-    private static final String YOTI_UNKNOWN_ISSUER = "CN=document-registration-server";
     private static final String SHA256_ALGO = "SHA256withRSA";
     private static final String CRITICAL_EXT_ID = "2.5.29.15";
 
@@ -94,7 +94,7 @@ public class AnchorConverterTest {
         assertEquals(TestAnchors.YOTI_UNKNOWN_ANCHOR_SUBTYPE, result.getSubType());
         assertEquals(TestAnchors.YOTI_UNKNOWN_ANCHOR_VALUE, result.getValue());
         assertEquals(TestAnchors.YOTI_UNKNOWN_ANCHOR_SERIAL, result.getOriginCertificates().get(0).getSerialNumber().toString());
-        assertEquals(YOTI_UNKNOWN_ISSUER, result.getOriginCertificates().get(0).getIssuerDN());
+        assertEquals(DOCUMENT_REGISTRATION_ISSUER, result.getOriginCertificates().get(0).getIssuerDN().toString());
         verifyTimestamp(result.getSignedTimestamp(), TestAnchors.YOTI_UNKNOWN_ANCHOR_TIMESTAMP);
     }
 
