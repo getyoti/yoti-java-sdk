@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -288,7 +289,7 @@ public class AttributeConverterTest {
         assertEquals(EMPTY_STRING, result.getValue());
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = ParseException.class)
     public void shouldNotParseDateWithEmptyValue() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setContentType(ContentTypeProto.ContentType.DATE)
@@ -299,7 +300,7 @@ public class AttributeConverterTest {
         Attribute<Date> result = testObj.convertAttribute(attribute);
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = ParseException.class)
     public void shouldNotParseJpegAttributeWithEmptyValue() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setContentType(ContentTypeProto.ContentType.JPEG)
@@ -310,7 +311,7 @@ public class AttributeConverterTest {
         Attribute<JpegAttributeValue> result = testObj.convertAttribute(attribute);
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = ParseException.class)
     public void shouldNotParsePngAttributeWithEmptyValue() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setContentType(ContentTypeProto.ContentType.PNG)
@@ -321,7 +322,7 @@ public class AttributeConverterTest {
         Attribute<PngAttributeValue> result = testObj.convertAttribute(attribute);
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = ParseException.class)
     public void shouldNotParseJsonAttributeWithEmptyValue() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setContentType(ContentTypeProto.ContentType.JSON)
@@ -332,7 +333,7 @@ public class AttributeConverterTest {
         Attribute<Map> result = testObj.convertAttribute(attribute);
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = ParseException.class)
     public void shouldNotParseMultiValueAttributeWithEmptyValue() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setContentType(ContentTypeProto.ContentType.MULTI_VALUE)
@@ -343,7 +344,7 @@ public class AttributeConverterTest {
         Attribute<List<Object>> result = testObj.convertAttribute(attribute);
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = ParseException.class)
     public void shouldNotParseIntAttributeWithEmptyValue() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
                 .setContentType(ContentTypeProto.ContentType.INT)
