@@ -183,7 +183,7 @@ public class SimpleDynamicPolicyBuilderTest {
     }
 
     @Test
-    public void buildWithRememberMeFlags() {
+    public void buildsWithRememberMeFlags() {
         DynamicPolicy result = new SimpleDynamicPolicyBuilder()
                 .withWantedRememberMe(true)
                 .withWantedRememberMeOptional(true)
@@ -194,7 +194,7 @@ public class SimpleDynamicPolicyBuilderTest {
     }
 
     @Test
-    public void buildWithSelfieAuthorisationEnabledThenDisabled() {
+    public void buildsWithSelfieAuthorisationEnabledThenDisabled() {
         DynamicPolicy result = new SimpleDynamicPolicyBuilder()
                 .withSelfieAuthorisation(true)
                 .withSelfieAuthorisation(false)
@@ -204,7 +204,7 @@ public class SimpleDynamicPolicyBuilderTest {
     }
 
     @Test
-    public void buildWithSelfieAuthorisationDisabledThenEnabled() {
+    public void buildsWithSelfieAuthorisationDisabledThenEnabled() {
         DynamicPolicy result = new SimpleDynamicPolicyBuilder()
                 .withSelfieAuthorisation(false)
                 .withSelfieAuthorisation(true)
@@ -214,7 +214,7 @@ public class SimpleDynamicPolicyBuilderTest {
     }
 
     @Test
-    public void buildWithPinAuthorisationEnabledThenDisabled() {
+    public void buildsWithPinAuthorisationEnabledThenDisabled() {
         DynamicPolicy result = new SimpleDynamicPolicyBuilder()
                 .withPinAuthorisation(true)
                 .withPinAuthorisation(false)
@@ -224,7 +224,7 @@ public class SimpleDynamicPolicyBuilderTest {
     }
 
     @Test
-    public void buildWithPinAuthorisationDisabledThenEnabled() {
+    public void buildsWithPinAuthorisationDisabledThenEnabled() {
         DynamicPolicy result = new SimpleDynamicPolicyBuilder()
                 .withPinAuthorisation(false)
                 .withPinAuthorisation(true)
@@ -233,7 +233,23 @@ public class SimpleDynamicPolicyBuilderTest {
         assertThat(result.getWantedAuthTypes(), hasItem(2));
     }
 
+    @Test
+    public void buildsWithSelfieAuthorisationDisabled() {
+        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+                .withSelfieAuthorisation(false)
+                .build();
 
+        assertThat(result.getWantedAuthTypes(), hasItem(1));
+    }
+
+    @Test
+    public void builsdWithPinAuthorisationDisabled() {
+        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+                .withPinAuthorisation(false)
+                .build();
+
+        assertThat(result.getWantedAuthTypes(), hasItem(2));
+    }
 
     private static class WantedAttributeMatcher extends TypeSafeDiagnosingMatcher<WantedAttribute> {
 
