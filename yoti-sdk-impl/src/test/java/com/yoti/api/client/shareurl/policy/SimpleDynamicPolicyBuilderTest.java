@@ -243,7 +243,7 @@ public class SimpleDynamicPolicyBuilderTest {
     }
 
     @Test
-    public void builsdWithPinAuthorisationDisabled() {
+    public void buildsWithPinAuthorisationDisabled() {
         DynamicPolicy result = new SimpleDynamicPolicyBuilder()
                 .withPinAuthorisation(false)
                 .build();
