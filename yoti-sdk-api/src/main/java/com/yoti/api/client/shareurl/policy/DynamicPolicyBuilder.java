@@ -87,6 +87,8 @@ public abstract class DynamicPolicyBuilder {
 
     public abstract DynamicPolicyBuilder withWantedAuthType(int wantedAuthType);
 
+    public abstract DynamicPolicyBuilder withWantedAuthType(int wantedAuthType, boolean enabled);
+
     public abstract DynamicPolicyBuilder withWantedRememberMe(boolean wantedRememberMe);
 
     public abstract DynamicPolicyBuilder withWantedRememberMeOptional(boolean wantedRememberMeOptional);
