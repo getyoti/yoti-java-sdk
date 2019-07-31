@@ -44,6 +44,7 @@ public class AttributeConverterTest {
     private static final String SOME_DATE_VALUE = "1980-08-05";
     private static final byte[] SOME_IMAGE_BYTES = "someImageBytes".getBytes();
     private static final String GENDER_MALE = "MALE";
+    private static final String EMPTY_STRING = "";
     public static final Integer SOME_INT_VALUE = 123;
 
     @InjectMocks AttributeConverter testObj;
@@ -271,6 +272,31 @@ public class AttributeConverterTest {
         List<Object> list = result.getValue();
         assertThat(list.size(), is(1));
         assertImageValue(list.get(0), "image/png", SOME_IMAGE_BYTES);
+    }
+
+    @Test
+    public void shouldParseStringAttributeWithEmptyValue() throws Exception {
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setContentType(ContentTypeProto.ContentType.STRING)
+                .setName(SOME_ATTRIBUTE_NAME)
+                .setValue(ByteString.copyFromUtf8(""))
+                .build();
+
+        Attribute<String> result = testObj.convertAttribute(attribute);
+
+        assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
+        assertEquals(EMPTY_STRING, result.getValue());
+    }
+
+    @Test(expected = Exception.class)
+    public void shouldNotParseNonStringAttributeWithEmptyValue() throws Exception {
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setContentType(ContentTypeProto.ContentType.DATE)
+                .setName(SOME_ATTRIBUTE_NAME)
+                .setValue(ByteString.copyFromUtf8(EMPTY_STRING))
+                .build();
+
+        Attribute<Date> result = testObj.convertAttribute(attribute);
     }
 
     private static AttrProto.MultiValue createMultiValueTestData() {
