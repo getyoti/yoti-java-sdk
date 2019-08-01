@@ -239,7 +239,7 @@ public class SimpleDynamicPolicyBuilderTest {
                 .withSelfieAuthorisation(false)
                 .build();
 
-        assertThat(result.getWantedAuthTypes(), hasItem(1));
+        assertThat(result.getWantedAuthTypes(), not(hasItem(1)));
     }
 
     @Test
@@ -248,7 +248,7 @@ public class SimpleDynamicPolicyBuilderTest {
                 .withPinAuthorisation(false)
                 .build();
 
-        assertThat(result.getWantedAuthTypes(), hasItem(2));
+        assertThat(result.getWantedAuthTypes(), not(hasItem(2)));
     }
 
     private static class WantedAttributeMatcher extends TypeSafeDiagnosingMatcher<WantedAttribute> {
