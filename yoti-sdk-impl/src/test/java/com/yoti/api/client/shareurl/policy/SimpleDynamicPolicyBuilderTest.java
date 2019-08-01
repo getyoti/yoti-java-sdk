@@ -30,6 +30,9 @@ import org.junit.Test;
 
 public class SimpleDynamicPolicyBuilderTest {
 
+    private static final int EXPECTED_SELFIE_AUTH_TYPE = 1;
+    private static final int EXPECTED_PIN_AUTH_TYPE = 2;
+
     @Test
     public void ensuresAnAttributeCanOnlyExistOnce() {
         WantedAttribute wantedAttribute = WantedAttributeBuilder.newInstance()
@@ -157,7 +160,7 @@ public class SimpleDynamicPolicyBuilderTest {
                 .build();
 
         assertThat(result.getWantedAuthTypes(), Matchers.hasSize(3));
-        assertThat(result.getWantedAuthTypes(), hasItems(1, 2, 99));
+        assertThat(result.getWantedAuthTypes(), hasItems(EXPECTED_SELFIE_AUTH_TYPE, EXPECTED_PIN_AUTH_TYPE, 99));
     }
 
     @Test
@@ -169,7 +172,7 @@ public class SimpleDynamicPolicyBuilderTest {
                 .build();
 
         assertThat(result.getWantedAuthTypes(), Matchers.hasSize(3));
-        assertThat(result.getWantedAuthTypes(), hasItems(1, 2, 99));
+        assertThat(result.getWantedAuthTypes(), hasItems(EXPECTED_SELFIE_AUTH_TYPE, EXPECTED_PIN_AUTH_TYPE, 99));
     }
 
     @Test
@@ -200,7 +203,8 @@ public class SimpleDynamicPolicyBuilderTest {
                 .withSelfieAuthorisation(false)
                 .build();
 
-        assertThat(result.getWantedAuthTypes(), not(hasItem(1)));
+        assertThat(result.getWantedAuthTypes(), not(hasItem(EXPECTED_SELFIE_AUTH_TYPE)));
+        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(0));
     }
 
     @Test
@@ -210,7 +214,8 @@ public class SimpleDynamicPolicyBuilderTest {
                 .withSelfieAuthorisation(true)
                 .build();
 
-        assertThat(result.getWantedAuthTypes(), hasItem(1));
+        assertThat(result.getWantedAuthTypes(), hasItem(EXPECTED_SELFIE_AUTH_TYPE));
+        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(1));
     }
 
     @Test
@@ -220,7 +225,8 @@ public class SimpleDynamicPolicyBuilderTest {
                 .withPinAuthorisation(false)
                 .build();
 
-        assertThat(result.getWantedAuthTypes(), not(hasItem(2)));
+        assertThat(result.getWantedAuthTypes(), not(hasItem(EXPECTED_PIN_AUTH_TYPE)));
+        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(0));
     }
 
     @Test
@@ -230,7 +236,8 @@ public class SimpleDynamicPolicyBuilderTest {
                 .withPinAuthorisation(true)
                 .build();
 
-        assertThat(result.getWantedAuthTypes(), hasItem(2));
+        assertThat(result.getWantedAuthTypes(), hasItem(EXPECTED_PIN_AUTH_TYPE));
+        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(1));
     }
 
     @Test
@@ -239,7 +246,8 @@ public class SimpleDynamicPolicyBuilderTest {
                 .withSelfieAuthorisation(false)
                 .build();
 
-        assertThat(result.getWantedAuthTypes(), not(hasItem(1)));
+        assertThat(result.getWantedAuthTypes(), not(hasItem(EXPECTED_SELFIE_AUTH_TYPE)));
+        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(0));
     }
 
     @Test
@@ -248,7 +256,8 @@ public class SimpleDynamicPolicyBuilderTest {
                 .withPinAuthorisation(false)
                 .build();
 
-        assertThat(result.getWantedAuthTypes(), not(hasItem(2)));
+        assertThat(result.getWantedAuthTypes(), not(hasItem(EXPECTED_PIN_AUTH_TYPE)));
+        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(0));
     }
 
     private static class WantedAttributeMatcher extends TypeSafeDiagnosingMatcher<WantedAttribute> {
