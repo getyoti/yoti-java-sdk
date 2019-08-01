@@ -125,7 +125,7 @@
     <findsecbugs.version>1.7.1</findsecbugs.version>
     <owasp.version>3.2.1</owasp.version>
     <owasp.dependency.check.cvss.limit>4</owasp.dependency.check.cvss.limit>
-    <owasp.dependency.check.cve.update.limit>24</owasp.dependency.check.cve.update.limit>
+    <owasp.dependency.check.cve.update.limit>12</owasp.dependency.check.cve.update.limit>
     <maven.reports.version>2.9</maven.reports.version>
     <animal.sniffer.version>1.16</animal.sniffer.version>
     <mojo.signature.artefact>java17</mojo.signature.artefact>
