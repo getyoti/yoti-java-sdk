@@ -68,7 +68,17 @@
                         </div>
 
                         <div class="yoti-attribute-value">
-                            <div class="yoti-attribute-value-text" th:text="${attribute.displayValue}" />
+                            <div th:switch="${attribute.attribute.name}" class="yoti-attribute-value-text">
+                                <div th:case="structured_postal_address">
+                                    <table>
+                                        <tr th:each="instance : ${attribute.attribute.value}">
+                                            <td th:text="${instance.key}"></td>
+                                            <td th:text="${instance.value}"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div th:case="*" class="yoti-attribute-value-text" th:text="${attribute.displayValue}"></div>
+                            </div>
                         </div>
 
                         <div class="yoti-attribute-anchors-layout">
