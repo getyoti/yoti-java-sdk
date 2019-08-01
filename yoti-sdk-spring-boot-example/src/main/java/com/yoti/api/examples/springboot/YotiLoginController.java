@@ -1,6 +1,7 @@
 package com.yoti.api.examples.springboot;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.yoti.api.attributes.AttributeConstants;
@@ -13,6 +14,7 @@ import com.yoti.api.client.YotiClient;
 import com.yoti.api.spring.YotiClientProperties;
 import com.yoti.api.spring.YotiProperties;
 
+import org.apache.juli.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +98,7 @@ public class YotiLoginController extends WebMvcConfigurerAdapter {
                 .map(this::mapToDisplayAttribute)
                 .filter(displayAttribute -> displayAttribute != null)
                 .collect(Collectors.toList());
+
         model.addAttribute("displayAttributes", displayAttributes);
 
         return "profile";
@@ -114,7 +117,7 @@ public class YotiLoginController extends WebMvcConfigurerAdapter {
             case AttributeConstants.HumanProfileAttributes.POSTAL_ADDRESS:
                 return new DisplayAttribute("Address", attribute, "yoti-icon-address");
             case AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS:
-                return null; // Do nothing - we are handling this with the postalAddress attribute
+                return new DisplayAttribute("Structured Postal Address", attribute, "yoti-icon-address"); // Do nothing - we are handling this with the postalAddress attribute
             case AttributeConstants.HumanProfileAttributes.PHONE_NUMBER:
                 return new DisplayAttribute("Mobile number", attribute, "yoti-icon-phone");
             case AttributeConstants.HumanProfileAttributes.EMAIL_ADDRESS:
