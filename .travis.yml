@@ -1,0 +1,49 @@
+language: java
+
+cache:
+  directories:
+    $HOME/.m2
+
+git:
+  depth: 1
+
+jobs:
+  include:
+    - state: Test
+      jdk: oraclejdk8
+      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -Ddependency-check.skip=true -Dhttps.protocols=TLSv1.2
+      script:
+        - ./mvnw test -B
+    - &test-compatability
+      stage: Compatability
+      jdk: oraclejdk8
+      os: linux
+      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -Ddependency-check.skip=true -Dhttps.protocols=TLSv1.2
+      script:
+        - ./mvnw test -B
+    - <<: *test-compatability
+      # Only the api and implementation need testing with Java 1.7
+      dist: precise
+      jdk: oraclejdk7
+      script:
+        - ./mvnw test -B -pl yoti-sdk-api,yoti-sdk-impl
+    - <<: *test-compatability
+      dist: precise
+      jdk: openjdk7
+      script:
+        - ./mvnw test -B -pl yoti-sdk-api,yoti-sdk-impl
+    - <<: *test-compatability
+      jdk: openjdk8
+    - <<: *test-compatability
+      jdk: oraclejdk9
+    - <<: *test-compatability
+      jdk: openjdk9
+    - <<: *test-compatability
+      dist: bionic
+      jdk: openjdk10
+    - &test-compatability-osx
+      <<: *test-compatability
+      - os: osx
+        osx_image: xcode9.3
+    - <<: *test-compatability-osx
+      jdk: openjdk8
