@@ -1,5 +1,7 @@
 # Yoti Java SDK
 
+[![Build Status](https://travis-ci.com/getyoti/yoti-java-sdk.svg?branch=master)](https://travis-ci.com/getyoti/yoti-java-sdk)
+
 Welcome to the Yoti Java SDK. This repo contains the tools and step by step instructions you need to quickly integrate your Java back-end with Yoti so that your users can share their identity details with your application in a secure and trusted way.
 
 ## Table of Contents
