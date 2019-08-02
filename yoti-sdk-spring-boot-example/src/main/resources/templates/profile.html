@@ -86,13 +86,13 @@
                             <div class="yoti-attribute-anchors-head -value">Value</div>
                             <div class="yoti-attribute-anchors-head -subtype">Sub type</div>
 
-                            <div th:each="anchor : ${attribute.attribute.sources}">
+                            <div th:each="anchor : ${attribute.attribute.sources}" th:remove="tag">
                                 <div class="yoti-attribute-anchors -s-v">Source</div>
                                 <div class="yoti-attribute-anchors -value" th:text="${anchor.value}" />
                                 <div class="yoti-attribute-anchors -subtype" th:text="${anchor.subType}" />
                             </div>
 
-                            <div th:each="anchor : ${attribute.attribute.verifiers}">
+                            <div th:each="anchor : ${attribute.attribute.verifiers}" th:remove="tag">
                                 <div class="yoti-attribute-anchors -s-v">Verifier</div>
                                 <div class="yoti-attribute-anchors -value" th:text="${anchor.value}" />
                                 <div class="yoti-attribute-anchors -subtype" th:text="${anchor.subType}" />
