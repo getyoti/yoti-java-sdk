@@ -205,3 +205,5 @@ $RECYCLE.BIN/
 
 .idea
 *.iml
+
+application.yml
