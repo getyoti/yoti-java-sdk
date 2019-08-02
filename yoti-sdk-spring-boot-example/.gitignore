@@ -199,4 +199,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+application.yml
 *.pem
