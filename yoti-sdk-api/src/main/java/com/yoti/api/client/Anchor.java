@@ -29,7 +29,6 @@ public interface Anchor {
      * Identifies the provider that either sourced or verified the attribute value.
      * The range of possible values is not limited.
      * For example, for a passport, this would either be "NFC" or "OCR"
-     * 
      *
      * @return String, naming the entity that anchored the attribute
      */
