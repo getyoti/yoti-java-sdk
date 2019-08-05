@@ -117,7 +117,7 @@ public class YotiLoginController extends WebMvcConfigurerAdapter {
             case AttributeConstants.HumanProfileAttributes.POSTAL_ADDRESS:
                 return new DisplayAttribute("Address", attribute, "yoti-icon-address");
             case AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS:
-                return new DisplayAttribute("Structured Postal Address", attribute, "yoti-icon-address"); // Do nothing - we are handling this with the postalAddress attribute
+                return new DisplayAttribute("Structured Postal Address", attribute, "yoti-icon-address");
             case AttributeConstants.HumanProfileAttributes.PHONE_NUMBER:
                 return new DisplayAttribute("Mobile number", attribute, "yoti-icon-phone");
             case AttributeConstants.HumanProfileAttributes.EMAIL_ADDRESS:
