@@ -37,7 +37,7 @@ Before you start, you'll need to create an Application in [Yoti Hub](https://hub
 In order to receive calls on your /login endpoint, you need to expose your server-app to the outside world. We require that you use the domain from the Callback URL and HTTPS.
 
 ## Requirements for running the application
-* Java 7 or above
+* Java 8 or above
 * If you are using Oracle JDK/JRE you need to install JCE extension in your server's Java to allow strong encryption (http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html). This is not a requirement if you are using OpenJDK.
 
 
