@@ -46,3 +46,9 @@ jobs:
     - <<: *test-compatability
       dist: bionic
       jdk: openjdk10
+    - <<: *test-compatability
+      dist: bionic
+      jdk: openjdk11
+    - <<: *test-compatability
+      dist: bionic
+      jdk: oraclejdk11
