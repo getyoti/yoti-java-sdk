@@ -10,8 +10,7 @@ import java.util.List;
 public interface Anchor {
 
     /**
-     * The type of Anchor - most likely either but it's possible that new Anchor types will be added in future
-     * "SOURCE" or "VERIFIER"
+     * The type of Anchor - most likely "SOURCE" or "VERIFIER" but it's possible that new Anchor types will be added in future
      * @return String, naming the type of the anchor
      */
     String getType();
