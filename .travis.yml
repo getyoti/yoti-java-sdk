@@ -5,7 +5,7 @@ cache:
     $HOME/.m2
 
 env:
-  - JAVA_TOOL_OPTIONS=-Dhttps.protocols=TLSv1.2
+  - JAVA_TOOL_OPTIONS=-Dhttps.protocols=TLSv1.2 -Ddependency-check.skip=true
 
 git:
   depth: 3
@@ -14,27 +14,27 @@ jobs:
   include:
     - state: Test
       jdk: oraclejdk8
-      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -Dowasp.dependency.check.cve.update.limit=1
+      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true
       script:
         - ./mvnw test -B
     - &test-compatability
       stage: Compatability
       jdk: oraclejdk8
       os: linux
-      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -Dowasp.dependency.check.cve.update.limit=1
+      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true
       script:
         - ./mvnw test -B
     - <<: *test-compatability
       # Only the api and implementation need testing with Java 1.7
       dist: precise
       jdk: oraclejdk7
-      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -pl !yoti-sdk-spring-boot-example -Dowasp.dependency.check.cve.update.limit=1
+      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -pl yoti-sdk-api,yoti-sdk-impl
       script:
         - ./mvnw test -B -pl yoti-sdk-api,yoti-sdk-impl
     - <<: *test-compatability
       dist: precise
       jdk: openjdk7
-      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -pl !yoti-sdk-spring-boot-example -Dowasp.dependency.check.cve.update.limit=1
+      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -pl yoti-sdk-api,yoti-sdk-impl
       script:
         - ./mvnw test -B -pl yoti-sdk-api,yoti-sdk-impl
     - <<: *test-compatability
