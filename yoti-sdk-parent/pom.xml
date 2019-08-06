@@ -133,6 +133,7 @@
     <mojo.extra.rules.version>1.0-beta-7</mojo.extra.rules.version>
     <nexus.plugin.version>1.6.8</nexus.plugin.version>
     <javadoc.plugin.version>3.1.0</javadoc.plugin.version>
+    <javadoc.plugin.source>8</javadoc.plugin.source>
     <gpg.plugin.version>1.6</gpg.plugin.version>
     
   </properties>
@@ -409,7 +410,7 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${javadoc.plugin.version}</version>
           <configuration>
-            <source>8</source>
+            <source>${javadoc.plugin.source}</source>
           </configuration>
           <executions>
             <execution>
