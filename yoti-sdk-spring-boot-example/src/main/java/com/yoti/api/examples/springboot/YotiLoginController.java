@@ -11,6 +11,16 @@ import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.Image;
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.YotiClient;
+import com.yoti.api.client.shareurl.DynamicScenario;
+import com.yoti.api.client.shareurl.DynamicShareException;
+import com.yoti.api.client.shareurl.SimpleDynamicScenarioBuilder;
+import com.yoti.api.client.shareurl.extension.Extension;
+import com.yoti.api.client.shareurl.extension.LocationConstraintContent;
+import com.yoti.api.client.shareurl.extension.SimpleLocationConstraintExtensionBuilder;
+import com.yoti.api.client.shareurl.policy.DynamicPolicy;
+import com.yoti.api.client.shareurl.policy.SimpleDynamicPolicyBuilder;
+import com.yoti.api.client.shareurl.policy.SimpleWantedAttributeBuilder;
+import com.yoti.api.client.shareurl.policy.WantedAttribute;
 import com.yoti.api.spring.YotiClientProperties;
 import com.yoti.api.spring.YotiProperties;
 
@@ -58,6 +68,49 @@ public class YotiLoginController extends WebMvcConfigurerAdapter {
         model.addAttribute("clientSdkId", properties.getClientSdkId());
         model.addAttribute("scenarioId", properties.getScenarioId());
         return "index";
+    }
+
+    @RequestMapping("/dynamic-share")
+    public String dynamicShareHome(final Model model) {
+        Extension<LocationConstraintContent> locationExtension = new SimpleLocationConstraintExtensionBuilder()
+                .withLatitude(51.5074)
+                .withLongitude(-0.1278)
+                .withRadius(6000)
+                .build();
+
+        WantedAttribute givenNamesWantedAttribute = new SimpleWantedAttributeBuilder()
+                .withName("given_names")
+                .build();
+
+        WantedAttribute emailAddressWantedAttribute = new SimpleWantedAttributeBuilder()
+                .withName("email_address")
+                .build();
+
+        DynamicPolicy dynamicPolicy = new SimpleDynamicPolicyBuilder()
+                .withWantedAttribute(givenNamesWantedAttribute)
+                .withWantedAttribute(emailAddressWantedAttribute)
+                .withFullName()
+                .withSelfie()
+                .withPhoneNumber()
+                .withAgeOver(18)
+                .build();
+
+        DynamicScenario dynamicScenario = new SimpleDynamicScenarioBuilder()
+                .withCallbackEndpoint("/login")
+                .withPolicy(dynamicPolicy)
+                .withExtension(locationExtension)
+                .build();
+
+        try {
+            String shareUrl = client.createShareUrl(dynamicScenario).getUrl();
+            model.addAttribute("yotiShareUrl", shareUrl);
+        } catch (DynamicShareException e) {
+            LOG.error(e.getMessage());
+        }
+
+        model.addAttribute("clientSdkId", properties.getClientSdkId());
+
+        return "dynamic-share";
     }
 
     /**
