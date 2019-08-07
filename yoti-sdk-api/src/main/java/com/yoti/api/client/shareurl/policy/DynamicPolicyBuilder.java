@@ -17,6 +17,8 @@ public abstract class DynamicPolicyBuilder {
 
     public abstract DynamicPolicyBuilder withWantedAttribute(WantedAttribute wantedAttribute);
 
+    public abstract DynamicPolicyBuilder withWantedAttribute(boolean optional, String name);
+
     public abstract DynamicPolicyBuilder withFamilyName(boolean optional);
 
     public abstract DynamicPolicyBuilder withFamilyName();

@@ -29,7 +29,8 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
         return this;
     }
 
-    private DynamicPolicyBuilder withWantedAttribute(boolean optional, String name) {
+    @Override
+    public DynamicPolicyBuilder withWantedAttribute(boolean optional, String name) {
         WantedAttribute wantedAttribute = new SimpleWantedAttributeBuilder()
                 .withName(name)
                 .withOptional(optional)
