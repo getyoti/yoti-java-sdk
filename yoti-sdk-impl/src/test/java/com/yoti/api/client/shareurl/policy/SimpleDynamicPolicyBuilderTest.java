@@ -260,6 +260,26 @@ public class SimpleDynamicPolicyBuilderTest {
         assertThat(result.getWantedAuthTypes(), Matchers.hasSize(0));
     }
 
+    @Test
+    public void buildsWithWantedAttributeByNameWithOptionalTrue() {
+        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+                .withWantedAttribute(true, GIVEN_NAMES)
+                .build();
+
+        assertThat(result.getWantedAttributes(), Matchers.hasSize(1));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(GIVEN_NAMES, true)));
+    }
+
+    @Test
+    public void buildsWithWantedAttributeByNameWithOptionalFalse() {
+        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+                .withWantedAttribute(false, GIVEN_NAMES)
+                .build();
+
+        assertThat(result.getWantedAttributes(), Matchers.hasSize(1));
+        assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(GIVEN_NAMES, false)));
+    }
+
     private static class WantedAttributeMatcher extends TypeSafeDiagnosingMatcher<WantedAttribute> {
 
         private static final String TEMPLATE = "{ name: '%s', derivation: '%s',  optional: '%s' }";
