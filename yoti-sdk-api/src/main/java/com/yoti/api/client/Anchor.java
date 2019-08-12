@@ -16,20 +16,20 @@ public interface Anchor {
     String getType();
 
     /**
-     * <pre>
-     * For SOURCE Anchors, describes how the attribute value was obtained, will be one of: ['USER_PROVIDED', 'PASSPORT', 'DRIVING_LICENSE', 'PASSCARD', 'NATIONAL_ID']
+     * Identifies the provider that either sourced or verified the attribute value.
+     * The range of possible values is not limited.
+     * For example, for a passport, this would either be "NFC" or "OCR"
      *
-     * For VERIFIER Anchors, describes the verification method used for the attribute, will be one of: ['YOTI_ADMIN', 'YOTI_IDENTITY', 'YOTI_OTP', 'PASSPORT_NFC_SIGNATURE', 'ISSUING_AUTHORITY', 'ISSUING_AUTHORITY_PKI']
-     * </pre>
      * @return String, further detailing how the attribute value was obtained
      */
     String getSubType();
 
     /**
-     * Identifies the provider that either sourced or verified the attribute value.
-     * The range of possible values is not limited.
-     * For example, for a passport, this would either be "NFC" or "OCR"
+     * <pre>
+     * For SOURCE Anchors, describes how the attribute value was obtained, options listed are among possible values: ['USER_PROVIDED', 'PASSPORT', 'DRIVING_LICENSE', 'PASSCARD', 'NATIONAL_ID']
      *
+     * For VERIFIER Anchors, describes the verification method used for the attribute, options listed are among possible values: ['YOTI_ADMIN', 'YOTI_IDENTITY', 'YOTI_OTP', 'PASSPORT_NFC_SIGNATURE', 'ISSUING_AUTHORITY', 'ISSUING_AUTHORITY_PKI']
+     * </pre>
      * @return String, naming the entity that anchored the attribute
      */
     String getValue();
