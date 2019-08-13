@@ -26,9 +26,9 @@ public interface Anchor {
 
     /**
      * <pre>
-     * For SOURCE Anchors, describes how the attribute value was obtained, options listed are among possible values: ['USER_PROVIDED', 'PASSPORT', 'DRIVING_LICENSE', 'PASSCARD', 'NATIONAL_ID']
+     * For SOURCE Anchors, describes how the attribute value was obtained, among the possible options are: ['USER_PROVIDED', 'PASSPORT', 'DRIVING_LICENSE', 'PASSCARD', 'NATIONAL_ID']
      *
-     * For VERIFIER Anchors, describes the verification method used for the attribute, options listed are among possible values: ['YOTI_ADMIN', 'YOTI_IDENTITY', 'YOTI_OTP', 'PASSPORT_NFC_SIGNATURE', 'ISSUING_AUTHORITY', 'ISSUING_AUTHORITY_PKI']
+     * For VERIFIER Anchors, describes the verification method used for the attribute, among the possible options are: ['YOTI_ADMIN', 'YOTI_IDENTITY', 'YOTI_OTP', 'PASSPORT_NFC_SIGNATURE', 'ISSUING_AUTHORITY', 'ISSUING_AUTHORITY_PKI']
      * </pre>
      * @return String, naming the entity that anchored the attribute
      */
