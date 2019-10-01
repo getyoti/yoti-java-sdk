@@ -19,8 +19,8 @@ public class SimpleWantedAnchorBuilderTest {
                 .withSubType(SOME_SUB_TYPE)
                 .build();
 
-        assertEquals(wantedAnchor.getValue(), SOME_VALUE);
-        assertEquals(wantedAnchor.getSubType(), SOME_SUB_TYPE);
+        assertEquals(SOME_VALUE, wantedAnchor.getValue());
+        assertEquals(SOME_SUB_TYPE, wantedAnchor.getSubType());
     }
 
     @Test(expected = IllegalArgumentException.class)

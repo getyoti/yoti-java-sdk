@@ -52,6 +52,8 @@ public interface HumanProfile extends Profile {
     /**
      * Searches for an {@link AgeVerification} corresponding to an 'Age Over' check for the given age
      *
+     *
+     * @param age the age the search over
      * @return age_over {@link AgeVerification} for the given age, or <code>null</code> if no match was found
      */
     AgeVerification findAgeOverVerification(int age);
@@ -59,6 +61,7 @@ public interface HumanProfile extends Profile {
     /**
      * Searches for an {@link AgeVerification} corresponding to an 'Age Under' check for the given age
      *
+     * @param age the age to search under
      * @return age_under {@link AgeVerification} for the given age, or <code>null</code> if no match was found
      */
     AgeVerification findAgeUnderVerification(int age);

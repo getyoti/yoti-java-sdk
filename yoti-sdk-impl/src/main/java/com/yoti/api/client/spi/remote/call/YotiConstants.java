@@ -5,10 +5,14 @@ public final class YotiConstants {
     private YotiConstants() {}
 
     public static final String PROPERTY_YOTI_API_URL = "yoti.api.url";
+    public static final String PROPERTY_YOTI_DOCS_URL = "yoti.docs.url";
 
     public static final String DEFAULT_YOTI_HOST = "https://api.yoti.com";
     public static final String YOTI_API_PATH_PREFIX = "/api/v1";
     public static final String DEFAULT_YOTI_API_URL = DEFAULT_YOTI_HOST + YOTI_API_PATH_PREFIX;
+
+    public static final String YOTI_DOCS_PATH_PREFIX = "/idverify/v1";
+    public static final String DEFAULT_YOTI_DOCS_URL = DEFAULT_YOTI_HOST + YOTI_DOCS_PATH_PREFIX;
 
     public static final String AUTH_KEY_HEADER = "X-Yoti-Auth-Key";
     public static final String DIGEST_HEADER = "X-Yoti-Auth-Digest";

@@ -114,8 +114,8 @@ public class ExtraDataConverterTest {
         AttributeIssuanceDetails attributeIssuanceDetails = extraData.getAttributeIssuanceDetails();
 
         assertNotNull(attributeIssuanceDetails);
-        assertEquals(attributeIssuanceDetails.getToken(), "someValue");
-        assertNotEquals(attributeIssuanceDetails.getToken(), "someOtherToken");
+        assertEquals("someValue", attributeIssuanceDetails.getToken());
+        assertNotEquals("someOtherToken", attributeIssuanceDetails.getToken());
     }
 
     @Test

@@ -184,7 +184,7 @@ public class SimpleProfileTest {
 
         List<Attribute<Integer>> result = profile.findAttributesStartingWith(STARTS_WITH, Integer.class);
 
-        assertEquals(result.size(), 1);
+        assertEquals(1, result.size());
         assertEquals(INTEGER_VALUE, result.get(0).getValue());
     }
 
@@ -238,7 +238,7 @@ public class SimpleProfileTest {
 
         Attribute<String> result = profile.getAttributeByName("some_attribute", String.class);
 
-        assertEquals(result.getValue(), "firstValue");
+        assertEquals("firstValue", result.getValue());
     }
 
     @Test
@@ -252,8 +252,8 @@ public class SimpleProfileTest {
         List<Attribute<String>> result = profile.getAttributesByName("some_attribute", String.class);
 
         assertThat(result, hasSize(2));
-        assertEquals(result.get(0).getValue(), "firstValue");
-        assertEquals(result.get(1).getValue(), "secondValue");
+        assertEquals("firstValue", result.get(0).getValue());
+        assertEquals("secondValue", result.get(1).getValue());
     }
 
     private static <T> List<Attribute<?>> asAttributeList(String key, T o) {

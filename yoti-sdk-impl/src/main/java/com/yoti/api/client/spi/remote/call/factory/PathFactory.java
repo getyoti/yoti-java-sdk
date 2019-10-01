@@ -18,15 +18,27 @@ public class PathFactory {
     }
 
     public String createProfilePath(String appId, String connectToken) {
-        return unsignedPathFactory.createProfilePath(appId, connectToken) + createSignatureParams();
+        return unsignedPathFactory.createProfilePath(appId, connectToken) + "&" + createSignatureParams();
     }
 
     public String createAmlPath(String appId) {
-        return unsignedPathFactory.createAmlPath(appId) + createSignatureParams();
+        return unsignedPathFactory.createAmlPath(appId) + "&" + createSignatureParams();
     }
 
     public String createDynamicSharingPath(String appId) {
-        return unsignedPathFactory.createDynamicSharingPath(appId) + createSignatureParams();
+        return unsignedPathFactory.createDynamicSharingPath(appId) + "?" + createSignatureParams();
+    }
+
+    public String createNewYotiDocsSessionPath(String appId) {
+        return unsignedPathFactory.createNewYotiDocsSessionPath(appId) + "&" + createSignatureParams();
+    }
+
+    public String createGetYotiDocsSessionPath(String appId, String sessionId) {
+        return unsignedPathFactory.createYotiDocsSessionPath(appId, sessionId) + "&" + createSignatureParams();
+    }
+
+    public String createMediaContentPath(String appId, String sessionId, String mediaId) {
+        return unsignedPathFactory.createMediaContentPath(appId, sessionId, mediaId) + "&" + createSignatureParams();
     }
 
     protected long createTimestamp() {
