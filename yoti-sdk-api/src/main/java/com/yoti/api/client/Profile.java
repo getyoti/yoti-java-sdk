@@ -22,7 +22,7 @@ public interface Profile {
     /**
      * Returns the {@link Attribute} object for the key
      *
-     * @param name
+     * @param name the name of the attribute
      * @return the attribute object, null if it is not present in the profile
      */
     @Deprecated

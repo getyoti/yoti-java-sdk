@@ -2,6 +2,7 @@ package com.yoti.api.client.spi.remote;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.yoti.api.client.Attribute;
@@ -24,7 +25,7 @@ public class SimpleAgeVerificationTest {
         assertExceptionForMalformedAttributeName("age_over:18:21");
     }
 
-    private static void assertExceptionForMalformedAttributeName(String attName) {
+    private void assertExceptionForMalformedAttributeName(String attName) {
         try {
             Attribute<String> attribute = new SimpleAttribute<>(attName, null);
             new SimpleAgeVerification(attribute);
@@ -43,9 +44,9 @@ public class SimpleAgeVerificationTest {
 
         SimpleAgeVerification result = new SimpleAgeVerification(attribute);
 
-        assertEquals(result.getCheckType(), "any_string_here");
-        assertEquals(result.getAge(), 21);
-        assertEquals(result.getResult(), true);
+        assertEquals("any_string_here", result.getCheckType());
+        assertEquals(21, result.getAge());
+        assertTrue(result.getResult());
     }
 
 }

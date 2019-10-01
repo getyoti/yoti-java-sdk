@@ -14,9 +14,9 @@ import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.YotiClient;
 import com.yoti.api.client.aml.AmlProfile;
 import com.yoti.api.client.aml.AmlResult;
+import com.yoti.api.client.shareurl.DynamicScenario;
 import com.yoti.api.client.shareurl.DynamicShareException;
 import com.yoti.api.client.shareurl.ShareUrlResult;
-import com.yoti.api.client.shareurl.DynamicScenario;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
 import com.yoti.api.client.spi.remote.call.qrcode.DynamicSharingService;
@@ -32,16 +32,16 @@ final class SecureYotiClient implements YotiClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(SecureYotiClient.class);
 
+    static {
+        Security.addProvider(new BouncyCastleProvider());
+    }
+
     private final String appId;
     private final KeyPair keyPair;
     private final ReceiptFetcher receiptFetcher;
     private final RemoteAmlService remoteAmlService;
     private final ActivityDetailsFactory activityDetailsFactory;
     private final DynamicSharingService dynamicSharingService;
-
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
 
     SecureYotiClient(String applicationId,
             KeyPairSource kpSource,

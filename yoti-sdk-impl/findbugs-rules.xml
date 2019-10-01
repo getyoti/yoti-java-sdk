@@ -12,6 +12,11 @@
     </Match>
 
     <Match>
+        <Class name="com.yoti.api.client.spi.remote.MediaValue"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+
+    <Match>
         <Class name="com.yoti.api.client.spi.remote.call.Receipt"/>
         <Bug pattern="EI_EXPOSE_REP"/>
     </Match>
