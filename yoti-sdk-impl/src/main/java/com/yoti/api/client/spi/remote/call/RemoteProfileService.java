@@ -5,21 +5,21 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
 import static com.yoti.api.client.spi.remote.Base64.base64;
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.AUTH_KEY_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_API_URL;
 import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.Security;
-import java.util.Map;
 
 import com.yoti.api.client.ProfileException;
-import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
-import com.yoti.api.client.spi.remote.call.factory.PathFactory;
-import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
+import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,32 +27,26 @@ public final class RemoteProfileService implements ProfileService {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoteProfileService.class);
 
-    private final ResourceFetcher resourceFetcher;
-    private final PathFactory pathFactory;
-    private final HeadersFactory headersFactory;
-    private final SignedMessageFactory signedMessageFactory;
+    private final UnsignedPathFactory unsignedPathFactory;
+    private final SignedRequestBuilder signedRequestBuilder;
     private final String apiUrl;
 
     static {
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        Security.addProvider(new BouncyCastleProvider());
     }
 
     public static RemoteProfileService newInstance() {
         return new RemoteProfileService(
-                JsonResourceFetcher.newInstance(),
-                new PathFactory(),
-                new HeadersFactory(),
-                SignedMessageFactory.newInstance());
+                new UnsignedPathFactory(),
+                SignedRequestBuilder.newInstance()
+        );
     }
 
-    RemoteProfileService(ResourceFetcher resourceFetcher,
-                         PathFactory profilePathFactory,
-                         HeadersFactory headersFactory,
-                         SignedMessageFactory signedMessageFactory) {
-        this.resourceFetcher = resourceFetcher;
-        this.pathFactory = profilePathFactory;
-        this.headersFactory = headersFactory;
-        this.signedMessageFactory = signedMessageFactory;
+    RemoteProfileService(UnsignedPathFactory profilePathFactory,
+            SignedRequestBuilder signedRequestBuilder) {
+        this.unsignedPathFactory = profilePathFactory;
+        this.signedRequestBuilder = signedRequestBuilder;
+
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
 
@@ -62,26 +56,32 @@ public final class RemoteProfileService implements ProfileService {
         notNull(appId, "Application id");
         notNull(connectToken, "Connect token");
 
-        String path = pathFactory.createProfilePath(appId, connectToken);
+        String path = unsignedPathFactory.createProfilePath(appId, connectToken);
 
         try {
-            String digest = signedMessageFactory.create(keyPair.getPrivate(), HTTP_GET, path);
             String authKey = base64(keyPair.getPublic().getEncoded());
-            return fetchReceipt(path, digest, authKey);
+
+            SignedRequest signedRequest = this.signedRequestBuilder
+                    .withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withHttpMethod(HTTP_GET)
+                    .withHeader(AUTH_KEY_HEADER, authKey)
+                    .build();
+            return fetchReceipt(signedRequest);
         } catch (GeneralSecurityException gse) {
             throw new ProfileException("Cannot sign request", gse);
+        } catch (URISyntaxException uriSyntaxException) {
+            throw new ProfileException("Error creating request", uriSyntaxException);
         } catch (IOException ioe) {
             throw new ProfileException("Error calling service to get profile", ioe);
         }
     }
 
-    private Receipt fetchReceipt(String resourcePath, String digest, String authKey) throws IOException, ProfileException {
-        LOG.info("Fetching profile from resource at '{}'", resourcePath);
-        Map<String, String> headers = headersFactory.create(digest, authKey);
-        UrlConnector urlConnector = UrlConnector.get(apiUrl + resourcePath);
-
+    private Receipt fetchReceipt(SignedRequest signedRequest) throws IOException, ProfileException {
+        LOG.info("Fetching profile from resource at '{}'", signedRequest.getUri());
         try {
-            ProfileResponse response = resourceFetcher.fetchResource(urlConnector, headers, ProfileResponse.class);
+            ProfileResponse response = signedRequest.execute(ProfileResponse.class);
             return response.getReceipt();
         } catch (ResourceException re) {
             int responseCode = re.getResponseCode();

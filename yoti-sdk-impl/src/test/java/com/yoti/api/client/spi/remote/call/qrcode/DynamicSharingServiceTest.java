@@ -1,21 +1,15 @@
 package com.yoti.api.client.spi.remote.call.qrcode;
 
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
 
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_API_PATH_PREFIX;
-
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.eq;
+import static org.mockito.Answers.RETURNS_SELF;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.util.HashMap;
@@ -23,12 +17,11 @@ import java.util.Map;
 
 import com.yoti.api.client.shareurl.DynamicScenario;
 import com.yoti.api.client.shareurl.DynamicShareException;
+import com.yoti.api.client.spi.remote.call.HttpMethod;
 import com.yoti.api.client.spi.remote.call.ResourceException;
-import com.yoti.api.client.spi.remote.call.ResourceFetcher;
-import com.yoti.api.client.spi.remote.call.UrlConnector;
-import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
-import com.yoti.api.client.spi.remote.call.factory.PathFactory;
-import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
+import com.yoti.api.client.spi.remote.call.SignedRequest;
+import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
+import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,8 +29,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -49,22 +40,18 @@ public class DynamicSharingServiceTest {
     private static final String DYNAMIC_QRCODE_PATH = "dynamicQRCodePath";
     private static final String SOME_BODY = "someBody";
     private static final byte[] SOME_BODY_BYTES = SOME_BODY.getBytes();
-    private static final String SOME_SIGNATURE = "someSignature";
     private static final Map<String, String> SOME_HEADERS = new HashMap<>();
 
     @InjectMocks DynamicSharingService testObj;
 
-    @Mock PathFactory pathFactoryMock;
-    @Mock HeadersFactory headersFactoryMock;
+    @Mock UnsignedPathFactory unsignedPathFactoryMock;
     @Mock ObjectMapper objectMapperMock;
-    @Mock ResourceFetcher resourceFetcherMock;
-    @Mock SignedMessageFactory signedMessageFactoryMock;
+    @Mock(answer = RETURNS_SELF) SignedRequestBuilder signedRequestBuilderMock;
 
     @Mock DynamicScenario simpleDynamicScenarioMock;
-    @Mock SimpleShareUrlResult simpleShareUrlResultMock;
+    @Mock SignedRequest signedRequestMock;
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPairMock;
-
-    @Captor ArgumentCaptor<UrlConnector> urlConnectorCaptor;
+    @Mock SimpleShareUrlResult simpleShareUrlResultMock;
 
     @BeforeClass
     public static void setUpClass() {
@@ -73,8 +60,7 @@ public class DynamicSharingServiceTest {
 
     @Before
     public void setUp() {
-        when(pathFactoryMock.createDynamicSharingPath(APP_ID)).thenReturn(DYNAMIC_QRCODE_PATH);
-        when(headersFactoryMock.create(SOME_SIGNATURE)).thenReturn(SOME_HEADERS);
+        when(unsignedPathFactoryMock.createDynamicSharingPath(APP_ID)).thenReturn(DYNAMIC_QRCODE_PATH);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -109,7 +95,7 @@ public class DynamicSharingServiceTest {
     public void shouldWrapSecurityExceptionInDynamicShareException() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         GeneralSecurityException securityException = new GeneralSecurityException();
-        when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenThrow(securityException);
+        when(signedRequestBuilderMock.build()).thenThrow(securityException);
 
         try {
             testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
@@ -122,9 +108,9 @@ public class DynamicSharingServiceTest {
     @Test
     public void shouldThrowExceptionForIOError() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
-        when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenReturn(SOME_SIGNATURE);
         IOException ioException = new IOException();
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleShareUrlResult.class))).thenThrow(ioException);
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(SimpleShareUrlResult.class)).thenThrow(ioException);
 
         try {
             testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
@@ -137,34 +123,32 @@ public class DynamicSharingServiceTest {
     @Test
     public void shouldThrowExceptionWithResourceExceptionCause() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
-        when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenReturn(SOME_SIGNATURE);
-        ResourceException resourceEx = new ResourceException(HTTP_NOT_FOUND, "Not found", "Test exception");
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleShareUrlResult.class))).thenThrow(resourceEx);
+        ResourceException resourceException = new ResourceException(404, "Not Found", "Test exception");
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(SimpleShareUrlResult.class)).thenThrow(resourceException);
 
         try {
             testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
             fail("Expected a DynamicShareException");
         } catch (DynamicShareException ex) {
-            assertSame(resourceEx, ex.getCause());
+            assertSame(resourceException, ex.getCause());
         }
     }
 
     @Test
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
-        when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES)).thenReturn(SOME_SIGNATURE);
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleShareUrlResult.class)))
-                .thenReturn(simpleShareUrlResultMock);
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(SimpleShareUrlResult.class)).thenReturn(simpleShareUrlResultMock);
 
         SimpleShareUrlResult result = testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
 
-        verify(resourceFetcherMock).postResource(urlConnectorCaptor.capture(), eq(SOME_BODY_BYTES), eq(SOME_HEADERS), eq(SimpleShareUrlResult.class));
-        assertEquals(YOTI_API_PATH_PREFIX + DYNAMIC_QRCODE_PATH, getPath(urlConnectorCaptor.getValue()));
+        verify(signedRequestBuilderMock).withKeyPair(keyPairMock);
+        verify(signedRequestBuilderMock).withBaseUrl(DEFAULT_YOTI_API_URL);
+        verify(signedRequestBuilderMock).withEndpoint(DYNAMIC_QRCODE_PATH);
+        verify(signedRequestBuilderMock).withPayload(SOME_BODY_BYTES);
+        verify(signedRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_POST);
         assertSame(simpleShareUrlResultMock, result);
-    }
-
-    private String getPath(UrlConnector urlConnector) throws Exception {
-        return new URL(urlConnector.getUrlString()).getPath();
     }
 
 }

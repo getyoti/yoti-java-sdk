@@ -22,6 +22,7 @@ import com.yoti.api.client.Time;
 import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.util.AnchorType;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.hamcrest.collection.IsCollectionWithSize;
@@ -31,7 +32,7 @@ import org.junit.Test;
 public class AnchorConverterTest {
 
     static {
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        Security.addProvider(new BouncyCastleProvider());
     }
 
     private static final String PASSPORT_ISSUER = "CN=passport-registration-server";

@@ -1,60 +1,44 @@
 package com.yoti.api.client.spi.remote.call.aml;
 
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
-import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
-import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
-
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_API_URL;
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.KeyPair;
-import java.util.Map;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yoti.api.client.AmlException;
 import com.yoti.api.client.aml.AmlProfile;
-import com.yoti.api.client.spi.remote.call.JsonResourceFetcher;
 import com.yoti.api.client.spi.remote.call.ResourceException;
-import com.yoti.api.client.spi.remote.call.ResourceFetcher;
-import com.yoti.api.client.spi.remote.call.UrlConnector;
-import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
-import com.yoti.api.client.spi.remote.call.factory.PathFactory;
-import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
+import com.yoti.api.client.spi.remote.call.SignedRequest;
+import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
+import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+
+import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.*;
+import static com.yoti.api.client.spi.remote.util.Validation.notNull;
+import static java.net.HttpURLConnection.*;
 
 public class RemoteAmlService {
 
-    private final PathFactory pathFactory;
-    private final HeadersFactory headersFactory;
+    private final UnsignedPathFactory unsignedPathFactory;
     private final ObjectMapper objectMapper;
-    private final SignedMessageFactory signedMessageFactory;
-    private final ResourceFetcher resourceFetcher;
+    private final SignedRequestBuilder signedRequestBuilder;
     private final String apiUrl;
 
     public static RemoteAmlService newInstance() {
         return new RemoteAmlService(
-                JsonResourceFetcher.newInstance(),
-                new PathFactory(),
-                new HeadersFactory(),
+                new UnsignedPathFactory(),
                 new ObjectMapper(),
-                SignedMessageFactory.newInstance());
+                SignedRequestBuilder.newInstance()
+        );
     }
 
-    public RemoteAmlService(ResourceFetcher resourceFetcher,
-            PathFactory pathFactory,
-            HeadersFactory headersFactory,
-            ObjectMapper objectMapper,
-            SignedMessageFactory signedMessageFactory) {
-        this.pathFactory = pathFactory;
-        this.headersFactory = headersFactory;
+    RemoteAmlService(UnsignedPathFactory unsignedPathFactory,
+                     ObjectMapper objectMapper,
+                     SignedRequestBuilder signedRequestBuilder) {
+        this.unsignedPathFactory = unsignedPathFactory;
         this.objectMapper = objectMapper;
-        this.signedMessageFactory = signedMessageFactory;
-        this.resourceFetcher = resourceFetcher;
+        this.signedRequestBuilder = signedRequestBuilder;
 
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
@@ -65,16 +49,23 @@ public class RemoteAmlService {
         notNull(amlProfile, "amlProfile");
 
         try {
-            String resourcePath = pathFactory.createAmlPath(appId);
+            String resourcePath = unsignedPathFactory.createAmlPath(appId);
             byte[] body = objectMapper.writeValueAsString(amlProfile).getBytes(DEFAULT_CHARSET);
-            String digest = signedMessageFactory.create(keyPair.getPrivate(), HTTP_POST, resourcePath, body);
-            Map<String, String> headers = headersFactory.create(digest);
-            UrlConnector urlConnector = UrlConnector.get(apiUrl + resourcePath);
-            return resourceFetcher.postResource(urlConnector, body, headers, SimpleAmlResult.class);
+
+            SignedRequest signedRequest = this.signedRequestBuilder.withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(resourcePath)
+                    .withPayload(body)
+                    .withHttpMethod(HTTP_POST)
+                    .build();
+
+            return signedRequest.execute(SimpleAmlResult.class);
         } catch (IOException ioException) {
             throw new AmlException("Error communicating with AML endpoint", ioException);
         } catch (GeneralSecurityException generalSecurityException) {
             throw new AmlException("Cannot sign request", generalSecurityException);
+        } catch (URISyntaxException uriSyntaxException) {
+            throw new AmlException("Error creating request", uriSyntaxException);
         } catch (ResourceException resourceException) {
             throw createExceptionFromStatusCode(resourceException);
         }
