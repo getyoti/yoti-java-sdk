@@ -2,6 +2,8 @@ package com.yoti.api.client.spi.remote.util;
 
 import static java.lang.String.format;
 
+import java.util.List;
+
 public class Validation {
 
     public static <T> T notNull(T value, String name) {
@@ -54,6 +56,12 @@ public class Validation {
     public static void matchesPattern(String value, String regex, String name) {
         if (value == null || ! value.matches(regex)) {
             throw new IllegalArgumentException(format("'%s' value '%s' does not match format '%s'", name, value, regex));
+        }
+    }
+
+    public static <T> void withinList(T value, List<T> allowedValues) {
+        if (!allowedValues.contains(value)) {
+            throw new IllegalArgumentException(format("value '%s' is not in the list '%s'", value, allowedValues));
         }
     }
 

@@ -32,15 +32,17 @@ public final class JsonResourceFetcher implements ResourceFetcher {
 
     @Override
     public <T> T fetchResource(UrlConnector urlConnector, Map<String, String> headers, Class<T> resourceClass) throws ResourceException, IOException {
-        HttpURLConnection httpUrlConnection = openConnection(urlConnector, HTTP_GET, headers);
-        return parseResponse(httpUrlConnection, resourceClass);
+        return doRequest(urlConnector, HTTP_GET, null, headers, resourceClass);
     }
 
     @Override
     public <T> T postResource(UrlConnector urlConnector, byte[] body, Map<String, String> headers, Class<T> resourceClass)
             throws ResourceException, IOException {
+        return doRequest(urlConnector, HTTP_POST, body, headers, resourceClass);
+    }
 
-        HttpURLConnection httpUrlConnection = openConnection(urlConnector, HTTP_POST, headers);
+    public <T> T doRequest(UrlConnector urlConnector, String httpMethod, byte[] body, Map<String, String> headers, Class<T> resourceClass) throws ResourceException, IOException {
+        HttpURLConnection httpUrlConnection = openConnection(urlConnector, httpMethod, headers);
         sendBody(body, httpUrlConnection);
         return parseResponse(httpUrlConnection, resourceClass);
     }
