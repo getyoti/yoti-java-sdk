@@ -3,19 +3,16 @@ package com.yoti.api.client.spi.remote.call.aml;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_API_PATH_PREFIX;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Answers.RETURNS_SELF;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.util.HashMap;
@@ -24,11 +21,9 @@ import java.util.Map;
 import com.yoti.api.client.AmlException;
 import com.yoti.api.client.aml.AmlProfile;
 import com.yoti.api.client.spi.remote.call.ResourceException;
-import com.yoti.api.client.spi.remote.call.ResourceFetcher;
-import com.yoti.api.client.spi.remote.call.UrlConnector;
-import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
-import com.yoti.api.client.spi.remote.call.factory.PathFactory;
-import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
+import com.yoti.api.client.spi.remote.call.SignedRequest;
+import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
+import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,8 +31,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -49,20 +42,17 @@ public class RemoteAmlServiceTest {
     private static final String GENERATED_PATH = "generatedPath";
     private static final String SERIALIZED_BODY = "serializedBody";
     private static final byte[] BODY_BYTES = SERIALIZED_BODY.getBytes();
-    private static final String SOME_SIGNATURE = "someSignature";
     private static final Map<String, String> SOME_HEADERS = new HashMap<>();
 
     @InjectMocks RemoteAmlService testObj;
 
-    @Mock PathFactory pathFactoryMock;
-    @Mock HeadersFactory headersFactoryMock;
+    @Mock UnsignedPathFactory unsignedPathFactoryMock;
     @Mock ObjectMapper objectMapperMock;
-    @Mock ResourceFetcher resourceFetcherMock;
-    @Mock SignedMessageFactory signedMessageFactoryMock;
+    @Mock(answer = RETURNS_SELF) SignedRequestBuilder signedRequestBuilderMock;
 
     @Mock AmlProfile amlProfileMock;
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPairMock;
-    @Captor ArgumentCaptor<UrlConnector> urlConnectorCaptor;
+    @Mock SignedRequest signedRequestMock;
     @Mock SimpleAmlResult simpleAmlResultMock;
 
     @BeforeClass
@@ -72,34 +62,31 @@ public class RemoteAmlServiceTest {
 
     @Before
     public void setUp() {
-        when(pathFactoryMock.createAmlPath(SOME_APP_ID)).thenReturn(GENERATED_PATH);
-        when(headersFactoryMock.create(SOME_SIGNATURE)).thenReturn(SOME_HEADERS);
+        when(unsignedPathFactoryMock.createAmlPath(SOME_APP_ID)).thenReturn(GENERATED_PATH);
     }
 
     @Test
     public void shouldPerformAmlCheck() throws Exception {
         when(objectMapperMock.writeValueAsString(amlProfileMock)).thenReturn(SERIALIZED_BODY);
-        when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, GENERATED_PATH, BODY_BYTES)).thenReturn(SOME_SIGNATURE);
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(BODY_BYTES), eq(SOME_HEADERS), eq(SimpleAmlResult.class)))
-                .thenReturn(simpleAmlResultMock);
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(SimpleAmlResult.class)).thenReturn(simpleAmlResultMock);
 
         SimpleAmlResult result = testObj.performCheck(keyPairMock, SOME_APP_ID, amlProfileMock);
 
-        verify(resourceFetcherMock).postResource(urlConnectorCaptor.capture(), eq(BODY_BYTES), eq(SOME_HEADERS), eq(SimpleAmlResult.class));
-        assertEquals(YOTI_API_PATH_PREFIX + GENERATED_PATH, getPath(urlConnectorCaptor.getValue()));
+        verify(signedRequestBuilderMock).withKeyPair(keyPairMock);
+        verify(signedRequestBuilderMock).withBaseUrl(DEFAULT_YOTI_API_URL);
+        verify(signedRequestBuilderMock).withEndpoint(GENERATED_PATH);
+        verify(signedRequestBuilderMock).withPayload(BODY_BYTES);
+        verify(signedRequestBuilderMock).withHttpMethod(HTTP_POST);
         assertSame(result, simpleAmlResultMock);
-    }
-
-    private String getPath(UrlConnector urlConnector) throws Exception {
-        return new URL(urlConnector.getUrlString()).getPath();
     }
 
     @Test
     public void shouldWrapIOException() throws Exception {
         IOException ioException = new IOException();
         when(objectMapperMock.writeValueAsString(amlProfileMock)).thenReturn(SERIALIZED_BODY);
-        when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, GENERATED_PATH, BODY_BYTES)).thenReturn(SOME_SIGNATURE);
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(BODY_BYTES), eq(SOME_HEADERS), eq(SimpleAmlResult.class))).thenThrow(ioException);
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(SimpleAmlResult.class)).thenThrow(ioException);
 
         try {
             testObj.performCheck(keyPairMock, SOME_APP_ID, amlProfileMock);
@@ -113,9 +100,8 @@ public class RemoteAmlServiceTest {
     public void shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(HTTP_UNAUTHORIZED, "Unauthorized", "failed verification");
         when(objectMapperMock.writeValueAsString(amlProfileMock)).thenReturn(SERIALIZED_BODY);
-        when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, GENERATED_PATH, BODY_BYTES)).thenReturn(SOME_SIGNATURE);
-        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(BODY_BYTES), eq(SOME_HEADERS), eq(SimpleAmlResult.class)))
-                .thenThrow(resourceException);
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(SimpleAmlResult.class)).thenThrow(resourceException);
 
         try {
             testObj.performCheck(keyPairMock, SOME_APP_ID, amlProfileMock);
@@ -129,7 +115,7 @@ public class RemoteAmlServiceTest {
     public void shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException generalSecurityException = new GeneralSecurityException();
         when(objectMapperMock.writeValueAsString(amlProfileMock)).thenReturn(SERIALIZED_BODY);
-        when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, GENERATED_PATH, BODY_BYTES)).thenThrow(generalSecurityException);
+        when(signedRequestBuilderMock.build()).thenThrow(generalSecurityException);
 
         try {
             testObj.performCheck(keyPairMock, SOME_APP_ID, amlProfileMock);

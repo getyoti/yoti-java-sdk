@@ -1,6 +1,5 @@
 package com.yoti.api.client.spi.remote.call.qrcode;
 
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_API_URL;
@@ -9,17 +8,13 @@ import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
-import java.util.Map;
 
 import com.yoti.api.client.shareurl.DynamicScenario;
 import com.yoti.api.client.shareurl.DynamicShareException;
-import com.yoti.api.client.spi.remote.call.JsonResourceFetcher;
 import com.yoti.api.client.spi.remote.call.ResourceException;
-import com.yoti.api.client.spi.remote.call.ResourceFetcher;
-import com.yoti.api.client.spi.remote.call.UrlConnector;
-import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
-import com.yoti.api.client.spi.remote.call.factory.PathFactory;
-import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
+import com.yoti.api.client.spi.remote.call.SignedRequest;
+import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
+import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -29,33 +24,26 @@ public final class DynamicSharingService {
 
     public static DynamicSharingService newInstance() {
         return new DynamicSharingService(
-                new PathFactory(),
-                new HeadersFactory(),
+                new UnsignedPathFactory(),
                 new ObjectMapper(),
-                JsonResourceFetcher.newInstance(),
-                SignedMessageFactory.newInstance());
+                SignedRequestBuilder.newInstance()
+        );
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(DynamicSharingService.class);
 
-    private final PathFactory pathFactory;
-    private final HeadersFactory headersFactory;
+    private final UnsignedPathFactory unsignedPathFactory;
     private final ObjectMapper objectMapper;
-    private final ResourceFetcher resourceFetcher;
-    private final SignedMessageFactory signedMessageFactory;
+    private final SignedRequestBuilder signedRequestBuilder;
 
     private final String apiUrl;
 
-    private DynamicSharingService(PathFactory pathFactory,
-            HeadersFactory headersFactory,
+    DynamicSharingService(UnsignedPathFactory unsignedPathFactory,
             ObjectMapper objectMapper,
-            ResourceFetcher resourceFetcher,
-            SignedMessageFactory signedMessageFactory) {
-        this.pathFactory = pathFactory;
-        this.headersFactory = headersFactory;
+            SignedRequestBuilder signedRequestBuilder) {
+        this.unsignedPathFactory = unsignedPathFactory;
         this.objectMapper = objectMapper;
-        this.resourceFetcher = resourceFetcher;
-        this.signedMessageFactory = signedMessageFactory;
+        this.signedRequestBuilder = signedRequestBuilder;
 
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
@@ -65,16 +53,21 @@ public final class DynamicSharingService {
         notNull(keyPair, "Application key Pair");
         notNull(dynamicScenario, "Dynamic scenario");
 
-        String path = pathFactory.createDynamicSharingPath(appId);
+        String path = unsignedPathFactory.createDynamicSharingPath(appId);
         LOG.info("Requesting Dynamic QR Code at {}", path);
 
         try {
             byte[] body = objectMapper.writeValueAsString(dynamicScenario).getBytes(DEFAULT_CHARSET);
-            String digest = signedMessageFactory.create(keyPair.getPrivate(), HTTP_POST, path, body);
-            Map<String, String> headers = headersFactory.create(digest);
-            UrlConnector urlConnector = UrlConnector.get(apiUrl + path);
-            return resourceFetcher.postResource(urlConnector, body, headers, SimpleShareUrlResult.class);
 
+            SignedRequest signedRequest = this.signedRequestBuilder
+                    .withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withPayload(body)
+                    .withHttpMethod("POST")
+                    .build();
+
+            return signedRequest.execute(SimpleShareUrlResult.class);
         } catch (GeneralSecurityException ex) {
             throw new DynamicShareException("Error signing the request: ", ex);
         } catch (ResourceException ex) {

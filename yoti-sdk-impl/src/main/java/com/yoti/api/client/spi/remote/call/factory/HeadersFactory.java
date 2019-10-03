@@ -23,6 +23,7 @@ public class HeadersFactory {
         return headers;
     }
 
+    @Deprecated
     public Map<String, String> create(String digest, String authKey) {
         Map<String, String> headers = create(digest);
         headers.put(AUTH_KEY_HEADER, authKey);
