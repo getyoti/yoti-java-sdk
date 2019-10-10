@@ -13,43 +13,43 @@ git:
 
 jobs:
   include:
-    - state: Test
+    - &test
+      stage: Test
       jdk: oraclejdk8
-      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -Ddependency-check.skip=true
+      install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -Ddependency-check.skip=true
       script:
-        - ./mvnw test -B -Ddependency-check.skip=true
-    - &test-compatability
-      stage: Compatability
-      jdk: oraclejdk8
-      os: linux
-      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -Ddependency-check.skip=true
-      script:
-        - ./mvnw test -B -Ddependency-check.skip=true
-    - <<: *test-compatability
+        - mvn test -B -Ddependency-check.skip=true
+    - <<: *test
       # Only the api and implementation need testing with Java 1.7
-      dist: precise
       jdk: oraclejdk7
-      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -pl yoti-sdk-api,yoti-sdk-impl -Ddependency-check.skip=true
-      script:
-        - ./mvnw test -B -pl yoti-sdk-api,yoti-sdk-impl -Ddependency-check.skip=true
-    - <<: *test-compatability
       dist: precise
-      jdk: openjdk7
-      install: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -pl yoti-sdk-api,yoti-sdk-impl -Ddependency-check.skip=true
+      install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -pl yoti-sdk-api,yoti-sdk-impl -Ddependency-check.skip=true
       script:
-        - ./mvnw test -B -pl yoti-sdk-api,yoti-sdk-impl -Ddependency-check.skip=true
-    - <<: *test-compatability
+        - mvn test -B -pl yoti-sdk-api,yoti-sdk-impl -Ddependency-check.skip=true
+    - <<: *test
+      jdk: openjdk7
+      dist: precise
+      install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -pl yoti-sdk-api,yoti-sdk-impl -Ddependency-check.skip=true
+      script:
+        - mvn test -B -pl yoti-sdk-api,yoti-sdk-impl -Ddependency-check.skip=true
+    - <<: *test
       jdk: openjdk8
-    - <<: *test-compatability
+    - <<: *test
       jdk: oraclejdk9
-    - <<: *test-compatability
+    - <<: *test
       jdk: openjdk9
-    - <<: *test-compatability
-      dist: bionic
+    - <<: *test
       jdk: openjdk10
-    - <<: *test-compatability
-      dist: bionic
+    - <<: *test
       jdk: openjdk11
-    - <<: *test-compatability
-      dist: bionic
+    - <<: *test
       jdk: oraclejdk11
+    - stage: Coverage
+      name: Coveralls
+      if: type = pull_request OR branch = master
+      jdk: oraclejdk8
+      install:
+        - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -Ddependency-check.skip=true
+      script:
+        - mvn jacoco:prepare-agent test jacoco:report coveralls:report -pl yoti-sdk-impl
+
