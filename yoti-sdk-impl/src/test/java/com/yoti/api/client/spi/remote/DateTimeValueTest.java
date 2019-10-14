@@ -1,20 +1,15 @@
 package com.yoti.api.client.spi.remote;
 
-import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import com.yoti.api.client.DateTime;
+import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import com.yoti.api.client.DateTime;
-
-import org.junit.Test;
+import static org.hamcrest.core.StringContains.containsString;
+import static org.junit.Assert.*;
 
 public class DateTimeValueTest {
 
@@ -123,6 +118,25 @@ public class DateTimeValueTest {
         assertTrue(dateTime2.equals(dateTime3));
         assertTrue(dateTime1.hashCode() == dateTime2.hashCode());
         assertTrue(dateTime2.hashCode() == dateTime3.hashCode());
+    }
+
+    public static void assertDateTimeValue(DateTime test,
+                                               int year,
+                                               int month,
+                                               int day,
+                                               int hour,
+                                               int minute,
+                                               int second,
+                                               int microseconds) {
+
+        assertEquals(year, test.getDate().getYear());
+        assertEquals(month, test.getDate().getMonth());
+        assertEquals(day, test.getDate().getDay());
+
+        assertEquals(hour, test.getTime().getHour());
+        assertEquals(minute, test.getTime().getMinute());
+        assertEquals(second, test.getTime().getSecond());
+        assertEquals(microseconds, test.getTime().getMicrosecond());
     }
 
 }
