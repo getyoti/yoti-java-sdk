@@ -6,5 +6,10 @@
 
 <FindBugsFilter>
 
+    <Match>
+        <Class name="com.yoti.api.client.shareurl.extension.ThirdPartyAttributeContent"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+
 </FindBugsFilter>
 

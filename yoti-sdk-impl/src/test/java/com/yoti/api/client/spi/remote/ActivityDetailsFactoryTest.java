@@ -60,9 +60,7 @@ public class ActivityDetailsFactoryTest {
     @InjectMocks ActivityDetailsFactory testObj;
 
     @Mock ProfileReader profileReaderMock;
-
-    @Mock
-    ExtraDataConverter extraDataConverterMock;
+    @Mock ExtraDataReader extraDataReaderMock;
 
     KeyPair keyPair;
     byte[] validReceiptKey;
@@ -128,6 +126,26 @@ public class ActivityDetailsFactoryTest {
     }
 
     @Test
+    public void shouldFailWithInvalidExtraData() throws Exception {
+        Receipt receipt = new Receipt.Builder()
+                .withWrappedReceiptKey(validReceiptKey)
+                .withExtraData(EXTRA_DATA_CONTENT)
+                .build();
+
+        ExtraDataException extraDataException = new ExtraDataException("Failed to load extra data from receipt");
+        when(extraDataConverterMock.read(eq(EXTRA_DATA_CONTENT))).thenThrow(extraDataException);
+
+        try {
+            testObj.create(receipt, keyPair.getPrivate());
+        } catch (ProfileException e) {
+            assertThat(e.getMessage(), containsString("Failed to load extra data from receipt"));
+            assertTrue(e.getCause() instanceof ExtraDataException);
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
     public void shouldGetCorrectProfilesFromProfileReaderWithoutAnyRememberMeIds() throws Exception {
         Receipt receipt = new Receipt.Builder()
                 .withWrappedReceiptKey(validReceiptKey)
@@ -140,7 +158,7 @@ public class ActivityDetailsFactoryTest {
                 .build();
         when(profileReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(profileMock);
         when(profileReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(otherProfileMock);
-        when(extraDataConverterMock.read(eq(EXTRA_DATA_CONTENT))).thenReturn(extraDataMock);
+        when(extraDataReaderMock.read(eq(EXTRA_DATA_CONTENT), any(Key.class))).thenReturn(extraDataMock);
 
 
         ActivityDetails result = testObj.create(receipt, keyPair.getPrivate());
@@ -169,7 +187,7 @@ public class ActivityDetailsFactoryTest {
                 .build();
         when(profileReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(profileMock);
         when(profileReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(otherProfileMock);
-        when(extraDataConverterMock.read(eq(EXTRA_DATA_CONTENT))).thenReturn(extraDataMock);
+        when(extraDataReaderMock.read(eq(EXTRA_DATA_CONTENT), any(Key.class))).thenReturn(extraDataMock);
 
         ActivityDetails result = testObj.create(receipt, keyPair.getPrivate());
 
@@ -197,7 +215,7 @@ public class ActivityDetailsFactoryTest {
                 .build();
         when(profileReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(profileMock);
         when(profileReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(otherProfileMock);
-        when(extraDataConverterMock.read(EXTRA_DATA_CONTENT)).thenReturn(extraDataMock);
+        when(extraDataReaderMock.read(eq(EXTRA_DATA_CONTENT), any(Key.class))).thenReturn(extraDataMock);
 
         ActivityDetails result = testObj.create(receipt, keyPair.getPrivate());
 

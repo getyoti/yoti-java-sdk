@@ -21,4 +21,6 @@ public abstract class ExtensionBuilderFactory {
 
     public abstract TransactionalFlowExtensionBuilder createTransactionalFlowExtensionBuilder();
 
+    public abstract ThirdPartyAttributeExtensionBuilder createThirdPartyAttributeExtensionBuilder();
+
 }

@@ -1,12 +1,14 @@
 package com.yoti.api.client.spi.remote;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yoti.api.client.AttributeDefinition;
 
 public class SimpleAttributeDefinition implements AttributeDefinition {
 
+    @JsonProperty("name")
     private String name;
 
-    SimpleAttributeDefinition(String name) {
+    public SimpleAttributeDefinition(String name) {
         this.name = name;
     }
 
