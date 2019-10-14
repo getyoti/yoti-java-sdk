@@ -26,4 +26,7 @@ public final class YotiConstants {
 
     public static final String DEFAULT_CHARSET = "UTF-8";
 
+    public static final String RFC3339_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final String RFC3339_PATTERN_MILLIS = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+
 }
