@@ -1,5 +1,6 @@
 package com.yoti.api.client.spi.remote;
 
+import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.yoti.api.client.DateTime;
 import com.yoti.api.client.AttributeIssuanceDetails;
@@ -32,11 +33,13 @@ public class ThirdPartyAttributeConverter {
 
         IssuingAttributes issuingAttributes = parseIssuingAttributes(thirdPartyAttribute.getIssuingAttributes());
 
-        String token = thirdPartyAttribute.getIssuanceToken().toStringUtf8();
+        ByteString issuanceToken = thirdPartyAttribute.getIssuanceToken();
+        String token = Base64.getEncoder().encodeToString(issuanceToken.toByteArray());
+
         DateTime expiryDate = issuingAttributes.getExpiryDate();
         List<AttributeDefinition> attributeDefinitions = issuingAttributes.getAttributeDefinitions();
 
-        if (token == null || token.isEmpty()) {
+        if (token.isEmpty()) {
             throw new ExtraDataException("ThirdPartyAttribute missing token");
         }
 

@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
 public class ThirdPartyAttributeConverterTest {
 
     private static final String SOME_ISSUANCE_TOKEN = "someIssuanceToken";
+    private static final String SOME_ISSUANCE_TOKEN_B64 = "c29tZUlzc3VhbmNlVG9rZW4=";
     private static final String SOME_EXPIRY_DATE = "2019-10-15T22:04:05.123Z";
     private static final String SOME_INVALID_FORMAT_EXPIRY_DATE = "2019-10-15";
     private static final String SOME_DEFINITION_NAME = "com.thirdparty.id";
@@ -43,7 +44,7 @@ public class ThirdPartyAttributeConverterTest {
 
         assertThat(issuingAttributes, hasSize(1));
         assertThat(issuingAttributes.get(0).getName(), is(SOME_DEFINITION_NAME));
-        assertThat(issuanceToken, is(SOME_ISSUANCE_TOKEN));
+        assertThat(issuanceToken, is(SOME_ISSUANCE_TOKEN_B64));
 
         DateTimeValueTest.assertDateTimeValue(
                 dateTimeValue, 2019, 10, 15, 22, 04, 05, 123000
@@ -83,7 +84,7 @@ public class ThirdPartyAttributeConverterTest {
         AttributeIssuanceDetails attributeIssuanceDetails =
                 thirdPartyAttributeConverter.parseThirdPartyAttribute(thirdPartyAttribute.toByteArray());
 
-        assertThat(attributeIssuanceDetails.getToken(), is(SOME_ISSUANCE_TOKEN));
+        assertThat(attributeIssuanceDetails.getToken(), is(SOME_ISSUANCE_TOKEN_B64));
         assertNull(attributeIssuanceDetails.getExpiryDate());
     }
 
@@ -96,7 +97,7 @@ public class ThirdPartyAttributeConverterTest {
         AttributeIssuanceDetails attributeIssuanceDetails =
                 thirdPartyAttributeConverter.parseThirdPartyAttribute(thirdPartyAttribute.toByteArray());
 
-        assertThat(attributeIssuanceDetails.getToken(), is(SOME_ISSUANCE_TOKEN));
+        assertThat(attributeIssuanceDetails.getToken(), is(SOME_ISSUANCE_TOKEN_B64));
         assertNull(attributeIssuanceDetails.getExpiryDate());
     }
 
@@ -109,7 +110,7 @@ public class ThirdPartyAttributeConverterTest {
                 thirdPartyAttributeConverter.parseThirdPartyAttribute(thirdPartyAttribute.toByteArray());
 
         assertNotNull(attributeIssuanceDetails);
-        assertThat(attributeIssuanceDetails.getToken(), is(SOME_ISSUANCE_TOKEN));
+        assertThat(attributeIssuanceDetails.getToken(), is(SOME_ISSUANCE_TOKEN_B64));
         assertNull(attributeIssuanceDetails.getExpiryDate());
         assertThat(attributeIssuanceDetails.getIssuingAttributes().size(), is(0));
     }
