@@ -7,6 +7,11 @@
 <FindBugsFilter>
 
     <Match>
+        <Class name="com.yoti.api.client.shareurl.extension.SimpleThirdPartyAttributeExtensionBuilder"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+
+    <Match>
         <Class name="com.yoti.api.client.spi.remote.call.Receipt"/>
         <Bug pattern="EI_EXPOSE_REP"/>
     </Match>
@@ -27,7 +32,7 @@
     </Match>
 
     <Match>
-        <Class name="com.yoti.api.client.spi.remote.ProfileReader"/>
+        <Class name="com.yoti.api.client.spi.remote.EncryptedDataReader"/>
         <Bug pattern="CIPHER_INTEGRITY"/>
     </Match>
 

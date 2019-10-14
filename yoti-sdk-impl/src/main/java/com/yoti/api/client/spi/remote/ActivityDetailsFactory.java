@@ -27,17 +27,17 @@ class ActivityDetailsFactory {
     private static final Logger LOG = LoggerFactory.getLogger(ActivityDetailsFactory.class);
 
     private final ProfileReader profileReader;
-    private final ExtraDataConverter extraDataConverter;
+    private final ExtraDataReader extraDataReader;
 
-    private ActivityDetailsFactory(ProfileReader profileReader, ExtraDataConverter extraDataConverter) {
+    private ActivityDetailsFactory(ProfileReader profileReader, ExtraDataReader extraDataReader) {
         this.profileReader = notNull(profileReader, "profileReader");
-        this.extraDataConverter = notNull(extraDataConverter, "extraDataConverter");
+        this.extraDataReader = notNull(extraDataReader, "extraDataReader");
     }
 
     static ActivityDetailsFactory newInstance() {
         return new ActivityDetailsFactory(
                 ProfileReader.newInstance(),
-                ExtraDataConverter.newInstance()
+                ExtraDataReader.newInstance()
         );
     }
 
@@ -48,7 +48,7 @@ class ActivityDetailsFactory {
         Profile userProfile = profileReader.read(receipt.getOtherPartyProfile(), secretKey);
         Profile applicationProfile = profileReader.read(receipt.getProfile(), secretKey);
 
-        ExtraData extraData = parseExtraData(receipt.getExtraData());
+        ExtraData extraData = parseExtraData(receipt.getExtraData(), secretKey);
 
         String rememberMeId = parseRememberMeId(receipt.getRememberMeId());
         String parentRememberMeId = parseRememberMeId(receipt.getParentRememberMeId());
@@ -57,11 +57,11 @@ class ActivityDetailsFactory {
         return new SimpleActivityDetails(rememberMeId, parentRememberMeId, userProfile, applicationProfile, extraData, timestamp, receipt.getReceiptId());
     }
 
-    private ExtraData parseExtraData(byte[] extraDataBytes) {
+    private ExtraData parseExtraData(byte[] extraDataBytes, Key secretKey) {
         ExtraData extraData;
         try {
-            extraData = extraDataConverter.read(extraDataBytes);
-        } catch (ExtraDataException e) {
+            extraData = extraDataReader.read(extraDataBytes, secretKey);
+        } catch (ProfileException | ExtraDataException e) {
             LOG.error("Failed to parse extra data from receipt");
             extraData = new SimpleExtraData();
         }
