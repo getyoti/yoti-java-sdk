@@ -1,5 +1,9 @@
 package com.yoti.api.client.shareurl.policy;
 
+import com.yoti.api.client.shareurl.constraint.Constraint;
+
+import java.util.List;
+
 /**
  * Type and content of an user detail
  *
@@ -26,5 +30,18 @@ public interface WantedAttribute {
      * @return optional
      */
     boolean isOptional();
+
+    /**
+     * Allows self asserted attributes
+     * @return accept self asserted
+     */
+    boolean getAcceptSelfAsserted();
+
+    /**
+     * List of {@link Constraint} for a {@link WantedAttribute}
+     *
+     * @return the list of constrains
+     */
+    List<Constraint> getConstraints();
 
 }

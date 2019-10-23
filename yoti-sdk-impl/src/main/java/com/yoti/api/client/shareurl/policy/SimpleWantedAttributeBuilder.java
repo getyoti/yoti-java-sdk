@@ -1,10 +1,17 @@
 package com.yoti.api.client.shareurl.policy;
 
+import com.yoti.api.client.shareurl.constraint.Constraint;
+
+import java.util.Collections;
+import java.util.List;
+
 public class SimpleWantedAttributeBuilder extends WantedAttributeBuilder {
 
     private String name;
     private String derivation;
     private boolean optional;
+    private boolean acceptSelfAsserted;
+    private List<Constraint> constraints;
 
     @Override
     protected WantedAttributeBuilder createWantedAttributeBuilder() {
@@ -30,8 +37,20 @@ public class SimpleWantedAttributeBuilder extends WantedAttributeBuilder {
     }
 
     @Override
+    public WantedAttributeBuilder withAcceptSelfAsserted(boolean acceptSelfAsserted) {
+        this.acceptSelfAsserted = acceptSelfAsserted;
+        return this;
+    }
+
+    @Override
+    public WantedAttributeBuilder withConstraints(List<Constraint> constraints) {
+        this.constraints = Collections.unmodifiableList(constraints);
+        return this;
+    }
+
+    @Override
     public WantedAttribute build() {
-        return new SimpleWantedAttribute(name, derivation, optional);
+        return new SimpleWantedAttribute(name, derivation, optional, acceptSelfAsserted, constraints);
     }
 
 }
