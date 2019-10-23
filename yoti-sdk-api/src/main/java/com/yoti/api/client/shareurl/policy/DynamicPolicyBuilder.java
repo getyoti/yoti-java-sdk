@@ -1,5 +1,8 @@
 package com.yoti.api.client.shareurl.policy;
 
+import com.yoti.api.client.shareurl.constraint.Constraint;
+
+import java.util.List;
 import java.util.ServiceLoader;
 
 public abstract class DynamicPolicyBuilder {
@@ -16,6 +19,8 @@ public abstract class DynamicPolicyBuilder {
     protected abstract DynamicPolicyBuilder createDynamicPolicyBuilder();
 
     public abstract DynamicPolicyBuilder withWantedAttribute(WantedAttribute wantedAttribute);
+
+    public abstract DynamicPolicyBuilder withWantedAttribute(boolean optional, String name, List<Constraint> constraints);
 
     public abstract DynamicPolicyBuilder withWantedAttribute(boolean optional, String name);
 
