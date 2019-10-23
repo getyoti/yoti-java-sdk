@@ -1,11 +1,9 @@
 package com.yoti.api.client.shareurl.policy;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.yoti.api.attributes.AttributeConstants;
+import com.yoti.api.client.shareurl.constraint.Constraint;
 
 public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
 
@@ -30,12 +28,18 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
     }
 
     @Override
-    public DynamicPolicyBuilder withWantedAttribute(boolean optional, String name) {
+    public DynamicPolicyBuilder withWantedAttribute(boolean optional, String name, List<Constraint> constraints) {
         WantedAttribute wantedAttribute = new SimpleWantedAttributeBuilder()
                 .withName(name)
                 .withOptional(optional)
+                .withConstraints(constraints)
                 .build();
         return withWantedAttribute(wantedAttribute);
+    }
+
+    @Override
+    public DynamicPolicyBuilder withWantedAttribute(boolean optional, String name) {
+        return withWantedAttribute(optional, name, Collections.<Constraint>emptyList());
     }
 
     @Override
