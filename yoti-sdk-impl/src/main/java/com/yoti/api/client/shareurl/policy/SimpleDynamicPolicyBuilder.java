@@ -23,6 +23,11 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
     @Override
     public DynamicPolicyBuilder withWantedAttribute(WantedAttribute wantedAttribute) {
         String key = wantedAttribute.getDerivation() != null ? wantedAttribute.getDerivation() : wantedAttribute.getName();
+
+        if (wantedAttribute.getConstraints().size() > 0) {
+            key = key + wantedAttribute.getConstraints().hashCode();
+        }
+
         this.wantedAttributes.put(key, wantedAttribute);
         return this;
     }
