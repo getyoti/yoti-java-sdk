@@ -1,5 +1,6 @@
 package com.yoti.api.client.spi.remote;
 
+import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import com.yoti.api.client.Profile;
 
 final class SimpleProfile implements Profile {
 
-    private final Map<String, Attribute<?>> protectedAttributes;
+    private final List<Attribute<?>> protectedAttributes;
 
     /**
      * Create a new profile based on a list of attributes
@@ -24,7 +25,7 @@ final class SimpleProfile implements Profile {
         if (attributeList == null) {
             throw new IllegalArgumentException("Attributes must not be null.");
         }
-        this.protectedAttributes = unmodifiableMap(createAttributeMap(attributeList));
+        this.protectedAttributes = unmodifiableList(attributeList);
     }
 
     /**
@@ -37,23 +38,23 @@ final class SimpleProfile implements Profile {
     @Override
     public <T> Attribute<T> getAttribute(String name, Class<T> clazz) {
         ensureName(name);
-        Attribute<?> attribute = protectedAttributes.get(name);
+        Attribute<?> attribute = doFindAttribute(name);
         return castSafely(clazz, attribute);
     }
 
     @Override
     public Attribute getAttribute(String name) {
         ensureName(name);
-        return protectedAttributes.get(name);
+        return doFindAttribute(name);
     }
 
     @Override
     public <T> List<Attribute<T>> findAttributesStartingWith(String name, Class<T> clazz) {
         ensureName(name);
         List<Attribute<T>> matches = new ArrayList<>();
-        for (Map.Entry<String, Attribute<?>> entry : protectedAttributes.entrySet()) {
-            if (entry.getKey().startsWith(name)) {
-                Attribute<T> value = castSafely(clazz, entry.getValue());
+        for (Attribute<?> entry : protectedAttributes) {
+            if (entry.getName().startsWith(name)) {
+                Attribute<T> value = castSafely(clazz, entry);
                 matches.add(value);
             }
         }
@@ -69,22 +70,14 @@ final class SimpleProfile implements Profile {
 
     @Override
     public Collection<Attribute<?>> getAttributes() {
-        return protectedAttributes.values();
-    }
-
-    private Map<String, Attribute<?>> createAttributeMap(List<Attribute<?>> attributes) {
-        Map<String, Attribute<?>> result = new HashMap<>();
-        for (Attribute<?> a : attributes) {
-            result.put(a.getName(), a);
-        }
-        return result;
+        return protectedAttributes;
     }
 
     private Attribute<?> doFindAttribute(String name) {
         ensureName(name);
-        for (Map.Entry<String, Attribute<?>> entry : protectedAttributes.entrySet()) {
-            if (entry.getKey().startsWith(name)) {
-                return entry.getValue();
+        for (Attribute<?> entry : protectedAttributes) {
+            if (entry.getName().startsWith(name)) {
+                return entry;
             }
         }
         return null;
