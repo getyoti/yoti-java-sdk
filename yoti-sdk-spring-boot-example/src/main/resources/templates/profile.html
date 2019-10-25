@@ -77,6 +77,9 @@
                                         </tr>
                                     </table>
                                 </div>
+                                <div th:case="document_images">
+                                    <img th:src="${attribute.attribute.value[0].base64Content}" alt="document_image" />
+                                </div>
                                 <div th:case="*" class="yoti-attribute-value-text" th:text="${attribute.displayValue}"></div>
                             </div>
                         </div>
