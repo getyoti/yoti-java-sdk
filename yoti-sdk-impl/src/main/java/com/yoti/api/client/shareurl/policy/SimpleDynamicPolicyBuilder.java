@@ -25,7 +25,7 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
         String key = wantedAttribute.getDerivation() != null ? wantedAttribute.getDerivation() : wantedAttribute.getName();
 
         if (wantedAttribute.getConstraints().size() > 0) {
-            key = key + wantedAttribute.getConstraints().hashCode();
+            key += "-" + wantedAttribute.getConstraints().hashCode();
         }
 
         this.wantedAttributes.put(key, wantedAttribute);
