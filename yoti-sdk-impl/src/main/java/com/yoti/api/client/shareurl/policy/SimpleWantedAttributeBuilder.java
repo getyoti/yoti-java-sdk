@@ -2,6 +2,7 @@ package com.yoti.api.client.shareurl.policy;
 
 import com.yoti.api.client.shareurl.constraint.Constraint;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,6 +13,10 @@ public class SimpleWantedAttributeBuilder extends WantedAttributeBuilder {
     private boolean optional;
     private boolean acceptSelfAsserted;
     private List<Constraint> constraints;
+
+    public SimpleWantedAttributeBuilder() {
+        this.constraints = new ArrayList<>();
+    }
 
     @Override
     protected WantedAttributeBuilder createWantedAttributeBuilder() {
@@ -45,6 +50,12 @@ public class SimpleWantedAttributeBuilder extends WantedAttributeBuilder {
     @Override
     public WantedAttributeBuilder withConstraints(List<Constraint> constraints) {
         this.constraints = Collections.unmodifiableList(constraints);
+        return this;
+    }
+
+    @Override
+    public WantedAttributeBuilder withConstraint(Constraint constraint) {
+        this.constraints.add(constraint);
         return this;
     }
 

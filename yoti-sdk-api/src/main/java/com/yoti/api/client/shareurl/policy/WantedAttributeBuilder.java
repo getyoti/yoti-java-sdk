@@ -59,6 +59,14 @@ public abstract class WantedAttributeBuilder {
     public abstract WantedAttributeBuilder withConstraints(List<Constraint> constraints);
 
     /**
+     * Add to the list of {@link Constraint}
+     *
+     * @param constraint the {@link Constraint}
+     * @return the builder
+     */
+    public abstract WantedAttributeBuilder withConstraint(Constraint constraint);
+
+    /**
      * Creates a {@link WantedAttribute} with the values supplied
      *
      * @return the {@link WantedAttribute}
