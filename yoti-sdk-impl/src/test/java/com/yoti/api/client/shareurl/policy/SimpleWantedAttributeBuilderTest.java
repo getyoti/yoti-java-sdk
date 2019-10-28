@@ -27,7 +27,7 @@ public class SimpleWantedAttributeBuilderTest {
 
     @Test
     public void buildsAnAttribute() {
-        WantedAttribute result = new SimpleWantedAttributeBuilder()
+        WantedAttribute result = WantedAttributeBuilder.newInstance()
                 .withName(SOME_NAME)
                 .withDerivation(SOME_DERIVATION)
                 .withOptional(true)
@@ -42,7 +42,7 @@ public class SimpleWantedAttributeBuilderTest {
     public void buildsAnAttributeWithSourceConstraint() {
         when(constraintListMock.size()).thenReturn(1);
 
-        WantedAttribute result = new SimpleWantedAttributeBuilder()
+        WantedAttribute result = WantedAttributeBuilder.newInstance()
                 .withName(SOME_NAME)
                 .withDerivation(SOME_DERIVATION)
                 .withOptional(true)
