@@ -32,8 +32,11 @@ class SimpleWantedAttribute implements WantedAttribute {
         this.optional = optional;
         this.acceptSelfAsserted = acceptSelfAsserted;
 
-        // TODO: Check with Mike if this is ok?
-        this.constraints = constraints == null ? Collections.<Constraint>emptyList() : constraints;
+        if (constraints == null) {
+            this.constraints = Collections.emptyList();
+        } else {
+            this.constraints = constraints;
+        }
     }
 
     /**
