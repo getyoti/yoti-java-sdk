@@ -34,7 +34,7 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
 
     @Override
     public DynamicPolicyBuilder withWantedAttribute(boolean optional, String name, List<Constraint> constraints) {
-        WantedAttribute wantedAttribute = new SimpleWantedAttributeBuilder()
+        WantedAttribute wantedAttribute = WantedAttributeBuilder.newInstance()
                 .withName(name)
                 .withOptional(optional)
                 .withConstraints(constraints)
@@ -108,7 +108,7 @@ public class SimpleDynamicPolicyBuilder extends DynamicPolicyBuilder {
     }
 
     private DynamicPolicyBuilder withAgeDerivedAttribute(boolean optional, String derivation) {
-        WantedAttribute wantedAttribute = new SimpleWantedAttributeBuilder()
+        WantedAttribute wantedAttribute = WantedAttributeBuilder.newInstance()
                 .withName(AttributeConstants.HumanProfileAttributes.DATE_OF_BIRTH)
                 .withDerivation(derivation)
                 .withOptional(optional)
