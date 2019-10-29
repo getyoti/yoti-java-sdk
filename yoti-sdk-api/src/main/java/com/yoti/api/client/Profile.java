@@ -11,11 +11,12 @@ public interface Profile {
     /**
      * Return typed {@link Attribute} object for a key.
      *
-     * @param <T> the type parameter indicating the type of the returned value
-     * @param name attribute name
+     * @param <T>   the type parameter indicating the type of the returned value
+     * @param name  attribute name
      * @param clazz attribute type
      * @return typed attribute, null if it is not present in the profile
      */
+    @Deprecated
     <T> Attribute<T> getAttribute(String name, Class<T> clazz);
 
     /**
@@ -24,7 +25,39 @@ public interface Profile {
      * @param name
      * @return the attribute object, null if it is not present in the profile
      */
+    @Deprecated
     Attribute getAttribute(String name);
+
+    /**
+     * Return single typed {@link Attribute} object
+     * by exact name
+     *
+     * @param name  the name of the {@link Attribute}
+     * @param clazz the type of the {@link Attribute} value
+     * @param <T>   the type parameter indicating the type of the returned value
+     * @return typed attribute, null if it is not present in the profile
+     */
+    <T> Attribute<T> getAttributeByName(String name, Class<T> clazz);
+
+    /**
+     * Return single {@link Attribute} object
+     * by exact name
+     *
+     * @param name the name of the {@link Attribute}
+     * @return the attribute object, null if it is not present in the profule
+     */
+    Attribute getAttributeByName(String name);
+
+    /**
+     * Return a list of {@link Attribute}s that match
+     * the exact name
+     *
+     * @param name   the name of the {@link Attribute}s
+     * @param clazz  the type of the {@link Attribute} value
+     * @param <T>the type parameter indicating the type of the returned value
+     * @return typed list of attribute, empty list if there are no matching attributes on the profile
+     */
+    <T> List<Attribute<T>> getAttributesByName(String name, Class<T> clazz);
 
     /**
      * Return a list of all the {@link Attribute}s with a name starting with <code>name</code>
