@@ -1,0 +1,8 @@
+- repo: local
+  hooks:
+    - id: maven-test
+      name: maven-test
+      entry: mvn clean test install -Ddependency-check.skip=true -Dgpg.skip=true
+      verbose: true
+      language: system
+      pass_filenames: false
