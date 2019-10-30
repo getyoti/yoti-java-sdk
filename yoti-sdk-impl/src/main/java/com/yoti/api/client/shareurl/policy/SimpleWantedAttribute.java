@@ -1,6 +1,5 @@
 package com.yoti.api.client.shareurl.policy;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yoti.api.client.shareurl.constraint.Constraint;
