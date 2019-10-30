@@ -242,7 +242,7 @@ public class SimpleProfileTest {
     }
 
     @Test
-    public void getAttributeByName_shouldReturnAllMatchingAttributesWhenMultipleWithSameName() {
+    public void getAttributesByName_shouldReturnAllMatchingAttributesWhenMultipleWithSameName() {
         List<Attribute<?>> attributeList = new ArrayList<>();
         attributeList.add(createAttribute("some_attribute", "firstValue"));
         attributeList.add(createAttribute("some_attribute", "secondValue"));
