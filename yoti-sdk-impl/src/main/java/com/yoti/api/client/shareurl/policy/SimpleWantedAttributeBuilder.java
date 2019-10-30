@@ -11,7 +11,7 @@ public class SimpleWantedAttributeBuilder extends WantedAttributeBuilder {
     private String name;
     private String derivation;
     private boolean optional;
-    private boolean acceptSelfAsserted;
+    private Boolean acceptSelfAsserted;
     private List<Constraint> constraints;
 
     public SimpleWantedAttributeBuilder() {
