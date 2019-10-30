@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yoti.api.client.shareurl.constraint.Constraint;
 import com.yoti.api.client.shareurl.constraint.SourceConstraint;
 import org.junit.BeforeClass;

@@ -25,7 +25,7 @@ class SimpleWantedAttribute implements WantedAttribute {
     private final boolean optional;
 
     @JsonProperty("accept_self_asserted")
-    private final boolean acceptSelfAsserted;
+    private final Boolean acceptSelfAsserted;
 
     @JsonProperty("constraints")
     private final List<Constraint> constraints;
@@ -73,7 +73,7 @@ class SimpleWantedAttribute implements WantedAttribute {
      * @see WantedAttribute#getAcceptSelfAsserted()
      */
     @Override
-    public boolean getAcceptSelfAsserted() {
+    public Boolean getAcceptSelfAsserted() {
         return acceptSelfAsserted;
     }
 
