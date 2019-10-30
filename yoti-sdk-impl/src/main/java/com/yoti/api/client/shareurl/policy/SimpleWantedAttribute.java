@@ -1,5 +1,7 @@
 package com.yoti.api.client.shareurl.policy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yoti.api.client.shareurl.constraint.Constraint;
 
@@ -20,13 +22,15 @@ class SimpleWantedAttribute implements WantedAttribute {
     @JsonProperty("optional")
     private final boolean optional;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("accept_self_asserted")
-    private final boolean acceptSelfAsserted;
+    private final Boolean acceptSelfAsserted;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("constraints")
     private final List<Constraint> constraints;
 
-    SimpleWantedAttribute(String name, String derivation, boolean optional, boolean acceptSelfAsserted, List<Constraint> constraints) {
+    SimpleWantedAttribute(String name, String derivation, boolean optional, Boolean acceptSelfAsserted, List<Constraint> constraints) {
         this.name = name;
         this.derivation = derivation;
         this.optional = optional;
@@ -67,7 +71,7 @@ class SimpleWantedAttribute implements WantedAttribute {
      * @see WantedAttribute#getAcceptSelfAsserted()
      */
     @Override
-    public boolean getAcceptSelfAsserted() {
+    public Boolean getAcceptSelfAsserted() {
         return acceptSelfAsserted;
     }
 
