@@ -1,13 +1,10 @@
 package com.yoti.api.client.spi.remote;
 
 import static java.util.Collections.unmodifiableList;
-import static java.util.Collections.unmodifiableMap;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Profile;
@@ -38,14 +35,14 @@ final class SimpleProfile implements Profile {
     @Deprecated
     @Override
     public <T> Attribute<T> getAttribute(String name, Class<T> clazz) {
-        Attribute<?> attribute = doFindAttributeThatStartsWith(name);
+        Attribute<?> attribute = getAttribute(name);
         return castSafely(clazz, attribute);
     }
 
     @Deprecated
     @Override
     public Attribute getAttribute(String name) {
-        return doFindAttributeThatStartsWith(name);
+        return findAttributeStartingWith(name);
     }
 
     /**
@@ -58,7 +55,7 @@ final class SimpleProfile implements Profile {
      */
     @Override
     public <T> Attribute<T> getAttributeByName(String name, Class<T> clazz) {
-        Attribute<?> attribute = doFindAttributeThatHasName(name);
+        Attribute<?> attribute = getAttributeByName(name);
         return castSafely(clazz, attribute);
     }
 
@@ -71,7 +68,13 @@ final class SimpleProfile implements Profile {
      */
     @Override
     public Attribute getAttributeByName(String name) {
-        return doFindAttributeThatHasName(name);
+        ensureName(name);
+        for (Attribute<?> entry : protectedAttributes) {
+            if (entry.getName().equals(name)) {
+                return entry;
+            }
+        }
+        return null;
     }
 
     /**
@@ -111,7 +114,7 @@ final class SimpleProfile implements Profile {
     @Override
     public <T> Attribute<T> findAttributeStartingWith(String name, Class<T> clazz) {
         ensureName(name);
-        Attribute<?> attribute = doFindAttributeThatStartsWith(name);
+        Attribute<?> attribute = findAttributeStartingWith(name);
         return castSafely(clazz, attribute);
     }
 
@@ -120,20 +123,10 @@ final class SimpleProfile implements Profile {
         return protectedAttributes;
     }
 
-    private Attribute<?> doFindAttributeThatStartsWith(String name) {
+    private Attribute<?> findAttributeStartingWith(String name) {
         ensureName(name);
         for (Attribute<?> entry : protectedAttributes) {
             if (entry.getName().startsWith(name)) {
-                return entry;
-            }
-        }
-        return null;
-    }
-
-    private Attribute<?> doFindAttributeThatHasName(String name) {
-        ensureName(name);
-        for (Attribute<?> entry : protectedAttributes) {
-            if (entry.getName().equals(name)) {
                 return entry;
             }
         }
