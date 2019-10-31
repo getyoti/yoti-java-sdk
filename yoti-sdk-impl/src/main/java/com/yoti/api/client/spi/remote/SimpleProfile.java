@@ -64,7 +64,7 @@ final class SimpleProfile implements Profile {
      * by exact name
      *
      * @param name the name of the {@link Attribute}
-     * @return the attribute object, null if it is not present in the profule
+     * @return the attribute object, null if it is not present in the profile
      */
     @Override
     public Attribute getAttributeByName(String name) {
