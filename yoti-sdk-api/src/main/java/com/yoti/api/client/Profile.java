@@ -44,7 +44,7 @@ public interface Profile {
      * by exact name
      *
      * @param name the name of the {@link Attribute}
-     * @return the attribute object, null if it is not present in the profule
+     * @return the attribute object, null if it is not present in the profile
      */
     Attribute getAttributeByName(String name);
 
