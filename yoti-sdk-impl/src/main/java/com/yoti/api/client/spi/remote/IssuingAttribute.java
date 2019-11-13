@@ -27,4 +27,9 @@ public class IssuingAttribute {
     public void setValue(String value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%n[%n\tName:%s%n\tValue:%s%n]", getName(), getValue());
+    }
 }
