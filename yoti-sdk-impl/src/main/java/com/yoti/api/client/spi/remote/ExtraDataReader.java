@@ -20,13 +20,13 @@ public class ExtraDataReader {
 
     static ExtraDataReader newInstance() {
         return new ExtraDataReader(
-                new EncryptedDataReader(),
+                EncryptedDataReader.newInstance(),
                 ExtraDataConverter.newInstance()
         );
     }
 
     ExtraData read(byte[] encryptedBytes, Key secretKey) throws ProfileException, ExtraDataException {
-        ExtraData extraData = null;
+        ExtraData extraData;
         if (encryptedBytes != null && encryptedBytes.length > 0) {
             byte[] extraDataBytes = encryptedDataReader.decryptBytes(encryptedBytes, secretKey);
             extraData = extraDataConverter.read(extraDataBytes);

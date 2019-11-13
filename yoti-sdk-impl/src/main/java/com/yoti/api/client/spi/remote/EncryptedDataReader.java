@@ -16,6 +16,12 @@ import java.security.Key;
 
 public class EncryptedDataReader {
 
+    private EncryptedDataReader() {}
+
+    static EncryptedDataReader newInstance() {
+        return new EncryptedDataReader();
+    }
+
     public byte[] decryptBytes(byte[] encryptedBytes, Key secretKey) throws ProfileException {
         EncryptedDataProto.EncryptedData encryptedData = parseEncryptedContent(encryptedBytes);
         return decrypt(encryptedData, secretKey);

@@ -126,26 +126,6 @@ public class ActivityDetailsFactoryTest {
     }
 
     @Test
-    public void shouldFailWithInvalidExtraData() throws Exception {
-        Receipt receipt = new Receipt.Builder()
-                .withWrappedReceiptKey(validReceiptKey)
-                .withExtraData(EXTRA_DATA_CONTENT)
-                .build();
-
-        ExtraDataException extraDataException = new ExtraDataException("Failed to load extra data from receipt");
-        when(extraDataConverterMock.read(eq(EXTRA_DATA_CONTENT))).thenThrow(extraDataException);
-
-        try {
-            testObj.create(receipt, keyPair.getPrivate());
-        } catch (ProfileException e) {
-            assertThat(e.getMessage(), containsString("Failed to load extra data from receipt"));
-            assertTrue(e.getCause() instanceof ExtraDataException);
-            return;
-        }
-        fail("Expected an Exception");
-    }
-
-    @Test
     public void shouldGetCorrectProfilesFromProfileReaderWithoutAnyRememberMeIds() throws Exception {
         Receipt receipt = new Receipt.Builder()
                 .withWrappedReceiptKey(validReceiptKey)

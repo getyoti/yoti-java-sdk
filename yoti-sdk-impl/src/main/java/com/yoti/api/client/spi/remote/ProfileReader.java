@@ -21,7 +21,7 @@ class ProfileReader {
 
     static ProfileReader newInstance() {
         return new ProfileReader(
-                new EncryptedDataReader(),
+                EncryptedDataReader.newInstance(),
                 AttributeListConverter.newInstance()
         );
     }
