@@ -19,8 +19,8 @@ import static org.junit.Assert.fail;
 
 public class SimpleThirdPartyAttributeExtensionBuilderTest {
 
-    public static final Date SOME_DATE = new Date();
-    public static final String SOME_DEFINITION = "com.thirdparty.id";
+    private static final Date SOME_DATE = new Date();
+    private static final String SOME_DEFINITION = "com.thirdparty.id";
 
     @Test
     public void shouldFailForNullExpiryDate() {
@@ -117,22 +117,6 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
         assertThat(definitions.size(), is(2));
         assertThat(definitions.get(0).getName(), is("firstDefinition"));
         assertThat(definitions.get(1).getName(), is("secondDefinition"));
-    }
-
-    @Test
-    public void doTest() throws Exception {
-        List<String> theDefinitions = new ArrayList<>();
-        theDefinitions.add("firstDefinition");
-        theDefinitions.add("secondDefinition");
-
-        Extension<ThirdPartyAttributeContent> extension = new SimpleThirdPartyAttributeExtensionBuilder()
-                .withExpiryDate(SOME_DATE)
-                .withDefinition(SOME_DEFINITION)
-                .withDefinitions(theDefinitions)
-                .build();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String text = objectMapper.writeValueAsString(extension);
     }
 
 }
