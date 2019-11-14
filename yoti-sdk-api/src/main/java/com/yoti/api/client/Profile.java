@@ -16,7 +16,6 @@ public interface Profile {
      * @param clazz attribute type
      * @return typed attribute, null if it is not present in the profile
      */
-    @Deprecated
     <T> Attribute<T> getAttribute(String name, Class<T> clazz);
 
     /**
@@ -25,28 +24,7 @@ public interface Profile {
      * @param name the name of the attribute
      * @return the attribute object, null if it is not present in the profile
      */
-    @Deprecated
     Attribute getAttribute(String name);
-
-    /**
-     * Return single typed {@link Attribute} object
-     * by exact name
-     *
-     * @param name  the name of the {@link Attribute}
-     * @param clazz the type of the {@link Attribute} value
-     * @param <T>   the type parameter indicating the type of the returned value
-     * @return typed attribute, null if it is not present in the profile
-     */
-    <T> Attribute<T> getAttributeByName(String name, Class<T> clazz);
-
-    /**
-     * Return single {@link Attribute} object
-     * by exact name
-     *
-     * @param name the name of the {@link Attribute}
-     * @return the attribute object, null if it is not present in the profile
-     */
-    Attribute getAttributeByName(String name);
 
     /**
      * Return a list of {@link Attribute}s that match

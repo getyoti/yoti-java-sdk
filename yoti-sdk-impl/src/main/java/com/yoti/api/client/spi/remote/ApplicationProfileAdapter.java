@@ -25,40 +25,13 @@ public final class ApplicationProfileAdapter implements ApplicationProfile {
     }
 
     @Override
-    @Deprecated
     public Attribute getAttribute(String name) {
         return wrapped.getAttribute(name);
     }
 
     @Override
-    @Deprecated
     public <T> Attribute<T> getAttribute(String name, Class<T> clazz) {
         return wrapped.getAttribute(name, clazz);
-    }
-
-    /**
-     * Return single typed {@link Attribute} object
-     * by exact name
-     *
-     * @param name  the name of the {@link Attribute}
-     * @param clazz the type of the {@link Attribute} value
-     * @return typed attribute, null if it is not present in the profile
-     */
-    @Override
-    public <T> Attribute<T> getAttributeByName(String name, Class<T> clazz) {
-        return wrapped.getAttributeByName(name, clazz);
-    }
-
-    /**
-     * Return single {@link Attribute} object
-     * by exact name
-     *
-     * @param name the name of the {@link Attribute}
-     * @return the attribute object, null if it is not present in the profule
-     */
-    @Override
-    public Attribute getAttributeByName(String name) {
-        return wrapped.getAttributeByName(name);
     }
 
     /**
@@ -91,22 +64,22 @@ public final class ApplicationProfileAdapter implements ApplicationProfile {
 
     @Override
     public Attribute<String> getApplicationName() {
-        return wrapped.getAttributeByName(AttributeConstants.ApplicationProfileAttributes.ATTRIBUTE_APPLICATION_NAME, String.class);
+        return wrapped.getAttribute(AttributeConstants.ApplicationProfileAttributes.ATTRIBUTE_APPLICATION_NAME, String.class);
     }
 
     @Override
     public Attribute<String> getApplicationUrl() {
-        return wrapped.getAttributeByName(AttributeConstants.ApplicationProfileAttributes.ATTRIBUTE_APPLICATION_URL, String.class);
+        return wrapped.getAttribute(AttributeConstants.ApplicationProfileAttributes.ATTRIBUTE_APPLICATION_URL, String.class);
     }
 
     @Override
     public Attribute<String> getApplicationReceiptBgColor() {
-        return wrapped.getAttributeByName(AttributeConstants.ApplicationProfileAttributes.ATTRIBUTE_APPLICATION_RECEIPT_BGCOLOR, String.class);
+        return wrapped.getAttribute(AttributeConstants.ApplicationProfileAttributes.ATTRIBUTE_APPLICATION_RECEIPT_BGCOLOR, String.class);
     }
 
     @Override
     public Attribute<Image> getApplicationLogo() {
-        return wrapped.getAttributeByName(AttributeConstants.ApplicationProfileAttributes.ATTRIBUTE_APPLICATION_LOGO, Image.class);
+        return wrapped.getAttribute(AttributeConstants.ApplicationProfileAttributes.ATTRIBUTE_APPLICATION_LOGO, Image.class);
     }
 
     @Override

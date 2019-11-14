@@ -38,7 +38,7 @@ public class SimpleProfileTest {
     public void getAttributeByName_shouldThrowExceptionForNullAttributeName() {
         SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>emptyList());
 
-        profile.getAttributeByName(null);
+        profile.getAttribute(null);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class SimpleProfileTest {
     public void getAttributeByName_shouldReturnNullValueForNonExistingKey() {
         SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>emptyList());
 
-        assertNull(profile.getAttributeByName(SOME_KEY));
+        assertNull(profile.getAttribute(SOME_KEY));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class SimpleProfileTest {
     public void getAttributeByName_shouldReturnValueForExistingKey() {
         SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, STRING_VALUE));
 
-        Attribute result = profile.getAttributeByName(SOME_KEY);
+        Attribute result = profile.getAttribute(SOME_KEY);
 
         assertEquals(STRING_VALUE, result.getValue());
     }
@@ -84,7 +84,7 @@ public class SimpleProfileTest {
     public void getAttributeByNameTyped_shouldThrowExceptionForNullAttributeName() {
         SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>emptyList());
 
-        profile.getAttributeByName(null, Object.class);
+        profile.getAttribute(null, Object.class);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class SimpleProfileTest {
     public void getAttributeByNameTyped_shouldReturnNullValueForNonExistingKey() {
         SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>emptyList());
 
-        assertNull(profile.getAttributeByName(SOME_KEY, Object.class));
+        assertNull(profile.getAttribute(SOME_KEY, Object.class));
     }
 
     @Test
@@ -114,7 +114,7 @@ public class SimpleProfileTest {
     public void getAttributeByNameTyped_shouldReturnTypedValueForExistingKey() {
         SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, STRING_VALUE));
 
-        Attribute<String> result = profile.getAttributeByName(SOME_KEY, String.class);
+        Attribute<String> result = profile.getAttribute(SOME_KEY, String.class);
 
         assertEquals(STRING_VALUE, result.getValue());
     }
@@ -138,7 +138,7 @@ public class SimpleProfileTest {
         SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, INTEGER_VALUE));
 
         try {
-            profile.getAttributeByName(SOME_KEY, String.class);
+            profile.getAttribute(SOME_KEY, String.class);
         } catch (ClassCastException e) {
             assertTrue(e.getMessage().contains("java.lang.String"));
             assertTrue(e.getMessage().contains("java.lang.Integer"));
@@ -236,7 +236,7 @@ public class SimpleProfileTest {
 
         SimpleProfile profile = new SimpleProfile(attributeList);
 
-        Attribute<String> result = profile.getAttributeByName("some_attribute", String.class);
+        Attribute<String> result = profile.getAttribute("some_attribute", String.class);
 
         assertEquals("firstValue", result.getValue());
     }

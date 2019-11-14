@@ -25,40 +25,13 @@ final class HumanProfileAdapter implements HumanProfile {
     }
 
     @Override
-    @Deprecated
     public Attribute getAttribute(String name) {
         return wrapped.getAttribute(name);
     }
 
     @Override
-    @Deprecated
     public <T> Attribute<T> getAttribute(String name, Class<T> clazz) {
         return wrapped.getAttribute(name, clazz);
-    }
-
-    /**
-     * Return single typed {@link Attribute} object
-     * by exact name
-     *
-     * @param name  the name of the {@link Attribute}
-     * @param clazz the type of the {@link Attribute} value
-     * @return typed attribute, null if it is not present in the profile
-     */
-    @Override
-    public <T> Attribute<T> getAttributeByName(String name, Class<T> clazz) {
-        return wrapped.getAttributeByName(name, clazz);
-    }
-
-    /**
-     * Return single {@link Attribute} object
-     * by exact name
-     *
-     * @param name the name of the {@link Attribute}
-     * @return the attribute object, null if it is not present in the profule
-     */
-    @Override
-    public Attribute getAttributeByName(String name) {
-        return wrapped.getAttributeByName(name);
     }
 
     /**
@@ -91,22 +64,22 @@ final class HumanProfileAdapter implements HumanProfile {
 
     @Override
     public Attribute<String> getFamilyName() {
-        return wrapped.getAttributeByName(HumanProfileAttributes.FAMILY_NAME, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.FAMILY_NAME, String.class);
     }
 
     @Override
     public Attribute<String> getGivenNames() {
-        return wrapped.getAttributeByName(HumanProfileAttributes.GIVEN_NAMES, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.GIVEN_NAMES, String.class);
     }
 
     @Override
     public Attribute<String> getFullName() {
-        return wrapped.getAttributeByName(HumanProfileAttributes.FULL_NAME, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.FULL_NAME, String.class);
     }
 
     @Override
     public Attribute<Date> getDateOfBirth() {
-        return wrapped.getAttributeByName(HumanProfileAttributes.DATE_OF_BIRTH, Date.class);
+        return wrapped.getAttribute(HumanProfileAttributes.DATE_OF_BIRTH, Date.class);
     }
 
     @Override
@@ -150,48 +123,48 @@ final class HumanProfileAdapter implements HumanProfile {
 
     @Override
     public Attribute<String> getGender() {
-        return wrapped.getAttributeByName(HumanProfileAttributes.GENDER, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.GENDER, String.class);
     }
 
     @Override
     public Attribute<String> getPostalAddress() {
-        return wrapped.getAttributeByName(HumanProfileAttributes.POSTAL_ADDRESS, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.POSTAL_ADDRESS, String.class);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public Attribute<Map<?, ?>> getStructuredPostalAddress() {
-        return wrapped.getAttributeByName(HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS, (Class) Map.class);
+        return wrapped.getAttribute(HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS, (Class) Map.class);
     }
 
     @Override
     public Attribute<String> getNationality() {
-        return wrapped.getAttributeByName(HumanProfileAttributes.NATIONALITY, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.NATIONALITY, String.class);
     }
 
     @Override
     public Attribute<String> getPhoneNumber() {
-        return wrapped.getAttributeByName(HumanProfileAttributes.PHONE_NUMBER, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.PHONE_NUMBER, String.class);
     }
 
     @Override
     public Attribute<Image> getSelfie() {
-        return wrapped.getAttributeByName(HumanProfileAttributes.SELFIE, Image.class);
+        return wrapped.getAttribute(HumanProfileAttributes.SELFIE, Image.class);
     }
 
     @Override
     public Attribute<String> getEmailAddress() {
-        return wrapped.getAttributeByName(HumanProfileAttributes.EMAIL_ADDRESS, String.class);
+        return wrapped.getAttribute(HumanProfileAttributes.EMAIL_ADDRESS, String.class);
     }
 
     @Override
     public Attribute<DocumentDetails> getDocumentDetails() {
-        return wrapped.getAttributeByName(HumanProfileAttributes.DOCUMENT_DETAILS, DocumentDetails.class);
+        return wrapped.getAttribute(HumanProfileAttributes.DOCUMENT_DETAILS, DocumentDetails.class);
     }
 
     @Override
     public Attribute<List<Image>> getDocumentImages() {
-        Attribute<?> a = wrapped.getAttributeByName(HumanProfileAttributes.DOCUMENT_IMAGES, List.class);
+        Attribute<?> a = wrapped.getAttribute(HumanProfileAttributes.DOCUMENT_IMAGES, List.class);
         return (Attribute<List<Image>>) a;
     }
 
