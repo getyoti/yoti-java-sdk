@@ -35,7 +35,7 @@ public interface WantedAttribute {
      * Allows self asserted attributes
      * @return accept self asserted
      */
-    Boolean getAcceptSelfAsserted();
+    boolean getAcceptSelfAsserted();
 
     /**
      * List of {@link Constraint} for a {@link WantedAttribute}
