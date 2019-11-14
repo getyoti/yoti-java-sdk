@@ -1,17 +1,16 @@
 package com.yoti.api.client.spi.remote;
 
 import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableMap;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Profile;
 
 final class SimpleProfile implements Profile {
 
-    private final List<Attribute<?>> protectedAttributes;
+    private final Map<String, List<Attribute<?>>> protectedAttributes;
 
     /**
      * Create a new profile based on a list of attributes
@@ -22,7 +21,7 @@ final class SimpleProfile implements Profile {
         if (attributeList == null) {
             throw new IllegalArgumentException("Attributes must not be null.");
         }
-        this.protectedAttributes = unmodifiableList(attributeList);
+        this.protectedAttributes = unmodifiableMap(createAttributeMap(attributeList));
     }
 
     /**
@@ -32,46 +31,18 @@ final class SimpleProfile implements Profile {
      * @param clazz attribute type
      * @return typed attribute value, null if attribute type is not assignable from the specified class
      */
-    @Deprecated
     @Override
     public <T> Attribute<T> getAttribute(String name, Class<T> clazz) {
         Attribute<?> attribute = getAttribute(name);
         return castSafely(clazz, attribute);
     }
 
-    @Deprecated
     @Override
     public Attribute getAttribute(String name) {
-        return findAttributeStartingWith(name);
-    }
-
-    /**
-     * Return single typed {@link Attribute} object
-     * by exact name
-     *
-     * @param name  the name of the {@link Attribute}
-     * @param clazz the type of the {@link Attribute} value
-     * @return typed attribute, null if it is not present in the profile
-     */
-    @Override
-    public <T> Attribute<T> getAttributeByName(String name, Class<T> clazz) {
-        Attribute<?> attribute = getAttributeByName(name);
-        return castSafely(clazz, attribute);
-    }
-
-    /**
-     * Return single {@link Attribute} object
-     * by exact name
-     *
-     * @param name the name of the {@link Attribute}
-     * @return the attribute object, null if it is not present in the profile
-     */
-    @Override
-    public Attribute getAttributeByName(String name) {
         ensureName(name);
-        for (Attribute<?> entry : protectedAttributes) {
-            if (entry.getName().equals(name)) {
-                return entry;
+        for (Map.Entry<String, List<Attribute<?>>> entry : protectedAttributes.entrySet()) {
+            if (entry.getKey().equals(name)) {
+                return entry.getValue().get(0);
             }
         }
         return null;
@@ -89,10 +60,12 @@ final class SimpleProfile implements Profile {
     public <T> List<Attribute<T>> getAttributesByName(String name, Class<T> clazz) {
         ensureName(name);
         List<Attribute<T>> matches = new ArrayList<>();
-        for (Attribute<?> entry : protectedAttributes) {
-            if (entry.getName().equals(name)) {
-                Attribute<T> value = castSafely(clazz, entry);
-                matches.add(value);
+        for (Map.Entry<String, List<Attribute<?>>> entry : protectedAttributes.entrySet()) {
+            if (entry.getKey().equals(name)) {
+                for (Attribute<?> attribute : entry.getValue()) {
+                    Attribute<T> value = castSafely(clazz, attribute);
+                    matches.add(value);
+                }
             }
         }
         return matches;
@@ -102,10 +75,12 @@ final class SimpleProfile implements Profile {
     public <T> List<Attribute<T>> findAttributesStartingWith(String name, Class<T> clazz) {
         ensureName(name);
         List<Attribute<T>> matches = new ArrayList<>();
-        for (Attribute<?> entry : protectedAttributes) {
-            if (entry.getName().startsWith(name)) {
-                Attribute<T> value = castSafely(clazz, entry);
-                matches.add(value);
+        for (Map.Entry<String, List<Attribute<?>>> entry : protectedAttributes.entrySet()) {
+            if (entry.getKey().startsWith(name)) {
+                for (Attribute<?> attribute : entry.getValue()) {
+                    Attribute<T> value = castSafely(clazz, attribute);
+                    matches.add(value);
+                }
             }
         }
         return matches;
@@ -118,19 +93,37 @@ final class SimpleProfile implements Profile {
         return castSafely(clazz, attribute);
     }
 
-    @Override
-    public Collection<Attribute<?>> getAttributes() {
-        return protectedAttributes;
-    }
-
     private Attribute<?> findAttributeStartingWith(String name) {
         ensureName(name);
-        for (Attribute<?> entry : protectedAttributes) {
-            if (entry.getName().startsWith(name)) {
-                return entry;
+        for (Map.Entry<String, List<Attribute<?>>> entry : protectedAttributes.entrySet()) {
+            if (entry.getKey().startsWith(name)) {
+                return entry.getValue().get(0);
             }
         }
         return null;
+    }
+
+    @Override
+    public Collection<Attribute<?>> getAttributes() {
+        List<Attribute<?>> attributes = new ArrayList<>();
+        for (Map.Entry<String, List<Attribute<?>>> entry : protectedAttributes.entrySet()) {
+            attributes.addAll(entry.getValue());
+        }
+        return attributes;
+    }
+
+    private Map<String, List<Attribute<?>>> createAttributeMap(List<Attribute<?>> attributes) {
+        Map<String, List<Attribute<?>>> result = new HashMap<>();
+        for (Attribute<?> a : attributes) {
+            if (!result.containsKey(a.getName())) {
+                result.put(a.getName(), new ArrayList<Attribute<?>>());
+            }
+
+            List<Attribute<?>> modifiable = result.get(a.getName());
+            modifiable.add(a);
+            result.put(a.getName(), modifiable);
+        }
+        return result;
     }
 
     private void ensureName(String name) {
