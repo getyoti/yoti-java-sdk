@@ -1,12 +1,11 @@
 package com.yoti.api.client.spi.remote;
 
-import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
-
-import java.util.*;
 
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Profile;
+
+import java.util.*;
 
 final class SimpleProfile implements Profile {
 
@@ -40,36 +39,13 @@ final class SimpleProfile implements Profile {
     @Override
     public Attribute getAttribute(String name) {
         ensureName(name);
-        for (Map.Entry<String, List<Attribute<?>>> entry : protectedAttributes.entrySet()) {
-            if (entry.getKey().equals(name)) {
-                return entry.getValue().get(0);
-            }
+        List<Attribute<?>> attributes = protectedAttributes.get(name);
+        if (attributes != null && attributes.size() > 0) {
+            return attributes.get(0);
         }
         return null;
     }
 
-    /**
-     * Return a list of {@link Attribute}s that match
-     * the exact name
-     *
-     * @param name  the name of the {@link Attribute}s
-     * @param clazz the type of the {@link Attribute} value
-     * @return typed list of attribute, empty list if there are no matching attributes on the profile
-     */
-    @Override
-    public <T> List<Attribute<T>> getAttributesByName(String name, Class<T> clazz) {
-        ensureName(name);
-        List<Attribute<T>> matches = new ArrayList<>();
-        for (Map.Entry<String, List<Attribute<?>>> entry : protectedAttributes.entrySet()) {
-            if (entry.getKey().equals(name)) {
-                for (Attribute<?> attribute : entry.getValue()) {
-                    Attribute<T> value = castSafely(clazz, attribute);
-                    matches.add(value);
-                }
-            }
-        }
-        return matches;
-    }
 
     @Override
     public <T> List<Attribute<T>> findAttributesStartingWith(String name, Class<T> clazz) {

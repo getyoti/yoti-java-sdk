@@ -34,19 +34,6 @@ final class HumanProfileAdapter implements HumanProfile {
         return wrapped.getAttribute(name, clazz);
     }
 
-    /**
-     * Return a list of {@link Attribute}s that match
-     * the exact name
-     *
-     * @param name  the name of the {@link Attribute}s
-     * @param clazz the type of the {@link Attribute} value
-     * @return typed list of attribute, empty list if there are no matching attributes on the profile
-     */
-    @Override
-    public <T> List<Attribute<T>> getAttributesByName(String name, Class<T> clazz) {
-        return wrapped.getAttributesByName(name, clazz);
-    }
-
     @Override
     public <T> List<Attribute<T>> findAttributesStartingWith(String name, Class<T> clazz) {
         return wrapped.findAttributesStartingWith(name, clazz);
