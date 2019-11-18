@@ -241,21 +241,6 @@ public class SimpleProfileTest {
         assertEquals("firstValue", result.getValue());
     }
 
-    @Test
-    public void getAttributesByName_shouldReturnAllMatchingAttributesWhenMultipleWithSameName() {
-        List<Attribute<?>> attributeList = new ArrayList<>();
-        attributeList.add(createAttribute("some_attribute", "firstValue"));
-        attributeList.add(createAttribute("some_attribute", "secondValue"));
-
-        SimpleProfile profile = new SimpleProfile(attributeList);
-
-        List<Attribute<String>> result = profile.getAttributesByName("some_attribute", String.class);
-
-        assertThat(result, hasSize(2));
-        assertEquals("firstValue", result.get(0).getValue());
-        assertEquals("secondValue", result.get(1).getValue());
-    }
-
     private static <T> List<Attribute<?>> asAttributeList(String key, T o) {
         Attribute<?> a = createAttribute(key, o);
         return Collections.<Attribute<?>>singletonList(a);

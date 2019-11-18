@@ -27,17 +27,6 @@ public interface Profile {
     Attribute getAttribute(String name);
 
     /**
-     * Return a list of {@link Attribute}s that match
-     * the exact name
-     *
-     * @param name   the name of the {@link Attribute}s
-     * @param clazz  the type of the {@link Attribute} value
-     * @param <T>the type parameter indicating the type of the returned value
-     * @return typed list of attribute, empty list if there are no matching attributes on the profile
-     */
-    <T> List<Attribute<T>> getAttributesByName(String name, Class<T> clazz);
-
-    /**
      * Return a list of all the {@link Attribute}s with a name starting with <code>name</code>
      *
      * @param <T>   the type parameter indicating the type of the returned value
