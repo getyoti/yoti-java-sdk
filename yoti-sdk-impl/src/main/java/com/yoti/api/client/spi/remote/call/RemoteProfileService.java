@@ -11,6 +11,7 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_AP
 import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
@@ -28,7 +29,6 @@ public final class RemoteProfileService implements ProfileService {
     private static final Logger LOG = LoggerFactory.getLogger(RemoteProfileService.class);
 
     private final UnsignedPathFactory unsignedPathFactory;
-    private final SignedRequestBuilder signedRequestBuilder;
     private final String apiUrl;
 
     static {
@@ -37,15 +37,12 @@ public final class RemoteProfileService implements ProfileService {
 
     public static RemoteProfileService newInstance() {
         return new RemoteProfileService(
-                new UnsignedPathFactory(),
-                SignedRequestBuilder.newInstance()
+                new UnsignedPathFactory()
         );
     }
 
-    RemoteProfileService(UnsignedPathFactory profilePathFactory,
-            SignedRequestBuilder signedRequestBuilder) {
+    RemoteProfileService(UnsignedPathFactory profilePathFactory) {
         this.unsignedPathFactory = profilePathFactory;
-        this.signedRequestBuilder = signedRequestBuilder;
 
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
@@ -61,18 +58,8 @@ public final class RemoteProfileService implements ProfileService {
         try {
             String authKey = base64(keyPair.getPublic().getEncoded());
 
-            SignedRequest signedRequest = this.signedRequestBuilder
-                    .withKeyPair(keyPair)
-                    .withBaseUrl(apiUrl)
-                    .withEndpoint(path)
-                    .withHttpMethod(HTTP_GET)
-                    .withHeader(AUTH_KEY_HEADER, authKey)
-                    .build();
+            SignedRequest signedRequest = createSignedRequest(keyPair, path, authKey);
             return fetchReceipt(signedRequest);
-        } catch (GeneralSecurityException gse) {
-            throw new ProfileException("Cannot sign request", gse);
-        } catch (URISyntaxException uriSyntaxException) {
-            throw new ProfileException("Error creating request", uriSyntaxException);
         } catch (IOException ioe) {
             throw new ProfileException("Error calling service to get profile", ioe);
         }
@@ -94,6 +81,22 @@ public final class RemoteProfileService implements ProfileService {
                 default:
                     throw new ProfileException("Unexpected response: " + responseCode + " " + re.getResponseBody(), re);
             }
+        }
+    }
+
+    SignedRequest createSignedRequest(KeyPair keyPair, String path, String authKey) throws ProfileException {
+        try {
+            return SignedRequestBuilder.newInstance()
+                    .withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withHttpMethod(HTTP_GET)
+                    .withHeader(AUTH_KEY_HEADER, authKey)
+                    .build();
+        } catch (GeneralSecurityException ex) {
+            throw new ProfileException("Cannot sign request", ex);
+        } catch (UnsupportedEncodingException | URISyntaxException ex) {
+            throw new ProfileException("Error creating request", ex);
         }
     }
 
