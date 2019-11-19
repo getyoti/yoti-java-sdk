@@ -1,26 +1,20 @@
 package com.yoti.api.client.spi.remote.call.qrcode;
 
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
-
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
-import static org.mockito.Answers.RETURNS_SELF;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.yoti.api.client.shareurl.DynamicScenario;
 import com.yoti.api.client.shareurl.DynamicShareException;
-import com.yoti.api.client.spi.remote.call.HttpMethod;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -31,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -42,11 +37,10 @@ public class DynamicSharingServiceTest {
     private static final byte[] SOME_BODY_BYTES = SOME_BODY.getBytes();
     private static final Map<String, String> SOME_HEADERS = new HashMap<>();
 
-    @InjectMocks DynamicSharingService testObj;
+    @Spy @InjectMocks DynamicSharingService testObj;
 
     @Mock UnsignedPathFactory unsignedPathFactoryMock;
     @Mock ObjectMapper objectMapperMock;
-    @Mock(answer = RETURNS_SELF) SignedRequestBuilder signedRequestBuilderMock;
 
     @Mock DynamicScenario simpleDynamicScenarioMock;
     @Mock SignedRequest signedRequestMock;
@@ -92,24 +86,10 @@ public class DynamicSharingServiceTest {
     }
 
     @Test
-    public void shouldWrapSecurityExceptionInDynamicShareException() throws Exception {
-        when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
-        GeneralSecurityException securityException = new GeneralSecurityException();
-        when(signedRequestBuilderMock.build()).thenThrow(securityException);
-
-        try {
-            testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
-            fail("Expected a DynamicShareException");
-        } catch (DynamicShareException ex) {
-            assertSame(securityException, ex.getCause());
-        }
-    }
-
-    @Test
     public void shouldThrowExceptionForIOError() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         IOException ioException = new IOException();
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        doReturn(signedRequestMock).when(testObj).createSignedRequest(keyPairMock, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
         when(signedRequestMock.execute(SimpleShareUrlResult.class)).thenThrow(ioException);
 
         try {
@@ -124,7 +104,7 @@ public class DynamicSharingServiceTest {
     public void shouldThrowExceptionWithResourceExceptionCause() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         ResourceException resourceException = new ResourceException(404, "Not Found", "Test exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        doReturn(signedRequestMock).when(testObj).createSignedRequest(keyPairMock, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
         when(signedRequestMock.execute(SimpleShareUrlResult.class)).thenThrow(resourceException);
 
         try {
@@ -138,16 +118,10 @@ public class DynamicSharingServiceTest {
     @Test
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        doReturn(signedRequestMock).when(testObj).createSignedRequest(keyPairMock, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
         when(signedRequestMock.execute(SimpleShareUrlResult.class)).thenReturn(simpleShareUrlResultMock);
 
         SimpleShareUrlResult result = testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
-
-        verify(signedRequestBuilderMock).withKeyPair(keyPairMock);
-        verify(signedRequestBuilderMock).withBaseUrl(DEFAULT_YOTI_API_URL);
-        verify(signedRequestBuilderMock).withEndpoint(DYNAMIC_QRCODE_PATH);
-        verify(signedRequestBuilderMock).withPayload(SOME_BODY_BYTES);
-        verify(signedRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_POST);
         assertSame(simpleShareUrlResultMock, result);
     }
 

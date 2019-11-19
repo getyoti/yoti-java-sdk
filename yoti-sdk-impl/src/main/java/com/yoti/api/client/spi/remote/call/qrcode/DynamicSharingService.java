@@ -6,6 +6,8 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_AP
 import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 
@@ -25,8 +27,7 @@ public final class DynamicSharingService {
     public static DynamicSharingService newInstance() {
         return new DynamicSharingService(
                 new UnsignedPathFactory(),
-                new ObjectMapper(),
-                SignedRequestBuilder.newInstance()
+                new ObjectMapper()
         );
     }
 
@@ -34,16 +35,13 @@ public final class DynamicSharingService {
 
     private final UnsignedPathFactory unsignedPathFactory;
     private final ObjectMapper objectMapper;
-    private final SignedRequestBuilder signedRequestBuilder;
 
     private final String apiUrl;
 
     DynamicSharingService(UnsignedPathFactory unsignedPathFactory,
-            ObjectMapper objectMapper,
-            SignedRequestBuilder signedRequestBuilder) {
+            ObjectMapper objectMapper) {
         this.unsignedPathFactory = unsignedPathFactory;
         this.objectMapper = objectMapper;
-        this.signedRequestBuilder = signedRequestBuilder;
 
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
@@ -59,23 +57,29 @@ public final class DynamicSharingService {
         try {
             byte[] body = objectMapper.writeValueAsString(dynamicScenario).getBytes(DEFAULT_CHARSET);
 
-            SignedRequest signedRequest = this.signedRequestBuilder
+            SignedRequest signedRequest = createSignedRequest(keyPair, path, body);
+
+            return signedRequest.execute(SimpleShareUrlResult.class);
+        } catch (ResourceException ex) {
+            throw new DynamicShareException("Error posting the request: ", ex);
+        } catch (IOException ex) {
+            throw new DynamicShareException("Error building the request: ", ex);
+        }
+    }
+
+    SignedRequest createSignedRequest(KeyPair keyPair, String path, byte[] body) throws DynamicShareException {
+        try {
+            return SignedRequestBuilder.newInstance()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withPayload(body)
                     .withHttpMethod("POST")
                     .build();
-
-            return signedRequest.execute(SimpleShareUrlResult.class);
         } catch (GeneralSecurityException ex) {
             throw new DynamicShareException("Error signing the request: ", ex);
-        } catch (ResourceException ex) {
-            throw new DynamicShareException("Error posting the request: ", ex);
-        } catch (IOException ex) {
+        } catch (UnsupportedEncodingException | URISyntaxException ex) {
             throw new DynamicShareException("Error building the request: ", ex);
-        } catch (Exception ex) {
-            throw new DynamicShareException("Error initiating the share: ", ex);
         }
     }
 

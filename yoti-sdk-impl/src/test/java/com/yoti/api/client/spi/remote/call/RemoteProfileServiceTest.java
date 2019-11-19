@@ -1,17 +1,15 @@
 package com.yoti.api.client.spi.remote.call;
 
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
+import static com.yoti.api.client.spi.remote.Base64.base64;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.KEY_PAIR_PEM;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,9 +21,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -42,18 +40,19 @@ public class RemoteProfileServiceTest {
     private static final String TOKEN = "test-token";
     private static final String GENERATED_PROFILE_PATH = "generatedProfilePath";
     private static final Map<String, String> SOME_HEADERS = new HashMap<>();
+    private static String B64_PUBLIC_KEY;
     private static KeyPair KEY_PAIR;
 
-    @InjectMocks RemoteProfileService testObj;
+    @Spy @InjectMocks RemoteProfileService testObj;
 
     @Mock UnsignedPathFactory unsignedPathFactory;
-    @Mock(answer = Answers.RETURNS_SELF) SignedRequestBuilder signedRequestBuilderMock;
 
     @Mock SignedRequest signedRequestMock;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
         KEY_PAIR = generateKeyPairFrom(KEY_PAIR_PEM);
+        B64_PUBLIC_KEY = base64(KEY_PAIR.getPublic().getEncoded());
         SOME_HEADERS.put("someKey", "someValue");
     }
 
@@ -64,35 +63,17 @@ public class RemoteProfileServiceTest {
 
     @Test
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        doReturn(signedRequestMock).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
         when(signedRequestMock.execute(ProfileResponse.class)).thenReturn(PROFILE_RESPONSE);
 
         Receipt result = testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);
-
-        verify(signedRequestBuilderMock).withKeyPair(KEY_PAIR);
-        verify(signedRequestBuilderMock).withBaseUrl(DEFAULT_YOTI_API_URL);
-        verify(signedRequestBuilderMock).withEndpoint(GENERATED_PROFILE_PATH);
-        verify(signedRequestBuilderMock).withHttpMethod(HTTP_GET);
         assertSame(RECEIPT, result);
-    }
-
-    @Test
-    public void shouldWrapSecurityExceptionInProfileException() throws Exception {
-        GeneralSecurityException securityException = new GeneralSecurityException();
-        when(signedRequestBuilderMock.build()).thenThrow(securityException);
-
-        try {
-            testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);
-            fail("Expected a ProfileException");
-        } catch (ProfileException e) {
-            assertSame(securityException, e.getCause());
-        }
     }
 
     @Test
     public void shouldThrowExceptionForIOError() throws Exception {
         IOException ioException = new IOException("Test exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        doReturn(signedRequestMock).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
         when(signedRequestMock.execute(ProfileResponse.class)).thenThrow(ioException);
 
         try {
@@ -106,7 +87,7 @@ public class RemoteProfileServiceTest {
     @Test
     public void shouldThrowExceptionWithResourceExceptionCause() throws Throwable {
         ResourceException resourceException = new ResourceException(404, "Not Found", "Test exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        doReturn(signedRequestMock).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
         when(signedRequestMock.execute(ProfileResponse.class)).thenThrow(resourceException);
 
         try {
