@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 
+import com.yoti.api.client.Image;
+
 public class SignedRequest {
 
     private final URI uri;
@@ -11,18 +13,24 @@ public class SignedRequest {
     private final byte[] data;
     private final Map<String, String> headers;
     private final JsonResourceFetcher jsonResourceFetcher;
+    private final RawResourceFetcher rawResourceFetcher;
+    private final ImageResourceFetcher imageResourceFetcher;
 
     SignedRequest(final URI uri,
             final String method,
             final byte[] data,
             final Map<String, String> headers,
-            JsonResourceFetcher jsonResourceFetcher) {
+            JsonResourceFetcher jsonResourceFetcher,
+            RawResourceFetcher rawResourceFetcher,
+            ImageResourceFetcher imageResourceFetcher) {
 
         this.uri = uri;
         this.method = method;
         this.data = data;
         this.headers = headers;
         this.jsonResourceFetcher = jsonResourceFetcher;
+        this.rawResourceFetcher = rawResourceFetcher;
+        this.imageResourceFetcher = imageResourceFetcher;
     }
 
     public URI getUri() {
@@ -42,7 +50,14 @@ public class SignedRequest {
     }
 
     public <T> T execute(Class<T> clazz) throws ResourceException, IOException {
-        UrlConnector urlConnector = UrlConnector.get(uri.toString());
-        return jsonResourceFetcher.doRequest(urlConnector, getMethod(), getData(), getHeaders(), clazz);
+        if (Image.class.isAssignableFrom(clazz)) {
+            return clazz.cast(imageResourceFetcher.doRequest(this));
+        }
+        return jsonResourceFetcher.doRequest(this, clazz);
     }
+
+    public SignedRequestResponse execute() throws ResourceException, IOException {
+        return rawResourceFetcher.doRequest(this);
+    }
+
 }
