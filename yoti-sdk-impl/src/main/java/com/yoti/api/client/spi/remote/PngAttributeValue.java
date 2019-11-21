@@ -4,7 +4,7 @@ package com.yoti.api.client.spi.remote;
  * Attribute value holding a PNG image.
  *
  */
-final class PngAttributeValue extends ImageAttributeValue {
+public final class PngAttributeValue extends ImageAttributeValue {
 
     private static final String MIME_TYPE = "image/png";
 

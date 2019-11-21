@@ -37,6 +37,21 @@
     </Match>
 
     <Match>
+        <Class name="com.yoti.api.client.spi.remote.JpegAttributeValue"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+
+    <Match>
+        <Class name="com.yoti.api.client.spi.remote.PngAttributeValue"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+
+    <Match>
+        <Class name="com.yoti.api.client.spi.remote.call.SignedRequestResponse"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+
+    <Match>
         <Bug pattern="CRLF_INJECTION_LOGS"/>
     </Match>
 

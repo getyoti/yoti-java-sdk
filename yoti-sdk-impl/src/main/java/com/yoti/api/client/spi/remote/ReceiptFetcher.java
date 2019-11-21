@@ -2,18 +2,17 @@ package com.yoti.api.client.spi.remote;
 
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 
-import java.security.KeyPair;
-import java.security.PrivateKey;
-
 import com.yoti.api.client.ActivityFailureException;
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.call.ProfileService;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.call.RemoteProfileService;
 import com.yoti.api.client.spi.remote.util.DecryptionHelper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.security.KeyPair;
+import java.security.PrivateKey;
 
 class ReceiptFetcher {
 

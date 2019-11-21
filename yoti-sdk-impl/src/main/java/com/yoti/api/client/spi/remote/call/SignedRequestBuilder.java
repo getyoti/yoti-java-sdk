@@ -20,12 +20,14 @@ import com.yoti.api.client.spi.remote.util.Validation;
 public class SignedRequestBuilder {
 
     public static SignedRequestBuilder newInstance() {
+        RawResourceFetcher rawResourceFetcher = new RawResourceFetcher();
         return new SignedRequestBuilder(
                 new PathFactory(),
                 SignedMessageFactory.newInstance(),
                 new HeadersFactory(),
-                JsonResourceFetcher.newInstance()
-        );
+                JsonResourceFetcher.newInstance(rawResourceFetcher),
+                rawResourceFetcher,
+                ImageResourceFetcher.newInstance(rawResourceFetcher));
     }
 
     private KeyPair keyPair;
@@ -40,15 +42,21 @@ public class SignedRequestBuilder {
     private final SignedMessageFactory signedMessageFactory;
     private final HeadersFactory headersFactory;
     private final JsonResourceFetcher jsonResourceFetcher;
+    private final RawResourceFetcher rawResourceFetcher;
+    private final ImageResourceFetcher imageResourceFetcher;
 
     SignedRequestBuilder(PathFactory pathFactory,
             SignedMessageFactory signedMessageFactory,
             HeadersFactory headersFactory,
-            JsonResourceFetcher jsonResourceFetcher) {
+            JsonResourceFetcher jsonResourceFetcher,
+            RawResourceFetcher rawResourceFetcher,
+            ImageResourceFetcher imageResourceFetcher) {
         this.pathFactory = pathFactory;
         this.signedMessageFactory = signedMessageFactory;
         this.headersFactory = headersFactory;
         this.jsonResourceFetcher = jsonResourceFetcher;
+        this.rawResourceFetcher = rawResourceFetcher;
+        this.imageResourceFetcher = imageResourceFetcher;
     }
 
     /**
@@ -154,8 +162,9 @@ public class SignedRequestBuilder {
                 httpMethod,
                 payload,
                 headers,
-                jsonResourceFetcher
-        );
+                jsonResourceFetcher,
+                rawResourceFetcher,
+                imageResourceFetcher);
     }
 
     private void validateRequest() {

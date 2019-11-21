@@ -17,6 +17,8 @@ public final class YotiConstants {
 
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_TYPE_JSON = "application/json";
+    public static final String CONTENT_TYPE_PNG = "image/png";
+    public static final String CONTENT_TYPE_JPEG = "image/jpeg";
 
     public static final String JAVA = "Java";
     public static final String SDK_VERSION = JAVA + "-2.6.0-SNAPSHOT";

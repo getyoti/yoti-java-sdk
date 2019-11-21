@@ -9,34 +9,7 @@
   <name>Yoti SDK Parent Pom</name>
   <description>Parent pom for the Java SDK projects</description>
   <url>https://github.com/getyoti/yoti-java-sdk</url>
-  
-  <developers>
-    <developer>
-      <name>Andras Bulla</name>
-    </developer>
-    <developer>
-      <name>Radoslaw Busz</name>
-    </developer>
-    <developer>
-      <name>David Goaté</name>
-    </developer>
-    <developer>
-      <name>Attila Kiss</name>
-    </developer>
-    <developer>
-      <name>Quirino Zagarese</name>
-    </developer>
-    <developer>
-      <name>Michael Buck</name>
-    </developer>
-    <developer>
-      <name>Francesco Sorice</name>
-    </developer>
-    <developer>
-      <name>Vincenzo Candela</name>
-    </developer>
-  </developers>
-  
+
   <licenses>
     <license>
       <name>Yoti License</name>
