@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * @see WantedAttribute
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 class SimpleWantedAttribute implements WantedAttribute {
 
     @JsonProperty("name")
