@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * @see WantedAttribute
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 class SimpleWantedAttribute implements WantedAttribute {
 
     @JsonProperty("name")
@@ -21,11 +22,9 @@ class SimpleWantedAttribute implements WantedAttribute {
     @JsonProperty("optional")
     private final boolean optional;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("accept_self_asserted")
     private final Boolean acceptSelfAsserted;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("constraints")
     private final List<Constraint> constraints;
 
