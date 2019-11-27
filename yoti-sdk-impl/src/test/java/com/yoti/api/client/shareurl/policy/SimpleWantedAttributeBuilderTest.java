@@ -8,10 +8,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.junit.Assert.fail;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SimpleWantedAttributeBuilderTest {
@@ -53,6 +55,17 @@ public class SimpleWantedAttributeBuilderTest {
         assertEquals(true, result.getAcceptSelfAsserted());
         assertThat(result.getConstraints(), hasSize(1));
         assertEquals(result.getConstraints(), constraintListMock);
+    }
+
+    @Test
+    public void buildingAnAttributeWithoutNameFails() {
+        try { 
+            WantedAttributeBuilder.newInstance().build();
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("name"));
+            return;
+        }
+        fail("Expected an Exception");
     }
 
 }
