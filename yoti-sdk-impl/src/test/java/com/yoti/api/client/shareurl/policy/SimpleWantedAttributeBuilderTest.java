@@ -59,7 +59,7 @@ public class SimpleWantedAttributeBuilderTest {
 
     @Test
     public void buildingAnAttributeWithoutNameFails() {
-        try {
+        try { 
             WantedAttributeBuilder.newInstance().build();
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("name"));
