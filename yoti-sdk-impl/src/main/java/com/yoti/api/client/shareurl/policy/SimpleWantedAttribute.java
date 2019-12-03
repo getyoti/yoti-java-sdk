@@ -1,10 +1,13 @@
 package com.yoti.api.client.shareurl.policy;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yoti.api.client.shareurl.constraint.Constraint;
 
 import java.util.Collections;
 import java.util.List;
+
+import static com.yoti.api.client.spi.remote.util.Validation.notNullOrEmpty;
 
 /**
  * @see WantedAttribute
@@ -27,7 +30,9 @@ class SimpleWantedAttribute implements WantedAttribute {
     @JsonProperty("constraints")
     private final List<Constraint> constraints;
 
-    SimpleWantedAttribute(String name, String derivation, boolean optional, boolean acceptSelfAsserted, List<Constraint> constraints) {
+    SimpleWantedAttribute(String name, String derivation, boolean optional, Boolean acceptSelfAsserted, List<Constraint> constraints) {
+        notNullOrEmpty(name, "name");
+
         this.name = name;
         this.derivation = derivation;
         this.optional = optional;
