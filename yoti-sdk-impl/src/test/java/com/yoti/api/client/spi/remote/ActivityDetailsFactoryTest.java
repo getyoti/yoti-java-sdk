@@ -209,6 +209,33 @@ public class ActivityDetailsFactoryTest {
         assertEquals(DATE, result.getTimestamp());
     }
 
+    @Test
+    public void shouldReThrowProfileExceptionFromExtraDataConverter() throws Exception {
+        Receipt receipt = new Receipt.Builder()
+                .withWrappedReceiptKey(validReceiptKey)
+                .withTimestamp(VALID_TIMESTAMP)
+                .withRememberMeId(SOME_REMEMBER_ME_ID_BYTES)
+                .withParentRememberMeId(SOME_PARENT_REMEMBER_ME_ID_BYTES)
+                .withProfile(PROFILE_CONTENT)
+                .withOtherPartyProfile(OTHER_PROFILE_CONTENT)
+                .withReceiptId(DECODED_RECEIPT_BYTES)
+                .withExtraData(EXTRA_DATA_CONTENT)
+                .build();
+        when(profileReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(profileMock);
+        when(profileReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(otherProfileMock);
+
+        when(extraDataReaderMock.read(eq(EXTRA_DATA_CONTENT), any(Key.class))).thenThrow(new ProfileException("Cannot decode profile"));
+
+        try {
+            testObj.create(receipt, keyPair.getPrivate());
+        } catch (ProfileException ex) {
+            assertThat(ex.getMessage(), containsString("Cannot decode profile"));
+            return;
+        }
+
+        fail("Expected an exception");
+    }
+
     private Profile getWrappedProfile(HumanProfile humanProfile) throws Exception {
         return (Profile) FieldUtils.getField(HumanProfileAdapter.class, "wrapped", true).get(humanProfile);
     }
