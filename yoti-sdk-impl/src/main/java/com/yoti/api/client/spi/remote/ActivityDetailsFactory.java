@@ -57,11 +57,11 @@ class ActivityDetailsFactory {
         return new SimpleActivityDetails(rememberMeId, parentRememberMeId, userProfile, applicationProfile, extraData, timestamp, receipt.getReceiptId());
     }
 
-    private ExtraData parseExtraData(byte[] extraDataBytes, Key secretKey) {
+    private ExtraData parseExtraData(byte[] extraDataBytes, Key secretKey) throws ProfileException {
         ExtraData extraData;
         try {
             extraData = extraDataReader.read(extraDataBytes, secretKey);
-        } catch (ProfileException | ExtraDataException e) {
+        } catch (ExtraDataException e) {
             LOG.error("Failed to parse extra data from receipt");
             extraData = new SimpleExtraData();
         }
