@@ -10,6 +10,12 @@
   <description>Parent pom for the Java SDK projects</description>
   <url>https://github.com/getyoti/yoti-java-sdk</url>
 
+  <developers>
+    <developer>
+      <name>Yoti</name>
+    </developer>
+  </developers>
+
   <licenses>
     <license>
       <name>Yoti License</name>
