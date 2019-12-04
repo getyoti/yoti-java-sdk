@@ -17,13 +17,18 @@ public final class YotiConstants {
 
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_TYPE_JSON = "application/json";
+    public static final String CONTENT_TYPE_PNG = "image/png";
+    public static final String CONTENT_TYPE_JPEG = "image/jpeg";
 
     public static final String JAVA = "Java";
-    public static final String SDK_VERSION = JAVA + "-2.5.1";
+    public static final String SDK_VERSION = JAVA + "-2.6.0";
     public static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
     public static final String ASYMMETRIC_CIPHER = "RSA/NONE/PKCS1Padding";
     public static final String SYMMETRIC_CIPHER = "AES/CBC/PKCS7Padding";
 
     public static final String DEFAULT_CHARSET = "UTF-8";
+
+    public static final String RFC3339_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final String RFC3339_PATTERN_MILLIS = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
 }

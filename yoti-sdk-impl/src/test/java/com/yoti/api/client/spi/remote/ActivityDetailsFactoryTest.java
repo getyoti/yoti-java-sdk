@@ -1,5 +1,6 @@
 package com.yoti.api.client.spi.remote;
 
+import static com.yoti.api.client.spi.remote.call.YotiConstants.RFC3339_PATTERN;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptAsymmetric;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateSymmetricKey;
@@ -26,11 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import com.yoti.api.client.ActivityDetails;
-import com.yoti.api.client.ApplicationProfile;
-import com.yoti.api.client.HumanProfile;
-import com.yoti.api.client.Profile;
-import com.yoti.api.client.ProfileException;
+import com.yoti.api.client.*;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 
@@ -47,9 +44,9 @@ public class ActivityDetailsFactoryTest {
 
     private static final byte[] PROFILE_CONTENT = { 0, 1, 2, 3 };
     private static final byte[] OTHER_PROFILE_CONTENT = { 4, 5, 6, 7 };
+    private static final byte[] EXTRA_DATA_CONTENT = { 8, 9, 10, 11 };
 
     private static final Date DATE = new GregorianCalendar(1980, Calendar.AUGUST, 5).getTime();
-    private static final String RFC3339_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private static final DateFormat RFC3339_FORMAT = new SimpleDateFormat(RFC3339_PATTERN);
     private static final String VALID_TIMESTAMP = RFC3339_FORMAT.format(DATE);
 
@@ -63,11 +60,13 @@ public class ActivityDetailsFactoryTest {
     @InjectMocks ActivityDetailsFactory testObj;
 
     @Mock ProfileReader profileReaderMock;
+    @Mock ExtraDataReader extraDataReaderMock;
 
     KeyPair keyPair;
     byte[] validReceiptKey;
     @Mock Profile profileMock;
     @Mock Profile otherProfileMock;
+    @Mock ExtraData extraDataMock;
 
     @Before
     public void setUp() throws Exception {
@@ -135,14 +134,18 @@ public class ActivityDetailsFactoryTest {
                 .withProfile(PROFILE_CONTENT)
                 .withOtherPartyProfile(OTHER_PROFILE_CONTENT)
                 .withReceiptId(DECODED_RECEIPT_BYTES)
+                .withExtraData(EXTRA_DATA_CONTENT)
                 .build();
         when(profileReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(profileMock);
         when(profileReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(otherProfileMock);
+        when(extraDataReaderMock.read(eq(EXTRA_DATA_CONTENT), any(Key.class))).thenReturn(extraDataMock);
+
 
         ActivityDetails result = testObj.create(receipt, keyPair.getPrivate());
 
         assertSame(otherProfileMock, getWrappedProfile(result.getUserProfile()));
         assertSame(profileMock, getWrappedProfile(result.getApplicationProfile()));
+        assertSame(extraDataMock, result.getExtraData());
         assertEquals("", result.getRememberMeId());
         assertEquals("", result.getUserId());
         assertEquals(null, result.getParentRememberMeId());
@@ -160,19 +163,77 @@ public class ActivityDetailsFactoryTest {
                 .withProfile(PROFILE_CONTENT)
                 .withOtherPartyProfile(OTHER_PROFILE_CONTENT)
                 .withReceiptId(DECODED_RECEIPT_BYTES)
+                .withExtraData(EXTRA_DATA_CONTENT)
                 .build();
         when(profileReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(profileMock);
         when(profileReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(otherProfileMock);
+        when(extraDataReaderMock.read(eq(EXTRA_DATA_CONTENT), any(Key.class))).thenReturn(extraDataMock);
 
         ActivityDetails result = testObj.create(receipt, keyPair.getPrivate());
 
         assertSame(otherProfileMock, getWrappedProfile(result.getUserProfile()));
         assertSame(profileMock, getWrappedProfile(result.getApplicationProfile()));
+        assertSame(extraDataMock, result.getExtraData());
         assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getRememberMeId());
         assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getUserId());
         assertEquals(SOME_PARENT_REMEMBER_ME_ID_STRING, result.getParentRememberMeId());
         assertEquals(ENCODED_RECEIPT_STRING, result.getReceiptId());
         assertEquals(DATE, result.getTimestamp());
+    }
+
+    @Test
+    public void shouldGetCorrectExtraDataFromExtraDataConverter() throws Exception {
+        Receipt receipt = new Receipt.Builder()
+                .withWrappedReceiptKey(validReceiptKey)
+                .withTimestamp(VALID_TIMESTAMP)
+                .withRememberMeId(SOME_REMEMBER_ME_ID_BYTES)
+                .withParentRememberMeId(SOME_PARENT_REMEMBER_ME_ID_BYTES)
+                .withProfile(PROFILE_CONTENT)
+                .withOtherPartyProfile(OTHER_PROFILE_CONTENT)
+                .withReceiptId(DECODED_RECEIPT_BYTES)
+                .withExtraData(EXTRA_DATA_CONTENT)
+                .build();
+        when(profileReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(profileMock);
+        when(profileReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(otherProfileMock);
+        when(extraDataReaderMock.read(eq(EXTRA_DATA_CONTENT), any(Key.class))).thenReturn(extraDataMock);
+
+        ActivityDetails result = testObj.create(receipt, keyPair.getPrivate());
+
+        assertSame(otherProfileMock, getWrappedProfile(result.getUserProfile()));
+        assertSame(profileMock, getWrappedProfile(result.getApplicationProfile()));
+        assertSame(extraDataMock, result.getExtraData());
+        assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getRememberMeId());
+        assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getUserId());
+        assertEquals(SOME_PARENT_REMEMBER_ME_ID_STRING, result.getParentRememberMeId());
+        assertEquals(ENCODED_RECEIPT_STRING, result.getReceiptId());
+        assertEquals(DATE, result.getTimestamp());
+    }
+
+    @Test
+    public void shouldReThrowProfileExceptionFromExtraDataConverter() throws Exception {
+        Receipt receipt = new Receipt.Builder()
+                .withWrappedReceiptKey(validReceiptKey)
+                .withTimestamp(VALID_TIMESTAMP)
+                .withRememberMeId(SOME_REMEMBER_ME_ID_BYTES)
+                .withParentRememberMeId(SOME_PARENT_REMEMBER_ME_ID_BYTES)
+                .withProfile(PROFILE_CONTENT)
+                .withOtherPartyProfile(OTHER_PROFILE_CONTENT)
+                .withReceiptId(DECODED_RECEIPT_BYTES)
+                .withExtraData(EXTRA_DATA_CONTENT)
+                .build();
+        when(profileReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(profileMock);
+        when(profileReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(otherProfileMock);
+
+        when(extraDataReaderMock.read(eq(EXTRA_DATA_CONTENT), any(Key.class))).thenThrow(new ProfileException("Cannot decode profile"));
+
+        try {
+            testObj.create(receipt, keyPair.getPrivate());
+        } catch (ProfileException ex) {
+            assertThat(ex.getMessage(), containsString("Cannot decode profile"));
+            return;
+        }
+
+        fail("Expected an exception");
     }
 
     private Profile getWrappedProfile(HumanProfile humanProfile) throws Exception {

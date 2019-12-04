@@ -70,4 +70,9 @@ public interface ActivityDetails {
     @Deprecated
     String getBase64Selfie();
 
+    /**
+     * Return the extra data associated with the receipt.
+     */
+    ExtraData getExtraData();
+
 }

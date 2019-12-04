@@ -11,7 +11,7 @@
   <parent>
     <groupId>com.yoti</groupId>
     <artifactId>yoti-sdk-parent</artifactId>
-    <version>2.5.1</version>
+    <version>2.6.0</version>
     <relativePath>../yoti-sdk-parent</relativePath>
   </parent>
   
@@ -91,6 +91,15 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>com/yoti/api/client/spi/remote/proto/**/*</exclude>
+          </excludes>
+        </configuration>
       </plugin>
     </plugins>
   </build>

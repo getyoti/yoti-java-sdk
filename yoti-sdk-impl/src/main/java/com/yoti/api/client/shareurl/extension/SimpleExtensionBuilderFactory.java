@@ -22,4 +22,9 @@ public class SimpleExtensionBuilderFactory extends ExtensionBuilderFactory {
         return new SimpleTransactionalFlowExtensionBuilder();
     }
 
+    @Override
+    public ThirdPartyAttributeExtensionBuilder createThirdPartyAttributeExtensionBuilder() {
+        return new SimpleThirdPartyAttributeExtensionBuilder();
+    }
+
 }

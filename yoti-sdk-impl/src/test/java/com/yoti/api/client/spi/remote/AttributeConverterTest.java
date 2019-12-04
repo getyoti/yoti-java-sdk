@@ -1,15 +1,18 @@
 package com.yoti.api.client.spi.remote;
 
-import static java.util.Arrays.asList;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsCollectionContaining.hasItems;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import com.google.protobuf.ByteString;
+import com.yoti.api.attributes.AttributeConstants;
+import com.yoti.api.client.*;
+import com.yoti.api.client.spi.remote.proto.AttrProto;
+import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
+import com.yoti.api.client.spi.remote.util.AnchorType;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.w3c.dom.Attr;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
@@ -18,24 +21,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.yoti.api.attributes.AttributeConstants;
-import com.yoti.api.client.Anchor;
-import com.yoti.api.client.Attribute;
-import com.yoti.api.client.Date;
-import com.yoti.api.client.DocumentDetails;
-import com.yoti.api.client.HumanProfile;
-import com.yoti.api.client.Image;
-import com.yoti.api.client.spi.remote.proto.AttrProto;
-import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
-import com.yoti.api.client.spi.remote.util.AnchorType;
-
-import com.google.protobuf.ByteString;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.collection.IsMapContaining.hasEntry;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsCollectionContaining.hasItems;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AttributeConverterTest {
@@ -47,22 +41,33 @@ public class AttributeConverterTest {
     private static final String GENDER_MALE = "MALE";
     private static final String EMPTY_STRING = "";
     public static final Integer SOME_INT_VALUE = 123;
+    public static final byte[] TEST_THIRD_PARTY_ASSIGNED_ATTRIBUTE_BYTES = Base64.getDecoder().decode(TestAttributes.THIRD_PARTY_ASSIGNED_ATTRIBUTE);
 
-    @InjectMocks AttributeConverter testObj;
+    @InjectMocks
+    AttributeConverter testObj;
 
-    @Mock DocumentDetailsAttributeParser documentDetailsAttributeParserMock;
-    @Mock AnchorConverter anchorConverterMock;
+    @Mock
+    DocumentDetailsAttributeParser documentDetailsAttributeParserMock;
+    @Mock
+    AnchorConverter anchorConverterMock;
 
-    @Mock DocumentDetails documentDetailsMock;
-    @Mock AttrProto.Anchor verifierProtoMock;
-    @Mock AttrProto.Anchor sourceProtoMock;
-    @Mock AttrProto.Anchor unknownProtoMock;
-    @Mock Anchor verifierAnchorMock;
-    @Mock Anchor sourceAnchorMock;
-    @Mock Anchor unknownAnchorMock;
+    @Mock
+    DocumentDetails documentDetailsMock;
+    @Mock
+    AttrProto.Anchor verifierProtoMock;
+    @Mock
+    AttrProto.Anchor sourceProtoMock;
+    @Mock
+    AttrProto.Anchor unknownProtoMock;
+    @Mock
+    Anchor verifierAnchorMock;
+    @Mock
+    Anchor sourceAnchorMock;
+    @Mock
+    Anchor unknownAnchorMock;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         when(verifierAnchorMock.getType()).thenReturn(AnchorType.VERIFIER.name());
         when(sourceAnchorMock.getType()).thenReturn(AnchorType.SOURCE.name());
         when(unknownAnchorMock.getType()).thenReturn(AnchorType.UNKNOWN.name());
@@ -353,6 +358,23 @@ public class AttributeConverterTest {
                 .build();
 
         Attribute<Integer> result = testObj.convertAttribute(attribute);
+    }
+
+    @Test
+    public void shouldParseActualThirdPartyAssignedAttribute() throws Exception {
+        AttrProto.Attribute attribute = AttrProto.Attribute.parseFrom(TEST_THIRD_PARTY_ASSIGNED_ATTRIBUTE_BYTES);
+        AttributeConverter attributeConverter = AttributeConverter.newInstance();
+
+        Attribute<String> result = attributeConverter.convertAttribute(attribute);
+
+        assertThat(result.getName(), is("com.thirdparty.id"));
+        assertThat(result.getValue(), is("test-third-party-attribute-0"));
+
+        assertThat(result.getSources().get(0).getValue(), is("THIRD_PARTY"));
+        assertThat(result.getSources().get(0).getSubType(), is("orgName"));
+
+        assertThat(result.getVerifiers().get(0).getValue(), is("THIRD_PARTY"));
+        assertThat(result.getVerifiers().get(0).getSubType(), is("orgName"));
     }
 
     private static AttrProto.MultiValue createMultiValueTestData() {
