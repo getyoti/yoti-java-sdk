@@ -104,13 +104,13 @@ If you are using Maven, you need to add the following dependency:
 <dependency>
     <groupId>com.yoti</groupId>
     <artifactId>yoti-sdk-impl</artifactId>
-    <version>2.6.0</version>
+    <version>2.6.1</version>
 </dependency>
 ```
 
 If you are using Gradle, here is the dependency to add:
 
-`compile group: 'com.yoti', name: 'yoti-sdk-impl', version: '2.6.0'`
+`compile group: 'com.yoti', name: 'yoti-sdk-impl', version: '2.6.1'`
 
 You will find all classes packaged under `com.yoti.api`
 
