@@ -2,13 +2,14 @@ package com.yoti.api.client.spi.remote;
 
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
+import java.util.Arrays;
 
 import com.yoti.api.client.Date;
 import com.yoti.api.client.DocumentDetails;
 
 class DocumentDetailsAttributeParser {
 
-    private static final String MINIMUM_ACCEPTABLE = "([A-Za-z_]*) ([A-Za-z]{3}) ([A-Za-z0-9]{1}).*";
+    private static final int MINIMUM_ACCEPTABLE = 3;
     private static final int TYPE_INDEX = 0;
     private static final int COUNTRY_INDEX = 1;
     private static final int NUMBER_INDEX = 2;
@@ -16,10 +17,21 @@ class DocumentDetailsAttributeParser {
     private static final int AUTHORITY_INDEX = 4;
 
     DocumentDetails parseFrom(String attributeValue) throws UnsupportedEncodingException, ParseException {
-        if (attributeValue == null || !attributeValue.matches(MINIMUM_ACCEPTABLE)) {
+        if (attributeValue == null || attributeValue.isEmpty()) {
             throw new IllegalArgumentException("Unable to parse attribute value to a DocumentDetails");
         }
+
         String[] attributes = attributeValue.split(" ");
+
+        if (attributes.length < MINIMUM_ACCEPTABLE) {
+            throw new IllegalArgumentException("Unable to parse attribute value to a DocumentDetails");
+        }
+
+        for (String s : attributes) {
+            if (s == null || s.isEmpty()) {
+                throw new IllegalArgumentException("Invalid Document Details value, multiple consecutive spaces");
+            }
+        }
 
         return DocumentDetailsAttributeValue.builder()
                 .withType(attributes[TYPE_INDEX])

@@ -1,5 +1,7 @@
 package com.yoti.api.client.spi.remote;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -8,9 +10,12 @@ import java.text.ParseException;
 
 import com.yoti.api.client.DocumentDetails;
 
+import com.yoti.api.client.spi.remote.call.YotiConstants;
 import org.junit.Test;
 
 public class DocumentDetailsAttributeParserTest {
+
+    private static final String SOME_AADHAR_DOCUMENT_DETAILS = "NATIONAL_ID IND ********6421 - UIDAI";
 
     DocumentDetailsAttributeParser testObj = new DocumentDetailsAttributeParser();
 
@@ -22,16 +27,6 @@ public class DocumentDetailsAttributeParserTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenAttributesAreMissing() throws Exception {
         testObj.parseFrom("PASSPORT GBR");
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldThrowExceptionForInvalidNumber() throws Exception {
-        testObj.parseFrom("PASSPORT GBR $%^$%^£ 2016-05-01");
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldThrowExceptionForInvalidCountry() throws Exception {
-        testObj.parseFrom("PASSPORT 13 1234abc 2016-05-01");
     }
 
     @Test
@@ -97,6 +92,18 @@ public class DocumentDetailsAttributeParserTest {
     @Test(expected = ParseException.class)
     public void shouldThrowExceptionForInvalidDate() throws Exception {
         testObj.parseFrom("PASSPORT GBR 1234abc" + " X016-05-01");
+    }
+
+    @Test
+    public void shouldParseRedactedAadhar() throws Exception {
+        DocumentDetails result = testObj.parseFrom(SOME_AADHAR_DOCUMENT_DETAILS);
+
+        assertThat(result, is(notNullValue()));
+        assertThat(result.getType(), is("NATIONAL_ID"));
+        assertThat(result.getIssuingCountry(), is("IND"));
+        assertThat(result.getDocumentNumber(), is("********6421"));
+        assertThat(result.getExpirationDate(), is(nullValue()));
+        assertThat(result.getIssuingAuthority(), is("UIDAI"));
     }
 
 }
