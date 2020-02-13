@@ -87,7 +87,7 @@
     <!-- spring versions -->
     <springboot.version>1.5.10.RELEASE</springboot.version>
     <spring.core.version>4.3.22.RELEASE</spring.core.version>
-    <spring.security.version>4.2.13.RELEASE</spring.security.version>
+    <spring.security.version>5.2.2.RELEASE</spring.security.version>
     <javax.servlet.version>2.5</javax.servlet.version>
 
     <!-- test libraries -->
