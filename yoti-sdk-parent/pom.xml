@@ -98,7 +98,7 @@
 
     <!-- maven + plugin versions -->
     <maven.compiler.version>3.0</maven.compiler.version>
-    <maven.source.version>2.2.1</maven.source.version>
+    <maven.source.version>3.2.1</maven.source.version>
     <maven.enforcer.version>3.0.0-M1</maven.enforcer.version>
     <findbugs.version>3.0.5</findbugs.version>
     <findsecbugs.version>1.7.1</findsecbugs.version>
