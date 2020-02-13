@@ -101,7 +101,7 @@
     <maven.source.version>2.2.1</maven.source.version>
     <maven.enforcer.version>3.0.0-M1</maven.enforcer.version>
     <findbugs.version>3.0.5</findbugs.version>
-    <findsecbugs.version>1.7.1</findsecbugs.version>
+    <findsecbugs.version>1.10.1</findsecbugs.version>
     <owasp.version>3.2.1</owasp.version>
     <owasp.dependency.check.cvss.limit>4</owasp.dependency.check.cvss.limit>
     <owasp.dependency.check.cve.update.limit>12</owasp.dependency.check.cve.update.limit>
