@@ -58,18 +58,18 @@ final class DocScanService {
     /**
      * Uses the supplied session specification to create a session
      *
-     * @param appId       the app ID
+     * @param sdkId       the SDK ID
      * @param keyPair     the {@code KeyPair}
      * @param sessionSpec the {@code SessionSpec}
      * @return the session creation result
      * @throws DocScanException if there was an error
      */
-    public CreateSessionResult createSession(String appId, KeyPair keyPair, SessionSpec sessionSpec) throws DocScanException {
-        notNullOrEmpty(appId, "Application id");
+    public CreateSessionResult createSession(String sdkId, KeyPair keyPair, SessionSpec sessionSpec) throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
         notNull(keyPair, "Application key Pair");
         notNull(sessionSpec, "sessionSpec");
 
-        String path = unsignedPathFactory.createNewYotiDocsSessionPath(appId);
+        String path = unsignedPathFactory.createNewYotiDocsSessionPath(sdkId);
         LOG.info("Creating session at '{}'", path);
 
         try {
@@ -99,18 +99,18 @@ final class DocScanService {
     /**
      * Retrieves the current state of a given session
      *
-     * @param appId     the app ID
+     * @param sdkId     the SDK ID
      * @param keyPair   the {@code KeyPair}
      * @param sessionId the session ID
      * @return the session state
      * @throws DocScanException if there was an error
      */
-    public SimpleGetSessionResult retrieveSession(String appId, KeyPair keyPair, String sessionId) throws DocScanException {
-        notNullOrEmpty(appId, "Application id");
+    public SimpleGetSessionResult retrieveSession(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
         notNull(keyPair, "Application key Pair");
         notNullOrEmpty(sessionId, "sessionId");
 
-        String path = unsignedPathFactory.createYotiDocsSessionPath(appId, sessionId);
+        String path = unsignedPathFactory.createYotiDocsSessionPath(sdkId, sessionId);
         LOG.info("Fetching session from '{}'", path);
 
         try {
@@ -136,17 +136,17 @@ final class DocScanService {
     /**
      * Deletes a session and all of it's associated content
      *
-     * @param appId     the app ID
+     * @param sdkId     the SDK ID
      * @param keyPair   the {@code KeyPair}
      * @param sessionId the session ID
      * @throws DocScanException if there was an error
      */
-    public void deleteSession(String appId, KeyPair keyPair, String sessionId) throws DocScanException {
-        notNullOrEmpty(appId, "Application id");
+    public void deleteSession(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
         notNull(keyPair, "Application key Pair");
         notNullOrEmpty(sessionId, "sessionId");
 
-        String path = unsignedPathFactory.createYotiDocsSessionPath(appId, sessionId);
+        String path = unsignedPathFactory.createYotiDocsSessionPath(sdkId, sessionId);
         LOG.info("Deleting session from '{}'", path);
 
         try {
@@ -172,20 +172,20 @@ final class DocScanService {
     /**
      * Retrieves {@link Media} content for a given session and media ID
      *
-     * @param appId     the app ID
+     * @param sdkId     the SDK ID
      * @param keyPair   the {@code KeyPair}
      * @param sessionId the session ID
      * @param mediaId   the media ID
      * @return the {@code Media} content
      * @throws DocScanException if there was an error
      */
-    public Media getMediaContent(String appId, KeyPair keyPair, String sessionId, String mediaId) throws DocScanException {
-        notNullOrEmpty(appId, "Application id");
+    public Media getMediaContent(String sdkId, KeyPair keyPair, String sessionId, String mediaId) throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
         notNull(keyPair, "Application key Pair");
         notNullOrEmpty(sessionId, "sessionId");
         notNullOrEmpty(mediaId, "mediaId");
 
-        String path = unsignedPathFactory.createMediaContentPath(appId, sessionId, mediaId);
+        String path = unsignedPathFactory.createMediaContentPath(sdkId, sessionId, mediaId);
         LOG.info("Fetching media from '{}'", path);
 
         try {
@@ -209,19 +209,19 @@ final class DocScanService {
     /**
      * Deletes media content for a given session and media ID
      *
-     * @param appId     the app ID
+     * @param sdkId     the SDK ID
      * @param keyPair   the {@code KeyPair}
      * @param sessionId the session ID
      * @param mediaId   the media ID
      * @throws DocScanException if there was an error
      */
-    public void deleteMediaContent(String appId, KeyPair keyPair, String sessionId, String mediaId) throws DocScanException {
-        notNullOrEmpty(appId, "Application id");
+    public void deleteMediaContent(String sdkId, KeyPair keyPair, String sessionId, String mediaId) throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
         notNull(keyPair, "Application key Pair");
         notNullOrEmpty(sessionId, "sessionId");
         notNullOrEmpty(mediaId, "mediaId");
 
-        String path = unsignedPathFactory.createMediaContentPath(appId, sessionId, mediaId);
+        String path = unsignedPathFactory.createMediaContentPath(sdkId, sessionId, mediaId);
         LOG.info("Deleting media at '{}'", path);
 
         try {
