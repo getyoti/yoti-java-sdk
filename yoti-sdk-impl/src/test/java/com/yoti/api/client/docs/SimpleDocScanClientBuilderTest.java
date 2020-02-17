@@ -22,22 +22,22 @@ public class SimpleDocScanClientBuilderTest {
     }
 
     @Test
-    public void build_shouldThrowExceptionWhenApplicationIdIsNull() {
+    public void build_shouldThrowExceptionWhenSdkIdIsNull() {
         try {
             new SimpleDocScanClientBuilder().build();
         } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application id"));
+            assertThat(ex.getMessage(), containsString("SDK ID"));
             return;
         }
         fail("Expected an exception");
     }
 
     @Test
-    public void build_shouldThrowExceptionWhenApplicationIdIsEmpty() {
+    public void build_shouldThrowExceptionWhenSdkIdIsEmpty() {
         try {
-            new SimpleDocScanClientBuilder().withApplicationId("").build();
+            new SimpleDocScanClientBuilder().withSdkId("").build();
         } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application id"));
+            assertThat(ex.getMessage(), containsString("SDK ID"));
             return;
         }
         fail("Expected an exception");
@@ -46,7 +46,7 @@ public class SimpleDocScanClientBuilderTest {
     @Test
     public void build_shouldThrowExceptionWhenKeyPairSourceIsNull() {
         try {
-            new SimpleDocScanClientBuilder().withApplicationId(SOME_APPLICATION_ID).build();
+            new SimpleDocScanClientBuilder().withSdkId(SOME_APPLICATION_ID).build();
         } catch (IllegalArgumentException ex) {
             assertThat(ex.getMessage(), containsString("Application key Pair"));
             return;
@@ -56,7 +56,7 @@ public class SimpleDocScanClientBuilderTest {
 
     @Test
     public void build_shouldCorrectlyBuildDocScanClient() {
-        DocScanClient result = new SimpleDocScanClientBuilder().withApplicationId(SOME_APPLICATION_ID)
+        DocScanClient result = new SimpleDocScanClientBuilder().withSdkId(SOME_APPLICATION_ID)
                 .withKeyPairSource(validKeyPairSource)
                 .build();
 

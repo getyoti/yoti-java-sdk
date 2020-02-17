@@ -18,13 +18,13 @@ public abstract class DocScanClientBuilder {
     }
 
     /**
-     * Sets the application ID to be used in the {@code DocScanClient}
+     * Sets the SDK ID to be used in the {@code DocScanClient}
      * on the builder
      *
-     * @param appId the application id
+     * @param sdkId the sdk id
      * @return the builder
      */
-    public abstract DocScanClientBuilder withApplicationId(String appId);
+    public abstract DocScanClientBuilder withSdkId(String sdkId);
 
     /**
      * Sets the {@link KeyPairSource} to be used in the {@code DocScanClient}

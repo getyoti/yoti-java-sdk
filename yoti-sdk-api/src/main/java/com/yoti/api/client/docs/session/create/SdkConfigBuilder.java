@@ -22,10 +22,10 @@ public interface SdkConfigBuilder {
     /**
      * Sets the allowed capture method
      *
-     * @param allowedCaptureMethod the allowed capture method
+     * @param allowedCaptureMethods the allowed capture method
      * @return the builder
      */
-    SdkConfigBuilder withAllowedCaptureMethod(String allowedCaptureMethod);
+    SdkConfigBuilder withAllowedCaptureMethods(String allowedCaptureMethods);
 
     /**
      * Sets the primary colour to be used by the web/native client
