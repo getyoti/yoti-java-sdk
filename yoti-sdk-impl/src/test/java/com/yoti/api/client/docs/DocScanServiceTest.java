@@ -918,7 +918,6 @@ public class DocScanServiceTest {
 
         assertThat(livenessResourceResponse.get(1), is(instanceOf(SimpleZoomLivenessResourceResponse.class)));
         assertThat(livenessResourceResponse.get(1).getId(), is("someZoomId"));
-
     }
 
 }

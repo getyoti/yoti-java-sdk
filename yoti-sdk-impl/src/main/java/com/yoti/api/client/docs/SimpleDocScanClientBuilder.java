@@ -9,12 +9,12 @@ public class SimpleDocScanClientBuilder extends DocScanClientBuilder {
 
     private static final DocScanService docScanService = DocScanService.newInstance();
 
-    private String appId;
+    private String sdkId;
     private KeyPairSource keyPairSource;
 
     @Override
-    public DocScanClientBuilder withApplicationId(String appId) {
-        this.appId = appId;
+    public DocScanClientBuilder withSdkId(String sdkId) {
+        this.sdkId = sdkId;
         return this;
     }
 
@@ -26,11 +26,11 @@ public class SimpleDocScanClientBuilder extends DocScanClientBuilder {
 
     @Override
     public DocScanClient build() {
-        notNullOrEmpty(appId, "Application id");
+        notNullOrEmpty(sdkId, "SDK ID");
         notNull(keyPairSource, "Application key Pair");
 
         return new SimpleDocScanClient(
-                appId,
+                sdkId,
                 keyPairSource,
                 docScanService
         );

@@ -13,7 +13,7 @@ public abstract class YotiClientBuilder {
     /**
      * Proceed building the client for a specific application.
      *
-     * @param applicationId the application identifier
+     * @param applicationId the application identifier (this is now the client SDK ID from Yoti Hub)
      * @return the updated builder 
      */
     public abstract YotiClientBuilder forApplication(String applicationId);

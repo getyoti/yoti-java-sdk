@@ -15,17 +15,17 @@ public class SimpleSdkConfigBuilder implements SdkConfigBuilder {
 
     @Override
     public SdkConfigBuilder withAllowsCamera() {
-        return withAllowedCaptureMethod(DocScanConstants.CAMERA);
+        return withAllowedCaptureMethods(DocScanConstants.CAMERA);
     }
 
     @Override
     public SdkConfigBuilder withAllowsCameraAndUpload() {
-        return withAllowedCaptureMethod(DocScanConstants.CAMERA_AND_UPLOAD);
+        return withAllowedCaptureMethods(DocScanConstants.CAMERA_AND_UPLOAD);
     }
 
     @Override
-    public SdkConfigBuilder withAllowedCaptureMethod(String allowedCaptureMethod) {
-        this.allowedCaptureMethods = allowedCaptureMethod;
+    public SdkConfigBuilder withAllowedCaptureMethods(String allowedCaptureMethods) {
+        this.allowedCaptureMethods = allowedCaptureMethods;
         return this;
     }
 

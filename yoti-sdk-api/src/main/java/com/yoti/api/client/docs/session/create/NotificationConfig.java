@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Configures call-back Notifications to some backend endpoint provided by the Relying Business.
  * <p>
- * Notifications can be configured to notified a client backend of certain events, avoiding the neeed to poll for the state of the Session.
+ * Notifications can be configured to notify a clients backend of certain events, avoiding the need to poll for the state of the Session.
  */
 public interface NotificationConfig {
 
