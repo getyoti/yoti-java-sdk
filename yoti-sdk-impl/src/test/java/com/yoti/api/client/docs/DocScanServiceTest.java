@@ -71,7 +71,6 @@ public class DocScanServiceTest {
 
     private static KeyPair KEY_PAIR;
 
-
     @Spy @InjectMocks DocScanService docScanService;
 
     @Mock UnsignedPathFactory unsignedPathFactoryMock;
@@ -91,7 +90,7 @@ public class DocScanServiceTest {
         try {
             docScanService.createSession(null, null, null);
         } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application id"));
+            assertThat(ex.getMessage(), containsString("SDK ID"));
             return;
         }
         fail("Expected an exception");
@@ -243,7 +242,7 @@ public class DocScanServiceTest {
         try {
             docScanService.retrieveSession(null, null, null);
         } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application id"));
+            assertThat(ex.getMessage(), containsString("SDK ID"));
             return;
         }
         fail("Expected an exception");
@@ -254,7 +253,7 @@ public class DocScanServiceTest {
         try {
             docScanService.retrieveSession("", null, null);
         } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application id"));
+            assertThat(ex.getMessage(), containsString("SDK ID"));
             return;
         }
         fail("Expected an exception");
@@ -391,7 +390,7 @@ public class DocScanServiceTest {
         try {
             docScanService.deleteSession(null, null, null);
         } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application id"));
+            assertThat(ex.getMessage(), containsString("SDK ID"));
             return;
         }
         fail("Expected an exception");
@@ -402,7 +401,7 @@ public class DocScanServiceTest {
         try {
             docScanService.deleteSession("", null, null);
         } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application id"));
+            assertThat(ex.getMessage(), containsString("SDK ID"));
             return;
         }
         fail("Expected an exception");
@@ -534,7 +533,7 @@ public class DocScanServiceTest {
         try {
             docScanService.getMediaContent(null, null, null, null);
         } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application id"));
+            assertThat(ex.getMessage(), containsString("SDK ID"));
             return;
         }
         fail("Expected an exception");
@@ -545,7 +544,7 @@ public class DocScanServiceTest {
         try {
             docScanService.getMediaContent("", null, null, null);
         } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application id"));
+            assertThat(ex.getMessage(), containsString("SDK ID"));
             return;
         }
         fail("Expected an exception");
@@ -733,7 +732,7 @@ public class DocScanServiceTest {
         try {
             docScanService.deleteMediaContent(null, null, null, null);
         } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application id"));
+            assertThat(ex.getMessage(), containsString("SDK ID"));
             return;
         }
         fail("Expected an exception");
@@ -744,7 +743,7 @@ public class DocScanServiceTest {
         try {
             docScanService.deleteMediaContent("", null, null, null);
         } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application id"));
+            assertThat(ex.getMessage(), containsString("SDK ID"));
             return;
         }
         fail("Expected an exception");

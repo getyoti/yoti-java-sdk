@@ -16,7 +16,16 @@ public abstract class YotiClientBuilder {
      * @param applicationId the application identifier (this is now the client SDK ID from Yoti Hub)
      * @return the updated builder 
      */
+    @Deprecated
     public abstract YotiClientBuilder forApplication(String applicationId);
+
+    /**
+     * Proceed building the client with a specific SDK ID.
+     *
+     * @param sdkId the client SDK ID from Yoti Hub
+     * @return the builder
+     */
+    public abstract YotiClientBuilder withSdkId(String sdkId);
 
     /**
      * Proceed building the client with a key pair from the an external source.
