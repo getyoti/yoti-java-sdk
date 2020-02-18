@@ -24,7 +24,7 @@ public abstract class DocScanClientBuilder {
      * @param sdkId the sdk id
      * @return the builder
      */
-    public abstract DocScanClientBuilder withSdkId(String sdkId);
+    public abstract DocScanClientBuilder withClientSdkId(String sdkId);
 
     /**
      * Sets the {@link KeyPairSource} to be used in the {@code DocScanClient}
