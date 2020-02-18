@@ -1,22 +1,12 @@
 package com.yoti.api.client.spi.remote;
 
-import static java.lang.Boolean.parseBoolean;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes;
-import com.yoti.api.client.AgeVerification;
-import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Date;
-import com.yoti.api.client.DocumentDetails;
-import com.yoti.api.client.HumanProfile;
-import com.yoti.api.client.Image;
-import com.yoti.api.client.Profile;
+import com.yoti.api.client.*;
+
+import java.util.*;
+
+import static java.lang.Boolean.parseBoolean;
 
 /**
  * Adapter linking Profile and ApplicationProfile together by wrapping the latter and exposing well-known attributes.

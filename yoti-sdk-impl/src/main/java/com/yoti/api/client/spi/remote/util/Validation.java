@@ -2,6 +2,7 @@ package com.yoti.api.client.spi.remote.util;
 
 import static java.lang.String.format;
 
+import java.util.Collection;
 import java.util.List;
 
 public class Validation {
@@ -19,6 +20,12 @@ public class Validation {
 
     public static void notNullOrEmpty(String value, String name) {
         if (isNullOrEmpty(value)) {
+            throw new IllegalArgumentException(format("'%s' must not be empty or null", name));
+        }
+    }
+
+    public static <T> void notNullOrEmpty(Collection<T> value, String name) {
+        if (value == null || value.isEmpty()) {
             throw new IllegalArgumentException(format("'%s' must not be empty or null", name));
         }
     }

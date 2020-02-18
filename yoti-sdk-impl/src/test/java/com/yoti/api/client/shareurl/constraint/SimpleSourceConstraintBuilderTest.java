@@ -31,10 +31,10 @@ public class SimpleSourceConstraintBuilderTest {
 
         PreferredSources preferredSources = sourceConstraint.getPreferredSources();
 
-        assertEquals(sourceConstraint.getType(), ConstraintConstants.SOURCE_CONSTRAINT);
+        assertEquals(ConstraintConstants.SOURCE_CONSTRAINT, sourceConstraint.getType());
         assertThat(preferredSources.getWantedAnchors(), hasSize(1));
         assertThat(preferredSources.getWantedAnchors(), hasItem(wantedAnchorMock));
-        assertEquals(preferredSources.getSoftPreference(), SOME_SOFT_PREFERENCE);
+        assertEquals(SOME_SOFT_PREFERENCE, preferredSources.getSoftPreference());
     }
 
     @Test
@@ -57,8 +57,8 @@ public class SimpleSourceConstraintBuilderTest {
         PreferredSources result = sourceConstraint.getPreferredSources();
 
         assertThat(result.getWantedAnchors(), hasSize(2));
-        assertEquals(result.getWantedAnchors().get(0).getValue(), "firstValue");
-        assertEquals(result.getWantedAnchors().get(1).getValue(), "secondValue");
+        assertEquals("firstValue", result.getWantedAnchors().get(0).getValue());
+        assertEquals("secondValue", result.getWantedAnchors().get(1).getValue());
     }
 
 }

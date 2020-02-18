@@ -72,6 +72,8 @@ public interface ActivityDetails {
 
     /**
      * Return the extra data associated with the receipt.
+     *
+     * @return {@link ExtraData} associated with the receipt
      */
     ExtraData getExtraData();
 

@@ -111,7 +111,7 @@ public class SecureYotiClientTest {
     }
 
     @Test
-    public void constructor_shouldFailWhenStreamExceptionLoadingKeys() throws Exception {
+    public void constructor_shouldFailWhenStreamExceptionLoadingKeys() {
         KeyPairSource badKeyPairSource = new StaticKeyPairSource(true);
 
         try {
@@ -125,7 +125,7 @@ public class SecureYotiClientTest {
     }
 
     @Test
-    public void constructor_shouldFailWhenKeyPairSourceExceptionLoadingKeys() throws Exception {
+    public void constructor_shouldFailWhenKeyPairSourceExceptionLoadingKeys() {
         KeyPairSource badKeyPairSource = new StaticKeyPairSource(false);
 
         try {
@@ -139,7 +139,7 @@ public class SecureYotiClientTest {
     }
 
     @Test
-    public void constructor_shouldFailWithNullApplicationId() throws Exception {
+    public void constructor_shouldFailWithNullApplicationId() {
         try {
             new SecureYotiClient(null, validKeyPairSource, receiptFetcherMock, activityDetailsFactoryMock, remoteAmlServiceMock, sharingServiceMock);
         } catch (IllegalArgumentException e) {
@@ -150,7 +150,7 @@ public class SecureYotiClientTest {
     }
 
     @Test
-    public void constructor_shouldFailWithNullKeyPairSource() throws Exception {
+    public void constructor_shouldFailWithNullKeyPairSource() {
         try {
             new SecureYotiClient(APP_ID, null, receiptFetcherMock, activityDetailsFactoryMock, remoteAmlServiceMock, sharingServiceMock);
         } catch (IllegalArgumentException e) {
@@ -161,7 +161,7 @@ public class SecureYotiClientTest {
     }
 
     @Test
-    public void constructor_shouldFailWithNullReceiptFetcher() throws Exception {
+    public void constructor_shouldFailWithNullReceiptFetcher() {
         try {
             new SecureYotiClient(APP_ID, validKeyPairSource, null, activityDetailsFactoryMock, remoteAmlServiceMock, sharingServiceMock);
         } catch (IllegalArgumentException e) {
@@ -172,7 +172,7 @@ public class SecureYotiClientTest {
     }
 
     @Test
-    public void constructor_shouldFailWithNullActivityDetailsFactory() throws Exception {
+    public void constructor_shouldFailWithNullActivityDetailsFactory() {
         try {
             new SecureYotiClient(APP_ID, validKeyPairSource, receiptFetcherMock, null, remoteAmlServiceMock, sharingServiceMock);
         } catch (IllegalArgumentException e) {
@@ -183,7 +183,7 @@ public class SecureYotiClientTest {
     }
 
     @Test
-    public void constructor_shouldFailWithNullAmlService() throws Exception {
+    public void constructor_shouldFailWithNullAmlService() {
         try {
             new SecureYotiClient(APP_ID, validKeyPairSource, receiptFetcherMock, activityDetailsFactoryMock, null, sharingServiceMock);
         } catch (IllegalArgumentException e) {
@@ -194,7 +194,7 @@ public class SecureYotiClientTest {
     }
 
     @Test
-    public void constructor_shouldFailWithNoKeyPair() throws Exception {
+    public void constructor_shouldFailWithNoKeyPair() {
         KeyPairSource invalidKeyPairSource = new StaticKeyPairSource("no-key-pair-in-file");
 
         try {
@@ -207,7 +207,7 @@ public class SecureYotiClientTest {
     }
 
     @Test
-    public void constructor_shouldFailWithInvalidKeyPair() throws Exception {
+    public void constructor_shouldFailWithInvalidKeyPair() {
         KeyPairSource invalidKeyPairSource = new StaticKeyPairSource(CryptoUtil.INVALID_KEY_PAIR_PEM);
 
         try {

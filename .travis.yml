@@ -52,4 +52,16 @@ jobs:
         - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -Ddependency-check.skip=true
       script:
         - mvn jacoco:prepare-agent test jacoco:report coveralls:report -pl yoti-sdk-impl
+    - stage: Analysis
+      name: Sonarcloud
+      if: type = pull_request OR branch = master
+      dist: trusty
+      addons:
+        sonarcloud:
+          organization: "getyoti"
+      install:
+        - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip=true -Ddependency-check.skip=true
+      script:
+        - mvn clean verify sonar:sonar -Ddependency-check.skip=true -Dgpg.skip=true -Dmaven.javadoc.skip=true
+
 

@@ -2,18 +2,14 @@ package com.yoti.api.client.spi.remote;
 
 import static java.util.Collections.unmodifiableMap;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Profile;
 
+import java.util.*;
+
 final class SimpleProfile implements Profile {
 
-    private final Map<String, Attribute<?>> protectedAttributes;
+    private final Map<String, List<Attribute<?>>> protectedAttributes;
 
     /**
      * Create a new profile based on a list of attributes
@@ -36,25 +32,31 @@ final class SimpleProfile implements Profile {
      */
     @Override
     public <T> Attribute<T> getAttribute(String name, Class<T> clazz) {
-        ensureName(name);
-        Attribute<?> attribute = protectedAttributes.get(name);
+        Attribute<?> attribute = getAttribute(name);
         return castSafely(clazz, attribute);
     }
 
     @Override
     public Attribute getAttribute(String name) {
         ensureName(name);
-        return protectedAttributes.get(name);
+        List<Attribute<?>> attributes = protectedAttributes.get(name);
+        if (attributes != null && attributes.size() > 0) {
+            return attributes.get(0);
+        }
+        return null;
     }
+
 
     @Override
     public <T> List<Attribute<T>> findAttributesStartingWith(String name, Class<T> clazz) {
         ensureName(name);
         List<Attribute<T>> matches = new ArrayList<>();
-        for (Map.Entry<String, Attribute<?>> entry : protectedAttributes.entrySet()) {
+        for (Map.Entry<String, List<Attribute<?>>> entry : protectedAttributes.entrySet()) {
             if (entry.getKey().startsWith(name)) {
-                Attribute<T> value = castSafely(clazz, entry.getValue());
-                matches.add(value);
+                for (Attribute<?> attribute : entry.getValue()) {
+                    Attribute<T> value = castSafely(clazz, attribute);
+                    matches.add(value);
+                }
             }
         }
         return matches;
@@ -63,31 +65,41 @@ final class SimpleProfile implements Profile {
     @Override
     public <T> Attribute<T> findAttributeStartingWith(String name, Class<T> clazz) {
         ensureName(name);
-        Attribute<?> attribute = doFindAttribute(name);
+        Attribute<?> attribute = findAttributeStartingWith(name);
         return castSafely(clazz, attribute);
+    }
+
+    private Attribute<?> findAttributeStartingWith(String name) {
+        ensureName(name);
+        for (Map.Entry<String, List<Attribute<?>>> entry : protectedAttributes.entrySet()) {
+            if (entry.getKey().startsWith(name)) {
+                return entry.getValue().get(0);
+            }
+        }
+        return null;
     }
 
     @Override
     public Collection<Attribute<?>> getAttributes() {
-        return protectedAttributes.values();
+        List<Attribute<?>> attributes = new ArrayList<>();
+        for (Map.Entry<String, List<Attribute<?>>> entry : protectedAttributes.entrySet()) {
+            attributes.addAll(entry.getValue());
+        }
+        return attributes;
     }
 
-    private Map<String, Attribute<?>> createAttributeMap(List<Attribute<?>> attributes) {
-        Map<String, Attribute<?>> result = new HashMap<>();
+    private Map<String, List<Attribute<?>>> createAttributeMap(List<Attribute<?>> attributes) {
+        Map<String, List<Attribute<?>>> result = new HashMap<>();
         for (Attribute<?> a : attributes) {
-            result.put(a.getName(), a);
+            if (!result.containsKey(a.getName())) {
+                result.put(a.getName(), new ArrayList<Attribute<?>>());
+            }
+
+            List<Attribute<?>> modifiable = result.get(a.getName());
+            modifiable.add(a);
+            result.put(a.getName(), modifiable);
         }
         return result;
-    }
-
-    private Attribute<?> doFindAttribute(String name) {
-        ensureName(name);
-        for (Map.Entry<String, Attribute<?>> entry : protectedAttributes.entrySet()) {
-            if (entry.getKey().startsWith(name)) {
-                return entry.getValue();
-            }
-        }
-        return null;
     }
 
     private void ensureName(String name) {

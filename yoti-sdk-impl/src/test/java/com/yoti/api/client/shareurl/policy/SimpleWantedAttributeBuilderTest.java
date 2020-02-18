@@ -1,19 +1,11 @@
 package com.yoti.api.client.shareurl.policy;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
 import com.yoti.api.client.shareurl.constraint.Constraint;
-import com.yoti.api.client.shareurl.constraint.SourceConstraint;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.core.StringContains.containsString;
@@ -34,7 +26,7 @@ public class SimpleWantedAttributeBuilderTest {
 
     @Test
     public void buildsAnAttribute() {
-        WantedAttribute result = new SimpleWantedAttributeBuilder()
+        WantedAttribute result = WantedAttributeBuilder.newInstance()
                 .withName(SOME_NAME)
                 .withDerivation(SOME_DERIVATION)
                 .withOptional(true)
@@ -49,7 +41,7 @@ public class SimpleWantedAttributeBuilderTest {
     public void buildsAnAttributeWithSourceConstraint() {
         when(constraintListMock.size()).thenReturn(1);
 
-        WantedAttribute result = new SimpleWantedAttributeBuilder()
+        WantedAttribute result = WantedAttributeBuilder.newInstance()
                 .withName(SOME_NAME)
                 .withDerivation(SOME_DERIVATION)
                 .withOptional(true)

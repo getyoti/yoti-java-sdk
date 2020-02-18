@@ -33,7 +33,7 @@ public class ThirdPartyAttributeIssuingRequestTest {
                 .build();
 
         assertThat(result.getIssuingAttributes(), hasSize(1));
-        assertEquals(result.getIssuanceToken(), SOME_ISSUANCE_TOKEN);
+        assertEquals(SOME_ISSUANCE_TOKEN, result.getIssuanceToken());
 
         assertThat(result.getIssuingAttributes().get(0), matchesIssuingAttribute(SOME_ISSUING_ATTRIBUTE));
         assertEquals(result.getIssuingAttributes().get(0).getName(), SOME_ISSUING_ATTRIBUTE.getName());
@@ -49,7 +49,7 @@ public class ThirdPartyAttributeIssuingRequestTest {
                 .build();
 
         assertThat(result.getIssuingAttributes(), hasSize(1));
-        assertEquals(result.getIssuanceToken(), SOME_ISSUANCE_TOKEN);
+        assertEquals(SOME_ISSUANCE_TOKEN, result.getIssuanceToken());
 
         assertEquals(result.getIssuingAttributes().get(0).getName(), SOME_ISSUING_ATTRIBUTE.getName());
         assertEquals(result.getIssuingAttributes().get(0).getValue(), SOME_ISSUING_ATTRIBUTE.getValue());
