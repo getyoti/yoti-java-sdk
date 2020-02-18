@@ -3,7 +3,7 @@ update_configs:
   - package_manager: "java:maven"
     directory: "/"
     update_schedule: "daily"
-    target_branch: "development"
+    target_branch: "DEVELOPMENT"
 
     default_reviewers:
       - "echarrod"
