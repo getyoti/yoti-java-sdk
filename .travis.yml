@@ -54,7 +54,7 @@ jobs:
         - mvn jacoco:prepare-agent test jacoco:report coveralls:report -pl yoti-sdk-impl
     - stage: Analysis
       name: Sonarcloud
-      if: type = pull_request
+      if: type = pull_request OR branch = master
       dist: trusty
       addons:
         sonarcloud:
