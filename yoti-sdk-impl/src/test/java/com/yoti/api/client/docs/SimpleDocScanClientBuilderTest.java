@@ -35,7 +35,7 @@ public class SimpleDocScanClientBuilderTest {
     @Test
     public void build_shouldThrowExceptionWhenSdkIdIsEmpty() {
         try {
-            new SimpleDocScanClientBuilder().withSdkId("").build();
+            new SimpleDocScanClientBuilder().withClientSdkId("").build();
         } catch (IllegalArgumentException ex) {
             assertThat(ex.getMessage(), containsString("SDK ID"));
             return;
@@ -46,7 +46,7 @@ public class SimpleDocScanClientBuilderTest {
     @Test
     public void build_shouldThrowExceptionWhenKeyPairSourceIsNull() {
         try {
-            new SimpleDocScanClientBuilder().withSdkId(SOME_APPLICATION_ID).build();
+            new SimpleDocScanClientBuilder().withClientSdkId(SOME_APPLICATION_ID).build();
         } catch (IllegalArgumentException ex) {
             assertThat(ex.getMessage(), containsString("Application key Pair"));
             return;
@@ -56,7 +56,7 @@ public class SimpleDocScanClientBuilderTest {
 
     @Test
     public void build_shouldCorrectlyBuildDocScanClient() {
-        DocScanClient result = new SimpleDocScanClientBuilder().withSdkId(SOME_APPLICATION_ID)
+        DocScanClient result = new SimpleDocScanClientBuilder().withClientSdkId(SOME_APPLICATION_ID)
                 .withKeyPairSource(validKeyPairSource)
                 .build();
 

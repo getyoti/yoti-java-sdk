@@ -20,13 +20,13 @@ final class ServiceLocatorYotiClientBuilder extends YotiClientBuilder implements
     @Deprecated
     @Override
     public YotiClientBuilder forApplication(String sdkId) {
-        return withSdkId(sdkId);
+        return withClientSdkId(sdkId);
     }
 
     @Override
-    public YotiClientBuilder withSdkId(String sdkId) {
+    public YotiClientBuilder withClientSdkId(String sdkId) {
         this.sdkId = sdkId;
-        return null;
+        return this;
     }
 
     @Override

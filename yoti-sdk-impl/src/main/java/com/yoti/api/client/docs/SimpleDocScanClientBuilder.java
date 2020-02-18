@@ -13,7 +13,7 @@ public class SimpleDocScanClientBuilder extends DocScanClientBuilder {
     private KeyPairSource keyPairSource;
 
     @Override
-    public DocScanClientBuilder withSdkId(String sdkId) {
+    public DocScanClientBuilder withClientSdkId(String sdkId) {
         this.sdkId = sdkId;
         return this;
     }
