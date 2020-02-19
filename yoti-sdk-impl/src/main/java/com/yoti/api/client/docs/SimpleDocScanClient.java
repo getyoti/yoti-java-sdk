@@ -10,6 +10,7 @@ import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
+import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -65,6 +66,18 @@ public class SimpleDocScanClient implements DocScanClient {
     public void deleteMediaContent(String sessionId, String mediaId) throws DocScanException {
         LOG.debug("Deleting media content '{}' in session '{}'", mediaId, sessionId);
         docScanService.deleteMediaContent(sdkId, keyPair, sessionId, mediaId);
+    }
+
+    /**
+     * Gets a list of supported documents.
+     *
+     * @return the supported documents
+     * @throws DocScanException if an error has occurred
+     */
+    @Override
+    public SupportedDocumentsResponse getSupportedDocuments() throws DocScanException {
+        LOG.debug("Getting all supported documents");
+        return docScanService.getSupportedDocuments(keyPair);
     }
 
     private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {

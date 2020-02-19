@@ -5,10 +5,15 @@ import static org.hamcrest.Matchers.*;
 
 import com.yoti.api.client.docs.session.create.check.RequestedCheck;
 import com.yoti.api.client.docs.session.create.check.SimpleRequestedCheckBuilderFactory;
+import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
 import com.yoti.api.client.docs.session.create.task.RequestedTask;
 import com.yoti.api.client.docs.session.create.task.SimpleRequestedTaskBuilderFactory;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class SimpleSessionSpecBuilderTest {
 
     private static final Integer SOME_CLIENT_SESSION_TOKEN_TTL = 300;
@@ -27,6 +32,8 @@ public class SimpleSessionSpecBuilderTest {
     private static final String SOME_SDK_CONFIG_SUCCESS_URL = "https://yourdomain.com/some/success/endpoint";
     private static final String SOME_SDK_CONFIG_ERROR_URL = "https://yourdomain.com/some/error/endpoint";
 
+    @Mock RequiredDocument requiredDocumentMock;
+
     @Test
     public void shouldBuildWithMinimalConfiguration() {
         SessionSpec result = new SimpleSessionSpecBuilder()
@@ -39,6 +46,7 @@ public class SimpleSessionSpecBuilderTest {
         assertThat(result.getClientSessionTokenTtl(), is(SOME_CLIENT_SESSION_TOKEN_TTL));
         assertThat(result.getResourcesTtl(), is(SOME_RESOURCES_TTL));
         assertThat(result.getUserTrackingId(), is(SOME_USER_TRACKING_ID));
+        assertThat(result.getRequiredDocuments(), hasSize(0));
     }
 
     @Test
@@ -167,6 +175,24 @@ public class SimpleSessionSpecBuilderTest {
         assertThat(result.getSdkConfig().getPresetIssuingCountry(), is(SOME_SDK_CONFIG_PRESET_ISSUING_COUNTRY));
         assertThat(result.getSdkConfig().getSuccessUrl(), is(SOME_SDK_CONFIG_SUCCESS_URL));
         assertThat(result.getSdkConfig().getErrorUrl(), is(SOME_SDK_CONFIG_ERROR_URL));
+    }
+
+    @Test
+    public void withRequiredDocument_shouldAddRequiredDocumentToList() {
+        SessionSpec result = new SimpleSessionSpecBuilder()
+                .withClientSessionTokenTtl(SOME_CLIENT_SESSION_TOKEN_TTL)
+                .withResourcesTtl(SOME_RESOURCES_TTL)
+                .withUserTrackingId(SOME_USER_TRACKING_ID)
+                .withRequiredDocument(requiredDocumentMock)
+                .build();
+
+        assertThat(result, is(instanceOf(SimpleSessionSpec.class)));
+        assertThat(result.getClientSessionTokenTtl(), is(SOME_CLIENT_SESSION_TOKEN_TTL));
+        assertThat(result.getResourcesTtl(), is(SOME_RESOURCES_TTL));
+        assertThat(result.getUserTrackingId(), is(SOME_USER_TRACKING_ID));
+
+        assertThat(result.getRequiredDocuments(), hasSize(1));
+        assertThat(result.getRequiredDocuments(), contains(requiredDocumentMock));
     }
 
 }

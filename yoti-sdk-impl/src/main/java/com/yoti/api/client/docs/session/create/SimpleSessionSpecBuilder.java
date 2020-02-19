@@ -2,6 +2,7 @@ package com.yoti.api.client.docs.session.create;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yoti.api.client.docs.session.create.check.RequestedCheck;
+import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
 import com.yoti.api.client.docs.session.create.task.RequestedTask;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class SimpleSessionSpecBuilder implements SessionSpecBuilder {
 
     private final List<RequestedCheck> requestedChecks = new ArrayList<>();
     private final List<RequestedTask> requestedTasks = new ArrayList<>();
+    private final List<RequiredDocument> requiredDocuments = new ArrayList<>();
     private Integer clientSessionTokenTtl;
     private Integer resourcesTtl;
     private String userTrackingId;
@@ -61,8 +63,14 @@ public class SimpleSessionSpecBuilder implements SessionSpecBuilder {
     }
 
     @Override
+    public SessionSpecBuilder withRequiredDocument(RequiredDocument requiredDocument) {
+        this.requiredDocuments.add(requiredDocument);
+        return this;
+    }
+
+    @Override
     public SessionSpec build() {
-        return new SimpleSessionSpec(clientSessionTokenTtl, resourcesTtl, userTrackingId, notifications, requestedChecks, requestedTasks, sdkConfig);
+        return new SimpleSessionSpec(clientSessionTokenTtl, resourcesTtl, userTrackingId, notifications, requestedChecks, requestedTasks, sdkConfig, requiredDocuments);
     }
 
 }

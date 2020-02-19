@@ -1,50 +1,26 @@
 package com.yoti.api.client.docs;
 
-import static java.util.Arrays.asList;
-
-import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JSON;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_DOCS_URL;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_DOCS_URL;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.*;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.KEY_PAIR_PEM;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
-
+import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertSame;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertNotSame;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.security.GeneralSecurityException;
-import java.security.KeyPair;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.create.SimpleCreateSessionResult;
 import com.yoti.api.client.docs.session.retrieve.*;
-import com.yoti.api.client.spi.remote.call.HttpMethod;
-import com.yoti.api.client.spi.remote.call.ResourceException;
-import com.yoti.api.client.spi.remote.call.SignedRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
-import com.yoti.api.client.spi.remote.call.SignedRequestResponse;
+import com.yoti.api.client.docs.support.SimpleSupportedDocumentsResponse;
+import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
+import com.yoti.api.client.spi.remote.call.*;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -57,6 +33,15 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @RunWith(MockitoJUnitRunner.class)
 public class DocScanServiceTest {
 
@@ -65,7 +50,7 @@ public class DocScanServiceTest {
     private static final String SOME_PATH = "somePath";
     private static final String SOME_MEDIA_ID = "someMediaId";
     private static final String SOME_API_URL = System.getProperty(PROPERTY_YOTI_DOCS_URL, DEFAULT_YOTI_DOCS_URL);
-    private static final byte[] SOME_SESSION_SPEC_BYTES = new byte[] { 1, 2, 3, 4 };
+    private static final byte[] SOME_SESSION_SPEC_BYTES = new byte[]{1, 2, 3, 4};
     private static final byte[] IMAGE_BODY = "some-image-body".getBytes();
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -78,6 +63,7 @@ public class DocScanServiceTest {
     @Mock SignedRequest signedRequestMock;
     @Mock(answer = Answers.RETURNS_SELF) SignedRequestBuilder signedRequestBuilderMock;
     @Mock SignedRequestResponse signedRequestResponseMock;
+    @Mock SimpleSupportedDocumentsResponse supportedDocumentsResponseMock;
 
 
     @BeforeClass
@@ -917,6 +903,99 @@ public class DocScanServiceTest {
 
         assertThat(livenessResourceResponse.get(1), is(instanceOf(SimpleZoomLivenessResourceResponse.class)));
         assertThat(livenessResourceResponse.get(1).getId(), is("someZoomId"));
+    }
+
+    @Test
+    public void getSupportedDocuments_shouldThrowExceptionWhenKeyPairIsNull() throws Exception {
+        try {
+            docScanService.getSupportedDocuments(null);
+        } catch (IllegalArgumentException ex) {
+            assertThat(ex.getMessage(), containsString("Application key Pair"));
+            return;
+        }
+        fail("Expected an exception");
+    }
+
+    @Test
+    public void getSupportedDocuments_shouldWrapGeneralSecurityException() throws Exception {
+        GeneralSecurityException gse = new GeneralSecurityException("some gse");
+
+        doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
+        when(signedRequestBuilderMock.build()).thenThrow(gse);
+
+        try {
+            docScanService.getSupportedDocuments(KEY_PAIR);
+        } catch (DocScanException ex) {
+            assertSame(ex.getCause(), gse);
+            assertThat(ex.getMessage(), containsString("Error executing the GET: some gse"));
+            return;
+        }
+        fail("Expected an exception");
+    }
+
+    @Test
+    public void getSupportedDocuments_shouldWrapResourceException() throws Exception {
+        ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
+
+        doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(SimpleSupportedDocumentsResponse.class)).thenThrow(resourceException);
+
+        try {
+            docScanService.getSupportedDocuments(KEY_PAIR);
+        } catch (DocScanException ex) {
+            assertSame(ex.getCause(), resourceException);
+            assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
+            return;
+        }
+        fail("Expected an exception");
+    }
+
+    @Test
+    public void getSupportedDocuments_shouldWrapIOException() throws Exception {
+        IOException ioException = new IOException("Some io exception");
+
+        doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(SimpleSupportedDocumentsResponse.class)).thenThrow(ioException);
+
+        try {
+            docScanService.getSupportedDocuments(KEY_PAIR);
+        } catch (DocScanException ex) {
+            assertSame(ex.getCause(), ioException);
+            assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
+            return;
+        }
+        fail("Expected an exception");
+    }
+
+    @Test
+    public void getSupportedDocuments_shouldWrapURISyntaxException() throws Exception {
+        URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
+
+        doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
+        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+
+        try {
+            docScanService.getSupportedDocuments(KEY_PAIR);
+        } catch (DocScanException ex) {
+            assertSame(ex.getCause(), uriSyntaxException);
+            assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+            return;
+        }
+        fail("Expected an exception");
+    }
+
+    @Test
+    public void getSupportedDocuments_shouldReturnSupportedDocuments() throws Exception {
+        doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(SimpleSupportedDocumentsResponse.class)).thenReturn(supportedDocumentsResponseMock);
+        when(unsignedPathFactoryMock.createGetSupportedDocumentsPath()).thenReturn(SOME_PATH);
+
+        SupportedDocumentsResponse result = docScanService.getSupportedDocuments(KEY_PAIR);
+
+        assertThat(result, is(instanceOf(SupportedDocumentsResponse.class)));
     }
 
 }

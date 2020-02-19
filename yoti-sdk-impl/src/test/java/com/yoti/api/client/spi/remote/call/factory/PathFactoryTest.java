@@ -81,4 +81,14 @@ public class PathFactoryTest {
         assertTrue(uri.getQuery().contains("timestamp="));
     }
 
+    @Test
+    public void shouldCreateSupportedDocumentsPath() {
+        String result = testObj.createGetSupportedDocumentsPath();
+
+        URI uri = URI.create(result);
+        assertEquals("/supported-documents", uri.getPath());
+        assertTrue(uri.getQuery().matches("(.*)nonce=(?i)[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}(.*)"));
+        assertTrue(uri.getQuery().contains("timestamp="));
+    }
+
 }
