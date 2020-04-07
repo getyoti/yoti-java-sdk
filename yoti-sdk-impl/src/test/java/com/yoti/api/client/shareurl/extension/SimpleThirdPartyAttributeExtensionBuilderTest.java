@@ -81,6 +81,28 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
     }
 
     @Test
+    public void shouldBuildThirdPartyAttributeExtensionWithCorrectDateValue() {
+        TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
+        Date date = new Date();
+
+        Extension<ThirdPartyAttributeContent> extension = new SimpleThirdPartyAttributeExtensionBuilder()
+                .withExpiryDate(date)
+                .withDefinition(SOME_DEFINITION)
+                .build();
+
+        SimpleDateFormat sdf = new SimpleDateFormat(YotiConstants.RFC3339_PATTERN_MILLIS);
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String formattedTestDate = sdf.format(date);
+
+        assertEquals(ExtensionConstants.THIRD_PARTY_ATTRIBUTE, extension.getType());
+        assertEquals(formattedTestDate, extension.getContent().getExpiryDate());
+
+        List<AttributeDefinition> definitions = extension.getContent().getDefinitions();
+        assertThat(definitions.size(), is(1));
+        assertThat(definitions.get(0).getName(), is(SOME_DEFINITION));
+    }
+
+    @Test
     public void shouldBuildThirdPartyAttributeExtensionWithMultipleDefinitions() {
         List<String> theDefinitions = new ArrayList<>();
         theDefinitions.add("firstDefinition");
