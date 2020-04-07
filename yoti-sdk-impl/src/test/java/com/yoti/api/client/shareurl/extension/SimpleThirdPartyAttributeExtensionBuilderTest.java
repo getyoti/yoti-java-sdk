@@ -1,9 +1,10 @@
 package com.yoti.api.client.shareurl.extension;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yoti.api.client.AttributeDefinition;
-import com.yoti.api.client.spi.remote.call.YotiConstants;
-import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,11 +12,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import com.yoti.api.client.AttributeDefinition;
+import com.yoti.api.client.spi.remote.call.YotiConstants;
+
+import org.junit.Test;
 
 public class SimpleThirdPartyAttributeExtensionBuilderTest {
 
@@ -68,9 +68,7 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
                 .withDefinition(SOME_DEFINITION)
                 .build();
 
-        SimpleDateFormat sdf = new SimpleDateFormat(YotiConstants.RFC3339_PATTERN_MILLIS);
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String formattedTestDate = sdf.format(SOME_DATE);
+        String formattedTestDate = formatDateToString(SOME_DATE);
 
         assertEquals(ExtensionConstants.THIRD_PARTY_ATTRIBUTE, extension.getType());
         assertEquals(formattedTestDate, extension.getContent().getExpiryDate());
@@ -81,7 +79,7 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
     }
 
     @Test
-    public void shouldBuildThirdPartyAttributeExtensionWithCorrectDateValue() {
+    public void shouldBuildThirdPartyAttributeExtensionWithCorrectlyFormattedDateString() {
         TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
         Date date = new Date();
 
@@ -90,16 +88,23 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
                 .withDefinition(SOME_DEFINITION)
                 .build();
 
-        SimpleDateFormat sdf = new SimpleDateFormat(YotiConstants.RFC3339_PATTERN_MILLIS);
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String formattedTestDate = sdf.format(date);
+        String formattedTestDate = formatDateToString(date);
 
-        assertEquals(ExtensionConstants.THIRD_PARTY_ATTRIBUTE, extension.getType());
         assertEquals(formattedTestDate, extension.getContent().getExpiryDate());
+    }
 
-        List<AttributeDefinition> definitions = extension.getContent().getDefinitions();
-        assertThat(definitions.size(), is(1));
-        assertThat(definitions.get(0).getName(), is(SOME_DEFINITION));
+    @Test
+    public void shouldWorkCorrectlyWithDateCreatedFromTimestamp() {
+        Date date = new Date(1586252260);
+
+        Extension<ThirdPartyAttributeContent> extension = new SimpleThirdPartyAttributeExtensionBuilder()
+                .withExpiryDate(date)
+                .withDefinition(SOME_DEFINITION)
+                .build();
+
+        String formattedTestDate = formatDateToString(date);
+
+        assertEquals(formattedTestDate, extension.getContent().getExpiryDate());
     }
 
     @Test
@@ -139,6 +144,12 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
         assertThat(definitions.size(), is(2));
         assertThat(definitions.get(0).getName(), is("firstDefinition"));
         assertThat(definitions.get(1).getName(), is("secondDefinition"));
+    }
+
+    private String formatDateToString(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat(YotiConstants.RFC3339_PATTERN_MILLIS);
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return sdf.format(date);
     }
 
 }
