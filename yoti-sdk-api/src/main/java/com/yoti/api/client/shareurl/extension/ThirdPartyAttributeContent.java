@@ -23,6 +23,7 @@ public class ThirdPartyAttributeContent {
     @JsonProperty("expiry_date")
     public String getExpiryDate() {
         SimpleDateFormat rfcDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        rfcDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return rfcDateFormat.format(expiryDate.getTime());
     }
 
