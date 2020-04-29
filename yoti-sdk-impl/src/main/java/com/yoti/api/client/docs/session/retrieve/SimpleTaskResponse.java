@@ -9,7 +9,7 @@ import com.yoti.api.client.docs.DocScanConstants;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = SimpleTaskResponse.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = SimpleTaskResponse.class, visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = SimpleTextExtractionTaskResponse.class, name = DocScanConstants.ID_DOCUMENT_TEXT_DATA_EXTRACTION),
 })
@@ -17,6 +17,9 @@ public class SimpleTaskResponse implements TaskResponse {
 
     @JsonProperty("id")
     private String id;
+
+    @JsonProperty("type")
+    private String type;
 
     @JsonProperty("state")
     private String state;
@@ -36,6 +39,11 @@ public class SimpleTaskResponse implements TaskResponse {
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public String getType() {
+        return type;
     }
 
     @Override

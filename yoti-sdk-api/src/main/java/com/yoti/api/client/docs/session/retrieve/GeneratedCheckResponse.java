@@ -4,4 +4,6 @@ public interface GeneratedCheckResponse {
 
     String getId();
 
+    String getType();
+
 }
