@@ -12,6 +12,13 @@ public interface CheckResponse {
     String getId();
 
     /**
+     * The type of the check
+     *
+     * @return the type
+     */
+    String getType();
+
+    /**
      * The state of the check
      *
      * @return the state

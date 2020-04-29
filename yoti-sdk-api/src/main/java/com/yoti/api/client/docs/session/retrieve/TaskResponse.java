@@ -6,6 +6,8 @@ public interface TaskResponse {
 
     String getId();
 
+    String getType();
+
     String getState();
 
     String getCreated();
