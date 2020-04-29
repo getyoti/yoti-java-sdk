@@ -88,8 +88,8 @@ public class SimpleGetSessionResult implements GetSessionResult {
     private <T extends CheckResponse> List<T> filterChecksByType(Class<T> clazz) {
         List<T> filteredList = new ArrayList<>();
         for (CheckResponse checkResponse : checks) {
-            if (checkResponse.getClass().isInstance(clazz)) {
-                filteredList.add((T) checkResponse);
+            if (clazz.isInstance(checkResponse)) {
+                filteredList.add(clazz.cast(checkResponse));
             }
         }
         return filteredList;

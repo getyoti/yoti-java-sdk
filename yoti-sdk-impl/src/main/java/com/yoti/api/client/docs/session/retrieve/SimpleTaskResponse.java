@@ -76,8 +76,8 @@ public class SimpleTaskResponse implements TaskResponse {
     protected <T extends GeneratedCheckResponse> List<T> filterGeneratedChecksByType(Class<T> clazz) {
         List<T> filteredList = new ArrayList<>();
         for (GeneratedCheckResponse generatedCheckResponse : generatedChecks) {
-            if (generatedCheckResponse.getClass().isInstance(clazz)) {
-                filteredList.add((T) generatedCheckResponse);
+            if (clazz.isInstance(generatedCheckResponse)) {
+                filteredList.add(clazz.cast(generatedCheckResponse));
             }
         }
         return filteredList;

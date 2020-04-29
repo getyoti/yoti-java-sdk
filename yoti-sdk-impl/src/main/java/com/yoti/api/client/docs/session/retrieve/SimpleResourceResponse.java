@@ -28,8 +28,8 @@ public abstract class SimpleResourceResponse implements ResourceResponse {
     protected <T extends TaskResponse> List<T> filterTasksByType(Class<T> clazz) {
         List<T> filteredList = new ArrayList<>();
         for (TaskResponse taskResponse : tasks) {
-            if (taskResponse.getClass().isInstance(clazz)) {
-                filteredList.add((T) taskResponse);
+            if (clazz.isInstance(taskResponse)) {
+                filteredList.add(clazz.cast(taskResponse));
             }
         }
         return filteredList;

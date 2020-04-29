@@ -43,8 +43,8 @@ public class SimpleResourceContainer implements ResourceContainer {
     private <T extends LivenessResourceResponse> List<T> filterLivenessResourcesByType(Class<T> clazz) {
         List<T> filteredList = new ArrayList<>();
         for (LivenessResourceResponse livenessResourceResponse : livenessCapture) {
-            if (livenessResourceResponse.getClass().isInstance(clazz)) {
-                filteredList.add((T) livenessResourceResponse);
+            if (clazz.isInstance(livenessResourceResponse)) {
+                filteredList.add(clazz.cast(livenessResourceResponse));
             }
         }
         return filteredList;
