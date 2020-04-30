@@ -3,6 +3,7 @@ package com.yoti.api.client.docs.session.create;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yoti.api.client.docs.session.create.check.RequestedCheck;
+import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
 import com.yoti.api.client.docs.session.create.task.RequestedTask;
 
 import java.util.List;
@@ -31,11 +32,17 @@ public class SimpleSessionSpec implements SessionSpec {
     @JsonProperty("sdk_config")
     private final SdkConfig sdkConfig;
 
+    @JsonProperty("required_documents")
+    private final List<RequiredDocument> requiredDocuments;
+
     public SimpleSessionSpec(Integer clientSessionTokenTtl,
                              Integer resourcesTtl,
                              String userTrackingId,
                              NotificationConfig notifications,
-                             List<RequestedCheck> requestedChecks, List<RequestedTask> requestedTasks, SdkConfig sdkConfig) {
+                             List<RequestedCheck> requestedChecks,
+                             List<RequestedTask> requestedTasks,
+                             SdkConfig sdkConfig,
+                             List<RequiredDocument> requiredDocuments) {
         this.clientSessionTokenTtl = clientSessionTokenTtl;
         this.resourcesTtl = resourcesTtl;
         this.userTrackingId = userTrackingId;
@@ -43,6 +50,7 @@ public class SimpleSessionSpec implements SessionSpec {
         this.requestedChecks = requestedChecks;
         this.requestedTasks = requestedTasks;
         this.sdkConfig = sdkConfig;
+        this.requiredDocuments = requiredDocuments;
     }
 
     @Override
@@ -78,6 +86,11 @@ public class SimpleSessionSpec implements SessionSpec {
     @Override
     public SdkConfig getSdkConfig() {
         return sdkConfig;
+    }
+
+    @Override
+    public List<RequiredDocument> getRequiredDocuments() {
+        return requiredDocuments;
     }
 
 }

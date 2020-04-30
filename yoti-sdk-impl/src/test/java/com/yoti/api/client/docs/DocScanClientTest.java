@@ -134,4 +134,20 @@ public class DocScanClientTest {
         fail("Expected an exception");
     }
 
+    @Test
+    public void getSupportedDocuments_shouldFailWithExceptionFromYotiDocsService() throws Exception {
+        DocScanException original = new DocScanException("Test exception");
+
+        doThrow(original).when(docScanServiceMock).getSupportedDocuments(any(KeyPair.class));
+
+        try {
+            SimpleDocScanClient testObj = new SimpleDocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
+            testObj.getSupportedDocuments();
+        } catch (DocScanException thrown) {
+            assertThat(thrown, is(original));
+            return;
+        }
+        fail("Expected an exception");
+    }
+
 }

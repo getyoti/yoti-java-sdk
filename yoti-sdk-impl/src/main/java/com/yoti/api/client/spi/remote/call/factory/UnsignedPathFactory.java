@@ -10,6 +10,7 @@ public class UnsignedPathFactory {
     static final String DOCS_CREATE_SESSION_PATH_TEMPLATE = "/sessions?sdkId=%s";
     static final String DOCS_SESSION_PATH_TEMPLATE = "/sessions/%s?sdkId=%s";
     static final String DOCS_MEDIA_CONTENT_PATH_TEMPLATE = "/sessions/%s/media/%s/content?sdkId=%s";
+    static final String DOCS_SUPPORTED_DOCUMENTS_PATH = "/supported-documents";
 
     public String createProfilePath(String appId, String connectToken) {
         return format(PROFILE_PATH_TEMPLATE, connectToken, appId);
@@ -33,6 +34,10 @@ public class UnsignedPathFactory {
 
     public String createMediaContentPath(String appId, String sessionId, String mediaId) {
         return format(DOCS_MEDIA_CONTENT_PATH_TEMPLATE, sessionId, mediaId, appId);
+    }
+
+    public String createGetSupportedDocumentsPath() {
+        return DOCS_SUPPORTED_DOCUMENTS_PATH;
     }
 
 }

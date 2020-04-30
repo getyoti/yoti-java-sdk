@@ -13,6 +13,8 @@ import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.create.SimpleCreateSessionResult;
 import com.yoti.api.client.docs.session.retrieve.SimpleGetSessionResult;
+import com.yoti.api.client.docs.support.SimpleSupportedDocumentsResponse;
+import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.MediaValue;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
@@ -242,6 +244,27 @@ final class DocScanService {
         }
     }
 
+    public SupportedDocumentsResponse getSupportedDocuments(KeyPair keyPair) throws DocScanException {
+        notNull(keyPair, "Application key Pair");
+
+        String path = unsignedPathFactory.createGetSupportedDocumentsPath();
+
+        try {
+            SignedRequest signedRequest = getSignedRequestBuilder()
+                    .withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withHttpMethod(HTTP_GET)
+                    .build();
+
+            return signedRequest.execute(SimpleSupportedDocumentsResponse.class);
+        } catch (GeneralSecurityException | ResourceException ex) {
+            throw new DocScanException("Error executing the GET: " + ex.getMessage(), ex);
+        } catch (IOException | URISyntaxException ex) {
+            throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
+        }
+    }
+
     private String findContentType(SignedRequestResponse response) {
         List<String> contentTypeValues = null;
         for (Map.Entry<String, List<String>> entry : response.getResponseHeaders().entrySet()) {
@@ -256,5 +279,4 @@ final class DocScanService {
     SignedRequestBuilder getSignedRequestBuilder() {
         return SignedRequestBuilder.newInstance();
     }
-
 }
