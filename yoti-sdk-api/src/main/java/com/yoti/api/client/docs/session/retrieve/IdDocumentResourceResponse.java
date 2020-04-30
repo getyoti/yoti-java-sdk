@@ -12,4 +12,6 @@ public interface IdDocumentResourceResponse extends ResourceResponse {
 
     DocumentFieldsResponse getDocumentFields();
 
+    List<TextExtractionTaskResponse> getTextExtractionTasks();
+
 }

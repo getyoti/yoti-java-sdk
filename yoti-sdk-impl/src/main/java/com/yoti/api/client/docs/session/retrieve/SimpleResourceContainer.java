@@ -1,5 +1,6 @@
 package com.yoti.api.client.docs.session.retrieve;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -32,6 +33,21 @@ public class SimpleResourceContainer implements ResourceContainer {
     @Override
     public List<? extends LivenessResourceResponse> getLivenessCapture() {
         return livenessCapture;
+    }
+
+    @Override
+    public List<ZoomLivenessResourceResponse> getZoomLivenessResources() {
+        return filterLivenessResourcesByType(ZoomLivenessResourceResponse.class);
+    }
+
+    private <T extends LivenessResourceResponse> List<T> filterLivenessResourcesByType(Class<T> clazz) {
+        List<T> filteredList = new ArrayList<>();
+        for (LivenessResourceResponse livenessResourceResponse : livenessCapture) {
+            if (clazz.isInstance(livenessResourceResponse)) {
+                filteredList.add(clazz.cast(livenessResourceResponse));
+            }
+        }
+        return filteredList;
     }
 
 }

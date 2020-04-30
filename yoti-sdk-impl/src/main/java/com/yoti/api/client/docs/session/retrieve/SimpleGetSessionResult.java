@@ -1,9 +1,10 @@
 package com.yoti.api.client.docs.session.retrieve;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleGetSessionResult implements GetSessionResult {
@@ -63,4 +64,35 @@ public class SimpleGetSessionResult implements GetSessionResult {
     public String getUserTrackingId() {
         return userTrackingId;
     }
+
+    @Override
+    public List<AuthenticityCheckResponse> getAuthenticityChecks() {
+        return filterChecksByType(AuthenticityCheckResponse.class);
+    }
+
+    @Override
+    public List<FaceMatchCheckResponse> getFaceMatchChecks() {
+        return filterChecksByType(FaceMatchCheckResponse.class);
+    }
+
+    @Override
+    public List<TextDataCheckResponse> getTextDataChecks() {
+        return filterChecksByType(TextDataCheckResponse.class);
+    }
+
+    @Override
+    public List<LivenessCheckResponse> getLivenessChecks() {
+        return filterChecksByType(LivenessCheckResponse.class);
+    }
+
+    private <T extends CheckResponse> List<T> filterChecksByType(Class<T> clazz) {
+        List<T> filteredList = new ArrayList<>();
+        for (CheckResponse checkResponse : checks) {
+            if (clazz.isInstance(checkResponse)) {
+                filteredList.add(clazz.cast(checkResponse));
+            }
+        }
+        return filteredList;
+    }
+
 }

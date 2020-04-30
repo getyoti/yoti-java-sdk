@@ -8,4 +8,6 @@ public interface ResourceContainer {
 
     List<? extends LivenessResourceResponse> getLivenessCapture();
 
+    List<ZoomLivenessResourceResponse> getZoomLivenessResources();
+
 }
