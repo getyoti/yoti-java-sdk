@@ -3,6 +3,7 @@ package com.yoti.api.client.docs.session.retrieve;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -34,6 +35,11 @@ public class SimpleIdDocumentResourceResponse extends SimpleResourceResponse imp
 
     public DocumentFieldsResponse getDocumentFields() {
         return documentFields;
+    }
+
+    @Override
+    public List<TextExtractionTaskResponse> getTextExtractionTasks() {
+        return filterTasksByType(TextExtractionTaskResponse.class);
     }
 
 }

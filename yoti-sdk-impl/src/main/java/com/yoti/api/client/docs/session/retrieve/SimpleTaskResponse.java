@@ -1,12 +1,14 @@
 package com.yoti.api.client.docs.session.retrieve;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.yoti.api.client.docs.DocScanConstants;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.yoti.api.client.docs.DocScanConstants;
-
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = SimpleTaskResponse.class, visible = true)
@@ -69,6 +71,16 @@ public class SimpleTaskResponse implements TaskResponse {
     @Override
     public List<? extends GeneratedMedia> getGeneratedMedia() {
         return generatedMedia;
+    }
+
+    protected <T extends GeneratedCheckResponse> List<T> filterGeneratedChecksByType(Class<T> clazz) {
+        List<T> filteredList = new ArrayList<>();
+        for (GeneratedCheckResponse generatedCheckResponse : generatedChecks) {
+            if (clazz.isInstance(generatedCheckResponse)) {
+                filteredList.add(clazz.cast(generatedCheckResponse));
+            }
+        }
+        return filteredList;
     }
 
 }
