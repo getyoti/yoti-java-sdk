@@ -3,6 +3,7 @@ package com.yoti.api.client.sandbox.profile.request.attribute;
 import java.util.Collections;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SandboxAttribute {
@@ -40,7 +41,7 @@ public class SandboxAttribute {
         return derivation;
     }
 
-    @JsonProperty("optional")
+    @JsonIgnore
     public String getOptional() {
         return optional;
     }
@@ -80,6 +81,10 @@ public class SandboxAttribute {
             return this;
         }
 
+        /**
+         * @deprecated 2.8.0
+         */
+        @Deprecated
         public SandboxAttributeBuilder withOptional(boolean optional) {
             this.optional = optional;
             return this;
