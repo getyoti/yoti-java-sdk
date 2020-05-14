@@ -1,0 +1,110 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--@thymesVar id="check" type="com.yoti.api.client.docs.session.retrieve.CheckResponse"-->
+<table th:fragment="check-template(${check})" class="table table-striped">
+    <tbody>
+    <tr>
+        <td>ID</td>
+        <td th:text="${check.getId()}"></td>
+    </tr>
+    <tr>
+        <td>State</td>
+        <td>
+            <span class="badge"
+                  th:text="${check.getState()}"
+                  th:classappend="${check.getState() == 'COMPLETED' ? 'badge-primary' : 'badge-secondary'}"></span>
+        </td>
+    </tr>
+    <tr>
+        <td>Created</td>
+        <td th:text="${check.getCreated()}"></td>
+    </tr>
+    <tr>
+        <td>Last Updated</td>
+        <td th:text="${check.getLastUpdated()}"></td>
+    </tr>
+    <tr>
+        <td>Resources Used</td>
+        <td th:text="${#strings.listJoin(check.getResourcesUsed(), ', ')}"></td>
+    </tr>
+
+    <th:block th:if="${check.getReport() != null}">
+        <tr th:if="${check.getReport().getRecommendation() != null}">
+            <td>Recommendation</td>
+            <td>
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td>Value</td>
+                        <td th:text="${check.getReport().getRecommendation().getValue()}"></td>
+                    </tr>
+                    <tr>
+                        <td>Reason</td>
+                        <td th:text="${check.getReport().getRecommendation().getReason()}"></td>
+                    </tr>
+                    <tr>
+                        <td>Recovery Suggestion</td>
+                        <td th:text="${check.getReport().getRecommendation().getRecoverySuggestion()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr th:if="${check.getReport().getBreakdown().size() > 0}">
+            <td>Breakdown</td>
+            <td>
+                <table class="table table-bordered"
+                       th:each="breakdown : ${check.getReport().getBreakdown()}">
+                    <tbody>
+                    <tr>
+                        <td>Sub Check</td>
+                        <td th:text="${breakdown.getSubCheck()}"></td>
+                    </tr>
+                    <tr>
+                        <td>Result</td>
+                        <td th:text="${breakdown.getResult()}"></td>
+                    </tr>
+                    <tr th:if="${breakdown.getDetails().size() > 0}">
+                        <td>Details</td>
+                        <td>
+                            <table class="table table-striped">
+                                <tbody>
+                                <tr th:each="detail : ${breakdown.getDetails()}">
+                                    <td th:text="${detail.getName()}"></td>
+                                    <td th:text="${detail.getValue()}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </th:block>
+
+    <th:block th:if="${check.getGeneratedMedia().size() > 0}">
+        <tr>
+            <td>Generated Media</td>
+            <td>
+                <table class="table table-striped"
+                       th:each="media : ${check.getGeneratedMedia()}">
+                    <tbody>
+                    <tr>
+                        <td>ID</td>
+                        <td><a th:href="'/media?mediaId=' + ${media.getId()}" th:text="${media.getId()}"></a></td>
+                    </tr>
+                    <tr>
+                        <td>Type</td>
+                        <td th:text="${media.getType()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </th:block>
+
+    </tbody>
+</table>
+
+</html>

@@ -1,0 +1,30 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--@thymesVar id="task" type="com.yoti.api.client.docs.session.retrieve.TaskResponse"-->
+<table th:fragment="task-template(${task})" class="table table-striped">
+    <tbody>
+    <tr>
+        <td>ID</td>
+        <td th:text="${task.getId()}"></td>
+    </tr>
+    <tr>
+        <td>State</td>
+        <td>
+            <span class="badge"
+                  th:classappend="${task.getState() == 'COMPLETED' ? 'badge-primary' : 'badge-secondary'}"
+                  th:text="${task.getState()}">
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>Created</td>
+        <td th:text="${task.getCreated()}"></td>
+    </tr>
+    <tr>
+        <td>Last Updated</td>
+        <td th:text="${task.getLastUpdated()}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</html>

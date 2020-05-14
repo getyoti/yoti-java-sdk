@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/components :: header-head"></head>
+
+<body>
+    <nav th:replace="fragments/components :: header-nav"></nav>
+
+    <iframe style="border:none;" width="100%" height="750" allow="camera" th:src="${iframeUrl}"></iframe>
+
+    <div th:replace="fragments/components :: footer"></div>
+</body>
+</html>
