@@ -14,7 +14,6 @@ public class SandboxZoomLivenessCheckBuilder extends SandboxCheckBuilder<Sandbox
     @Override
     public SandboxLivenessCheck build() {
         notNull(recommendation, "recommendation");
-        notNull(breakdown, "breakdown");
 
         SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
         SandboxCheckResult result = new SandboxCheckResult(report);

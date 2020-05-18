@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SandboxTextDataExtractionTaskTest {
+public class SandboxDocumentTextDataExtractionTaskTest {
 
     private static final String SOME_KEY = "someKey";
     private static final String SOME_VALUE = "someValue";
@@ -34,7 +34,7 @@ public class SandboxTextDataExtractionTaskTest {
     @Test
     public void builder_shouldThrowExceptionWhenNoDocumentFieldsSupplied() {
         try {
-            SandboxTextDataExtractionTask.builder().build();
+            SandboxDocumentTextDataExtractionTask.builder().build();
         } catch (IllegalArgumentException ex) {
             assertThat(ex.getMessage(), containsString("documentFields"));
             return;
@@ -44,7 +44,7 @@ public class SandboxTextDataExtractionTaskTest {
 
     @Test
     public void builder_shouldAllowIndividualDocumentFields() {
-        SandboxTextDataExtractionTask result = SandboxTextDataExtractionTask.builder()
+        SandboxDocumentTextDataExtractionTask result = SandboxDocumentTextDataExtractionTask.builder()
                 .withDocumentField(SOME_KEY, SOME_VALUE)
                 .build();
 
@@ -53,7 +53,7 @@ public class SandboxTextDataExtractionTaskTest {
 
     @Test
     public void builder_shouldAllowDocumentFieldsToBeSet() {
-        SandboxTextDataExtractionTask result = SandboxTextDataExtractionTask.builder()
+        SandboxDocumentTextDataExtractionTask result = SandboxDocumentTextDataExtractionTask.builder()
                 .withDocumentFields(SOME_DOCUMENT_FIELDS)
                 .build();
 
@@ -63,7 +63,7 @@ public class SandboxTextDataExtractionTaskTest {
 
     @Test
     public void builder_shouldAllowDocumentFilter() {
-        SandboxTextDataExtractionTask result = SandboxTextDataExtractionTask.builder()
+        SandboxDocumentTextDataExtractionTask result = SandboxDocumentTextDataExtractionTask.builder()
                 .withDocumentField(SOME_KEY, SOME_VALUE)
                 .withDocumentFilter(documentFilterMock)
                 .build();

@@ -9,7 +9,7 @@ import com.yoti.api.client.sandbox.docs.request.check.report.SandboxRecommendati
 abstract class SandboxCheckBuilder<T extends SandboxCheckBuilder<T>> {
 
     protected SandboxRecommendation recommendation;
-    protected List<SandboxBreakdown> breakdown;
+    protected List<SandboxBreakdown> breakdown = new ArrayList<>();
 
     public T withRecommendation(SandboxRecommendation recommendation) {
         this.recommendation = recommendation;
@@ -17,10 +17,6 @@ abstract class SandboxCheckBuilder<T extends SandboxCheckBuilder<T>> {
     }
 
     public T withBreakdown(SandboxBreakdown breakdown) {
-        if (this.breakdown == null) {
-            this.breakdown = new ArrayList<>();
-        }
-
         this.breakdown.add(breakdown);
         return self();
     }

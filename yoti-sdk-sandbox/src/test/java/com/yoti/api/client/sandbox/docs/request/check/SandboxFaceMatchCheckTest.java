@@ -33,19 +33,6 @@ public class SandboxFaceMatchCheckTest {
     }
 
     @Test
-    public void builder_shouldThrowExceptionWhenNoBreakdownAdded() {
-        try {
-            SandboxFaceMatchCheck.builder()
-                    .withRecommendation(sandboxRecommendationMock)
-                    .build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("breakdown"));
-            return;
-        }
-        fail("Expected an exception");
-    }
-
-    @Test
     public void builder_shouldBuildCorrectly() {
         SandboxFaceMatchCheck result = SandboxFaceMatchCheck.builder()
                 .withRecommendation(sandboxRecommendationMock)

@@ -11,15 +11,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SandboxTextDataExtractionTask {
+public class SandboxDocumentTextDataExtractionTask {
 
     @JsonProperty("result")
-    private final SandboxTextDataExtractionTaskResult result;
+    private final SandboxDocumentTextDataExtractionTaskResult result;
 
     @JsonProperty("document_filter")
     private final SandboxDocumentFilter documentFilter;
 
-    SandboxTextDataExtractionTask(SandboxTextDataExtractionTaskResult result, SandboxDocumentFilter documentFilter) {
+    SandboxDocumentTextDataExtractionTask(SandboxDocumentTextDataExtractionTaskResult result, SandboxDocumentFilter documentFilter) {
         this.result = result;
         this.documentFilter = documentFilter;
     }
@@ -28,7 +28,7 @@ public class SandboxTextDataExtractionTask {
         return new Builder();
     }
 
-    public SandboxTextDataExtractionTaskResult getResult() {
+    public SandboxDocumentTextDataExtractionTaskResult getResult() {
         return result;
     }
 
@@ -37,7 +37,7 @@ public class SandboxTextDataExtractionTask {
     }
 
     /**
-     * Builder for {@link SandboxTextDataExtractionTask}
+     * Builder for {@link SandboxDocumentTextDataExtractionTask}
      */
     public static class Builder {
 
@@ -63,11 +63,11 @@ public class SandboxTextDataExtractionTask {
             return this;
         }
 
-        public SandboxTextDataExtractionTask build() {
+        public SandboxDocumentTextDataExtractionTask build() {
             notNull(documentFields, "documentFields");
 
-            SandboxTextDataExtractionTaskResult result = new SandboxTextDataExtractionTaskResult(documentFields);
-            return new SandboxTextDataExtractionTask(result, documentFilter);
+            SandboxDocumentTextDataExtractionTaskResult result = new SandboxDocumentTextDataExtractionTaskResult(documentFields);
+            return new SandboxDocumentTextDataExtractionTask(result, documentFilter);
         }
 
     }

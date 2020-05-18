@@ -11,7 +11,7 @@ import java.util.List;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentAuthenticityCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxFaceMatchCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxLivenessCheck;
-import com.yoti.api.client.sandbox.docs.request.check.SandboxTextDataCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentTextDataCheck;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SandboxCheckReports {
 
     @JsonProperty(ID_DOCUMENT_TEXT_DATA_CHECK)
-    private final List<SandboxTextDataCheck> textDataChecks;
+    private final List<SandboxDocumentTextDataCheck> documentTextDataChecks;
 
     @JsonProperty(ID_DOCUMENT_AUTHENTICITY)
     private final List<SandboxDocumentAuthenticityCheck> documentAuthenticityChecks;
@@ -34,12 +34,12 @@ public class SandboxCheckReports {
     @JsonProperty("async_report_delay")
     private final Integer asyncReportDelay;
 
-    SandboxCheckReports(List<SandboxTextDataCheck> textDataChecks,
+    SandboxCheckReports(List<SandboxDocumentTextDataCheck> documentTextDataChecks,
             List<SandboxDocumentAuthenticityCheck> documentAuthenticityChecks,
             List<SandboxLivenessCheck> livenessChecks,
             List<SandboxFaceMatchCheck> documentFaceMatchChecks,
             Integer asyncReportsDelay) {
-        this.textDataChecks = textDataChecks;
+        this.documentTextDataChecks = documentTextDataChecks;
         this.documentAuthenticityChecks = documentAuthenticityChecks;
         this.livenessChecks = livenessChecks;
         this.documentFaceMatchChecks = documentFaceMatchChecks;
@@ -50,8 +50,8 @@ public class SandboxCheckReports {
         return new Builder();
     }
 
-    public List<SandboxTextDataCheck> getTextDataChecks() {
-        return textDataChecks;
+    public List<SandboxDocumentTextDataCheck> getDocumentTextDataChecks() {
+        return documentTextDataChecks;
     }
 
     public List<SandboxDocumentAuthenticityCheck> getDocumentAuthenticityChecks() {
@@ -75,7 +75,7 @@ public class SandboxCheckReports {
      */
     public static class Builder {
 
-        private List<SandboxTextDataCheck> textDataCheck = new ArrayList<>();
+        private List<SandboxDocumentTextDataCheck> textDataCheck = new ArrayList<>();
 
         private List<SandboxDocumentAuthenticityCheck> documentAuthenticityCheck = new ArrayList<>();
 
@@ -85,7 +85,7 @@ public class SandboxCheckReports {
 
         private Integer asyncReportDelay;
 
-        public Builder withTextDataCheck(SandboxTextDataCheck textDataCheckReport) {
+        public Builder withDocumentTextDataCheck(SandboxDocumentTextDataCheck textDataCheckReport) {
             this.textDataCheck.add(textDataCheckReport);
             return this;
         }

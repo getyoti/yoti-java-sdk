@@ -27,7 +27,6 @@ public class SandboxDocumentAuthenticityCheck extends SandboxDocumentCheck {
         @Override
         public SandboxDocumentAuthenticityCheck build() {
             notNull(recommendation, "recommendation");
-            notNull(breakdown, "breakdown");
 
             SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report);

@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SandboxTextDataCheckTest {
+public class SandboxDocumentTextDataCheckTest {
 
     private static final String SOME_KEY = "someKey";
     private static final String SOME_VALUE = "someValue";
@@ -36,7 +36,7 @@ public class SandboxTextDataCheckTest {
     @Test
     public void builder_shouldThrowExceptionForMissingRecommendation() {
         try {
-            SandboxTextDataCheck.builder().build();
+            SandboxDocumentTextDataCheck.builder().build();
         } catch (IllegalArgumentException ex) {
             assertThat(ex.getMessage(), containsString("recommendation"));
             return;
@@ -45,22 +45,9 @@ public class SandboxTextDataCheckTest {
     }
 
     @Test
-    public void builder_shouldThrowExceptionForNoBreakdowns() {
-        try {
-            SandboxTextDataCheck.builder()
-                    .withRecommendation(sandboxRecommendationMock)
-                    .build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("breakdown"));
-            return;
-        }
-        fail("Expected an exception");
-    }
-
-    @Test
     public void builder_shouldThrowExceptionForMissingDocumentFields() {
         try {
-            SandboxTextDataCheck.builder()
+            SandboxDocumentTextDataCheck.builder()
                     .withRecommendation(sandboxRecommendationMock)
                     .withBreakdown(sandboxBreakdownMock)
                     .build();
@@ -73,7 +60,7 @@ public class SandboxTextDataCheckTest {
 
     @Test
     public void builder_shouldInitialiseDocumentFieldsMap() {
-        SandboxTextDataCheck result = SandboxTextDataCheck.builder()
+        SandboxDocumentTextDataCheck result = SandboxDocumentTextDataCheck.builder()
                 .withRecommendation(sandboxRecommendationMock)
                 .withBreakdown(sandboxBreakdownMock)
                 .withDocumentField(SOME_KEY, SOME_VALUE)
@@ -85,7 +72,7 @@ public class SandboxTextDataCheckTest {
 
     @Test
     public void builder_shouldAllowMapForDocumentFields() {
-        SandboxTextDataCheck result = SandboxTextDataCheck.builder()
+        SandboxDocumentTextDataCheck result = SandboxDocumentTextDataCheck.builder()
                 .withRecommendation(sandboxRecommendationMock)
                 .withBreakdown(sandboxBreakdownMock)
                 .withDocumentFields(SOME_DOCUMENT_FIELDS)

@@ -10,9 +10,9 @@ import com.yoti.api.client.sandbox.docs.request.SandboxDocumentFilter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class SandboxTextDataCheck extends SandboxDocumentCheck {
+public class SandboxDocumentTextDataCheck extends SandboxDocumentCheck {
 
-    SandboxTextDataCheck(SandboxTextDataCheckResult result, SandboxDocumentFilter documentFilter) {
+    SandboxDocumentTextDataCheck(SandboxDocumentTextDataCheckResult result, SandboxDocumentFilter documentFilter) {
         super(result, documentFilter);
     }
 
@@ -21,12 +21,12 @@ public class SandboxTextDataCheck extends SandboxDocumentCheck {
     }
 
     @Override
-    public SandboxTextDataCheckResult getResult() {
-        return (SandboxTextDataCheckResult) super.getResult();
+    public SandboxDocumentTextDataCheckResult getResult() {
+        return (SandboxDocumentTextDataCheckResult) super.getResult();
     }
 
     /**
-     * Builder for {@link SandboxTextDataCheck}
+     * Builder for {@link SandboxDocumentTextDataCheck}
      */
     public static class Builder extends SandboxDocumentCheckBuilder<Builder> {
 
@@ -52,15 +52,14 @@ public class SandboxTextDataCheck extends SandboxDocumentCheck {
         }
 
         @Override
-        public SandboxTextDataCheck build() {
+        public SandboxDocumentTextDataCheck build() {
             notNull(recommendation, "recommendation");
-            notNull(breakdown, "breakdown");
             notNull(documentFields, "documentFields");
 
             SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
-            SandboxTextDataCheckResult result = new SandboxTextDataCheckResult(report, documentFields);
+            SandboxDocumentTextDataCheckResult result = new SandboxDocumentTextDataCheckResult(report, documentFields);
 
-            return new SandboxTextDataCheck(result, documentFilter);
+            return new SandboxDocumentTextDataCheck(result, documentFilter);
         }
 
     }

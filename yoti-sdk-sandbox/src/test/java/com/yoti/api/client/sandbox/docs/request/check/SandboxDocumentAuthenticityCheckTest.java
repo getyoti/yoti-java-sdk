@@ -39,19 +39,6 @@ public class SandboxDocumentAuthenticityCheckTest {
     }
 
     @Test
-    public void builder_shouldThrowExceptionWhenBreakdownNotAdded() {
-        try {
-            SandboxDocumentAuthenticityCheck.builder()
-                    .withRecommendation(sandboxRecommendationMock)
-                    .build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("breakdown"));
-            return;
-        }
-        fail("Expected an exception");
-    }
-
-    @Test
     public void builder_shouldBuildWithoutDocumentFilter() {
         SandboxDocumentAuthenticityCheck result = SandboxDocumentAuthenticityCheck.builder()
                 .withRecommendation(sandboxRecommendationMock)

@@ -4,11 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
-import com.yoti.api.client.sandbox.docs.request.SandboxCheckReports;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentAuthenticityCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxFaceMatchCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxLivenessCheck;
-import com.yoti.api.client.sandbox.docs.request.check.SandboxTextDataCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentTextDataCheck;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +19,7 @@ public class SandboxCheckReportsTest {
 
     @Mock SandboxDocumentAuthenticityCheck documentAuthenticityCheckMock;
     @Mock SandboxFaceMatchCheck faceMatchCheckMock;
-    @Mock SandboxTextDataCheck textDataCheckMock;
+    @Mock SandboxDocumentTextDataCheck textDataCheckMock;
     @Mock SandboxLivenessCheck livenessCheckMock;
 
     @Test
@@ -46,11 +45,11 @@ public class SandboxCheckReportsTest {
     @Test
     public void builder_shouldAllowTextDataChecks() {
         SandboxCheckReports result = SandboxCheckReports.builder()
-                .withTextDataCheck(textDataCheckMock)
+                .withDocumentTextDataCheck(textDataCheckMock)
                 .build();
 
-        assertThat(result.getTextDataChecks(), hasSize(1));
-        assertThat(result.getTextDataChecks().get(0), is(textDataCheckMock));
+        assertThat(result.getDocumentTextDataChecks(), hasSize(1));
+        assertThat(result.getDocumentTextDataChecks().get(0), is(textDataCheckMock));
     }
 
     @Test

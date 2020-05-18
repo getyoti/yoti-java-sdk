@@ -27,7 +27,6 @@ public class SandboxFaceMatchCheck extends SandboxDocumentCheck {
         @Override
         public SandboxFaceMatchCheck build() {
             notNull(recommendation, "recommendation");
-            notNull(breakdown, "breakdown");
 
             SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report);
