@@ -41,6 +41,10 @@ public class PathFactory {
         return unsignedPathFactory.createMediaContentPath(appId, sessionId, mediaId) + "&" + createSignatureParams();
     }
 
+    public String createGetSupportedDocumentsPath() {
+        return unsignedPathFactory.createGetSupportedDocumentsPath() + "?" + createSignatureParams();
+    }
+
     protected long createTimestamp() {
         return nanoTime() / 1000;
     }

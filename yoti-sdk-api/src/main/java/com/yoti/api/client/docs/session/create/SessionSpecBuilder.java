@@ -1,6 +1,7 @@
 package com.yoti.api.client.docs.session.create;
 
 import com.yoti.api.client.docs.session.create.check.RequestedCheck;
+import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
 import com.yoti.api.client.docs.session.create.task.RequestedTask;
 
 /**
@@ -63,6 +64,14 @@ public interface SessionSpecBuilder {
      * @return the builder
      */
     SessionSpecBuilder withSdkConfig(SdkConfig sdkConfig);
+
+    /**
+     * Adds a {@link RequiredDocument} to the list
+     *
+     * @param requiredDocument the {@code RequiredDocument}
+     * @return the builder
+     */
+    SessionSpecBuilder withRequiredDocument(RequiredDocument requiredDocument);
 
     /**
      * Builds the {@link SessionSpec} based on the values supplied to the builder

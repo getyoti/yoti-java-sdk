@@ -16,7 +16,7 @@ Before you start, you'll need to create an Application in [Yoti Hub](https://hub
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>yoti-sdk-impl</artifactId>
-      <version>2.7.1</version>
+      <version>2.8.0</version>
     </dependency>
 ```
 
@@ -29,8 +29,8 @@ Before you start, you'll need to create an Application in [Yoti Hub](https://hub
 1. Run `mvn clean package` to build the project.
 
 ## Running
-* You can run your server-app by executing `java -jar target/yoti-sdk-spring-boot-example-2.7.1.jar`
-  * If you are using Java 9, you can run the server-app as follows `java -jar target/yoti-sdk-spring-boot-example-2.7.1.jar --add-exports java.base/jdk.internal.ref=ALL-UNNAMED`
+* You can run your server-app by executing `java -jar target/yoti-sdk-spring-boot-example-2.8.0.jar`
+  * If you are using Java 9, you can run the server-app as follows `java -jar target/yoti-sdk-spring-boot-example-2.8.0.jar --add-exports java.base/jdk.internal.ref=ALL-UNNAMED`
 * Navigate to `https://localhost:8443`
 * You can then initiate a login using Yoti.  The Spring demo is listening for the response on `https://localhost:8443/login`.
 

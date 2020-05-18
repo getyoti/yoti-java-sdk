@@ -1,0 +1,15 @@
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-store: "server.keystore.jks"
+    key-store-password: javaexample
+  servlet:
+    session:
+      persistent: true
+      timeout: 360000
+com:
+  yoti:
+    docscan:
+      sdkId: "your-client-sdk-id-from-yoti-hub"
+      pemFileName: "your-pem-file-from-yoti-hub"

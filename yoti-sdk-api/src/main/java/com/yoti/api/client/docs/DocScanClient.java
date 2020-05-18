@@ -4,6 +4,7 @@ import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
+import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 
 /**
  * Client used for communication with the Yoti Doc Scan service
@@ -59,5 +60,13 @@ public interface DocScanClient {
      * @throws DocScanException if an error has occurred
      */
     void deleteMediaContent(String sessionId, String mediaId)  throws DocScanException;
+
+    /**
+     * Gets a list of supported documents.
+     *
+     * @return the supported documents
+     * @throws DocScanException if an error has occurred
+     */
+    SupportedDocumentsResponse getSupportedDocuments() throws DocScanException;
 
 }

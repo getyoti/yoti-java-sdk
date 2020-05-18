@@ -18,4 +18,12 @@ public interface GetSessionResult {
 
     ResourceContainer getResources();
 
+    List<AuthenticityCheckResponse> getAuthenticityChecks();
+
+    List<FaceMatchCheckResponse> getFaceMatchChecks();
+
+    List<TextDataCheckResponse> getTextDataChecks();
+
+    List<LivenessCheckResponse> getLivenessChecks();
+
 }

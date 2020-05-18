@@ -39,8 +39,8 @@ The Modules above explained
 1) [Spring Boot Auto Configuration](#spring-boot-auto-configuration) -
 Description of utilising Spring Boot
 
-1) [Running the Example](#running-the-example) -
-Running the Spring example project
+1) [Running the Examples](#running-the-examples) -
+Running the Spring example projects
 
 1) [Breaking changes and enhancements made in v2.0.0](#breaking-changes-and-enhancements-made-in-v2.0.0) -
 Things you need to know when migrating from 1.x to 2.x
@@ -104,13 +104,13 @@ If you are using Maven, you need to add the following dependency:
 <dependency>
     <groupId>com.yoti</groupId>
     <artifactId>yoti-sdk-impl</artifactId>
-    <version>2.7.1</version>
+    <version>2.8.0</version>
 </dependency>
 ```
 
 If you are using Gradle, here is the dependency to add:
 
-`compile group: 'com.yoti', name: 'yoti-sdk-impl', version: '2.7.1'`
+`compile group: 'com.yoti', name: 'yoti-sdk-impl', version: '2.8.0'`
 
 You will find all classes packaged under `com.yoti.api`
 
@@ -341,9 +341,12 @@ As a convenience, if your application happens to use Spring Boot, you can utilis
 
 For more information and to see an example of this in use take a look at the [Spring Boot Auto Configuration module](/yoti-sdk-spring-boot-auto-config).
 
-## Running the Example
+## Running the Examples
 
-Instructions on how to run the Spring example project can be found in the [yoti-sdk-spring-boot-example](/yoti-sdk-spring-boot-example) folder.
+Instructions on how to run the Spring example projects can be found at the following:
+
+1. [Yoti App](/yoti-sdk-spring-boot-example)
+1. [Doc Scan](/examples/doc-scan)
 
 ## Breaking changes and enhancements made in v2.0.0
 
