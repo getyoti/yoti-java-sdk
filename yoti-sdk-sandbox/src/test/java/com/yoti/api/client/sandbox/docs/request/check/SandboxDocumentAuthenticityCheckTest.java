@@ -69,7 +69,7 @@ public class SandboxDocumentAuthenticityCheckTest {
 
         SandboxDocumentAuthenticityCheck result = SandboxDocumentAuthenticityCheck.builder()
                 .withRecommendation(sandboxRecommendationMock)
-                .withBreakdownList(breakdownList)
+                .withBreakdowns(breakdownList)
                 .build();
 
         assertThat(result.getResult().getReport().getBreakdown(), hasSize(3));

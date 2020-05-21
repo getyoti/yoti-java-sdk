@@ -44,6 +44,8 @@ public class SandboxDocumentTextDataExtractionTask {
         private Map<String, Object> documentFields;
         private SandboxDocumentFilter documentFilter;
 
+        private Builder() {}
+
         public Builder withDocumentField(String key, Object value) {
             if (documentFields == null) {
                 documentFields = new HashMap<>();

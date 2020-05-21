@@ -3,6 +3,7 @@ package com.yoti.api.client.sandbox.docs.request.check;
 import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 
 import com.yoti.api.client.sandbox.docs.request.SandboxDocumentFilter;
+import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxDocumentAuthenticityCheck extends SandboxDocumentCheck {
 
@@ -18,6 +19,8 @@ public class SandboxDocumentAuthenticityCheck extends SandboxDocumentCheck {
      * Builder for {@link SandboxDocumentAuthenticityCheck}
      */
     public static class Builder extends SandboxDocumentCheckBuilder<Builder> {
+
+        private Builder() {}
 
         @Override
         protected Builder self() {

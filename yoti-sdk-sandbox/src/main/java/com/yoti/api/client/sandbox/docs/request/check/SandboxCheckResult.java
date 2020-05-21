@@ -1,5 +1,7 @@
 package com.yoti.api.client.sandbox.docs.request.check;
 
+import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 class SandboxCheckResult {

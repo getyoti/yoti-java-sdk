@@ -1,5 +1,7 @@
 package com.yoti.api.client.sandbox.docs.request.check;
 
+import static com.yoti.api.client.spi.remote.util.Validation.notNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +23,9 @@ abstract class SandboxCheckBuilder<T extends SandboxCheckBuilder<T>> {
         return self();
     }
 
-    public T withBreakdownList(List<SandboxBreakdown> breakdownList) {
-        this.breakdown = breakdownList;
+    public T withBreakdowns(List<SandboxBreakdown> breakdowns) {
+        notNull(breakdowns, "breakdowns");
+        this.breakdown = breakdowns;
         return self();
     }
 

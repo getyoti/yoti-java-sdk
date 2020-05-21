@@ -85,6 +85,8 @@ public class SandboxCheckReports {
 
         private Integer asyncReportDelay;
 
+        private Builder() {}
+
         public Builder withDocumentTextDataCheck(SandboxDocumentTextDataCheck textDataCheckReport) {
             this.textDataCheck.add(textDataCheckReport);
             return this;

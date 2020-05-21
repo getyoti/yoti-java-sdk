@@ -34,6 +34,8 @@ public class SandboxTaskResults {
 
         private List<SandboxDocumentTextDataExtractionTask> documentTextDataExtractionTasks = new ArrayList<>();
 
+        private Builder() {}
+
         public Builder withDocumentTextDataExtractionTask(SandboxDocumentTextDataExtractionTask textDataExtractionTask) {
             this.documentTextDataExtractionTasks.add(textDataExtractionTask);
             return this;

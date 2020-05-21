@@ -38,6 +38,8 @@ public class SandboxDocumentFilter {
         private List<String> documentTypes = new ArrayList<>();
         private List<String> countryCodes = new ArrayList<>();
 
+        private Builder() {}
+
         public Builder withDocumentType(String documentType) {
             this.documentTypes.add(documentType);
             return this;

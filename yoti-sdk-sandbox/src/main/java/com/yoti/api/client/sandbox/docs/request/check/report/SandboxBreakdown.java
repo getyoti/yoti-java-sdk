@@ -49,6 +49,8 @@ public class SandboxBreakdown {
         private String result;
         private List<SandboxDetail> details = new ArrayList<>();
 
+        private Builder() {}
+
         public Builder withSubCheck(String subCheck) {
             this.subCheck = subCheck;
             return this;

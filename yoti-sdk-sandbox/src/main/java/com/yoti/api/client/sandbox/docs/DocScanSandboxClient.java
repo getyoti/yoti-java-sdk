@@ -110,6 +110,8 @@ public class DocScanSandboxClient {
         private String sdkId;
         private KeyPair keyPair;
 
+        private Builder() {}
+
         public Builder withSdkId(String sdkId) {
             this.sdkId = sdkId;
             return this;

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.yoti.api.client.sandbox.docs.request.SandboxDocumentFilter;
+import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -31,6 +32,8 @@ public class SandboxDocumentTextDataCheck extends SandboxDocumentCheck {
     public static class Builder extends SandboxDocumentCheckBuilder<Builder> {
 
         private Map<String, Object> documentFields;
+
+        private Builder() {}
 
         public Builder withDocumentField(String key, Object value) {
             if (documentFields == null) {

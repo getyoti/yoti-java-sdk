@@ -1,4 +1,4 @@
-package com.yoti.api.client.sandbox.docs.request.check;
+package com.yoti.api.client.sandbox.docs.request.check.report;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class SandboxCheckReport {
     @JsonProperty("breakdown")
     private List<SandboxBreakdown> breakdown;
 
-    SandboxCheckReport(SandboxRecommendation recommendation, List<SandboxBreakdown> breakdown) {
+    public SandboxCheckReport(SandboxRecommendation recommendation, List<SandboxBreakdown> breakdown) {
         this.recommendation = recommendation;
         this.breakdown = breakdown;
     }
