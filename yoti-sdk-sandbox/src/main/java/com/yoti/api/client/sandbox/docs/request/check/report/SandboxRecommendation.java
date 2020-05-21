@@ -43,7 +43,8 @@ public class SandboxRecommendation {
         private String reason;
         private String recoverySuggestion;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder withValue(String value) {
             this.value = value;

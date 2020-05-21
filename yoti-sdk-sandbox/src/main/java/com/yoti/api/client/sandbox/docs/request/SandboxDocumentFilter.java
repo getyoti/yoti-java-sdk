@@ -1,5 +1,7 @@
 package com.yoti.api.client.sandbox.docs.request;
 
+import static com.yoti.api.client.spi.remote.util.Validation.notNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,8 @@ public class SandboxDocumentFilter {
         private List<String> documentTypes = new ArrayList<>();
         private List<String> countryCodes = new ArrayList<>();
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder withDocumentType(String documentType) {
             this.documentTypes.add(documentType);
@@ -46,6 +49,7 @@ public class SandboxDocumentFilter {
         }
 
         public Builder withDocumentTypes(List<String> documentTypes) {
+            notNull(documentTypes, "documentTypes");
             this.documentTypes = documentTypes;
             return this;
         }
@@ -56,6 +60,7 @@ public class SandboxDocumentFilter {
         }
 
         public Builder withCountryCodes(List<String> countryCodes) {
+            notNull(countryCodes, "countryCodes");
             this.countryCodes = countryCodes;
             return this;
         }

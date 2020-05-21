@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentAuthenticityCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentTextDataCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxFaceMatchCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxLivenessCheck;
-import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentTextDataCheck;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -85,7 +85,8 @@ public class SandboxCheckReports {
 
         private Integer asyncReportDelay;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder withDocumentTextDataCheck(SandboxDocumentTextDataCheck textDataCheckReport) {
             this.textDataCheck.add(textDataCheckReport);

@@ -53,7 +53,6 @@ public class DocScanSandboxClient {
      * @throws SandboxException - if there was a problem configuring the response
      */
     public void configureSessionResponse(String sessionId, ResponseConfig responseConfig) throws SandboxException {
-        String s = "";
         String path = String.format("/sessions/%s/response-config", sessionId);
 
         try {
@@ -110,7 +109,8 @@ public class DocScanSandboxClient {
         private String sdkId;
         private KeyPair keyPair;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder withSdkId(String sdkId) {
             this.sdkId = sdkId;

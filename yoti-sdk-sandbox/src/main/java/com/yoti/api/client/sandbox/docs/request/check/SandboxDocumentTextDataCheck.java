@@ -29,11 +29,12 @@ public class SandboxDocumentTextDataCheck extends SandboxDocumentCheck {
     /**
      * Builder for {@link SandboxDocumentTextDataCheck}
      */
-    public static class Builder extends SandboxDocumentCheckBuilder<Builder> {
+    public static class Builder extends SandboxDocumentCheck.Builder<Builder> {
 
         private Map<String, Object> documentFields;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder withDocumentField(String key, Object value) {
             if (documentFields == null) {
@@ -57,7 +58,6 @@ public class SandboxDocumentTextDataCheck extends SandboxDocumentCheck {
         @Override
         public SandboxDocumentTextDataCheck build() {
             notNull(recommendation, "recommendation");
-            notNull(documentFields, "documentFields");
 
             SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
             SandboxDocumentTextDataCheckResult result = new SandboxDocumentTextDataCheckResult(report, documentFields);

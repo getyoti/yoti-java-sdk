@@ -44,7 +44,8 @@ public class SandboxDocumentTextDataExtractionTask {
         private Map<String, Object> documentFields;
         private SandboxDocumentFilter documentFilter;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder withDocumentField(String key, Object value) {
             if (documentFields == null) {
@@ -56,6 +57,7 @@ public class SandboxDocumentTextDataExtractionTask {
         }
 
         public Builder withDocumentFields(Map<String, Object> documentFields) {
+            notNull(documentFields, "documentFields");
             this.documentFields = documentFields;
             return this;
         }
@@ -66,8 +68,6 @@ public class SandboxDocumentTextDataExtractionTask {
         }
 
         public SandboxDocumentTextDataExtractionTask build() {
-            notNull(documentFields, "documentFields");
-
             SandboxDocumentTextDataExtractionTaskResult result = new SandboxDocumentTextDataExtractionTaskResult(documentFields);
             return new SandboxDocumentTextDataExtractionTask(result, documentFilter);
         }

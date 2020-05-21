@@ -1,10 +1,8 @@
 package com.yoti.api.client.sandbox.docs.request.task;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,17 +28,6 @@ public class SandboxDocumentTextDataExtractionTaskTest {
     }
 
     @Mock SandboxDocumentFilter documentFilterMock;
-
-    @Test
-    public void builder_shouldThrowExceptionWhenNoDocumentFieldsSupplied() {
-        try {
-            SandboxDocumentTextDataExtractionTask.builder().build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("documentFields"));
-            return;
-        }
-        fail("Expected an exception");
-    }
 
     @Test
     public void builder_shouldAllowIndividualDocumentFields() {

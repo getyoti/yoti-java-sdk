@@ -20,4 +20,15 @@ class SandboxDocumentCheck extends SandboxCheck {
         return documentFilter;
     }
 
+    static abstract class Builder<T extends Builder<T>> extends SandboxCheck.Builder<T> {
+
+        protected SandboxDocumentFilter documentFilter;
+
+        public T withDocumentFilter(SandboxDocumentFilter documentFilter) {
+            this.documentFilter = documentFilter;
+            return self();
+        }
+
+    }
+
 }

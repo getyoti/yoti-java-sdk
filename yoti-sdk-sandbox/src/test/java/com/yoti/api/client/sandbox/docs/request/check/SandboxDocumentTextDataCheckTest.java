@@ -45,20 +45,6 @@ public class SandboxDocumentTextDataCheckTest {
     }
 
     @Test
-    public void builder_shouldThrowExceptionForMissingDocumentFields() {
-        try {
-            SandboxDocumentTextDataCheck.builder()
-                    .withRecommendation(sandboxRecommendationMock)
-                    .withBreakdown(sandboxBreakdownMock)
-                    .build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("documentFields"));
-            return;
-        }
-        fail("Expected an exception");
-    }
-
-    @Test
     public void builder_shouldInitialiseDocumentFieldsMap() {
         SandboxDocumentTextDataCheck result = SandboxDocumentTextDataCheck.builder()
                 .withRecommendation(sandboxRecommendationMock)

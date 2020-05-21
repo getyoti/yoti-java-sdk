@@ -2,9 +2,6 @@ package com.yoti.api.client.sandbox.docs.request.check.report;
 
 import java.util.List;
 
-import com.yoti.api.client.sandbox.docs.request.check.report.SandboxBreakdown;
-import com.yoti.api.client.sandbox.docs.request.check.report.SandboxRecommendation;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

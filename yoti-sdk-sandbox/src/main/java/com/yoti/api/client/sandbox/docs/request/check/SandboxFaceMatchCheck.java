@@ -18,9 +18,10 @@ public class SandboxFaceMatchCheck extends SandboxDocumentCheck {
     /**
      * Builder for {@link SandboxFaceMatchCheck}
      */
-    public static class Builder extends SandboxDocumentCheckBuilder<Builder> {
+    public static class Builder extends SandboxDocumentCheck.Builder<Builder> {
 
-        private Builder() {}
+        private Builder() {
+        }
 
         @Override
         protected Builder self() {
