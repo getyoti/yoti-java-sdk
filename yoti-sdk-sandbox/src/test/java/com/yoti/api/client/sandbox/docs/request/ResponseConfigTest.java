@@ -17,7 +17,7 @@ public class ResponseConfigTest {
     @Test
     public void builder_shouldAllowCheckReportsToBeProvided() {
         ResponseConfig result = ResponseConfig.builder()
-                .withCheckReport(checkReportsMock)
+                .withCheckReports(checkReportsMock)
                 .build();
 
         assertThat(result.getCheckReports(), is(checkReportsMock));
