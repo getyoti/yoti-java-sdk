@@ -43,7 +43,7 @@ public class ResponseConfig {
             return this;
         }
 
-        public Builder withCheckReport(SandboxCheckReports sandboxCheckReports) {
+        public Builder withCheckReports(SandboxCheckReports sandboxCheckReports) {
             this.sandboxCheckReports = sandboxCheckReports;
             return this;
         }
