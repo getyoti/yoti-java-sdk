@@ -115,7 +115,7 @@
     <javadoc.plugin.source>8</javadoc.plugin.source>
     <gpg.plugin.version>1.6</gpg.plugin.version>
     <coveralls.plugin.version>4.3.0</coveralls.plugin.version>
-    <jacoco.plugin.version>0.8.4</jacoco.plugin.version>
+    <jacoco.plugin.version>0.8.5</jacoco.plugin.version>
   </properties>
   
   <dependencyManagement>
