@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentAuthenticityCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentTextDataCheck;
-import com.yoti.api.client.sandbox.docs.request.check.SandboxFaceMatchCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentFaceMatchCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxLivenessCheck;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -29,7 +29,7 @@ public class SandboxCheckReports {
     private final List<SandboxLivenessCheck> livenessChecks;
 
     @JsonProperty(ID_DOCUMENT_FACE_MATCH)
-    private final List<SandboxFaceMatchCheck> documentFaceMatchChecks;
+    private final List<SandboxDocumentFaceMatchCheck> documentFaceMatchChecks;
 
     @JsonProperty("async_report_delay")
     private final Integer asyncReportDelay;
@@ -37,7 +37,7 @@ public class SandboxCheckReports {
     SandboxCheckReports(List<SandboxDocumentTextDataCheck> documentTextDataChecks,
             List<SandboxDocumentAuthenticityCheck> documentAuthenticityChecks,
             List<SandboxLivenessCheck> livenessChecks,
-            List<SandboxFaceMatchCheck> documentFaceMatchChecks,
+            List<SandboxDocumentFaceMatchCheck> documentFaceMatchChecks,
             Integer asyncReportsDelay) {
         this.documentTextDataChecks = documentTextDataChecks;
         this.documentAuthenticityChecks = documentAuthenticityChecks;
@@ -62,7 +62,7 @@ public class SandboxCheckReports {
         return livenessChecks;
     }
 
-    public List<SandboxFaceMatchCheck> getDocumentFaceMatchChecks() {
+    public List<SandboxDocumentFaceMatchCheck> getDocumentFaceMatchChecks() {
         return documentFaceMatchChecks;
     }
 
@@ -81,7 +81,7 @@ public class SandboxCheckReports {
 
         private List<SandboxLivenessCheck> livenessCheck = new ArrayList<>();
 
-        private List<SandboxFaceMatchCheck> documentFaceMatchCheck = new ArrayList<>();
+        private List<SandboxDocumentFaceMatchCheck> documentFaceMatchCheck = new ArrayList<>();
 
         private Integer asyncReportDelay;
 
@@ -103,7 +103,7 @@ public class SandboxCheckReports {
             return this;
         }
 
-        public Builder withDocumentFaceMatchCheck(SandboxFaceMatchCheck documentFaceMatchReport) {
+        public Builder withDocumentFaceMatchCheck(SandboxDocumentFaceMatchCheck documentFaceMatchReport) {
             this.documentFaceMatchCheck.add(documentFaceMatchReport);
             return this;
         }
