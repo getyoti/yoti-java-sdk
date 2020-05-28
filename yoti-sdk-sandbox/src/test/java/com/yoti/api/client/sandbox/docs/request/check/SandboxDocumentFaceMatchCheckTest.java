@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SandboxFaceMatchCheckTest {
+public class SandboxDocumentFaceMatchCheckTest {
 
     @Mock SandboxRecommendation sandboxRecommendationMock;
     @Mock SandboxBreakdown sandboxBreakdownMock;
@@ -24,7 +24,7 @@ public class SandboxFaceMatchCheckTest {
     @Test
     public void builder_shouldThrowExceptionWhenMissingRecommendation() {
         try {
-            SandboxFaceMatchCheck.builder().build();
+            SandboxDocumentFaceMatchCheck.builder().build();
         } catch (IllegalArgumentException ex) {
             assertThat(ex.getMessage(), containsString("recommendation"));
             return;
@@ -34,7 +34,7 @@ public class SandboxFaceMatchCheckTest {
 
     @Test
     public void builder_shouldBuildCorrectly() {
-        SandboxFaceMatchCheck result = SandboxFaceMatchCheck.builder()
+        SandboxDocumentFaceMatchCheck result = SandboxDocumentFaceMatchCheck.builder()
                 .withRecommendation(sandboxRecommendationMock)
                 .withBreakdown(sandboxBreakdownMock)
                 .build();

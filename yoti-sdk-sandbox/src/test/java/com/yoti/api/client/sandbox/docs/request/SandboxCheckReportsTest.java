@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentAuthenticityCheck;
-import com.yoti.api.client.sandbox.docs.request.check.SandboxFaceMatchCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentFaceMatchCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxLivenessCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentTextDataCheck;
 
@@ -18,7 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class SandboxCheckReportsTest {
 
     @Mock SandboxDocumentAuthenticityCheck documentAuthenticityCheckMock;
-    @Mock SandboxFaceMatchCheck faceMatchCheckMock;
+    @Mock SandboxDocumentFaceMatchCheck faceMatchCheckMock;
     @Mock SandboxDocumentTextDataCheck textDataCheckMock;
     @Mock SandboxLivenessCheck livenessCheckMock;
 

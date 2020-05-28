@@ -5,9 +5,9 @@ import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 import com.yoti.api.client.sandbox.docs.request.SandboxDocumentFilter;
 import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
-public class SandboxFaceMatchCheck extends SandboxDocumentCheck {
+public class SandboxDocumentFaceMatchCheck extends SandboxDocumentCheck {
 
-    SandboxFaceMatchCheck(SandboxCheckResult result, SandboxDocumentFilter documentFilter) {
+    SandboxDocumentFaceMatchCheck(SandboxCheckResult result, SandboxDocumentFilter documentFilter) {
         super(result, documentFilter);
     }
 
@@ -16,7 +16,7 @@ public class SandboxFaceMatchCheck extends SandboxDocumentCheck {
     }
 
     /**
-     * Builder for {@link SandboxFaceMatchCheck}
+     * Builder for {@link SandboxDocumentFaceMatchCheck}
      */
     public static class Builder extends SandboxDocumentCheck.Builder<Builder> {
 
@@ -29,13 +29,13 @@ public class SandboxFaceMatchCheck extends SandboxDocumentCheck {
         }
 
         @Override
-        public SandboxFaceMatchCheck build() {
+        public SandboxDocumentFaceMatchCheck build() {
             notNull(recommendation, "recommendation");
 
             SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report);
 
-            return new SandboxFaceMatchCheck(result, documentFilter);
+            return new SandboxDocumentFaceMatchCheck(result, documentFilter);
         }
 
     }
