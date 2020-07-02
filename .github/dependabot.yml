@@ -12,13 +12,3 @@ updates:
   - MrBurtyyy
   assignees:
   - MrBurtyyy
-  ignore:
-  - dependency-name: org.apache.maven.plugins:maven-source-plugin
-    versions:
-    - ">= 3.a, < 4"
-  - dependency-name: org.hamcrest:hamcrest-core
-    versions:
-    - ">= 2.a, < 3"
-  - dependency-name: org.hamcrest:hamcrest-library
-    versions:
-    - ">= 2.a, < 3"
