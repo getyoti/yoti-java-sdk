@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 public class ThirdPartyAttributeConverterTest {
 
     private static final String SOME_ISSUANCE_TOKEN = "someIssuanceToken";
-    private static final String SOME_ISSUANCE_TOKEN_B64 = "c29tZUlzc3VhbmNlVG9rZW4=";
+    private static final String SOME_ISSUANCE_TOKEN_B64 = "c29tZUlzc3VhbmNlVG9rZW4";
     private static final String SOME_EXPIRY_DATE = "2019-10-15T22:04:05.123Z";
     private static final String SOME_INVALID_FORMAT_EXPIRY_DATE = "2019-10-15";
     private static final String SOME_DEFINITION_NAME = "com.thirdparty.id";

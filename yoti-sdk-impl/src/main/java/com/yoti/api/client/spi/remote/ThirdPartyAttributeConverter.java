@@ -34,7 +34,10 @@ public class ThirdPartyAttributeConverter {
         IssuingAttributes issuingAttributes = parseIssuingAttributes(thirdPartyAttribute.getIssuingAttributes());
 
         ByteString issuanceToken = thirdPartyAttribute.getIssuanceToken();
-        String token = Base64.getEncoder().encodeToString(issuanceToken.toByteArray());
+        String token = Base64
+                .getUrlEncoder()
+                .withoutPadding()
+                .encodeToString(issuanceToken.toByteArray());
 
         DateTime expiryDate = issuingAttributes.getExpiryDate();
         List<AttributeDefinition> attributeDefinitions = issuingAttributes.getAttributeDefinitions();
