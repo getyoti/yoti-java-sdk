@@ -81,7 +81,7 @@
     <!-- sdk dependency versions -->
     <slf4j.version>1.7.30</slf4j.version>
     <bouncy.castle.version>1.60</bouncy.castle.version>
-    <jackson.version>2.9.9.2</jackson.version>
+    <jackson.version>2.11.2</jackson.version>
     <google.protobuf.version>3.12.4</google.protobuf.version>
   
     <!-- spring versions -->
