@@ -30,9 +30,6 @@ Description on handling user logons
 1) [Connectivity Requirements](#connectivity-requirements) -
 Description of network connectivity requirements
 
-1) [AML Integration](#aml-integration) -
-How to integrate with Yoti's AML (Anti Money Laundering) service
-
 1) [Modules](#modules) -
 The Modules above explained
 
@@ -256,57 +253,6 @@ Since version 1.1 of the `yoti-sdk-impl` you can set the following two system pr
 
 * `yoti.client.connect.timeout.ms` - the number of milliseconds that you are prepared to wait for the connection to be established. Zero is interpreted as an infinite timeout.
 * `yoti.client.read.timeout.ms` - the number of milliseconds that you are prepared to wait for data to become available to read in the response stream. Zero is interpreted as an infinite timeout.
-
-## AML Integration
-
-Yoti provides an AML (Anti Money Laundering) check service to allow a deeper KYC process to prevent fraud. This is a chargeable service, so please contact [sdksupport@yoti.com](mailto:sdksupport@yoti.com) for more information.
-
-Yoti will provide a boolean result on the following checks:
-
-* PEP list - Verify against Politically Exposed Persons list
-* Fraud list - Verify against  US Social Security Administration Fraud (SSN Fraud) list
-* Watch list - Verify against watch lists from the Office of Foreign Assets Control
-
-To use this functionality you must ensure your application is assigned to your Organisation in the Yoti Dashboard - please see [here](https://developers.yoti.com/yoti-app/web-integration#step-1-creating-an-organisation) for further information.
-
-For the AML check you will need to provide the following:
-
-* Data provided by Yoti (please ensure you have selected the Given name(s) and Family name attributes from the Data tab in the Yoti Hub)
-  * Given name(s)
-  * Family name
-* Data that must be collected from the user:
-  * Country of residence (must be an ISO 3166 3-letter code)
-  * Social Security Number (US citizens only)
-  * Postcode/Zip code (US citizens only)
-
-### Consent
-
-Performing an AML check on a person *requires* their consent.
-**You must ensure you have user consent *before* using this service.**
-
-### Code Example
-
-Given a YotiClient initialised with your SDK ID and KeyPair (see [Client Initialisation](#client-initialisation)) performing an AML check is a straightforward case of providing basic profile data.
-
-```java
-// POJOs for the data to check
-AmlAddress amlAddress = new AmlAddressBuilder()
-                            .withCountry("GBR")
-                            .build();
-AmlProfile amlProfile = new AmlProfileBuilder()
-                            .withGivenNames("Edward Richard George")
-                            .withFamilyName("Heath")
-                            .withAddress(amlAddress)
-                            .build();
-
-// Perform the check
-AmlResult amlResult = client.performAmlCheck(amlProfile);
-
-// Result returned in a POJO
-System.out.println(amlResult.isOnFraudList());
-System.out.println(amlResult.isOnWatchList());
-System.out.println(amlResult.isOnPepList());
-```
 
 ## Modules
 
