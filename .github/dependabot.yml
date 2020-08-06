@@ -1,0 +1,14 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 3
+  target-branch: DEVELOPMENT
+  reviewers:
+  - echarrod
+  - davidgrayston
+  - MrBurtyyy
+  assignees:
+  - echarrod
