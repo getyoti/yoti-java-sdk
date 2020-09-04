@@ -40,12 +40,14 @@ public class SimpleSessionSpecBuilderTest {
                 .withClientSessionTokenTtl(SOME_CLIENT_SESSION_TOKEN_TTL)
                 .withResourcesTtl(SOME_RESOURCES_TTL)
                 .withUserTrackingId(SOME_USER_TRACKING_ID)
+                .withBlockBiometricConsent(true)
                 .build();
 
         assertThat(result, is(instanceOf(SimpleSessionSpec.class)));
         assertThat(result.getClientSessionTokenTtl(), is(SOME_CLIENT_SESSION_TOKEN_TTL));
         assertThat(result.getResourcesTtl(), is(SOME_RESOURCES_TTL));
         assertThat(result.getUserTrackingId(), is(SOME_USER_TRACKING_ID));
+        assertThat(result.getBlockBiometricConsent(), is(true));
         assertThat(result.getRequiredDocuments(), hasSize(0));
     }
 

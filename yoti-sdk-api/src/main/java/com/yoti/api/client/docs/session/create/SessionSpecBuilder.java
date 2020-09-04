@@ -74,6 +74,14 @@ public interface SessionSpecBuilder {
     SessionSpecBuilder withRequiredDocument(RequiredDocument requiredDocument);
 
     /**
+     * Sets whether or not to block the collection of biometric consent
+     *
+     * @param blockBiometricConsent block collection of biometric consent
+     * @return the builder
+     */
+    SessionSpecBuilder withBlockBiometricConsent(boolean blockBiometricConsent);
+
+    /**
      * Builds the {@link SessionSpec} based on the values supplied to the builder
      *
      * @return the built {@link SessionSpec}

@@ -24,6 +24,9 @@ public class SimpleGetSessionResult implements GetSessionResult {
     @JsonProperty("client_session_token")
     private String clientSessionToken;
 
+    @JsonProperty("biometric_consent")
+    private String biometricConsent;
+
     @JsonProperty("checks")
     private List<? extends SimpleCheckResponse> checks;
 
@@ -48,6 +51,11 @@ public class SimpleGetSessionResult implements GetSessionResult {
     @Override
     public String getClientSessionToken() {
         return clientSessionToken;
+    }
+
+    @Override
+    public String getBiometricConsentTimestamp() {
+        return biometricConsent;
     }
 
     @Override
