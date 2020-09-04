@@ -20,6 +20,7 @@ public class SimpleGetSessionResultTest {
     @Mock FaceMatchCheckResponse faceMatchCheckResponseMock;
     @Mock TextDataCheckResponse textDataCheckResponseMock;
     @Mock LivenessCheckResponse livenessCheckResponseMock;
+    @Mock IdDocumentComparisonCheckResponse idDocumentComparisonCheckResponse;
 
     SimpleGetSessionResult getSessionResult;
 
@@ -34,12 +35,13 @@ public class SimpleGetSessionResultTest {
                         authenticityCheckResponseMock,
                         livenessCheckResponseMock,
                         textDataCheckResponseMock,
-                        faceMatchCheckResponseMock
+                        faceMatchCheckResponseMock,
+                        idDocumentComparisonCheckResponse
                 )
         );
 
         List<AuthenticityCheckResponse> result = getSessionResult.getAuthenticityChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(4));
+        assertThat(getSessionResult.getChecks(), hasSize(5));
         assertThat(result, hasSize(1));
     }
 
@@ -54,12 +56,13 @@ public class SimpleGetSessionResultTest {
                         authenticityCheckResponseMock,
                         livenessCheckResponseMock,
                         textDataCheckResponseMock,
-                        faceMatchCheckResponseMock
+                        faceMatchCheckResponseMock,
+                        idDocumentComparisonCheckResponse
                 )
         );
 
         List<LivenessCheckResponse> result = getSessionResult.getLivenessChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(4));
+        assertThat(getSessionResult.getChecks(), hasSize(5));
         assertThat(result, hasSize(1));
     }
 
@@ -74,12 +77,13 @@ public class SimpleGetSessionResultTest {
                         authenticityCheckResponseMock,
                         livenessCheckResponseMock,
                         textDataCheckResponseMock,
-                        faceMatchCheckResponseMock
+                        faceMatchCheckResponseMock,
+                        idDocumentComparisonCheckResponse
                 )
         );
 
         List<TextDataCheckResponse> result = getSessionResult.getTextDataChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(4));
+        assertThat(getSessionResult.getChecks(), hasSize(5));
         assertThat(result, hasSize(1));
     }
 
@@ -94,12 +98,34 @@ public class SimpleGetSessionResultTest {
                         authenticityCheckResponseMock,
                         livenessCheckResponseMock,
                         textDataCheckResponseMock,
-                        faceMatchCheckResponseMock
+                        faceMatchCheckResponseMock,
+                        idDocumentComparisonCheckResponse
                 )
         );
 
         List<FaceMatchCheckResponse> result = getSessionResult.getFaceMatchChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(4));
+        assertThat(getSessionResult.getChecks(), hasSize(5));
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
+    public void shouldFilterIdDocumentComparisonChecks() throws NoSuchFieldException {
+        getSessionResult = new SimpleGetSessionResult();
+
+        FieldSetter.setField(
+                getSessionResult,
+                getSessionResult.getClass().getDeclaredField("checks"),
+                Arrays.asList(
+                        authenticityCheckResponseMock,
+                        livenessCheckResponseMock,
+                        textDataCheckResponseMock,
+                        faceMatchCheckResponseMock,
+                        idDocumentComparisonCheckResponse
+                )
+        );
+
+        List<IdDocumentComparisonCheckResponse> result = getSessionResult.getIdDocumentComparisonChecks();
+        assertThat(getSessionResult.getChecks(), hasSize(5));
         assertThat(result, hasSize(1));
     }
 
