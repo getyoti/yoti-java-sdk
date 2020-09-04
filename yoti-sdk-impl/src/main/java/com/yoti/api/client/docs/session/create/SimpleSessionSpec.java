@@ -2,6 +2,7 @@ package com.yoti.api.client.docs.session.create;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import com.yoti.api.client.docs.session.create.check.RequestedCheck;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
 import com.yoti.api.client.docs.session.create.task.RequestedTask;
@@ -35,14 +36,18 @@ public class SimpleSessionSpec implements SessionSpec {
     @JsonProperty("required_documents")
     private final List<RequiredDocument> requiredDocuments;
 
+    @JsonProperty("block_biometric_consent")
+    private final Boolean blockBiometricConsent;
+
     public SimpleSessionSpec(Integer clientSessionTokenTtl,
-                             Integer resourcesTtl,
-                             String userTrackingId,
-                             NotificationConfig notifications,
-                             List<RequestedCheck> requestedChecks,
-                             List<RequestedTask> requestedTasks,
-                             SdkConfig sdkConfig,
-                             List<RequiredDocument> requiredDocuments) {
+            Integer resourcesTtl,
+            String userTrackingId,
+            NotificationConfig notifications,
+            List<RequestedCheck> requestedChecks,
+            List<RequestedTask> requestedTasks,
+            SdkConfig sdkConfig,
+            List<RequiredDocument> requiredDocuments,
+            Boolean blockBiometricConsent) {
         this.clientSessionTokenTtl = clientSessionTokenTtl;
         this.resourcesTtl = resourcesTtl;
         this.userTrackingId = userTrackingId;
@@ -51,6 +56,7 @@ public class SimpleSessionSpec implements SessionSpec {
         this.requestedTasks = requestedTasks;
         this.sdkConfig = sdkConfig;
         this.requiredDocuments = requiredDocuments;
+        this.blockBiometricConsent = blockBiometricConsent;
     }
 
     @Override
@@ -91,6 +97,11 @@ public class SimpleSessionSpec implements SessionSpec {
     @Override
     public List<RequiredDocument> getRequiredDocuments() {
         return requiredDocuments;
+    }
+
+    @Override
+    public Boolean getBlockBiometricConsent() {
+        return blockBiometricConsent;
     }
 
 }

@@ -14,6 +14,8 @@ public interface GetSessionResult {
 
     String getClientSessionToken();
 
+    String getBiometricConsentTimestamp();
+
     List<? extends CheckResponse> getChecks();
 
     ResourceContainer getResources();
