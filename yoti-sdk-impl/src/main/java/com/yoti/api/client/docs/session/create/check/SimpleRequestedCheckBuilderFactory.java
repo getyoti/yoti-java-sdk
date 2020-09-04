@@ -16,4 +16,9 @@ public class SimpleRequestedCheckBuilderFactory extends RequestedCheckBuilderFac
     public RequestedFaceMatchCheckBuilder forFaceMatchCheck() {
         return new SimpleRequestedFaceMatchCheckBuilder();
     }
+
+    @Override
+    public RequestedIdDocumentComparisonCheckBuilder forIdDocumentComparisonCheck() {
+        return new SimpleRequestedIdDocumentComparisonCheckBuilder();
+    }
 }

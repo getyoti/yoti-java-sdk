@@ -7,6 +7,7 @@ package com.yoti.api.client.docs;
 public class DocScanConstants {
 
     public static final String ID_DOCUMENT_AUTHENTICITY = "ID_DOCUMENT_AUTHENTICITY";
+    public static final String ID_DOCUMENT_COMPARISON = "ID_DOCUMENT_COMPARISON";
     public static final String ID_DOCUMENT_TEXT_DATA_CHECK = "ID_DOCUMENT_TEXT_DATA_CHECK";
     public static final String ID_DOCUMENT_TEXT_DATA_EXTRACTION = "ID_DOCUMENT_TEXT_DATA_EXTRACTION";
     public static final String ID_DOCUMENT_FACE_MATCH = "ID_DOCUMENT_FACE_MATCH";

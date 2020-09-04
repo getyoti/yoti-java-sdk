@@ -45,4 +45,12 @@ public abstract class RequestedCheckBuilderFactory {
      */
     public abstract RequestedFaceMatchCheckBuilder forFaceMatchCheck();
 
+    /**
+     * Returns a {@link RequestedIdDocumentComparisonCheckBuilder} used for
+     * creating {@link RequestedIdDocumentComparisonCheck}
+     *
+     * @return the builder
+     */
+    public abstract RequestedIdDocumentComparisonCheckBuilder forIdDocumentComparisonCheck();
+
 }
