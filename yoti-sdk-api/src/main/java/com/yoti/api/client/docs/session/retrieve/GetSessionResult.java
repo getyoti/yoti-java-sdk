@@ -26,4 +26,6 @@ public interface GetSessionResult {
 
     List<LivenessCheckResponse> getLivenessChecks();
 
+    List<IdDocumentComparisonCheckResponse> getIdDocumentComparisonChecks();
+
 }

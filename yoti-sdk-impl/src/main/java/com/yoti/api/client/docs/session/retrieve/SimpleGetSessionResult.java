@@ -85,6 +85,11 @@ public class SimpleGetSessionResult implements GetSessionResult {
         return filterChecksByType(LivenessCheckResponse.class);
     }
 
+    @Override
+    public List<IdDocumentComparisonCheckResponse> getIdDocumentComparisonChecks() {
+        return filterChecksByType(IdDocumentComparisonCheckResponse.class);
+    }
+
     private <T extends CheckResponse> List<T> filterChecksByType(Class<T> clazz) {
         List<T> filteredList = new ArrayList<>();
         for (CheckResponse checkResponse : checks) {
