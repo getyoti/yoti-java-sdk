@@ -67,4 +67,11 @@ public interface SessionSpec {
      */
     List<RequiredDocument> getRequiredDocuments();
 
+    /**
+     * Whether or not to block the collection of biometric consent
+     *
+     * @return should block biometric consent
+     */
+    Boolean getBlockBiometricConsent();
+
 }

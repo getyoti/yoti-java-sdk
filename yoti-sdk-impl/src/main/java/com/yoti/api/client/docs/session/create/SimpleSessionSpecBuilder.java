@@ -19,6 +19,7 @@ public class SimpleSessionSpecBuilder implements SessionSpecBuilder {
     private String userTrackingId;
     private NotificationConfig notifications;
     private SdkConfig sdkConfig;
+    private Boolean blockBiometricConsent;
 
     @Override
     public SessionSpecBuilder withClientSessionTokenTtl(Integer clientSessionTokenTtl) {
@@ -69,8 +70,14 @@ public class SimpleSessionSpecBuilder implements SessionSpecBuilder {
     }
 
     @Override
+    public SessionSpecBuilder withBlockBiometricConsent(boolean blockBiometricConsent) {
+        this.blockBiometricConsent = blockBiometricConsent;
+        return this;
+    }
+
+    @Override
     public SessionSpec build() {
-        return new SimpleSessionSpec(clientSessionTokenTtl, resourcesTtl, userTrackingId, notifications, requestedChecks, requestedTasks, sdkConfig, requiredDocuments);
+        return new SimpleSessionSpec(clientSessionTokenTtl, resourcesTtl, userTrackingId, notifications, requestedChecks, requestedTasks, sdkConfig, requiredDocuments, blockBiometricConsent);
     }
 
 }
