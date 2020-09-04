@@ -81,13 +81,13 @@
     <!-- sdk dependency versions -->
     <slf4j.version>1.7.30</slf4j.version>
     <bouncy.castle.version>1.60</bouncy.castle.version>
-    <jackson.version>2.9.9.2</jackson.version>
+    <jackson.version>2.9.10.6</jackson.version>
     <google.protobuf.version>3.12.4</google.protobuf.version>
   
     <!-- spring versions -->
     <springboot.version>1.5.10.RELEASE</springboot.version>
-    <spring.core.version>4.3.22.RELEASE</spring.core.version>
-    <spring.security.version>4.2.13.RELEASE</spring.security.version>
+    <spring.core.version>4.3.28.RELEASE</spring.core.version>
+    <spring.security.version>4.2.18.RELEASE</spring.security.version>
     <javax.servlet.version>2.5</javax.servlet.version>
 
     <!-- test libraries -->
@@ -102,7 +102,7 @@
     <maven.enforcer.version>3.0.0-M1</maven.enforcer.version>
     <findbugs.version>3.0.5</findbugs.version>
     <findsecbugs.version>1.7.1</findsecbugs.version>
-    <owasp.version>3.2.1</owasp.version>
+    <owasp.version>4.0.2</owasp.version>
     <owasp.dependency.check.cvss.limit>4</owasp.dependency.check.cvss.limit>
     <owasp.dependency.check.cve.update.limit>12</owasp.dependency.check.cve.update.limit>
     <maven.reports.version>2.9</maven.reports.version>
