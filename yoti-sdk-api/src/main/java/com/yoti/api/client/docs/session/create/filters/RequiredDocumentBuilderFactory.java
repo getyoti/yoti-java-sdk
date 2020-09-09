@@ -20,4 +20,6 @@ public abstract class RequiredDocumentBuilderFactory {
 
     public abstract RequiredIdDocumentBuilder forIdDocument();
 
+    public abstract RequiredSupplementaryDocumentBuilder forSupplementaryDocument();
+
 }
