@@ -7,4 +7,9 @@ public class SimpleRequiredDocumentBuilderFactory extends RequiredDocumentBuilde
         return new SimpleRequiredIdDocumentBuilder();
     }
 
+    @Override
+    public RequiredSupplementaryDocumentBuilder forSupplementaryDocument() {
+        return new SimpleRequiredSupplementaryDocumentBuilder();
+    }
+
 }
