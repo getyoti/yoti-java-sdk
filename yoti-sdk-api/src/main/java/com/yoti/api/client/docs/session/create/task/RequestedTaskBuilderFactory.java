@@ -23,4 +23,15 @@ public abstract class RequestedTaskBuilderFactory {
      */
     public abstract RequestedTextExtractionTaskBuilder forTextExtractionTask();
 
+    /**
+     * Returns a {@link RequestedSupplementaryDocTextExtractionTaskBuilder} used for
+     * creating {@link RequestedSupplementaryDocTextExtractionTask}
+     *
+     * @return the builder
+     */
+    public abstract RequestedSupplementaryDocTextExtractionTaskBuilder forSupplementaryDocTextExtractionTask();
+
+
+
+
 }
