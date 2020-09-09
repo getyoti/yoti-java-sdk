@@ -11,6 +11,10 @@ public class DocScanConstants {
     public static final String ID_DOCUMENT_TEXT_DATA_CHECK = "ID_DOCUMENT_TEXT_DATA_CHECK";
     public static final String ID_DOCUMENT_TEXT_DATA_EXTRACTION = "ID_DOCUMENT_TEXT_DATA_EXTRACTION";
     public static final String ID_DOCUMENT_FACE_MATCH = "ID_DOCUMENT_FACE_MATCH";
+
+    public static final String SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = "SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK";
+    public static final String SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION = "SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION";
+
     public static final String LIVENESS = "LIVENESS";
     public static final String ZOOM = "ZOOM";
 
@@ -30,10 +34,14 @@ public class DocScanConstants {
     public static final String IGNORE = "IGNORE";
 
     public static final String ID_DOCUMENT = "ID_DOCUMENT";
+    public static final String SUPPLEMENTARY_DOCUMENT = "SUPPLEMENTARY_DOCUMENT";
+
     public static final String ORTHOGONAL_RESTRICTIONS = "ORTHOGONAL_RESTRICTIONS";
     public static final String DOCUMENT_RESTRICTIONS = "DOCUMENT_RESTRICTIONS";
 
     public static final String INCLUSION_WHITELIST = "WHITELIST";
     public static final String INCLUSION_BLACKLIST = "BLACKLIST";
+
+    public static final String PROOF_OF_ADDRESS = "PROOF_OF_ADDRESS";
 
 }
