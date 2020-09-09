@@ -7,4 +7,9 @@ public class SimpleRequestedTaskBuilderFactory extends RequestedTaskBuilderFacto
         return new SimpleRequestedTextExtractionTaskBuilder();
     }
 
+    @Override
+    public RequestedSupplementaryDocTextExtractionTaskBuilder forSupplementaryDocTextExtractionTask() {
+        return new SimpleRequestedSupplementaryDocTextExtractionTaskBuilder();
+    }
+
 }
