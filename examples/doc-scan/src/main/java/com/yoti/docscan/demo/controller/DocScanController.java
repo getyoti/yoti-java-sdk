@@ -13,13 +13,7 @@ import com.yoti.api.client.docs.DocScanException;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
 import com.yoti.docscan.demo.service.DocScanService;
-import com.yoti.docscan.demo.session.DocScanUserSession;
 
-import org.apache.tika.config.TikaConfig;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.mime.MimeType;
-import org.apache.tika.mime.MimeTypeException;
-import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -108,7 +102,6 @@ public class DocScanController implements WebMvcConfigurer {
     @RequestMapping(value = "/media", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getMedia(
             @RequestParam(value = "mediaId") String mediaId,
-            @RequestParam(value = "base64", required = false, defaultValue = "0") String base64,
             HttpSession httpSession) {
 
         String sessionId = (String) httpSession.getAttribute(DOC_SCAN_SESSION_ID);
@@ -122,29 +115,6 @@ public class DocScanController implements WebMvcConfigurer {
 
         if (media == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        if (base64.equals("1")) {
-            byte[] decoded = Base64.decode(media.getContent());
-            InputStream is = new BufferedInputStream(new ByteArrayInputStream(decoded));
-            TikaConfig config = TikaConfig.getDefaultConfig();
-            try {
-                org.apache.tika.mime.MediaType mediaType = config.getMimeRepository().detect(is, new Metadata());
-                MimeType mimeType = config.getMimeRepository().forName(mediaType.toString());
-                String extension = mimeType.getExtension();
-
-                HttpHeaders headers = new HttpHeaders();
-                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=facemap" + extension);
-
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .contentLength(decoded.length)
-                        .contentType(MediaType.parseMediaType(mimeType.toString()))
-                        .body(decoded);
-            } catch (IOException | MimeTypeException e) {
-                LOG.error(e.getMessage());
-                return ResponseEntity.status(500).build();
-            }
         }
 
         HttpHeaders headers = new HttpHeaders();
