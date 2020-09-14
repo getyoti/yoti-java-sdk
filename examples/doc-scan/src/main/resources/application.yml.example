@@ -12,4 +12,4 @@ com:
   yoti:
     docscan:
       sdkId: "your-client-sdk-id-from-yoti-hub"
-      pemFileName: "your-pem-file-from-yoti-hub"
+      pemFileLocation: "your-pem-file-from-yoti-hub"
