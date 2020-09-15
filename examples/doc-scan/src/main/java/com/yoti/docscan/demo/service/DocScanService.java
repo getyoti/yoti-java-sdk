@@ -4,6 +4,8 @@ import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.DocScanClient;
 import com.yoti.api.client.docs.DocScanException;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
+import com.yoti.api.client.docs.session.create.filters.DocumentFilterBuilderFactory;
+import com.yoti.api.client.docs.session.create.filters.RequiredDocumentBuilderFactory;
 import com.yoti.api.client.docs.session.create.SdkConfig;
 import com.yoti.api.client.docs.session.create.SdkConfigBuilderFactory;
 import com.yoti.api.client.docs.session.create.SessionSpec;
@@ -16,6 +18,8 @@ import com.yoti.api.client.spi.remote.call.YotiConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 @Service
 public class DocScanService {
 
@@ -23,6 +27,8 @@ public class DocScanService {
     private static final SessionSpecBuilderFactory SESSION_SPEC_BUILDER_FACTORY = SessionSpecBuilderFactory.newInstance();
     private static final RequestedCheckBuilderFactory REQUESTED_CHECK_BUILDER_FACTORY = RequestedCheckBuilderFactory.newInstance();
     private static final RequestedTaskBuilderFactory REQUESTED_TASK_BUILDER_FACTORY = RequestedTaskBuilderFactory.newInstance();
+    private static final RequiredDocumentBuilderFactory REQUIRED_DOCUMENT_FACTORY = RequiredDocumentBuilderFactory.newInstance();
+    private static final DocumentFilterBuilderFactory ORTHOGONAL_FILTER_FACTORY = DocumentFilterBuilderFactory.newInstance();
 
     private static final String IFRAME_URL_FORMAT = "%s/web/index.html?sessionID=%s&sessionToken=%s";
 
@@ -58,7 +64,7 @@ public class DocScanService {
                 .withRequestedCheck(
                         REQUESTED_CHECK_BUILDER_FACTORY
                                 .forFaceMatchCheck()
-                                .withManualCheckFallback()
+                                .withManualCheckNever()
                                 .build()
                 )
                 .withRequestedCheck(
@@ -68,12 +74,40 @@ public class DocScanService {
                                 .withMaxRetries(1)
                                 .build()
                 )
+                .withRequestedCheck(
+                        REQUESTED_CHECK_BUILDER_FACTORY
+                                .forIdDocumentComparisonCheck()
+                                .build()
+                )
                 .withRequestedTask(
                         REQUESTED_TASK_BUILDER_FACTORY
                                 .forTextExtractionTask()
-                                .withManualCheckAlways()
+                                .withManualCheckNever()
                                 .build()
-                ).build();
+                )
+                .withRequiredDocument(
+                        REQUIRED_DOCUMENT_FACTORY
+                                .forIdDocument()
+                                .withFilter(
+                                        ORTHOGONAL_FILTER_FACTORY
+                                                .forOrthogonalRestrictionsFilter()
+                                                .withWhitelistedDocumentTypes(Arrays.asList("PASSPORT"))
+                                                .build()
+                                )
+                                .build()
+                )
+                .withRequiredDocument(
+                        REQUIRED_DOCUMENT_FACTORY
+                                .forIdDocument()
+                                .withFilter(
+                                        ORTHOGONAL_FILTER_FACTORY
+                                                .forOrthogonalRestrictionsFilter()
+                                                .withWhitelistedDocumentTypes(Arrays.asList("DRIVING_LICENCE"))
+                                                .build()
+                                )
+                                .build()
+                )
+                .build();
 
         return docScanClient.createSession(sessionSpec);
     }
