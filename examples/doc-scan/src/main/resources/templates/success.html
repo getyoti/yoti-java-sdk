@@ -189,7 +189,7 @@
 
                     <!-- Document Fields -->
                     <div class="card" th:if="${document.getDocumentFields() != null}">
-                        <div class="card-header" th:id="document-fields-${iter.index}">
+                        <div class="card-header" th:id="${'document-fields-' + iter.index}">
                             <h4 class="mb-0">
                                 <button class="btn btn-link" type="button" data-toggle="collapse"
                                         th:attr="data-target='#collapse-document-fields-' + ${iter.index}"
@@ -199,8 +199,8 @@
                                 </button>
                             </h4>
                         </div>
-                        <div th:id="collapse-document-fields-${iter.index}" class="collapse"
-                             th:aria-labelledby="document-fields-${iter.index}">
+                        <div th:id="${'collapse-document-fields-' + iter.index}" class="collapse"
+                             th:aria-labelledby="${'document-fields-' + iter.index}">
                             <div class="card-body">
                                 <th:block th:if="${document.getDocumentFields().getMedia() != null}">
                                     <h5>Media</h5>
@@ -263,8 +263,10 @@
                                             <tbody>
                                             <tr>
                                                 <td>ID</td>
-                                                <a th:text="${generatedMedia.getId()}"
-                                                   th:href="${'/media?mediaId=' + generatedMedia.getId()}"></a>
+                                                <td>
+                                                    <a th:text="${generatedMedia.getId()}"
+                                                    th:href="${'/media?mediaId=' + generatedMedia.getId()}"></a>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Type</td>
