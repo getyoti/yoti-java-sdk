@@ -26,6 +26,19 @@ public interface RequestedTextExtractionTaskBuilder {
      */
     RequestedTextExtractionTaskBuilder withManualCheckNever();
 
-    RequestedTextExtractionTask build();
+    /**
+     * The TextExtractionTask will use chip data if it is available
+     *
+     * @return the builder
+     */
+    RequestedTextExtractionTaskBuilder withChipDataDesired();
 
+    /**
+     * The TextExtractionTask will ignore chip data
+     *
+     * @return the builder
+     */
+    RequestedTextExtractionTaskBuilder withChipDataIgnore();
+
+    RequestedTextExtractionTask build();
 }
