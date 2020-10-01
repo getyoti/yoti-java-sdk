@@ -12,4 +12,12 @@ public interface RequestedTextExtractionTaskConfig extends RequestedTaskConfig {
      */
     String getManualCheck();
 
+    /**
+     * Describes how to use chip data from an ID document if
+     * it is available
+     *
+     * @return the chip data usage
+     */
+    String getChipData();
+
 }
