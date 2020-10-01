@@ -21,6 +21,9 @@ public class SimpleIdDocumentResourceResponse extends SimpleResourceResponse imp
     @JsonProperty("document_fields")
     private SimpleDocumentFieldsResponse documentFields;
 
+    @JsonProperty("document_id_photo")
+    private SimpleDocumentIdPhotoResponse documentIdPhoto;
+
     public String getDocumentType() {
         return documentType;
     }
@@ -40,6 +43,11 @@ public class SimpleIdDocumentResourceResponse extends SimpleResourceResponse imp
     @Override
     public List<TextExtractionTaskResponse> getTextExtractionTasks() {
         return filterTasksByType(TextExtractionTaskResponse.class);
+    }
+
+    @Override
+    public DocumentIdPhotoResponse getDocumentIdPhoto() {
+        return documentIdPhoto;
     }
 
 }
