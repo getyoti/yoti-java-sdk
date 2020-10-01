@@ -26,6 +26,9 @@ public class DocScanConstants {
     public static final String FALLBACK = "FALLBACK";
     public static final String NEVER = "NEVER";
 
+    public static final String DESIRED = "DESIRED";
+    public static final String IGNORE = "IGNORE";
+
     public static final String ID_DOCUMENT = "ID_DOCUMENT";
     public static final String ORTHOGONAL_RESTRICTIONS = "ORTHOGONAL_RESTRICTIONS";
     public static final String DOCUMENT_RESTRICTIONS = "DOCUMENT_RESTRICTIONS";

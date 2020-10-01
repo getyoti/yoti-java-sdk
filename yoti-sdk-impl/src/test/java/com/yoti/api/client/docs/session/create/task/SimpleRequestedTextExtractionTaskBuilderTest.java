@@ -43,4 +43,24 @@ public class SimpleRequestedTextExtractionTaskBuilderTest {
         assertThat(configResult.getManualCheck(), is("NEVER"));
     }
 
+    @Test
+    public void shouldBuildSimpleRequestedTextExtractionTaskWithChipDataDesired() {
+        RequestedTextExtractionTask result = new SimpleRequestedTextExtractionTaskBuilder()
+                .withChipDataDesired()
+                .build();
+
+        SimpleRequestedTextExtractionTaskConfig configResult = (SimpleRequestedTextExtractionTaskConfig) result.getConfig();
+        assertThat(configResult.getChipData(), is("DESIRED"));
+    }
+
+    @Test
+    public void shouldBuildSimpleRequestedTextExtractionTaskWithChipDataIgnore() {
+        RequestedTextExtractionTask result = new SimpleRequestedTextExtractionTaskBuilder()
+                .withChipDataIgnore()
+                .build();
+
+        SimpleRequestedTextExtractionTaskConfig configResult = (SimpleRequestedTextExtractionTaskConfig) result.getConfig();
+        assertThat(configResult.getChipData(), is("IGNORE"));
+    }
+
 }
