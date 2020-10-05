@@ -12,9 +12,20 @@ public class SandboxDocumentTextDataExtractionTaskResult {
     @JsonProperty("document_id_photo")
     private final SandboxDocumentIdPhoto documentIdPhoto;
 
-    SandboxDocumentTextDataExtractionTaskResult(Map<String, Object> documentFields, SandboxDocumentIdPhoto documentIdPhoto) {
+    @JsonProperty("detected_country")
+    private final String detectedCountry;
+
+    @JsonProperty("recommendation")
+    private final SandboxTextExtractionTaskRecommendation recommendation;
+
+    SandboxDocumentTextDataExtractionTaskResult(Map<String, Object> documentFields,
+            SandboxDocumentIdPhoto documentIdPhoto,
+            String detectedCountry,
+            SandboxTextExtractionTaskRecommendation recommendation) {
         this.documentFields = documentFields;
         this.documentIdPhoto = documentIdPhoto;
+        this.detectedCountry = detectedCountry;
+        this.recommendation = recommendation;
     }
 
     public Map<String, Object> getDocumentFields() {
@@ -23,5 +34,13 @@ public class SandboxDocumentTextDataExtractionTaskResult {
 
     public SandboxDocumentIdPhoto getDocumentIdPhoto() {
         return documentIdPhoto;
+    }
+
+    public String getDetectedCountry() {
+        return detectedCountry;
+    }
+
+    public SandboxTextExtractionTaskRecommendation getRecommendation() {
+        return recommendation;
     }
 }
