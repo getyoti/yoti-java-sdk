@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.yoti.api.client.sandbox.docs.request.SandboxDocumentFilter;
+import com.yoti.api.client.spi.remote.Base64;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -43,6 +44,7 @@ public class SandboxDocumentTextDataExtractionTask {
 
         private Map<String, Object> documentFields;
         private SandboxDocumentFilter documentFilter;
+        private SandboxDocumentIdPhoto documentIdPhoto;
 
         private Builder() {
         }
@@ -67,10 +69,15 @@ public class SandboxDocumentTextDataExtractionTask {
             return this;
         }
 
-        public SandboxDocumentTextDataExtractionTask build() {
-            SandboxDocumentTextDataExtractionTaskResult result = new SandboxDocumentTextDataExtractionTaskResult(documentFields);
-            return new SandboxDocumentTextDataExtractionTask(result, documentFilter);
+        public Builder withDocumentIdPhoto(String contentType, byte[] documentIdPhoto) {
+            String b64DocumentIdPhoto = Base64.getEncoder().encodeToString(documentIdPhoto);
+            this.documentIdPhoto = new SandboxDocumentIdPhoto(contentType, b64DocumentIdPhoto);
+            return this;
         }
 
+        public SandboxDocumentTextDataExtractionTask build() {
+            SandboxDocumentTextDataExtractionTaskResult result = new SandboxDocumentTextDataExtractionTaskResult(documentFields, this.documentIdPhoto);
+            return new SandboxDocumentTextDataExtractionTask(result, documentFilter);
+        }
     }
 }
