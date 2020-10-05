@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.yoti.api.client.sandbox.docs.request.SandboxDocumentFilter;
+import com.yoti.api.client.spi.remote.Base64;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +20,9 @@ public class SandboxDocumentTextDataExtractionTaskTest {
 
     private static final String SOME_KEY = "someKey";
     private static final String SOME_VALUE = "someValue";
+    private static final String SOME_CONTENT_TYPE = "someContentType";
+    private static final byte[] SOME_DOCUMENT_ID_PHOTO = new byte[] { 1, 2, 3, 4 };
+    private static final String EXPECTED_B64_DOCUMENT_ID_PHOTO = Base64.getEncoder().encodeToString(SOME_DOCUMENT_ID_PHOTO);
     private static final Map<String, Object> SOME_DOCUMENT_FIELDS;
 
     static {
@@ -35,7 +39,8 @@ public class SandboxDocumentTextDataExtractionTaskTest {
                 .withDocumentField(SOME_KEY, SOME_VALUE)
                 .build();
 
-        assertThat(result.getResult().getDocumentFields(), hasEntry(SOME_KEY, (Object) SOME_VALUE));
+        assertThat(result.getResult()
+                .getDocumentFields(), hasEntry(SOME_KEY, (Object) SOME_VALUE));
     }
 
     @Test
@@ -44,8 +49,10 @@ public class SandboxDocumentTextDataExtractionTaskTest {
                 .withDocumentFields(SOME_DOCUMENT_FIELDS)
                 .build();
 
-        assertThat(result.getResult().getDocumentFields(), hasEntry("firstKey", (Object) "firstValue"));
-        assertThat(result.getResult().getDocumentFields(), hasEntry("secondKey", (Object) 100));
+        assertThat(result.getResult()
+                .getDocumentFields(), hasEntry("firstKey", (Object) "firstValue"));
+        assertThat(result.getResult()
+                .getDocumentFields(), hasEntry("secondKey", (Object) 100));
     }
 
     @Test
@@ -56,6 +63,17 @@ public class SandboxDocumentTextDataExtractionTaskTest {
                 .build();
 
         assertThat(result.getDocumentFilter(), is(documentFilterMock));
+    }
+
+    @Test
+    public void builder_shouldEncodeDocumentIdPhotoToBase64() {
+        SandboxDocumentTextDataExtractionTask result = SandboxDocumentTextDataExtractionTask.builder()
+                .withDocumentIdPhoto(SOME_CONTENT_TYPE, SOME_DOCUMENT_ID_PHOTO)
+                .build();
+
+        SandboxDocumentIdPhoto documentIdPhoto = result.getResult().getDocumentIdPhoto();
+        assertThat(documentIdPhoto.getContentType(), is(SOME_CONTENT_TYPE));
+        assertThat(documentIdPhoto.getData(), is(EXPECTED_B64_DOCUMENT_ID_PHOTO));
     }
 
 }
