@@ -223,6 +223,27 @@
                         </div>
                     </div>
 
+                    <!-- Document ID Photo -->
+                    <div class="card" th:if="${document.getDocumentIdPhoto() != null}">
+                        <div class="card-header" th:id="${'document-id-photo-' + iter.index}">
+                            <h4 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        th:attr="data-target='#collapse-document-id-photo-' + ${iter.index}"
+                                        th:attrappend="aria-controls='collapse-document-id-photo-' + ${iter.index}"
+                                        aria-expanded="true">
+                                    Document ID Photo
+                                </button>
+                            </h4>
+                        </div>
+                        <div th:id="${'collapse-document-id-photo-' + iter.index}" class="collapse" th:aria-labelledby="${'document-id-photo-' + iter.index}">
+                            <div class="card-body">
+                                <div th:if="${document.getDocumentIdPhoto().getMedia() != null}">
+                                    <img class="card-img-top" th:src="${'/media/?mediaId=' + document.getDocumentIdPhoto().getMedia().getId()}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Text Extraction Tasks -->
                     <div class="card" th:if="${document.getTextExtractionTasks().size() > 0}">
                         <div class="card-header" th:id="${'text-extraction-tasks-' + iter.index}">
