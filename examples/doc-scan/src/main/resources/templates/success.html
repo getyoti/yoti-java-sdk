@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
+<!--/*@thymesVar id="sessionResult" type="com.yoti.api.client.docs.session.retrieve.GetSessionResult"*/-->
+
 <head th:replace="fragments/components :: header-head"></head>
 
 <body>
@@ -265,7 +267,7 @@
                                                 <td>ID</td>
                                                 <td>
                                                     <a th:text="${generatedMedia.getId()}"
-                                                    th:href="${'/media?mediaId=' + generatedMedia.getId()}"></a>
+                                                       th:href="${'/media?mediaId=' + generatedMedia.getId()}"></a>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -297,19 +299,44 @@
                              th:attr="aria-labelledby='document-pages-' + ${iter.index}">
                             <div class="card-body">
                                 <div class="card-group">
-                                    <div class="card" style="width: 18rem;"
-                                         th:each="page : ${document.getPages()}">
-                                        <img class="card-img-top"
-                                             th:src="${'/media?mediaId=' + page.getMedia().getId()}" alt="Page Image"/>
-                                        <div class="card-body">
-                                            <p th:text="'Method: ' + ${page.getCaptureMethod()}"></p>
+                                    <th:block th:each="page,pageIter : ${document.getPages()}">
+                                        <div class="card" style="width: 18rem;">
+                                            <img class="card-img-top"
+                                                 th:src="${'/media?mediaId=' + page.getMedia().getId()}" alt="Page Image"/>
+                                            <div class="card-body">
+                                                <p th:text="'Method: ' + ${page.getCaptureMethod()}"></p>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="card" th:if="${page.getFrames().size() > 0}">
+                                            <div class="card-header" th:id="${'page-' + pageIter.index + '-frames'}">
+                                                <h3 class="mb-0">
+                                                    <button class="btn btn-link" type="button" data-toggle="collapse" aria-expanded="true"
+                                                            th:attr="data-target='#collapse-page-' + ${pageIter.index} + '-frames'"
+                                                            th:attrappend="aria-controls='collapse-page-' + ${pageIter.index} + '-frames'">
+                                                        Frames
+                                                    </button>
+                                                </h3>
+                                            </div>
+                                            <div class="collapse"
+                                                 th:id="${'collapse-page-' + pageIter.index + '-frames'}"
+                                                 th:attr="aria-labelledby='page-' + ${pageIter.index} + '-frames'">
+                                                <div class="card-group">
+                                                    <th:block th:each="frame : ${page.getFrames()}">
+                                                        <div class="card" th:if="${frame.getMedia() != null}">
+                                                            <img class="card-img-top" th:src="${'/media?mediaId=' + frame.getMedia().getId()}"/>
+                                                            <div class="card-body">
+                                                                <h5 class="card-title">Frame</h5>
+                                                            </div>
+                                                        </div>
+                                                    </th:block>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </th:block>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -352,7 +379,7 @@
                                 <div class="card-group">
                                     <th:block th:each="frame : ${liveness.getFrames()}">
                                         <div class="card" th:if="${frame.getMedia() != null}">
-                                            <img class="card-img-top" th:src="${'/media?mediaId=' + frame.getMedia().getId()}" />
+                                            <img class="card-img-top" th:src="${'/media?mediaId=' + frame.getMedia().getId()}"/>
                                             <div class="card-body">
                                                 <h5 class="card-title">Frame</h5>
                                             </div>
