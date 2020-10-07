@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = SimpleTaskResponse.class, visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = SimpleTextExtractionTaskResponse.class, name = DocScanConstants.ID_DOCUMENT_TEXT_DATA_EXTRACTION),
+        @JsonSubTypes.Type(value = SimpleSupplementaryDocumentTextExtractionTaskResponse.class, name = DocScanConstants.SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION),
 })
 public class SimpleTaskResponse implements TaskResponse {
 
