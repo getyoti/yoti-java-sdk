@@ -10,6 +10,7 @@ import com.yoti.api.client.docs.DocScanConstants;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = SimpleGeneratedCheckResponse.class, visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = SimpleGeneratedTextDataCheckResponse.class, name = DocScanConstants.ID_DOCUMENT_TEXT_DATA_CHECK),
+        @JsonSubTypes.Type(value = SimpleGeneratedSupplementaryDocumentTextDataCheckResponse.class, name = DocScanConstants.SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK)
 })
 public class SimpleGeneratedCheckResponse implements GeneratedCheckResponse {
 

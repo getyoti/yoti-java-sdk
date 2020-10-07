@@ -12,6 +12,9 @@ public class SimpleResourceContainer implements ResourceContainer {
     @JsonProperty("id_documents")
     private List<SimpleIdDocumentResourceResponse> idDocuments;
 
+    @JsonProperty("supplementary_documents")
+    private List<SimpleSupplementaryDocumentResourceResponse> supplementaryDocuments;
+
     @JsonProperty("liveness_capture")
     private List<SimpleLivenessResourceResponse> livenessCapture;
 
@@ -23,6 +26,11 @@ public class SimpleResourceContainer implements ResourceContainer {
     @Override
     public List<? extends IdDocumentResourceResponse> getIdDocuments() {
         return idDocuments;
+    }
+
+    @Override
+    public List<? extends SupplementaryDocumentResourceResponse> getSupplementaryDocuments() {
+        return supplementaryDocuments;
     }
 
     /**
