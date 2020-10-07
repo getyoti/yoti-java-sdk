@@ -24,7 +24,15 @@ public interface GetSessionResult {
 
     List<FaceMatchCheckResponse> getFaceMatchChecks();
 
+    /**
+     * @deprecated Please use {@code getIdDocumentTextDataChecks()} instead.
+     */
+    @Deprecated
     List<TextDataCheckResponse> getTextDataChecks();
+
+    List<TextDataCheckResponse> getIdDocumentTextDataChecks();
+
+    List<SupplementaryDocumentTextDataCheckResponse> getSupplementaryDocumentTextDataChecks();
 
     List<LivenessCheckResponse> getLivenessChecks();
 

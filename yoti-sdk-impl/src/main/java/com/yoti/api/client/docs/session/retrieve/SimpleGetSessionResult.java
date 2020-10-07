@@ -85,7 +85,17 @@ public class SimpleGetSessionResult implements GetSessionResult {
 
     @Override
     public List<TextDataCheckResponse> getTextDataChecks() {
+        return getIdDocumentTextDataChecks();
+    }
+
+    @Override
+    public List<TextDataCheckResponse> getIdDocumentTextDataChecks() {
         return filterChecksByType(TextDataCheckResponse.class);
+    }
+
+    @Override
+    public List<SupplementaryDocumentTextDataCheckResponse> getSupplementaryDocumentTextDataChecks() {
+        return filterChecksByType(SupplementaryDocumentTextDataCheckResponse.class);
     }
 
     @Override

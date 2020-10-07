@@ -7,5 +7,4 @@ public interface ResourceResponse {
     String getId();
 
     List<? extends TaskResponse> getTasks();
-
 }
