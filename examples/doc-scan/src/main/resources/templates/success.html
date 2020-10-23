@@ -78,20 +78,20 @@
                 </div>
 
                 <!-- Text Data Checks -->
-                <div th:if="${sessionResult.getTextDataChecks().size() > 0}" class="card">
+                <div th:if="${sessionResult.getIdDocumentTextDataChecks().size() > 0}" class="card">
                     <div class="card-header" id="text-data-checks">
                         <h3 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse"
                                     data-target="#collapse-text-data-checks-checks" aria-expanded="true"
                                     aria-controls="collapse-text-data-checks-checks">
-                                Text Data Checks
+                                ID Document Text Data Checks
                             </button>
                         </h3>
                     </div>
                     <div id="collapse-text-data-checks-checks" class="collapse"
                          aria-labelledby="text-data-checks-checks">
                         <div class="card-body">
-                            <table th:each="check : ${sessionResult.getTextDataChecks()}"
+                            <table th:each="check : ${sessionResult.getIdDocumentTextDataChecks()}"
                                    th:include="fragments/checks :: check-template(${check})"
                                    class="table table-striped">
                             </table>
@@ -158,6 +158,28 @@
                          aria-labelledby="comparison-checks">
                         <div class="card-body">
                             <table th:each="check : ${sessionResult.getIdDocumentComparisonChecks()}"
+                                   th:include="fragments/checks :: check-template(${check})"
+                                   class="table table-striped">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Supplementary Document Text Data Checks -->
+                <div th:if="${sessionResult.getSupplementaryDocumentTextDataChecks().size() > 0}" class="card">
+                    <div class="card-header" id="sup-text-data-checks">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    data-target="#collapse-sup-text-data-checks-checks" aria-expanded="true"
+                                    aria-controls="collapse-sup-text-data-checks-checks">
+                                Supplementary Document Text Data Checks
+                            </button>
+                        </h3>
+                    </div>
+                    <div id="collapse-sup-text-data-checks-checks" class="collapse"
+                         aria-labelledby="sup-text-data-checks-checks">
+                        <div class="card-body">
+                            <table th:each="check : ${sessionResult.getSupplementaryDocumentTextDataChecks()}"
                                    th:include="fragments/checks :: check-template(${check})"
                                    class="table table-striped">
                             </table>
@@ -318,6 +340,176 @@
                         <div class="collapse"
                              th:id="${'collapse-document-pages-' + iter.index + '-' + pageIter.index}"
                              th:attr="aria-labelledby='document-pages-' + ${iter.index} + '-' + ${pageIter.index}">
+                            <div class="card-group">
+                                <div class="card" style="width: 18rem;">
+                                    <img class="card-img-top"
+                                         th:src="${'/media?mediaId=' + page.getMedia().getId()}" alt="Page Image"/>
+                                    <div class="card-body">
+                                        <p th:text="'Method: ' + ${page.getCaptureMethod()}"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-group" th:if="${page.getFrames().size() > 0}">
+                                <th:block th:each="frame : ${page.getFrames()}">
+                                    <div class="card" th:if="${frame.getMedia() != null}">
+                                        <img class="card-img-top" th:src="${'/media?mediaId=' + frame.getMedia().getId()}"/>
+                                        <div class="card-body">
+                                            <h5 class="card-title">Frame</h5>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+
+
+    <th:block th:if="${sessionResult.getResources().getSupplementaryDocuments().size() > 0}">
+        <div class="row pt-4">
+            <div class="col">
+                <h2>Supplementary Documents</h2>
+            </div>
+        </div>
+
+        <div class="row pt-4"
+             th:each="document,iter : ${sessionResult.getResources().getSupplementaryDocuments()}">
+
+            <div class="col">
+
+                <!-- Header -->
+                <h3>
+                    <span th:text="${document.getDocumentType()}" th:remove="tag"></span>
+                    <span class="badge badge-primary"
+                          th:text="${document.getIssuingCountry()}"></span>
+                </h3>
+
+                <div class="accordion mt-3">
+
+                    <!-- Document Fields -->
+                    <div class="card" th:if="${document.getDocumentFields() != null}">
+                        <div class="card-header" th:id="${'sup-doc-fields-' + iter.index}">
+                            <h4 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        th:attr="data-target='#collapse-sup-doc-fields-' + ${iter.index}"
+                                        th:attrappend="aria-controls='collapse-sup-doc-fields-' + ${iter.index}"
+                                        aria-expanded="true">
+                                    Document Fields
+                                </button>
+                            </h4>
+                        </div>
+                        <div th:id="${'collapse-sup-doc-fields-' + iter.index}" class="collapse"
+                             th:aria-labelledby="${'sup-doc-fields-' + iter.index}">
+                            <div class="card-body">
+                                <th:block th:if="${document.getDocumentFields().getMedia() != null}">
+                                    <h5>Media</h5>
+                                    <table class="table table-striped table-light">
+                                        <tbody>
+                                        <tr>
+                                            <td>ID</td>
+                                            <td>
+                                                <a th:href="${'/media?mediaId=' + document.getDocumentFields().getMedia().getId()}"
+                                                   th:text="${document.getDocumentFields().getMedia().getId()}">
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text Extraction Tasks -->
+                    <div class="card" th:if="${document.getTextExtractionTasks().size() > 0}">
+                        <div class="card-header" th:id="${'text-extraction-tasks-' + iter.index}">
+                            <h4 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        aria-expanded="true"
+                                        th:attr="aria-controls='collapse-text-extraction-tasks-' + ${iter.index}"
+                                        th:attrappend="data-target='#collapse-text-extraction-tasks-' + ${iter.index}">
+                                    Text Extraction Tasks
+                                </button>
+                            </h4>
+                        </div>
+                        <div class="collapse"
+                             th:id="${'collapse-text-extraction-tasks-' + iter.index}"
+                             th:attr="aria-labelledby='text-extraction-tasks-' + ${iter.index}">
+                            <div class="card-body">
+                                <th:block th:each="task : ${document.getTextExtractionTasks()}">
+                                    <table class="table table-striped"
+                                           th:replace="fragments/tasks :: task-template(${task})">
+                                    </table>
+
+                                    <th:block th:if="${task.getGeneratedTextDataChecks().size() > 0}">
+                                        <h5>Generated Text Data Checks</h5>
+
+                                        <table class="table table-striped"
+                                               th:each="generated_check : ${task.getGeneratedTextDataChecks()}">
+                                            <tbody>
+                                            <tr>
+                                                <td>ID</td>
+                                                <td th:text="${generated_check.getId()}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </th:block>
+
+                                    <th:block th:if="${task.getGeneratedMedia().size() > 0}">
+                                        <h5>Generated Media</h5>
+
+                                        <table class="table table-striped" th:each="generatedMedia : ${task.getGeneratedMedia()}">
+                                            <tbody>
+                                            <tr>
+                                                <td>ID</td>
+                                                <td>
+                                                    <a th:text="${generatedMedia.getId()}"
+                                                       th:href="${'/media?mediaId=' + generatedMedia.getId()}"></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Type</td>
+                                                <td th:text="${generatedMedia.getType()}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </th:block>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- File -->
+                    <div class="card" th:if="${document.getDocumentFile() != null}">
+                        <div class="card-header" th:id="${'sup-doc-file-' + iter.index}">
+                            <h4 class="mb-0">
+                                <button class="btn btn-link" type="button">
+                                    <a th:href="${'/media?mediaId=' + document.getDocumentFile().getMedia().getId()}">
+                                        Download File
+                                    </a>
+                                </button>
+                            </h4>
+                        </div>
+                    </div>
+
+                    <!-- Pages -->
+                    <div class="card" th:if="${document.getPages().size() > 0}" th:each="page,pageIter : ${document.getPages()}">
+                        <div class="card-header" th:id="${'sup-doc-pages-' + iter.index + '-' + pageIter.index}">
+                            <h4 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        aria-expanded="true"
+                                        th:attr="aria-controls='collapse-sup-doc-pages-' + ${iter.index} + '-' + ${pageIter.index}"
+                                        th:attrappend="data-target='#collapse-sup-doc-pages-' + ${iter.index} + '-' + ${pageIter.index}">
+                                    Page <span th:text="${pageIter.index + 1}"></span>
+                                </button>
+                            </h4>
+                        </div>
+                        <div class="collapse"
+                             th:id="${'collapse-sup-doc-pages-' + iter.index + '-' + pageIter.index}"
+                             th:attr="aria-labelledby='sup-doc-pages-' + ${iter.index} + '-' + ${pageIter.index}">
                             <div class="card-group">
                                 <div class="card" style="width: 18rem;">
                                     <img class="card-img-top"
