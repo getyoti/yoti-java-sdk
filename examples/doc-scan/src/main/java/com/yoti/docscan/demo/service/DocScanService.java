@@ -6,6 +6,7 @@ import com.yoti.api.client.docs.DocScanException;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.filters.DocumentFilterBuilderFactory;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocumentBuilderFactory;
+import com.yoti.api.client.docs.session.create.objective.ObjectiveBuilderFactory;
 import com.yoti.api.client.docs.session.create.SdkConfig;
 import com.yoti.api.client.docs.session.create.SdkConfigBuilderFactory;
 import com.yoti.api.client.docs.session.create.SessionSpec;
@@ -29,6 +30,7 @@ public class DocScanService {
     private static final RequestedTaskBuilderFactory REQUESTED_TASK_BUILDER_FACTORY = RequestedTaskBuilderFactory.newInstance();
     private static final RequiredDocumentBuilderFactory REQUIRED_DOCUMENT_FACTORY = RequiredDocumentBuilderFactory.newInstance();
     private static final DocumentFilterBuilderFactory ORTHOGONAL_FILTER_FACTORY = DocumentFilterBuilderFactory.newInstance();
+    private static final ObjectiveBuilderFactory OBJECTIVE_BUILDER_FACTORY = ObjectiveBuilderFactory.newInstance();
 
     private static final String IFRAME_URL_FORMAT = "%s/web/index.html?sessionID=%s&sessionToken=%s";
 
@@ -64,7 +66,7 @@ public class DocScanService {
                 .withRequestedCheck(
                         REQUESTED_CHECK_BUILDER_FACTORY
                                 .forFaceMatchCheck()
-                                .withManualCheckNever()
+                                .withManualCheckAlways()
                                 .build()
                 )
                 .withRequestedCheck(
@@ -82,7 +84,13 @@ public class DocScanService {
                 .withRequestedTask(
                         REQUESTED_TASK_BUILDER_FACTORY
                                 .forTextExtractionTask()
-                                .withManualCheckNever()
+                                .withManualCheckAlways()
+                                .build()
+                )
+                .withRequestedTask(
+                        REQUESTED_TASK_BUILDER_FACTORY
+                                .forSupplementaryDocTextExtractionTask()
+                                .withManualCheckAlways()
                                 .build()
                 )
                 .withRequiredDocument(
@@ -103,6 +111,16 @@ public class DocScanService {
                                         ORTHOGONAL_FILTER_FACTORY
                                                 .forOrthogonalRestrictionsFilter()
                                                 .withWhitelistedDocumentTypes(Arrays.asList("DRIVING_LICENCE"))
+                                                .build()
+                                )
+                                .build()
+                )
+                .withRequiredDocument(
+                        REQUIRED_DOCUMENT_FACTORY
+                                .forSupplementaryDocument()
+                                .withObjective(
+                                        OBJECTIVE_BUILDER_FACTORY
+                                                .forProofOfAddress()
                                                 .build()
                                 )
                                 .build()
