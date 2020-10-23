@@ -2,7 +2,6 @@ package com.yoti.api.client.docs.session.create.filters;
 
 import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.yoti.api.client.docs.session.create.objective.Objective;
