@@ -51,6 +51,7 @@ public class DocScanService {
                 .withPresetIssuingCountry("GBR")
                 .withSuccessUrl("https://localhost:8443/success")
                 .withErrorUrl("https://localhost:8443/error")
+                .withPrivacyPolicyUrl("https://localhost:8443/privacy-policy")
                 .build();
 
         SessionSpec sessionSpec = SESSION_SPEC_BUILDER_FACTORY.create()

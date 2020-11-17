@@ -17,6 +17,7 @@ public class SimpleSdkConfigBuilderTest {
 
     private static final String SOME_SUCCESS_URL = "https://yourdomain.com/some/success/endpoint";
     private static final String SOME_ERROR_URL = "https://yourdomain.com/some/error/endpoint";
+    private static final String SOME_PRIVACY_POLICY_URL = "https://yourdomain.com/some/privacy/policy";
 
     @Test
     public void shouldBuildSimpleSdkConfigWithAllOptions() {
@@ -29,6 +30,7 @@ public class SimpleSdkConfigBuilderTest {
                 .withPresetIssuingCountry(SOME_PRESET_ISSUING_COUNTRY)
                 .withSuccessUrl(SOME_SUCCESS_URL)
                 .withErrorUrl(SOME_ERROR_URL)
+                .withPrivacyPolicyUrl(SOME_PRIVACY_POLICY_URL)
                 .build();
 
         assertThat(result, is(instanceOf(SimpleSdkConfig.class)));
@@ -41,6 +43,7 @@ public class SimpleSdkConfigBuilderTest {
         assertThat(result.getPresetIssuingCountry(), is(SOME_PRESET_ISSUING_COUNTRY));
         assertThat(result.getSuccessUrl(), is(SOME_SUCCESS_URL));
         assertThat(result.getErrorUrl(), is(SOME_ERROR_URL));
+        assertThat(result.getPrivacyPolicyUrl(), is(SOME_PRIVACY_POLICY_URL));
     }
 
     @Test
