@@ -12,6 +12,7 @@ public class SimpleSdkConfigBuilder implements SdkConfigBuilder {
     private String presetIssuingCountry;
     private String successUrl;
     private String errorUrl;
+    private String privacyPolicyUrl;
 
     @Override
     public SdkConfigBuilder withAllowsCamera() {
@@ -72,7 +73,13 @@ public class SimpleSdkConfigBuilder implements SdkConfigBuilder {
     }
 
     @Override
+    public SdkConfigBuilder withPrivacyPolicyUrl(String privacyPolicyUrl) {
+        this.privacyPolicyUrl = privacyPolicyUrl;
+        return this;
+    }
+
+    @Override
     public SdkConfig build() {
-        return new SimpleSdkConfig(allowedCaptureMethods, primaryColour, secondaryColour, fontColour, locale, presetIssuingCountry, successUrl, errorUrl);
+        return new SimpleSdkConfig(allowedCaptureMethods, primaryColour, secondaryColour, fontColour, locale, presetIssuingCountry, successUrl, errorUrl, privacyPolicyUrl);
     }
 }

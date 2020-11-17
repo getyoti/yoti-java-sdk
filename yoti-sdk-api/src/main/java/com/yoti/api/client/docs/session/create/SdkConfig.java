@@ -61,4 +61,11 @@ public interface SdkConfig {
      */
     String getErrorUrl();
 
+    /**
+     * The privacy policy URL
+     *
+     * @return the privacy policy URL
+     */
+    String getPrivacyPolicyUrl();
+
 }

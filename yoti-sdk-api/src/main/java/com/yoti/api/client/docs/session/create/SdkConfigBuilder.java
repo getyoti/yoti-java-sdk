@@ -90,4 +90,12 @@ public interface SdkConfigBuilder {
      */
     SdkConfig build();
 
+    /**
+     * Sets the privacy policy URL
+     *
+     * @param privacyPolicyUrl the privacy policy URL
+     * @return the builder
+     */
+    SdkConfigBuilder withPrivacyPolicyUrl(String privacyPolicyUrl);
+
 }

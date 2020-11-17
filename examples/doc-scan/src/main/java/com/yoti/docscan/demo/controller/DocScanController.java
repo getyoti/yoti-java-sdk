@@ -134,4 +134,9 @@ public class DocScanController implements WebMvcConfigurer {
         return "error";
     }
 
+    @RequestMapping(value = "/privacy-policy", method = RequestMethod.GET)
+    public String showPrivacyPolicyPage() {
+        return "privacy";
+    }
+
 }

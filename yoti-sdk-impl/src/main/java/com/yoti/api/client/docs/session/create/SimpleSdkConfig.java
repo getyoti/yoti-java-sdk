@@ -30,12 +30,18 @@ public class SimpleSdkConfig implements SdkConfig {
     @JsonProperty("error_url")
     private final String errorUrl;
 
+    @JsonProperty("privacy_policy_url")
+    private final String privacyPolicyUrl;
+
     SimpleSdkConfig(String allowedCaptureMethods,
                     String primaryColour,
                     String secondaryColour,
                     String fontColour,
                     String locale,
-                    String presetIssuingCountry, String successUrl, String errorUrl) {
+                    String presetIssuingCountry,
+                    String successUrl,
+                    String errorUrl,
+                    String privacyPolicyUrl) {
         this.allowedCaptureMethods = allowedCaptureMethods;
         this.primaryColour = primaryColour;
         this.secondaryColour = secondaryColour;
@@ -44,6 +50,7 @@ public class SimpleSdkConfig implements SdkConfig {
         this.presetIssuingCountry = presetIssuingCountry;
         this.successUrl = successUrl;
         this.errorUrl = errorUrl;
+        this.privacyPolicyUrl = privacyPolicyUrl;
     }
 
     @Override
@@ -84,6 +91,11 @@ public class SimpleSdkConfig implements SdkConfig {
     @Override
     public String getErrorUrl() {
         return errorUrl;
+    }
+
+    @Override
+    public String getPrivacyPolicyUrl() {
+        return privacyPolicyUrl;
     }
 
 }
