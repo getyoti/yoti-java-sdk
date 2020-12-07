@@ -21,4 +21,10 @@ public class SimpleRequestedCheckBuilderFactory extends RequestedCheckBuilderFac
     public RequestedIdDocumentComparisonCheckBuilder forIdDocumentComparisonCheck() {
         return new SimpleRequestedIdDocumentComparisonCheckBuilder();
     }
+
+    @Override
+    public RequestedThirdPartyIdentityCheckBuilder forThirdPartyIdentityCheck() {
+        return new SimpleRequestedThirdPartyIdentityCheckBuilder();
+    }
+
 }

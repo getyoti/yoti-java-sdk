@@ -53,4 +53,12 @@ public abstract class RequestedCheckBuilderFactory {
      */
     public abstract RequestedIdDocumentComparisonCheckBuilder forIdDocumentComparisonCheck();
 
+    /**
+     * Returns a {@link RequestedThirdPartyIdentityCheckBuilder} used for
+     * creating {@link RequestedThirdPartyIdentityCheck}
+     *
+     * @return the builder
+     */
+    public abstract RequestedThirdPartyIdentityCheckBuilder forThirdPartyIdentityCheck();
+
 }
