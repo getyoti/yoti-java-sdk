@@ -38,4 +38,6 @@ public interface GetSessionResult {
 
     List<IdDocumentComparisonCheckResponse> getIdDocumentComparisonChecks();
 
+    List<ThirdPartyIdentityCheckResponse> getThirdPartyIdentityChecks();
+
 }

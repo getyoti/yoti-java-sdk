@@ -108,6 +108,11 @@ public class SimpleGetSessionResult implements GetSessionResult {
         return filterChecksByType(IdDocumentComparisonCheckResponse.class);
     }
 
+    @Override
+    public List<ThirdPartyIdentityCheckResponse> getThirdPartyIdentityChecks() {
+        return filterChecksByType(ThirdPartyIdentityCheckResponse.class);
+    }
+
     private <T extends CheckResponse> List<T> filterChecksByType(Class<T> clazz) {
         List<T> filteredList = new ArrayList<>();
         for (CheckResponse checkResponse : checks) {
