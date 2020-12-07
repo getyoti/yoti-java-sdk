@@ -6,6 +6,22 @@ package com.yoti.api.client.docs.session.create;
 public interface NotificationConfigBuilder {
 
     /**
+     * Sets the authorization type to BASIC.  The authorization token
+     * will be Base64 encoded by the backend when sent with notifications.
+     *
+     * @return the builder
+     */
+    NotificationConfigBuilder withAuthTypeBasic();
+
+    /**
+     * Sets the authorization type to BEARER.  The authorization token
+     * will be unchanged by the backend when sent with notifications.
+     *
+     * @return the builder
+     */
+    NotificationConfigBuilder withAuthTypeBearer();
+
+    /**
      * Sets the authorization token to be included in call-back messages
      *
      * @param authToken the authorization token
