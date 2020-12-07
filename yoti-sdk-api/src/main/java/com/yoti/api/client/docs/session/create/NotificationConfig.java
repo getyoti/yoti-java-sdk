@@ -17,12 +17,18 @@ public interface NotificationConfig {
     String getAuthToken();
 
     /**
+     * The authorization type to use for the token
+     *
+     * @return the authorization type
+     */
+    String getAuthType();
+
+    /**
      * The endpoint that notifications should be sent to
      *
      * @return the endpoint
      */
     String getEndpoint();
-
 
     /**
      * The list of topics that should trigger notifications

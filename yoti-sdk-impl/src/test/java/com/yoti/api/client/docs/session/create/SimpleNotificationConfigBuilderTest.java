@@ -1,7 +1,13 @@
 package com.yoti.api.client.docs.session.create;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import org.junit.Test;
 
@@ -80,6 +86,35 @@ public class SimpleNotificationConfigBuilderTest {
                 "CHECK_COMPLETION",
                 "SESSION_COMPLETION"
         ));
+    }
+
+    @Test
+    public void shouldNotImplicitlySetAValueForAuthType() {
+        NotificationConfig result = new SimpleNotificationConfigBuilder()
+                .forResourceUpdate()
+                .build();
+
+        assertThat(result.getAuthType(), is(nullValue()));
+    }
+
+    @Test
+    public void shouldSetAuthTypeToBasic() {
+        NotificationConfig result = new SimpleNotificationConfigBuilder()
+                .forResourceUpdate()
+                .withAuthTypeBasic()
+                .build();
+
+        assertThat(result.getAuthType(), is("BASIC"));
+    }
+
+    @Test
+    public void shouldSetAuthTypeToBearer() {
+        NotificationConfig result = new SimpleNotificationConfigBuilder()
+                .forResourceUpdate()
+                .withAuthTypeBearer()
+                .build();
+
+        assertThat(result.getAuthType(), is("BEARER"));
     }
 
 }
