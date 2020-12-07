@@ -47,4 +47,7 @@ public class DocScanConstants {
 
     public static final String PROOF_OF_ADDRESS = "PROOF_OF_ADDRESS";
 
+    public static final String BASIC = "BASIC";
+    public static final String BEARER = "BEARER";
+
 }
