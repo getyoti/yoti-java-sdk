@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = SimpleFaceMatchCheckResponse.class, name = DocScanConstants.ID_DOCUMENT_FACE_MATCH),
         @JsonSubTypes.Type(value = SimpleIdDocumentComparisonCheckResponse.class, name = DocScanConstants.ID_DOCUMENT_COMPARISON),
         @JsonSubTypes.Type(value = SimpleSupplementaryDocumentTextDataCheckResponse.class, name = DocScanConstants.SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK),
+        @JsonSubTypes.Type(value = SimpleThirdPartyIdentityCheckResponse.class, name = DocScanConstants.THIRD_PARTY_IDENTITY),
 })
 public class SimpleCheckResponse implements CheckResponse {
 
