@@ -10,6 +10,7 @@ import com.yoti.api.client.sandbox.docs.request.check.SandboxIdDocumentCompariso
 import com.yoti.api.client.sandbox.docs.request.check.SandboxLivenessCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentTextDataCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxSupplementaryDocumentTextDataCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxThirdPartyIdentityCheck;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,7 @@ public class SandboxCheckReportsTest {
     @Mock SandboxLivenessCheck livenessCheckMock;
     @Mock SandboxIdDocumentComparisonCheck idDocumentComparisonCheckMock;
     @Mock SandboxSupplementaryDocumentTextDataCheck supplementaryDocumentTextDataCheckMock;
+    @Mock SandboxThirdPartyIdentityCheck thirdPartyIdentityCheckMock;
 
     @Test
     public void builder_shouldAllowDocumentAuthenticityChecks() {
@@ -84,6 +86,15 @@ public class SandboxCheckReportsTest {
 
         assertThat(result.getSupplementaryDocumentTextDataChecks(), hasSize(1));
         assertThat(result.getSupplementaryDocumentTextDataChecks().get(0), is(supplementaryDocumentTextDataCheckMock));
+    }
+
+    @Test
+    public void builder_shouldAllowThirdPartyIdentityChecks() {
+        SandboxCheckReports result = SandboxCheckReports.builder()
+                .withThirdPartyIdentityCheck(thirdPartyIdentityCheckMock)
+                .build();
+
+        assertThat(result.getThirdPartyIdentityCheck(), is(thirdPartyIdentityCheckMock));
     }
 
     @Test
