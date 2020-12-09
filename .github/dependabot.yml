@@ -7,8 +7,9 @@ updates:
   open-pull-requests-limit: 3
   target-branch: DEVELOPMENT
   reviewers:
-  - echarrod
-  - davidgrayston
+  - bucky-boy
   - MrBurtyyy
+  - psmelia
+  - pn-santos
   assignees:
-  - echarrod
+  - MrBurtyyy
