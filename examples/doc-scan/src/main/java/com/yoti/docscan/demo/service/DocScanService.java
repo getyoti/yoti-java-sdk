@@ -82,6 +82,11 @@ public class DocScanService {
                                 .forIdDocumentComparisonCheck()
                                 .build()
                 )
+                .withRequestedCheck(
+                        REQUESTED_CHECK_BUILDER_FACTORY
+                                .forThirdPartyIdentityCheck()
+                                .build()
+                )
                 .withRequestedTask(
                         REQUESTED_TASK_BUILDER_FACTORY
                                 .forTextExtractionTask()
