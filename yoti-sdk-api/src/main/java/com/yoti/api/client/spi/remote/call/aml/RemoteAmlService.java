@@ -18,6 +18,7 @@ import java.security.KeyPair;
 
 import com.yoti.api.client.AmlException;
 import com.yoti.api.client.aml.AmlProfile;
+import com.yoti.api.client.aml.AmlResult;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
 import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
@@ -45,7 +46,7 @@ public class RemoteAmlService {
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
 
-    public SimpleAmlResult performCheck(KeyPair keyPair, String appId, AmlProfile amlProfile) throws AmlException {
+    public AmlResult performCheck(KeyPair keyPair, String appId, AmlProfile amlProfile) throws AmlException {
         notNull(keyPair, "Key pair");
         notNull(appId, "Application id");
         notNull(amlProfile, "amlProfile");
@@ -55,7 +56,7 @@ public class RemoteAmlService {
             byte[] body = objectMapper.writeValueAsString(amlProfile).getBytes(DEFAULT_CHARSET);
 
             SignedRequest signedRequest = createSignedRequest(keyPair, resourcePath, body);
-            return signedRequest.execute(SimpleAmlResult.class);
+            return signedRequest.execute(AmlResult.class);
         } catch (IOException ioException) {
             throw new AmlException("Error communicating with AML endpoint", ioException);
         } catch (ResourceException resourceException) {

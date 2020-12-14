@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-public class SimpleLocationConstraintExtensionBuilderTest {
+public class LocationConstraintExtensionBuilderTest {
 
     private static final double SOME_LATITUDE = 1d;
     private static final double SOME_LONGITUDE = 2d;
@@ -17,7 +17,7 @@ public class SimpleLocationConstraintExtensionBuilderTest {
     @Test
     public void shouldFailForLatitudeTooLow() {
         try {
-            new SimpleLocationConstraintExtensionBuilder()
+            new LocationConstraintExtensionBuilder()
                     .withLatitude(-91)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -30,7 +30,7 @@ public class SimpleLocationConstraintExtensionBuilderTest {
     @Test
     public void shouldFailForLatitudeTooHigh() {
         try {
-            new SimpleLocationConstraintExtensionBuilder()
+            new LocationConstraintExtensionBuilder()
                     .withLatitude(91)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -43,7 +43,7 @@ public class SimpleLocationConstraintExtensionBuilderTest {
     @Test
     public void shouldFailForLongitudeTooLow() {
         try {
-            new SimpleLocationConstraintExtensionBuilder()
+            new LocationConstraintExtensionBuilder()
                     .withLongitude(-181)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -56,7 +56,7 @@ public class SimpleLocationConstraintExtensionBuilderTest {
     @Test
     public void shouldFailForLongitudeTooHigh() {
         try {
-            new SimpleLocationConstraintExtensionBuilder()
+            new LocationConstraintExtensionBuilder()
                     .withLongitude(181)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -69,7 +69,7 @@ public class SimpleLocationConstraintExtensionBuilderTest {
     @Test
     public void shouldFailForRadiusLessThanZero() {
         try {
-            new SimpleLocationConstraintExtensionBuilder()
+            new LocationConstraintExtensionBuilder()
                     .withRadius(-1)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -82,7 +82,7 @@ public class SimpleLocationConstraintExtensionBuilderTest {
     @Test
     public void shouldFailForUncertaintyLessThanZero() {
         try {
-            new SimpleLocationConstraintExtensionBuilder()
+            new LocationConstraintExtensionBuilder()
                     .withMaxUncertainty(-1)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -94,7 +94,7 @@ public class SimpleLocationConstraintExtensionBuilderTest {
 
     @Test
     public void shouldBuildLocationConstraintWithGivenValues() {
-        Extension<LocationConstraintContent> extension = new SimpleLocationConstraintExtensionBuilder()
+        Extension<LocationConstraintContent> extension = new LocationConstraintExtensionBuilder()
                 .withLatitude(SOME_LATITUDE)
                 .withLongitude(SOME_LONGITUDE)
                 .withRadius(SOME_RADIUS)
@@ -111,7 +111,7 @@ public class SimpleLocationConstraintExtensionBuilderTest {
 
     @Test
     public void shouldBuildLocationConstraintWithDefaultValues() {
-        Extension<LocationConstraintContent> extension = new SimpleLocationConstraintExtensionBuilder()
+        Extension<LocationConstraintContent> extension = new LocationConstraintExtensionBuilder()
                 .withLatitude(SOME_LATITUDE)
                 .withLongitude(SOME_LONGITUDE)
                 .build();

@@ -38,7 +38,7 @@ class AnchorConverter {
         String value = anchorTypeAndValue.value;
         SignedTimestamp signedTimestamp = convertSignedTimestamp(anchorProto.getSignedTimeStamp());
 
-        return new SimpleAnchor(anchorType, anchorProto.getSubType(), value, certificates, signedTimestamp);
+        return new Anchor(anchorType, anchorProto.getSubType(), value, certificates, signedTimestamp);
     }
 
     private List<X509Certificate> convertCertificates(AttrProto.Anchor anchorProto) throws CertificateException {
@@ -69,7 +69,7 @@ class AnchorConverter {
         if (extension != null) {
             // Read the First object
             ASN1Primitive derObject = ASN1Primitive.fromByteArray(extension);
-            if (derObject != null && derObject instanceof DEROctetString) {
+            if (derObject instanceof DEROctetString) {
                 DEROctetString derOctetString = (DEROctetString) derObject;
                 // Read the sub object which is expected to be a sequence
                 ASN1Primitive asn1Primitive1 = ASN1Primitive.fromByteArray(derOctetString.getOctets());

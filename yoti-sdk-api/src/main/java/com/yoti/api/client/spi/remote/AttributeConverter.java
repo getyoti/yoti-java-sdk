@@ -36,7 +36,7 @@ class AttributeConverter {
         this.anchorConverter = anchorConverter;
     }
 
-    static final AttributeConverter newInstance() {
+    static AttributeConverter newInstance() {
         return new AttributeConverter(new DocumentDetailsAttributeParser(), new AnchorConverter());
     }
 
@@ -46,7 +46,7 @@ class AttributeConverter {
         List<Anchor> anchors = convertAnchors(attribute);
         List<Anchor> sources = filterAnchors(anchors, AnchorType.SOURCE.name());
         List<Anchor> verifiers = filterAnchors(anchors, AnchorType.VERIFIER.name());
-        return new SimpleAttribute(attribute.getName(), value, sources, verifiers, anchors);
+        return new Attribute(attribute.getName(), value, sources, verifiers, anchors);
     }
 
     private Object convertValueFromProto(AttrProto.Attribute attribute) throws ParseException, IOException {

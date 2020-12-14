@@ -74,7 +74,7 @@
   
     <!-- java version -->
     <yoti.java.sdk.version>${project.version}</yoti.java.sdk.version>
-    <supported.java.version>1.7</supported.java.version>
+    <supported.java.version>1.8</supported.java.version>
     <maven.compiler.source>${supported.java.version}</maven.compiler.source>
     <maven.compiler.target>${supported.java.version}</maven.compiler.target>
     

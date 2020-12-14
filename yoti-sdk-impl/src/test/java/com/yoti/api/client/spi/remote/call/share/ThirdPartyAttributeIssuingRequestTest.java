@@ -2,7 +2,7 @@ package com.yoti.api.client.spi.remote.call.share;
 
 import com.yoti.api.client.AttributeDefinition;
 import com.yoti.api.client.spi.remote.IssuingAttribute;
-import com.yoti.api.client.spi.remote.SimpleAttributeDefinition;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -21,7 +21,7 @@ public class ThirdPartyAttributeIssuingRequestTest {
     private static final String SOME_DEFINITION_NAME = "some.third.party.definition";
     private static final String SOME_ISSUING_ATTRIBUTE_VALUE = "someAttributeValue";
 
-    private static final AttributeDefinition SOME_ATTRIBUTE_DEFINITION = new SimpleAttributeDefinition(SOME_DEFINITION_NAME);
+    private static final AttributeDefinition SOME_ATTRIBUTE_DEFINITION = new AttributeDefinition(SOME_DEFINITION_NAME);
     private static final IssuingAttribute SOME_ISSUING_ATTRIBUTE = new IssuingAttribute(SOME_ATTRIBUTE_DEFINITION, SOME_ISSUING_ATTRIBUTE_VALUE);
 
     @Test
@@ -74,7 +74,7 @@ public class ThirdPartyAttributeIssuingRequestTest {
     }
 
     private IssuingAttribute createIssuingAttribute(String name, String value) {
-        AttributeDefinition attributeDefinition = new SimpleAttributeDefinition(name);
+        AttributeDefinition attributeDefinition = new AttributeDefinition(name);
         return new IssuingAttribute(attributeDefinition, value);
     }
 

@@ -7,6 +7,7 @@ import java.util.List;
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Profile;
 import com.yoti.api.client.ProfileException;
+import com.yoti.api.client.ProfileImpl;
 
 class ProfileReader {
 
@@ -32,7 +33,7 @@ class ProfileReader {
             byte[] profileData = encryptedDataReader.decryptBytes(encryptedProfileBytes, secretKey);
             attributeList = attributeListConverter.parseAttributeList(profileData);
         }
-        return new SimpleProfile(attributeList);
+        return new ProfileImpl(attributeList);
     }
 
 }

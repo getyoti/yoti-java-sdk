@@ -29,13 +29,13 @@ public class ExtraDataConverter {
 
     public ExtraData read(byte[] extraDataBytes) throws ExtraDataException {
         if (extraDataBytes == null || extraDataBytes.length == 0) {
-            return new SimpleExtraData();
+            return new ExtraData();
         }
 
         ExtraDataProto.ExtraData extraData = parseProto(extraDataBytes);
         List<Object> dataEntryList = parseDataEntries(extraData);
 
-        return new SimpleExtraData(dataEntryList);
+        return new ExtraData(dataEntryList);
     }
 
     private ExtraDataProto.ExtraData parseProto(byte[] extraDataBytes) throws ExtraDataException {
