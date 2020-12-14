@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 import static org.junit.Assert.fail;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SimpleWantedAttributeBuilderTest {
+public class WantedAttributeTest {
 
     public static final String SOME_NAME = "someName";
     public static final String SOME_DERIVATION = "someDerivation";
@@ -26,7 +26,7 @@ public class SimpleWantedAttributeBuilderTest {
 
     @Test
     public void buildsAnAttribute() {
-        WantedAttribute result = WantedAttributeBuilder.newInstance()
+        WantedAttribute result = WantedAttribute.builder()
                 .withName(SOME_NAME)
                 .withDerivation(SOME_DERIVATION)
                 .withOptional(true)
@@ -41,7 +41,7 @@ public class SimpleWantedAttributeBuilderTest {
     public void buildsAnAttributeWithSourceConstraint() {
         when(constraintListMock.size()).thenReturn(1);
 
-        WantedAttribute result = WantedAttributeBuilder.newInstance()
+        WantedAttribute result = WantedAttribute.builder()
                 .withName(SOME_NAME)
                 .withDerivation(SOME_DERIVATION)
                 .withOptional(true)
@@ -60,7 +60,7 @@ public class SimpleWantedAttributeBuilderTest {
     @Test
     public void buildingAnAttributeWithoutNameFails() {
         try { 
-            WantedAttributeBuilder.newInstance().build();
+            WantedAttribute.builder().build();
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("name"));
             return;

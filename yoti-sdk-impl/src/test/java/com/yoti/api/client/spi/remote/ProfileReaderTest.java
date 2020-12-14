@@ -68,13 +68,13 @@ public class ProfileReaderTest {
 
     @Test
     public void shouldDecodeProfileCorrectly() throws Exception {
-        Attribute<String> stringAttribute = new SimpleAttribute<>("someName", "someValue");
+        Attribute<String> stringAttribute = new Attribute<>("someName", "someValue");
         byte[] profileContent = EncryptedDataProto.EncryptedData.newBuilder()
                 .setCipherText(ByteString.copyFrom(validProfileEncryptionResult.data))
                 .setIv(ByteString.copyFrom(validProfileEncryptionResult.iv))
                 .build()
                 .toByteArray();
-        when(attributeListConverterMock.parseAttributeList(PROFILE_DATA_BYTES)).thenReturn(Arrays.<Attribute<?>>asList(stringAttribute));
+        when(attributeListConverterMock.parseAttributeList(PROFILE_DATA_BYTES)).thenReturn(Arrays.asList(stringAttribute));
         when(encryptedDataReaderMock.decryptBytes(profileContent, receiptKey)).thenReturn(PROFILE_DATA_BYTES);
 
         Profile result = testObj.read(profileContent, receiptKey);

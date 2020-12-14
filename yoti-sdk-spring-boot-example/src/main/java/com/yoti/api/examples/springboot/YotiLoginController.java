@@ -1,7 +1,6 @@
 package com.yoti.api.examples.springboot;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.yoti.api.attributes.AttributeConstants;
@@ -13,18 +12,14 @@ import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.YotiClient;
 import com.yoti.api.client.shareurl.DynamicScenario;
 import com.yoti.api.client.shareurl.DynamicShareException;
-import com.yoti.api.client.shareurl.SimpleDynamicScenarioBuilder;
 import com.yoti.api.client.shareurl.extension.Extension;
 import com.yoti.api.client.shareurl.extension.LocationConstraintContent;
-import com.yoti.api.client.shareurl.extension.SimpleLocationConstraintExtensionBuilder;
+import com.yoti.api.client.shareurl.extension.LocationConstraintExtensionBuilder;
 import com.yoti.api.client.shareurl.policy.DynamicPolicy;
-import com.yoti.api.client.shareurl.policy.SimpleDynamicPolicyBuilder;
-import com.yoti.api.client.shareurl.policy.SimpleWantedAttributeBuilder;
 import com.yoti.api.client.shareurl.policy.WantedAttribute;
 import com.yoti.api.spring.YotiClientProperties;
 import com.yoti.api.spring.YotiProperties;
 
-import org.apache.juli.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,21 +67,21 @@ public class YotiLoginController extends WebMvcConfigurerAdapter {
 
     @RequestMapping("/dynamic-share")
     public String dynamicShareHome(final Model model) {
-        Extension<LocationConstraintContent> locationExtension = new SimpleLocationConstraintExtensionBuilder()
+        Extension<LocationConstraintContent> locationExtension = new LocationConstraintExtensionBuilder()
                 .withLatitude(51.5074)
                 .withLongitude(-0.1278)
                 .withRadius(6000)
                 .build();
 
-        WantedAttribute givenNamesWantedAttribute = new SimpleWantedAttributeBuilder()
+        WantedAttribute givenNamesWantedAttribute = WantedAttribute.builder()
                 .withName("given_names")
                 .build();
 
-        WantedAttribute emailAddressWantedAttribute = new SimpleWantedAttributeBuilder()
+        WantedAttribute emailAddressWantedAttribute = WantedAttribute.builder()
                 .withName("email_address")
                 .build();
 
-        DynamicPolicy dynamicPolicy = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy dynamicPolicy = DynamicPolicy.builder()
                 .withWantedAttribute(givenNamesWantedAttribute)
                 .withWantedAttribute(emailAddressWantedAttribute)
                 .withFullName()
@@ -95,7 +90,7 @@ public class YotiLoginController extends WebMvcConfigurerAdapter {
                 .withAgeOver(18)
                 .build();
 
-        DynamicScenario dynamicScenario = new SimpleDynamicScenarioBuilder()
+        DynamicScenario dynamicScenario = DynamicScenario.builder()
                 .withCallbackEndpoint("/login")
                 .withPolicy(dynamicPolicy)
                 .withExtension(locationExtension)

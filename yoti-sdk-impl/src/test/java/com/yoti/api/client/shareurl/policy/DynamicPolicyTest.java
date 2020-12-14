@@ -28,18 +28,18 @@ import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.Test;
 
-public class SimpleDynamicPolicyBuilderTest {
+public class DynamicPolicyTest {
 
     private static final int EXPECTED_SELFIE_AUTH_TYPE = 1;
     private static final int EXPECTED_PIN_AUTH_TYPE = 2;
 
     @Test
     public void ensuresAnAttributeCanOnlyExistOnce() {
-        WantedAttribute wantedAttribute = WantedAttributeBuilder.newInstance()
+        WantedAttribute wantedAttribute = WantedAttribute.builder()
                 .withName("someAttributeName")
                 .build();
 
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withWantedAttribute(wantedAttribute)
                 .withWantedAttribute(wantedAttribute)
                 .build();
@@ -50,7 +50,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithSimpleAttributes() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withFamilyName()
                 .withGivenNames()
                 .withFullName()
@@ -80,7 +80,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithSimpleAttributesAndOptionalFlag() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withFamilyName(true)
                 .withGivenNames(true)
                 .withFullName(true)
@@ -110,7 +110,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithMultipleAgeDerivedAttributes() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withDateOfBirth()
                 .withAgeOver(18)
                 .withAgeUnder(30)
@@ -126,7 +126,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithMultipleAgeDerivedAttributesAndOptionalFlag() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withDateOfBirth(true)
                 .withAgeOver(true, 18)
                 .withAgeUnder(true, 30)
@@ -142,7 +142,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void shouldOverwriteIdenticalAgeVerificationToEnsureItOnlyExistsOnce() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withAgeUnder(true, 30)
                 .withAgeUnder(false, 30)
                 .build();
@@ -153,9 +153,9 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithAuthTypes() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
-                .withSelfieAuthorisation()
-                .withPinAuthorisation()
+        DynamicPolicy result = DynamicPolicy.builder()
+                .withSelfieAuthorisation(true)
+                .withPinAuthorisation(true)
                 .withWantedAuthType(99)
                 .build();
 
@@ -165,7 +165,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithAuthTypesTrue() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withSelfieAuthorisation(true)
                 .withPinAuthorisation(true)
                 .withWantedAuthType(99)
@@ -177,7 +177,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithAuthTypesFalse() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withSelfieAuthorisation(false)
                 .withPinAuthorisation(false)
                 .build();
@@ -187,7 +187,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithRememberMeFlags() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withWantedRememberMe(true)
                 .withWantedRememberMeOptional(true)
                 .build();
@@ -198,7 +198,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithSelfieAuthorisationEnabledThenDisabled() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withSelfieAuthorisation(true)
                 .withSelfieAuthorisation(false)
                 .build();
@@ -209,7 +209,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithSelfieAuthorisationDisabledThenEnabled() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withSelfieAuthorisation(false)
                 .withSelfieAuthorisation(true)
                 .build();
@@ -220,7 +220,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithPinAuthorisationEnabledThenDisabled() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withPinAuthorisation(true)
                 .withPinAuthorisation(false)
                 .build();
@@ -231,7 +231,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithPinAuthorisationDisabledThenEnabled() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withPinAuthorisation(false)
                 .withPinAuthorisation(true)
                 .build();
@@ -242,7 +242,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithSelfieAuthorisationDisabled() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withSelfieAuthorisation(false)
                 .build();
 
@@ -252,7 +252,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithPinAuthorisationDisabled() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withPinAuthorisation(false)
                 .build();
 
@@ -262,7 +262,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithWantedAttributeByNameWithOptionalTrue() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withWantedAttribute(true, GIVEN_NAMES)
                 .build();
 
@@ -272,7 +272,7 @@ public class SimpleDynamicPolicyBuilderTest {
 
     @Test
     public void buildsWithWantedAttributeByNameWithOptionalFalse() {
-        DynamicPolicy result = new SimpleDynamicPolicyBuilder()
+        DynamicPolicy result = DynamicPolicy.builder()
                 .withWantedAttribute(false, GIVEN_NAMES)
                 .build();
 

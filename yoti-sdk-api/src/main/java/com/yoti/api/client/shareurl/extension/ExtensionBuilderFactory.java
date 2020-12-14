@@ -2,25 +2,26 @@ package com.yoti.api.client.shareurl.extension;
 
 import java.util.ServiceLoader;
 
-public abstract class ExtensionBuilderFactory {
+public class ExtensionBuilderFactory {
 
-    public static final ExtensionBuilderFactory newInstance() {
-        ServiceLoader<ExtensionBuilderFactory> extensionBuilderLoader = ServiceLoader.load(ExtensionBuilderFactory.class);
-        if (!extensionBuilderLoader.iterator().hasNext()) {
-            throw new IllegalStateException("Cannot find any implementation of " + ExtensionBuilderFactory.class.getSimpleName());
-        }
-        ExtensionBuilderFactory extensionBuilderFactory = extensionBuilderLoader.iterator().next();
-        return extensionBuilderFactory.createExtensionBuilderFactory();
+    private ExtensionBuilderFactory() {}
+
+    public static ExtensionBuilderFactory newInstance() {
+        return new ExtensionBuilderFactory();
     }
 
-    protected abstract ExtensionBuilderFactory createExtensionBuilderFactory();
+    public BasicExtensionBuilder createExtensionBuilder() { return new BasicExtensionBuilder(); }
 
-    public abstract BasicExtensionBuilder createExtensionBuilder();
+    public LocationConstraintExtensionBuilder createLocationConstraintExtensionBuilder() {
+        return new LocationConstraintExtensionBuilder();
+    }
 
-    public abstract LocationConstraintExtensionBuilder createLocationConstraintExtensionBuilder();
+    public TransactionalFlowExtensionBuilder createTransactionalFlowExtensionBuilder() {
+        return new TransactionalFlowExtensionBuilder();
+    }
 
-    public abstract TransactionalFlowExtensionBuilder createTransactionalFlowExtensionBuilder();
-
-    public abstract ThirdPartyAttributeExtensionBuilder createThirdPartyAttributeExtensionBuilder();
+    public ThirdPartyAttributeExtensionBuilder createThirdPartyAttributeExtensionBuilder() {
+        return new ThirdPartyAttributeExtensionBuilder();
+    }
 
 }

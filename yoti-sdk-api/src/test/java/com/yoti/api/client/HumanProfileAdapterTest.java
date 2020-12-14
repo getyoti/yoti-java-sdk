@@ -1,4 +1,4 @@
-package com.yoti.api.client.spi.remote;
+package com.yoti.api.client;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.EMPTY_LIST;
@@ -18,9 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes;
-import com.yoti.api.client.AgeVerification;
-import com.yoti.api.client.Attribute;
-import com.yoti.api.client.Profile;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,10 +35,10 @@ public class HumanProfileAdapterTest {
 
     @Mock Profile profileMock;
 
-    Attribute<String> ageUnder18Attribute = new SimpleAttribute<>("age_under:18", "false");
-    Attribute<String> ageUnder21Attribute = new SimpleAttribute<>("age_under:21", "true");
-    Attribute<String> ageOver18Attribute = new SimpleAttribute<>("age_over:18", "true");
-    Attribute<String> ageOver21Attribute = new SimpleAttribute<>("age_over:21", "false");
+    Attribute<String> ageUnder18Attribute = new Attribute<>("age_under:18", "false");
+    Attribute<String> ageUnder21Attribute = new Attribute<>("age_under:21", "true");
+    Attribute<String> ageOver18Attribute = new Attribute<>("age_over:18", "true");
+    Attribute<String> ageOver21Attribute = new Attribute<>("age_over:21", "false");
     List<Attribute<String>> ageUnderAttributes = asList(ageUnder18Attribute, ageUnder21Attribute);
     List<Attribute<String>> ageOverAttributes = asList(ageOver18Attribute, ageOver21Attribute);
 
@@ -54,7 +51,7 @@ public class HumanProfileAdapterTest {
 
     @Test
     public void isAgeVerified_shouldReturnValueOfAgeOver() {
-        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, String.class)).thenReturn(new SimpleAttribute(ATTR_AGE_OVER, "true"));
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, String.class)).thenReturn(new Attribute(ATTR_AGE_OVER, "true"));
 
         Boolean result = testObj.isAgeVerified();
 
@@ -63,7 +60,7 @@ public class HumanProfileAdapterTest {
 
     @Test
     public void isAgeVerified_shouldReturnValueOfAgeUnder() {
-        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, String.class)).thenReturn(new SimpleAttribute(ATTR_AGE_UNDER, "false"));
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, String.class)).thenReturn(new Attribute(ATTR_AGE_UNDER, "false"));
 
         Boolean result = testObj.isAgeVerified();
 
@@ -73,8 +70,8 @@ public class HumanProfileAdapterTest {
     // This scenario should never happen, but to be pragmatic...
     @Test
     public void isAgeVerified_shouldPreferAgeOverWhenBothAttributesArePresent() {
-        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, String.class)).thenReturn(new SimpleAttribute(ATTR_AGE_OVER, "true"));
-        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, String.class)).thenReturn(new SimpleAttribute(ATTR_AGE_UNDER, "false"));
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_OVER, String.class)).thenReturn(new Attribute<>(ATTR_AGE_OVER, "true"));
+        when(profileMock.findAttributeStartingWith(ATTR_AGE_UNDER, String.class)).thenReturn(new Attribute<>(ATTR_AGE_UNDER, "false"));
 
         Boolean result = testObj.isAgeVerified();
 

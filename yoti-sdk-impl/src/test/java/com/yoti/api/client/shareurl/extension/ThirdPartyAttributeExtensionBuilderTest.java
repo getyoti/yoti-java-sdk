@@ -17,7 +17,7 @@ import com.yoti.api.client.spi.remote.call.YotiConstants;
 
 import org.junit.Test;
 
-public class SimpleThirdPartyAttributeExtensionBuilderTest {
+public class ThirdPartyAttributeExtensionBuilderTest {
 
     private static final Date SOME_DATE = new Date();
     private static final String SOME_DEFINITION = "com.thirdparty.id";
@@ -25,7 +25,7 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
     @Test
     public void shouldFailForNullExpiryDate() {
         try {
-            new SimpleThirdPartyAttributeExtensionBuilder()
+            new ThirdPartyAttributeExtensionBuilder()
                     .withExpiryDate(null)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -38,7 +38,7 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
     @Test
     public void shouldFailForNullDefinition() {
         try {
-            new SimpleThirdPartyAttributeExtensionBuilder()
+            new ThirdPartyAttributeExtensionBuilder()
                     .withDefinition(null)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -51,7 +51,7 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
     @Test
     public void shouldFailForEmptyDefinition() {
         try {
-            new SimpleThirdPartyAttributeExtensionBuilder()
+            new ThirdPartyAttributeExtensionBuilder()
                     .withDefinition("")
                     .build();
         } catch (IllegalArgumentException e) {
@@ -63,7 +63,7 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
 
     @Test
     public void shouldBuildThirdPartyAttributeExtensionWithGivenValues() {
-        Extension<ThirdPartyAttributeContent> extension = new SimpleThirdPartyAttributeExtensionBuilder()
+        Extension<ThirdPartyAttributeContent> extension = new ThirdPartyAttributeExtensionBuilder()
                 .withExpiryDate(SOME_DATE)
                 .withDefinition(SOME_DEFINITION)
                 .build();
@@ -83,7 +83,7 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
         TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
         Date date = new Date();
 
-        Extension<ThirdPartyAttributeContent> extension = new SimpleThirdPartyAttributeExtensionBuilder()
+        Extension<ThirdPartyAttributeContent> extension = new ThirdPartyAttributeExtensionBuilder()
                 .withExpiryDate(date)
                 .withDefinition(SOME_DEFINITION)
                 .build();
@@ -97,7 +97,7 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
     public void shouldWorkCorrectlyWithDateCreatedFromTimestamp() {
         Date date = new Date(1586252260);
 
-        Extension<ThirdPartyAttributeContent> extension = new SimpleThirdPartyAttributeExtensionBuilder()
+        Extension<ThirdPartyAttributeContent> extension = new ThirdPartyAttributeExtensionBuilder()
                 .withExpiryDate(date)
                 .withDefinition(SOME_DEFINITION)
                 .build();
@@ -113,7 +113,7 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
         theDefinitions.add("firstDefinition");
         theDefinitions.add("secondDefinition");
 
-        Extension<ThirdPartyAttributeContent> extension = new SimpleThirdPartyAttributeExtensionBuilder()
+        Extension<ThirdPartyAttributeContent> extension = new ThirdPartyAttributeExtensionBuilder()
                 .withExpiryDate(SOME_DATE)
                 .withDefinitions(theDefinitions)
                 .build();
@@ -132,7 +132,7 @@ public class SimpleThirdPartyAttributeExtensionBuilderTest {
         theDefinitions.add("firstDefinition");
         theDefinitions.add("secondDefinition");
 
-        Extension<ThirdPartyAttributeContent> extension = new SimpleThirdPartyAttributeExtensionBuilder()
+        Extension<ThirdPartyAttributeContent> extension = new ThirdPartyAttributeExtensionBuilder()
                 .withExpiryDate(SOME_DATE)
                 .withDefinition(SOME_DEFINITION)
                 .withDefinitions(theDefinitions)

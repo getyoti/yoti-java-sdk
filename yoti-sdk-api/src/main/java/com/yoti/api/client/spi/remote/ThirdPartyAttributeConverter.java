@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 public class ThirdPartyAttributeConverter {
 
-    private static Logger LOG = LoggerFactory.getLogger(ThirdPartyAttributeConverter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ThirdPartyAttributeConverter.class);
 
     public static ThirdPartyAttributeConverter newInstance() {
         return new ThirdPartyAttributeConverter();
@@ -44,7 +44,7 @@ public class ThirdPartyAttributeConverter {
             throw new ExtraDataException("ThirdPartyAttribute missing token");
         }
 
-        return new SimpleAttributeIssuanceDetails(token, expiryDate, attributeDefinitions);
+        return new AttributeIssuanceDetails(token, expiryDate, attributeDefinitions);
     }
 
     private IssuingAttributes parseIssuingAttributes(IssuingAttributesProto.IssuingAttributes issuingAttributes) {
@@ -79,7 +79,7 @@ public class ThirdPartyAttributeConverter {
     private List<AttributeDefinition> parseDefinitions(List<IssuingAttributesProto.Definition> definitions) {
         List<AttributeDefinition> attributes = new ArrayList<>();
         for (IssuingAttributesProto.Definition definition : definitions) {
-            AttributeDefinition newDef = new SimpleAttributeDefinition(definition.getName());
+            AttributeDefinition newDef = new AttributeDefinition(definition.getName());
             attributes.add(newDef);
         }
         return attributes;
@@ -87,9 +87,9 @@ public class ThirdPartyAttributeConverter {
 
     static class IssuingAttributes {
 
-        private DateTime expiryDate;
+        private final DateTime expiryDate;
 
-        private List<AttributeDefinition> attributeDefinitions;
+        private final List<AttributeDefinition> attributeDefinitions;
 
         public IssuingAttributes(final DateTime expiryDate, final List<AttributeDefinition> attributeDefinitions) {
             this.expiryDate = expiryDate;

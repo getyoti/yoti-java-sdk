@@ -11,17 +11,17 @@ import com.yoti.api.client.shareurl.policy.DynamicPolicy;
 import org.junit.Test;
 import org.mockito.Mock;
 
-public class SimpleDynamicScenarioBuilderTest {
+public class DynamicScenarioTest {
 
     private static final String SOME_ENDPOINT = "someEndpoint";
 
     @Mock DynamicPolicy dynamicPolicyMock;
-    @Mock Extension extension1Mock;
-    @Mock Extension extension2Mock;
+    @Mock Extension<?> extension1Mock;
+    @Mock Extension<?> extension2Mock;
 
     @Test
     public void shouldBuildADynamicScenario() {
-        DynamicScenario result = new SimpleDynamicScenarioBuilder()
+        DynamicScenario result = DynamicScenario.builder()
                 .withCallbackEndpoint(SOME_ENDPOINT)
                 .withPolicy(dynamicPolicyMock)
                 .withExtension(extension1Mock)
