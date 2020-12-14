@@ -1,34 +1,59 @@
 package com.yoti.api.client;
 
+import static com.yoti.api.client.spi.remote.util.Validation.notNull;
+
+import static org.bouncycastle.util.encoders.Base64.toBase64String;
+
 import java.util.Date;
+
+import com.yoti.api.client.spi.remote.ApplicationProfileAdapter;
 
 /**
  * Details of an activity between a user and the application.
- *
  */
-public interface ActivityDetails {
+public final class ActivityDetails {
+
+    private final String rememberMeId;
+    private final String parentRememberMeId;
+    private final ApplicationProfile applicationProfile;
+    private final HumanProfile userProfile;
+    private final Date timestamp;
+    private final String receiptId;
+    private final ExtraData extraData;
+
+    public ActivityDetails(String rememberMeId,
+            String parentRememberMeId,
+            Profile userProfile,
+            Profile applicationProfile,
+            ExtraData extraData,
+            Date timestamp,
+            byte[] receiptId) {
+        this.rememberMeId = notNull(rememberMeId, "Remember Me id");
+        this.parentRememberMeId = parentRememberMeId;
+        this.userProfile = HumanProfileAdapter.wrap(notNull(userProfile, "User profile"));
+        this.applicationProfile = ApplicationProfileAdapter.wrap(notNull(applicationProfile, "Application profile"));
+        this.timestamp = notNull(timestamp, "Timestamp");
+        this.receiptId = toBase64String(notNull(receiptId, "Receipt id"));
+        this.extraData = notNull(extraData, "extraData");
+    }
 
     /**
      * Get the profile associated with the user.
      *
      * @return profile containing attributes for the user
      */
-    HumanProfile getUserProfile();
+    public HumanProfile getUserProfile() {
+        return userProfile;
+    }
 
     /**
      * Get the profile associated with the application.
      *
      * @return profile containing attributes for the application
      */
-    ApplicationProfile getApplicationProfile();
-
-    /**
-     * Deprecated.  Please use getRememberMeId() instead.
-     *
-     * @return userId (now known as rememberMeId)
-     */
-    @Deprecated
-    String getUserId();
+    public ApplicationProfile getApplicationProfile() {
+        return applicationProfile;
+    }
 
     /**
      * Return the rememberMeId, which is a unique, stable identifier for a user in the context of an application.
@@ -36,7 +61,9 @@ public interface ActivityDetails {
      *
      * @return rememberMeId
      */
-    String getRememberMeId();
+    public String getRememberMeId() {
+        return rememberMeId;
+    }
 
     /**
      * Return the parentRememberMeId, which is a unique, stable identifier for a user in the context of an organisation.
@@ -45,36 +72,35 @@ public interface ActivityDetails {
      *
      * @return parentRememberMeId
      */
-    String getParentRememberMeId();
+    public String getParentRememberMeId() {
+        return parentRememberMeId;
+    }
 
     /**
      * Time and date of the sharing activity
      *
      * @return time and date of the activity
      */
-    Date getTimestamp();
+    public Date getTimestamp() {
+        return new Date(timestamp.getTime());
+    }
 
     /**
      * ReceiptId identifying a completed sharing activity.
      *
      * @return receiptId
      */
-    String getReceiptId();
-    
-    /**
-     * @deprecated From v2.1 onwards you should use getUserProfile().getSelfie()
-     * JPEG selfie in Base64 string.
-     *
-     * @return JPEG selfie image in Base64 string format
-     */
-    @Deprecated
-    String getBase64Selfie();
+    public String getReceiptId() {
+        return receiptId;
+    }
 
     /**
      * Return the extra data associated with the receipt.
      *
      * @return {@link ExtraData} associated with the receipt
      */
-    ExtraData getExtraData();
+    public ExtraData getExtraData() {
+        return extraData;
+    }
 
 }

@@ -15,6 +15,7 @@ import java.util.Map;
 
 import com.yoti.api.client.AmlException;
 import com.yoti.api.client.aml.AmlProfile;
+import com.yoti.api.client.aml.AmlResult;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
@@ -47,7 +48,7 @@ public class RemoteAmlServiceTest {
     @Mock AmlProfile amlProfileMock;
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPairMock;
     @Mock SignedRequest signedRequestMock;
-    @Mock SimpleAmlResult simpleAmlResultMock;
+    @Mock AmlResult amlResultMock;
 
     @BeforeClass
     public static void setUpClass() {
@@ -63,11 +64,11 @@ public class RemoteAmlServiceTest {
     public void shouldPerformAmlCheck() throws Exception {
         when(objectMapperMock.writeValueAsString(amlProfileMock)).thenReturn(SERIALIZED_BODY);
         doReturn(signedRequestMock).when(testObj).createSignedRequest(keyPairMock, GENERATED_PATH, BODY_BYTES);
-        when(signedRequestMock.execute(SimpleAmlResult.class)).thenReturn(simpleAmlResultMock);
+        when(signedRequestMock.execute(AmlResult.class)).thenReturn(amlResultMock);
 
-        SimpleAmlResult result = testObj.performCheck(keyPairMock, SOME_APP_ID, amlProfileMock);
+        AmlResult result = testObj.performCheck(keyPairMock, SOME_APP_ID, amlProfileMock);
 
-        assertSame(result, simpleAmlResultMock);
+        assertSame(result, amlResultMock);
     }
 
     @Test
@@ -75,7 +76,7 @@ public class RemoteAmlServiceTest {
         IOException ioException = new IOException();
         when(objectMapperMock.writeValueAsString(amlProfileMock)).thenReturn(SERIALIZED_BODY);
         doReturn(signedRequestMock).when(testObj).createSignedRequest(keyPairMock, GENERATED_PATH, BODY_BYTES);
-        when(signedRequestMock.execute(SimpleAmlResult.class)).thenThrow(ioException);
+        when(signedRequestMock.execute(AmlResult.class)).thenThrow(ioException);
 
         try {
             testObj.performCheck(keyPairMock, SOME_APP_ID, amlProfileMock);
@@ -90,7 +91,7 @@ public class RemoteAmlServiceTest {
         ResourceException resourceException = new ResourceException(HTTP_UNAUTHORIZED, "Unauthorized", "failed verification");
         when(objectMapperMock.writeValueAsString(amlProfileMock)).thenReturn(SERIALIZED_BODY);
         doReturn(signedRequestMock).when(testObj).createSignedRequest(keyPairMock, GENERATED_PATH, BODY_BYTES);
-        when(signedRequestMock.execute(SimpleAmlResult.class)).thenThrow(resourceException);
+        when(signedRequestMock.execute(AmlResult.class)).thenThrow(resourceException);
 
         try {
             testObj.performCheck(keyPairMock, SOME_APP_ID, amlProfileMock);

@@ -2,12 +2,35 @@ package com.yoti.api.client;
 
 import java.util.List;
 
-public interface AttributeIssuanceDetails {
+public class AttributeIssuanceDetails {
 
-    DateTime getExpiryDate();
+    private final DateTime expiryDate;
 
-    String getToken();
+    private final String token;
 
-    List<AttributeDefinition> getIssuingAttributes();
+    private final List<AttributeDefinition> issuingAttributes;
+
+    public AttributeIssuanceDetails(String token, DateTime expiryDate, List<AttributeDefinition> issuingAttributes) {
+        if (token == null) {
+            this.token = "";
+        } else {
+            this.token = token;
+        }
+
+        this.expiryDate = expiryDate;
+        this.issuingAttributes = issuingAttributes;
+    }
+
+    public DateTime getExpiryDate() {
+        return expiryDate;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public List<AttributeDefinition> getIssuingAttributes() {
+        return issuingAttributes;
+    }
 
 }

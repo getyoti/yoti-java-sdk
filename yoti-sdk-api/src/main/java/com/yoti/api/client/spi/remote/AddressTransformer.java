@@ -25,7 +25,7 @@ class AddressTransformer {
                 final Map<?, ?> structuredAddressValue = (Map<?, ?>) structuredPostalAddress.getValue();
                 final Object formattedAddress = structuredAddressValue.get(HumanProfileAttributes.Keys.FORMATTED_ADDRESS);
                 if (formattedAddress != null) {
-                    transformedAddress = new SimpleAttribute(HumanProfileAttributes.POSTAL_ADDRESS,
+                    transformedAddress = new Attribute<>(HumanProfileAttributes.POSTAL_ADDRESS,
                             String.valueOf(formattedAddress),
                             structuredPostalAddress.getSources(),
                             structuredPostalAddress.getVerifiers(),

@@ -1,7 +1,5 @@
-package com.yoti.api.client.spi.remote;
+package com.yoti.api.client;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -11,11 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.yoti.api.client.Attribute;
-
 import org.junit.Test;
 
-public class SimpleProfileTest {
+public class ProfileTest {
 
     private static final String SOME_KEY = "someKey";
     private static final String STARTS_WITH = "startsWith";
@@ -24,86 +20,86 @@ public class SimpleProfileTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void constructor_shouldFailConstructionForNullAttributes() {
-        new SimpleProfile(null);
+        new ProfileImpl(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getAttribute_shouldThrowExceptionForNullAttributeName() {
-        SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>emptyList());
+        Profile profile = new ProfileImpl(Collections.emptyList());
 
         profile.getAttribute(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getAttributeByName_shouldThrowExceptionForNullAttributeName() {
-        SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>emptyList());
+        Profile profile = new ProfileImpl(Collections.emptyList());
 
         profile.getAttribute(null);
     }
 
     @Test
     public void getAttribute_shouldReturnNullValueForNonExistingKey() {
-        SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>emptyList());
+        Profile profile = new ProfileImpl(Collections.emptyList());
 
         assertNull(profile.getAttribute(SOME_KEY));
     }
 
     @Test
     public void getAttributeByName_shouldReturnNullValueForNonExistingKey() {
-        SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>emptyList());
+        Profile profile = new ProfileImpl(Collections.emptyList());
 
         assertNull(profile.getAttribute(SOME_KEY));
     }
 
     @Test
     public void getAttribute_shouldReturnValueForExistingKey() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, STRING_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(SOME_KEY, STRING_VALUE));
 
-        Attribute result = profile.getAttribute(SOME_KEY);
+        Attribute<?> result = profile.getAttribute(SOME_KEY);
 
         assertEquals(STRING_VALUE, result.getValue());
     }
 
     @Test
     public void getAttributeByName_shouldReturnValueForExistingKey() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, STRING_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(SOME_KEY, STRING_VALUE));
 
-        Attribute result = profile.getAttribute(SOME_KEY);
+        Attribute<?> result = profile.getAttribute(SOME_KEY);
 
         assertEquals(STRING_VALUE, result.getValue());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getAttributeTyped_shouldThrowExceptionForNullAttributeName() {
-        SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>emptyList());
+        Profile profile = new ProfileImpl(Collections.emptyList());
 
         profile.getAttribute(null, Object.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getAttributeByNameTyped_shouldThrowExceptionForNullAttributeName() {
-        SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>emptyList());
+        Profile profile = new ProfileImpl(Collections.emptyList());
 
         profile.getAttribute(null, Object.class);
     }
 
     @Test
     public void getAttributeTyped_shouldReturnNullValueForNonExistingKey() {
-        SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>emptyList());
+        Profile profile = new ProfileImpl(Collections.emptyList());
 
         assertNull(profile.getAttribute(SOME_KEY, Object.class));
     }
 
     @Test
     public void getAttributeByNameTyped_shouldReturnNullValueForNonExistingKey() {
-        SimpleProfile profile = new SimpleProfile(Collections.<Attribute<?>>emptyList());
+        Profile profile = new ProfileImpl(Collections.emptyList());
 
         assertNull(profile.getAttribute(SOME_KEY, Object.class));
     }
 
     @Test
     public void getAttributeTyped_shouldReturnTypedValueForExistingKey() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, STRING_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(SOME_KEY, STRING_VALUE));
 
         Attribute<String> result = profile.getAttribute(SOME_KEY, String.class);
 
@@ -112,7 +108,7 @@ public class SimpleProfileTest {
 
     @Test
     public void getAttributeByNameTyped_shouldReturnTypedValueForExistingKey() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, STRING_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(SOME_KEY, STRING_VALUE));
 
         Attribute<String> result = profile.getAttribute(SOME_KEY, String.class);
 
@@ -121,7 +117,7 @@ public class SimpleProfileTest {
 
     @Test
     public void getAttributeTyped_shouldThrowExceptionForForMismatchingType() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, INTEGER_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(SOME_KEY, INTEGER_VALUE));
 
         try {
             profile.getAttribute(SOME_KEY, String.class);
@@ -135,7 +131,7 @@ public class SimpleProfileTest {
 
     @Test
     public void getAttributeByNameTyped_shouldThrowExceptionForForMismatchingType() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, INTEGER_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(SOME_KEY, INTEGER_VALUE));
 
         try {
             profile.getAttribute(SOME_KEY, String.class);
@@ -149,14 +145,14 @@ public class SimpleProfileTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void findAttributesStartingWith_shouldThrowExceptionForNullAttributeName() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, INTEGER_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(SOME_KEY, INTEGER_VALUE));
 
         profile.findAttributesStartingWith(null, Integer.class);
     }
 
     @Test
     public void findAttributesStartingWith_shouldReturnEmptyListWhenNoMatches() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, INTEGER_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(SOME_KEY, INTEGER_VALUE));
 
         List<Attribute<Integer>> result = profile.findAttributesStartingWith(STARTS_WITH, Integer.class);
 
@@ -165,7 +161,7 @@ public class SimpleProfileTest {
 
     @Test
     public void findAttributesStartingWith_shouldThrowExceptionForMismatchingType() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(STARTS_WITH, INTEGER_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(STARTS_WITH, INTEGER_VALUE));
 
         try {
             profile.findAttributesStartingWith(STARTS_WITH, String.class);
@@ -180,7 +176,7 @@ public class SimpleProfileTest {
 
     @Test
     public void findAttributesStartingWith_shouldReturnTypedValuesForMatchingKey() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(STARTS_WITH + ":restOfKey", INTEGER_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(STARTS_WITH + ":restOfKey", INTEGER_VALUE));
 
         List<Attribute<Integer>> result = profile.findAttributesStartingWith(STARTS_WITH, Integer.class);
 
@@ -190,14 +186,14 @@ public class SimpleProfileTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void findAttributeStartingWith_shouldThrowExceptionForNullAttributeName() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, INTEGER_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(SOME_KEY, INTEGER_VALUE));
 
         profile.findAttributeStartingWith(null, Integer.class);
     }
 
     @Test
     public void findAttributeStartingWith_shouldReturnNullWhenNoMatchingName() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(SOME_KEY, INTEGER_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(SOME_KEY, INTEGER_VALUE));
 
         Attribute<Integer> result = profile.findAttributeStartingWith(STARTS_WITH, Integer.class);
 
@@ -206,7 +202,7 @@ public class SimpleProfileTest {
 
     @Test
     public void findAttributeStartingWith_shouldThrowExceptionForMismatchingType() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(STARTS_WITH, INTEGER_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(STARTS_WITH, INTEGER_VALUE));
 
         try {
             profile.findAttributeStartingWith(STARTS_WITH, String.class);
@@ -221,7 +217,7 @@ public class SimpleProfileTest {
 
     @Test
     public void findAttributeStartingWith_shouldReturnTypedValueForMatchingKey() {
-        SimpleProfile profile = new SimpleProfile(asAttributeList(STARTS_WITH + ":restOfKey", INTEGER_VALUE));
+        Profile profile = new ProfileImpl(asAttributeList(STARTS_WITH + ":restOfKey", INTEGER_VALUE));
 
         Attribute<Integer> result = profile.findAttributeStartingWith(STARTS_WITH, Integer.class);
 
@@ -234,7 +230,7 @@ public class SimpleProfileTest {
         attributeList.add(createAttribute("some_attribute", "firstValue"));
         attributeList.add(createAttribute("some_attribute", "secondValue"));
 
-        SimpleProfile profile = new SimpleProfile(attributeList);
+        Profile profile = new ProfileImpl(attributeList);
 
         Attribute<String> result = profile.getAttribute("some_attribute", String.class);
 
@@ -243,11 +239,11 @@ public class SimpleProfileTest {
 
     private static <T> List<Attribute<?>> asAttributeList(String key, T o) {
         Attribute<?> a = createAttribute(key, o);
-        return Collections.<Attribute<?>>singletonList(a);
+        return Collections.singletonList(a);
     }
 
     private static <T> Attribute<?> createAttribute(String key, T o) {
-        return new SimpleAttribute(key, o);
+        return new Attribute<>(key, o);
     }
 
 }

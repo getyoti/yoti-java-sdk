@@ -147,7 +147,6 @@ public class ActivityDetailsFactoryTest {
         assertSame(profileMock, getWrappedProfile(result.getApplicationProfile()));
         assertSame(extraDataMock, result.getExtraData());
         assertEquals("", result.getRememberMeId());
-        assertEquals("", result.getUserId());
         assertEquals(null, result.getParentRememberMeId());
         assertEquals(ENCODED_RECEIPT_STRING, result.getReceiptId());
         assertEquals(DATE, result.getTimestamp());
@@ -175,7 +174,6 @@ public class ActivityDetailsFactoryTest {
         assertSame(profileMock, getWrappedProfile(result.getApplicationProfile()));
         assertSame(extraDataMock, result.getExtraData());
         assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getRememberMeId());
-        assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getUserId());
         assertEquals(SOME_PARENT_REMEMBER_ME_ID_STRING, result.getParentRememberMeId());
         assertEquals(ENCODED_RECEIPT_STRING, result.getReceiptId());
         assertEquals(DATE, result.getTimestamp());
@@ -203,7 +201,6 @@ public class ActivityDetailsFactoryTest {
         assertSame(profileMock, getWrappedProfile(result.getApplicationProfile()));
         assertSame(extraDataMock, result.getExtraData());
         assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getRememberMeId());
-        assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getUserId());
         assertEquals(SOME_PARENT_REMEMBER_ME_ID_STRING, result.getParentRememberMeId());
         assertEquals(ENCODED_RECEIPT_STRING, result.getReceiptId());
         assertEquals(DATE, result.getTimestamp());

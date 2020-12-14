@@ -1,4 +1,4 @@
-package com.yoti.api.client.spi.remote;
+package com.yoti.api.client;
 
 import static java.lang.Boolean.parseBoolean;
 
@@ -10,18 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes;
-import com.yoti.api.client.AgeVerification;
-import com.yoti.api.client.Attribute;
-import com.yoti.api.client.Date;
-import com.yoti.api.client.DocumentDetails;
-import com.yoti.api.client.HumanProfile;
-import com.yoti.api.client.Image;
-import com.yoti.api.client.Profile;
 
 /**
  * Adapter linking Profile and ApplicationProfile together by wrapping the latter and exposing well-known attributes.
  */
-final class HumanProfileAdapter implements HumanProfile {
+public final class HumanProfileAdapter implements HumanProfile {
 
     private final Profile wrapped;
     private Map<String, AgeVerification> verificationsMap;
@@ -35,7 +28,7 @@ final class HumanProfileAdapter implements HumanProfile {
     }
 
     @Override
-    public Attribute getAttribute(String name) {
+    public Attribute<?> getAttribute(String name) {
         return wrapped.getAttribute(name);
     }
 
@@ -101,10 +94,10 @@ final class HumanProfileAdapter implements HumanProfile {
         if (verificationsMap == null) {
             Map<String, AgeVerification> verifications = new HashMap<>();
             for (Attribute<String> ageOver : wrapped.findAttributesStartingWith(HumanProfileAttributes.AGE_OVER, String.class)) {
-                verifications.put(ageOver.getName(), new SimpleAgeVerification(ageOver));
+                verifications.put(ageOver.getName(), new AgeVerification(ageOver));
             }
             for (Attribute<String> ageUnder : wrapped.findAttributesStartingWith(HumanProfileAttributes.AGE_UNDER, String.class)) {
-                verifications.put(ageUnder.getName(), new SimpleAgeVerification(ageUnder));
+                verifications.put(ageUnder.getName(), new AgeVerification(ageUnder));
             }
             this.verificationsMap = verifications;
         }

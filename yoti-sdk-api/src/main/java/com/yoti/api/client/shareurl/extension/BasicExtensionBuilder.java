@@ -1,9 +1,23 @@
 package com.yoti.api.client.shareurl.extension;
 
-public interface BasicExtensionBuilder extends ExtensionBuilder<Object> {
+public class BasicExtensionBuilder implements ExtensionBuilder<Object> {
 
-    BasicExtensionBuilder withType(String type);
+    private String type;
+    private Object content;
 
-    BasicExtensionBuilder withContent(Object content);
+    public BasicExtensionBuilder withType(String type) {
+        this.type = type;
+        return this;
+    }
+
+    public BasicExtensionBuilder withContent(Object content) {
+        this.content = content;
+        return this;
+    }
+
+    @Override
+    public Extension<Object> build() {
+        return new Extension(type, content);
+    }
 
 }
