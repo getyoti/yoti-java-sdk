@@ -102,8 +102,8 @@ public class ExtraDataConverterTest {
     @Test
     public void shouldReturnFirstMatchingThirdPartyAttribute() throws Exception {
         when(dataEntryConverterMock.convertDataEntry(any(DataEntryProto.DataEntry.class)))
-                .thenReturn(new SimpleAttributeIssuanceDetails("someValue", null, null))
-                .thenReturn(new SimpleAttributeIssuanceDetails("someOtherValue", null, null));
+                .thenReturn(new AttributeIssuanceDetails("someValue", null, null))
+                .thenReturn(new AttributeIssuanceDetails("someOtherValue", null, null));
 
         byte[] extraDataBytes = createExtraData(
                 buildDataEntry(THIRD_PARTY_ATTRIBUTE, ByteString.copyFromUtf8("someValue")),

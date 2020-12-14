@@ -58,7 +58,7 @@ class ActivityDetailsFactory {
         String parentRememberMeId = parseRememberMeId(receipt.getParentRememberMeId());
         Date timestamp = parseTimestamp(receipt.getTimestamp());
 
-        return new SimpleActivityDetails(rememberMeId, parentRememberMeId, userProfile, applicationProfile, extraData, timestamp, receipt.getReceiptId());
+        return new ActivityDetails(rememberMeId, parentRememberMeId, userProfile, applicationProfile, extraData, timestamp, receipt.getReceiptId());
     }
 
     private ExtraData parseExtraData(byte[] extraDataBytes, Key secretKey) throws ProfileException {
@@ -67,7 +67,7 @@ class ActivityDetailsFactory {
             extraData = extraDataReader.read(extraDataBytes, secretKey);
         } catch (ExtraDataException e) {
             LOG.error("Failed to parse extra data from receipt");
-            extraData = new SimpleExtraData();
+            extraData = new ExtraData();
         }
 
         return extraData;

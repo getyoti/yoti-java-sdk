@@ -1,8 +1,7 @@
 package com.yoti.api.client.shareurl.constraint;
 
-import com.yoti.api.client.shareurl.policy.SimpleWantedAnchorBuilder;
 import com.yoti.api.client.shareurl.policy.WantedAnchor;
-import com.yoti.api.client.shareurl.policy.WantedAnchorBuilder;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -15,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SimpleSourceConstraintBuilderTest {
+public class SourceConstraintTest {
 
     private static final boolean SOME_SOFT_PREFERENCE = true;
 
@@ -24,7 +23,7 @@ public class SimpleSourceConstraintBuilderTest {
 
     @Test
     public void shouldBuildSourceConstraintWithGivenValues() {
-        SourceConstraint sourceConstraint = new SimpleSourceConstraintBuilder()
+        SourceConstraint sourceConstraint = SourceConstraint.builder()
                 .withWantedAnchor(wantedAnchorMock)
                 .withSoftPreference(SOME_SOFT_PREFERENCE)
                 .build();
@@ -39,17 +38,17 @@ public class SimpleSourceConstraintBuilderTest {
 
     @Test
     public void shouldRetainOrderOfWantedAnchors() {
-        WantedAnchor firstWantedAnchor = new SimpleWantedAnchorBuilder()
+        WantedAnchor firstWantedAnchor = WantedAnchor.builder()
                 .withValue("firstValue")
                 .withSubType("")
                 .build();
 
-        WantedAnchor secondWantedAnchor = new SimpleWantedAnchorBuilder()
+        WantedAnchor secondWantedAnchor = WantedAnchor.builder()
                 .withValue("secondValue")
                 .withSubType("")
                 .build();
 
-        SourceConstraint sourceConstraint = new SimpleSourceConstraintBuilder()
+        SourceConstraint sourceConstraint = SourceConstraint.builder()
                 .withWantedAnchor(firstWantedAnchor)
                 .withWantedAnchor(secondWantedAnchor)
                 .build();

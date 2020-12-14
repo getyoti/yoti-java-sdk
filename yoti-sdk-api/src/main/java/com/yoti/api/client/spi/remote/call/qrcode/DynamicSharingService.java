@@ -13,6 +13,7 @@ import java.security.KeyPair;
 
 import com.yoti.api.client.shareurl.DynamicScenario;
 import com.yoti.api.client.shareurl.DynamicShareException;
+import com.yoti.api.client.shareurl.ShareUrlResult;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
 import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
@@ -46,7 +47,7 @@ public final class DynamicSharingService {
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
 
-    public SimpleShareUrlResult createShareUrl(String appId, KeyPair keyPair, DynamicScenario dynamicScenario) throws DynamicShareException {
+    public ShareUrlResult createShareUrl(String appId, KeyPair keyPair, DynamicScenario dynamicScenario) throws DynamicShareException {
         notNull(appId, "Application id");
         notNull(keyPair, "Application key Pair");
         notNull(dynamicScenario, "Dynamic scenario");
@@ -59,7 +60,7 @@ public final class DynamicSharingService {
 
             SignedRequest signedRequest = createSignedRequest(keyPair, path, body);
 
-            return signedRequest.execute(SimpleShareUrlResult.class);
+            return signedRequest.execute(ShareUrlResult.class);
         } catch (ResourceException ex) {
             throw new DynamicShareException("Error posting the request: ", ex);
         } catch (IOException ex) {

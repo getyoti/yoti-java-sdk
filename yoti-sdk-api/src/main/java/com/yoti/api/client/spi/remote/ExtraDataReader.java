@@ -31,7 +31,7 @@ public class ExtraDataReader {
             byte[] extraDataBytes = encryptedDataReader.decryptBytes(encryptedBytes, secretKey);
             extraData = extraDataConverter.read(extraDataBytes);
         } else {
-            extraData = new SimpleExtraData();
+            extraData = new ExtraData();
         }
 
         return extraData;

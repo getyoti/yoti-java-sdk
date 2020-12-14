@@ -1,4 +1,4 @@
-package com.yoti.api.client.spi.remote;
+package com.yoti.api.client;
 
 import static java.util.Collections.unmodifiableMap;
 
@@ -8,10 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.yoti.api.client.Attribute;
-import com.yoti.api.client.Profile;
-
-final class SimpleProfile implements Profile {
+public class ProfileImpl implements Profile {
 
     private final Map<String, List<Attribute<?>>> protectedAttributes;
 
@@ -20,7 +17,7 @@ final class SimpleProfile implements Profile {
      *
      * @param attributeList list containing the attributes for this profile
      */
-    public SimpleProfile(List<Attribute<?>> attributeList) {
+    public ProfileImpl(List<Attribute<?>> attributeList) {
         if (attributeList == null) {
             throw new IllegalArgumentException("Attributes must not be null.");
         }
@@ -41,7 +38,7 @@ final class SimpleProfile implements Profile {
     }
 
     @Override
-    public Attribute getAttribute(String name) {
+    public Attribute<?> getAttribute(String name) {
         ensureName(name);
         List<Attribute<?>> attributes = protectedAttributes.get(name);
         if (attributes != null && attributes.size() > 0) {
@@ -115,13 +112,12 @@ final class SimpleProfile implements Profile {
     @SuppressWarnings("unchecked")
     private <T> Attribute<T> castSafely(Class<T> clazz, Attribute<?> attribute) {
         if (attribute != null) {
-            Class valueType = attribute.getValue().getClass();
+            Class<?> valueType = attribute.getValue().getClass();
             if (!clazz.isAssignableFrom(valueType)) {
                 throw new ClassCastException(String.format("Cannot cast from '%s' to '%s'", valueType.getCanonicalName(), clazz.getCanonicalName()));
             }
         }
         return (Attribute<T>) attribute;
     }
-
 
 }

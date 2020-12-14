@@ -7,14 +7,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SimpleWantedAnchorBuilderTest {
+public class WantedAnchorTest {
 
     private static final String SOME_VALUE = "someAnchorValue";
     private static final String SOME_SUB_TYPE = "someAnchorSubType";
 
     @Test
     public void shouldBuildWantedAnchorWithGivenValues() {
-        WantedAnchor wantedAnchor = new SimpleWantedAnchorBuilder()
+        WantedAnchor wantedAnchor = WantedAnchor.builder()
                 .withValue(SOME_VALUE)
                 .withSubType(SOME_SUB_TYPE)
                 .build();
@@ -25,21 +25,21 @@ public class SimpleWantedAnchorBuilderTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionForValueWithNull() {
-        new SimpleWantedAnchorBuilder()
+        WantedAnchor.builder()
                 .withValue(null)
                 .build();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionForValueWithEmptyString() {
-        new SimpleWantedAnchorBuilder()
+        WantedAnchor.builder()
                 .withValue("")
                 .build();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionForSubTypeWithNull() {
-        new SimpleWantedAnchorBuilder()
+        WantedAnchor.builder()
                 .withValue(SOME_VALUE)
                 .withSubType(null)
                 .build();

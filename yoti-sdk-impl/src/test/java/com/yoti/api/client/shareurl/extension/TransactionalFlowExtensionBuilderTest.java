@@ -8,14 +8,14 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-public class SimpleTransactionalFlowExtensionBuilderTest {
+public class TransactionalFlowExtensionBuilderTest {
 
     private static final Object SOME_OBJECT = new Object();
 
     @Test
     public void shouldFailForNullContent() {
         try {
-            new SimpleTransactionalFlowExtensionBuilder()
+            new TransactionalFlowExtensionBuilder()
                     .withContent(null)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -27,7 +27,7 @@ public class SimpleTransactionalFlowExtensionBuilderTest {
 
     @Test
     public void shouldBuildWithContent() {
-        Extension extension = new SimpleTransactionalFlowExtensionBuilder()
+        Extension<?> extension = new TransactionalFlowExtensionBuilder()
                 .withContent(SOME_OBJECT)
                 .build();
 

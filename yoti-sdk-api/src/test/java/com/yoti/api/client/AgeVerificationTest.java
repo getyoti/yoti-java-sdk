@@ -1,16 +1,14 @@
-package com.yoti.api.client.spi.remote;
+package com.yoti.api.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import com.yoti.api.client.Attribute;
-
 import org.hamcrest.core.StringContains;
 import org.junit.Test;
 
-public class SimpleAgeVerificationTest {
+public class AgeVerificationTest {
 
     @Test
     public void shouldFailForAttributeNamesThatDontMatchThePattern() {
@@ -27,8 +25,8 @@ public class SimpleAgeVerificationTest {
 
     private void assertExceptionForMalformedAttributeName(String attName) {
         try {
-            Attribute<String> attribute = new SimpleAttribute<>(attName, null);
-            new SimpleAgeVerification(attribute);
+            Attribute<String> attribute = new Attribute<>(attName, null);
+            new AgeVerification(attribute);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), StringContains.containsString("attribute.name"));
             assertThat(e.getMessage(), StringContains.containsString(attName));
@@ -40,9 +38,9 @@ public class SimpleAgeVerificationTest {
 
     @Test
     public void shouldParseWellFormedAgeDerivation() {
-        Attribute<String> attribute = new SimpleAttribute<>("any_string_here:21", "true");
+        Attribute<String> attribute = new Attribute<>("any_string_here:21", "true");
 
-        SimpleAgeVerification result = new SimpleAgeVerification(attribute);
+        AgeVerification result = new AgeVerification(attribute);
 
         assertEquals("any_string_here", result.getCheckType());
         assertEquals(21, result.getAge());

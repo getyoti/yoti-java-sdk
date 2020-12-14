@@ -1,19 +1,20 @@
 package com.yoti.api.client.spi.remote.call.aml;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+
 import com.yoti.api.client.aml.AmlAddress;
-import com.yoti.api.client.aml.AmlAddressFactory;
 import com.yoti.api.client.aml.AmlProfile;
-import com.yoti.api.client.aml.AmlProfileFactory;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
-
 @RunWith(MockitoJUnitRunner.class)
-public class SimpleAmlTest {
+public class AmlTest {
 
     private static final String SOME_GIVEN_NAME = "Jandice";
     private static final String SOME_FAMILY_NAME = "Witherspoon";
@@ -27,7 +28,12 @@ public class SimpleAmlTest {
 
     @Test
     public void shouldReturnAmlProfile() {
-        AmlProfile amlProfile = new SimpleAmlProfile(SOME_GIVEN_NAME, SOME_FAMILY_NAME, SOME_SSN, amlAddressMock);
+        AmlProfile amlProfile = AmlProfile.builder()
+                .withGivenNames(SOME_GIVEN_NAME)
+                .withFamilyName(SOME_FAMILY_NAME)
+                .withSsn(SOME_SSN)
+                .withAddress(amlAddressMock)
+                .build();
 
         assertNotNull(amlProfile);
         assertThat(amlProfile.getGivenNames(), is(SOME_GIVEN_NAME));
@@ -38,8 +44,12 @@ public class SimpleAmlTest {
 
     @Test
     public void factoryShouldReturnValidAmlProfile() {
-        AmlProfileFactory amlProfileFactory = new SimpleAmlProfileFactory();
-        AmlProfile amlProfile = amlProfileFactory.create(SOME_GIVEN_NAME, SOME_FAMILY_NAME, SOME_SSN, amlAddressMock);
+        AmlProfile amlProfile = AmlProfile.builder()
+                .withGivenNames(SOME_GIVEN_NAME)
+                .withFamilyName(SOME_FAMILY_NAME)
+                .withSsn(SOME_SSN)
+                .withAddress(amlAddressMock)
+                .build();
 
         assertNotNull(amlProfile);
         assertThat(amlProfile.getGivenNames(), is(SOME_GIVEN_NAME));
@@ -50,7 +60,7 @@ public class SimpleAmlTest {
 
     @Test
     public void shouldReturnAmlAddress() {
-        AmlAddress amlAddress = new SimpleAmlAddress(SOME_POSTCODE, SOME_COUNTRY);
+        AmlAddress amlAddress = new AmlAddress(SOME_POSTCODE, SOME_COUNTRY);
 
         assertNotNull(amlAddress);
         assertThat(amlAddress.getPostCode(), is(SOME_POSTCODE));
@@ -59,8 +69,10 @@ public class SimpleAmlTest {
 
     @Test
     public void factoryShouldReturnValidSimpleAmlAddress() {
-        AmlAddressFactory amlAddressFactory = new SimpleAmlAddressFactory();
-        AmlAddress amlAddress = amlAddressFactory.create(SOME_POSTCODE, SOME_COUNTRY);
+        AmlAddress amlAddress = AmlAddress.builder()
+                .withPostCode(SOME_POSTCODE)
+                .withCountry(SOME_COUNTRY)
+                .build();
 
         assertNotNull(amlAddress);
         assertThat(amlAddress.getPostCode(), is(SOME_POSTCODE));
