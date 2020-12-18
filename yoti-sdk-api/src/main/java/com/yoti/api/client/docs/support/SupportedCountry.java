@@ -2,10 +2,22 @@ package com.yoti.api.client.docs.support;
 
 import java.util.List;
 
-public interface SupportedCountry {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    String getCode();
+public class SupportedCountry {
 
-    List<? extends SupportedDocument> getSupportedDocuments();
+    @JsonProperty("code")
+    private String code;
+
+    @JsonProperty("supported_documents")
+    private List<SupportedDocument> supportedDocuments;
+
+    public String getCode() {
+        return code;
+    }
+
+    public List<? extends SupportedDocument> getSupportedDocuments() {
+        return supportedDocuments;
+    }
 
 }

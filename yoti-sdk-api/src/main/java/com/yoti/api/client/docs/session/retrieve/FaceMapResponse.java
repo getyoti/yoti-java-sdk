@@ -1,7 +1,15 @@
 package com.yoti.api.client.docs.session.retrieve;
 
-public interface FaceMapResponse {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    MediaResponse getMedia();
+public class FaceMapResponse {
+
+    @JsonProperty("media")
+    private MediaResponse media;
+
+    public MediaResponse getMedia() {
+        return media;
+    }
+
 
 }

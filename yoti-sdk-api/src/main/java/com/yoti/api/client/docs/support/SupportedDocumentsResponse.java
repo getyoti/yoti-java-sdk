@@ -2,8 +2,15 @@ package com.yoti.api.client.docs.support;
 
 import java.util.List;
 
-public interface SupportedDocumentsResponse {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    List<? extends SupportedCountry> getSupportedCountries();
+public class SupportedDocumentsResponse {
+
+    @JsonProperty("supported_countries")
+    List<SupportedCountry> supportedCountries;
+
+    public List<? extends SupportedCountry> getSupportedCountries() {
+        return supportedCountries;
+    }
 
 }

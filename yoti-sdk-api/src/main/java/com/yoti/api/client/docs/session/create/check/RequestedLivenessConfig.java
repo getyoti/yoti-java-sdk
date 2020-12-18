@@ -1,9 +1,22 @@
 package com.yoti.api.client.docs.session.create.check;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * The configuration applied when creating a LivenessCheck
  */
-public interface RequestedLivenessConfig extends RequestedCheckConfig {
+public class RequestedLivenessConfig implements RequestedCheckConfig {
+
+    @JsonProperty("liveness_type")
+    private final String livenessType;
+
+    @JsonProperty("max_retries")
+    private final int maxRetries;
+
+    RequestedLivenessConfig(int maxRetries, String livenessType) {
+        this.maxRetries = maxRetries;
+        this.livenessType = livenessType;
+    }
 
     /**
      * Returns the maximum number of retries allowed by the user
@@ -11,13 +24,17 @@ public interface RequestedLivenessConfig extends RequestedCheckConfig {
      *
      * @return the maximum number of retries
      */
-    int getMaxRetries();
+    public int getMaxRetries() {
+        return maxRetries;
+    }
 
     /**
      * Returns the type of the liveness check
      *
      * @return the liveness type
      */
-    String getLivenessType();
+    public String getLivenessType() {
+        return livenessType;
+    }
 
 }

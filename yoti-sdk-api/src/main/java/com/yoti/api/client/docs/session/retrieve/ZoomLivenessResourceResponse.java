@@ -2,10 +2,24 @@ package com.yoti.api.client.docs.session.retrieve;
 
 import java.util.List;
 
-public interface ZoomLivenessResourceResponse extends LivenessResourceResponse {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    FaceMapResponse getFaceMap();
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ZoomLivenessResourceResponse extends LivenessResourceResponse {
 
-    List<? extends FrameResponse> getFrames();
+    @JsonProperty("facemap")
+    private FaceMapResponse faceMap;
+
+    @JsonProperty("frames")
+    private List<FrameResponse> frames;
+
+    public FaceMapResponse getFaceMap() {
+        return faceMap;
+    }
+
+    public List<? extends FrameResponse> getFrames() {
+        return frames;
+    }
 
 }

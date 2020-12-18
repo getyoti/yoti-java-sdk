@@ -1,6 +1,11 @@
 package com.yoti.api.client.docs.session.retrieve;
 
-public interface DocumentIdPhotoResponse {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class DocumentIdPhotoResponse {
+
+    @JsonProperty("media")
+    private MediaResponse media;
 
     /**
      * Retrieve the {@link MediaResponse} related to the
@@ -8,6 +13,8 @@ public interface DocumentIdPhotoResponse {
      *
      * @return the media
      */
-    MediaResponse getMedia();
+    public MediaResponse getMedia() {
+        return media;
+    }
 
 }

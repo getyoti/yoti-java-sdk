@@ -2,12 +2,31 @@ package com.yoti.api.client.docs.session.retrieve;
 
 import java.util.List;
 
-public interface BreakdownResponse {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    String getSubCheck();
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class BreakdownResponse {
 
-    String getResult();
+    @JsonProperty("sub_check")
+    private String subCheck;
 
-    List<? extends DetailsResponse> getDetails();
+    @JsonProperty("result")
+    private String result;
+
+    @JsonProperty("details")
+    private List<DetailsResponse> details;
+
+    public String getSubCheck() {
+        return subCheck;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public List<? extends DetailsResponse> getDetails() {
+        return details;
+    }
 
 }

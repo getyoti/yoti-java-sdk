@@ -2,8 +2,14 @@ package com.yoti.api.client.docs.session.retrieve;
 
 import java.util.List;
 
-public interface TextExtractionTaskResponse extends TaskResponse {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-    List<GeneratedTextDataCheckResponse> getGeneratedTextDataChecks();
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class TextExtractionTaskResponse extends TaskResponse {
+
+    public List<GeneratedTextDataCheckResponse> getGeneratedTextDataChecks() {
+        return filterGeneratedChecksByType(GeneratedTextDataCheckResponse.class);
+    }
+
 
 }

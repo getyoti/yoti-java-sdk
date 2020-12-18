@@ -1,8 +1,38 @@
 package com.yoti.api.client.docs.session.create.check;
 
-public interface RequestedIdDocumentComparisonCheck<T extends RequestedIdDocumentComparisonConfig> extends RequestedCheck<T> {
+import com.yoti.api.client.docs.DocScanConstants;
+
+public class RequestedIdDocumentComparisonCheck extends RequestedCheck<RequestedIdDocumentComparisonConfig> {
+
+    private final RequestedIdDocumentComparisonConfig config;
+
+    RequestedIdDocumentComparisonCheck(RequestedIdDocumentComparisonConfig config) {
+        this.config = config;
+    }
+
+    public static RequestedIdDocumentComparisonCheck.Builder builder() {
+        return new RequestedIdDocumentComparisonCheck.Builder();
+    }
 
     @Override
-    T getConfig();
+    public String getType() {
+        return DocScanConstants.ID_DOCUMENT_COMPARISON;
+    }
+
+    @Override
+    public RequestedIdDocumentComparisonConfig getConfig() {
+        return config;
+    }
+
+    public static class Builder {
+
+        private Builder() {
+        }
+
+        public RequestedIdDocumentComparisonCheck build() {
+            return new RequestedIdDocumentComparisonCheck(new RequestedIdDocumentComparisonConfig());
+        }
+
+    }
 
 }

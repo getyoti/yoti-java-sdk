@@ -2,18 +2,47 @@ package com.yoti.api.client.docs.session.retrieve;
 
 import java.util.List;
 
-public interface IdDocumentResourceResponse extends ResourceResponse {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    String getDocumentType();
+public class IdDocumentResourceResponse extends ResourceResponse {
 
-    String getIssuingCountry();
+    @JsonProperty("document_type")
+    private String documentType;
 
-    List<? extends PageResponse> getPages();
+    @JsonProperty("issuing_country")
+    private String issuingCountry;
 
-    DocumentFieldsResponse getDocumentFields();
+    @JsonProperty("pages")
+    private List<PageResponse> pages;
 
-    List<TextExtractionTaskResponse> getTextExtractionTasks();
+    @JsonProperty("document_fields")
+    private DocumentFieldsResponse documentFields;
 
-    DocumentIdPhotoResponse getDocumentIdPhoto();
+    @JsonProperty("document_id_photo")
+    private DocumentIdPhotoResponse documentIdPhoto;
+
+    public String getDocumentType() {
+        return documentType;
+    }
+
+    public String getIssuingCountry() {
+        return issuingCountry;
+    }
+
+    public List<? extends PageResponse> getPages() {
+        return pages;
+    }
+
+    public DocumentFieldsResponse getDocumentFields() {
+        return documentFields;
+    }
+
+    public List<TextExtractionTaskResponse> getTextExtractionTasks() {
+        return filterTasksByType(TextExtractionTaskResponse.class);
+    }
+
+    public DocumentIdPhotoResponse getDocumentIdPhoto() {
+        return documentIdPhoto;
+    }
 
 }
