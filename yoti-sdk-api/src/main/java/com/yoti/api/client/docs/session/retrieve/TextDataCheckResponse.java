@@ -1,4 +1,5 @@
 package com.yoti.api.client.docs.session.retrieve;
 
-public interface TextDataCheckResponse extends CheckResponse {
+public class TextDataCheckResponse extends CheckResponse {
+
 }

@@ -1,37 +1,29 @@
 package com.yoti.api.client.docs;
 
-import static com.yoti.api.client.spi.remote.call.YotiConstants.*;
+import static java.util.Arrays.asList;
+
+import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JSON;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_DOCS_URL;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_DOCS_URL;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.KEY_PAIR_PEM;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
-import static java.util.Arrays.asList;
+
 import static junit.framework.TestCase.assertSame;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertNotSame;
-import static org.mockito.Mockito.*;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yoti.api.client.Media;
-import com.yoti.api.client.docs.session.create.CreateSessionResult;
-import com.yoti.api.client.docs.session.create.SessionSpec;
-import com.yoti.api.client.docs.session.create.SimpleCreateSessionResult;
-import com.yoti.api.client.docs.session.retrieve.*;
-import com.yoti.api.client.docs.support.SimpleSupportedDocumentsResponse;
-import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
-import com.yoti.api.client.spi.remote.call.*;
-import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
-import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Answers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +33,32 @@ import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.yoti.api.client.Media;
+import com.yoti.api.client.docs.session.create.CreateSessionResult;
+import com.yoti.api.client.docs.session.create.SessionSpec;
+import com.yoti.api.client.docs.session.retrieve.AuthenticityCheckResponse;
+import com.yoti.api.client.docs.session.retrieve.CheckResponse;
+import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
+import com.yoti.api.client.docs.session.retrieve.LivenessResourceResponse;
+import com.yoti.api.client.docs.session.retrieve.ZoomLivenessResourceResponse;
+import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
+import com.yoti.api.client.spi.remote.call.HttpMethod;
+import com.yoti.api.client.spi.remote.call.ResourceException;
+import com.yoti.api.client.spi.remote.call.SignedRequest;
+import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
+import com.yoti.api.client.spi.remote.call.SignedRequestResponse;
+import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Answers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DocScanServiceTest {
@@ -63,7 +81,7 @@ public class DocScanServiceTest {
     @Mock SignedRequest signedRequestMock;
     @Mock(answer = Answers.RETURNS_SELF) SignedRequestBuilder signedRequestBuilderMock;
     @Mock SignedRequestResponse signedRequestResponseMock;
-    @Mock SimpleSupportedDocumentsResponse supportedDocumentsResponseMock;
+    @Mock SupportedDocumentsResponse supportedDocumentsResponseMock;
 
 
     @BeforeClass
@@ -129,7 +147,7 @@ public class DocScanServiceTest {
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
         doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SimpleCreateSessionResult.class)).thenThrow(resourceException);
+        when(signedRequestMock.execute(CreateSessionResult.class)).thenThrow(resourceException);
 
         try {
             docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock);
@@ -148,7 +166,7 @@ public class DocScanServiceTest {
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
         doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SimpleCreateSessionResult.class)).thenThrow(ioException);
+        when(signedRequestMock.execute(CreateSessionResult.class)).thenThrow(ioException);
 
         try {
             docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock);
@@ -179,16 +197,14 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void createSession_shouldWrapGeneralException() throws Exception {
+    public void createSession_shouldWrapGeneralException() {
         final Exception someException = new Exception("Some exception we weren't expecting");
 
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock i) throws Throwable {
-                throw someException;
-            }
-        }).when(docScanService).getSignedRequestBuilder();
+        doAnswer(i -> {
+            throw someException;
+        }).when(docScanService)
+                .getSignedRequestBuilder();
 
         try {
             docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock);
@@ -203,17 +219,17 @@ public class DocScanServiceTest {
     @Test
     public void createSession_shouldCallSignedRequestBuilderWithCorrectMethods() throws Exception {
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
-        SimpleCreateSessionResult simpleCreateSessionResultMock = mock(SimpleCreateSessionResult.class);
+        CreateSessionResult createSessionResultMock = mock(CreateSessionResult.class);
 
         doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
         when(objectMapperMock.writeValueAsBytes(sessionSpecMock)).thenReturn(SOME_SESSION_SPEC_BYTES);
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SimpleCreateSessionResult.class)).thenReturn(simpleCreateSessionResultMock);
+        when(signedRequestMock.execute(CreateSessionResult.class)).thenReturn(createSessionResultMock);
         when(unsignedPathFactoryMock.createNewYotiDocsSessionPath(SOME_APP_ID)).thenReturn(SOME_PATH);
 
         CreateSessionResult result = docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock);
 
-        assertThat(result, Matchers.<CreateSessionResult>is(simpleCreateSessionResultMock));
+        assertThat(result, is(createSessionResultMock));
 
         verify(signedRequestBuilderMock).withKeyPair(KEY_PAIR);
         verify(signedRequestBuilderMock).withEndpoint(SOME_PATH);
@@ -301,7 +317,7 @@ public class DocScanServiceTest {
 
         doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SimpleGetSessionResult.class)).thenThrow(resourceException);
+        when(signedRequestMock.execute(GetSessionResult.class)).thenThrow(resourceException);
 
         try {
             docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
@@ -319,7 +335,7 @@ public class DocScanServiceTest {
 
         doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SimpleGetSessionResult.class)).thenThrow(ioException);
+        when(signedRequestMock.execute(GetSessionResult.class)).thenThrow(ioException);
 
         try {
             docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
@@ -332,15 +348,13 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void retrieveSession_shouldWrapGeneralException() throws Exception {
+    public void retrieveSession_shouldWrapGeneralException() {
         final Exception someException = new Exception("Some exception we weren't expecting");
 
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock i) throws Throwable {
-                throw someException;
-            }
-        }).when(docScanService).getSignedRequestBuilder();
+        doAnswer(i -> {
+            throw someException;
+        }).when(docScanService)
+                .getSignedRequestBuilder();
 
         try {
             docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
@@ -354,16 +368,16 @@ public class DocScanServiceTest {
 
     @Test
     public void retrieveSession_shouldCallSignedRequestBuilderWithCorrectMethods() throws Exception {
-        SimpleGetSessionResult simpleDocScanSessionResponseMock = mock(SimpleGetSessionResult.class);
+        GetSessionResult docScanSessionResponseMock = mock(GetSessionResult.class);
 
         doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SimpleGetSessionResult.class)).thenReturn(simpleDocScanSessionResponseMock);
+        when(signedRequestMock.execute(GetSessionResult.class)).thenReturn(docScanSessionResponseMock);
         when(unsignedPathFactoryMock.createYotiDocsSessionPath(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
 
-        SimpleGetSessionResult result = docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
+        GetSessionResult result = docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
 
-        assertThat(result, is(simpleDocScanSessionResponseMock));
+        assertThat(result, is(docScanSessionResponseMock));
 
         verify(signedRequestBuilderMock).withKeyPair(KEY_PAIR);
         verify(signedRequestBuilderMock).withEndpoint(SOME_PATH);
@@ -480,15 +494,13 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void deleteSession_shouldWrapGeneralException() throws Exception {
+    public void deleteSession_shouldWrapGeneralException() {
         final Exception someException = new Exception("Some exception we weren't expecting");
 
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock i) throws Throwable {
-                throw someException;
-            }
-        }).when(docScanService).getSignedRequestBuilder();
+        doAnswer(i -> {
+            throw someException;
+        }).when(docScanService)
+                .getSignedRequestBuilder();
 
         try {
             docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
@@ -886,22 +898,22 @@ public class DocScanServiceTest {
     @Test
     public void shouldNotFailForUnknownChecks() throws Exception {
         InputStream is = getClass().getResourceAsStream("/GetSessionResultExample.json");
-        GetSessionResult result = MAPPER.readValue(is, SimpleGetSessionResult.class);
+        GetSessionResult result = MAPPER.readValue(is, GetSessionResult.class);
 
         assertThat(result.getChecks(), hasSize(2));
 
-        assertThat(result.getChecks().get(0), is(instanceOf(SimpleCheckResponse.class)));
-        assertThat(result.getChecks().get(0), is(not(instanceOf(SimpleAuthenticityCheckResponse.class))));
+        assertThat(result.getChecks().get(0), is(instanceOf(CheckResponse.class)));
+        assertThat(result.getChecks().get(0), is(not(instanceOf(AuthenticityCheckResponse.class))));
         assertThat(result.getChecks().get(0).getId(), is("someUnknownCheckId"));
 
-        assertThat(result.getChecks().get(1), is(instanceOf(SimpleAuthenticityCheckResponse.class)));
+        assertThat(result.getChecks().get(1), is(instanceOf(AuthenticityCheckResponse.class)));
         assertThat(result.getChecks().get(1).getId(), is("documentAuthenticityCheckId"));
 
         List<? extends LivenessResourceResponse> livenessResourceResponse = result.getResources().getLivenessCapture();
-        assertThat(livenessResourceResponse.get(0), is(instanceOf(SimpleLivenessResourceResponse.class)));
+        assertThat(livenessResourceResponse.get(0), is(instanceOf(LivenessResourceResponse.class)));
         assertThat(livenessResourceResponse.get(0).getId(), is("someUnknownLivenessId"));
 
-        assertThat(livenessResourceResponse.get(1), is(instanceOf(SimpleZoomLivenessResourceResponse.class)));
+        assertThat(livenessResourceResponse.get(1), is(instanceOf(ZoomLivenessResourceResponse.class)));
         assertThat(livenessResourceResponse.get(1).getId(), is("someZoomId"));
     }
 
@@ -939,7 +951,7 @@ public class DocScanServiceTest {
 
         doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SimpleSupportedDocumentsResponse.class)).thenThrow(resourceException);
+        when(signedRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(resourceException);
 
         try {
             docScanService.getSupportedDocuments(KEY_PAIR);
@@ -957,7 +969,7 @@ public class DocScanServiceTest {
 
         doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SimpleSupportedDocumentsResponse.class)).thenThrow(ioException);
+        when(signedRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(ioException);
 
         try {
             docScanService.getSupportedDocuments(KEY_PAIR);
@@ -990,7 +1002,7 @@ public class DocScanServiceTest {
     public void getSupportedDocuments_shouldReturnSupportedDocuments() throws Exception {
         doReturn(signedRequestBuilderMock).when(docScanService).getSignedRequestBuilder();
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SimpleSupportedDocumentsResponse.class)).thenReturn(supportedDocumentsResponseMock);
+        when(signedRequestMock.execute(SupportedDocumentsResponse.class)).thenReturn(supportedDocumentsResponseMock);
         when(unsignedPathFactoryMock.createGetSupportedDocumentsPath()).thenReturn(SOME_PATH);
 
         SupportedDocumentsResponse result = docScanService.getSupportedDocuments(KEY_PAIR);

@@ -1,6 +1,16 @@
 package com.yoti.api.client.docs.session.retrieve;
 
-public interface FileResponse {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    MediaResponse getMedia();
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class FileResponse {
+
+    @JsonProperty("media")
+    private MediaResponse media;
+
+    public MediaResponse getMedia() {
+        return media;
+    }
+
 }

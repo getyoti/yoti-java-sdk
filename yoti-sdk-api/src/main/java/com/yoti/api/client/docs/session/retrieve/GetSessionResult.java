@@ -1,43 +1,104 @@
 package com.yoti.api.client.docs.session.retrieve;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public interface GetSessionResult {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    long getClientSessionTokenTtl();
+public class GetSessionResult {
 
-    String getSessionId();
+    @JsonProperty("client_session_token_ttl")
+    private long clientSessionTokenTtl;
 
-    String getUserTrackingId();
+    @JsonProperty("session_id")
+    private String sessionId;
 
-    String getState();
+    @JsonProperty("user_tracking_id")
+    private String userTrackingId;
 
-    String getClientSessionToken();
+    @JsonProperty("state")
+    private String state;
 
-    String getBiometricConsentTimestamp();
+    @JsonProperty("client_session_token")
+    private String clientSessionToken;
 
-    List<? extends CheckResponse> getChecks();
+    @JsonProperty("biometric_consent")
+    private String biometricConsent;
 
-    ResourceContainer getResources();
+    @JsonProperty("checks")
+    private List<? extends CheckResponse> checks;
 
-    List<AuthenticityCheckResponse> getAuthenticityChecks();
+    @JsonProperty("resources")
+    private ResourceContainer resources;
 
-    List<FaceMatchCheckResponse> getFaceMatchChecks();
+    public String getSessionId() {
+        return sessionId;
+    }
 
-    /**
-     * @deprecated Please use {@code getIdDocumentTextDataChecks()} instead.
-     */
-    @Deprecated
-    List<TextDataCheckResponse> getTextDataChecks();
+    public long getClientSessionTokenTtl() {
+        return clientSessionTokenTtl;
+    }
 
-    List<TextDataCheckResponse> getIdDocumentTextDataChecks();
+    public String getState() {
+        return state;
+    }
 
-    List<SupplementaryDocumentTextDataCheckResponse> getSupplementaryDocumentTextDataChecks();
+    public String getClientSessionToken() {
+        return clientSessionToken;
+    }
 
-    List<LivenessCheckResponse> getLivenessChecks();
+    public String getBiometricConsentTimestamp() {
+        return biometricConsent;
+    }
 
-    List<IdDocumentComparisonCheckResponse> getIdDocumentComparisonChecks();
+    public List<? extends CheckResponse> getChecks() {
+        return checks;
+    }
 
-    List<ThirdPartyIdentityCheckResponse> getThirdPartyIdentityChecks();
+    public ResourceContainer getResources() {
+        return resources;
+    }
+
+    public String getUserTrackingId() {
+        return userTrackingId;
+    }
+
+    public List<AuthenticityCheckResponse> getAuthenticityChecks() {
+        return filterChecksByType(AuthenticityCheckResponse.class);
+    }
+
+    public List<FaceMatchCheckResponse> getFaceMatchChecks() {
+        return filterChecksByType(FaceMatchCheckResponse.class);
+    }
+
+    public List<TextDataCheckResponse> getIdDocumentTextDataChecks() {
+        return filterChecksByType(TextDataCheckResponse.class);
+    }
+
+    public List<SupplementaryDocumentTextDataCheckResponse> getSupplementaryDocumentTextDataChecks() {
+        return filterChecksByType(SupplementaryDocumentTextDataCheckResponse.class);
+    }
+
+    public List<LivenessCheckResponse> getLivenessChecks() {
+        return filterChecksByType(LivenessCheckResponse.class);
+    }
+
+    public List<IdDocumentComparisonCheckResponse> getIdDocumentComparisonChecks() {
+        return filterChecksByType(IdDocumentComparisonCheckResponse.class);
+    }
+
+    public List<ThirdPartyIdentityCheckResponse> getThirdPartyIdentityChecks() {
+        return filterChecksByType(ThirdPartyIdentityCheckResponse.class);
+    }
+
+    private <T extends CheckResponse> List<T> filterChecksByType(Class<T> clazz) {
+        List<T> filteredList = new ArrayList<>();
+        for (CheckResponse checkResponse : checks) {
+            if (clazz.isInstance(checkResponse)) {
+                filteredList.add(clazz.cast(checkResponse));
+            }
+        }
+        return filteredList;
+    }
 
 }
