@@ -45,7 +45,7 @@ public class DocScanClientTest {
         KeyPairSource badKeyPairSource = new StaticKeyPairSource(true);
 
         try {
-            new SimpleDocScanClient(APP_ID, badKeyPairSource, docScanServiceMock);
+            new DocScanClient(APP_ID, badKeyPairSource, docScanServiceMock);
         } catch (InitialisationException e) {
             assertThat(e.getCause(), is(instanceOf(IOException.class)));
             assertThat(e.getCause().getMessage(), containsString("Test stream exception"));
@@ -61,7 +61,7 @@ public class DocScanClientTest {
         when(docScanServiceMock.createSession(eq(APP_ID), any(KeyPair.class), eq(sessionSpecMock))).thenThrow(original);
 
         try {
-            SimpleDocScanClient testObj = new SimpleDocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
+            DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
             testObj.createSession(sessionSpecMock);
         } catch (DocScanException thrown) {
             assertThat(thrown, is(original));
@@ -77,7 +77,7 @@ public class DocScanClientTest {
         when(docScanServiceMock.retrieveSession(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID))).thenThrow(original);
 
         try {
-            SimpleDocScanClient testObj = new SimpleDocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
+            DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
             testObj.getSession(SOME_SESSION_ID);
         } catch (DocScanException thrown) {
             assertThat(thrown, is(original));
@@ -93,7 +93,7 @@ public class DocScanClientTest {
         when(docScanServiceMock.getMediaContent(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID), eq(SOME_MEDIA_ID))).thenThrow(original);
 
         try {
-            SimpleDocScanClient testObj = new SimpleDocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
+            DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
             testObj.getMediaContent(SOME_SESSION_ID, SOME_MEDIA_ID);
         } catch (DocScanException thrown) {
             assertThat(thrown, is(original));
@@ -109,7 +109,7 @@ public class DocScanClientTest {
         doThrow(original).when(docScanServiceMock).deleteMediaContent(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID), eq(SOME_MEDIA_ID));
 
         try {
-            SimpleDocScanClient testObj = new SimpleDocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
+            DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
             testObj.deleteMediaContent(SOME_SESSION_ID, SOME_MEDIA_ID);
         } catch (DocScanException thrown) {
             assertThat(thrown, is(original));
@@ -125,7 +125,7 @@ public class DocScanClientTest {
         doThrow(original).when(docScanServiceMock).deleteSession(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID));
 
         try {
-            SimpleDocScanClient testObj = new SimpleDocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
+            DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
             testObj.deleteSession(SOME_SESSION_ID);
         } catch (DocScanException thrown) {
             assertThat(thrown, is(original));
@@ -141,7 +141,7 @@ public class DocScanClientTest {
         doThrow(original).when(docScanServiceMock).getSupportedDocuments(any(KeyPair.class));
 
         try {
-            SimpleDocScanClient testObj = new SimpleDocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
+            DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
             testObj.getSupportedDocuments();
         } catch (DocScanException thrown) {
             assertThat(thrown, is(original));

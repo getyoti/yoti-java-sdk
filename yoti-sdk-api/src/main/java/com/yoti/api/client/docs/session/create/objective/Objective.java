@@ -1,7 +1,18 @@
 package com.yoti.api.client.docs.session.create.objective;
 
-public interface Objective {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    String getType();
+public abstract class Objective {
+
+    @JsonProperty("type")
+    private final String type;
+
+    Objective(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
 
 }

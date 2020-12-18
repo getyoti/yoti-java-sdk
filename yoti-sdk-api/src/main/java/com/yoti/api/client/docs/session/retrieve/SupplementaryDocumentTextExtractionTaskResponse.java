@@ -2,8 +2,10 @@ package com.yoti.api.client.docs.session.retrieve;
 
 import java.util.List;
 
-public interface SupplementaryDocumentTextExtractionTaskResponse extends TaskResponse {
+public class SupplementaryDocumentTextExtractionTaskResponse extends TaskResponse {
 
-    List<GeneratedSupplementaryDocumentTextDataCheckResponse> getGeneratedTextDataChecks();
+    public List<GeneratedSupplementaryDocumentTextDataCheckResponse> getGeneratedTextDataChecks() {
+        return filterGeneratedChecksByType(GeneratedSupplementaryDocumentTextDataCheckResponse.class);
+    }
 
 }

@@ -2,12 +2,31 @@ package com.yoti.api.client.docs.session.retrieve;
 
 import java.util.List;
 
-public interface PageResponse {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    String getCaptureMethod();
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class PageResponse {
 
-    MediaResponse getMedia();
+    @JsonProperty("capture_method")
+    private String captureMethod;
 
-    List<? extends FrameResponse> getFrames();
+    @JsonProperty("media")
+    private MediaResponse media;
+
+    @JsonProperty("frames")
+    private List<FrameResponse> frames;
+
+    public String getCaptureMethod() {
+        return captureMethod;
+    }
+
+    public MediaResponse getMedia() {
+        return media;
+    }
+
+    public List<? extends FrameResponse> getFrames() {
+        return frames;
+    }
 
 }

@@ -1,8 +1,23 @@
 package com.yoti.api.client.docs.session.retrieve;
 
-public interface GeneratedMedia {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    String getId();
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class GeneratedMedia {
 
-    String getType();
+    @JsonProperty("id")
+    private String id;
+
+    @JsonProperty("type")
+    private String type;
+
+    public String getId() {
+        return id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
 }

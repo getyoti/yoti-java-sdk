@@ -1,4 +1,4 @@
 package com.yoti.api.client.docs.session.create.check;
 
-public interface RequestedIdDocumentComparisonConfig extends RequestedCheckConfig {
+public class RequestedIdDocumentComparisonConfig implements RequestedCheckConfig {
 }
