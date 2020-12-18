@@ -1,7 +1,24 @@
 package com.yoti.api.client.docs.session.retrieve;
 
-public interface LivenessResourceResponse extends ResourceResponse {
+import com.yoti.api.client.docs.DocScanConstants;
 
-    String getLivenessType();
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "liveness_type", defaultImpl = LivenessResourceResponse.class, visible = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = ZoomLivenessResourceResponse.class, name = DocScanConstants.ZOOM),
+})
+public class LivenessResourceResponse extends ResourceResponse {
+
+    @JsonProperty("liveness_type")
+    private String livenessType;
+
+    public String getLivenessType() {
+        return livenessType;
+    }
 
 }

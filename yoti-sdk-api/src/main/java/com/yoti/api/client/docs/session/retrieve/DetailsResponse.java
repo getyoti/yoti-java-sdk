@@ -1,9 +1,21 @@
 package com.yoti.api.client.docs.session.retrieve;
 
-public interface DetailsResponse {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    String getName();
+public class DetailsResponse {
 
-    String getValue();
+    @JsonProperty("name")
+    private String name;
+
+    @JsonProperty("value")
+    private String value;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
 }

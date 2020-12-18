@@ -1,7 +1,14 @@
 package com.yoti.api.client.docs.support;
 
-public interface SupportedDocument {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    String getType();
+public class SupportedDocument {
+
+    @JsonProperty("type")
+    private String type;
+
+    public String getType() {
+        return type;
+    }
 
 }

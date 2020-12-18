@@ -1,11 +1,30 @@
 package com.yoti.api.client.docs.session.retrieve;
 
-public interface RecommendationResponse {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    String getValue();
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class RecommendationResponse {
 
-    String getReason();
+    @JsonProperty("value")
+    private String value;
 
-    String getRecoverySuggestion();
+    @JsonProperty("reason")
+    private String reason;
+
+    @JsonProperty("recovery_suggestion")
+    private String recoverySuggestion;
+
+    public String getValue() {
+        return value;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public String getRecoverySuggestion() {
+        return recoverySuggestion;
+    }
 
 }
