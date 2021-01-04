@@ -12,12 +12,16 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.crypto.spec.SecretKeySpec;
 
 import com.yoti.api.client.ActivityDetails;
+import com.yoti.api.client.ApplicationProfile;
+import com.yoti.api.client.Attribute;
 import com.yoti.api.client.ExtraData;
 import com.yoti.api.client.ExtraDataException;
+import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.Profile;
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.call.Receipt;
@@ -30,17 +34,17 @@ class ActivityDetailsFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActivityDetailsFactory.class);
 
-    private final ProfileReader profileReader;
+    private final AttributeListReader attributeListReader;
     private final ExtraDataReader extraDataReader;
 
-    private ActivityDetailsFactory(ProfileReader profileReader, ExtraDataReader extraDataReader) {
-        this.profileReader = notNull(profileReader, "profileReader");
+    private ActivityDetailsFactory(AttributeListReader attributeListReader, ExtraDataReader extraDataReader) {
+        this.attributeListReader = notNull(attributeListReader, "profileReader");
         this.extraDataReader = notNull(extraDataReader, "extraDataReader");
     }
 
     static ActivityDetailsFactory newInstance() {
         return new ActivityDetailsFactory(
-                ProfileReader.newInstance(),
+                AttributeListReader.newInstance(),
                 ExtraDataReader.newInstance()
         );
     }
@@ -49,8 +53,11 @@ class ActivityDetailsFactory {
         byte[] decryptedKey = DecryptionHelper.decryptAsymmetric(receipt.getWrappedReceiptKey(), privateKey);
         Key secretKey = new SecretKeySpec(decryptedKey, SYMMETRIC_CIPHER);
 
-        Profile userProfile = profileReader.read(receipt.getOtherPartyProfile(), secretKey);
-        Profile applicationProfile = profileReader.read(receipt.getProfile(), secretKey);
+        List<Attribute<?>> userProfileAttr = attributeListReader.read(receipt.getOtherPartyProfile(), secretKey);
+        List<Attribute<?>> applicationProfileAttr = attributeListReader.read(receipt.getProfile(), secretKey);
+
+        HumanProfile userProfile = new HumanProfile(userProfileAttr);
+        ApplicationProfile applicationProfile = new ApplicationProfile(applicationProfileAttr);
 
         ExtraData extraData = parseExtraData(receipt.getExtraData(), secretKey);
 
