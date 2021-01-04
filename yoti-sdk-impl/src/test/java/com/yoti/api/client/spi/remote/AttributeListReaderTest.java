@@ -4,27 +4,24 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptSymmetric;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateSymmetricKey;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.util.Arrays;
+import java.util.List;
 
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Profile;
-import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.AttributeListProto;
 import com.yoti.api.client.spi.remote.proto.EncryptedDataProto;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 
 import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
 import org.hamcrest.core.IsCollectionContaining;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +31,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ProfileReaderTest {
+public class AttributeListReaderTest {
 
     private static final String STRING_ATTRIBUTE_NAME = "testStringAttr";
     private static final AttrProto.Attribute STRING_ATTRIBUTE_PROTO = AttrProto.Attribute.newBuilder()
@@ -45,7 +42,7 @@ public class ProfileReaderTest {
             .build()
             .toByteArray();
 
-    @InjectMocks ProfileReader testObj;
+    @InjectMocks AttributeListReader testObj;
 
     @Mock EncryptedDataReader encryptedDataReaderMock;
     @Mock AttributeListConverter attributeListConverterMock;
@@ -61,9 +58,9 @@ public class ProfileReaderTest {
 
     @Test
     public void shouldGetEmptyProfileWhenGivenNullContent() throws Exception {
-        Profile result = testObj.read(null, receiptKey);
+        List<Attribute<?>> result = testObj.read(null, receiptKey);
 
-        assertThat(result.getAttributes(), hasSize(0));
+        assertThat(result, hasSize(0));
     }
 
     @Test
@@ -77,10 +74,10 @@ public class ProfileReaderTest {
         when(attributeListConverterMock.parseAttributeList(PROFILE_DATA_BYTES)).thenReturn(Arrays.asList(stringAttribute));
         when(encryptedDataReaderMock.decryptBytes(profileContent, receiptKey)).thenReturn(PROFILE_DATA_BYTES);
 
-        Profile result = testObj.read(profileContent, receiptKey);
+        List<Attribute<?>> result = testObj.read(profileContent, receiptKey);
 
-        assertThat(result.getAttributes(), hasSize(1));
-        assertThat(result.getAttributes(), IsCollectionContaining.hasItem(stringAttribute));
+        assertThat(result, hasSize(1));
+        assertThat(result, IsCollectionContaining.hasItem(stringAttribute));
     }
 
 }

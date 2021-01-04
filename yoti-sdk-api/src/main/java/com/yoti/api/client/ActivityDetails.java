@@ -6,8 +6,6 @@ import static org.bouncycastle.util.encoders.Base64.toBase64String;
 
 import java.util.Date;
 
-import com.yoti.api.client.spi.remote.ApplicationProfileAdapter;
-
 /**
  * Details of an activity between a user and the application.
  */
@@ -23,15 +21,15 @@ public final class ActivityDetails {
 
     public ActivityDetails(String rememberMeId,
             String parentRememberMeId,
-            Profile userProfile,
-            Profile applicationProfile,
+            HumanProfile userProfile,
+            ApplicationProfile applicationProfile,
             ExtraData extraData,
             Date timestamp,
             byte[] receiptId) {
         this.rememberMeId = notNull(rememberMeId, "Remember Me id");
         this.parentRememberMeId = parentRememberMeId;
-        this.userProfile = HumanProfileAdapter.wrap(notNull(userProfile, "User profile"));
-        this.applicationProfile = ApplicationProfileAdapter.wrap(notNull(applicationProfile, "Application profile"));
+        this.userProfile = notNull(userProfile, "User profile");
+        this.applicationProfile = notNull(applicationProfile, "Application profile");
         this.timestamp = notNull(timestamp, "Timestamp");
         this.receiptId = toBase64String(notNull(receiptId, "Receipt id"));
         this.extraData = notNull(extraData, "extraData");
