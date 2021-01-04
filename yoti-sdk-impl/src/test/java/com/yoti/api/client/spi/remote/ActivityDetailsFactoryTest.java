@@ -9,6 +9,7 @@ import static org.bouncycastle.util.encoders.Base64.decode;
 import static org.bouncycastle.util.encoders.Base64.toBase64String;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -24,6 +25,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -59,7 +61,7 @@ public class ActivityDetailsFactoryTest {
 
     @InjectMocks ActivityDetailsFactory testObj;
 
-    @Mock ProfileReader profileReaderMock;
+    @Mock AttributeListReader attributeListReaderMock;
     @Mock ExtraDataReader extraDataReaderMock;
 
     KeyPair keyPair;
@@ -136,15 +138,14 @@ public class ActivityDetailsFactoryTest {
                 .withReceiptId(DECODED_RECEIPT_BYTES)
                 .withExtraData(EXTRA_DATA_CONTENT)
                 .build();
-        when(profileReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(profileMock);
-        when(profileReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(otherProfileMock);
+        when(attributeListReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(Collections.emptyList());
+        when(attributeListReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(Collections.emptyList());
         when(extraDataReaderMock.read(eq(EXTRA_DATA_CONTENT), any(Key.class))).thenReturn(extraDataMock);
-
 
         ActivityDetails result = testObj.create(receipt, keyPair.getPrivate());
 
-        assertSame(otherProfileMock, getWrappedProfile(result.getUserProfile()));
-        assertSame(profileMock, getWrappedProfile(result.getApplicationProfile()));
+        assertNotNull(result.getUserProfile());
+        assertNotNull(result.getApplicationProfile());
         assertSame(extraDataMock, result.getExtraData());
         assertEquals("", result.getRememberMeId());
         assertEquals(null, result.getParentRememberMeId());
@@ -164,14 +165,14 @@ public class ActivityDetailsFactoryTest {
                 .withReceiptId(DECODED_RECEIPT_BYTES)
                 .withExtraData(EXTRA_DATA_CONTENT)
                 .build();
-        when(profileReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(profileMock);
-        when(profileReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(otherProfileMock);
+        when(attributeListReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(Collections.emptyList());
+        when(attributeListReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(Collections.emptyList());
         when(extraDataReaderMock.read(eq(EXTRA_DATA_CONTENT), any(Key.class))).thenReturn(extraDataMock);
 
         ActivityDetails result = testObj.create(receipt, keyPair.getPrivate());
 
-        assertSame(otherProfileMock, getWrappedProfile(result.getUserProfile()));
-        assertSame(profileMock, getWrappedProfile(result.getApplicationProfile()));
+        assertNotNull(result.getUserProfile());
+        assertNotNull(result.getApplicationProfile());
         assertSame(extraDataMock, result.getExtraData());
         assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getRememberMeId());
         assertEquals(SOME_PARENT_REMEMBER_ME_ID_STRING, result.getParentRememberMeId());
@@ -191,14 +192,14 @@ public class ActivityDetailsFactoryTest {
                 .withReceiptId(DECODED_RECEIPT_BYTES)
                 .withExtraData(EXTRA_DATA_CONTENT)
                 .build();
-        when(profileReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(profileMock);
-        when(profileReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(otherProfileMock);
+        when(attributeListReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(Collections.emptyList());
+        when(attributeListReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(Collections.emptyList());
         when(extraDataReaderMock.read(eq(EXTRA_DATA_CONTENT), any(Key.class))).thenReturn(extraDataMock);
 
         ActivityDetails result = testObj.create(receipt, keyPair.getPrivate());
 
-        assertSame(otherProfileMock, getWrappedProfile(result.getUserProfile()));
-        assertSame(profileMock, getWrappedProfile(result.getApplicationProfile()));
+        assertNotNull(result.getUserProfile());
+        assertNotNull(result.getApplicationProfile());
         assertSame(extraDataMock, result.getExtraData());
         assertEquals(SOME_REMEMBER_ME_ID_STRING, result.getRememberMeId());
         assertEquals(SOME_PARENT_REMEMBER_ME_ID_STRING, result.getParentRememberMeId());
@@ -218,8 +219,8 @@ public class ActivityDetailsFactoryTest {
                 .withReceiptId(DECODED_RECEIPT_BYTES)
                 .withExtraData(EXTRA_DATA_CONTENT)
                 .build();
-        when(profileReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(profileMock);
-        when(profileReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(otherProfileMock);
+        when(attributeListReaderMock.read(eq(PROFILE_CONTENT), any(Key.class))).thenReturn(Collections.emptyList());
+        when(attributeListReaderMock.read(eq(OTHER_PROFILE_CONTENT), any(Key.class))).thenReturn(Collections.emptyList());
 
         when(extraDataReaderMock.read(eq(EXTRA_DATA_CONTENT), any(Key.class))).thenThrow(new ProfileException("Cannot decode profile"));
 
@@ -232,13 +233,4 @@ public class ActivityDetailsFactoryTest {
 
         fail("Expected an exception");
     }
-
-    private Profile getWrappedProfile(HumanProfile humanProfile) throws Exception {
-        return (Profile) FieldUtils.getField(HumanProfileAdapter.class, "wrapped", true).get(humanProfile);
-    }
-
-    private Profile getWrappedProfile(ApplicationProfile applicationProfile) throws Exception {
-        return (Profile) FieldUtils.getField(ApplicationProfileAdapter.class, "wrapped", true).get(applicationProfile);
-    }
-
 }
