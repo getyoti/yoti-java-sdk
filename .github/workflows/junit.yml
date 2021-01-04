@@ -17,4 +17,4 @@ jobs:
         with:
           java-version: ${{ matrix.jdk-version }}
           architecture: x64
-      - run: mvn test -B -pl yoti-sdk-api,yoti-sdk-impl -Ddependency-check.skip=true
+      - run: mvn test -B -pl yoti-sdk-api -Ddependency-check.skip=true

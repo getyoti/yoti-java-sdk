@@ -1,6 +1,6 @@
 # Yoti Java SDK
 
-[![Build Status](https://travis-ci.com/getyoti/yoti-java-sdk.svg?branch=master)](https://travis-ci.com/getyoti/yoti-java-sdk)
+[![Build Status](https://github.com/getyoti/yoti-java-sdk/workflows/Unit%20Test/badge.svg?branch=master)](https://github.com/getyoti/yoti-java-sdk/actions)
 
 Welcome to the Yoti Java SDK. This repo contains the tools and step by step instructions you need to quickly integrate your Java back-end with Yoti so that your users can share their identity details with your application in a secure and trusted way.
 
@@ -101,13 +101,13 @@ If you are using Maven, you need to add the following dependency:
 <dependency>
     <groupId>com.yoti</groupId>
     <artifactId>yoti-sdk-api</artifactId>
-    <version>2.12.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
 If you are using Gradle, here is the dependency to add:
 
-`compile group: 'com.yoti', name: 'yoti-sdk-api', version: '2.12.0-SNAPSHOT'`
+`compile group: 'com.yoti', name: 'yoti-sdk-api', version: '3.0.0-SNAPSHOT'`
 
 You will find all classes packaged under `com.yoti.api`
 
