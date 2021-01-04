@@ -27,10 +27,6 @@
       <groupId>com.yoti</groupId>
       <artifactId>yoti-sdk-api</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.yoti</groupId>
-      <artifactId>yoti-sdk-impl</artifactId>
-    </dependency>
 
     <!-- Testing dependencies -->
     <dependency>
