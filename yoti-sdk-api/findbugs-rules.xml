@@ -64,6 +64,11 @@
     <Match>
         <Bug pattern="CRLF_INJECTION_LOGS"/>
     </Match>
+    
+    <Match>
+        <Class name="com.yoti.api.client.shareurl.extension.ThirdPartyAttributeExtensionBuilder"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
 
 </FindBugsFilter>
 
