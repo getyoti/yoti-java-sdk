@@ -1,6 +1,6 @@
 # Yoti Java SDK
 
-[![Build Status](https://github.com/getyoti/yoti-java-sdk/workflows/Unit%20Test/badge.svg?branch=master)](https://github.com/getyoti/yoti-java-sdk/actions)
+[![Build Status](https://travis-ci.com/getyoti/yoti-java-sdk.svg?branch=master)](https://travis-ci.com/getyoti/yoti-java-sdk)
 
 Welcome to the Yoti Java SDK. This repo contains the tools and step by step instructions you need to quickly integrate your Java back-end with Yoti so that your users can share their identity details with your application in a secure and trusted way.
 
@@ -100,14 +100,14 @@ If you are using Maven, you need to add the following dependency:
 ```xml
 <dependency>
     <groupId>com.yoti</groupId>
-    <artifactId>yoti-sdk-impl</artifactId>
-    <version>2.13.0-SNAPSHOT</version>
+    <artifactId>yoti-sdk-api</artifactId>
+    <version>2.12.0-SNAPSHOT</version>
 </dependency>
 ```
 
 If you are using Gradle, here is the dependency to add:
 
-`compile group: 'com.yoti', name: 'yoti-sdk-impl', version: '2.13.0-SNAPSHOT'`
+`compile group: 'com.yoti', name: 'yoti-sdk-api', version: '2.12.0-SNAPSHOT'`
 
 You will find all classes packaged under `com.yoti.api`
 
@@ -249,7 +249,7 @@ Using the `com.yoti.api.client.YotiClient` to get `com.yoti.api.client.ActivityD
 
 By default the Yoti Client will block indefinitely when connecting to the remote server or reading data. Consequently it is **possible that your application thread could be blocked**.
 
-Since version 1.1 of the `yoti-sdk-impl` you can set the following two system properties to control this behaviour:
+Since version 1.1 of the `yoti-sdk-api` you can set the following two system properties to control this behaviour:
 
 * `yoti.client.connect.timeout.ms` - the number of milliseconds that you are prepared to wait for the connection to be established. Zero is interpreted as an infinite timeout.
 * `yoti.client.read.timeout.ms` - the number of milliseconds that you are prepared to wait for data to become available to read in the response stream. Zero is interpreted as an infinite timeout.
@@ -268,10 +268,6 @@ HumanProfile  | The set of attributes the user has configured for the transactio
 YotiClientBuilder  | Builds a YotiClient instance by automatically selecting the available implementations on the class path.
 YotiClient | Allows your app to retrieve a user profile, given an encrypted token.
 KeyPairSource and its implementations | A set of classes responsible for working with different sources (e.g. files, classpath resources, URLs) to load the private/public keypair.
-
-### yoti-sdk-impl
-
-Real SDK implementation that takes care of decrypting the token, fetching the user profile from Yoti servers by issuing a signed request and finally decrypting the fetched profile.
 
 ### yoti-sdk-spring-boot-auto-config
 
