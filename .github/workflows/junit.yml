@@ -1,5 +1,12 @@
 name: Unit Test
-on: [push, pull_request_target]
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - 'master'
+      - 'DEVELOPMENT*'
 
 jobs:
   junit:
