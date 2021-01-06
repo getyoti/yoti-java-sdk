@@ -2,5 +2,13 @@
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
     <suppress>
         <cve>CVE-2018-1258</cve>
+        
+        <!-- bcprov-jdk15on: Can't update due to bytecode incompatibility with Java 8 -->
+        <cve>CVE-2020-26939</cve>
+        
+        <!-- jackson-databind: Can't update due to bytecode incompatibility with Java 8 -->
+        <cve>CVE-2020-35491</cve>
+        <cve>CVE-2020-35490</cve>
+        <cve>CVE-2020-35728</cve>
     </suppress>
 </suppressions>
