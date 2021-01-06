@@ -81,20 +81,20 @@
     <!-- sdk dependency versions -->
     <slf4j.version>1.7.30</slf4j.version>
     <bouncy.castle.version>1.60</bouncy.castle.version>
-    <jackson.version>2.9.9.2</jackson.version>
-    <google.protobuf.version>3.12.4</google.protobuf.version>
+    <jackson.version>2.9.10.7</jackson.version>
+    <google.protobuf.version>3.14.0</google.protobuf.version>
   
     <!-- spring versions -->
-    <springboot.version>1.5.10.RELEASE</springboot.version>
-    <spring.core.version>4.3.22.RELEASE</spring.core.version>
-    <spring.security.version>4.2.13.RELEASE</spring.security.version>
-    <javax.servlet.version>2.5</javax.servlet.version>
+    <springboot.version>2.3.7.RELEASE</springboot.version>
+    <spring.core.version>5.2.12.RELEASE</spring.core.version>
+    <spring.security.version>5.3.6.RELEASE</spring.security.version>
+    <javax.servlet.version>4.0.1</javax.servlet.version>
 
     <!-- test libraries -->
-    <junit.version>4.12</junit.version>
-    <mockito.version>2.23.4</mockito.version>
+    <junit.version>4.13.1</junit.version>
+    <mockito.version>2.28.2</mockito.version>
     <hamcrest.version>1.3</hamcrest.version>
-    <commons.lang3.version>3.7</commons.lang3.version>
+    <commons.lang3.version>3.11</commons.lang3.version>
 
     <!-- maven + plugin versions -->
     <maven.compiler.version>3.0</maven.compiler.version>
@@ -102,7 +102,7 @@
     <maven.enforcer.version>3.0.0-M1</maven.enforcer.version>
     <findbugs.version>3.0.5</findbugs.version>
     <findsecbugs.version>1.7.1</findsecbugs.version>
-    <owasp.version>3.2.1</owasp.version>
+    <owasp.version>6.0.4</owasp.version>
     <owasp.dependency.check.cvss.limit>4</owasp.dependency.check.cvss.limit>
     <owasp.dependency.check.cve.update.limit>12</owasp.dependency.check.cve.update.limit>
     <maven.reports.version>2.9</maven.reports.version>
@@ -196,7 +196,7 @@
       </dependency>
       <dependency>
         <groupId>javax.servlet</groupId>
-        <artifactId>servlet-api</artifactId>
+        <artifactId>javax.servlet-api</artifactId>
         <version>${javax.servlet.version}</version>
       </dependency>
   
