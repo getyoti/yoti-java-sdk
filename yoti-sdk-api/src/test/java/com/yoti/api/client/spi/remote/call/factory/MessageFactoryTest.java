@@ -2,10 +2,10 @@ package com.yoti.api.client.spi.remote.call.factory;
 
 import static com.yoti.api.client.spi.remote.Base64.base64;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 

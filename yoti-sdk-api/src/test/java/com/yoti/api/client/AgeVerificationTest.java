@@ -1,11 +1,11 @@
 package com.yoti.api.client;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.hamcrest.core.StringContains;
 import org.junit.Test;
 
 public class AgeVerificationTest {
@@ -28,8 +28,8 @@ public class AgeVerificationTest {
             Attribute<String> attribute = new Attribute<>(attName, null);
             new AgeVerification(attribute);
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), StringContains.containsString("attribute.name"));
-            assertThat(e.getMessage(), StringContains.containsString(attName));
+            assertThat(e.getMessage(), containsString("attribute.name"));
+            assertThat(e.getMessage(), containsString(attName));
             return;
         }
 

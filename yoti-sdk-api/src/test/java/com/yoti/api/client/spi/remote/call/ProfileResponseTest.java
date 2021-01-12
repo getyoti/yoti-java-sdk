@@ -3,8 +3,8 @@ package com.yoti.api.client.spi.remote.call;
 import static com.yoti.api.client.spi.remote.call.ReceiptTest.VALID_CONTENT;
 import static com.yoti.api.client.spi.remote.call.ReceiptTest.VALID_STRING;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasEntry;
-import static org.junit.Assert.assertThat;
 
 import java.util.Map;
 
