@@ -9,7 +9,6 @@ import com.yoti.api.client.ActivityFailureException;
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.call.ProfileService;
 import com.yoti.api.client.spi.remote.call.Receipt;
-import com.yoti.api.client.spi.remote.call.RemoteProfileService;
 import com.yoti.api.client.spi.remote.util.DecryptionHelper;
 
 import org.slf4j.Logger;
@@ -26,7 +25,7 @@ public class ReceiptFetcher {
     }
 
     public static ReceiptFetcher newInstance() {
-        return new ReceiptFetcher(RemoteProfileService.newInstance());
+        return new ReceiptFetcher(ProfileService.newInstance());
     }
 
     public Receipt fetch(String encryptedConnectToken, KeyPair keyPair, String appId) throws ProfileException {
