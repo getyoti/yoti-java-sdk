@@ -15,7 +15,7 @@ import com.yoti.api.client.spi.remote.util.DecryptionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class ReceiptFetcher {
+public class ReceiptFetcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReceiptFetcher.class);
 
@@ -25,11 +25,11 @@ class ReceiptFetcher {
         this.profileService = profileService;
     }
 
-    static ReceiptFetcher newInstance() {
+    public static ReceiptFetcher newInstance() {
         return new ReceiptFetcher(RemoteProfileService.newInstance());
     }
 
-    Receipt fetch(String encryptedConnectToken, KeyPair keyPair, String appId) throws ProfileException {
+    public Receipt fetch(String encryptedConnectToken, KeyPair keyPair, String appId) throws ProfileException {
         LOG.debug("Decrypting connect token: '{}'", encryptedConnectToken);
         String connectToken = decryptConnectToken(encryptedConnectToken, keyPair.getPrivate());
         LOG.debug("Connect token decrypted: '{}'", connectToken);
