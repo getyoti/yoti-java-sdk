@@ -3,8 +3,9 @@ package com.yoti.api.client.spi.remote;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptSymmetric;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateSymmetricKey;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.mockito.Mockito.when;
 
 import java.security.Key;
@@ -18,7 +19,6 @@ import com.yoti.api.client.spi.remote.proto.EncryptedDataProto;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 
 import com.google.protobuf.ByteString;
-import org.hamcrest.core.IsCollectionContaining;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -73,7 +73,7 @@ public class AttributeListReaderTest {
         List<Attribute<?>> result = testObj.read(profileContent, receiptKey);
 
         assertThat(result, hasSize(1));
-        assertThat(result, IsCollectionContaining.hasItem(stringAttribute));
+        assertThat(result, hasItem(stringAttribute));
     }
 
 }

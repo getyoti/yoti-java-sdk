@@ -9,8 +9,8 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.SDK_VERSION;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_VERSION_HEADER;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
-import static org.junit.Assert.assertThat;
 
 import java.util.Map;
 

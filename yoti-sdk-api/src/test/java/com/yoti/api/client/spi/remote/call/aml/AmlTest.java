@@ -1,9 +1,9 @@
 package com.yoti.api.client.spi.remote.call.aml;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 
 import com.yoti.api.client.aml.AmlAddress;
 import com.yoti.api.client.aml.AmlProfile;

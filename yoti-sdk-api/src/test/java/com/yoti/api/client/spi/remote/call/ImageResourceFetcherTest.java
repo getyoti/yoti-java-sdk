@@ -3,7 +3,7 @@ package com.yoti.api.client.spi.remote.call;
 import static java.util.Arrays.asList;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
