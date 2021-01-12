@@ -1,36 +1,32 @@
 package com.yoti.docscan.demo.service;
 
+import java.util.Arrays;
+
 import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.DocScanClient;
 import com.yoti.api.client.docs.DocScanException;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
-import com.yoti.api.client.docs.session.create.filters.DocumentFilterBuilderFactory;
-import com.yoti.api.client.docs.session.create.filters.RequiredDocumentBuilderFactory;
-import com.yoti.api.client.docs.session.create.objective.ObjectiveBuilderFactory;
 import com.yoti.api.client.docs.session.create.SdkConfig;
-import com.yoti.api.client.docs.session.create.SdkConfigBuilderFactory;
 import com.yoti.api.client.docs.session.create.SessionSpec;
-import com.yoti.api.client.docs.session.create.SessionSpecBuilderFactory;
-import com.yoti.api.client.docs.session.create.check.RequestedCheckBuilderFactory;
-import com.yoti.api.client.docs.session.create.task.RequestedTaskBuilderFactory;
+import com.yoti.api.client.docs.session.create.check.RequestedDocumentAuthenticityCheck;
+import com.yoti.api.client.docs.session.create.check.RequestedFaceMatchCheck;
+import com.yoti.api.client.docs.session.create.check.RequestedIdDocumentComparisonCheck;
+import com.yoti.api.client.docs.session.create.check.RequestedLivenessCheck;
+import com.yoti.api.client.docs.session.create.check.RequestedThirdPartyIdentityCheck;
+import com.yoti.api.client.docs.session.create.filters.OrthogonalRestrictionsFilter;
+import com.yoti.api.client.docs.session.create.filters.RequiredIdDocument;
+import com.yoti.api.client.docs.session.create.filters.RequiredSupplementaryDocument;
+import com.yoti.api.client.docs.session.create.objective.ProofOfAddressObjective;
+import com.yoti.api.client.docs.session.create.task.RequestedSupplementaryDocTextExtractionTask;
+import com.yoti.api.client.docs.session.create.task.RequestedTextExtractionTask;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
 import com.yoti.api.client.spi.remote.call.YotiConstants;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-
 @Service
 public class DocScanService {
-
-    private static final SdkConfigBuilderFactory SDK_CONFIG_BUILDER_FACTORY = SdkConfigBuilderFactory.newInstance();
-    private static final SessionSpecBuilderFactory SESSION_SPEC_BUILDER_FACTORY = SessionSpecBuilderFactory.newInstance();
-    private static final RequestedCheckBuilderFactory REQUESTED_CHECK_BUILDER_FACTORY = RequestedCheckBuilderFactory.newInstance();
-    private static final RequestedTaskBuilderFactory REQUESTED_TASK_BUILDER_FACTORY = RequestedTaskBuilderFactory.newInstance();
-    private static final RequiredDocumentBuilderFactory REQUIRED_DOCUMENT_FACTORY = RequiredDocumentBuilderFactory.newInstance();
-    private static final DocumentFilterBuilderFactory ORTHOGONAL_FILTER_FACTORY = DocumentFilterBuilderFactory.newInstance();
-    private static final ObjectiveBuilderFactory OBJECTIVE_BUILDER_FACTORY = ObjectiveBuilderFactory.newInstance();
 
     private static final String IFRAME_URL_FORMAT = "%s/web/index.html?sessionID=%s&sessionToken=%s";
 
@@ -42,7 +38,7 @@ public class DocScanService {
     }
 
     public CreateSessionResult createSession() throws DocScanException {
-        SdkConfig sdkConfig = SDK_CONFIG_BUILDER_FACTORY.create()
+        SdkConfig sdkConfig = SdkConfig.builder()
                 .withAllowsCameraAndUpload()
                 .withPrimaryColour("#2d9fff")
                 .withSecondaryColour("#FFFFFF")
@@ -54,79 +50,66 @@ public class DocScanService {
                 .withPrivacyPolicyUrl("https://localhost:8443/privacy-policy")
                 .build();
 
-        SessionSpec sessionSpec = SESSION_SPEC_BUILDER_FACTORY.create()
+        SessionSpec sessionSpec = SessionSpec.builder()
                 .withClientSessionTokenTtl(600)
                 .withResourcesTtl(90000)
                 .withUserTrackingId("some-user-tracking-id")
                 .withSdkConfig(sdkConfig)
                 .withRequestedCheck(
-                        REQUESTED_CHECK_BUILDER_FACTORY
-                                .forDocumentAuthenticityCheck()
+                        RequestedDocumentAuthenticityCheck.builder()
                                 .build()
                 )
                 .withRequestedCheck(
-                        REQUESTED_CHECK_BUILDER_FACTORY
-                                .forFaceMatchCheck()
+                        RequestedFaceMatchCheck.builder()
                                 .withManualCheckAlways()
                                 .build()
                 )
                 .withRequestedCheck(
-                        REQUESTED_CHECK_BUILDER_FACTORY
-                                .forLivenessCheck()
+                        RequestedLivenessCheck.builder()
                                 .forZoomLiveness()
                                 .withMaxRetries(1)
                                 .build()
                 )
                 .withRequestedCheck(
-                        REQUESTED_CHECK_BUILDER_FACTORY
-                                .forIdDocumentComparisonCheck()
+                        RequestedIdDocumentComparisonCheck.builder()
                                 .build()
                 )
                 .withRequestedCheck(
-                        REQUESTED_CHECK_BUILDER_FACTORY
-                                .forThirdPartyIdentityCheck()
+                        RequestedThirdPartyIdentityCheck.builder()
                                 .build()
                 )
                 .withRequestedTask(
-                        REQUESTED_TASK_BUILDER_FACTORY
-                                .forTextExtractionTask()
+                        RequestedTextExtractionTask.builder()
                                 .withManualCheckAlways()
                                 .build()
                 )
                 .withRequestedTask(
-                        REQUESTED_TASK_BUILDER_FACTORY
-                                .forSupplementaryDocTextExtractionTask()
+                        RequestedSupplementaryDocTextExtractionTask.builder()
                                 .withManualCheckAlways()
                                 .build()
                 )
                 .withRequiredDocument(
-                        REQUIRED_DOCUMENT_FACTORY
-                                .forIdDocument()
+                        RequiredIdDocument.builder()
                                 .withFilter(
-                                        ORTHOGONAL_FILTER_FACTORY
-                                                .forOrthogonalRestrictionsFilter()
+                                        OrthogonalRestrictionsFilter.builder()
                                                 .withWhitelistedDocumentTypes(Arrays.asList("PASSPORT"))
                                                 .build()
                                 )
                                 .build()
                 )
                 .withRequiredDocument(
-                        REQUIRED_DOCUMENT_FACTORY
-                                .forIdDocument()
+                        RequiredIdDocument.builder()
                                 .withFilter(
-                                        ORTHOGONAL_FILTER_FACTORY
-                                                .forOrthogonalRestrictionsFilter()
+                                        OrthogonalRestrictionsFilter.builder()
                                                 .withWhitelistedDocumentTypes(Arrays.asList("DRIVING_LICENCE"))
                                                 .build()
                                 )
                                 .build()
                 )
                 .withRequiredDocument(
-                        REQUIRED_DOCUMENT_FACTORY
-                                .forSupplementaryDocument()
+                        RequiredSupplementaryDocument.builder()
                                 .withObjective(
-                                        OBJECTIVE_BUILDER_FACTORY
-                                                .forProofOfAddress()
+                                        ProofOfAddressObjective.builder()
                                                 .build()
                                 )
                                 .build()
