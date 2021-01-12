@@ -30,7 +30,7 @@ import com.yoti.api.client.spi.remote.util.DecryptionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class ActivityDetailsFactory {
+public class ActivityDetailsFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActivityDetailsFactory.class);
 
@@ -42,14 +42,14 @@ class ActivityDetailsFactory {
         this.extraDataReader = notNull(extraDataReader, "extraDataReader");
     }
 
-    static ActivityDetailsFactory newInstance() {
+    public static ActivityDetailsFactory newInstance() {
         return new ActivityDetailsFactory(
                 AttributeListReader.newInstance(),
                 ExtraDataReader.newInstance()
         );
     }
 
-    ActivityDetails create(Receipt receipt, PrivateKey privateKey) throws ProfileException {
+    public ActivityDetails create(Receipt receipt, PrivateKey privateKey) throws ProfileException {
         byte[] decryptedKey = DecryptionHelper.decryptAsymmetric(receipt.getWrappedReceiptKey(), privateKey);
         Key secretKey = new SecretKeySpec(decryptedKey, SYMMETRIC_CIPHER);
 

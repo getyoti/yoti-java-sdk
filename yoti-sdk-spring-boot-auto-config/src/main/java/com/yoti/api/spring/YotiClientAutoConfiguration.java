@@ -2,7 +2,7 @@ package com.yoti.api.spring;
 
 import com.yoti.api.client.KeyPairSource;
 import com.yoti.api.client.YotiClient;
-import com.yoti.api.client.YotiClientBuilder;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +42,8 @@ public class YotiClientAutoConfiguration {
     @ConditionalOnMissingBean(YotiClient.class)
     public YotiClient yotiClient(final KeyPairSource keyPairSource) throws Exception {
         LOGGER.info("Configuring Yoti client with {} and {}.", properties, keyPairSource);
-        return YotiClientBuilder.newInstance()
-                .forApplication(properties.getClientSdkId())
+        return YotiClient.builder()
+                .withClientSdkId(properties.getClientSdkId())
                 .withKeyPair(keyPairSource)
                 .build();
     }
