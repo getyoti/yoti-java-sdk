@@ -2,10 +2,10 @@ package com.yoti.api.client.spi.remote;
 
 import static java.util.Arrays.asList;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
@@ -15,7 +15,6 @@ import com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes;
 import com.yoti.api.client.Anchor;
 import com.yoti.api.client.Attribute;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -70,7 +69,7 @@ public class AddressTransformerTest {
 
         Attribute<String> result = testObj.transform(structuredAddressMock);
 
-        assertThat(result.getName(), Matchers.is(HumanProfileAttributes.POSTAL_ADDRESS));
+        assertThat(result.getName(), is(HumanProfileAttributes.POSTAL_ADDRESS));
         assertThat(result.getValue(), is(SOME_FORMATTED_ADDRESS));
         assertThat(result.getSources(), hasItems(sourceAnchorMock));
         assertThat(result.getVerifiers(), hasItems(verifierAnchorMock));

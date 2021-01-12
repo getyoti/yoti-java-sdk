@@ -16,15 +16,14 @@ import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.
 import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.SELFIE;
 import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.hamcrest.Description;
-import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.Test;
 
@@ -159,7 +158,7 @@ public class DynamicPolicyTest {
                 .withWantedAuthType(99)
                 .build();
 
-        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(3));
+        assertThat(result.getWantedAuthTypes(), hasSize(3));
         assertThat(result.getWantedAuthTypes(), hasItems(EXPECTED_SELFIE_AUTH_TYPE, EXPECTED_PIN_AUTH_TYPE, 99));
     }
 
@@ -171,7 +170,7 @@ public class DynamicPolicyTest {
                 .withWantedAuthType(99)
                 .build();
 
-        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(3));
+        assertThat(result.getWantedAuthTypes(), hasSize(3));
         assertThat(result.getWantedAuthTypes(), hasItems(EXPECTED_SELFIE_AUTH_TYPE, EXPECTED_PIN_AUTH_TYPE, 99));
     }
 
@@ -182,7 +181,7 @@ public class DynamicPolicyTest {
                 .withPinAuthorisation(false)
                 .build();
 
-        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(0));
+        assertThat(result.getWantedAuthTypes(), hasSize(0));
     }
 
     @Test
@@ -204,7 +203,7 @@ public class DynamicPolicyTest {
                 .build();
 
         assertThat(result.getWantedAuthTypes(), not(hasItem(EXPECTED_SELFIE_AUTH_TYPE)));
-        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(0));
+        assertThat(result.getWantedAuthTypes(), hasSize(0));
     }
 
     @Test
@@ -215,7 +214,7 @@ public class DynamicPolicyTest {
                 .build();
 
         assertThat(result.getWantedAuthTypes(), hasItem(EXPECTED_SELFIE_AUTH_TYPE));
-        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(1));
+        assertThat(result.getWantedAuthTypes(), hasSize(1));
     }
 
     @Test
@@ -226,7 +225,7 @@ public class DynamicPolicyTest {
                 .build();
 
         assertThat(result.getWantedAuthTypes(), not(hasItem(EXPECTED_PIN_AUTH_TYPE)));
-        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(0));
+        assertThat(result.getWantedAuthTypes(), hasSize(0));
     }
 
     @Test
@@ -237,7 +236,7 @@ public class DynamicPolicyTest {
                 .build();
 
         assertThat(result.getWantedAuthTypes(), hasItem(EXPECTED_PIN_AUTH_TYPE));
-        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(1));
+        assertThat(result.getWantedAuthTypes(), hasSize(1));
     }
 
     @Test
@@ -247,7 +246,7 @@ public class DynamicPolicyTest {
                 .build();
 
         assertThat(result.getWantedAuthTypes(), not(hasItem(EXPECTED_SELFIE_AUTH_TYPE)));
-        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(0));
+        assertThat(result.getWantedAuthTypes(), hasSize(0));
     }
 
     @Test
@@ -257,7 +256,7 @@ public class DynamicPolicyTest {
                 .build();
 
         assertThat(result.getWantedAuthTypes(), not(hasItem(EXPECTED_PIN_AUTH_TYPE)));
-        assertThat(result.getWantedAuthTypes(), Matchers.hasSize(0));
+        assertThat(result.getWantedAuthTypes(), hasSize(0));
     }
 
     @Test
@@ -266,7 +265,7 @@ public class DynamicPolicyTest {
                 .withWantedAttribute(true, GIVEN_NAMES)
                 .build();
 
-        assertThat(result.getWantedAttributes(), Matchers.hasSize(1));
+        assertThat(result.getWantedAttributes(), hasSize(1));
         assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(GIVEN_NAMES, true)));
     }
 
@@ -276,7 +275,7 @@ public class DynamicPolicyTest {
                 .withWantedAttribute(false, GIVEN_NAMES)
                 .build();
 
-        assertThat(result.getWantedAttributes(), Matchers.hasSize(1));
+        assertThat(result.getWantedAttributes(), hasSize(1));
         assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(GIVEN_NAMES, false)));
     }
 

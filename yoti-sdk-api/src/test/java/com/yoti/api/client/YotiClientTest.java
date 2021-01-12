@@ -5,9 +5,9 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptAsymmetric;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateSymmetricKey;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;

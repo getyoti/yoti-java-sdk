@@ -4,11 +4,11 @@ import static com.yoti.api.client.spi.remote.util.ProtoUtil.buildDefinition;
 import static com.yoti.api.client.spi.remote.util.ProtoUtil.buildIssuingAttributes;
 import static com.yoti.api.client.spi.remote.util.ProtoUtil.buildThirdPartyAttribute;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 
 import java.util.List;
 

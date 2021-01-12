@@ -2,10 +2,10 @@ package com.yoti.api.client.spi.remote.util;
 
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 import java.util.Collections;
