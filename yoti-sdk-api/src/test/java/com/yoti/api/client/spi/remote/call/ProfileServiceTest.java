@@ -27,7 +27,7 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RemoteProfileServiceTest {
+public class ProfileServiceTest {
 
     private static final Receipt RECEIPT = new Receipt.Builder()
             .withProfile(new byte[] { 1, 2, 3, 4 })
@@ -43,7 +43,7 @@ public class RemoteProfileServiceTest {
     private static String B64_PUBLIC_KEY;
     private static KeyPair KEY_PAIR;
 
-    @Spy @InjectMocks RemoteProfileService testObj;
+    @Spy @InjectMocks ProfileService testObj;
 
     @Mock UnsignedPathFactory unsignedPathFactory;
 
