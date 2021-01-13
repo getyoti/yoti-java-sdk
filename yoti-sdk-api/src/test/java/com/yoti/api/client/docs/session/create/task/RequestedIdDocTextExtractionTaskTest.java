@@ -7,59 +7,59 @@ import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
 
-public class RequestedTextExtractionTaskTest {
+public class RequestedIdDocTextExtractionTaskTest {
 
     @Test
     public void shouldBuildSimpleRequestedTextExtractionTaskWithManualFallbackAlways() {
-        RequestedTextExtractionTask result = RequestedTextExtractionTask.builder()
+        RequestedIdDocTextExtractionTask result = RequestedIdDocTextExtractionTask.builder()
                 .withManualCheckAlways()
                 .build();
 
-        assertThat(result, is(instanceOf(RequestedTextExtractionTask.class)));
-        assertThat(result.getConfig(), instanceOf(RequestedTextExtractionTaskConfig.class));
+        assertThat(result, is(instanceOf(RequestedIdDocTextExtractionTask.class)));
+        assertThat(result.getConfig(), instanceOf(RequestedIdDocTextExtractionTaskConfig.class));
         assertThat(result.getType(), is("ID_DOCUMENT_TEXT_DATA_EXTRACTION"));
 
-        RequestedTextExtractionTaskConfig configResult = result.getConfig();
+        RequestedIdDocTextExtractionTaskConfig configResult = result.getConfig();
         assertThat(configResult.getManualCheck(), is("ALWAYS"));
     }
 
     @Test
     public void shouldBuildSimpleRequestedTextExtractionTaskWithManualFallbackFallback() {
-        RequestedTextExtractionTask result = RequestedTextExtractionTask.builder()
+        RequestedIdDocTextExtractionTask result = RequestedIdDocTextExtractionTask.builder()
                 .withManualCheckFallback()
                 .build();
 
-        RequestedTextExtractionTaskConfig configResult = result.getConfig();
+        RequestedIdDocTextExtractionTaskConfig configResult = result.getConfig();
         assertThat(configResult.getManualCheck(), is("FALLBACK"));
     }
 
     @Test
     public void shouldBuildSimpleRequestedTextExtractionTaskWithManualFallbackNever() {
-        RequestedTextExtractionTask result = RequestedTextExtractionTask.builder()
+        RequestedIdDocTextExtractionTask result = RequestedIdDocTextExtractionTask.builder()
                 .withManualCheckNever()
                 .build();
 
-        RequestedTextExtractionTaskConfig configResult = result.getConfig();
+        RequestedIdDocTextExtractionTaskConfig configResult = result.getConfig();
         assertThat(configResult.getManualCheck(), is("NEVER"));
     }
 
     @Test
     public void shouldBuildSimpleRequestedTextExtractionTaskWithChipDataDesired() {
-        RequestedTextExtractionTask result = RequestedTextExtractionTask.builder()
+        RequestedIdDocTextExtractionTask result = RequestedIdDocTextExtractionTask.builder()
                 .withChipDataDesired()
                 .build();
 
-        RequestedTextExtractionTaskConfig configResult = result.getConfig();
+        RequestedIdDocTextExtractionTaskConfig configResult = result.getConfig();
         assertThat(configResult.getChipData(), is("DESIRED"));
     }
 
     @Test
     public void shouldBuildSimpleRequestedTextExtractionTaskWithChipDataIgnore() {
-        RequestedTextExtractionTask result = RequestedTextExtractionTask.builder()
+        RequestedIdDocTextExtractionTask result = RequestedIdDocTextExtractionTask.builder()
                 .withChipDataIgnore()
                 .build();
 
-        RequestedTextExtractionTaskConfig configResult = result.getConfig();
+        RequestedIdDocTextExtractionTaskConfig configResult = result.getConfig();
         assertThat(configResult.getChipData(), is("IGNORE"));
     }
 

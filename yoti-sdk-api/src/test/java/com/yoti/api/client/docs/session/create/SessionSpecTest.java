@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import com.yoti.api.client.docs.session.create.check.RequestedDocumentAuthenticityCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedLivenessCheck;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
-import com.yoti.api.client.docs.session.create.task.RequestedTextExtractionTask;
+import com.yoti.api.client.docs.session.create.task.RequestedIdDocTextExtractionTask;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -136,7 +136,7 @@ public class SessionSpecTest {
 
     @Test
     public void shouldBuildWithValidRequestedTasks() {
-        RequestedTextExtractionTask textExtractionTask = RequestedTextExtractionTask.builder()
+        RequestedIdDocTextExtractionTask textExtractionTask = RequestedIdDocTextExtractionTask.builder()
                 .withManualCheckAlways()
                 .build();
 

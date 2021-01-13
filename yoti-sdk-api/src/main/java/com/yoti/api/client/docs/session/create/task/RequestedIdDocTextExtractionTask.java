@@ -5,16 +5,16 @@ import com.yoti.api.client.docs.DocScanConstants;
 /**
  * Requests that a TextExtractionTask be applied to each Document
  */
-public class RequestedTextExtractionTask extends RequestedTask<RequestedTextExtractionTaskConfig> {
+public class RequestedIdDocTextExtractionTask extends RequestedTask<RequestedIdDocTextExtractionTaskConfig> {
 
-    private final RequestedTextExtractionTaskConfig config;
+    private final RequestedIdDocTextExtractionTaskConfig config;
 
-    RequestedTextExtractionTask(RequestedTextExtractionTaskConfig config) {
+    RequestedIdDocTextExtractionTask(RequestedIdDocTextExtractionTaskConfig config) {
         this.config = config;
     }
 
-    public static RequestedTextExtractionTask.Builder builder() {
-        return new RequestedTextExtractionTask.Builder();
+    public static RequestedIdDocTextExtractionTask.Builder builder() {
+        return new RequestedIdDocTextExtractionTask.Builder();
     }
 
     @Override
@@ -23,7 +23,7 @@ public class RequestedTextExtractionTask extends RequestedTask<RequestedTextExtr
     }
 
     @Override
-    public RequestedTextExtractionTaskConfig getConfig() {
+    public RequestedIdDocTextExtractionTaskConfig getConfig() {
         return config;
     }
 
@@ -57,9 +57,9 @@ public class RequestedTextExtractionTask extends RequestedTask<RequestedTextExtr
             return this;
         }
 
-        public RequestedTextExtractionTask build() {
-            RequestedTextExtractionTaskConfig config = new RequestedTextExtractionTaskConfig(manualCheck, chipData);
-            return new RequestedTextExtractionTask(config);
+        public RequestedIdDocTextExtractionTask build() {
+            RequestedIdDocTextExtractionTaskConfig config = new RequestedIdDocTextExtractionTaskConfig(manualCheck, chipData);
+            return new RequestedIdDocTextExtractionTask(config);
         }
         
     }
