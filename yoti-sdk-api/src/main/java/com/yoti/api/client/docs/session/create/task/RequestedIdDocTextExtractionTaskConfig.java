@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * The configuration applied when creating each TextExtractionTask
  */
-public class RequestedTextExtractionTaskConfig implements RequestedTaskConfig {
+public class RequestedIdDocTextExtractionTaskConfig implements RequestedTaskConfig {
 
     @JsonProperty("manual_check")
     private final String manualCheck;
@@ -13,7 +13,7 @@ public class RequestedTextExtractionTaskConfig implements RequestedTaskConfig {
     @JsonProperty("chip_data")
     private final String chipData;
 
-    RequestedTextExtractionTaskConfig(String manualCheck, String chipData) {
+    RequestedIdDocTextExtractionTaskConfig(String manualCheck, String chipData) {
         this.manualCheck = manualCheck;
         this.chipData = chipData;
     }
