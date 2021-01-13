@@ -32,7 +32,7 @@ class DocumentDetailsAttributeParser {
             }
         }
 
-        return DocumentDetailsAttributeValue.builder()
+        return DocumentDetails.builder()
                 .withType(attributes[TYPE_INDEX])
                 .withIssuingCountry(attributes[COUNTRY_INDEX])
                 .withNumber(attributes[NUMBER_INDEX])
@@ -43,7 +43,7 @@ class DocumentDetailsAttributeParser {
 
     private static Date getDateSafely(String[] attributes, int index) throws UnsupportedEncodingException, ParseException {
         String expirationDate = getSafely(attributes, index);
-        return expirationDate == null ? null : DateValue.parseFrom(expirationDate);
+        return expirationDate == null ? null : Date.parseFrom(expirationDate);
     }
 
     private static String getSafely(String[] attributes, int index) {

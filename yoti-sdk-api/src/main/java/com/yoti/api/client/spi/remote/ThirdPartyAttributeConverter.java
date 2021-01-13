@@ -49,7 +49,7 @@ public class ThirdPartyAttributeConverter {
 
     private IssuingAttributes parseIssuingAttributes(IssuingAttributesProto.IssuingAttributes issuingAttributes) {
         String expiryDateString = issuingAttributes.getExpiryDate();
-        DateTimeValue expiryDate = parseExpiryDateTime(expiryDateString);
+        DateTime expiryDate = parseExpiryDateTime(expiryDateString);
 
         List<IssuingAttributesProto.Definition> definitionProtoList = issuingAttributes.getDefinitionsList();
         List<AttributeDefinition> attributeDefinitions = parseDefinitions(definitionProtoList);
@@ -57,7 +57,7 @@ public class ThirdPartyAttributeConverter {
         return new IssuingAttributes(expiryDate, attributeDefinitions);
     }
 
-    private DateTimeValue parseExpiryDateTime(String dateTimeStringValue) {
+    private DateTime parseExpiryDateTime(String dateTimeStringValue) {
         // Return null if datetime string is null or empty
         if (dateTimeStringValue == null || dateTimeStringValue.isEmpty()) {
             return null;
@@ -65,10 +65,10 @@ public class ThirdPartyAttributeConverter {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(RFC3339_PATTERN_MILLIS);
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        DateTimeValue dateTimeValue = null;
+        DateTime dateTimeValue = null;
         try {
             Date date = simpleDateFormat.parse(dateTimeStringValue);
-            dateTimeValue = DateTimeValue.from(date.getTime() * 1000);
+            dateTimeValue = DateTime.from(date.getTime() * 1000);
         } catch (ParseException e) {
             LOG.error("Failed to parse date: '{}', {}", dateTimeStringValue, e.getMessage());
         }

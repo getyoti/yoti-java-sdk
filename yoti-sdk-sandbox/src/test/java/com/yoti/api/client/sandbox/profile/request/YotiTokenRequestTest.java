@@ -11,12 +11,11 @@ import java.util.Collections;
 import java.util.List;
 
 import com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes;
+import com.yoti.api.client.Date;
 import com.yoti.api.client.DocumentDetails;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAnchor;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAttribute;
 import com.yoti.api.client.sandbox.profile.request.attribute.derivation.SandboxAgeVerification;
-import com.yoti.api.client.spi.remote.DateValue;
-import com.yoti.api.client.spi.remote.DocumentDetailsAttributeValue;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
@@ -227,7 +226,7 @@ public class YotiTokenRequestTest {
     @Test
     public void shouldCreateRequestWithDateOfBirthFromDate() throws Exception {
         YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
-                .withDateOfBirth(DateValue.parseFrom(SOME_DOB))
+                .withDateOfBirth(Date.parseFrom(SOME_DOB))
                 .build();
 
         List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
@@ -239,7 +238,7 @@ public class YotiTokenRequestTest {
     @Test
     public void shouldCreateRequestWithDateOfBirthFromDateAndAnchors() throws Exception {
         YotiTokenRequest yotiTokenRequest = YotiTokenRequest.builder()
-                .withDateOfBirth(DateValue.parseFrom(SOME_DOB), anchors)
+                .withDateOfBirth(Date.parseFrom(SOME_DOB), anchors)
                 .build();
 
         List<SandboxAttribute> result = yotiTokenRequest.getSandboxAttributes();
@@ -425,7 +424,7 @@ public class YotiTokenRequestTest {
 
     @Test
     public void shouldCreateRequestWithDocumentDetails() {
-        DocumentDetails documentDetails = DocumentDetailsAttributeValue.builder()
+        DocumentDetails documentDetails = DocumentDetails.builder()
                 .withType("type")
                 .withIssuingCountry("country")
                 .withNumber("number")
@@ -442,7 +441,7 @@ public class YotiTokenRequestTest {
 
     @Test
     public void shouldCreateRequestWithDocumentDetailsAndAnchors() {
-        DocumentDetails documentDetails = DocumentDetailsAttributeValue.builder()
+        DocumentDetails documentDetails = DocumentDetails.builder()
                 .withType("type")
                 .withIssuingCountry("country")
                 .withNumber("number")
