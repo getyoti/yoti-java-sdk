@@ -12,6 +12,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import com.yoti.api.client.Anchor;
+import com.yoti.api.client.DateTime;
 import com.yoti.api.client.SignedTimestamp;
 import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.SignedTimestampProto;
@@ -92,7 +93,7 @@ class AnchorConverter {
 
     private SignedTimestamp convertSignedTimestamp(ByteString timestampByteString) throws InvalidProtocolBufferException {
         SignedTimestampProto.SignedTimestamp timestampProto = SignedTimestampProto.SignedTimestamp.parseFrom(timestampByteString);
-        return new SignedTimestampValue(timestampProto.getVersion(), DateTimeValue.from(timestampProto.getTimestamp()));
+        return new SignedTimestampValue(timestampProto.getVersion(), DateTime.from(timestampProto.getTimestamp()));
     }
 
     private static class AnchorTypeAndValue {

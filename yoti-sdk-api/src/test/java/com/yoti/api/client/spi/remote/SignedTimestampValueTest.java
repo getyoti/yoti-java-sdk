@@ -12,8 +12,8 @@ import org.junit.Test;
 
 public class SignedTimestampValueTest {
 
-    private static final DateTime DATE_TIME_1 = DateTimeValue.from(123456789);
-    private static final DateTime DATE_TIME_2 = DateTimeValue.from(987654321);
+    private static final DateTime DATE_TIME_1 = DateTime.from(123456789);
+    private static final DateTime DATE_TIME_2 = DateTime.from(987654321);
 
     @Test
     public void constructor_willNotAllowNullTimestamp() {
