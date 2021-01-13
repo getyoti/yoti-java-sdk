@@ -37,8 +37,8 @@ public class IdDocumentResourceResponse extends ResourceResponse {
         return documentFields;
     }
 
-    public List<TextExtractionTaskResponse> getTextExtractionTasks() {
-        return filterTasksByType(TextExtractionTaskResponse.class);
+    public List<IdDocTextExtractionTaskResponse> getTextExtractionTasks() {
+        return filterTasksByType(IdDocTextExtractionTaskResponse.class);
     }
 
     public DocumentIdPhotoResponse getDocumentIdPhoto() {
