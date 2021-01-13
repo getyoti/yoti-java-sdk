@@ -7,7 +7,6 @@ import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAnchor;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAttribute;
-import com.yoti.api.client.spi.remote.DateValue;
 import com.yoti.api.client.spi.remote.util.Validation;
 
 public class SandboxAgeVerification {
@@ -46,7 +45,7 @@ public class SandboxAgeVerification {
 
         public SandboxAgeVerificationBuilder withDateOfBirth(String value) {
             try {
-                this.dateOfBirth = DateValue.parseFrom(value);
+                this.dateOfBirth = Date.parseFrom(value);
                 return this;
             } catch (Exception e) {
                 throw new IllegalArgumentException(e.getMessage(), e);

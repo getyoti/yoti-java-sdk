@@ -1,4 +1,4 @@
-package com.yoti.api.client.spi.remote;
+package com.yoti.api.client;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
@@ -15,7 +15,7 @@ import java.util.TimeZone;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TimeValueTest {
+public class TimeTest {
 
     private static final TimeZone UTC_TIME_ZONE = TimeZone.getTimeZone("UTC");
 
@@ -31,7 +31,7 @@ public class TimeValueTest {
 
     @Test
     public void from_createsValueSuccessfully() {
-        TimeValue result = TimeValue.from(calendar, 999);
+        Time result = Time.from(calendar, 999);
 
         assertEquals(13, result.getHour());
         assertEquals(15, result.getMinute());
@@ -42,7 +42,7 @@ public class TimeValueTest {
     @Test
     public void from_ensuresMicrosecondsValueNotGreaterThan999() {
         try {
-            TimeValue.from(calendar, 1000);
+            Time.from(calendar, 1000);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("microsecond"));
             assertThat(e.getMessage(), containsString("1000"));
@@ -56,7 +56,7 @@ public class TimeValueTest {
     @Test
     public void builder_appliesMinLimitOnHour() {
         try {
-            TimeValue.builder().withHour(-1);
+            Time.builder().withHour(-1);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("hour"));
             return;
@@ -67,7 +67,7 @@ public class TimeValueTest {
     @Test
     public void builder_appliesMaxLimitOnHour() {
         try {
-            TimeValue.builder().withHour(24);
+            Time.builder().withHour(24);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("hour"));
             return;
@@ -78,7 +78,7 @@ public class TimeValueTest {
     @Test
     public void builder_appliesMinLimitOnMinute() {
         try {
-            TimeValue.builder().withMinute(-1);
+            Time.builder().withMinute(-1);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("minute"));
             return;
@@ -89,7 +89,7 @@ public class TimeValueTest {
     @Test
     public void builder_appliesMaxLimitOnMinute() {
         try {
-            TimeValue.builder().withMinute(60);
+            Time.builder().withMinute(60);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("minute"));
             return;
@@ -100,7 +100,7 @@ public class TimeValueTest {
     @Test
     public void builder_appliesMinLimitOnSecond() {
         try {
-            TimeValue.builder().withSecond(-1);
+            Time.builder().withSecond(-1);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("second"));
             return;
@@ -111,7 +111,7 @@ public class TimeValueTest {
     @Test
     public void builder_appliesMaxLimitOnSecond() {
         try {
-            TimeValue.builder().withSecond(60);
+            Time.builder().withSecond(60);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("second"));
             return;
@@ -122,7 +122,7 @@ public class TimeValueTest {
     @Test
     public void builder_appliesMinLimitOnMicrosecond() {
         try {
-            TimeValue.builder().withMicrosecond(-1);
+            Time.builder().withMicrosecond(-1);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("microsecond"));
             return;
@@ -133,7 +133,7 @@ public class TimeValueTest {
     @Test
     public void builder_appliesMaxLimitOnMicrosecond() {
         try {
-            TimeValue.builder().withMicrosecond(1000000);
+            Time.builder().withMicrosecond(1000000);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("microsecond"));
             return;
@@ -142,8 +142,8 @@ public class TimeValueTest {
     }
 
     @Test
-    public void builder_buildsATimeValueWithDefaults() {
-        TimeValue result = TimeValue.builder().build();
+    public void builder_buildsATimeWithDefaults() {
+        Time result = Time.builder().build();
 
         assertEquals(0, result.getHour());
         assertEquals(0, result.getMinute());
@@ -152,8 +152,8 @@ public class TimeValueTest {
     }
 
     @Test
-    public void builder_buildsATimeValueWithGivenValues() {
-        TimeValue result = TimeValue.builder()
+    public void builder_buildsATimeWithGivenValues() {
+        Time result = Time.builder()
                 .withHour(1)
                 .withMinute(2)
                 .withSecond(3)
@@ -168,7 +168,7 @@ public class TimeValueTest {
 
     @Test
     public void toString_shouldFormatDateCorrectly() {
-        TimeValue timeValue = TimeValue.from(calendar, 999);
+        Time timeValue = Time.from(calendar, 999);
 
         String result = timeValue.toString();
 
@@ -177,14 +177,14 @@ public class TimeValueTest {
 
     @Test
     public void equals_returnsFalseWhenComparedToNull() {
-        TimeValue timeValue = TimeValue.from(calendar, 999);
+        Time timeValue = Time.from(calendar, 999);
 
         assertFalse(timeValue.equals(null));
     }
 
     @Test
     public void equals_shouldBeReflexive() {
-        TimeValue timeValue = TimeValue.from(calendar, 999);
+        Time timeValue = Time.from(calendar, 999);
 
         assertTrue(timeValue.equals(timeValue));
         assertTrue(timeValue.hashCode() == timeValue.hashCode());
@@ -192,8 +192,8 @@ public class TimeValueTest {
 
     @Test
     public void equals_shouldBeSymmetricWhenValuesMatch() {
-        TimeValue timeValue1 = TimeValue.from(calendar, 999);
-        TimeValue timeValue2 = TimeValue.from(calendar, 999);
+        Time timeValue1 = Time.from(calendar, 999);
+        Time timeValue2 = Time.from(calendar, 999);
 
         assertTrue(timeValue1.equals(timeValue2));
         assertTrue(timeValue2.equals(timeValue1));
@@ -202,8 +202,8 @@ public class TimeValueTest {
 
     @Test
     public void equals_shouldBeSymmetricWhenValuesDoNotMatch() {
-        TimeValue timeValue1 = TimeValue.from(calendar, 999);
-        TimeValue timeValue2 = TimeValue.from(calendar, 123);
+        Time timeValue1 = Time.from(calendar, 999);
+        Time timeValue2 = Time.from(calendar, 123);
 
         assertFalse(timeValue1.equals(timeValue2));
         assertFalse(timeValue2.equals(timeValue1));
@@ -211,9 +211,9 @@ public class TimeValueTest {
 
     @Test
     public void equals_shouldBeTransitive() {
-        TimeValue timeValue1 = TimeValue.from(calendar, 999);
-        TimeValue timeValue2 = TimeValue.from(calendar, 999);
-        TimeValue timeValue3 = TimeValue.from(calendar, 999);
+        Time timeValue1 = Time.from(calendar, 999);
+        Time timeValue2 = Time.from(calendar, 999);
+        Time timeValue3 = Time.from(calendar, 999);
 
         assertTrue(timeValue1.equals(timeValue2));
         assertTrue(timeValue1.equals(timeValue3));

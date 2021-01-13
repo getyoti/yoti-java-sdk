@@ -13,6 +13,7 @@ import java.util.Map;
 import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.Anchor;
 import com.yoti.api.client.Attribute;
+import com.yoti.api.client.Date;
 import com.yoti.api.client.Image;
 import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
@@ -63,7 +64,7 @@ class AttributeConverter {
             case STRING:
                 return value.toString(DEFAULT_CHARSET);
             case DATE:
-                return DateValue.parseFrom(value.toByteArray());
+                return Date.parseFrom(value.toByteArray());
             case JPEG:
                 return new JpegAttributeValue(value.toByteArray());
             case PNG:

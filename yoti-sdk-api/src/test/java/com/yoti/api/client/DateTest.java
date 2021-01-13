@@ -1,4 +1,4 @@
-package com.yoti.api.client.spi.remote;
+package com.yoti.api.client;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
@@ -16,7 +16,7 @@ import com.yoti.api.client.Date;
 
 import org.junit.Test;
 
-public class DateValueTest {
+public class DateTest {
 
     private static final String VALID_DATE_STRING = "2016-12-01";
     private static final String INVALID_DATE_VALUE_STRING = "2016-13-01";
@@ -28,39 +28,40 @@ public class DateValueTest {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(simpleDateFormat.parse("2016-Dec-01 14:59:49:123"));
 
-        DateValue result = DateValue.from(calendar);
+        Date result = Date.from(calendar);
 
         assertDate(result, 2016, 12, 1);
     }
 
     @Test
     public void parseFrom_shouldParseValidString() throws Exception {
-        DateValue result = DateValue.parseFrom(VALID_DATE_STRING);
+        Date result = Date.parseFrom(VALID_DATE_STRING);
 
         assertDate(result, 2016, 12, 1);
     }
 
     @Test
     public void parseFrom_shouldParseValidArray() throws Exception {
-        DateValue result = DateValue.parseFrom(VALID_DATE_STRING.getBytes("UTF-8"));
+        Date result = Date.parseFrom(VALID_DATE_STRING.getBytes("UTF-8"));
 
         assertDate(result, 2016, 12, 1);
     }
 
     @Test(expected = ParseException.class)
     public void parseFrom_shouldNotParseInvalidDateFormat() throws Exception {
-        DateValue.parseFrom(INVALID_DATE_FORMAT_STRING);
+        Date.parseFrom(INVALID_DATE_FORMAT_STRING);
     }
 
     @Test(expected = ParseException.class)
-    public void parseFrom_shouldNotParseInvalidDateValue() throws Exception {
-        DateValue.parseFrom(INVALID_DATE_VALUE_STRING);
+    public void parseFrom_shouldNotParseInvalidDate() throws Exception {
+        Date.parseFrom(INVALID_DATE_VALUE_STRING);
     }
 
     @Test
     public void builder_shouldNotAllowYearZero() {
         try {
-            DateValue.builder().withYear(0);
+            Date.builder()
+                    .withYear(0);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("year"));
             return;
@@ -71,7 +72,8 @@ public class DateValueTest {
     @Test
     public void builder_shouldApplyMinLimitToMonth() {
         try {
-            DateValue.builder().withMonth(0);
+            Date.builder()
+                    .withMonth(0);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("month"));
             return;
@@ -82,7 +84,8 @@ public class DateValueTest {
     @Test
     public void builder_shouldApplyMaxLimitToMonth() {
         try {
-            DateValue.builder().withMonth(13);
+            Date.builder()
+                    .withMonth(13);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("month"));
             return;
@@ -93,7 +96,8 @@ public class DateValueTest {
     @Test
     public void builder_shouldApplyMinLimitToDay() {
         try {
-            DateValue.builder().withDay(0);
+            Date.builder()
+                    .withDay(0);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("day"));
             return;
@@ -104,7 +108,8 @@ public class DateValueTest {
     @Test
     public void builder_shouldApplyMaxLimitToDay() {
         try {
-            DateValue.builder().withDay(32);
+            Date.builder()
+                    .withDay(32);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("day"));
             return;
@@ -115,7 +120,7 @@ public class DateValueTest {
     @Test
     public void builder_shouldFailForAnInvalidDate() throws Exception {
         try {
-            DateValue.builder()
+            Date.builder()
                     .withYear(2015)
                     .withMonth(2)
                     .withDay(29)
@@ -131,7 +136,8 @@ public class DateValueTest {
 
     @Test
     public void builder_shouldBuildDateWithDefaultValues() throws Exception {
-        DateValue result = DateValue.builder().build();
+        Date result = Date.builder()
+                .build();
 
         assertEquals(1, result.getYear());
         assertEquals(1, result.getMonth());
@@ -140,7 +146,7 @@ public class DateValueTest {
 
     @Test
     public void builder_shouldBuildDateWithGivenValues() throws Exception {
-        DateValue result = DateValue.builder()
+        Date result = Date.builder()
                 .withYear(1999)
                 .withMonth(12)
                 .withDay(31)
@@ -153,7 +159,7 @@ public class DateValueTest {
 
     @Test
     public void toString_shouldFormatDateCorrectly() throws Exception {
-        DateValue date = DateValue.parseFrom(VALID_DATE_STRING);
+        Date date = Date.parseFrom(VALID_DATE_STRING);
 
         String result = date.toString();
 
@@ -162,14 +168,14 @@ public class DateValueTest {
 
     @Test
     public void equals_returnsFalseWhenComparedToNull() throws Exception {
-        DateValue dateValue = DateValue.parseFrom(VALID_DATE_STRING);
+        Date dateValue = Date.parseFrom(VALID_DATE_STRING);
 
         assertFalse(dateValue.equals(null));
     }
 
     @Test
     public void equals_shouldBeReflexive() throws Exception {
-        DateValue dateValue = DateValue.parseFrom(VALID_DATE_STRING);
+        Date dateValue = Date.parseFrom(VALID_DATE_STRING);
 
         assertTrue(dateValue.equals(dateValue));
         assertTrue(dateValue.hashCode() == dateValue.hashCode());
@@ -177,8 +183,8 @@ public class DateValueTest {
 
     @Test
     public void equals_shouldBeSymmetricWhenValuesMatch() throws Exception {
-        DateValue date1 = DateValue.parseFrom(VALID_DATE_STRING);
-        DateValue date2 = DateValue.parseFrom(VALID_DATE_STRING);
+        Date date1 = Date.parseFrom(VALID_DATE_STRING);
+        Date date2 = Date.parseFrom(VALID_DATE_STRING);
 
         assertTrue(date1.equals(date2));
         assertTrue(date2.equals(date1));
@@ -187,8 +193,8 @@ public class DateValueTest {
 
     @Test
     public void equals_shouldBeSymmetricWhenValuesDoNotMatch() throws Exception {
-        DateValue dateTime1 = DateValue.parseFrom(VALID_DATE_STRING);
-        DateValue dateTime2 = DateValue.parseFrom("2017-03-31");
+        Date dateTime1 = Date.parseFrom(VALID_DATE_STRING);
+        Date dateTime2 = Date.parseFrom("2017-03-31");
 
         assertFalse(dateTime1.equals(dateTime2));
         assertFalse(dateTime2.equals(dateTime1));
@@ -196,9 +202,9 @@ public class DateValueTest {
 
     @Test
     public void equals_shouldBeTransitive() throws Exception {
-        DateValue dateTime1 = DateValue.parseFrom(VALID_DATE_STRING);
-        DateValue dateTime2 = DateValue.parseFrom(VALID_DATE_STRING);
-        DateValue dateTime3 = DateValue.parseFrom(VALID_DATE_STRING);
+        Date dateTime1 = Date.parseFrom(VALID_DATE_STRING);
+        Date dateTime2 = Date.parseFrom(VALID_DATE_STRING);
+        Date dateTime3 = Date.parseFrom(VALID_DATE_STRING);
 
         assertTrue(dateTime1.equals(dateTime2));
         assertTrue(dateTime1.equals(dateTime3));
