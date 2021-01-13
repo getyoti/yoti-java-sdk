@@ -15,6 +15,7 @@ import java.util.List;
 import com.yoti.api.client.AttributeDefinition;
 import com.yoti.api.client.AttributeIssuanceDetails;
 import com.yoti.api.client.DateTime;
+import com.yoti.api.client.DateTimeTest;
 import com.yoti.api.client.ExtraDataException;
 import com.yoti.api.client.spi.remote.proto.IssuingAttributesProto;
 import com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto;
@@ -52,8 +53,8 @@ public class ThirdPartyAttributeConverterTest {
         assertThat(issuingAttributes.get(0).getName(), is(SOME_DEFINITION_NAME));
         assertThat(issuanceToken, is(SOME_ISSUANCE_TOKEN_B64));
 
-        DateTimeValueTest.assertDateTimeValue(
-                dateTimeValue, 2019, 10, 15, 22, 04, 05, 123000
+        DateTimeTest.assertDateTime(
+                dateTimeValue, 2019, 10, 15, 22, 4, 5, 123000
         );
     }
 

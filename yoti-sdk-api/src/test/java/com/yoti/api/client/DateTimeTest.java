@@ -1,4 +1,4 @@
-package com.yoti.api.client.spi.remote;
+package com.yoti.api.client;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
@@ -12,16 +12,14 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import com.yoti.api.client.DateTime;
-
 import org.junit.Test;
 
-public class DateTimeValueTest {
+public class DateTimeTest {
 
     @Test
     public void constructor_willNotAllowNullDate() {
         try {
-            new DateTimeValue(null, null);
+            new DateTime(null, null);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("date"));
             return;
@@ -33,7 +31,7 @@ public class DateTimeValueTest {
     @Test
     public void constructor_willNotAllowNullTime() throws Exception {
         try {
-            new DateTimeValue(DateValue.parseFrom("1984-10-31"), null);
+            new DateTime(Date.parseFrom("1984-10-31"), null);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("time"));
             return;
@@ -44,7 +42,7 @@ public class DateTimeValueTest {
 
     @Test
     public void from_shouldWorkForEpochBeginning() {
-        DateTime result = DateTimeValue.from(0);
+        DateTime result = DateTime.from(0);
 
         assertEquals(1970, result.getDate().getYear());
         assertEquals(1, result.getDate().getMonth());
@@ -66,7 +64,7 @@ public class DateTimeValueTest {
         long microseconds = calendar.getTimeInMillis() * 1000;
         microseconds = microseconds + 123456;
 
-        DateTime result = DateTimeValue.from(microseconds);
+        DateTime result = DateTime.from(microseconds);
 
         assertEquals(1980, result.getDate().getYear());
         assertEquals(8, result.getDate().getMonth());
@@ -80,14 +78,14 @@ public class DateTimeValueTest {
 
     @Test
     public void equals_returnsFalseWhenComparedToNull() {
-        DateTime dateTime = DateTimeValue.from(123456789);
+        DateTime dateTime = DateTime.from(123456789);
 
         assertFalse(dateTime.equals(null));
     }
 
     @Test
     public void equals_shouldBeReflexive() {
-        DateTime dateTime = DateTimeValue.from(123456789);
+        DateTime dateTime = DateTime.from(123456789);
 
         assertTrue(dateTime.equals(dateTime));
         assertTrue(dateTime.hashCode() == dateTime.hashCode());
@@ -95,8 +93,8 @@ public class DateTimeValueTest {
 
     @Test
     public void equals_shouldBeSymmetricWhenValuesMatch() {
-        DateTime dateTime1 = DateTimeValue.from(123456789);
-        DateTime dateTime2 = DateTimeValue.from(123456789);
+        DateTime dateTime1 = DateTime.from(123456789);
+        DateTime dateTime2 = DateTime.from(123456789);
 
         assertTrue(dateTime1.equals(dateTime2));
         assertTrue(dateTime2.equals(dateTime1));
@@ -105,8 +103,8 @@ public class DateTimeValueTest {
 
     @Test
     public void equals_shouldBeSymmetricWhenValuesDoNotMatch() {
-        DateTime dateTime1 = DateTimeValue.from(987654321);
-        DateTime dateTime2 = DateTimeValue.from(123456789);
+        DateTime dateTime1 = DateTime.from(987654321);
+        DateTime dateTime2 = DateTime.from(123456789);
 
         assertFalse(dateTime1.equals(dateTime2));
         assertFalse(dateTime2.equals(dateTime1));
@@ -114,9 +112,9 @@ public class DateTimeValueTest {
 
     @Test
     public void equals_shouldBeTransitive() {
-        DateTime dateTime1 = DateTimeValue.from(123456789);
-        DateTime dateTime2 = DateTimeValue.from(123456789);
-        DateTime dateTime3 = DateTimeValue.from(123456789);
+        DateTime dateTime1 = DateTime.from(123456789);
+        DateTime dateTime2 = DateTime.from(123456789);
+        DateTime dateTime3 = DateTime.from(123456789);
 
         assertTrue(dateTime1.equals(dateTime2));
         assertTrue(dateTime1.equals(dateTime3));
@@ -125,7 +123,7 @@ public class DateTimeValueTest {
         assertTrue(dateTime2.hashCode() == dateTime3.hashCode());
     }
 
-    public static void assertDateTimeValue(DateTime test,
+    public static void assertDateTime(DateTime test,
                                                int year,
                                                int month,
                                                int day,

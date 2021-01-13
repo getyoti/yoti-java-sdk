@@ -1,17 +1,14 @@
-package com.yoti.api.client.spi.remote;
+package com.yoti.api.client;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import com.yoti.api.client.Date;
-import com.yoti.api.client.DocumentDetails;
-
 import org.junit.Before;
 import org.junit.Test;
 
-public class DocumentDetailsAttributeValueTest {
+public class DocumentDetailsTest {
 
     private static final String SOME_TYPE = "someType";
     private static final String SOME_COUNTRY = "someCountry";
@@ -19,17 +16,17 @@ public class DocumentDetailsAttributeValueTest {
     private static final String SOME_DATE_STRING = "2011-11-30";
     private static final String SOME_AUTHORITY = "someAuthority";
 
-    private DocumentDetailsAttributeValue testObj;
+    private DocumentDetails testObj;
     private Date testDate;
 
     @Before
     public void setUp() throws Exception {
-        testDate = DateValue.parseFrom(SOME_DATE_STRING);
+        testDate = Date.parseFrom(SOME_DATE_STRING);
     }
 
     @Test
     public void shouldBuildCorrectStringForMandatoryAttributes() {
-        testObj = new DocumentDetailsAttributeValue(SOME_TYPE, SOME_COUNTRY, SOME_NUMBER, null, null);
+        testObj = new DocumentDetails(SOME_TYPE, SOME_COUNTRY, SOME_NUMBER, null, null);
 
         String result = testObj.toString();
 
@@ -38,7 +35,7 @@ public class DocumentDetailsAttributeValueTest {
 
     @Test
     public void shouldBuildCorrectStringWithDocumentDate() {
-        testObj = new DocumentDetailsAttributeValue(SOME_TYPE, SOME_COUNTRY, SOME_NUMBER, testDate, null);
+        testObj = new DocumentDetails(SOME_TYPE, SOME_COUNTRY, SOME_NUMBER, testDate, null);
 
         String result = testObj.toString();
 
@@ -47,7 +44,7 @@ public class DocumentDetailsAttributeValueTest {
 
     @Test
     public void shouldBuildCorrectStringWithDocumentDateAndAuthority() {
-        testObj = new DocumentDetailsAttributeValue(SOME_TYPE, SOME_COUNTRY, SOME_NUMBER, testDate, SOME_AUTHORITY);
+        testObj = new DocumentDetails(SOME_TYPE, SOME_COUNTRY, SOME_NUMBER, testDate, SOME_AUTHORITY);
 
         String result = testObj.toString();
 
@@ -56,7 +53,7 @@ public class DocumentDetailsAttributeValueTest {
 
     @Test
     public void shouldBuildCorrectStringWhenDateIsAbsent() {
-        testObj = new DocumentDetailsAttributeValue(SOME_TYPE, SOME_COUNTRY, SOME_NUMBER, null, SOME_AUTHORITY);
+        testObj = new DocumentDetails(SOME_TYPE, SOME_COUNTRY, SOME_NUMBER, null, SOME_AUTHORITY);
 
         String result = testObj.toString();
 
@@ -77,7 +74,8 @@ public class DocumentDetailsAttributeValueTest {
     @Test
     public void shouldFailWhenTypeIsMissing() {
         try {
-            DocumentDetailsAttributeValue.builder().build();
+            DocumentDetails.builder()
+                    .build();
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("type"));
             return;
@@ -89,7 +87,7 @@ public class DocumentDetailsAttributeValueTest {
     @Test
     public void shouldFailWhenCountryIsMissing() {
         try {
-            DocumentDetailsAttributeValue.builder()
+            DocumentDetails.builder()
                     .withType(SOME_TYPE)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -103,7 +101,7 @@ public class DocumentDetailsAttributeValueTest {
     @Test
     public void shouldFailWhenNumberIsMissing() {
         try {
-            DocumentDetailsAttributeValue.builder()
+            DocumentDetails.builder()
                     .withType(SOME_TYPE)
                     .withIssuingCountry(SOME_COUNTRY)
                     .build();
@@ -117,7 +115,7 @@ public class DocumentDetailsAttributeValueTest {
 
     @Test
     public void shouldCreateDocumentDetailsWithMandatoryAttributes() {
-        DocumentDetails result = DocumentDetailsAttributeValue.builder()
+        DocumentDetails result = DocumentDetails.builder()
                 .withType(SOME_TYPE)
                 .withIssuingCountry(SOME_COUNTRY)
                 .withNumber(SOME_NUMBER)
@@ -130,11 +128,11 @@ public class DocumentDetailsAttributeValueTest {
 
     @Test
     public void shouldCreateDocumentDetailsWithAllAttributes() throws Exception {
-        DocumentDetails result = DocumentDetailsAttributeValue.builder()
+        DocumentDetails result = DocumentDetails.builder()
                 .withType(SOME_TYPE)
                 .withIssuingCountry(SOME_COUNTRY)
                 .withNumber(SOME_NUMBER)
-                .withDate(DateValue.parseFrom(SOME_DATE_STRING))
+                .withDate(Date.parseFrom(SOME_DATE_STRING))
                 .withAuthority(SOME_AUTHORITY)
                 .build();
 

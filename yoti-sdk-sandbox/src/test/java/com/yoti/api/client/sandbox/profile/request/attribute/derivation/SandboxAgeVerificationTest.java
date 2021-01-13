@@ -11,9 +11,9 @@ import static org.junit.Assert.fail;
 import java.text.ParseException;
 
 import com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes;
+import com.yoti.api.client.Date;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAnchor;
 import com.yoti.api.client.sandbox.profile.request.attribute.SandboxAttribute;
-import com.yoti.api.client.spi.remote.DateValue;
 
 import org.junit.Test;
 
@@ -88,7 +88,7 @@ public class SandboxAgeVerificationTest {
     @Test
     public void shouldCreateAgeOverSandboxAttribute() throws Exception {
         SandboxAttribute result = SandboxAgeVerification.builder()
-                .withDateOfBirth(DateValue.parseFrom(VALID_DATE_STRING))
+                .withDateOfBirth(Date.parseFrom(VALID_DATE_STRING))
                 .withAgeOver(21)
                 .build()
                 .toAttribute();
@@ -103,7 +103,7 @@ public class SandboxAgeVerificationTest {
     @Test
     public void shouldCreateAgeUnderSandboxAttribute() throws Exception {
         SandboxAttribute result = SandboxAgeVerification.builder()
-                .withDateOfBirth(DateValue.parseFrom(VALID_DATE_STRING))
+                .withDateOfBirth(Date.parseFrom(VALID_DATE_STRING))
                 .withAgeUnder(16)
                 .build()
                 .toAttribute();
@@ -119,7 +119,7 @@ public class SandboxAgeVerificationTest {
     public void shouldCreateAgeVerificationWithAnchors() throws Exception{
         SandboxAnchor sandboxAnchor = SandboxAnchor.builder().build();
         SandboxAttribute result = SandboxAgeVerification.builder()
-                .withDateOfBirth(DateValue.parseFrom(VALID_DATE_STRING))
+                .withDateOfBirth(Date.parseFrom(VALID_DATE_STRING))
                 .withAgeUnder(16)
                 .withAnchors(asList(sandboxAnchor))
                 .build()
