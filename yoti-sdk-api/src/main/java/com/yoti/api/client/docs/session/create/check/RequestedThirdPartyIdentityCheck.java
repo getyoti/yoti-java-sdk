@@ -28,7 +28,7 @@ public class RequestedThirdPartyIdentityCheck extends RequestedCheck<RequestedTh
 
         private final RequestedThirdPartyIdentityConfig config;
 
-        Builder() {
+        private Builder() {
             config = new RequestedThirdPartyIdentityConfig();
         }
 

@@ -38,6 +38,8 @@ public class RequiredIdDocument extends RequiredDocument {
 
         private DocumentFilter filter;
 
+        private Builder() {}
+
         public Builder withFilter(DocumentFilter filter) {
             this.filter = filter;
             return this;

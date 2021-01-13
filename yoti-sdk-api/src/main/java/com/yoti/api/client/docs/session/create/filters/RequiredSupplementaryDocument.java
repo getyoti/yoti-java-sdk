@@ -71,6 +71,8 @@ public class RequiredSupplementaryDocument extends RequiredDocument {
         private List<String> documentTypes;
         private List<String> countryCodes;
 
+        private Builder() {}
+
         public Builder withObjective(Objective objective) {
             this.objective = objective;
             return this;

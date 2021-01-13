@@ -25,4 +25,12 @@ public abstract class RequestedTask<T extends RequestedTaskConfig> {
     @JsonProperty("config")
     public abstract T getConfig();
 
+    public static RequestedIdDocTextExtractionTask.Builder forIdDocTextExtractionTask() {
+        return RequestedIdDocTextExtractionTask.builder();
+    }
+
+    public static RequestedSupplementaryDocTextExtractionTask.Builder forSupplementaryDocTextExtractionTask() {
+        return RequestedSupplementaryDocTextExtractionTask.builder();
+    }
+
 }

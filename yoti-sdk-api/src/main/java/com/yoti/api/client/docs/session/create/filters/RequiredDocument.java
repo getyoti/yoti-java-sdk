@@ -15,4 +15,12 @@ public abstract class RequiredDocument {
     @JsonProperty("type")
     public abstract String getType();
 
+    public static RequiredIdDocument.Builder forIdDocument() {
+        return RequiredIdDocument.builder();
+    }
+
+    public static RequiredSupplementaryDocument.Builder forSupplementaryDocument() {
+        return RequiredSupplementaryDocument.builder();
+    }
+
 }

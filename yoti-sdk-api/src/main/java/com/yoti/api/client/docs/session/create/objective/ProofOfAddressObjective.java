@@ -14,6 +14,8 @@ public class ProofOfAddressObjective extends Objective {
 
     public static class Builder {
 
+        private Builder() {}
+
         public ProofOfAddressObjective build() {
         return new ProofOfAddressObjective();
     }

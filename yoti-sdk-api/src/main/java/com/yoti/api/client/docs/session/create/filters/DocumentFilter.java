@@ -24,4 +24,12 @@ public abstract class DocumentFilter {
         return type;
     }
 
+    public static DocumentRestrictionsFilter.Builder forDocumentRestrictionsFilter() {
+        return DocumentRestrictionsFilter.builder();
+    }
+
+    public static OrthogonalRestrictionsFilter.Builder forOrthogonalRestrictionsFilter() {
+        return OrthogonalRestrictionsFilter.builder();
+    }
+
 }

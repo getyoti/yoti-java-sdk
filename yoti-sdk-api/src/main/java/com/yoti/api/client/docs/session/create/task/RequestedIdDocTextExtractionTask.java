@@ -32,6 +32,8 @@ public class RequestedIdDocTextExtractionTask extends RequestedTask<RequestedIdD
         private String manualCheck;
         private String chipData;
 
+        private Builder() {}
+
         public Builder withManualCheckAlways() {
             this.manualCheck = DocScanConstants.ALWAYS;
             return this;

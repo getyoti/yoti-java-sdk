@@ -15,4 +15,8 @@ public abstract class Objective {
         return type;
     }
 
+    public static ProofOfAddressObjective.Builder forProofOfAddress() {
+        return ProofOfAddressObjective.builder();
+    }
+
 }

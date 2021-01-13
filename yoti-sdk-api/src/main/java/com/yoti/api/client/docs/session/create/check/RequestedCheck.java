@@ -25,4 +25,24 @@ public abstract class RequestedCheck<T extends RequestedCheckConfig> {
     @JsonProperty("config")
     public abstract T getConfig();
 
+    public static RequestedDocumentAuthenticityCheck.Builder forDocumentAuthenticity() {
+        return RequestedDocumentAuthenticityCheck.builder();
+    }
+
+    public static RequestedFaceMatchCheck.Builder forFaceMatch() {
+        return RequestedFaceMatchCheck.builder();
+    }
+
+    public static RequestedIdDocumentComparisonCheck.Builder forIdDocumentComparison() {
+        return RequestedIdDocumentComparisonCheck.builder();
+    }
+
+    public static RequestedLivenessCheck.Builder forLiveness() {
+        return RequestedLivenessCheck.builder();
+    }
+
+    public static RequestedThirdPartyIdentityCheck.Builder forThirdPartyIdentity() {
+        return RequestedThirdPartyIdentityCheck.builder();
+    }
+
 }
