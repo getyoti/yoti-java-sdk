@@ -13,20 +13,20 @@ import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TextExtractionTaskResponseTest {
+public class IdDocTextExtractionTaskResponseTest {
 
     @Mock GeneratedTextDataCheckResponse textDataCheckResponseMock;
     @Mock GeneratedCheckResponse checkResponse;
 
-    TextExtractionTaskResponse textExtractionTaskResponse;
+    IdDocTextExtractionTaskResponse testObj;
 
     @Test
     public void shouldFilterGeneratedTextDataChecks() throws NoSuchFieldException {
-        textExtractionTaskResponse = new TextExtractionTaskResponse();
+        testObj = new IdDocTextExtractionTaskResponse();
 
         FieldSetter.setField(
-                textExtractionTaskResponse,
-                textExtractionTaskResponse.getClass().getSuperclass().getDeclaredField("generatedChecks"),
+                testObj,
+                testObj.getClass().getSuperclass().getDeclaredField("generatedChecks"),
                 Arrays.asList(
                         textDataCheckResponseMock,
                         checkResponse,
@@ -34,8 +34,8 @@ public class TextExtractionTaskResponseTest {
                 )
         );
 
-        List<GeneratedTextDataCheckResponse> result = textExtractionTaskResponse.getGeneratedTextDataChecks();
-        assertThat(textExtractionTaskResponse.getGeneratedChecks(), hasSize(3));
+        List<GeneratedTextDataCheckResponse> result = testObj.getGeneratedTextDataChecks();
+        assertThat(testObj.getGeneratedChecks(), hasSize(3));
         assertThat(result, hasSize(1));
     }
 
