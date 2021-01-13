@@ -16,41 +16,41 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class IdDocumentResourceResponseTest {
 
-    @Mock TextExtractionTaskResponse textExtractionTaskResponseMock;
+    @Mock IdDocTextExtractionTaskResponse idDocTextExtractionTaskResponseMock;
     @Mock TaskResponse taskResponseMock;
 
-    IdDocumentResourceResponse simpleIdDocumentResourceResponse;
+    IdDocumentResourceResponse testObj;
 
     @Test
     public void shouldFilterTextExtractionTasks() throws NoSuchFieldException {
-        simpleIdDocumentResourceResponse = new IdDocumentResourceResponse();
+        testObj = new IdDocumentResourceResponse();
 
         FieldSetter.setField(
-                simpleIdDocumentResourceResponse,
-                simpleIdDocumentResourceResponse.getClass().getSuperclass().getDeclaredField("tasks"),
+                testObj,
+                testObj.getClass().getSuperclass().getDeclaredField("tasks"),
                 Arrays.asList(
-                        textExtractionTaskResponseMock,
+                        idDocTextExtractionTaskResponseMock,
                         taskResponseMock
                 )
         );
 
-        List<TextExtractionTaskResponse> result = simpleIdDocumentResourceResponse.getTextExtractionTasks();
-        assertThat(simpleIdDocumentResourceResponse.getTasks(), hasSize(2));
+        List<IdDocTextExtractionTaskResponse> result = testObj.getTextExtractionTasks();
+        assertThat(testObj.getTasks(), hasSize(2));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldReturnEmptyList() throws NoSuchFieldException {
-        simpleIdDocumentResourceResponse = new IdDocumentResourceResponse();
+        testObj = new IdDocumentResourceResponse();
 
         FieldSetter.setField(
-                simpleIdDocumentResourceResponse,
-                simpleIdDocumentResourceResponse.getClass().getSuperclass().getDeclaredField("tasks"),
+                testObj,
+                testObj.getClass().getSuperclass().getDeclaredField("tasks"),
                 new ArrayList<>()
         );
 
-        List<TextExtractionTaskResponse> result = simpleIdDocumentResourceResponse.getTextExtractionTasks();
-        assertThat(simpleIdDocumentResourceResponse.getTasks(), hasSize(0));
+        List<IdDocTextExtractionTaskResponse> result = testObj.getTextExtractionTasks();
+        assertThat(testObj.getTasks(), hasSize(0));
         assertThat(result, hasSize(0));
     }
 
