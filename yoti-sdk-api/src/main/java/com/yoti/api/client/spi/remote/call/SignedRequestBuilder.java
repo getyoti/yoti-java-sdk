@@ -19,17 +19,6 @@ import com.yoti.api.client.spi.remote.util.Validation;
 
 public class SignedRequestBuilder {
 
-    public static SignedRequestBuilder newInstance() {
-        RawResourceFetcher rawResourceFetcher = new RawResourceFetcher();
-        return new SignedRequestBuilder(
-                new PathFactory(),
-                SignedMessageFactory.newInstance(),
-                new HeadersFactory(),
-                JsonResourceFetcher.newInstance(rawResourceFetcher),
-                rawResourceFetcher,
-                ImageResourceFetcher.newInstance(rawResourceFetcher));
-    }
-
     private KeyPair keyPair;
     private String baseUrl;
     private String endpoint;

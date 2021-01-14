@@ -29,6 +29,7 @@ public class ProfileService {
     private static final Logger LOG = LoggerFactory.getLogger(ProfileService.class);
 
     private final UnsignedPathFactory unsignedPathFactory;
+    private final SignedRequestBuilderFactory signedRequestBuilderFactory;
     private final String apiUrl;
 
     static {
@@ -37,12 +38,13 @@ public class ProfileService {
 
     public static ProfileService newInstance() {
         return new ProfileService(
-                new UnsignedPathFactory()
-        );
+                new UnsignedPathFactory(),
+                new SignedRequestBuilderFactory());
     }
 
-    ProfileService(UnsignedPathFactory profilePathFactory) {
+    ProfileService(UnsignedPathFactory profilePathFactory, SignedRequestBuilderFactory signedRequestBuilderFactory) {
         this.unsignedPathFactory = profilePathFactory;
+        this.signedRequestBuilderFactory = signedRequestBuilderFactory;
 
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
@@ -86,7 +88,7 @@ public class ProfileService {
 
     SignedRequest createSignedRequest(KeyPair keyPair, String path, String authKey) throws ProfileException {
         try {
-            return SignedRequestBuilder.newInstance()
+            return signedRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
