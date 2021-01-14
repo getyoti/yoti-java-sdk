@@ -2,11 +2,11 @@ package com.yoti.api.client.sandbox.docs.request.task;
 
 import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.yoti.api.client.sandbox.docs.request.SandboxDocumentFilter;
-import com.yoti.api.client.spi.remote.Base64;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

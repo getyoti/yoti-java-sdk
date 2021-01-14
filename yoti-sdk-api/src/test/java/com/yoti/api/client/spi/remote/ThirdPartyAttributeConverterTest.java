@@ -10,6 +10,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.Base64;
 import java.util.List;
 
 import com.yoti.api.client.AttributeDefinition;

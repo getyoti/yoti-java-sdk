@@ -1,11 +1,11 @@
 package com.yoti.api.client.spi.remote.call.factory;
 
-import static com.yoti.api.client.spi.remote.Base64.base64;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertArrayEquals;
+
+import java.util.Base64;
 
 import org.junit.Test;
 
@@ -36,7 +36,8 @@ public class MessageFactoryTest {
         byte[] result = testObj.create(SOME_METHOD, SOME_PATH, body);
 
         assertThat(new String(result), startsWith(new String((SOME_METHOD + "&" + SOME_PATH).getBytes())));
-        assertThat(new String(result), endsWith("&" + new String((base64(body)))));
+        assertThat(new String(result), endsWith("&" + (Base64.getEncoder()
+                .encodeToString(body))));
     }
 
 }
