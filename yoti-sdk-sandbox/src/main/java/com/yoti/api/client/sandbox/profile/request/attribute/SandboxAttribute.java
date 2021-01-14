@@ -3,7 +3,6 @@ package com.yoti.api.client.sandbox.profile.request.attribute;
 import java.util.Collections;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SandboxAttribute {
@@ -11,19 +10,16 @@ public class SandboxAttribute {
     private final String name;
     private final String value;
     private final String derivation;
-    private final String optional;
     private final List<SandboxAnchor> anchors;
 
     private SandboxAttribute(String name,
             String value,
             String derivation,
-            String optional,
             List<SandboxAnchor> anchors) {
         this.name = name;
         this.value = value;
         this.derivation = derivation;
-        this.optional = optional;
-        this.anchors = anchors == null ? Collections.<SandboxAnchor>emptyList() : anchors;
+        this.anchors = anchors == null ? Collections.emptyList() : anchors;
     }
 
     @JsonProperty("name")
@@ -41,11 +37,6 @@ public class SandboxAttribute {
         return derivation;
     }
 
-    @JsonIgnore
-    public String getOptional() {
-        return optional;
-    }
-
     @JsonProperty("anchors")
     public List<SandboxAnchor> getAnchors() {
         return anchors;
@@ -60,7 +51,6 @@ public class SandboxAttribute {
         private String name;
         private String value;
         private String derivation;
-        private boolean optional;
         private List<SandboxAnchor> anchors;
 
         private SandboxAttributeBuilder() {
@@ -81,22 +71,13 @@ public class SandboxAttribute {
             return this;
         }
 
-        /**
-         * @deprecated 2.8.0
-         */
-        @Deprecated
-        public SandboxAttributeBuilder withOptional(boolean optional) {
-            this.optional = optional;
-            return this;
-        }
-
         public SandboxAttributeBuilder withAnchors(List<SandboxAnchor> anchors) {
             this.anchors = anchors;
             return this;
         }
 
         public SandboxAttribute build() {
-            return new SandboxAttribute(name, value, derivation, Boolean.toString(optional), anchors);
+            return new SandboxAttribute(name, value, derivation, anchors);
         }
 
     }
