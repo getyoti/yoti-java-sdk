@@ -96,7 +96,6 @@ public class SandboxAgeVerificationTest {
         assertEquals(HumanProfileAttributes.DATE_OF_BIRTH, result.getName());
         assertEquals(VALID_DATE_STRING, result.getValue());
         assertEquals(HumanProfileAttributes.AGE_OVER + 21, result.getDerivation());
-        assertEquals("false", result.getOptional());
         assertTrue(result.getAnchors().isEmpty());
     }
 
@@ -111,7 +110,6 @@ public class SandboxAgeVerificationTest {
         assertEquals(HumanProfileAttributes.DATE_OF_BIRTH, result.getName());
         assertEquals(VALID_DATE_STRING, result.getValue());
         assertEquals(HumanProfileAttributes.AGE_UNDER + 16, result.getDerivation());
-        assertEquals("false", result.getOptional());
         assertTrue(result.getAnchors().isEmpty());
     }
 
@@ -128,7 +126,6 @@ public class SandboxAgeVerificationTest {
         assertEquals(HumanProfileAttributes.DATE_OF_BIRTH, result.getName());
         assertEquals(VALID_DATE_STRING, result.getValue());
         assertEquals(HumanProfileAttributes.AGE_UNDER + 16, result.getDerivation());
-        assertEquals("false", result.getOptional());
         assertEquals(result.getAnchors(), asList(sandboxAnchor));
     }
 

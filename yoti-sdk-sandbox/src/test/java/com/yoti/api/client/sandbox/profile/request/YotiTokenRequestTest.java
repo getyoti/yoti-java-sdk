@@ -533,14 +533,12 @@ public class YotiTokenRequestTest {
         private final String name;
         private final String value;
         private final String derivation;
-        private final String optional;
         private final List<SandboxAnchor> anchors;
 
-        private AttributeMatcher(String name, String value, String derivation, String optional, List<SandboxAnchor> anchors) {
+        private AttributeMatcher(String name, String value, String derivation, List<SandboxAnchor> anchors) {
             this.name = name;
             this.value = value;
             this.derivation = derivation;
-            this.optional = optional;
             this.anchors = anchors;
         }
 
@@ -550,7 +548,6 @@ public class YotiTokenRequestTest {
             return name.equals(sandboxAttribute.getName())
                     && value.equals(sandboxAttribute.getValue())
                     && (derivation == sandboxAttribute.getDerivation() || derivation.equals(sandboxAttribute.getDerivation()))
-                    && optional.equals(sandboxAttribute.getOptional())
                     && anchors.equals(sandboxAttribute.getAnchors());
         }
 
@@ -559,7 +556,6 @@ public class YotiTokenRequestTest {
             stringBuilder.append("{ Name: " + sandboxAttribute.getName() + ", ");
             stringBuilder.append("Value: " + sandboxAttribute.getValue() + ", ");
             stringBuilder.append("Derivation: " + sandboxAttribute.getDerivation() + ", ");
-            stringBuilder.append("Optional: " + sandboxAttribute.getOptional() + " }");
             return stringBuilder.toString();
         }
 
@@ -569,28 +565,27 @@ public class YotiTokenRequestTest {
             stringBuilder.append("{ Name: " + name + ", ");
             stringBuilder.append("Value: " + value + ", ");
             stringBuilder.append("Derivation: " + derivation + ", ");
-            stringBuilder.append("Optional: " + optional + " }");
             description.appendText(stringBuilder.toString());
         }
 
         public static AttributeMatcher requiredAttribute(String name, String value) {
-            return requiredAttribute(name, value, Collections.<SandboxAnchor>emptyList());
+            return requiredAttribute(name, value, Collections.emptyList());
         }
 
         public static AttributeMatcher requiredAttribute(String name, String value, List<SandboxAnchor> anchors) {
-            return new AttributeMatcher(name, value, null, "false", anchors);
+            return new AttributeMatcher(name, value, null, anchors);
         }
 
         public static AttributeMatcher derivedAttribute(String name, String value, String derivation) {
-            return new AttributeMatcher(name, value, derivation, "false", Collections.<SandboxAnchor>emptyList());
+            return new AttributeMatcher(name, value, derivation, Collections.emptyList());
         }
 
         public static AttributeMatcher optionalAttribute(String name, String value) {
-            return optionalAttribute(name, value, Collections.<SandboxAnchor>emptyList());
+            return optionalAttribute(name, value, Collections.emptyList());
         }
 
         public static AttributeMatcher optionalAttribute(String name, String value, List<SandboxAnchor> anchors) {
-            return new AttributeMatcher(name, value, null, "true", anchors);
+            return new AttributeMatcher(name, value, null, anchors);
         }
 
 
