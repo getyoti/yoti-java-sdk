@@ -17,6 +17,7 @@ import com.yoti.api.client.shareurl.ShareUrlResult;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
 import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
+import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +29,8 @@ public final class DynamicSharingService {
     public static DynamicSharingService newInstance() {
         return new DynamicSharingService(
                 new UnsignedPathFactory(),
-                new ObjectMapper()
+                new ObjectMapper(),
+                new SignedRequestBuilderFactory()
         );
     }
 
@@ -36,13 +38,16 @@ public final class DynamicSharingService {
 
     private final UnsignedPathFactory unsignedPathFactory;
     private final ObjectMapper objectMapper;
+    private final SignedRequestBuilderFactory signedRequestBuilderFactory;
 
     private final String apiUrl;
 
     DynamicSharingService(UnsignedPathFactory unsignedPathFactory,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper,
+            SignedRequestBuilderFactory signedRequestBuilderFactory) {
         this.unsignedPathFactory = unsignedPathFactory;
         this.objectMapper = objectMapper;
+        this.signedRequestBuilderFactory = signedRequestBuilderFactory;
 
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
@@ -70,7 +75,7 @@ public final class DynamicSharingService {
 
     SignedRequest createSignedRequest(KeyPair keyPair, String path, byte[] body) throws DynamicShareException {
         try {
-            return SignedRequestBuilder.newInstance()
+            return signedRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)

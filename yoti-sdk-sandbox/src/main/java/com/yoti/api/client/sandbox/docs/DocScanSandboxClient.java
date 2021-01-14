@@ -18,7 +18,7 @@ import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 import com.yoti.api.client.spi.remote.call.HttpMethod;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
+import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -31,13 +31,18 @@ public class DocScanSandboxClient {
 
     private final String docScanBaseUrl;
     private final ObjectMapper mapper;
+    private final SignedRequestBuilderFactory signedRequestBuilderFactory;
     private final String sdkId;
     private final KeyPair keyPair;
 
-    DocScanSandboxClient(String sdkId, KeyPair keyPair, ObjectMapper mapper) {
+    DocScanSandboxClient(String sdkId,
+            KeyPair keyPair,
+            ObjectMapper mapper,
+            SignedRequestBuilderFactory signedRequestBuilderFactory) {
         this.sdkId = sdkId;
         this.keyPair = keyPair;
         this.mapper = mapper;
+        this.signedRequestBuilderFactory = signedRequestBuilderFactory;
         this.docScanBaseUrl = System.getProperty(PROPERTY_YOTI_DOCS_URL, DEFAULT_DOC_SCAN_SANDBOX_API_URL);
     }
 
@@ -58,7 +63,7 @@ public class DocScanSandboxClient {
         try {
             byte[] body = mapper.writeValueAsBytes(responseConfig);
 
-            SignedRequest signedRequest = getSignedRequestBuilder()
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
                     .withBaseUrl(docScanBaseUrl)
                     .withEndpoint(path)
                     .withKeyPair(keyPair)
@@ -84,7 +89,7 @@ public class DocScanSandboxClient {
         try {
             byte[] body = mapper.writeValueAsBytes(sandboxExpectation);
 
-            SignedRequest signedRequest = getSignedRequestBuilder()
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
                     .withBaseUrl(docScanBaseUrl)
                     .withEndpoint(path)
                     .withKeyPair(keyPair)
@@ -96,10 +101,6 @@ public class DocScanSandboxClient {
         } catch (URISyntaxException | GeneralSecurityException | ResourceException | IOException e) {
             throw new SandboxException(e);
         }
-    }
-
-    SignedRequestBuilder getSignedRequestBuilder() {
-        return SignedRequestBuilder.newInstance();
     }
 
     public static class Builder {
@@ -131,7 +132,7 @@ public class DocScanSandboxClient {
             notNullOrEmpty(sdkId, "sdkId");
             notNull(keyPair, "keyPair");
 
-            return new DocScanSandboxClient(sdkId, keyPair, new ObjectMapper());
+            return new DocScanSandboxClient(sdkId, keyPair, new ObjectMapper(), new SignedRequestBuilderFactory());
         }
     }
 }

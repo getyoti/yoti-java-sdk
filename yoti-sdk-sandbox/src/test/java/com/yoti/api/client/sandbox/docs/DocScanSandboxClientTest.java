@@ -5,7 +5,6 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_DO
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -17,8 +16,10 @@ import com.yoti.api.client.sandbox.docs.request.ResponseConfig;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
 import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
+import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
@@ -36,6 +37,7 @@ public class DocScanSandboxClientTest {
     private static final String SOME_SDK_ID = "someSdkId";
     private static final String SOME_SESSION_ID = "someSessionId";
 
+    @Mock SignedRequestBuilderFactory signedRequestBuilderFactory;
     @Mock(answer = Answers.RETURNS_SELF) SignedRequestBuilder signedRequestBuilderMock;
     @Mock SignedRequest signedRequestMock;
     @Mock ResponseConfig responseConfigMock;
@@ -44,6 +46,11 @@ public class DocScanSandboxClientTest {
 
     @Spy @InjectMocks DocScanSandboxClient docScanSandboxClient;
 
+    @Before
+    public void setUp() {
+        when(signedRequestBuilderFactory.create()).thenReturn(signedRequestBuilderMock);
+    }
+
     @Test
     public void configureSessionResponse_shouldWrapIoException() throws Exception {
         IOException ioException = new IOException("Some error");
@@ -51,7 +58,6 @@ public class DocScanSandboxClientTest {
         when(objectMapperMock.writeValueAsBytes(responseConfigMock)).thenReturn(SOME_BYTES);
         when(signedRequestMock.execute()).thenThrow(ioException);
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        doReturn(signedRequestBuilderMock).when(docScanSandboxClient).getSignedRequestBuilder();
 
         try {
             docScanSandboxClient.configureSessionResponse(SOME_SESSION_ID, responseConfigMock);
@@ -69,7 +75,6 @@ public class DocScanSandboxClientTest {
         when(objectMapperMock.writeValueAsBytes(responseConfigMock)).thenReturn(SOME_BYTES);
         when(signedRequestMock.execute()).thenThrow(resourceException);
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        doReturn(signedRequestBuilderMock).when(docScanSandboxClient).getSignedRequestBuilder();
 
         try {
             docScanSandboxClient.configureSessionResponse(SOME_SESSION_ID, responseConfigMock);
@@ -84,7 +89,6 @@ public class DocScanSandboxClientTest {
     public void configureSessionResponse_shouldCallSignedRequestBuilderWithCorrectValues() throws Exception {
         when(objectMapperMock.writeValueAsBytes(responseConfigMock)).thenReturn(SOME_BYTES);
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        doReturn(signedRequestBuilderMock).when(docScanSandboxClient).getSignedRequestBuilder();
 
         docScanSandboxClient.configureSessionResponse(SOME_SESSION_ID, responseConfigMock);
 
@@ -98,7 +102,6 @@ public class DocScanSandboxClientTest {
     public void configureApplicationResponse_shouldCallSignedRequestBuilderWithCorrectValues() throws Exception {
         when(objectMapperMock.writeValueAsBytes(responseConfigMock)).thenReturn(SOME_BYTES);
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        doReturn(signedRequestBuilderMock).when(docScanSandboxClient).getSignedRequestBuilder();
 
         FieldSetter.setField(docScanSandboxClient, docScanSandboxClient.getClass().getDeclaredField("sdkId"), SOME_SDK_ID);
 

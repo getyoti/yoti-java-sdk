@@ -5,8 +5,6 @@ import java.util.Map;
 
 public interface ResourceFetcher {
 
-    <T> T fetchResource(UrlConnector urlConnector, Map<String, String> headers, Class<T> resourceClass) throws ResourceException, IOException;
-
-    <T> T postResource(UrlConnector urlConnector, byte[] body, Map<String, String> headers, Class<T> resourceClass) throws ResourceException, IOException;
+    <T> T doRequest(SignedRequest signedRequest, Class<T> resourceClass) throws ResourceException, IOException;
 
 }
