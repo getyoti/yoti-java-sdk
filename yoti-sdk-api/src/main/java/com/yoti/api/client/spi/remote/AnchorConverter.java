@@ -93,7 +93,7 @@ class AnchorConverter {
 
     private SignedTimestamp convertSignedTimestamp(ByteString timestampByteString) throws InvalidProtocolBufferException {
         SignedTimestampProto.SignedTimestamp timestampProto = SignedTimestampProto.SignedTimestamp.parseFrom(timestampByteString);
-        return new SignedTimestampValue(timestampProto.getVersion(), DateTime.from(timestampProto.getTimestamp()));
+        return new SignedTimestamp(timestampProto.getVersion(), DateTime.from(timestampProto.getTimestamp()));
     }
 
     private static class AnchorTypeAndValue {
