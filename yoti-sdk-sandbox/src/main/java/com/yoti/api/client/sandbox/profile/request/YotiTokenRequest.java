@@ -209,7 +209,6 @@ public class YotiTokenRequest {
             SandboxAttribute sandboxAttribute  =  SandboxAttribute.builder()
                     .withName(HumanProfileAttributes.DOCUMENT_DETAILS)
                     .withValue(value)
-                    .withOptional(true)
                     .withAnchors(anchors)
                     .build();
             return withAttribute(sandboxAttribute);

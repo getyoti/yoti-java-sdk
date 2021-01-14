@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
+import static org.mockito.Answers.RETURNS_SELF;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -52,31 +53,27 @@ public class YotiSandboxClientTest {
     private static final String SOME_PATH = "somePath";
     private static final byte[] BODY_BYTES = {};
     private static final String SOME_TOKEN = "someToken";
-    private static final String SOME_SIGNATURE = "someSignature";
 
     YotiSandboxClient testObj;
 
     @Mock SandboxPathFactory sandboxPathFactoryMock;
     @Mock ObjectMapper objectMapperMock;
-    @Mock SignedMessageFactory signedMessageFactoryMock;
     @Mock ResourceFetcher resourceFetcherMock;
 
     @Mock KeyPairSource keyPairSourceMock;
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPairMock;
 
-    @Mock SignedRequest signedRequestMock;
-    @Mock(answer = RETURNS_DEEP_STUBS) SignedRequestBuilder signedRequestBuilderMock;
     @Mock SignedRequestBuilderFactory signedRequestBuilderFactoryMock;
-
-    @Captor ArgumentCaptor<Map<String, String>> headersCaptor;
-    @Captor ArgumentCaptor<UrlConnector> urlConnectorCaptor;
+    @Mock(answer = RETURNS_SELF) SignedRequestBuilder signedRequestBuilderMock;
+    @Mock SignedRequest signedRequestMock;
 
     @Mock YotiTokenRequest yotiTokenRequestMock;
     @Mock YotiTokenResponse yotiTokenResponseMock;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         when(signedRequestBuilderFactoryMock.create()).thenReturn(signedRequestBuilderMock);
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         testObj = new YotiSandboxClient(SOME_APP_ID, keyPairMock, sandboxPathFactoryMock, objectMapperMock, resourceFetcherMock, signedRequestBuilderFactoryMock);
     }
 
@@ -130,23 +127,6 @@ public class YotiSandboxClientTest {
     }
 
     @Test
-    public void setupSharingProfile_shouldWrapGeneralSecurityException() throws Exception {
-        GeneralSecurityException generalSecurityException = new GeneralSecurityException();
-        when(sandboxPathFactoryMock.createSandboxPath(SOME_APP_ID)).thenReturn(SOME_PATH);
-        when(objectMapperMock.writeValueAsBytes(yotiTokenRequestMock)).thenReturn(BODY_BYTES);
-        when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), "POST", SOME_PATH, BODY_BYTES)).thenThrow(generalSecurityException);
-
-        try {
-            testObj.setupSharingProfile(yotiTokenRequestMock);
-        } catch (SandboxException e) {
-            assertEquals(generalSecurityException, e.getCause());
-            return;
-        }
-
-        fail("Expected an Exception");
-    }
-
-    @Test
     public void setupSharingProfile_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(401, null, null);
         when(objectMapperMock.writeValueAsBytes(yotiTokenRequestMock)).thenReturn(BODY_BYTES);
@@ -162,27 +142,17 @@ public class YotiSandboxClientTest {
         fail("Expected an Exception");
     }
 
-//    @Test
-//    public void setupSharingProfile_shouldReturnTokenFromSandbox() throws Exception {
-//        when(sandboxPathFactoryMock.createSandboxPath(SOME_APP_ID)).thenReturn(SOME_PATH);
-//        when(objectMapperMock.writeValueAsBytes(yotiTokenRequestMock)).thenReturn(BODY_BYTES);
-//        when(signedMessageFactoryMock.create(keyPairMock.getPrivate(), HTTP_POST, SOME_PATH, BODY_BYTES)).thenReturn(SOME_SIGNATURE);
-//        when(resourceFetcherMock.postResource(any(UrlConnector.class), eq(BODY_BYTES), any(Map.class), eq(YotiTokenResponse.class))).thenReturn(
-//                yotiTokenResponseMock);
-//        when(yotiTokenResponseMock.getToken()).thenReturn(SOME_TOKEN);
-//
-//        String result = testObj.setupSharingProfile(yotiTokenRequestMock);
-//
-//        verify(resourceFetcherMock).postResource(urlConnectorCaptor.capture(), eq(BODY_BYTES), headersCaptor.capture(), eq(YotiTokenResponse.class));
-//        assertEquals(YOTI_SANDBOX_PATH_PREFIX + SOME_PATH, getPath(urlConnectorCaptor.getValue()));
-//        assertEquals(SOME_SIGNATURE, headersCaptor.getValue().get(DIGEST_HEADER));
-//        assertEquals(JAVA, headersCaptor.getValue().get(YOTI_SDK_HEADER));
-//        assertEquals(SDK_VERSION, headersCaptor.getValue().get(YOTI_SDK_VERSION_HEADER));
-//        assertEquals(SOME_TOKEN, result);
-//    }
+    @Test
+    public void setupSharingProfile_shouldReturnTokenFromSandbox() throws Exception {
+        when(sandboxPathFactoryMock.createSandboxPath(SOME_APP_ID)).thenReturn(SOME_PATH);
+        when(objectMapperMock.writeValueAsBytes(yotiTokenRequestMock)).thenReturn(BODY_BYTES);
+        when(resourceFetcherMock.doRequest(signedRequestMock, YotiTokenResponse.class)).thenReturn(yotiTokenResponseMock);
+        when(yotiTokenResponseMock.getToken()).thenReturn(SOME_TOKEN);
 
-    private String getPath(UrlConnector urlConnector) throws Exception {
-        return new URL(urlConnector.getUrlString()).getPath();
+        String result = testObj.setupSharingProfile(yotiTokenRequestMock);
+
+        verify(resourceFetcherMock).doRequest(signedRequestMock, YotiTokenResponse.class);
+        assertEquals(SOME_TOKEN, result);
     }
 
 }

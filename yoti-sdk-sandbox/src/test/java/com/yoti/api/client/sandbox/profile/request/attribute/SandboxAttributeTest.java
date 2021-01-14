@@ -21,7 +21,6 @@ public class SandboxAttributeTest {
         assertEquals(SOME_NAME, result.getName());
         assertEquals(SOME_DERIVATION, result.getDerivation());
         assertEquals(SOME_VALUE, result.getValue());
-        assertEquals("false", result.getOptional());
     }
 
     @Test
@@ -30,13 +29,11 @@ public class SandboxAttributeTest {
                 .withName(SOME_NAME)
                 .withDerivation(SOME_DERIVATION)
                 .withValue(SOME_VALUE)
-                .withOptional(true)
                 .build();
 
         assertEquals(SOME_NAME, result.getName());
         assertEquals(SOME_DERIVATION, result.getDerivation());
         assertEquals(SOME_VALUE, result.getValue());
-        assertEquals("true", result.getOptional());
     }
 
 }
