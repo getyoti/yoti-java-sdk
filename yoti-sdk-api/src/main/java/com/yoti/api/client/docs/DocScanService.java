@@ -26,7 +26,7 @@ import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.MediaValue;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
+import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.SignedRequestResponse;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
@@ -44,11 +44,15 @@ final class DocScanService {
     private static final Logger LOG = LoggerFactory.getLogger(DocScanService.class);
     private final UnsignedPathFactory unsignedPathFactory;
     private final ObjectMapper objectMapper;
+    private final SignedRequestBuilderFactory signedRequestBuilderFactory;
     private final String apiUrl;
 
-    private DocScanService(UnsignedPathFactory pathFactory, ObjectMapper objectMapper) {
+    private DocScanService(UnsignedPathFactory pathFactory,
+            ObjectMapper objectMapper,
+            SignedRequestBuilderFactory signedRequestBuilderFactory) {
         this.unsignedPathFactory = pathFactory;
         this.objectMapper = objectMapper;
+        this.signedRequestBuilderFactory = signedRequestBuilderFactory;
 
         apiUrl = System.getProperty(PROPERTY_YOTI_DOCS_URL, DEFAULT_YOTI_DOCS_URL);
     }
@@ -58,7 +62,7 @@ final class DocScanService {
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        return new DocScanService(new UnsignedPathFactory(), objectMapper);
+        return new DocScanService(new UnsignedPathFactory(), objectMapper, new SignedRequestBuilderFactory());
     }
 
     /**
@@ -81,7 +85,7 @@ final class DocScanService {
         try {
             byte[] payload = objectMapper.writeValueAsBytes(sessionSpec);
 
-            SignedRequest signedRequest = getSignedRequestBuilder()
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
@@ -120,7 +124,7 @@ final class DocScanService {
         LOG.info("Fetching session from '{}'", path);
 
         try {
-            SignedRequest signedRequest = getSignedRequestBuilder()
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
@@ -156,7 +160,7 @@ final class DocScanService {
         LOG.info("Deleting session from '{}'", path);
 
         try {
-            SignedRequest signedRequest = getSignedRequestBuilder()
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
@@ -195,7 +199,7 @@ final class DocScanService {
         LOG.info("Fetching media from '{}'", path);
 
         try {
-            SignedRequest signedRequest = getSignedRequestBuilder()
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
@@ -231,7 +235,7 @@ final class DocScanService {
         LOG.info("Deleting media at '{}'", path);
 
         try {
-            SignedRequest signedRequest = getSignedRequestBuilder()
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
@@ -254,7 +258,7 @@ final class DocScanService {
         String path = unsignedPathFactory.createGetSupportedDocumentsPath();
 
         try {
-            SignedRequest signedRequest = getSignedRequestBuilder()
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
@@ -280,7 +284,4 @@ final class DocScanService {
         return contentTypeValues == null || contentTypeValues.isEmpty() ? "" : contentTypeValues.get(0);
     }
 
-    SignedRequestBuilder getSignedRequestBuilder() {
-        return SignedRequestBuilder.newInstance();
-    }
 }
