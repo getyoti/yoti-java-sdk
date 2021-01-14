@@ -16,6 +16,7 @@ import static org.mockito.Mockito.when;
 
 import java.security.KeyPair;
 import java.security.PublicKey;
+import java.util.Base64;
 
 import com.yoti.api.client.ActivityFailureException;
 import com.yoti.api.client.ProfileException;

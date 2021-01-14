@@ -14,11 +14,10 @@ import java.security.KeyPair;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.Signature;
+import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
-
-import com.yoti.api.client.spi.remote.Base64;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMKeyPair;
