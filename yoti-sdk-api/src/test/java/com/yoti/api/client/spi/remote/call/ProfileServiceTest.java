@@ -1,6 +1,5 @@
 package com.yoti.api.client.spi.remote.call;
 
-import static com.yoti.api.client.spi.remote.Base64.base64;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.KEY_PAIR_PEM;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
 
@@ -11,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.security.KeyPair;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +52,9 @@ public class ProfileServiceTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         KEY_PAIR = generateKeyPairFrom(KEY_PAIR_PEM);
-        B64_PUBLIC_KEY = base64(KEY_PAIR.getPublic().getEncoded());
+        B64_PUBLIC_KEY = Base64.getEncoder()
+                .encodeToString(KEY_PAIR.getPublic()
+                        .getEncoded());
         SOME_HEADERS.put("someKey", "someValue");
     }
 

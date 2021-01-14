@@ -10,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;

@@ -4,11 +4,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.yoti.api.client.sandbox.docs.request.SandboxDocumentFilter;
-import com.yoti.api.client.spi.remote.Base64;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

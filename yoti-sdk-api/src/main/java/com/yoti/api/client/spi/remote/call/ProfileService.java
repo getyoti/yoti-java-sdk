@@ -3,7 +3,6 @@ package com.yoti.api.client.spi.remote.call;
 import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
-import static com.yoti.api.client.spi.remote.Base64.base64;
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.AUTH_KEY_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
@@ -16,6 +15,7 @@ import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.Security;
+import java.util.Base64;
 
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
@@ -55,7 +55,8 @@ public class ProfileService {
         String path = unsignedPathFactory.createProfilePath(appId, connectToken);
 
         try {
-            String authKey = base64(keyPair.getPublic().getEncoded());
+            String authKey = Base64.getEncoder()
+                    .encodeToString(keyPair.getPublic().getEncoded());
 
             SignedRequest signedRequest = createSignedRequest(keyPair, path, authKey);
             return fetchReceipt(signedRequest);

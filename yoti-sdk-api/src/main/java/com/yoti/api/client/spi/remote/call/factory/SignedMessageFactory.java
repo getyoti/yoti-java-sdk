@@ -1,12 +1,12 @@
 package com.yoti.api.client.spi.remote.call.factory;
 
-import static com.yoti.api.client.spi.remote.Base64.base64;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.SIGNATURE_ALGORITHM;
 
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.Signature;
+import java.util.Base64;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -36,7 +36,8 @@ public class SignedMessageFactory {
         Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM, BouncyCastleProvider.PROVIDER_NAME);
         signature.initSign(privateKey, new SecureRandom());
         signature.update(message);
-        return base64(signature.sign());
+        return Base64.getEncoder()
+                .encodeToString((signature.sign()));
     }
 
 }
