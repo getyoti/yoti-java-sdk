@@ -7,8 +7,7 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.verifyMessage;
 import static org.mockito.Mockito.when;
 
 import java.security.KeyPair;
-
-import com.yoti.api.client.spi.remote.Base64;
+import java.util.Base64;
 
 import org.junit.Before;
 import org.junit.Test;

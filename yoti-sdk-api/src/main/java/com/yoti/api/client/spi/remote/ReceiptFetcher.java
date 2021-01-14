@@ -4,6 +4,7 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.util.Base64;
 
 import com.yoti.api.client.ActivityFailureException;
 import com.yoti.api.client.ProfileException;

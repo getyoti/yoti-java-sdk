@@ -11,6 +11,7 @@ import java.security.PrivateKey;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,6 @@ import com.yoti.api.client.Attribute;
 import com.yoti.api.client.ExtraData;
 import com.yoti.api.client.ExtraDataException;
 import com.yoti.api.client.HumanProfile;
-import com.yoti.api.client.Profile;
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.util.DecryptionHelper;

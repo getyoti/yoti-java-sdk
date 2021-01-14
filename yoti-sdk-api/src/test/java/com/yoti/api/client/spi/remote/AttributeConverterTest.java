@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.text.ParseException;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;

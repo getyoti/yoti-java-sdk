@@ -21,7 +21,7 @@ jobs:
           java-version: 11
           architecture: x64
       - name: Scan SDK
-        run: mvn clean install sonar:sonar -Ddependency-check.skip=true -Dgpg.skip=true -Dfindbugs.skip=true
+        run: mvn -B clean install sonar:sonar -Ddependency-check.skip=true -Dgpg.skip=true -Dfindbugs.skip=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

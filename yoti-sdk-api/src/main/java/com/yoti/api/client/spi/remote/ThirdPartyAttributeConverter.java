@@ -5,6 +5,7 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.RFC3339_PATTERN_
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;

@@ -68,7 +68,7 @@ Yoti also allows you to enable user details verification from your mobile app by
 
 ## Requirements
 
-* Java 1.7 or higher
+* Java 1.8 or higher
 * SLF4J
 
 ## Building From Source
