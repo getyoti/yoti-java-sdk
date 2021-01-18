@@ -153,8 +153,8 @@ public class DynamicPolicyTest {
     @Test
     public void buildsWithAuthTypes() {
         DynamicPolicy result = DynamicPolicy.builder()
-                .withSelfieAuthorisation(true)
-                .withPinAuthorisation(true)
+                .withSelfieAuthentication(true)
+                .withPinAuthentication(true)
                 .withWantedAuthType(99)
                 .build();
 
@@ -165,8 +165,8 @@ public class DynamicPolicyTest {
     @Test
     public void buildsWithAuthTypesTrue() {
         DynamicPolicy result = DynamicPolicy.builder()
-                .withSelfieAuthorisation(true)
-                .withPinAuthorisation(true)
+                .withSelfieAuthentication(true)
+                .withPinAuthentication(true)
                 .withWantedAuthType(99)
                 .build();
 
@@ -177,8 +177,8 @@ public class DynamicPolicyTest {
     @Test
     public void buildsWithAuthTypesFalse() {
         DynamicPolicy result = DynamicPolicy.builder()
-                .withSelfieAuthorisation(false)
-                .withPinAuthorisation(false)
+                .withSelfieAuthentication(false)
+                .withPinAuthentication(false)
                 .build();
 
         assertThat(result.getWantedAuthTypes(), hasSize(0));
@@ -198,8 +198,8 @@ public class DynamicPolicyTest {
     @Test
     public void buildsWithSelfieAuthorisationEnabledThenDisabled() {
         DynamicPolicy result = DynamicPolicy.builder()
-                .withSelfieAuthorisation(true)
-                .withSelfieAuthorisation(false)
+                .withSelfieAuthentication(true)
+                .withSelfieAuthentication(false)
                 .build();
 
         assertThat(result.getWantedAuthTypes(), not(hasItem(EXPECTED_SELFIE_AUTH_TYPE)));
@@ -209,8 +209,8 @@ public class DynamicPolicyTest {
     @Test
     public void buildsWithSelfieAuthorisationDisabledThenEnabled() {
         DynamicPolicy result = DynamicPolicy.builder()
-                .withSelfieAuthorisation(false)
-                .withSelfieAuthorisation(true)
+                .withSelfieAuthentication(false)
+                .withSelfieAuthentication(true)
                 .build();
 
         assertThat(result.getWantedAuthTypes(), hasItem(EXPECTED_SELFIE_AUTH_TYPE));
@@ -220,8 +220,8 @@ public class DynamicPolicyTest {
     @Test
     public void buildsWithPinAuthorisationEnabledThenDisabled() {
         DynamicPolicy result = DynamicPolicy.builder()
-                .withPinAuthorisation(true)
-                .withPinAuthorisation(false)
+                .withPinAuthentication(true)
+                .withPinAuthentication(false)
                 .build();
 
         assertThat(result.getWantedAuthTypes(), not(hasItem(EXPECTED_PIN_AUTH_TYPE)));
@@ -231,8 +231,8 @@ public class DynamicPolicyTest {
     @Test
     public void buildsWithPinAuthorisationDisabledThenEnabled() {
         DynamicPolicy result = DynamicPolicy.builder()
-                .withPinAuthorisation(false)
-                .withPinAuthorisation(true)
+                .withPinAuthentication(false)
+                .withPinAuthentication(true)
                 .build();
 
         assertThat(result.getWantedAuthTypes(), hasItem(EXPECTED_PIN_AUTH_TYPE));
@@ -242,7 +242,7 @@ public class DynamicPolicyTest {
     @Test
     public void buildsWithSelfieAuthorisationDisabled() {
         DynamicPolicy result = DynamicPolicy.builder()
-                .withSelfieAuthorisation(false)
+                .withSelfieAuthentication(false)
                 .build();
 
         assertThat(result.getWantedAuthTypes(), not(hasItem(EXPECTED_SELFIE_AUTH_TYPE)));
@@ -252,7 +252,7 @@ public class DynamicPolicyTest {
     @Test
     public void buildsWithPinAuthorisationDisabled() {
         DynamicPolicy result = DynamicPolicy.builder()
-                .withPinAuthorisation(false)
+                .withPinAuthentication(false)
                 .build();
 
         assertThat(result.getWantedAuthTypes(), not(hasItem(EXPECTED_PIN_AUTH_TYPE)));
