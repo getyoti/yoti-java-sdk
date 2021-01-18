@@ -1,14 +1,9 @@
 package com.yoti.api.client.spi.remote;
 
-import static com.yoti.api.client.spi.remote.call.YotiConstants.RFC3339_PATTERN_MILLIS;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import com.yoti.api.client.AttributeDefinition;
 import com.yoti.api.client.AttributeIssuanceDetails;
@@ -59,22 +54,16 @@ public class ThirdPartyAttributeConverter {
     }
 
     private DateTime parseExpiryDateTime(String dateTimeStringValue) {
-        // Return null if datetime string is null or empty
-        if (dateTimeStringValue == null || dateTimeStringValue.isEmpty()) {
-            return null;
-        }
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(RFC3339_PATTERN_MILLIS);
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        DateTime dateTimeValue = null;
+        DateTime dateTime = null;
         try {
-            Date date = simpleDateFormat.parse(dateTimeStringValue);
-            dateTimeValue = DateTime.from(date.getTime() * 1000);
-        } catch (ParseException e) {
-            LOG.error("Failed to parse date: '{}', {}", dateTimeStringValue, e.getMessage());
+            if (dateTimeStringValue != null && !dateTimeStringValue.isEmpty()) {
+                dateTime = DateTime.from(dateTimeStringValue);
+            }
+        } catch (DateTimeParseException ex) {
+            LOG.error("Failed to parse date: '{}', {}", dateTimeStringValue, ex.getMessage());
         }
 
-        return dateTimeValue;
+        return dateTime;
     }
 
     private List<AttributeDefinition> parseDefinitions(List<IssuingAttributesProto.Definition> definitions) {
