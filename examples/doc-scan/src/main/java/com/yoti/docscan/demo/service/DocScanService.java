@@ -17,8 +17,8 @@ import com.yoti.api.client.docs.session.create.filters.OrthogonalRestrictionsFil
 import com.yoti.api.client.docs.session.create.filters.RequiredIdDocument;
 import com.yoti.api.client.docs.session.create.filters.RequiredSupplementaryDocument;
 import com.yoti.api.client.docs.session.create.objective.ProofOfAddressObjective;
+import com.yoti.api.client.docs.session.create.task.RequestedIdDocTextExtractionTask;
 import com.yoti.api.client.docs.session.create.task.RequestedSupplementaryDocTextExtractionTask;
-import com.yoti.api.client.docs.session.create.task.RequestedTextExtractionTask;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
 import com.yoti.api.client.spi.remote.call.YotiConstants;
 
@@ -79,7 +79,7 @@ public class DocScanService {
                                 .build()
                 )
                 .withRequestedTask(
-                        RequestedTextExtractionTask.builder()
+                        RequestedIdDocTextExtractionTask.builder()
                                 .withManualCheckAlways()
                                 .build()
                 )
