@@ -229,11 +229,11 @@ public class DynamicPolicy {
             return withWantedAttribute(optional, AttributeConstants.HumanProfileAttributes.EMAIL_ADDRESS);
         }
 
-        public Builder withSelfieAuthorisation(boolean enabled) {
+        public Builder withSelfieAuthentication(boolean enabled) {
             return this.withWantedAuthType(SELFIE_AUTH_TYPE, enabled);
         }
 
-        public Builder withPinAuthorisation(boolean enabled) {
+        public Builder withPinAuthentication(boolean enabled) {
             return this.withWantedAuthType(PIN_AUTH_TYPE, enabled);
         }
 
