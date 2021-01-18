@@ -42,6 +42,8 @@ import org.slf4j.LoggerFactory;
 final class DocScanService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DocScanService.class);
+    private static final int HTTP_STATUS_NO_CONTENT = 204;
+
     private final UnsignedPathFactory unsignedPathFactory;
     private final ObjectMapper objectMapper;
     private final SignedRequestBuilderFactory signedRequestBuilderFactory;
@@ -186,7 +188,7 @@ final class DocScanService {
      * @param keyPair   the {@code KeyPair}
      * @param sessionId the session ID
      * @param mediaId   the media ID
-     * @return the {@code Media} content
+     * @return the {@code Media} content, null if 204 No Content
      * @throws DocScanException if there was an error
      */
     public Media getMediaContent(String sdkId, KeyPair keyPair, String sessionId, String mediaId) throws DocScanException {
@@ -206,6 +208,10 @@ final class DocScanService {
                     .withHttpMethod(HTTP_GET)
                     .build();
             SignedRequestResponse response = signedRequest.execute();
+
+            if (response.getResponseCode() == HTTP_STATUS_NO_CONTENT) {
+                return null;
+            }
             return new MediaValue(findContentType(response), response.getResponseBody());
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
