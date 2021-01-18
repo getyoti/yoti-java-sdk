@@ -1,5 +1,9 @@
 package com.yoti.api.client;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
@@ -30,6 +34,11 @@ public class DateTime {
         long milliseconds = (microseconds - mod) / 1000;
         calendar.setTimeInMillis(milliseconds);
         return new DateTime(Date.from(calendar), Time.from(calendar, mod));
+    }
+
+    public static DateTime from(String dateTimeStringValue) throws DateTimeParseException {
+        OffsetDateTime zonedDateTime = OffsetDateTime.parse(dateTimeStringValue).truncatedTo(ChronoUnit.MICROS);
+        return DateTime.from(ChronoUnit.MICROS.between(Instant.EPOCH, zonedDateTime.toInstant()));
     }
 
     public Date getDate() {
