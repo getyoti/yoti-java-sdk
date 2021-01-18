@@ -17,6 +17,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertNotSame;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.doAnswer;
@@ -688,6 +689,18 @@ public class DocScanServiceTest {
 
         assertThat(result.getMimeType(), is(CONTENT_TYPE_JSON));
         assertThat(result.getContent(), is(IMAGE_BODY));
+    }
+
+    @Test
+    public void getMediaContent_shouldReturnNullForNoContent() throws Exception {
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute()).thenReturn(signedRequestResponseMock);
+        when(signedRequestResponseMock.getResponseCode()).thenReturn(204);
+        when(unsignedPathFactoryMock.createMediaContentPath(SOME_APP_ID, SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
+
+        Media result = docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
+
+        assertThat(result, is(nullValue()));
     }
 
     @Test
