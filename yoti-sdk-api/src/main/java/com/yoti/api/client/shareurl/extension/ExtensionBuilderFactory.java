@@ -1,7 +1,5 @@
 package com.yoti.api.client.shareurl.extension;
 
-import java.util.ServiceLoader;
-
 public class ExtensionBuilderFactory {
 
     private ExtensionBuilderFactory() {}
