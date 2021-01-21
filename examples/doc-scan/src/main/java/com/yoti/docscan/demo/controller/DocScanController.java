@@ -1,10 +1,5 @@
 package com.yoti.docscan.demo.controller;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import javax.servlet.http.HttpSession;
 
 import com.yoti.api.client.Media;
@@ -19,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -121,17 +115,6 @@ public class DocScanController implements WebMvcConfigurer {
         headers.setContentType(MediaType.parseMediaType(media.getMimeType()));
 
         return new ResponseEntity<>(media.getContent(), headers, HttpStatus.OK);
-    }
-
-    @GetMapping("/error")
-    public String showErrorPage(final Model model, @RequestParam(value = "yotiErrorCode", required = false) String yotiErrorCode) {
-        model.addAttribute("error", "An unknown error has occurred");
-
-        if (yotiErrorCode != null && !yotiErrorCode.equals("")) {
-            model.addAttribute("error", String.format("Error Code: %s", yotiErrorCode));
-        }
-
-        return "error";
     }
 
     @RequestMapping(value = "/privacy-policy", method = RequestMethod.GET)
