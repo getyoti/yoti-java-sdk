@@ -117,11 +117,10 @@ The entry point of the SDK is `com.yoti.api.client.YotiClient`.  To initialise i
 
 ```java
 import com.yoti.api.client.YotiClient;
-import com.yoti.api.client.YotiClientBuilder;
 import static com.yoti.api.client.FileKeyPairSource.fromFile;
 
-YotiClient client = YotiClientBuilder.newInstance()
-    .forApplication(<YOUR_CLIENT_SDK_ID>)
+YotiClient client = YotiClient.builder()
+    .withClientSdkId(<YOUR_CLIENT_SDK_ID>)
     .withKeyPair(fromFile(new java.io.File("<PATH/TO/YOUR/APPLICATION/KEY_PAIR.pem>")))
     .build();
 ```
@@ -290,29 +289,16 @@ Instructions on how to run the Spring example projects can be found at the follo
 1. [Yoti App](/yoti-sdk-spring-boot-example)
 1. [Doc Scan](/examples/doc-scan)
 
-## Breaking changes and enhancements made in v2.0.0
+## Breaking changes and enhancements made in v3.0.0
 
-As well as exposing significant new functionality, we've taken this opportunity to clean up and simplify our public API.
+This major update does not have any major updates to the API, but instead builds upon and
+standardizes our implementation.
 
-### Dropped support for Java 6
-Minimum supported Java version is now 7.
+### Dropped support for Java 7
+Minimum supported Java version is now 8.
 
-### New interfaces - Attribute<T> and Anchor
-The old `com.yoti.api.client.Attribute` class has been replaced with `com.yoti.api.client.Attribute<T>`, which now exposes a `List<Anchor>` for the sources and verifiers of the attribute.
-The old `Set<String> getSources()` and `Set<String> getVerifiers()` methods have been replaced with `List<Anchor> getSources()` and `List<Anchor> getVerifiers()`.
-
-### Changes to HumanProfile and ApplicationProfile
-All attributes are now returned as an an instance of `Attribute<T>`.  Use the `Attribute<T>.getValue()` method to determine the actual value of an attribute.
-Consequently, all the `getXXXSources` and `getXXXVerifiers ` methods have been removed, as well as the `is(name, defaultValue)` helper method
-
-### No Enums returned by the public API
-Yoti are adding new functionality all the time.  To avoid the risk the new values returned to the SDK will cause it to break, the SDK will no longer try to map returned values to Enums.  Each SDK release will define String constants in the public api for the possible values known at the time of release. 
-The two Enums removed are:
-* DocumentType - the `DocumentDetails.getType()` method now returns a String.  The possible values are exposed as constants on the `com.yoti.api.client.DocumentDetails` interface.
-* HumanProfile.Gender - `HumanProfile.getGender()` now returns an `Attribute<String>`.  Possible values are defined in `com.yoti.api.client.HumanProfile`.
-
-### Removed toString() methods
-We've removed implementations of toString() from all the DTOs returned through the public api.
+### Builder are now in-line classes
+Most builders for the request objects are now in-line classes, and can be accessed with a static `.builder()` method (instead of using factories to instantiate new builders)
 
 ## Spring Security Integration
 
