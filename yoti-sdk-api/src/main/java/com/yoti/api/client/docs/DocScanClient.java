@@ -135,7 +135,6 @@ public class DocScanClient {
 
     public static class Builder {
 
-        // FIXME: Should this really be a static property?????
         private static final DocScanService docScanService = DocScanService.newInstance();
 
         private String sdkId;
