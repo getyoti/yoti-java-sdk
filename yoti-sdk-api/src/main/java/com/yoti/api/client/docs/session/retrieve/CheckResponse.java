@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = IdDocumentComparisonCheckResponse.class, name = DocScanConstants.ID_DOCUMENT_COMPARISON),
         @JsonSubTypes.Type(value = SupplementaryDocumentTextDataCheckResponse.class, name = DocScanConstants.SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK),
         @JsonSubTypes.Type(value = ThirdPartyIdentityCheckResponse.class, name = DocScanConstants.THIRD_PARTY_IDENTITY),
+        @JsonSubTypes.Type(value = WatchlistCheckResponse.class, name = DocScanConstants.WATCHLIST_SCREENING),
 })
 public class CheckResponse {
 
