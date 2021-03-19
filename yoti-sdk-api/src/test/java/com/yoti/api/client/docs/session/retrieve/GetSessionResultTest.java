@@ -23,6 +23,7 @@ public class GetSessionResultTest {
     @Mock LivenessCheckResponse livenessCheckResponseMock;
     @Mock IdDocumentComparisonCheckResponse idDocumentComparisonCheckResponse;
     @Mock ThirdPartyIdentityCheckResponse thirdPartyIdentityCheckResponse;
+    @Mock WatchlistScreeningCheckResponse watchlistScreeningCheckResponse;
 
     GetSessionResult getSessionResult;
 
@@ -30,22 +31,10 @@ public class GetSessionResultTest {
     public void shouldFilterAuthenticityChecks() throws NoSuchFieldException {
         getSessionResult = new GetSessionResult();
 
-        FieldSetter.setField(
-                getSessionResult,
-                getSessionResult.getClass().getDeclaredField("checks"),
-                Arrays.asList(
-                        authenticityCheckResponseMock,
-                        livenessCheckResponseMock,
-                        textDataCheckResponseMock,
-                        supplementaryDocumentTextDataCheckResponseMock,
-                        faceMatchCheckResponseMock,
-                        idDocumentComparisonCheckResponse,
-                        thirdPartyIdentityCheckResponse
-                )
-        );
+        setupGetSessionResult();
 
         List<AuthenticityCheckResponse> result = getSessionResult.getAuthenticityChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(7));
+        assertThat(getSessionResult.getChecks(), hasSize(8));
         assertThat(result, hasSize(1));
     }
 
@@ -53,22 +42,10 @@ public class GetSessionResultTest {
     public void shouldFilterLivenessChecks() throws NoSuchFieldException {
         getSessionResult = new GetSessionResult();
 
-        FieldSetter.setField(
-                getSessionResult,
-                getSessionResult.getClass().getDeclaredField("checks"),
-                Arrays.asList(
-                        authenticityCheckResponseMock,
-                        livenessCheckResponseMock,
-                        textDataCheckResponseMock,
-                        supplementaryDocumentTextDataCheckResponseMock,
-                        faceMatchCheckResponseMock,
-                        idDocumentComparisonCheckResponse,
-                        thirdPartyIdentityCheckResponse
-                )
-        );
+        setupGetSessionResult();
 
         List<LivenessCheckResponse> result = getSessionResult.getLivenessChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(7));
+        assertThat(getSessionResult.getChecks(), hasSize(8));
         assertThat(result, hasSize(1));
     }
 
@@ -76,22 +53,10 @@ public class GetSessionResultTest {
     public void shouldFilterTextDataChecks() throws NoSuchFieldException {
         getSessionResult = new GetSessionResult();
 
-        FieldSetter.setField(
-                getSessionResult,
-                getSessionResult.getClass().getDeclaredField("checks"),
-                Arrays.asList(
-                        authenticityCheckResponseMock,
-                        livenessCheckResponseMock,
-                        textDataCheckResponseMock,
-                        supplementaryDocumentTextDataCheckResponseMock,
-                        faceMatchCheckResponseMock,
-                        idDocumentComparisonCheckResponse,
-                        thirdPartyIdentityCheckResponse
-                )
-        );
+        setupGetSessionResult();
 
         List<TextDataCheckResponse> result = getSessionResult.getIdDocumentTextDataChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(7));
+        assertThat(getSessionResult.getChecks(), hasSize(8));
         assertThat(result, hasSize(1));
     }
 
@@ -99,22 +64,10 @@ public class GetSessionResultTest {
     public void shouldFilterSupplementaryDocumentTextDataChecks() throws NoSuchFieldException {
         getSessionResult = new GetSessionResult();
 
-        FieldSetter.setField(
-                getSessionResult,
-                getSessionResult.getClass().getDeclaredField("checks"),
-                Arrays.asList(
-                        authenticityCheckResponseMock,
-                        livenessCheckResponseMock,
-                        textDataCheckResponseMock,
-                        supplementaryDocumentTextDataCheckResponseMock,
-                        faceMatchCheckResponseMock,
-                        idDocumentComparisonCheckResponse,
-                        thirdPartyIdentityCheckResponse
-                )
-        );
+        setupGetSessionResult();
 
         List<SupplementaryDocumentTextDataCheckResponse> result = getSessionResult.getSupplementaryDocumentTextDataChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(7));
+        assertThat(getSessionResult.getChecks(), hasSize(8));
         assertThat(result, hasSize(1));
     }
 
@@ -122,22 +75,10 @@ public class GetSessionResultTest {
     public void shouldFilterFaceMatchChecks() throws NoSuchFieldException {
         getSessionResult = new GetSessionResult();
 
-        FieldSetter.setField(
-                getSessionResult,
-                getSessionResult.getClass().getDeclaredField("checks"),
-                Arrays.asList(
-                        authenticityCheckResponseMock,
-                        livenessCheckResponseMock,
-                        textDataCheckResponseMock,
-                        supplementaryDocumentTextDataCheckResponseMock,
-                        faceMatchCheckResponseMock,
-                        idDocumentComparisonCheckResponse,
-                        thirdPartyIdentityCheckResponse
-                )
-        );
+        setupGetSessionResult();
 
         List<FaceMatchCheckResponse> result = getSessionResult.getFaceMatchChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(7));
+        assertThat(getSessionResult.getChecks(), hasSize(8));
         assertThat(result, hasSize(1));
     }
 
@@ -145,22 +86,10 @@ public class GetSessionResultTest {
     public void shouldFilterIdDocumentComparisonChecks() throws NoSuchFieldException {
         getSessionResult = new GetSessionResult();
 
-        FieldSetter.setField(
-                getSessionResult,
-                getSessionResult.getClass().getDeclaredField("checks"),
-                Arrays.asList(
-                        authenticityCheckResponseMock,
-                        livenessCheckResponseMock,
-                        textDataCheckResponseMock,
-                        supplementaryDocumentTextDataCheckResponseMock,
-                        faceMatchCheckResponseMock,
-                        idDocumentComparisonCheckResponse,
-                        thirdPartyIdentityCheckResponse
-                )
-        );
+        setupGetSessionResult();
 
         List<IdDocumentComparisonCheckResponse> result = getSessionResult.getIdDocumentComparisonChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(7));
+        assertThat(getSessionResult.getChecks(), hasSize(8));
         assertThat(result, hasSize(1));
     }
 
@@ -168,22 +97,21 @@ public class GetSessionResultTest {
     public void shouldFilterThirdPartyIdentityChecks() throws NoSuchFieldException {
         getSessionResult = new GetSessionResult();
 
-        FieldSetter.setField(
-                getSessionResult,
-                getSessionResult.getClass().getDeclaredField("checks"),
-                Arrays.asList(
-                        authenticityCheckResponseMock,
-                        livenessCheckResponseMock,
-                        textDataCheckResponseMock,
-                        supplementaryDocumentTextDataCheckResponseMock,
-                        faceMatchCheckResponseMock,
-                        idDocumentComparisonCheckResponse,
-                        thirdPartyIdentityCheckResponse
-                )
-        );
+        setupGetSessionResult();
 
         List<ThirdPartyIdentityCheckResponse> result = getSessionResult.getThirdPartyIdentityChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(7));
+        assertThat(getSessionResult.getChecks(), hasSize(8));
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
+    public void shouldFilterWatchlistScreeningChecks() throws NoSuchFieldException {
+        getSessionResult = new GetSessionResult();
+
+        setupGetSessionResult();
+
+        List<WatchlistScreeningCheckResponse> result = getSessionResult.getWatchlistScreeningChecks();
+        assertThat(getSessionResult.getChecks(), hasSize(8));
         assertThat(result, hasSize(1));
     }
 
@@ -203,6 +131,23 @@ public class GetSessionResultTest {
         assertThat(getSessionResult.getIdDocumentTextDataChecks(), hasSize(0));
         assertThat(getSessionResult.getSupplementaryDocumentTextDataChecks(), hasSize(0));
         assertThat(getSessionResult.getLivenessChecks(), hasSize(0));
+    }
+
+    private void setupGetSessionResult() throws NoSuchFieldException {
+        FieldSetter.setField(
+                getSessionResult,
+                getSessionResult.getClass().getDeclaredField("checks"),
+                Arrays.asList(
+                        authenticityCheckResponseMock,
+                        livenessCheckResponseMock,
+                        textDataCheckResponseMock,
+                        supplementaryDocumentTextDataCheckResponseMock,
+                        faceMatchCheckResponseMock,
+                        idDocumentComparisonCheckResponse,
+                        thirdPartyIdentityCheckResponse,
+                        watchlistScreeningCheckResponse
+                )
+        );
     }
 
 }
