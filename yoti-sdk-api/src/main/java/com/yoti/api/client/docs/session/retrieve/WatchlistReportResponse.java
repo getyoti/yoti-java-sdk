@@ -2,12 +2,12 @@ package com.yoti.api.client.docs.session.retrieve;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class WatchlistReportResponse extends ReportResponse {
+abstract class WatchlistReportResponse<Summary extends WatchlistSummaryResponse<?>> extends ReportResponse {
 
     @JsonProperty("watchlist_summary")
-    private WatchlistSummaryResponse watchlistSummary;
+    private Summary watchlistSummary;
 
-    public WatchlistSummaryResponse getWatchlistSummary() {
+    public Summary getWatchlistSummary() {
         return watchlistSummary;
     }
 

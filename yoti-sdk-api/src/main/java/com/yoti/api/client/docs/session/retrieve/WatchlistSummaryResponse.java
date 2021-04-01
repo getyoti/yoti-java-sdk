@@ -4,13 +4,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class WatchlistSummaryResponse {
+abstract class WatchlistSummaryResponse<Config extends WatchlistSearchConfigResponse> {
 
     @JsonProperty("total_hits")
     private int totalHits;
-
-    @JsonProperty("search_config")
-    private SearchConfigResponse searchConfig;
 
     @JsonProperty("raw_results")
     private RawResultsResponse rawResults;
@@ -18,12 +15,11 @@ public class WatchlistSummaryResponse {
     @JsonProperty("associated_country_codes")
     private List<String> associatedCountryCodes;
 
+    @JsonProperty("search_config")
+    private Config searchConfig;
+
     public int getTotalHits() {
         return totalHits;
-    }
-
-    public SearchConfigResponse getSearchConfig() {
-        return searchConfig;
     }
 
     public RawResultsResponse getRawResults() {
@@ -32,6 +28,10 @@ public class WatchlistSummaryResponse {
 
     public List<String> getAssociatedCountryCodes() {
         return associatedCountryCodes;
+    }
+
+    public Config getSearchConfig() {
+        return searchConfig;
     }
 
 }

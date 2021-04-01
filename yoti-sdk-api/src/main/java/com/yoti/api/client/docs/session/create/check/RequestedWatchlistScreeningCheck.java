@@ -31,7 +31,7 @@ public class RequestedWatchlistScreeningCheck extends RequestedCheck<RequestedWa
         private Builder() {
         }
 
-        Builder withConfig(RequestedWatchlistScreeningConfig config) {
+        public Builder withConfig(RequestedWatchlistScreeningConfig config) {
             this.config = config;
             return this;
         }
