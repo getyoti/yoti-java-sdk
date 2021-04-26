@@ -13,6 +13,8 @@ import com.yoti.api.client.docs.session.create.check.RequestedFaceMatchCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedIdDocumentComparisonCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedLivenessCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedThirdPartyIdentityCheck;
+import com.yoti.api.client.docs.session.create.check.RequestedWatchlistScreeningCheck;
+import com.yoti.api.client.docs.session.create.check.RequestedWatchlistScreeningConfig;
 import com.yoti.api.client.docs.session.create.filters.OrthogonalRestrictionsFilter;
 import com.yoti.api.client.docs.session.create.filters.RequiredIdDocument;
 import com.yoti.api.client.docs.session.create.filters.RequiredSupplementaryDocument;
@@ -50,6 +52,11 @@ public class DocScanService {
                 .withPrivacyPolicyUrl("https://localhost:8443/privacy-policy")
                 .build();
 
+        RequestedWatchlistScreeningConfig watchlistScreeningConfig = RequestedWatchlistScreeningConfig.builder()
+                .withAdverseMediaCategory()
+                .withSanctionsCategory()
+                .build();
+
         SessionSpec sessionSpec = SessionSpec.builder()
                 .withClientSessionTokenTtl(600)
                 .withResourcesTtl(90000)
@@ -76,6 +83,11 @@ public class DocScanService {
                 )
                 .withRequestedCheck(
                         RequestedThirdPartyIdentityCheck.builder()
+                                .build()
+                )
+                .withRequestedCheck(
+                        RequestedWatchlistScreeningCheck.builder()
+                                .withConfig(watchlistScreeningConfig)
                                 .build()
                 )
                 .withRequestedTask(
