@@ -187,6 +187,28 @@
                     </div>
                 </div>
 
+                <!-- Watchlist Screening Checks -->
+                <div th:if="${sessionResult.getWatchlistScreeningChecks().size() > 0}" class="card">
+                    <div class="card-header" id="watchlist-screening-checks">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    data-target="#collapse-watchlist-screening-checks" aria-expanded="true"
+                                    aria-controls="collapse-watchlist-screening-checks">
+                                Watchlist Screening Checks
+                            </button>
+                        </h3>
+                    </div>
+                    <div id="collapse-watchlist-screening-checks" class="collapse"
+                         aria-labelledby="watchlist-screening-checks">
+                        <div class="card-body">
+                            <table th:each="check : ${sessionResult.getWatchlistScreeningChecks()}"
+                                   th:include="fragments/checks :: check-template(${check})"
+                                   class="table table-striped">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Supplementary Document Text Data Checks -->
                 <div th:if="${sessionResult.getSupplementaryDocumentTextDataChecks().size() > 0}" class="card">
                     <div class="card-header" id="sup-text-data-checks">
