@@ -15,6 +15,14 @@ public class DocScanConstants {
     public static final String ID_DOCUMENT_FACE_MATCH = "ID_DOCUMENT_FACE_MATCH";
     public static final String THIRD_PARTY_IDENTITY = "THIRD_PARTY_IDENTITY";
     public static final String WATCHLIST_SCREENING = "WATCHLIST_SCREENING";
+    public static final String WATCHLIST_ADVANCED_CA = "WATCHLIST_ADVANCED_CA";
+
+    public static final String WITH_YOTI_ACCOUNT = "WITH_YOTI_ACCOUNT";
+    public static final String WITH_CUSTOM_ACCOUNT = "WITH_CUSTOM_ACCOUNT";
+    public static final String TYPE_LIST = "TYPE_LIST";
+    public static final String PROFILE = "PROFILE";
+    public static final String EXACT = "EXACT";
+    public static final String FUZZY = "FUZZY";
 
     public static final String SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = "SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK";
     public static final String SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION = "SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION";
