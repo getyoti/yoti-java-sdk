@@ -113,6 +113,27 @@ public class GetSessionResultTest {
         List<WatchlistScreeningCheckResponse> result = getSessionResult.getWatchlistScreeningChecks();
         assertThat(getSessionResult.getChecks(), hasSize(8));
         assertThat(result, hasSize(1));
+
+//        WatchlistScreeningCheckResponse watchlistScreeningCheckResponse = result.get(0);
+//        WatchlistScreeningReportResponse report = watchlistScreeningCheckResponse.getReport();
+//        WatchlistScreeningSummaryResponse watchlistSummary = report.getWatchlistSummary();
+//        WatchlistScreeningSearchConfigResponse searchConfig = watchlistSummary.getSearchConfig();
+//        List<String> categories = searchConfig.getCategories();
+//
+//
+//        List<WatchlistAdvancedYotiAcctCheckResponse> result2 = getSessionResult.getWatchlistYotiAcctChecks();
+//        WatchlistAdvancedYotiAcctCheckResponse watchlistAdvancedYotiAcctCheckResponse = result2.get(0);
+//        YotiAcctReportResponse report1 = watchlistAdvancedYotiAcctCheckResponse.getReport();
+//        YotiAcctSummaryResponse watchlistAdvancedSummary = report1.getWatchlistSummary();
+//        WatchlistAdvancedSearchConfigResponse advancedConfig = watchlistAdvancedSummary.getSearchConfig();
+//        boolean removeDeceased = advancedConfig.isRemoveDeceased();
+//
+//        List<WatchlistAdvancedCustomAcctCheckResponse> result3 = getSessionResult.getWatchlistCustomAcctChecks();
+//        WatchlistAdvancedCustomAcctCheckResponse watchlistAdvancedCustomAcctCheckResponse = result3.get(0);
+//        CustomAcctReportResponse report2 = watchlistAdvancedCustomAcctCheckResponse.getReport();
+//        CustomAcctSummaryResponse watchlistSummary1 = report2.getWatchlistSummary();
+//        CustomAccountWatchlistSearchConfigResponse searchConfig1 = watchlistSummary1.getSearchConfig();
+//        String apiKey = searchConfig1.getApiKey();
     }
 
     @Test

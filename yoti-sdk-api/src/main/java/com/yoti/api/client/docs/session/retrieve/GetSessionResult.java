@@ -95,6 +95,10 @@ public class GetSessionResult {
         return filterChecksByType(WatchlistScreeningCheckResponse.class);
     }
 
+    public List<WatchlistAdvancedCaCheckResponse> getWatchlistAdvancedCaChecks() {
+        return filterChecksByType(WatchlistAdvancedCaCheckResponse.class);
+    }
+
     private <T extends CheckResponse> List<T> filterChecksByType(Class<T> clazz) {
         List<T> filteredList = new ArrayList<>();
         for (CheckResponse checkResponse : checks) {
