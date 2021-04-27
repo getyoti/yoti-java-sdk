@@ -23,7 +23,7 @@ public class RequestedSearchProfileSources extends RequestedCaSources {
 
         private String searchProfile;
 
-        Builder() {}
+        private Builder() {}
 
         public Builder withSearchProfile(String searchProfile) {
             this.searchProfile = searchProfile;
