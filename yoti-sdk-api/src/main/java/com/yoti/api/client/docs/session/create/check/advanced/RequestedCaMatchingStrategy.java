@@ -13,11 +13,4 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public abstract class RequestedCaMatchingStrategy {
 
-    public static RequestedExactMatchingStrategy.Builder forExactMatchBuilder() {
-        return RequestedExactMatchingStrategy.builder();
-    }
-
-    public static RequestedFuzzyMatchingStrategy.Builder forFuzzyMatchBuilder() {
-        return RequestedFuzzyMatchingStrategy.builder();
-    }
 }

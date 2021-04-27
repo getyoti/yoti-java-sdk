@@ -11,8 +11,7 @@ public class RequestedExactMatchingStrategyTest {
 
     @Test
     public void builder_shouldBuildRequestedExactMatchingStrategyTest() {
-        RequestedExactMatchingStrategy result = RequestedCaMatchingStrategy.forExactMatchBuilder()
-                .build();
+        RequestedExactMatchingStrategy result = RequestedExactMatchingStrategy.builder().build();
 
         assertThat(result, is(not(nullValue())));
         assertThat(result.isExactMatch(), is(true));

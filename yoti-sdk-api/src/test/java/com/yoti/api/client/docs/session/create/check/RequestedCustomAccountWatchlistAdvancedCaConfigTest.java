@@ -36,7 +36,7 @@ public class RequestedCustomAccountWatchlistAdvancedCaConfigTest {
 
     @Test
     public void builder_shouldBuildWithCorrectProperties() {
-        RequestedCustomAccountWatchlistAdvancedCaConfig result = RequestedWatchlistAdvancedCaConfig.customAccountConfigBuilder()
+        RequestedCustomAccountWatchlistAdvancedCaConfig result = RequestedCustomAccountWatchlistAdvancedCaConfig.builder()
                 .withRemoveDeceased(SOME_REMOVE_DECEASED)
                 .withShareUrl(SOME_SHARE_URL)
                 .withSources(profileSourceMock)

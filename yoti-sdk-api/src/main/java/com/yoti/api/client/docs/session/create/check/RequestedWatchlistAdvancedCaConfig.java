@@ -36,14 +36,6 @@ public abstract class RequestedWatchlistAdvancedCaConfig implements RequestedChe
         this.matchingStrategy = matchingStrategy;
     }
 
-    public static RequestedYotiAccountWatchlistAdvancedCaConfig.Builder yotiAccountConfigBuilder() {
-        return RequestedYotiAccountWatchlistAdvancedCaConfig.builder();
-    }
-
-    public static RequestedCustomAccountWatchlistAdvancedCaConfig.Builder customAccountConfigBuilder() {
-        return RequestedCustomAccountWatchlistAdvancedCaConfig.builder();
-    }
-
     public Boolean getRemoveDeceased() {
         return removeDeceased;
     }
