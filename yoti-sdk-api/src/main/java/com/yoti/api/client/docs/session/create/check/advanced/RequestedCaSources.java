@@ -13,11 +13,4 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public abstract class RequestedCaSources {
 
-    public static RequestedSearchProfileSources.Builder searchProfileSourcesBuilder() {
-        return RequestedSearchProfileSources.builder();
-    }
-
-    public static RequestedTypeListSources.Builder typeListSourcesBuilder() {
-        return RequestedTypeListSources.builder();
-    }
 }

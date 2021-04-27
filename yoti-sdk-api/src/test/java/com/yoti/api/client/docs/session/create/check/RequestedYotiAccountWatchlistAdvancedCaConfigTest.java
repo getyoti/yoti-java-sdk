@@ -24,7 +24,7 @@ public class RequestedYotiAccountWatchlistAdvancedCaConfigTest {
 
     @Test
     public void builder_shouldBuildWithCorrectProperties() {
-        RequestedYotiAccountWatchlistAdvancedCaConfig result = RequestedWatchlistAdvancedCaConfig.yotiAccountConfigBuilder()
+        RequestedYotiAccountWatchlistAdvancedCaConfig result = RequestedYotiAccountWatchlistAdvancedCaConfig.builder()
                 .withRemoveDeceased(SOME_REMOVE_DECEASED)
                 .withShareUrl(SOME_SHARE_URL)
                 .withSources(profileSourceMock)

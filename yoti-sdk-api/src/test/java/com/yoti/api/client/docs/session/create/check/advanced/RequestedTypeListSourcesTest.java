@@ -16,7 +16,7 @@ public class RequestedTypeListSourcesTest {
 
     @Test
     public void builder_shouldBuildWithCorrectListOfTypes() {
-        RequestedTypeListSources result = RequestedCaSources.typeListSourcesBuilder()
+        RequestedTypeListSources result = RequestedTypeListSources.builder()
                 .withTypes(SOME_TYPES)
                 .build();
 

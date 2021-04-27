@@ -8,17 +8,15 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        property = "type",
-        defaultImpl = YotiAccountWatchlistCaSearchConfigResponse.class,
-        visible = true
-)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = YotiAccountWatchlistCaSearchConfigResponse.class, visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = YotiAccountWatchlistCaSearchConfigResponse.class, name = DocScanConstants.WITH_YOTI_ACCOUNT),
         @JsonSubTypes.Type(value = CustomAccountWatchlistCaSearchConfigResponse.class, name = DocScanConstants.WITH_CUSTOM_ACCOUNT)
 })
-abstract class WatchlistAdvancedCaSearchConfigResponse extends WatchlistSearchConfigResponse {
+public abstract class WatchlistAdvancedCaSearchConfigResponse extends WatchlistSearchConfigResponse {
+
+    @JsonProperty("type")
+    private String type;
 
     @JsonProperty("remove_deceased")
     private boolean removeDeceased;
