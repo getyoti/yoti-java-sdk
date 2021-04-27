@@ -28,8 +28,7 @@ public class RequestedWatchlistAdvancedCaCheck extends RequestedCheck<RequestedW
 
         private RequestedWatchlistAdvancedCaConfig config;
 
-        Builder() {
-        }
+        private Builder() {}
 
         public Builder withConfig(RequestedWatchlistAdvancedCaConfig config) {
             this.config = config;
@@ -39,7 +38,5 @@ public class RequestedWatchlistAdvancedCaCheck extends RequestedCheck<RequestedW
         public RequestedWatchlistAdvancedCaCheck build() {
             return new RequestedWatchlistAdvancedCaCheck(config);
         }
-
     }
-
 }
