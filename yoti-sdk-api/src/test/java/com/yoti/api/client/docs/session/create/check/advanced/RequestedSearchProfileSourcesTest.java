@@ -13,7 +13,7 @@ public class RequestedSearchProfileSourcesTest {
 
     @Test
     public void builder_shouldBuildWithCorrectSearchProfile() {
-        RequestedSearchProfileSources result = RequestedCaSources.searchProfileSourcesBuilder()
+        RequestedSearchProfileSources result = RequestedSearchProfileSources.builder()
                 .withSearchProfile(SOME_SEARCH_PROFILE)
                 .build();
 

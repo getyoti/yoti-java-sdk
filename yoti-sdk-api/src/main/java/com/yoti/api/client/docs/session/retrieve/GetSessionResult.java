@@ -1,7 +1,7 @@
 package com.yoti.api.client.docs.session.retrieve;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -100,13 +100,10 @@ public class GetSessionResult {
     }
 
     private <T extends CheckResponse> List<T> filterChecksByType(Class<T> clazz) {
-        List<T> filteredList = new ArrayList<>();
-        for (CheckResponse checkResponse : checks) {
-            if (clazz.isInstance(checkResponse)) {
-                filteredList.add(clazz.cast(checkResponse));
-            }
-        }
-        return filteredList;
+        return checks.stream()
+                .filter(clazz::isInstance)
+                .map(clazz::cast)
+                .collect(Collectors.toList());
     }
 
 }

@@ -13,7 +13,7 @@ public class RequestedFuzzyMatchingStrategyTest {
 
     @Test
     public void builder_shouldBuildWithCorrectFuzziness() {
-        RequestedFuzzyMatchingStrategy result = RequestedCaMatchingStrategy.forFuzzyMatchBuilder()
+        RequestedFuzzyMatchingStrategy result = RequestedFuzzyMatchingStrategy.builder()
                 .withFuzziness(SOME_FUZZINESS)
                 .build();
 
