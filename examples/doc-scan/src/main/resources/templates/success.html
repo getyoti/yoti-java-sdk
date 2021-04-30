@@ -209,6 +209,28 @@
                     </div>
                 </div>
 
+                <!-- Watchlist Advanced Checks -->
+                <div th:if="${sessionResult.getWatchlistAdvancedCaChecks().size() > 0}" class="card">
+                    <div class="card-header" id="watchlist-advanced-ca-checks">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    data-target="#collapse-watchlist-advanced-ca-checks" aria-expanded="true"
+                                    aria-controls="collapse-watchlist-advanced-ca-checks">
+                                Watchlist Advanced Checks
+                            </button>
+                        </h3>
+                    </div>
+                    <div id="collapse-watchlist-advanced-ca-checks" class="collapse"
+                         aria-labelledby="watchlist-advanced-ca-checks">
+                        <div class="card-body">
+                            <table th:each="check : ${sessionResult.getWatchlistAdvancedCaChecks()}"
+                                   th:include="fragments/checks :: check-template(${check})"
+                                   class="table table-striped">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Supplementary Document Text Data Checks -->
                 <div th:if="${sessionResult.getSupplementaryDocumentTextDataChecks().size() > 0}" class="card">
                     <div class="card-header" id="sup-text-data-checks">
@@ -563,7 +585,7 @@
                                 </div>
                             </div>
 
-                            <div class="card-group" th:if="${page.getFrames().size() > 0}">
+                            <div class="card-group" th:if="${page.getFrames() != null && page.getFrames().size() > 0}">
                                 <th:block th:each="frame : ${page.getFrames()}">
                                     <div class="card" th:if="${frame.getMedia() != null}">
                                         <img class="card-img-top" th:src="${'/media?mediaId=' + frame.getMedia().getId()}"/>
