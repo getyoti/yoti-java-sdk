@@ -104,6 +104,12 @@
         </tr>
     </th:block>
 
+    <th:block th:if="${check.getType() == 'WATCHLIST_ADVANCED_CA' && check.getReport() != null}">
+        <tr th:include="fragments/watchlist_advanced_raw_media :: advanced-check(${check})">
+
+        </tr>
+    </th:block>
+
     </tbody>
 </table>
 
