@@ -5,20 +5,23 @@
     <td>Raw Results Media</td>
     <td th:with="report=${check.getReport()}">
         <!--@thymesVar id="report" type="com.yoti.api.client.docs.session.retrieve.WatchlistAdvancedCaReportResponse"-->
-        <th:block th:with="summary=${report.getWatchlistSummary()}">
+        <th:block th:if="${report != null}" th:with="summary=${report.getWatchlistSummary()}">
             <!--@thymesVar id="summary" type="com.yoti.api.client.docs.session.retrieve.WatchlistAdvancedCaSummaryResponse"-->
-            <table class="table table-striped">
-                <tbody>
-                <tr>
-                    <td>ID</td>
-                    <td><a th:href="'/media?mediaId=' + ${summary.getRawResults().getMedia().getId()}" th:text="${summary.getRawResults().getMedia().getId()}"></a></td>
-                </tr>
-                <tr>
-                    <td>Type</td>
-                    <td th:text="${summary.getRawResults().getMedia().getType()}"></td>
-                </tr>
-                </tbody>
-            </table>
+            <th:block th:if="${summary != null}">
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>ID</td>
+                        <td><a th:href="'/media?mediaId=' + ${summary.getRawResults().getMedia().getId()}"
+                               th:text="${summary.getRawResults().getMedia().getId()}"></a></td>
+                    </tr>
+                    <tr>
+                        <td>Type</td>
+                        <td th:text="${summary.getRawResults().getMedia().getType()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </th:block>
         </th:block>
     </td>
 </tr>
