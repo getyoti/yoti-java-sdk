@@ -25,7 +25,7 @@ public final class YotiConstants {
     public static final String CONTENT_TYPE_JPEG = "image/jpeg";
 
     public static final String JAVA = "Java";
-    public static final String SDK_VERSION = JAVA + "-3.2.0";
+    public static final String SDK_VERSION = JAVA + "-3.2.1-SNAPSHOT";
     public static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
     public static final String ASYMMETRIC_CIPHER = "RSA/NONE/PKCS1Padding";
     public static final String SYMMETRIC_CIPHER = "AES/CBC/PKCS7Padding";
