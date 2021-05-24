@@ -38,4 +38,11 @@ public abstract class WatchlistAdvancedCaSearchConfigResponse extends WatchlistS
         return shareUrl;
     }
 
+    public CaSourcesResponse getSources() {
+        return sources;
+    }
+
+    public CaMatchingStrategyResponse getMatchingStrategy() {
+        return matchingStrategy;
+    }
 }
