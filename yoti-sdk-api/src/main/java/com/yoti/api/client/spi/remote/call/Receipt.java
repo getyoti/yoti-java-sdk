@@ -4,10 +4,8 @@ import static org.bouncycastle.util.encoders.Base64.toBase64String;
 
 import java.util.Arrays;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public final class Receipt {
     @JsonProperty("receipt_id")
     private byte[] receiptId;

@@ -2,12 +2,10 @@ package com.yoti.api.client.docs.session.retrieve;
 
 import com.yoti.api.client.docs.DocScanConstants;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = YotiAccountWatchlistCaSearchConfigResponse.class, visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = YotiAccountWatchlistCaSearchConfigResponse.class, name = DocScanConstants.WITH_YOTI_ACCOUNT),
