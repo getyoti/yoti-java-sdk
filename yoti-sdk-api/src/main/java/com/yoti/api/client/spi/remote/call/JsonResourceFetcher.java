@@ -2,6 +2,7 @@ package com.yoti.api.client.spi.remote.call;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class JsonResourceFetcher implements ResourceFetcher {
@@ -14,7 +15,9 @@ public final class JsonResourceFetcher implements ResourceFetcher {
     }
 
     public static JsonResourceFetcher newInstance(RawResourceFetcher rawResourceFetcher) {
-        return new JsonResourceFetcher(new ObjectMapper(), rawResourceFetcher);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return new JsonResourceFetcher(objectMapper, rawResourceFetcher);
     }
 
     private JsonResourceFetcher(ObjectMapper objectMapper,
