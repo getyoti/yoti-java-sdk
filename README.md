@@ -52,7 +52,7 @@ Miscellaneous items
 Known issues using the libraries
 
 1) [Support](#support) -
-Please feel free to reach out
+Please feel free to reach out to [clientsupport@yoti.com](mailto:clientsupport@yoti.com)
 
 ## An Architectural View
 
