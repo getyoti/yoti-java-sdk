@@ -52,7 +52,7 @@ Miscellaneous items
 Known issues using the libraries
 
 1) [Support](#support) -
-Please feel free to reach out to [clientsupport@yoti.com](mailto:clientsupport@yoti.com)
+Please feel free to reach out
 
 ## An Architectural View
 
@@ -418,7 +418,7 @@ Using the new (correctly encoded) file should now be compatible with versions 1.
 
 ## Support
 
-For any questions or support please email [sdksupport@yoti.com](mailto:sdksupport@yoti.com).
+For any questions or support please email [clientsupport@yoti.com](mailto:clientupport@yoti.com).
 Please provide the following to get you up and working as quickly as possible:
 
 * Computer type
