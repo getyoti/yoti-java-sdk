@@ -41,6 +41,9 @@ public class SessionSpec {
     @JsonProperty("block_biometric_consent")
     private final Boolean blockBiometricConsent;
 
+    @JsonProperty("ibv_options")
+    private final IbvOptions ibvOptions;
+
     SessionSpec(Integer clientSessionTokenTtl,
             Integer resourcesTtl,
             String userTrackingId,
@@ -49,7 +52,8 @@ public class SessionSpec {
             List<RequestedTask<?>> requestedTasks,
             SdkConfig sdkConfig,
             List<RequiredDocument> requiredDocuments,
-            Boolean blockBiometricConsent) {
+            Boolean blockBiometricConsent,
+            IbvOptions ibvOptions) {
         this.clientSessionTokenTtl = clientSessionTokenTtl;
         this.resourcesTtl = resourcesTtl;
         this.userTrackingId = userTrackingId;
@@ -59,6 +63,7 @@ public class SessionSpec {
         this.sdkConfig = sdkConfig;
         this.requiredDocuments = requiredDocuments;
         this.blockBiometricConsent = blockBiometricConsent;
+        this.ibvOptions = ibvOptions;
     }
 
     public static SessionSpec.Builder builder() {
@@ -146,6 +151,16 @@ public class SessionSpec {
         return blockBiometricConsent;
     }
 
+    /**
+     * The options that define if a session will be required to be performed
+     * using In-Branch Verification
+     *
+     * @return the IBV options
+     */
+    public IbvOptions getIbvOptions() {
+        return ibvOptions;
+    }
+
     public static class Builder {
 
         private final List<RequestedCheck<?>> requestedChecks = new ArrayList<>();
@@ -157,6 +172,7 @@ public class SessionSpec {
         private NotificationConfig notifications;
         private SdkConfig sdkConfig;
         private Boolean blockBiometricConsent;
+        private IbvOptions ibvOptions;
 
         private Builder() {
         }
@@ -250,13 +266,25 @@ public class SessionSpec {
         }
 
         /**
-         * Sets whether or not to block the collection of biometric consent
+         * Sets whether to block the collection of biometric consent
          *
          * @param blockBiometricConsent block collection of biometric consent
          * @return the builder
          */
         public Builder withBlockBiometricConsent(boolean blockBiometricConsent) {
             this.blockBiometricConsent = blockBiometricConsent;
+            return this;
+        }
+
+        /**
+         * Sets the options that define if a session will be required to be performed
+         * using In-Branch Verification
+         *
+         * @param ibvOptions the IBV options
+         * @return the builder
+         */
+        public Builder withIbvOptions(IbvOptions ibvOptions) {
+            this.ibvOptions = ibvOptions;
             return this;
         }
 
@@ -275,7 +303,8 @@ public class SessionSpec {
                     requestedTasks,
                     sdkConfig,
                     requiredDocuments,
-                    blockBiometricConsent
+                    blockBiometricConsent,
+                    ibvOptions
             );
         }
     }

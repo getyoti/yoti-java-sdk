@@ -39,6 +39,7 @@ public class SessionSpecTest {
     private static final String SOME_SDK_CONFIG_ERROR_URL = "https://yourdomain.com/some/error/endpoint";
 
     @Mock RequiredDocument requiredDocumentMock;
+    @Mock IbvOptions ibvOptionsMock;
 
     @Test
     public void shouldBuildWithMinimalConfiguration() {
@@ -198,6 +199,15 @@ public class SessionSpecTest {
 
         assertThat(result.getRequiredDocuments(), hasSize(1));
         assertThat(result.getRequiredDocuments(), contains(requiredDocumentMock));
+    }
+
+    @Test
+    public void withIbvOptions_shouldSetTheIbvOptions() {
+        SessionSpec result = SessionSpec.builder()
+                .withIbvOptions(ibvOptionsMock)
+                .build();
+
+        assertThat(result.getIbvOptions(), is(ibvOptionsMock));
     }
 
 }
