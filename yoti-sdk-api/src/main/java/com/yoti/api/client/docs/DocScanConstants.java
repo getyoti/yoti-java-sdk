@@ -24,6 +24,9 @@ public class DocScanConstants {
     public static final String EXACT = "EXACT";
     public static final String FUZZY = "FUZZY";
 
+    public static final String MANDATORY = "MANDATORY";
+    public static final String NOT_ALLOWED = "NOT_ALLOWED";
+
     public static final String SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = "SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK";
     public static final String SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION = "SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION";
 
