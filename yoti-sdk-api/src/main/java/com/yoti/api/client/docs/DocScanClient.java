@@ -14,6 +14,7 @@ import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
+import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsResponse;
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 
@@ -135,6 +136,16 @@ public class DocScanClient {
     public SupportedDocumentsResponse getSupportedDocuments() throws DocScanException {
         LOG.debug("Getting all supported documents");
         return docScanService.getSupportedDocuments(keyPair);
+    }
+
+    /**
+     * Fetches any currently set instructions for an IBV session.
+     *
+     * @return the instructions
+     */
+    public InstructionsResponse getIbvInstructions(String sessionId) throws DocScanException {
+        LOG.debug("Fetching instructions for session '{}'", sessionId);
+        return docScanService.getIbvInstructions(sdkId, keyPair, sessionId);
     }
 
     private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {
