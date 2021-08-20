@@ -11,6 +11,7 @@ public class UnsignedPathFactory {
     static final String DOCS_SESSION_PATH_TEMPLATE = "/sessions/%s?sdkId=%s";
     static final String DOCS_MEDIA_CONTENT_PATH_TEMPLATE = "/sessions/%s/media/%s/content?sdkId=%s";
     static final String DOCS_PUT_IBV_INSTRUCTIONS_PATH_TEMPLATE = "/sessions/%s/instructions?sdkId=%s";
+    static final String DOCS_FETCH_IBV_INSTRUCTIONS_PATH_TEMPLATE = "/sessions/%s/instructions?sdkId=%s";
     static final String DOCS_SUPPORTED_DOCUMENTS_PATH = "/supported-documents";
 
     public String createProfilePath(String appId, String connectToken) {
@@ -39,6 +40,10 @@ public class UnsignedPathFactory {
 
     public String createPutIbvInstructionsPath(String appId, String sessionId) {
         return format(DOCS_PUT_IBV_INSTRUCTIONS_PATH_TEMPLATE, sessionId, appId);
+    }
+
+    public String createFetchIbvInstructionsPath(String appId, String sessionId) {
+        return format(DOCS_FETCH_IBV_INSTRUCTIONS_PATH_TEMPLATE, sessionId, appId);
     }
 
     public String createGetSupportedDocumentsPath() {
