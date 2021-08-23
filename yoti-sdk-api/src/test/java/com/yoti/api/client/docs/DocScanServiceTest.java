@@ -1072,6 +1072,113 @@ public class DocScanServiceTest {
 
         assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
+    
+    @Test
+    public void getIbvInstructionsPdf_shouldThrowExceptionWhenSdkIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(null, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void getIbvInstructionsPdf_shouldThrowExceptionWhenSdkIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf("", KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void getIbvInstructionsPdf_shouldThrowExceptionWhenKeyPairIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, null, SOME_SESSION_ID));
+
+        assertThat(exception.getMessage(), containsString("Application key Pair"));
+    }
+
+    @Test
+    public void getIbvInstructionsPdf_shouldThrowExceptionWhenSessionIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, null));
+
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void getIbvInstructionsPdf_shouldThrowExceptionWhenSessionIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, ""));
+
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void getIbvInstructionsPdf_shouldWrapGeneralSecurityException() throws Exception {
+        GeneralSecurityException gse = new GeneralSecurityException("some gse");
+
+        when(signedRequestBuilderMock.build()).thenThrow(gse);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(docScanException.getMessage(), containsString("Error signing the request: some gse"));
+    }
+
+    @Test
+    public void getIbvInstructionsPdf_shouldWrapResourceException() throws Exception {
+        ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
+
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute()).thenThrow(resourceException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(docScanException.getMessage(), containsString("Error executing the GET: Failed Request"));
+    }
+
+    @Test
+    public void getIbvInstructionsPdf_shouldWrapIOException() throws Exception {
+        IOException ioException = new IOException("Some io exception");
+
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute()).thenThrow(ioException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(docScanException.getMessage(), containsString("Error building the request: Some io exception"));
+    }
+
+    @Test
+    public void getIbvInstructionsPdf_shouldWrapURISyntaxException() throws Exception {
+        URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
+
+        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+    }
+
+    @Test
+    public void getIbvInstructionsPdf_shouldReturnMedia() throws Exception {
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute()).thenReturn(signedRequestResponseMock);
+        when(signedRequestResponseMock.getResponseHeaders()).thenReturn(createHeadersMap(CONTENT_TYPE, CONTENT_TYPE_JSON));
+        when(signedRequestResponseMock.getResponseBody()).thenReturn(IMAGE_BODY);
+        when(unsignedPathFactoryMock.createFetchIbvInstructionsPdfPath(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
+
+        Media result = docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
+
+        assertThat(result.getMimeType(), is(CONTENT_TYPE_JSON));
+        assertThat(result.getContent(), is(IMAGE_BODY));
+    }
+
+    @Test
+    public void getIbvInstructionsPdf_shouldReturnNullForNoContent() throws Exception {
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute()).thenReturn(signedRequestResponseMock);
+        when(signedRequestResponseMock.getResponseCode()).thenReturn(204);
+        when(unsignedPathFactoryMock.createFetchIbvInstructionsPdfPath(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
+
+        Media result = docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
+
+        assertThat(result, is(nullValue()));
+    }
 
     @Test
     public void getSupportedDocuments_shouldThrowExceptionWhenKeyPairIsNull() throws Exception {
