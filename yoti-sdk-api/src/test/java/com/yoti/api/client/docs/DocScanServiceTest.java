@@ -18,10 +18,9 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,6 +37,7 @@ import java.util.Map;
 import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
+import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.AuthenticityCheckResponse;
 import com.yoti.api.client.docs.session.retrieve.CheckResponse;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
@@ -86,6 +86,7 @@ public class DocScanServiceTest {
     @Mock SignedRequestResponse signedRequestResponseMock;
     @Mock SignedRequestBuilderFactory signedRequestBuilderFactoryMock;
     @Mock SupportedDocumentsResponse supportedDocumentsResponseMock;
+    @Mock Instructions instructionsMock;
 
 
     @BeforeClass
@@ -900,6 +901,94 @@ public class DocScanServiceTest {
 
         assertThat(livenessResourceResponse.get(1), is(instanceOf(ZoomLivenessResourceResponse.class)));
         assertThat(livenessResourceResponse.get(1).getId(), is("someZoomId"));
+    }
+
+    @Test
+    public void putIbvInstructions_shouldThrowExceptionWhenSdkIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(null, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void putIbvInstructions_shouldThrowExceptionWhenSdkIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions("", KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void putIbvInstructions_shouldThrowExceptionWhenKeyPairIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, null, SOME_SESSION_ID, instructionsMock));
+
+        assertThat(exception.getMessage(), containsString("Application key Pair"));
+    }
+
+    @Test
+    public void putIbvInstructions_shouldThrowExceptionWhenSessionIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, null, instructionsMock));
+
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void putIbvInstructions_shouldThrowExceptionWhenSessionIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, "", instructionsMock));
+
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void putIbvInstructions_shouldThrowExceptionWhenInstructionsIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null));
+
+        assertThat(exception.getMessage(), containsString("instructions"));
+    }
+
+    @Test
+    public void putIbvInstructions_shouldWrapGeneralSecurityException() throws Exception {
+        GeneralSecurityException gse = new GeneralSecurityException("some gse");
+
+        when(signedRequestBuilderMock.build()).thenThrow(gse);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+
+        assertThat(docScanException.getMessage(), containsString("Error signing the request: some gse"));
+    }
+
+    @Test
+    public void putIbvInstructions_shouldWrapResourceException() throws Exception {
+        ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
+
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute()).thenThrow(resourceException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+
+        assertThat(docScanException.getMessage(), containsString("Error executing the PUT: Failed Request"));
+    }
+
+    @Test
+    public void putIbvInstructions_shouldWrapIOException() throws Exception {
+        IOException ioException = new IOException("Some io exception");
+
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute()).thenThrow(ioException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+
+        assertThat(docScanException.getMessage(), containsString("Error building the request: Some io exception"));
+    }
+
+    @Test
+    public void putIbvInstructions_shouldWrapURISyntaxException() throws Exception {
+        URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
+
+        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+
+        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test

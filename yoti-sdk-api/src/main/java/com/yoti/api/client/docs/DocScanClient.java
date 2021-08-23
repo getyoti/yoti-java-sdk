@@ -12,6 +12,7 @@ import com.yoti.api.client.KeyPairSource;
 import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
+import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
@@ -111,6 +112,18 @@ public class DocScanClient {
     public void deleteMediaContent(String sessionId, String mediaId) throws DocScanException {
         LOG.debug("Deleting media content '{}' in session '{}'", mediaId, sessionId);
         docScanService.deleteMediaContent(sdkId, keyPair, sessionId, mediaId);
+    }
+
+    /**
+     * Sets the IBV instructions for the given session
+     *
+     * @param sessionId the session ID
+     * @param instructions the instructions
+     * @throws DocScanException if an error has occurred
+     */
+    public void putIbvInstructions(String sessionId, Instructions instructions) throws DocScanException {
+        LOG.debug("Setting IBV instructions for session '{}'", sessionId);
+        docScanService.putIbvInstructions(sdkId, keyPair, sessionId, instructions);
     }
 
     /**
