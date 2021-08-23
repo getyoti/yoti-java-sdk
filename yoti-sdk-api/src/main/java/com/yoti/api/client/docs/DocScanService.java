@@ -317,6 +317,36 @@ final class DocScanService {
         }
     }
 
+    public Media getIbvInstructionsPdf(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
+        notNull(keyPair, "Application key Pair");
+        notNullOrEmpty(sessionId, "sessionId");
+
+        String path = unsignedPathFactory.createFetchIbvInstructionsPdfPath(sdkId, sessionId);
+        LOG.info("Fetching instructions PDF at '{}'", path);
+
+        try {
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+                    .withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withHttpMethod(HTTP_GET)
+                    .build();
+            SignedRequestResponse response = signedRequest.execute();
+
+            if (response.getResponseCode() == HTTP_STATUS_NO_CONTENT) {
+                return null;
+            }
+            return new MediaValue(findContentType(response), response.getResponseBody());
+        } catch (GeneralSecurityException ex) {
+            throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
+        } catch (ResourceException ex) {
+            throw new DocScanException("Error executing the GET: " + ex.getMessage(), ex);
+        } catch (IOException | URISyntaxException ex) {
+            throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
+        }
+    }
+
     public SupportedDocumentsResponse getSupportedDocuments(KeyPair keyPair) throws DocScanException {
         notNull(keyPair, "Application key Pair");
 
@@ -348,4 +378,5 @@ final class DocScanService {
         }
         return contentTypeValues == null || contentTypeValues.isEmpty() ? "" : contentTypeValues.get(0);
     }
+
 }

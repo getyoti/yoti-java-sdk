@@ -128,6 +128,18 @@ public class DocScanClient {
     }
 
     /**
+     * Fetches the instructions PDF associated with an In-Branch Verification session.
+     *
+     * @param sessionId the sessionID
+     * @return the PDF media
+     * @throws DocScanException if an error has occurred
+     */
+    public Media getIbvInstructionsPdf(String sessionId) throws DocScanException {
+        LOG.debug("Retrieving IBV instructions PDF in session '{}'", sessionId);
+        return docScanService.getIbvInstructionsPdf(sdkId, keyPair, sessionId);
+    }
+
+    /**
      * Gets a list of supported documents.
      *
      * @return the supported documents

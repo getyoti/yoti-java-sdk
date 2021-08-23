@@ -30,7 +30,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class DocScanClientTest {
 
-    private static final String TOKEN = "test-token-test-test-test";
     private static final String APP_ID = "appId";
     private static final String SOME_SESSION_ID = "someSessionId";
     private static final String SOME_MEDIA_ID = "someMediaId";
@@ -163,6 +162,20 @@ public class DocScanClientTest {
         DocScanException exception = assertThrows(DocScanException.class, () -> {
             DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
             testObj.getIbvInstructions(SOME_SESSION_ID);
+        });
+
+        assertThat(exception, is(original));
+    }
+
+    @Test
+    public void getIbvInstructionsPdf_shouldFailWithExceptionFromYotiDocsService() throws Exception {
+        DocScanException original = new DocScanException("Test exception");
+
+        doThrow(original).when(docScanServiceMock).getIbvInstructionsPdf(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID));
+
+        DocScanException exception = assertThrows(DocScanException.class, () -> {
+            DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
+            testObj.getIbvInstructionsPdf(SOME_SESSION_ID);
         });
 
         assertThat(exception, is(original));
