@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -17,6 +18,7 @@ import com.yoti.api.client.InitialisationException;
 import com.yoti.api.client.KeyPairSource;
 import com.yoti.api.client.common.StaticKeyPairSource;
 import com.yoti.api.client.docs.session.create.SessionSpec;
+import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 
 import org.junit.Before;
@@ -36,6 +38,7 @@ public class DocScanClientTest {
     @Mock DocScanService docScanServiceMock;
 
     @Mock SessionSpec sessionSpecMock;
+    @Mock Instructions instructionsMock;
     private KeyPairSource validKeyPairSource;
 
     @Before
@@ -135,6 +138,20 @@ public class DocScanClientTest {
             return;
         }
         fail("Expected an exception");
+    }
+
+    @Test
+    public void putIbvInstructions_shouldFailWithExceptionFromYotiDocsService() throws Exception {
+        DocScanException original = new DocScanException("Test exception");
+
+        doThrow(original).when(docScanServiceMock).putIbvInstructions(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID), eq(instructionsMock));
+
+        DocScanException exception = assertThrows(DocScanException.class, () -> {
+            DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
+            testObj.putIbvInstructions(SOME_SESSION_ID, instructionsMock);
+        });
+
+        assertThat(exception, is(original));
     }
 
     @Test
