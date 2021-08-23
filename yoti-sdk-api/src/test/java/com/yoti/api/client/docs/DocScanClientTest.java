@@ -182,6 +182,20 @@ public class DocScanClientTest {
     }
 
     @Test
+    public void fetchInstructionsContactProfile_shouldFailWithExceptionFromYotiDocsService() throws Exception {
+        DocScanException original = new DocScanException("Test exception");
+
+        doThrow(original).when(docScanServiceMock).fetchInstructionsContactProfile(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID));
+
+        DocScanException exception = assertThrows(DocScanException.class, () -> {
+            DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
+            testObj.fetchInstructionsContactProfile(SOME_SESSION_ID);
+        });
+
+        assertThat(exception, is(original));
+    }
+
+    @Test
     public void getSupportedDocuments_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
 
