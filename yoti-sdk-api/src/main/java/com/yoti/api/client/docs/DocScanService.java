@@ -25,6 +25,7 @@ import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
 import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsResponse;
+import com.yoti.api.client.docs.session.retrieve.instructions.ContactProfileResponse;
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.MediaValue;
 import com.yoti.api.client.spi.remote.call.ResourceException;
@@ -308,6 +309,41 @@ final class DocScanService {
                     .build();
 
             return signedRequest.execute(InstructionsResponse.class);
+        } catch (GeneralSecurityException ex) {
+            throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
+        } catch (ResourceException ex) {
+            throw new DocScanException("Error executing the GET: " + ex.getMessage(), ex);
+        } catch (IOException | URISyntaxException ex) {
+            throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
+        }
+    }
+
+    /**
+     * Retrieves the current state of a given session
+     *
+     * @param sdkId     the SDK ID
+     * @param keyPair   the {@code KeyPair}
+     * @param sessionId the session ID
+     * @return the session state
+     * @throws DocScanException if there was an error
+     */
+    public ContactProfileResponse fetchInstructionsContactProfile(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
+        notNull(keyPair, "Application key Pair");
+        notNullOrEmpty(sessionId, "sessionId");
+
+        String path = unsignedPathFactory.createFetchInstructionsContactProfilePath(sdkId, sessionId);
+        LOG.info("Fetching instruction contact profile from '{}'", path);
+
+        try {
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+                    .withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withHttpMethod(HTTP_GET)
+                    .build();
+
+            return signedRequest.execute(ContactProfileResponse.class);
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {

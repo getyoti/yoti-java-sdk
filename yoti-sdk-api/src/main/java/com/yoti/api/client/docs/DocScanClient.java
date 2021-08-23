@@ -15,6 +15,7 @@ import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
 import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsResponse;
+import com.yoti.api.client.docs.session.retrieve.instructions.ContactProfileResponse;
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 
@@ -137,6 +138,18 @@ public class DocScanClient {
     public Media getIbvInstructionsPdf(String sessionId) throws DocScanException {
         LOG.debug("Retrieving IBV instructions PDF in session '{}'", sessionId);
         return docScanService.getIbvInstructionsPdf(sdkId, keyPair, sessionId);
+    }
+
+    /**
+     * Fetches the associated instructions contact profile for the given In-Branch Verification session
+     *
+     * @param sessionId the session ID
+     * @return the contact profile
+     * @throws DocScanException if an error has occurred
+     */
+    public ContactProfileResponse fetchInstructionsContactProfile(String sessionId) throws DocScanException {
+        LOG.debug("Fetching instructions contact profile in session '{}'", sessionId);
+        return docScanService.fetchInstructionsContactProfile(sdkId, keyPair, sessionId);
     }
 
     /**
