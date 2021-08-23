@@ -3,6 +3,7 @@ package com.yoti.api.client.docs;
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_DELETE;
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
+import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_PUT;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JSON;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_DOCS_URL;
@@ -21,6 +22,7 @@ import java.util.Map;
 import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
+import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.MediaValue;
@@ -31,7 +33,6 @@ import com.yoti.api.client.spi.remote.call.SignedRequestResponse;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.slf4j.Logger;
@@ -259,6 +260,36 @@ final class DocScanService {
         }
     }
 
+    public void putIbvInstructions(String sdkId, KeyPair keyPair, String sessionId, Instructions instructions) throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
+        notNull(keyPair, "Application key Pair");
+        notNullOrEmpty(sessionId, "sessionId");
+        notNull(instructions, "instructions");
+
+        String path = unsignedPathFactory.createPutIbvInstructionsPath(sdkId, sessionId);
+        LOG.info("Setting IBV instructions at '{}'", path);
+
+        try {
+            byte[] payload = objectMapper.writeValueAsBytes(instructions);
+
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+                    .withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withHttpMethod(HTTP_PUT)
+                    .withPayload(payload)
+                    .build();
+
+            signedRequest.execute();
+        } catch (GeneralSecurityException ex) {
+            throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
+        } catch (ResourceException ex) {
+            throw new DocScanException("Error executing the PUT: " + ex.getMessage(), ex);
+        } catch (IOException | URISyntaxException ex) {
+            throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
+        }
+    }
+
     public SupportedDocumentsResponse getSupportedDocuments(KeyPair keyPair) throws DocScanException {
         notNull(keyPair, "Application key Pair");
 
@@ -290,5 +321,4 @@ final class DocScanService {
         }
         return contentTypeValues == null || contentTypeValues.isEmpty() ? "" : contentTypeValues.get(0);
     }
-
 }
