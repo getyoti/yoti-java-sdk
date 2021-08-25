@@ -67,4 +67,8 @@ public class DocScanConstants {
     public static final String BASIC = "BASIC";
     public static final String BEARER = "BEARER";
 
+    public static final String END_USER = "END_USER";
+    public static final String RELYING_BUSINESS = "RELYING_BUSINESS";
+    public static final String IBV = "IBV";
+
 }
