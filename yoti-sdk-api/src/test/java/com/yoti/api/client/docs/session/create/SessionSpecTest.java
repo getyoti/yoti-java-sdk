@@ -9,6 +9,9 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
+
 import com.yoti.api.client.docs.session.create.check.RequestedDocumentAuthenticityCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedLivenessCheck;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
@@ -40,6 +43,7 @@ public class SessionSpecTest {
 
     @Mock RequiredDocument requiredDocumentMock;
     @Mock IbvOptions ibvOptionsMock;
+    @Mock ZonedDateTime sessionDeadlineMock;
 
     @Test
     public void shouldBuildWithMinimalConfiguration() {
@@ -208,6 +212,15 @@ public class SessionSpecTest {
                 .build();
 
         assertThat(result.getIbvOptions(), is(ibvOptionsMock));
+    }
+
+    @Test
+    public void withSessionDeadline_shouldSetTheSessionDeadline() {
+        SessionSpec result = SessionSpec.builder()
+                .withSessionDeadline(sessionDeadlineMock)
+                .build();
+
+        assertThat(result.getSessionDeadline(), is(sessionDeadlineMock));
     }
 
 }
