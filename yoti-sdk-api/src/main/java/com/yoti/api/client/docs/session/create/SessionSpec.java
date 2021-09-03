@@ -1,5 +1,6 @@
 package com.yoti.api.client.docs.session.create;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,9 @@ public class SessionSpec {
 
     @JsonProperty("client_session_token_ttl")
     private final Integer clientSessionTokenTtl;
+
+    @JsonProperty("session_deadline")
+    private final ZonedDateTime sessionDeadline;
 
     @JsonProperty("resources_ttl")
     private final Integer resourcesTtl;
@@ -53,7 +57,8 @@ public class SessionSpec {
             SdkConfig sdkConfig,
             List<RequiredDocument> requiredDocuments,
             Boolean blockBiometricConsent,
-            IbvOptions ibvOptions) {
+            IbvOptions ibvOptions,
+            ZonedDateTime sessionDeadline) {
         this.clientSessionTokenTtl = clientSessionTokenTtl;
         this.resourcesTtl = resourcesTtl;
         this.userTrackingId = userTrackingId;
@@ -64,6 +69,7 @@ public class SessionSpec {
         this.requiredDocuments = requiredDocuments;
         this.blockBiometricConsent = blockBiometricConsent;
         this.ibvOptions = ibvOptions;
+        this.sessionDeadline = sessionDeadline;
     }
 
     public static SessionSpec.Builder builder() {
@@ -161,6 +167,15 @@ public class SessionSpec {
         return ibvOptions;
     }
 
+    /**
+     * The deadline that the session needs to be completed by.
+     *
+     * @return the session deadline
+     */
+    public ZonedDateTime getSessionDeadline() {
+        return sessionDeadline;
+    }
+
     public static class Builder {
 
         private final List<RequestedCheck<?>> requestedChecks = new ArrayList<>();
@@ -173,6 +188,7 @@ public class SessionSpec {
         private SdkConfig sdkConfig;
         private Boolean blockBiometricConsent;
         private IbvOptions ibvOptions;
+        private ZonedDateTime sessionDeadline;
 
         private Builder() {
         }
@@ -289,6 +305,17 @@ public class SessionSpec {
         }
 
         /**
+         * Sets the deadline that the session must be completed by.
+         *
+         * @param sessionDeadline the session deadline
+         * @return the builder
+         */
+        public Builder withSessionDeadline(ZonedDateTime sessionDeadline) {
+            this.sessionDeadline = sessionDeadline;
+            return this;
+        }
+
+        /**
          * Builds the {@link SessionSpec} based on the values supplied to the builder
          *
          * @return the built {@link SessionSpec}
@@ -304,7 +331,8 @@ public class SessionSpec {
                     sdkConfig,
                     requiredDocuments,
                     blockBiometricConsent,
-                    ibvOptions
+                    ibvOptions,
+                    sessionDeadline
             );
         }
     }
