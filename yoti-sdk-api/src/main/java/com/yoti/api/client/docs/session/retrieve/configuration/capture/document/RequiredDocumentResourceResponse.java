@@ -10,10 +10,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true)
+@JsonTypeInfo(include = JsonTypeInfo.As.EXISTING_PROPERTY, use = JsonTypeInfo.Id.NAME, property = "type", visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = RequiredIdDocumentResourceResponse.class, name = DocScanConstants.ID_DOCUMENT),
-        @JsonSubTypes.Type(value = RequiredSupplementaryDocumentResource.class, name = DocScanConstants.SUPPLEMENTARY_DOCUMENT)
+        @JsonSubTypes.Type(value = RequiredSupplementaryDocumentResourceResponse.class, name = DocScanConstants.SUPPLEMENTARY_DOCUMENT)
 })
 public abstract class RequiredDocumentResourceResponse extends RequiredResourceResponse {
 

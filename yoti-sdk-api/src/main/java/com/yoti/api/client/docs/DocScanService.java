@@ -24,6 +24,7 @@ import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
+import com.yoti.api.client.docs.session.retrieve.configuration.capture.YotiAnnotationIntrospector;
 import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsResponse;
 import com.yoti.api.client.docs.session.retrieve.instructions.ContactProfileResponse;
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
@@ -35,8 +36,11 @@ import com.yoti.api.client.spi.remote.call.SignedRequestResponse;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,6 +71,10 @@ final class DocScanService {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+        AnnotationIntrospector dis1 = AnnotationIntrospectorPair.pair(new JacksonAnnotationIntrospector(), new YotiAnnotationIntrospector());
+
+        objectMapper.setAnnotationIntrospectors(new JacksonAnnotationIntrospector(), dis1);
 
         return new DocScanService(new UnsignedPathFactory(), objectMapper, new SignedRequestBuilderFactory());
     }

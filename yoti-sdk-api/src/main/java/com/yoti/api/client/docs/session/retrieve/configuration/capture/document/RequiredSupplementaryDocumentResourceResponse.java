@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RequiredSupplementaryDocumentResource {
+public class RequiredSupplementaryDocumentResourceResponse extends RequiredDocumentResourceResponse {
 
     @JsonProperty("document_types")
     private List<String> documentTypes;
@@ -34,7 +34,7 @@ public class RequiredSupplementaryDocumentResource {
     }
 
     /**
-     * Returns the objective that the {@link RequiredSupplementaryDocumentResource} will satisfy
+     * Returns the objective that the {@link RequiredSupplementaryDocumentResourceResponse} will satisfy
      *
      * @return the objective
      */
