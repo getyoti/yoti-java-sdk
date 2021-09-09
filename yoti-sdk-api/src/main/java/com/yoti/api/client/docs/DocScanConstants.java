@@ -33,6 +33,8 @@ public class DocScanConstants {
     public static final String LIVENESS = "LIVENESS";
     public static final String ZOOM = "ZOOM";
 
+    public static final String FACE_CAPTURE = "FACE_CAPTURE";
+
     public static final String ADVERSE_MEDIA = "ADVERSE-MEDIA";
     public static final String SANCTIONS = "SANCTIONS";
 
@@ -66,5 +68,9 @@ public class DocScanConstants {
 
     public static final String BASIC = "BASIC";
     public static final String BEARER = "BEARER";
+
+    public static final String END_USER = "END_USER";
+    public static final String RELYING_BUSINESS = "RELYING_BUSINESS";
+    public static final String IBV = "IBV";
 
 }
