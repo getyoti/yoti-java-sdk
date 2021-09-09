@@ -24,8 +24,10 @@ import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
-import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsResponse;
+import com.yoti.api.client.docs.session.retrieve.configuration.SessionConfigurationResponse;
+import com.yoti.api.client.docs.session.retrieve.configuration.capture.liveness.RequiredLivenessResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.instructions.ContactProfileResponse;
+import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsResponse;
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.MediaValue;
 import com.yoti.api.client.spi.remote.call.ResourceException;
@@ -37,6 +39,7 @@ import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +73,9 @@ final class DocScanService {
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.registerModule(new JavaTimeModule());
+
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addDeserializer(RequiredLivenessResourceResponse.class, new ForceSubTypeDeserializer<>(RequiredLivenessResourceResponse.class));
 
         return new DocScanService(new UnsignedPathFactory(), objectMapper, new SignedRequestBuilderFactory());
     }
@@ -377,6 +383,32 @@ final class DocScanService {
                 return null;
             }
             return new MediaValue(findContentType(response), response.getResponseBody());
+        } catch (GeneralSecurityException ex) {
+            throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
+        } catch (ResourceException ex) {
+            throw new DocScanException("Error executing the GET: " + ex.getMessage(), ex);
+        } catch (IOException | URISyntaxException ex) {
+            throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
+        }
+    }
+
+    public SessionConfigurationResponse fetchSessionConfiguration(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
+        notNull(keyPair, "Application key Pair");
+        notNullOrEmpty(sessionId, "sessionId");
+
+        String path = unsignedPathFactory.createFetchSessionConfigurationPath(sdkId, sessionId);
+        LOG.info("Fetching session configuration from '{}'", path);
+
+        try {
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+                    .withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withHttpMethod(HTTP_GET)
+                    .build();
+
+            return signedRequest.execute(SessionConfigurationResponse.class);
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
