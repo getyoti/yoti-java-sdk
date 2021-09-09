@@ -18,7 +18,6 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.doAnswer;
@@ -44,8 +43,9 @@ import com.yoti.api.client.docs.session.retrieve.CheckResponse;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
 import com.yoti.api.client.docs.session.retrieve.LivenessResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.ZoomLivenessResourceResponse;
-import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsResponse;
+import com.yoti.api.client.docs.session.retrieve.configuration.SessionConfigurationResponse;
 import com.yoti.api.client.docs.session.retrieve.instructions.ContactProfileResponse;
+import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsResponse;
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.call.HttpMethod;
 import com.yoti.api.client.spi.remote.call.ResourceException;
@@ -1259,6 +1259,87 @@ public class DocScanServiceTest {
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+    }
+    
+    @Test
+    public void fetchSessionConfiguration_shouldThrowExceptionWhenSdkIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(null, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void fetchSessionConfiguration_shouldThrowExceptionWhenSdkIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration("", KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void fetchSessionConfiguration_shouldThrowExceptionWhenKeyPairIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, null, SOME_SESSION_ID));
+
+        assertThat(exception.getMessage(), containsString("Application key Pair"));
+    }
+
+    @Test
+    public void fetchSessionConfiguration_shouldThrowExceptionWhenSessionIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, null));
+
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void fetchSessionConfiguration_shouldThrowExceptionWhenSessionIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, ""));
+
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void fetchSessionConfiguration_shouldWrapGeneralSecurityException() throws Exception {
+        GeneralSecurityException gse = new GeneralSecurityException("some gse");
+
+        when(signedRequestBuilderMock.build()).thenThrow(gse);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(docScanException.getMessage(), containsString("Error signing the request: some gse"));
+    }
+
+    @Test
+    public void fetchSessionConfiguration_shouldWrapResourceException() throws Exception {
+        ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
+
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(SessionConfigurationResponse.class)).thenThrow(resourceException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(docScanException.getMessage(), containsString("Error executing the GET: Failed Request"));
+    }
+
+    @Test
+    public void fetchSessionConfiguration_shouldWrapIOException() throws Exception {
+        IOException ioException = new IOException("Some io exception");
+
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(SessionConfigurationResponse.class)).thenThrow(ioException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(docScanException.getMessage(), containsString("Error building the request: Some io exception"));
+    }
+
+    @Test
+    public void fetchSessionConfiguration_shouldWrapURISyntaxException() throws Exception {
+        URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
+
+        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
         assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }

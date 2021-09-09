@@ -14,8 +14,9 @@ import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
-import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsResponse;
+import com.yoti.api.client.docs.session.retrieve.configuration.SessionConfigurationResponse;
 import com.yoti.api.client.docs.session.retrieve.instructions.ContactProfileResponse;
+import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsResponse;
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 
@@ -167,10 +168,24 @@ public class DocScanClient {
      * Fetches any currently set instructions for an IBV session.
      *
      * @return the instructions
+     * @throws DocScanException if an error has occurred
      */
     public InstructionsResponse getIbvInstructions(String sessionId) throws DocScanException {
         LOG.debug("Fetching instructions for session '{}'", sessionId);
         return docScanService.getIbvInstructions(sdkId, keyPair, sessionId);
+    }
+
+    /**
+     * Fetches the configuration for the given sessionID.
+     *
+     * @param sessionId the session ID
+     *
+     * @return the session configuration
+     * @throws DocScanException if an error has occurred
+     */
+    public SessionConfigurationResponse getSessionConfiguration(String sessionId) throws DocScanException {
+        LOG.debug("Fetching configuration for session '{}'", sessionId);
+        return docScanService.fetchSessionConfiguration(sdkId, keyPair, sessionId);
     }
 
     private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {
