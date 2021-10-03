@@ -14,29 +14,34 @@ import com.yoti.api.client.docs.session.retrieve.configuration.capture.facecaptu
 import com.yoti.api.client.docs.session.retrieve.configuration.capture.liveness.RequiredLivenessResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.configuration.capture.liveness.RequiredZoomLivenessResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.configuration.capture.liveness.UnknownRequiredLivenessResourceResponse;
+import com.yoti.api.client.spi.remote.util.FieldSetter;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CaptureResponseTest {
 
-    @Mock RequiredIdDocumentResourceResponse idDocumentResourceResponseMock;
-    @Mock RequiredSupplementaryDocumentResourceResponse supplementaryDocumentResourceResponseMock;
-    @Mock RequiredZoomLivenessResourceResponse zoomLivenessResourceResponseMock;
-    @Mock UnknownRequiredLivenessResourceResponse unknownRequiredLivenessResourceResponseMock;
-    @Mock RequiredFaceCaptureResourceResponse faceCaptureResourceResponseMock;
+    @Mock RequiredIdDocumentResourceResponse idDocRequirementMock;
+    @Mock RequiredSupplementaryDocumentResourceResponse supplementaryDocRequirementMock;
+    @Mock RequiredZoomLivenessResourceResponse zoomRequirementMock;
+    @Mock UnknownRequiredLivenessResourceResponse unknownLivenessRequirementMock;
+    @Mock RequiredFaceCaptureResourceResponse faceCaptureRequirementMock;
 
     CaptureResponse captureResponse;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
+        final List<RequiredResourceResponse> requirements = Arrays.asList(idDocRequirementMock,
+                supplementaryDocRequirementMock,
+                zoomRequirementMock,
+                unknownLivenessRequirementMock,
+                faceCaptureRequirementMock);
         captureResponse = new CaptureResponse();
-        setupCaptureResponse();
+        FieldSetter.setField(captureResponse, "requiredResources", requirements);
     }
 
     @Test
@@ -45,11 +50,11 @@ public class CaptureResponseTest {
 
         assertThat(result, hasSize(5));
         assertThat(result, containsInAnyOrder(
-                idDocumentResourceResponseMock,
-                supplementaryDocumentResourceResponseMock,
-                zoomLivenessResourceResponseMock,
-                unknownRequiredLivenessResourceResponseMock,
-                faceCaptureResourceResponseMock)
+                idDocRequirementMock,
+                supplementaryDocRequirementMock,
+                zoomRequirementMock,
+                unknownLivenessRequirementMock,
+                faceCaptureRequirementMock)
         );
     }
 
@@ -58,7 +63,7 @@ public class CaptureResponseTest {
         List<RequiredDocumentResourceResponse> result = captureResponse.getDocumentResourceRequirements();
 
         assertThat(result, hasSize(2));
-        assertThat(result, containsInAnyOrder(idDocumentResourceResponseMock, supplementaryDocumentResourceResponseMock));
+        assertThat(result, containsInAnyOrder(idDocRequirementMock, supplementaryDocRequirementMock));
     }
 
     @Test
@@ -66,7 +71,7 @@ public class CaptureResponseTest {
         List<RequiredIdDocumentResourceResponse> result = captureResponse.getIdDocumentResourceRequirements();
 
         assertThat(result, hasSize(1));
-        assertThat(result, containsInAnyOrder(idDocumentResourceResponseMock));
+        assertThat(result, containsInAnyOrder(idDocRequirementMock));
     }
 
     @Test
@@ -74,7 +79,7 @@ public class CaptureResponseTest {
         List<RequiredSupplementaryDocumentResourceResponse> result = captureResponse.getSupplementaryResourceRequirements();
 
         assertThat(result, hasSize(1));
-        assertThat(result, containsInAnyOrder(supplementaryDocumentResourceResponseMock));
+        assertThat(result, containsInAnyOrder(supplementaryDocRequirementMock));
     }
 
     @Test
@@ -82,7 +87,7 @@ public class CaptureResponseTest {
         List<RequiredLivenessResourceResponse> result = captureResponse.getLivenessResourceRequirements();
 
         assertThat(result, hasSize(2));
-        assertThat(result, containsInAnyOrder(zoomLivenessResourceResponseMock, unknownRequiredLivenessResourceResponseMock));
+        assertThat(result, containsInAnyOrder(zoomRequirementMock, unknownLivenessRequirementMock));
     }
 
     @Test
@@ -90,7 +95,7 @@ public class CaptureResponseTest {
         List<RequiredZoomLivenessResourceResponse> result = captureResponse.getZoomLivenessResourceRequirements();
 
         assertThat(result, hasSize(1));
-        assertThat(result, containsInAnyOrder(zoomLivenessResourceResponseMock));
+        assertThat(result, containsInAnyOrder(zoomRequirementMock));
     }
 
     @Test
@@ -98,21 +103,7 @@ public class CaptureResponseTest {
         List<RequiredFaceCaptureResourceResponse> result = captureResponse.getFaceCaptureResourceRequirements();
 
         assertThat(result, hasSize(1));
-        assertThat(result, containsInAnyOrder(faceCaptureResourceResponseMock));
-    }
-
-    private void setupCaptureResponse() throws NoSuchFieldException {
-        FieldSetter.setField(
-                captureResponse,
-                captureResponse.getClass().getDeclaredField("requiredResources"),
-                Arrays.asList(
-                        idDocumentResourceResponseMock,
-                        supplementaryDocumentResourceResponseMock,
-                        zoomLivenessResourceResponseMock,
-                        unknownRequiredLivenessResourceResponseMock,
-                        faceCaptureResourceResponseMock
-                )
-        );
+        assertThat(result, containsInAnyOrder(faceCaptureRequirementMock));
     }
 
 }

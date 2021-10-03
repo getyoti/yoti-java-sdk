@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.yoti.api.client.spi.remote.util.FieldSetter;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -22,12 +23,12 @@ public class IdDocumentResourceResponseTest {
     IdDocumentResourceResponse testObj;
 
     @Test
-    public void shouldFilterTextExtractionTasks() throws NoSuchFieldException {
+    public void shouldFilterTextExtractionTasks() {
         testObj = new IdDocumentResourceResponse();
 
         FieldSetter.setField(
                 testObj,
-                testObj.getClass().getSuperclass().getDeclaredField("tasks"),
+                "tasks",
                 Arrays.asList(
                         idDocTextExtractionTaskResponseMock,
                         taskResponseMock
@@ -40,12 +41,12 @@ public class IdDocumentResourceResponseTest {
     }
 
     @Test
-    public void shouldReturnEmptyList() throws NoSuchFieldException {
+    public void shouldReturnEmptyList() {
         testObj = new IdDocumentResourceResponse();
 
         FieldSetter.setField(
                 testObj,
-                testObj.getClass().getSuperclass().getDeclaredField("tasks"),
+                "tasks",
                 new ArrayList<>()
         );
 

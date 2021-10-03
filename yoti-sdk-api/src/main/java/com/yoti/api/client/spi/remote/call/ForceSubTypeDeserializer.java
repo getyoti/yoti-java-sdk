@@ -1,4 +1,4 @@
-package com.yoti.api.client.docs;
+package com.yoti.api.client.spi.remote.call;
 
 import java.io.IOException;
 

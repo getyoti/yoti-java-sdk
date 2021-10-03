@@ -1,8 +1,6 @@
 package com.yoti.api.client.spi.remote.call.factory;
 
 import static com.yoti.api.client.spi.remote.call.YotiConstants.AUTH_KEY_HEADER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JSON;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DIGEST_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.JAVA;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.SDK_VERSION;
@@ -14,7 +12,7 @@ import static org.hamcrest.collection.IsMapContaining.hasEntry;
 
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.*;
 
 public class HeadersFactoryTest {
 
@@ -30,7 +28,6 @@ public class HeadersFactoryTest {
         assertThat(result, hasEntry(DIGEST_HEADER, SOME_DIGEST));
         assertThat(result, hasEntry(YOTI_SDK_HEADER, JAVA));
         assertThat(result, hasEntry(YOTI_SDK_VERSION_HEADER, SDK_VERSION));
-        assertThat(result, hasEntry(CONTENT_TYPE, CONTENT_TYPE_JSON));
     }
 
     @Test
@@ -40,7 +37,6 @@ public class HeadersFactoryTest {
         assertThat(result, hasEntry(DIGEST_HEADER, SOME_DIGEST));
         assertThat(result, hasEntry(YOTI_SDK_HEADER, JAVA));
         assertThat(result, hasEntry(YOTI_SDK_VERSION_HEADER, SDK_VERSION));
-        assertThat(result, hasEntry(CONTENT_TYPE, CONTENT_TYPE_JSON));
         assertThat(result, hasEntry(AUTH_KEY_HEADER, SOME_KEY));
     }
 

@@ -16,6 +16,8 @@ public class UnsignedPathFactory {
     static final String DOCS_SUPPORTED_DOCUMENTS_PATH = "/supported-documents";
     static final String DOCS_FETCH_INSTRUCTION_CONTACT_PROFILE_PATH_TEMPLATE = "/sessions/%s/instructions/contact-profile?sdkId=%s";
     static final String DOCS_FETCH_SESSION_CONFIGURATION_PATH_TEMPLATE = "/sessions/%s/configuration?sdkId=%s";
+    static final String DOCS_NEW_FACE_CAPTURE_RESOURCE_PATH_TEMPLATE = "/sessions/%s/resources/face-capture?sdkId=%s";
+    static final String DOCS_UPLOAD_FACE_CAPTURE_IMAGE_PATH_TEMPLATE = "/sessions/%s/resources/face-capture/%s/image?sdkId=%s";
 
     public String createProfilePath(String appId, String connectToken) {
         return format(PROFILE_PATH_TEMPLATE, connectToken, appId);
@@ -59,6 +61,14 @@ public class UnsignedPathFactory {
 
     public String createFetchIbvInstructionsPdfPath(String sdkId, String sessionId) {
         return format(DOCS_FETCH_IBV_INSTRUCTIONS_PDF_PATH_TEMPLATE, sessionId, sdkId);
+    }
+
+    public String createNewFaceCaptureResourcePath(String sdkId, String sessionId) {
+        return format(DOCS_NEW_FACE_CAPTURE_RESOURCE_PATH_TEMPLATE, sessionId, sdkId);
+    }
+
+    public String createUploadFaceCaptureImagePath(String sdkId, String sessionId, String resourceId) {
+        return format(DOCS_UPLOAD_FACE_CAPTURE_IMAGE_PATH_TEMPLATE, sessionId, resourceId, sdkId);
     }
 
     public String createFetchSessionConfigurationPath(String sdkId, String sessionId) {

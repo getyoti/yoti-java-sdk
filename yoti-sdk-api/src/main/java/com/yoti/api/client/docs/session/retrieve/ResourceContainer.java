@@ -16,6 +16,9 @@ public class ResourceContainer {
     @JsonProperty("liveness_capture")
     private List<LivenessResourceResponse> livenessCapture;
 
+    @JsonProperty("face_capture")
+    private List<FaceCaptureResourceResponse> faceCapture;
+
     /**
      * Returns ID documents that were uploaded by the user
      *
@@ -41,6 +44,15 @@ public class ResourceContainer {
      */
     public List<? extends LivenessResourceResponse> getLivenessCapture() {
         return livenessCapture;
+    }
+
+    /**
+     * Returns Face Captures resources uploaded by the user/relying business
+     *
+     * @return the list of face capture resources
+     */
+    public List<? extends FaceCaptureResourceResponse> getFaceCapture() {
+        return faceCapture;
     }
 
     public List<ZoomLivenessResourceResponse> getZoomLivenessResources() {

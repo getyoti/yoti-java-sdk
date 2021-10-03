@@ -37,9 +37,12 @@ import java.util.Map;
 import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
+import com.yoti.api.client.docs.session.create.facecapture.CreateFaceCaptureResourcePayload;
+import com.yoti.api.client.docs.session.create.facecapture.UploadFaceCaptureImagePayload;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.AuthenticityCheckResponse;
 import com.yoti.api.client.docs.session.retrieve.CheckResponse;
+import com.yoti.api.client.docs.session.retrieve.CreateFaceCaptureResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
 import com.yoti.api.client.docs.session.retrieve.LivenessResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.ZoomLivenessResourceResponse;
@@ -74,7 +77,9 @@ public class DocScanServiceTest {
     private static final String SOME_PATH = "somePath";
     private static final String SOME_MEDIA_ID = "someMediaId";
     private static final String SOME_API_URL = System.getProperty(PROPERTY_YOTI_DOCS_URL, DEFAULT_YOTI_DOCS_URL);
-    private static final byte[] SOME_SESSION_SPEC_BYTES = new byte[]{1, 2, 3, 4};
+    private static final String SOME_RESOURCE_ID = "someResourceId";
+    private static final String SOME_IMAGE_CONTENT_TYPE = "someImageContentType";
+    private static final byte[] SOME_SESSION_SPEC_BYTES = new byte[]{ 1, 2, 3, 4 };
     private static final byte[] IMAGE_BODY = "some-image-body".getBytes();
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -90,6 +95,8 @@ public class DocScanServiceTest {
     @Mock SignedRequestBuilderFactory signedRequestBuilderFactoryMock;
     @Mock SupportedDocumentsResponse supportedDocumentsResponseMock;
     @Mock Instructions instructionsMock;
+    @Mock CreateFaceCaptureResourcePayload createFaceCaptureResourcePayloadMock;
+    @Mock UploadFaceCaptureImagePayload uploadFaceCaptureImagePayloadMock;
 
 
     @BeforeClass
@@ -1074,7 +1081,7 @@ public class DocScanServiceTest {
 
         assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
-    
+
     @Test
     public void getIbvInstructionsPdf_shouldThrowExceptionWhenSdkIdIsNull() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(null, KEY_PAIR, SOME_SESSION_ID));
@@ -1262,7 +1269,7 @@ public class DocScanServiceTest {
 
         assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
-    
+
     @Test
     public void fetchSessionConfiguration_shouldThrowExceptionWhenSdkIdIsNull() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(null, KEY_PAIR, SOME_SESSION_ID));
@@ -1342,6 +1349,205 @@ public class DocScanServiceTest {
         DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
         assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+    }
+
+    @Test
+    public void createFaceCaptureResource_shouldThrowExceptionWhenSdkIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(null, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void createFaceCaptureResource_shouldThrowExceptionWhenSdkIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource("", KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void createFaceCaptureResource_shouldThrowExceptionWhenKeyPairIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, null, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+
+        assertThat(exception.getMessage(), containsString("Application key Pair"));
+    }
+
+    @Test
+    public void createFaceCaptureResource_shouldThrowExceptionWhenSessionIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, null, createFaceCaptureResourcePayloadMock));
+
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void createFaceCaptureResource_shouldThrowExceptionWhenSessionIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, "", createFaceCaptureResourcePayloadMock));
+
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void createFaceCaptureResource_shouldThrowExceptionWhenPayloadIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null));
+
+        assertThat(exception.getMessage(), containsString("createFaceCaptureResourcePayload"));
+    }
+
+    @Test
+    public void createFaceCaptureResource_shouldWrapGeneralSecurityException() throws Exception {
+        GeneralSecurityException gse = new GeneralSecurityException("some gse");
+
+        when(signedRequestBuilderMock.build()).thenThrow(gse);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+
+        assertThat(docScanException.getMessage(), containsString("Error signing the request: some gse"));
+    }
+
+    @Test
+    public void createFaceCaptureResource_shouldWrapResourceException() throws Exception {
+        ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(CreateFaceCaptureResourceResponse.class)).thenThrow(resourceException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+
+        assertThat(docScanException.getMessage(), containsString("Error executing the POST: Failed Request"));
+    }
+
+    @Test
+    public void createFaceCaptureResource_shouldWrapIOException() throws Exception {
+        IOException ioException = new IOException("Some io exception");
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(CreateFaceCaptureResourceResponse.class)).thenThrow(ioException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+
+        assertThat(docScanException.getMessage(), containsString("Error building the request: Some io exception"));
+    }
+
+    @Test
+    public void createFaceCaptureResource_shouldWrapURISyntaxException() throws Exception {
+        URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
+        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+
+        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+    }
+
+    @Test
+    public void uploadFaceCaptureImage_shouldFailForNullSdkId() {
+        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(null, null, null, null, null));
+
+        assertThat(docScanException.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void uploadFaceCaptureImage_shouldFailForEmptySdkId() {
+        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage("", null, null, null, null));
+
+        assertThat(docScanException.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void uploadFaceCaptureImage_shouldFailForNullKeyPair() {
+        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, null, null, null, null));
+
+        assertThat(docScanException.getMessage(), containsString("Application key Pair"));
+    }
+
+    @Test
+    public void uploadFaceCaptureImage_shouldFailForNullSessionId() {
+        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, null, null,null));
+
+        assertThat(docScanException.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void uploadFaceCaptureImage_shouldFailForEmptySessionId() {
+        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, "", null, null));
+
+        assertThat(docScanException.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void uploadFaceCaptureImage_shouldFailForNullResourceId() {
+        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null,null));
+
+        assertThat(docScanException.getMessage(), containsString("resourceId"));
+    }
+
+    @Test
+    public void uploadFaceCaptureImage_shouldFailForEmptyResourceId() {
+        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, "", null));
+
+        assertThat(docScanException.getMessage(), containsString("resourceId"));
+    }
+
+    @Test
+    public void uploadFaceCaptureImage_shouldFailForNullPayload() {
+        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, null));
+
+        assertThat(docScanException.getMessage(), containsString("faceCaptureImagePayload"));
+    }
+
+    @Test
+    public void uploadFaceCaptureImage_shouldWrapGeneralSecurityException() throws Exception {
+        when(uploadFaceCaptureImagePayloadMock.getImageContents()).thenReturn(IMAGE_BODY);
+        when(uploadFaceCaptureImagePayloadMock.getImageContentType()).thenReturn(SOME_IMAGE_CONTENT_TYPE);
+        when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_APP_ID, SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
+        GeneralSecurityException gse = new GeneralSecurityException("some gse");
+        when(signedRequestBuilderMock.build()).thenThrow(gse);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
+
+        assertSame(docScanException.getCause(), gse);
+        assertThat(docScanException.getMessage(), containsString("Error executing the PUT: some gse"));
+    }
+
+    @Test
+    public void uploadFaceCaptureImage_shouldWrapURISyntaxException() throws Exception {
+        when(uploadFaceCaptureImagePayloadMock.getImageContents()).thenReturn(IMAGE_BODY);
+        when(uploadFaceCaptureImagePayloadMock.getImageContentType()).thenReturn(SOME_IMAGE_CONTENT_TYPE);
+        when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_APP_ID, SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
+        URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
+        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
+
+        assertSame(docScanException.getCause(), uriSyntaxException);
+        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+    }
+
+    @Test
+    public void uploadFaceCaptureImage_shouldWrapIOException() throws Exception {
+        when(uploadFaceCaptureImagePayloadMock.getImageContents()).thenReturn(IMAGE_BODY);
+        when(uploadFaceCaptureImagePayloadMock.getImageContentType()).thenReturn(SOME_IMAGE_CONTENT_TYPE);
+        when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_APP_ID, SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
+        IOException ioException = new IOException("some IO exception");
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute()).thenThrow(ioException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
+
+        assertSame(docScanException.getCause(), ioException);
+        assertThat(docScanException.getMessage(), containsString("Error building the request: some IO exception"));
+    }
+
+    @Test
+    public void uploadFaceCaptureImage_shouldWrapResourceException() throws Exception {
+        when(uploadFaceCaptureImagePayloadMock.getImageContents()).thenReturn(IMAGE_BODY);
+        when(uploadFaceCaptureImagePayloadMock.getImageContentType()).thenReturn(SOME_IMAGE_CONTENT_TYPE);
+        when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_APP_ID, SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
+        ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute()).thenThrow(resourceException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
+
+        assertSame(docScanException.getCause(), resourceException);
+        assertThat(docScanException.getMessage(), containsString("Error executing the PUT: Failed Request"));
     }
 
     @Test

@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.yoti.api.client.spi.remote.util.FieldSetter;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -22,12 +23,12 @@ public class ResourceContainerTest {
     ResourceContainer simpleResourceContainer;
 
     @Test
-    public void shouldFilterZoomLivenessResources() throws NoSuchFieldException {
+    public void shouldFilterZoomLivenessResources() {
         simpleResourceContainer = new ResourceContainer();
 
         FieldSetter.setField(
                 simpleResourceContainer,
-                simpleResourceContainer.getClass().getDeclaredField("livenessCapture"),
+                "livenessCapture",
                 Arrays.asList(
                         zoomLivenessResourceResponseMock,
                         livenessResourceResponse,
@@ -41,12 +42,12 @@ public class ResourceContainerTest {
     }
 
     @Test
-    public void shouldReturnEmptyList() throws NoSuchFieldException {
+    public void shouldReturnEmptyList() {
         simpleResourceContainer = new ResourceContainer();
 
         FieldSetter.setField(
                 simpleResourceContainer,
-                simpleResourceContainer.getClass().getDeclaredField("livenessCapture"),
+                "livenessCapture",
                 new ArrayList<>()
         );
 
