@@ -27,6 +27,11 @@
     </Match>
     
     <Match>
+        <Class name="com.yoti.api.client.docs.session.create.facecapture.UploadFaceCaptureImagePayload"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    
+    <Match>
         <Class name="com.yoti.api.client.spi.remote.call.SignedRequest" />
         <Bug pattern="PZLA_PREFER_ZERO_LENGTH_ARRAYS" />
     </Match>

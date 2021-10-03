@@ -12,7 +12,10 @@ import com.yoti.api.client.KeyPairSource;
 import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
+import com.yoti.api.client.docs.session.create.facecapture.CreateFaceCaptureResourcePayload;
+import com.yoti.api.client.docs.session.create.facecapture.UploadFaceCaptureImagePayload;
 import com.yoti.api.client.docs.session.instructions.Instructions;
+import com.yoti.api.client.docs.session.retrieve.CreateFaceCaptureResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
 import com.yoti.api.client.docs.session.retrieve.configuration.SessionConfigurationResponse;
 import com.yoti.api.client.docs.session.retrieve.instructions.ContactProfileResponse;
@@ -151,6 +154,32 @@ public class DocScanClient {
     public ContactProfileResponse fetchInstructionsContactProfile(String sessionId) throws DocScanException {
         LOG.debug("Fetching instructions contact profile in session '{}'", sessionId);
         return docScanService.fetchInstructionsContactProfile(sdkId, keyPair, sessionId);
+    }
+
+    /**
+     * Creates a Face Capture resource, that will be linked using
+     * the supplied requirement ID
+     *
+     * @param sessionId the session ID
+     * @param createFaceCaptureResourcePayload the {@link CreateFaceCaptureResourcePayload}
+     * @return the response
+     * @throws DocScanException if an error has occurred
+     */
+    public CreateFaceCaptureResourceResponse createFaceCaptureResource(String sessionId, CreateFaceCaptureResourcePayload createFaceCaptureResourcePayload) throws DocScanException {
+        LOG.debug("Creating Face Capture resource in session '{}' for requirement '{}'", sessionId, createFaceCaptureResourcePayload.getRequirementId());
+        return docScanService.createFaceCaptureResource(sdkId, keyPair, sessionId, createFaceCaptureResourcePayload);
+    }
+
+    /**
+     * Uploads an image to the specified Face Capture resource
+     *
+     * @param sessionId the session ID
+     * @param uploadFaceCaptureImagePayload the Face Capture image payload
+     * @throws DocScanException if an error has occurred
+     */
+    public void uploadFaceCaptureImage(String sessionId, String resourceId, UploadFaceCaptureImagePayload uploadFaceCaptureImagePayload) throws DocScanException {
+        LOG.debug("Uploading image to Face Capture resource '{}' for session '{}'", resourceId, sessionId);
+        docScanService.uploadFaceCaptureImage(sdkId, keyPair, sessionId, resourceId, uploadFaceCaptureImagePayload);
     }
 
     /**

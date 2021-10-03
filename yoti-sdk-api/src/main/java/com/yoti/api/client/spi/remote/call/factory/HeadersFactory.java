@@ -1,8 +1,6 @@
 package com.yoti.api.client.spi.remote.call.factory;
 
 import static com.yoti.api.client.spi.remote.call.YotiConstants.AUTH_KEY_HEADER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JSON;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DIGEST_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.JAVA;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.SDK_VERSION;
@@ -19,7 +17,6 @@ public class HeadersFactory {
         headers.put(DIGEST_HEADER, digest);
         headers.put(YOTI_SDK_HEADER, JAVA);
         headers.put(YOTI_SDK_VERSION_HEADER, SDK_VERSION);
-        headers.put(CONTENT_TYPE, CONTENT_TYPE_JSON);
         return headers;
     }
 

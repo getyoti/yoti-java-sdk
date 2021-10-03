@@ -1,7 +1,11 @@
 package com.yoti.api.client.spi.remote.call;
 
 import static com.yoti.api.client.spi.remote.call.HttpMethod.SUPPORTED_HTTP_METHODS;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JSON;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,6 +20,10 @@ import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
 import com.yoti.api.client.spi.remote.call.factory.PathFactory;
 import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
 import com.yoti.api.client.spi.remote.util.Validation;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 
 public class SignedRequestBuilder {
 
@@ -33,6 +41,7 @@ public class SignedRequestBuilder {
     private final JsonResourceFetcher jsonResourceFetcher;
     private final RawResourceFetcher rawResourceFetcher;
     private final ImageResourceFetcher imageResourceFetcher;
+    private MultipartEntityBuilder multipartEntityBuilder;
 
     SignedRequestBuilder(PathFactory pathFactory,
             SignedMessageFactory signedMessageFactory,
@@ -88,6 +97,7 @@ public class SignedRequestBuilder {
      * @return the update builder
      */
     public SignedRequestBuilder withPayload(byte[] payload) {
+        this.multipartEntityBuilder = null;
         this.payload = payload;
         return this;
     }
@@ -128,6 +138,49 @@ public class SignedRequestBuilder {
         return this;
     }
 
+    private SignedRequestBuilder forMultipartRequest() {
+        if (this.multipartEntityBuilder == null) {
+            this.multipartEntityBuilder = MultipartEntityBuilder.create();
+        }
+        this.payload = null;
+        return this;
+    }
+
+    /**
+     * Sets the boundary to be used on the multipart request
+     *
+     * @param multipartBoundary the multipart boundary
+     * @return the updated builder
+     */
+    public SignedRequestBuilder withMultipartBoundary(String multipartBoundary) {
+        Validation.notNullOrEmpty(multipartBoundary, "multipartBoundary");
+        forMultipartRequest();
+        multipartEntityBuilder.setBoundary(multipartBoundary);
+        return this;
+    }
+
+    /**
+     * Adds a binary body to the multipart request.
+     * <p>
+     * Note: the Signed Request must be specified with a boundary also
+     * in order to make use of the Multipart request
+     *
+     * @param name        the name of the binary body
+     * @param payload     the payload of the binary body
+     * @param contentType the content type of the binary body
+     * @param fileName    the filename of the binary body
+     * @return the updated builder
+     */
+    public SignedRequestBuilder withMultipartBinaryBody(String name, byte[] payload, ContentType contentType, String fileName) {
+        Validation.notNullOrEmpty(name, "name");
+        Validation.notNull(payload, "payload");
+        Validation.notNull(contentType, "contentType");
+        Validation.notNullOrEmpty(fileName, "fileName");
+        forMultipartRequest();
+        multipartEntityBuilder.addBinaryBody(name, payload, contentType, fileName);
+        return this;
+    }
+
     /**
      * Build the signed request with specified options
      *
@@ -143,13 +196,30 @@ public class SignedRequestBuilder {
         }
 
         String builtEndpoint = endpoint + createQueryParameterString(queryParameters);
-        String digest = createDigest(builtEndpoint);
+
+        byte[] finalPayload;
+        if (multipartEntityBuilder == null) {
+            headers.put(CONTENT_TYPE, CONTENT_TYPE_JSON);
+            finalPayload = payload;
+        } else {
+            try {
+                HttpEntity httpEntity = multipartEntityBuilder.build();
+                headers.put(CONTENT_TYPE, httpEntity.getContentType().getElements()[0].toString());
+                ByteArrayOutputStream multipartStream = new ByteArrayOutputStream();
+                httpEntity.writeTo(multipartStream);
+                finalPayload = multipartStream.toByteArray();
+            } catch (IOException ioe) {
+                throw new IllegalStateException(ioe);
+            }
+        }
+
+        String digest = createDigest(builtEndpoint, finalPayload);
         headers.putAll(headersFactory.create(digest));
 
         return new SignedRequest(
                 new URI(baseUrl + builtEndpoint),
                 httpMethod,
-                payload,
+                finalPayload,
                 headers,
                 jsonResourceFetcher,
                 rawResourceFetcher,
@@ -175,7 +245,7 @@ public class SignedRequestBuilder {
         return stringBuilder.toString();
     }
 
-    private String createDigest(String endpoint) throws GeneralSecurityException {
+    private String createDigest(String endpoint, byte[] payload) throws GeneralSecurityException {
         if (payload != null) {
             return signedMessageFactory.create(keyPair.getPrivate(), httpMethod, endpoint, payload);
         } else {

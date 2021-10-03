@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.yoti.api.client.spi.remote.util.FieldSetter;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -28,7 +29,7 @@ public class GetSessionResultTest {
     GetSessionResult getSessionResult;
 
     @Test
-    public void shouldFilterAuthenticityChecks() throws NoSuchFieldException {
+    public void shouldFilterAuthenticityChecks() {
         getSessionResult = new GetSessionResult();
 
         setupGetSessionResult();
@@ -39,7 +40,7 @@ public class GetSessionResultTest {
     }
 
     @Test
-    public void shouldFilterLivenessChecks() throws NoSuchFieldException {
+    public void shouldFilterLivenessChecks() {
         getSessionResult = new GetSessionResult();
 
         setupGetSessionResult();
@@ -50,7 +51,7 @@ public class GetSessionResultTest {
     }
 
     @Test
-    public void shouldFilterTextDataChecks() throws NoSuchFieldException {
+    public void shouldFilterTextDataChecks() {
         getSessionResult = new GetSessionResult();
 
         setupGetSessionResult();
@@ -61,7 +62,7 @@ public class GetSessionResultTest {
     }
 
     @Test
-    public void shouldFilterSupplementaryDocumentTextDataChecks() throws NoSuchFieldException {
+    public void shouldFilterSupplementaryDocumentTextDataChecks() {
         getSessionResult = new GetSessionResult();
 
         setupGetSessionResult();
@@ -72,7 +73,7 @@ public class GetSessionResultTest {
     }
 
     @Test
-    public void shouldFilterFaceMatchChecks() throws NoSuchFieldException {
+    public void shouldFilterFaceMatchChecks() {
         getSessionResult = new GetSessionResult();
 
         setupGetSessionResult();
@@ -83,7 +84,7 @@ public class GetSessionResultTest {
     }
 
     @Test
-    public void shouldFilterIdDocumentComparisonChecks() throws NoSuchFieldException {
+    public void shouldFilterIdDocumentComparisonChecks() {
         getSessionResult = new GetSessionResult();
 
         setupGetSessionResult();
@@ -94,7 +95,7 @@ public class GetSessionResultTest {
     }
 
     @Test
-    public void shouldFilterThirdPartyIdentityChecks() throws NoSuchFieldException {
+    public void shouldFilterThirdPartyIdentityChecks() {
         getSessionResult = new GetSessionResult();
 
         setupGetSessionResult();
@@ -105,7 +106,7 @@ public class GetSessionResultTest {
     }
 
     @Test
-    public void shouldFilterWatchlistScreeningChecks() throws NoSuchFieldException {
+    public void shouldFilterWatchlistScreeningChecks() {
         getSessionResult = new GetSessionResult();
 
         setupGetSessionResult();
@@ -116,12 +117,12 @@ public class GetSessionResultTest {
     }
 
     @Test
-    public void shouldReturnEmptyLists() throws NoSuchFieldException {
+    public void shouldReturnEmptyLists() {
         getSessionResult = new GetSessionResult();
 
         FieldSetter.setField(
                 getSessionResult,
-                getSessionResult.getClass().getDeclaredField("checks"),
+                "checks",
                 new ArrayList<>()
         );
 
@@ -133,10 +134,10 @@ public class GetSessionResultTest {
         assertThat(getSessionResult.getLivenessChecks(), hasSize(0));
     }
 
-    private void setupGetSessionResult() throws NoSuchFieldException {
+    private void setupGetSessionResult() {
         FieldSetter.setField(
                 getSessionResult,
-                getSessionResult.getClass().getDeclaredField("checks"),
+                "checks",
                 Arrays.asList(
                         authenticityCheckResponseMock,
                         livenessCheckResponseMock,
