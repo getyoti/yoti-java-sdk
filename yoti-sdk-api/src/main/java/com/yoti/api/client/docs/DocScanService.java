@@ -22,10 +22,12 @@ import java.util.Map;
 import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
+import com.yoti.api.client.docs.session.create.facecapture.CreateFaceCaptureResourcePayload;
+import com.yoti.api.client.docs.session.create.facecapture.UploadFaceCaptureImagePayload;
 import com.yoti.api.client.docs.session.instructions.Instructions;
+import com.yoti.api.client.docs.session.retrieve.CreateFaceCaptureResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
 import com.yoti.api.client.docs.session.retrieve.configuration.SessionConfigurationResponse;
-import com.yoti.api.client.docs.session.retrieve.configuration.capture.liveness.RequiredLivenessResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.instructions.ContactProfileResponse;
 import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsResponse;
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
@@ -39,8 +41,8 @@ import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.apache.http.entity.ContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +53,7 @@ final class DocScanService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DocScanService.class);
     private static final int HTTP_STATUS_NO_CONTENT = 204;
+    private static final String YOTI_MULTIPART_BOUNDARY = "yoti-doc-scan-boundary";
 
     private final UnsignedPathFactory unsignedPathFactory;
     private final ObjectMapper objectMapper;
@@ -73,9 +76,6 @@ final class DocScanService {
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.registerModule(new JavaTimeModule());
-
-        SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addDeserializer(RequiredLivenessResourceResponse.class, new ForceSubTypeDeserializer<>(RequiredLivenessResourceResponse.class));
 
         return new DocScanService(new UnsignedPathFactory(), objectMapper, new SignedRequestBuilderFactory());
     }
@@ -413,6 +413,71 @@ final class DocScanService {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
             throw new DocScanException("Error executing the GET: " + ex.getMessage(), ex);
+        } catch (IOException | URISyntaxException ex) {
+            throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
+        }
+    }
+
+    public CreateFaceCaptureResourceResponse createFaceCaptureResource(String sdkId,
+            KeyPair keyPair,
+            String sessionId,
+            CreateFaceCaptureResourcePayload createFaceCaptureResourcePayload) throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
+        notNull(keyPair, "Application key Pair");
+        notNullOrEmpty(sessionId, "sessionId");
+        notNull(createFaceCaptureResourcePayload, "createFaceCaptureResourcePayload");
+
+        String path = unsignedPathFactory.createNewFaceCaptureResourcePath(sdkId, sessionId);
+        LOG.info("Creating new Face Capture resource at '{}'", path);
+
+        try {
+            byte[] payload = objectMapper.writeValueAsBytes(createFaceCaptureResourcePayload);
+
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+                    .withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withPayload(payload)
+                    .withHttpMethod(HTTP_POST)
+                    .build();
+
+            return signedRequest.execute(CreateFaceCaptureResourceResponse.class);
+        } catch (GeneralSecurityException ex) {
+            throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
+        } catch (ResourceException ex) {
+            throw new DocScanException("Error executing the POST: " + ex.getMessage(), ex);
+        } catch (IOException | URISyntaxException ex) {
+            throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
+        }
+    }
+
+    public void uploadFaceCaptureImage(String sdkId, KeyPair keyPair, String sessionId, String resourceId, UploadFaceCaptureImagePayload faceCaptureImagePayload)
+            throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
+        notNull(keyPair, "Application key Pair");
+        notNullOrEmpty(sessionId, "sessionId");
+        notNullOrEmpty(resourceId, "resourceId");
+        notNull(faceCaptureImagePayload, "faceCaptureImagePayload");
+
+        String path = unsignedPathFactory.createUploadFaceCaptureImagePath(sdkId, sessionId, resourceId);
+        LOG.info("Uploading image to Face Capture resource at '{}'", path);
+
+        try {
+            signedRequestBuilderFactory.create()
+                    .withMultipartBoundary(YOTI_MULTIPART_BOUNDARY)
+                    .withMultipartBinaryBody(
+                            "binary-content",
+                            faceCaptureImagePayload.getImageContents(),
+                            ContentType.parse(faceCaptureImagePayload.getImageContentType()),
+                            "face-capture-image")
+                    .withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withHttpMethod(HTTP_PUT)
+                    .build()
+                    .execute();
+        } catch (GeneralSecurityException | ResourceException ex) {
+            throw new DocScanException("Error executing the PUT: " + ex.getMessage(), ex);
         } catch (IOException | URISyntaxException ex) {
             throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
         }

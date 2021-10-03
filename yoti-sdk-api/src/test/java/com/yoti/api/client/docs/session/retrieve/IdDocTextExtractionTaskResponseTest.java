@@ -6,10 +6,11 @@ import static org.hamcrest.Matchers.hasSize;
 import java.util.Arrays;
 import java.util.List;
 
+import com.yoti.api.client.spi.remote.util.FieldSetter;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -21,20 +22,13 @@ public class IdDocTextExtractionTaskResponseTest {
     IdDocTextExtractionTaskResponse testObj;
 
     @Test
-    public void shouldFilterGeneratedTextDataChecks() throws NoSuchFieldException {
+    public void shouldFilterGeneratedTextDataChecks() {
         testObj = new IdDocTextExtractionTaskResponse();
-
-        FieldSetter.setField(
-                testObj,
-                testObj.getClass().getSuperclass().getDeclaredField("generatedChecks"),
-                Arrays.asList(
-                        textDataCheckResponseMock,
-                        checkResponse,
-                        checkResponse
-                )
-        );
+        List<GeneratedCheckResponse> list = Arrays.asList(textDataCheckResponseMock, checkResponse, checkResponse);
+        FieldSetter.setField(testObj, "generatedChecks", list);
 
         List<GeneratedTextDataCheckResponse> result = testObj.getGeneratedTextDataChecks();
+
         assertThat(testObj.getGeneratedChecks(), hasSize(3));
         assertThat(result, hasSize(1));
     }
