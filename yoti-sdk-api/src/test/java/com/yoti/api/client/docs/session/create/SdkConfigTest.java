@@ -2,8 +2,7 @@ package com.yoti.api.client.docs.session.create;
 
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 import org.junit.Test;
 
@@ -31,6 +30,7 @@ public class SdkConfigTest {
                 .withSuccessUrl(SOME_SUCCESS_URL)
                 .withErrorUrl(SOME_ERROR_URL)
                 .withPrivacyPolicyUrl(SOME_PRIVACY_POLICY_URL)
+                .withAllowHandoff(true)
                 .build();
 
         assertThat(result, is(instanceOf(SdkConfig.class)));
@@ -44,6 +44,15 @@ public class SdkConfigTest {
         assertThat(result.getSuccessUrl(), is(SOME_SUCCESS_URL));
         assertThat(result.getErrorUrl(), is(SOME_ERROR_URL));
         assertThat(result.getPrivacyPolicyUrl(), is(SOME_PRIVACY_POLICY_URL));
+        assertThat(result.getAllowHandoff(), is(true));
+    }
+
+    @Test
+    public void allowHandoff_shouldBeNullWhenNotSet() {
+        SdkConfig result = SdkConfig.builder()
+                .build();
+
+        assertThat(result.getAllowHandoff(), is(nullValue()));
     }
 
     @Test
