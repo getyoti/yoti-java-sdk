@@ -5,9 +5,17 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-import org.junit.Test;
+import com.yoti.api.client.docs.session.create.filters.DocumentFilter;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.*;
+import org.mockito.junit.*;
+
+@RunWith(MockitoJUnitRunner.class)
 public class RequestedDocumentAuthenticityCheckTest {
+
+    @Mock DocumentFilter documentFilterMock;
 
     @Test
     public void shouldBuildRequestedDocumentAuthenticityCheck() {
@@ -45,6 +53,26 @@ public class RequestedDocumentAuthenticityCheckTest {
                 .build();
 
         assertThat(result.getConfig().getManualCheck(), is("NEVER"));
+    }
+
+    @Test
+    public void withIssuingAuthoritySubCheck_shouldBuildDefaultObject() {
+        RequestedDocumentAuthenticityCheck result = RequestedDocumentAuthenticityCheck.builder()
+                .withIssuingAuthoritySubCheck()
+                .build();
+
+        assertThat(result.getConfig().getIssuingAuthoritySubCheck().isRequested(), is(true));
+        assertThat(result.getConfig().getIssuingAuthoritySubCheck().getFilter(), is(nullValue()));
+    }
+
+    @Test
+    public void withIssuingAuthoritySubCheck_shouldAcceptDocumentFilter() {
+        RequestedDocumentAuthenticityCheck result = RequestedDocumentAuthenticityCheck.builder()
+                .withIssuingAuthoritySubCheck(documentFilterMock)
+                .build();
+
+        assertThat(result.getConfig().getIssuingAuthoritySubCheck().isRequested(), is(true));
+        assertThat(result.getConfig().getIssuingAuthoritySubCheck().getFilter(), is(documentFilterMock));
     }
 
 }

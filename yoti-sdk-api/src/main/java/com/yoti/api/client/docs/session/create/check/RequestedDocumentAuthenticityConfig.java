@@ -10,8 +10,17 @@ public class RequestedDocumentAuthenticityConfig implements RequestedCheckConfig
     @JsonProperty("manual_check")
     private final String manualCheck;
 
+    @JsonProperty("issuing_authority_sub_check")
+    private final IssuingAuthoritySubCheck issuingAuthoritySubCheck;
+
     public RequestedDocumentAuthenticityConfig(String manualCheck) {
         this.manualCheck = manualCheck;
+        this.issuingAuthoritySubCheck = null;
+    }
+
+    public RequestedDocumentAuthenticityConfig(String manualCheck, IssuingAuthoritySubCheck issuingAuthoritySubCheck) {
+        this.manualCheck = manualCheck;
+        this.issuingAuthoritySubCheck = issuingAuthoritySubCheck;
     }
 
     /**
@@ -22,6 +31,15 @@ public class RequestedDocumentAuthenticityConfig implements RequestedCheckConfig
      */
     public String getManualCheck() {
         return manualCheck;
+    }
+
+    /**
+     * Returns the requested Issuing Authority sub check
+     *
+     * @return the issuing authority sub check
+     */
+    public IssuingAuthoritySubCheck getIssuingAuthoritySubCheck() {
+        return issuingAuthoritySubCheck;
     }
 
 }
