@@ -1,6 +1,7 @@
 package com.yoti.api.client.docs.session.create.check;
 
 import com.yoti.api.client.docs.DocScanConstants;
+import com.yoti.api.client.docs.session.create.filters.DocumentFilter;
 
 /**
  * Requests creation of a DocumentAuthenticityCheck
@@ -30,6 +31,7 @@ public class RequestedDocumentAuthenticityCheck extends RequestedCheck<Requested
     public static class Builder {
 
         private String manualCheck;
+        private IssuingAuthoritySubCheck issuingAuthoritySubCheck;
 
         private Builder() {}
 
@@ -48,8 +50,23 @@ public class RequestedDocumentAuthenticityCheck extends RequestedCheck<Requested
             return this;
         }
 
+        public Builder withIssuingAuthoritySubCheck() {
+            this.issuingAuthoritySubCheck = IssuingAuthoritySubCheck.builder()
+                    .withRequested(true)
+                    .build();
+            return this;
+        }
+
+        public Builder withIssuingAuthoritySubCheck(DocumentFilter documentFilter) {
+            this.issuingAuthoritySubCheck = IssuingAuthoritySubCheck.builder()
+                    .withRequested(true)
+                    .withDocumentFilter(documentFilter)
+                    .build();
+            return this;
+        }
+
         public RequestedDocumentAuthenticityCheck build() {
-            RequestedDocumentAuthenticityConfig config = new RequestedDocumentAuthenticityConfig(manualCheck);
+            RequestedDocumentAuthenticityConfig config = new RequestedDocumentAuthenticityConfig(manualCheck, issuingAuthoritySubCheck);
             return new RequestedDocumentAuthenticityCheck(config);
         }
     }
