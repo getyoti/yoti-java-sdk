@@ -36,6 +36,9 @@ public class SdkConfig {
     @JsonProperty("privacy_policy_url")
     private final String privacyPolicyUrl;
 
+    @JsonProperty("allow_handoff")
+    private final Boolean allowHandoff;
+
     SdkConfig(String allowedCaptureMethods,
             String primaryColour,
             String secondaryColour,
@@ -44,7 +47,8 @@ public class SdkConfig {
             String presetIssuingCountry,
             String successUrl,
             String errorUrl,
-            String privacyPolicyUrl) {
+            String privacyPolicyUrl,
+            Boolean allowHandoff) {
         this.allowedCaptureMethods = allowedCaptureMethods;
         this.primaryColour = primaryColour;
         this.secondaryColour = secondaryColour;
@@ -54,6 +58,7 @@ public class SdkConfig {
         this.successUrl = successUrl;
         this.errorUrl = errorUrl;
         this.privacyPolicyUrl = privacyPolicyUrl;
+        this.allowHandoff = allowHandoff;
     }
 
     public static SdkConfig.Builder builder() {
@@ -142,6 +147,15 @@ public class SdkConfig {
     }
 
     /**
+     * If mobile handoff is allowed in the session
+     *
+     * @return if mobile handoff is allowed
+     */
+    public Boolean getAllowHandoff() {
+        return allowHandoff;
+    }
+
+    /**
      * Builder to assist in the creation of {@link SdkConfig}.
      */
     public static class Builder {
@@ -155,6 +169,7 @@ public class SdkConfig {
         private String successUrl;
         private String errorUrl;
         private String privacyPolicyUrl;
+        private Boolean allowHandoff;
 
         private Builder() {
         }
@@ -277,6 +292,17 @@ public class SdkConfig {
         }
 
         /**
+         * Sets if the user is allowed to perform mobile handoff
+         *
+         * @param allowHandoff if mobile handoff is allowed
+         * @return the builder
+         */
+        public Builder withAllowHandoff(boolean allowHandoff) {
+            this.allowHandoff = allowHandoff;
+            return this;
+        }
+
+        /**
          * Builds the {@link SdkConfig} using the values supplied to the builder
          *
          * @return the {@link SdkConfig}
@@ -291,7 +317,8 @@ public class SdkConfig {
                     presetIssuingCountry,
                     successUrl,
                     errorUrl,
-                    privacyPolicyUrl
+                    privacyPolicyUrl,
+                    allowHandoff
             );
         }
     }
