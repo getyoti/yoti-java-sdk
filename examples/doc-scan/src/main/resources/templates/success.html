@@ -266,6 +266,7 @@
         <div class="row pt-4"
              th:each="document,iter : ${sessionResult.getResources().getIdDocuments()}">
 
+            <!--@thymesVar id="document" type="com.yoti.api.client.docs.session.retrieve.IdDocumentResourceResponse"-->
             <div class="col">
 
                 <!-- Header -->
@@ -273,6 +274,8 @@
                     <span th:text="${document.getDocumentType()}" th:remove="tag"></span>
                     <span class="badge badge-primary"
                           th:text="${document.getIssuingCountry()}"></span>
+                    <span th:if="${document.getSource() != null}" class="badge badge-warning"
+                          th:text="${document.getSource().getType()}"></span>
                 </h3>
 
                 <div class="accordion mt-3">
@@ -443,6 +446,7 @@
         <div class="row pt-4"
              th:each="document,iter : ${sessionResult.getResources().getSupplementaryDocuments()}">
 
+            <!--@thymesVar id="document" type="com.yoti.api.client.docs.session.retrieve.SupplementaryDocumentResourceResponse"-->
             <div class="col">
 
                 <!-- Header -->
@@ -450,6 +454,8 @@
                     <span th:text="${document.getDocumentType()}" th:remove="tag"></span>
                     <span class="badge badge-primary"
                           th:text="${document.getIssuingCountry()}"></span>
+                    <span th:if="${document.getSource() != null}" class="badge badge-warning"
+                          th:text="${document.getSource().getType()}"></span>
                 </h3>
 
                 <div class="accordion mt-3">
