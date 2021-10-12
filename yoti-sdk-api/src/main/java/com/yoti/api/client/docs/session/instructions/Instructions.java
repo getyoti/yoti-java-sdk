@@ -6,6 +6,8 @@ import java.util.List;
 import com.yoti.api.client.docs.session.instructions.branch.Branch;
 import com.yoti.api.client.docs.session.instructions.document.DocumentProposal;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Configures the instructions in order to be able to complete In-Branch Verification.
  * <p>
@@ -14,8 +16,13 @@ import com.yoti.api.client.docs.session.instructions.document.DocumentProposal;
  */
 public class Instructions {
 
+    @JsonProperty("contact_profile")
     private final ContactProfile contactProfile;
+
+    @JsonProperty("documents")
     private final List<DocumentProposal> documents;
+
+    @JsonProperty("branch")
     private final Branch branch;
 
     private Instructions(ContactProfile contactProfile, List<DocumentProposal> documents, Branch branch) {
