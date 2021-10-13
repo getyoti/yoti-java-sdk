@@ -16,7 +16,7 @@ public class InstructionsResponse {
     private List<DocumentProposalResponse> documents;
 
     @JsonProperty("branch")
-    private BranchResponse branchResponse;
+    private BranchResponse branch;
 
     public boolean isContactProfileExists() {
         return contactProfileExists;
@@ -26,8 +26,8 @@ public class InstructionsResponse {
         return documents;
     }
 
-    public BranchResponse getBranchResponse() {
-        return branchResponse;
+    public BranchResponse getBranch() {
+        return branch;
     }
 
 }
