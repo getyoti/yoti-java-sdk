@@ -194,6 +194,20 @@ public class DocScanClientTest {
 
         assertThat(exception, is(original));
     }
+
+    @Test
+    public void triggerIbvEmailNotification_shouldFailWithExceptionFromYotiDocsService() throws Exception {
+        DocScanException original = new DocScanException("Test exception");
+
+        doThrow(original).when(docScanServiceMock).triggerIbvEmailNotification(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID));
+
+        DocScanException exception = assertThrows(DocScanException.class, () -> {
+            DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
+            testObj.triggerIbvEmailNotification(SOME_SESSION_ID);
+        });
+
+        assertThat(exception, is(original));
+    }
     
     @Test
     public void getSessionConfiguration_shouldFailWithExceptionFromYotiDocsService() throws Exception {
