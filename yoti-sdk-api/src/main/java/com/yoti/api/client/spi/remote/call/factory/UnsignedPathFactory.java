@@ -18,6 +18,7 @@ public class UnsignedPathFactory {
     static final String DOCS_FETCH_SESSION_CONFIGURATION_PATH_TEMPLATE = "/sessions/%s/configuration?sdkId=%s";
     static final String DOCS_NEW_FACE_CAPTURE_RESOURCE_PATH_TEMPLATE = "/sessions/%s/resources/face-capture?sdkId=%s";
     static final String DOCS_UPLOAD_FACE_CAPTURE_IMAGE_PATH_TEMPLATE = "/sessions/%s/resources/face-capture/%s/image?sdkId=%s";
+    static final String DOCS_TRIGGER_IBV_NOTIFICATION_PATH_TEMPLATE = "/sessions/%s/instructions/email?sdkId=%s";
 
     public String createProfilePath(String appId, String connectToken) {
         return format(PROFILE_PATH_TEMPLATE, connectToken, appId);
@@ -74,4 +75,9 @@ public class UnsignedPathFactory {
     public String createFetchSessionConfigurationPath(String sdkId, String sessionId) {
         return format(DOCS_FETCH_SESSION_CONFIGURATION_PATH_TEMPLATE, sessionId, sdkId);
     }
+
+    public String createTriggerIbvEmailNotificationPath(String sdkId, String sessionId) {
+        return format(DOCS_TRIGGER_IBV_NOTIFICATION_PATH_TEMPLATE, sessionId, sdkId);
+    }
+
 }
