@@ -1549,6 +1549,87 @@ public class DocScanServiceTest {
         assertSame(docScanException.getCause(), resourceException);
         assertThat(docScanException.getMessage(), containsString("Error executing the PUT: Failed Request"));
     }
+    
+    @Test
+    public void triggerIbvEmailNotification_shouldThrowExceptionWhenSdkIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(null, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void triggerIbvEmailNotification_shouldThrowExceptionWhenSdkIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification("", KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void triggerIbvEmailNotification_shouldThrowExceptionWhenKeyPairIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, null, SOME_SESSION_ID));
+
+        assertThat(exception.getMessage(), containsString("Application key Pair"));
+    }
+
+    @Test
+    public void triggerIbvEmailNotification_shouldThrowExceptionWhenSessionIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, null));
+
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void triggerIbvEmailNotification_shouldThrowExceptionWhenSessionIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, ""));
+
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void triggerIbvEmailNotification_shouldWrapGeneralSecurityException() throws Exception {
+        GeneralSecurityException gse = new GeneralSecurityException("some gse");
+
+        when(signedRequestBuilderMock.build()).thenThrow(gse);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(docScanException.getMessage(), containsString("Error executing the POST: some gse"));
+    }
+
+    @Test
+    public void triggerIbvEmailNotification_shouldWrapResourceException() throws Exception {
+        ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
+
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute()).thenThrow(resourceException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(docScanException.getMessage(), containsString("Error executing the POST: Failed Request"));
+    }
+
+    @Test
+    public void triggerIbvEmailNotification_shouldWrapIOException() throws Exception {
+        IOException ioException = new IOException("Some io exception");
+
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute()).thenThrow(ioException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(docScanException.getMessage(), containsString("Error building the request: Some io exception"));
+    }
+
+    @Test
+    public void triggerIbvEmailNotification_shouldWrapURISyntaxException() throws Exception {
+        URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
+
+        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+
+        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+    }
 
     @Test
     public void getSupportedDocuments_shouldThrowExceptionWhenKeyPairIsNull() throws Exception {

@@ -205,6 +205,20 @@ public class DocScanClient {
     }
 
     /**
+     * Triggers an email notification for the IBV instructions at-home flow.
+     * This will be one of:
+     *  - an email sent directly to the end user, using the email provided in the ContactProfile
+     *  - if requested, a backend notification using the configured notification endpoint
+     *
+     * @param sessionId the session ID
+     * @throws DocScanException if an error has occurred
+     */
+    public void triggerIbvEmailNotification(String sessionId) throws DocScanException {
+        LOG.debug("Triggering IBV email notification for session '{}'", sessionId);
+        docScanService.triggerIbvEmailNotification(sdkId, keyPair, sessionId);
+    }
+
+    /**
      * Fetches the configuration for the given sessionID.
      *
      * @param sessionId the session ID

@@ -504,6 +504,29 @@ final class DocScanService {
         }
     }
 
+    public void triggerIbvEmailNotification(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
+        notNull(keyPair, "Application key Pair");
+        notNullOrEmpty(sessionId, "sessionId");
+
+        String path = unsignedPathFactory.createTriggerIbvEmailNotificationPath(sdkId, sessionId);
+        LOG.info("Triggering IBV email notification at '{}'", path);
+
+        try {
+            signedRequestBuilderFactory.create()
+                    .withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withHttpMethod(HTTP_POST)
+                    .build()
+                    .execute();
+        } catch (GeneralSecurityException | ResourceException ex) {
+            throw new DocScanException("Error executing the POST: " + ex.getMessage(), ex);
+        } catch (IOException | URISyntaxException ex) {
+            throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
+        }
+    }
+
     private String findContentType(SignedRequestResponse response) {
         List<String> contentTypeValues = null;
         for (Map.Entry<String, List<String>> entry : response.getResponseHeaders().entrySet()) {
@@ -514,5 +537,6 @@ final class DocScanService {
         }
         return contentTypeValues == null || contentTypeValues.isEmpty() ? "" : contentTypeValues.get(0);
     }
+
 
 }
