@@ -17,11 +17,12 @@ import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.
 import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertTrue;
+
+import com.yoti.api.client.shareurl.policy.profile.IdentityProfile;
+import com.yoti.api.client.shareurl.policy.profile.IdentityProfileScheme;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
@@ -277,6 +278,32 @@ public class DynamicPolicyTest {
 
         assertThat(result.getWantedAttributes(), hasSize(1));
         assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(GIVEN_NAMES, false)));
+    }
+
+    @Test
+    public void buildWithIdentityProfile() {
+        final String IdentityProfileSchemeType = "A_TYPE";
+        final String objective = "AN_OBJECTIVE";
+
+        IdentityProfileScheme identityProfileScheme = IdentityProfileScheme.builder()
+                .withType(IdentityProfileSchemeType)
+                .withObjective(objective)
+                .build();
+
+        final String framework = "A_FRAMEWORK";
+
+        IdentityProfile identityProfile = IdentityProfile.builder()
+                .withFramework(framework)
+                .withScheme(identityProfileScheme)
+                .build();
+
+        DynamicPolicy result = DynamicPolicy.builder()
+                .withIdentityProfile(identityProfile)
+                .build();
+
+        assertThat(result.getIdentityProfile(), notNullValue());
+        assertThat(result.getIdentityProfile().getFramework(), is(equalTo(framework)));
+        assertThat(result.getIdentityProfile().getScheme(), is(equalTo(identityProfileScheme)));
     }
 
     private static class WantedAttributeMatcher extends TypeSafeDiagnosingMatcher<WantedAttribute> {

@@ -10,34 +10,40 @@ import java.util.Set;
 
 import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.shareurl.constraint.Constraint;
+import com.yoti.api.client.shareurl.policy.profile.IdentityProfile;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Set of data required to request a sharing transaction
  */
-public class DynamicPolicy {
+public final class DynamicPolicy {
 
-    @JsonProperty("wanted")
+    @JsonProperty(Property.WANTED)
     private final Collection<WantedAttribute> wantedAttributes;
 
-    @JsonProperty("wanted_auth_types")
+    @JsonProperty(Property.WANTED_AUTH_TYPES)
     private final Set<Integer> wantedAuthTypes;
 
-    @JsonProperty("wanted_remember_me")
+    @JsonProperty(Property.WANTED_REMEMBER_ME)
     private final boolean wantedRememberMe;
 
-    @JsonProperty("wanted_remember_me_optional")
+    @JsonProperty(Property.WANTED_REMEMBER_ME_OPTIONAL)
     private final boolean wantedRememberMeOptional;
+
+    @JsonProperty(Property.IDENTITY_PROFILE_REQUIREMENTS)
+    private final IdentityProfile identityProfile;
 
     DynamicPolicy(Collection<WantedAttribute> wantedAttributes,
             Set<Integer> wantedAuthTypes,
             boolean wantedRememberMe,
-            boolean wantedRememberMeOptional) {
+            boolean wantedRememberMeOptional,
+            IdentityProfile identityProfile) {
         this.wantedAttributes = wantedAttributes;
         this.wantedAuthTypes = wantedAuthTypes;
         this.wantedRememberMe = wantedRememberMe;
         this.wantedRememberMeOptional = wantedRememberMeOptional;
+        this.identityProfile = identityProfile;
     }
 
     public static DynamicPolicy.Builder builder() {
@@ -80,6 +86,15 @@ public class DynamicPolicy {
         return wantedRememberMeOptional;
     }
 
+    /**
+     * Defines a required identity profile within the scope of a trust framework and scheme.
+     *
+     * @return IdentityProfile
+     */
+    public IdentityProfile getIdentityProfile() {
+        return identityProfile;
+    }
+
     public static class Builder {
 
         private static final int SELFIE_AUTH_TYPE = 1;
@@ -89,14 +104,15 @@ public class DynamicPolicy {
         private final Set<Integer> wantedAuthTypes = new HashSet<>();
         private boolean wantedRememberMe;
         private boolean wantedRememberMeOptional;
+        private IdentityProfile identityProfile;
+
+        private Builder() { }
 
         public Builder withWantedAttribute(WantedAttribute wantedAttribute) {
             String key = wantedAttribute.getDerivation() != null ? wantedAttribute.getDerivation() : wantedAttribute.getName();
 
-            if (wantedAttribute.getConstraints()
-                    .size() > 0) {
-                key += "-" + wantedAttribute.getConstraints()
-                        .hashCode();
+            if (!wantedAttribute.getConstraints().isEmpty()) {
+                key += "-" + wantedAttribute.getConstraints().hashCode();
             }
 
             this.wantedAttributes.put(key, wantedAttribute);
@@ -260,10 +276,33 @@ public class DynamicPolicy {
             this.wantedRememberMeOptional = wantedRememberMeOptional;
             return this;
         }
+
+        public Builder withIdentityProfile(IdentityProfile identityProfile) {
+            this.identityProfile = identityProfile;
+            return this;
+        }
         
         public DynamicPolicy build() {
-            return new DynamicPolicy(wantedAttributes.values(), wantedAuthTypes, wantedRememberMe, wantedRememberMeOptional);
+            return new DynamicPolicy(
+                    wantedAttributes.values(),
+                    wantedAuthTypes,
+                    wantedRememberMe,
+                    wantedRememberMeOptional,
+                    identityProfile
+            );
         }
+
+    }
+
+    private static final class Property {
+
+        private Property() { }
+
+        private static final String WANTED = "wanted";
+        private static final String WANTED_AUTH_TYPES = "wanted_auth_types";
+        private static final String WANTED_REMEMBER_ME = "wanted_remember_me";
+        private static final String WANTED_REMEMBER_ME_OPTIONAL = "wanted_remember_me_optional";
+        private static final String IDENTITY_PROFILE_REQUIREMENTS = "identity_profile_requirements";
 
     }
 
