@@ -11,6 +11,7 @@ import java.util.Set;
 import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.shareurl.constraint.Constraint;
 import com.yoti.api.client.shareurl.policy.profile.IdentityProfile;
+import com.yoti.api.client.shareurl.policy.profile.Subject;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -34,16 +35,21 @@ public final class DynamicPolicy {
     @JsonProperty(Property.IDENTITY_PROFILE_REQUIREMENTS)
     private final IdentityProfile identityProfile;
 
+    @JsonProperty(Property.SUBJECT)
+    private final Subject subject;
+
     DynamicPolicy(Collection<WantedAttribute> wantedAttributes,
             Set<Integer> wantedAuthTypes,
             boolean wantedRememberMe,
             boolean wantedRememberMeOptional,
-            IdentityProfile identityProfile) {
+            IdentityProfile identityProfile,
+            Subject subject) {
         this.wantedAttributes = wantedAttributes;
         this.wantedAuthTypes = wantedAuthTypes;
         this.wantedRememberMe = wantedRememberMe;
         this.wantedRememberMeOptional = wantedRememberMeOptional;
         this.identityProfile = identityProfile;
+        this.subject = subject;
     }
 
     public static DynamicPolicy.Builder builder() {
@@ -95,6 +101,15 @@ public final class DynamicPolicy {
         return identityProfile;
     }
 
+    /**
+     * Holds information about the subject for which the identity assertion will be performed.
+     *
+     * @return subject
+     */
+    public Subject getSubject() {
+        return subject;
+    }
+
     public static class Builder {
 
         private static final int SELFIE_AUTH_TYPE = 1;
@@ -105,6 +120,7 @@ public final class DynamicPolicy {
         private boolean wantedRememberMe;
         private boolean wantedRememberMeOptional;
         private IdentityProfile identityProfile;
+        private Subject subject;
 
         private Builder() { }
 
@@ -281,6 +297,11 @@ public final class DynamicPolicy {
             this.identityProfile = identityProfile;
             return this;
         }
+
+        public Builder withSubject(Subject subject) {
+            this.subject = subject;
+            return this;
+        }
         
         public DynamicPolicy build() {
             return new DynamicPolicy(
@@ -288,7 +309,8 @@ public final class DynamicPolicy {
                     wantedAuthTypes,
                     wantedRememberMe,
                     wantedRememberMeOptional,
-                    identityProfile
+                    identityProfile,
+                    subject
             );
         }
 
@@ -303,6 +325,7 @@ public final class DynamicPolicy {
         private static final String WANTED_REMEMBER_ME = "wanted_remember_me";
         private static final String WANTED_REMEMBER_ME_OPTIONAL = "wanted_remember_me_optional";
         private static final String IDENTITY_PROFILE_REQUIREMENTS = "identity_profile_requirements";
+        private static final String SUBJECT = "subject";
 
     }
 

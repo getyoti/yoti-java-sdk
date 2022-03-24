@@ -23,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.yoti.api.client.shareurl.policy.profile.IdentityProfile;
 import com.yoti.api.client.shareurl.policy.profile.IdentityProfileScheme;
+import com.yoti.api.client.shareurl.policy.profile.Subject;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
@@ -304,6 +305,17 @@ public class DynamicPolicyTest {
         assertThat(result.getIdentityProfile(), notNullValue());
         assertThat(result.getIdentityProfile().getFramework(), is(equalTo(framework)));
         assertThat(result.getIdentityProfile().getScheme(), is(equalTo(identityProfileScheme)));
+    }
+
+    @Test
+    public void buildWithSubject() {
+        Subject subject = Subject.builder().withSubjectId("AN_ID").build();
+
+        DynamicPolicy result = DynamicPolicy.builder()
+                .withSubject(subject)
+                .build();
+
+        assertThat(result.getSubject(), is(equalTo(subject)));
     }
 
     private static class WantedAttributeMatcher extends TypeSafeDiagnosingMatcher<WantedAttribute> {
