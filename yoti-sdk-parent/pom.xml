@@ -79,45 +79,45 @@
     <maven.compiler.target>${supported.java.version}</maven.compiler.target>
     
     <!-- sdk dependency versions -->
-    <slf4j.version>1.7.30</slf4j.version>
-    <bouncy.castle.version>1.60</bouncy.castle.version>
-    <jackson.version>2.9.10.7</jackson.version>
-    <jackson-jsr310.version>2.9.10</jackson-jsr310.version>
+    <slf4j.version>1.7.36</slf4j.version>
+    <bouncy.castle.version>1.70</bouncy.castle.version>
+    <jackson.version>2.13.2</jackson.version>
+    <jackson-databind.version>2.13.2.1</jackson-databind.version>
     <google.protobuf.version>3.19.4</google.protobuf.version>
     <httpmime.version>4.5.13</httpmime.version>
     
     <!-- spring versions -->
-    <springboot.version>2.3.7.RELEASE</springboot.version>
-    <spring.core.version>5.2.12.RELEASE</spring.core.version>
-    <spring.security.version>5.3.6.RELEASE</spring.security.version>
+    <springboot.version>2.6.5</springboot.version>
+    <spring.core.version>5.3.17</spring.core.version>
+    <spring.security.version>5.6.2</spring.security.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
     
     <!-- test libraries -->
-    <junit.version>4.13.1</junit.version>
-    <mockito.version>3.7.7</mockito.version>
-    <hamcrest.version>1.3</hamcrest.version>
-    <commons.lang3.version>3.11</commons.lang3.version>
+    <junit.version>4.13.2</junit.version>
+    <mockito.version>4.4.0</mockito.version>
+    <hamcrest.version>2.2</hamcrest.version>
+    <commons.lang3.version>3.12.0</commons.lang3.version>
     
     <!-- maven + plugin versions -->
-    <maven.compiler.version>3.8.1</maven.compiler.version>
-    <maven.source.version>2.2.1</maven.source.version>
-    <maven.enforcer.version>3.0.0-M1</maven.enforcer.version>
+    <maven.compiler.version>3.10.1</maven.compiler.version>
+    <maven.source.version>3.2.1</maven.source.version>
+    <maven.enforcer.version>3.0.0</maven.enforcer.version>
     <findbugs.version>3.0.5</findbugs.version>
     <findsecbugs.version>1.7.1</findsecbugs.version>
-    <owasp.version>6.0.4</owasp.version>
+    <owasp.version>7.0.1</owasp.version>
     <owasp.dependency.check.cvss.limit>4</owasp.dependency.check.cvss.limit>
     <owasp.dependency.check.cve.update.limit>12</owasp.dependency.check.cve.update.limit>
-    <maven.reports.version>3.1.1</maven.reports.version>
-    <animal.sniffer.version>1.16</animal.sniffer.version>
+    <maven.reports.version>3.2.2</maven.reports.version>
+    <animal.sniffer.version>1.21</animal.sniffer.version>
     <mojo.signature.artefact>java18</mojo.signature.artefact>
     <mojo.signature.version>1.0</mojo.signature.version>
-    <mojo.extra.rules.version>1.0-beta-7</mojo.extra.rules.version>
-    <nexus.plugin.version>1.6.8</nexus.plugin.version>
-    <javadoc.plugin.version>3.2.0</javadoc.plugin.version>
+    <mojo.extra.rules.version>1.5.1</mojo.extra.rules.version>
+    <nexus.plugin.version>1.6.12</nexus.plugin.version>
+    <javadoc.plugin.version>3.3.2</javadoc.plugin.version>
     <javadoc.plugin.source>8</javadoc.plugin.source>
-    <gpg.plugin.version>1.6</gpg.plugin.version>
+    <gpg.plugin.version>3.0.1</gpg.plugin.version>
     <coveralls.plugin.version>4.3.0</coveralls.plugin.version>
-    <jacoco.plugin.version>0.8.5</jacoco.plugin.version>
+    <jacoco.plugin.version>0.8.7</jacoco.plugin.version>
   </properties>
   
   <dependencyManagement>
@@ -132,12 +132,12 @@
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
-        <version>${jackson.version}</version>
+        <version>${jackson-databind.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.datatype</groupId>
         <artifactId>jackson-datatype-jsr310</artifactId>
-        <version>${jackson-jsr310.version}</version>
+        <version>${jackson.version}</version>
       </dependency>
       <dependency>
         <groupId>com.google.protobuf</groupId>

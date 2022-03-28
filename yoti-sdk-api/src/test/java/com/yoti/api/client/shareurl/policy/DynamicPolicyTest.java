@@ -15,22 +15,29 @@ import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.
 import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.POSTAL_ADDRESS;
 import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.SELFIE;
 import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS;
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.junit.Test;
+import org.junit.*;
 
 public class DynamicPolicyTest {
 
     private static final int EXPECTED_SELFIE_AUTH_TYPE = 1;
     private static final int EXPECTED_PIN_AUTH_TYPE = 2;
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Test
     public void ensuresAnAttributeCanOnlyExistOnce() {
@@ -277,6 +284,62 @@ public class DynamicPolicyTest {
 
         assertThat(result.getWantedAttributes(), hasSize(1));
         assertThat(result.getWantedAttributes(), hasItem(WantedAttributeMatcher.forAttribute(GIVEN_NAMES, false)));
+    }
+
+    @Test
+    public void buildWithIdentityProfile() throws IOException {
+        IdentityProfileScheme scheme = new IdentityProfileScheme("A_TYPE", "AN_OBJECTIVE");
+
+        IdentityProfile identityProfile = new IdentityProfile("A_FRAMEWORK", scheme);
+
+        JsonNode json = toDynamicPolicyJson(identityProfile);
+
+        assertThat(json.get(Property.TRUST_FRAMEWORK).asText(), is(equalTo(identityProfile.getFramework())));
+
+        JsonNode schemeJsonNode = json.get(Property.SCHEME);
+        assertThat(schemeJsonNode.get(Property.TYPE).asText(), is(equalTo(scheme.getType())));
+        assertThat(schemeJsonNode.get(Property.OBJECTIVE).asText(), is(equalTo(scheme.getObjective())));
+    }
+
+    @Test
+    public void buildWithIdentityProfileMap() throws IOException {
+        Map<String, Object> scheme = new HashMap<>();
+        scheme.put(Property.TYPE, "A_TYPE");
+        scheme.put(Property.OBJECTIVE, "AN_OBJECTIVE");
+
+        Map<String, Object> identityProfile = new HashMap<>();
+        identityProfile.put(Property.TRUST_FRAMEWORK, "A_FRAMEWORK");
+        identityProfile.put(Property.SCHEME, scheme);
+
+        JsonNode json = toDynamicPolicyJson(identityProfile);
+
+        assertThat(
+                json.get(Property.TRUST_FRAMEWORK).asText(),
+                is(equalTo(identityProfile.get(Property.TRUST_FRAMEWORK)))
+        );
+
+        JsonNode schemeJsonNode = json.get(Property.SCHEME);
+        assertThat(schemeJsonNode.get(Property.TYPE).asText(), is(equalTo(scheme.get(Property.TYPE))));
+        assertThat(schemeJsonNode.get(Property.OBJECTIVE).asText(), is(equalTo(scheme.get(Property.OBJECTIVE))));
+    }
+
+    private static JsonNode toDynamicPolicyJson(Object obj) throws IOException {
+        DynamicPolicy policy = DynamicPolicy.builder()
+                .withIdentityProfile(obj)
+                .build();
+
+        return MAPPER.readTree(MAPPER.writeValueAsString(policy.getIdentityProfile()).getBytes(DEFAULT_CHARSET));
+    }
+
+    private static final class Property {
+
+        private Property() { }
+
+        private static final String TYPE = "type";
+        private static final String SCHEME = "scheme";
+        private static final String OBJECTIVE = "objective";
+        private static final String TRUST_FRAMEWORK = "trust_framework";
+
     }
 
     private static class WantedAttributeMatcher extends TypeSafeDiagnosingMatcher<WantedAttribute> {
