@@ -13,19 +13,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class DynamicScenario {
 
-    @JsonProperty("callback_endpoint")
+    @JsonProperty(Property.CALLBACK_ENDPOINT)
     private final String callbackEndpoint;
 
-    @JsonProperty("policy")
+    @JsonProperty(Property.POLICY)
     private final DynamicPolicy dynamicPolicy;
 
-    @JsonProperty("extensions")
+    @JsonProperty(Property.EXTENSIONS)
     private final List<Extension<?>> extensions;
 
-    DynamicScenario(String callbackEndpoint, DynamicPolicy dynamicPolicy, List<Extension<?>> extensions) {
+    @JsonProperty(Property.SUBJECT)
+    private final Object subject;
+
+    DynamicScenario(
+            String callbackEndpoint,
+            DynamicPolicy dynamicPolicy,
+            List<Extension<?>> extensions,
+            Object subject) {
         this.callbackEndpoint = callbackEndpoint;
         this.dynamicPolicy = dynamicPolicy;
         this.extensions = extensions;
+        this.subject = subject;
     }
 
     public static DynamicScenario.Builder builder() {
@@ -53,11 +61,19 @@ public class DynamicScenario {
         return extensions;
     }
 
+    /**
+     * The subject for which the identity assertion will be performed.
+     */
+    public Object subject() {
+        return subject;
+    }
+
     public static class Builder {
 
         private String callbackEndpoint;
         private DynamicPolicy dynamicPolicy;
         private final List<Extension<?>> extensions = new ArrayList<>();
+        private Object subject;
 
         public Builder withCallbackEndpoint(String callbackEndpoint) {
             this.callbackEndpoint = callbackEndpoint;
@@ -74,9 +90,25 @@ public class DynamicScenario {
             return this;
         }
 
-        public DynamicScenario build() {
-            return new DynamicScenario(callbackEndpoint, dynamicPolicy, extensions);
+        public Builder withSubject(Object subject) {
+            this.subject = subject;
+            return this;
         }
+
+        public DynamicScenario build() {
+            return new DynamicScenario(callbackEndpoint, dynamicPolicy, extensions, subject);
+        }
+
+    }
+
+    private static final class Property {
+
+        private static final String POLICY = "policy";
+        private static final String SUBJECT = "subject";
+        private static final String EXTENSIONS = "extensions";
+        private static final String CALLBACK_ENDPOINT = "callback_endpoint";
+
+        private Property() { }
 
     }
 
