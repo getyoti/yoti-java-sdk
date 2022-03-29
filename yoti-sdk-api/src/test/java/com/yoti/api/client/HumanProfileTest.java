@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.yoti.api.client.spi.remote.AttributeParser;
+import com.yoti.api.client.spi.remote.JpegAttributeValue;
 import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
 
@@ -372,6 +374,43 @@ public class HumanProfileTest {
         assertThat(value, is(notNullValue()));
         assertThat(value.get("identity_assertion"), is(notNullValue()));
         assertThat(value.get("verification_report"), is(notNullValue()));
+    }
+
+    @Test
+    public void getAttributeById_shouldReturnAttributeById() {
+        String anId = "anId";
+        Attribute<JpegAttributeValue> imageAttribute = createImageAttribute(anId);
+
+        List<Attribute<?>> attributes = new ArrayList<>();
+        attributes.add(imageAttribute);
+        attributes.add(createImageAttribute("anotherId"));
+
+        HumanProfile humanProfile = new HumanProfile(attributes);
+
+        Attribute<?> attribute = humanProfile.getAttributeById(anId);
+
+        assertThat(attribute, is(imageAttribute));
+    }
+
+    @Test
+    public void getAttributeById_shouldReturnNull() {
+        List<Attribute<?>> attributes = new ArrayList<>();
+        attributes.add(createImageAttribute("anId"));
+        attributes.add(createImageAttribute("anotherId"));
+
+        HumanProfile humanProfile = new HumanProfile(attributes);
+
+        Attribute<?> attribute = humanProfile.getAttributeById("unknown_id");
+
+        assertNull(attribute);
+    }
+
+    private static Attribute<JpegAttributeValue> createImageAttribute(String id) {
+        return new Attribute<>(
+                id,
+                String.format("name_%s", id),
+                new JpegAttributeValue("image".getBytes(StandardCharsets.UTF_8))
+        );
     }
 
     private static <T> List<Attribute<?>> asAttributeList(String key, T o) {

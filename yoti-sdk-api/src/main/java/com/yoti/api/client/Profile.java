@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Yoti profile for a connect token and application. You can get a hold of one of these by using a {@link YotiClient}.
@@ -54,7 +55,6 @@ public abstract class Profile {
         }
         return null;
     }
-
 
     /**
      * Return a list of all the {@link Attribute}s with a name starting with <code>name</code>
@@ -113,6 +113,25 @@ public abstract class Profile {
             attributes.addAll(entry.getValue());
         }
         return attributes;
+    }
+
+    /**
+     * Return typed {@link Attribute} by ID.
+     *
+     * @param id the ID to match
+     * @return attribute value, <code>null</code> if there was no match
+     */
+    public Attribute<?> getAttributeById(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Attribute ID must not be null");
+        }
+
+        return protectedAttributes.values()
+                .stream()
+                .flatMap(List::stream)
+                .filter(attribute -> Objects.equals(attribute.getId(), id))
+                .findFirst()
+                .orElse(null);
     }
 
     private Map<String, List<Attribute<?>>> createAttributeMap(List<Attribute<?>> attributes) {
