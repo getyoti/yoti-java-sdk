@@ -20,52 +20,73 @@ public final class SigningProto {
 
     /**
      * <code>string name = 1;</code>
+     * @return The name.
      */
-    String getName();
+    java.lang.String getName();
     /**
      * <code>string name = 1;</code>
+     * @return The bytes for name.
      */
     com.google.protobuf.ByteString
         getNameBytes();
 
     /**
      * <code>bytes value = 2;</code>
+     * @return The value.
      */
     com.google.protobuf.ByteString getValue();
 
     /**
      * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
+     * @return The enum numeric value on the wire for contentType.
      */
     int getContentTypeValue();
     /**
      * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
+     * @return The contentType.
      */
-    ContentTypeProto.ContentType getContentType();
+    com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType getContentType();
 
     /**
      * <code>bytes artifact_signature = 4;</code>
+     * @return The artifactSignature.
      */
     com.google.protobuf.ByteString getArtifactSignature();
 
     /**
      * <code>string sub_type = 5;</code>
+     * @return The subType.
      */
-    String getSubType();
+    java.lang.String getSubType();
     /**
      * <code>string sub_type = 5;</code>
+     * @return The bytes for subType.
      */
     com.google.protobuf.ByteString
         getSubTypeBytes();
 
     /**
      * <code>bytes signed_time_stamp = 6;</code>
+     * @return The signedTimeStamp.
      */
     com.google.protobuf.ByteString getSignedTimeStamp();
+
+    /**
+     * <code>string associated_source = 7;</code>
+     * @return The associatedSource.
+     */
+    java.lang.String getAssociatedSource();
+    /**
+     * <code>string associated_source = 7;</code>
+     * @return The bytes for associatedSource.
+     */
+    com.google.protobuf.ByteString
+        getAssociatedSourceBytes();
   }
   /**
    * Protobuf type {@code attrpubapi_v1.AttributeSigning}
    */
-  public  static final class AttributeSigning extends
+  public static final class AttributeSigning extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:attrpubapi_v1.AttributeSigning)
       AttributeSigningOrBuilder {
@@ -81,9 +102,17 @@ public final class SigningProto {
       artifactSignature_ = com.google.protobuf.ByteString.EMPTY;
       subType_ = "";
       signedTimeStamp_ = com.google.protobuf.ByteString.EMPTY;
+      associatedSource_ = "";
     }
 
-    @Override
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new AttributeSigning();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -94,9 +123,8 @@ public final class SigningProto {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new NullPointerException();
+        throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -108,7 +136,7 @@ public final class SigningProto {
               done = true;
               break;
             case 10: {
-              String s = input.readStringRequireUtf8();
+              java.lang.String s = input.readStringRequireUtf8();
 
               name_ = s;
               break;
@@ -130,7 +158,7 @@ public final class SigningProto {
               break;
             }
             case 42: {
-              String s = input.readStringRequireUtf8();
+              java.lang.String s = input.readStringRequireUtf8();
 
               subType_ = s;
               break;
@@ -140,8 +168,14 @@ public final class SigningProto {
               signedTimeStamp_ = input.readBytes();
               break;
             }
+            case 58: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              associatedSource_ = s;
+              break;
+            }
             default: {
-              if (!parseUnknownFieldProto3(
+              if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
@@ -161,44 +195,48 @@ public final class SigningProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return SigningProto.internal_static_attrpubapi_v1_AttributeSigning_descriptor;
+      return com.yoti.api.client.spi.remote.proto.SigningProto.internal_static_attrpubapi_v1_AttributeSigning_descriptor;
     }
 
-    @Override
-    protected FieldAccessorTable
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return SigningProto.internal_static_attrpubapi_v1_AttributeSigning_fieldAccessorTable
+      return com.yoti.api.client.spi.remote.proto.SigningProto.internal_static_attrpubapi_v1_AttributeSigning_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              AttributeSigning.class, Builder.class);
+              com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning.class, com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning.Builder.class);
     }
 
     public static final int NAME_FIELD_NUMBER = 1;
-    private volatile Object name_;
+    private volatile java.lang.Object name_;
     /**
      * <code>string name = 1;</code>
+     * @return The name.
      */
-    public String getName() {
-      Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         name_ = s;
         return s;
       }
     }
     /**
      * <code>string name = 1;</code>
+     * @return The bytes for name.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getNameBytes() {
-      Object ref = name_;
-      if (ref instanceof String) {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         name_ = b;
         return b;
       } else {
@@ -210,7 +248,9 @@ public final class SigningProto {
     private com.google.protobuf.ByteString value_;
     /**
      * <code>bytes value = 2;</code>
+     * @return The value.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getValue() {
       return value_;
     }
@@ -219,55 +259,63 @@ public final class SigningProto {
     private int contentType_;
     /**
      * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
+     * @return The enum numeric value on the wire for contentType.
      */
-    public int getContentTypeValue() {
+    @java.lang.Override public int getContentTypeValue() {
       return contentType_;
     }
     /**
      * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
+     * @return The contentType.
      */
-    public ContentTypeProto.ContentType getContentType() {
+    @java.lang.Override public com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType getContentType() {
       @SuppressWarnings("deprecation")
-      ContentTypeProto.ContentType result = ContentTypeProto.ContentType.valueOf(contentType_);
-      return result == null ? ContentTypeProto.ContentType.UNRECOGNIZED : result;
+      com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType result = com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.valueOf(contentType_);
+      return result == null ? com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.UNRECOGNIZED : result;
     }
 
     public static final int ARTIFACT_SIGNATURE_FIELD_NUMBER = 4;
     private com.google.protobuf.ByteString artifactSignature_;
     /**
      * <code>bytes artifact_signature = 4;</code>
+     * @return The artifactSignature.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getArtifactSignature() {
       return artifactSignature_;
     }
 
     public static final int SUB_TYPE_FIELD_NUMBER = 5;
-    private volatile Object subType_;
+    private volatile java.lang.Object subType_;
     /**
      * <code>string sub_type = 5;</code>
+     * @return The subType.
      */
-    public String getSubType() {
-      Object ref = subType_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getSubType() {
+      java.lang.Object ref = subType_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         subType_ = s;
         return s;
       }
     }
     /**
      * <code>string sub_type = 5;</code>
+     * @return The bytes for subType.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getSubTypeBytes() {
-      Object ref = subType_;
-      if (ref instanceof String) {
+      java.lang.Object ref = subType_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         subType_ = b;
         return b;
       } else {
@@ -279,13 +327,53 @@ public final class SigningProto {
     private com.google.protobuf.ByteString signedTimeStamp_;
     /**
      * <code>bytes signed_time_stamp = 6;</code>
+     * @return The signedTimeStamp.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getSignedTimeStamp() {
       return signedTimeStamp_;
     }
 
+    public static final int ASSOCIATED_SOURCE_FIELD_NUMBER = 7;
+    private volatile java.lang.Object associatedSource_;
+    /**
+     * <code>string associated_source = 7;</code>
+     * @return The associatedSource.
+     */
+    @java.lang.Override
+    public java.lang.String getAssociatedSource() {
+      java.lang.Object ref = associatedSource_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        associatedSource_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string associated_source = 7;</code>
+     * @return The bytes for associatedSource.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAssociatedSourceBytes() {
+      java.lang.Object ref = associatedSource_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        associatedSource_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -295,44 +383,47 @@ public final class SigningProto {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!getNameBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
       }
       if (!value_.isEmpty()) {
         output.writeBytes(2, value_);
       }
-      if (contentType_ != ContentTypeProto.ContentType.UNDEFINED.getNumber()) {
+      if (contentType_ != com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.UNDEFINED.getNumber()) {
         output.writeEnum(3, contentType_);
       }
       if (!artifactSignature_.isEmpty()) {
         output.writeBytes(4, artifactSignature_);
       }
-      if (!getSubTypeBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(subType_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, subType_);
       }
       if (!signedTimeStamp_.isEmpty()) {
         output.writeBytes(6, signedTimeStamp_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(associatedSource_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, associatedSource_);
+      }
       unknownFields.writeTo(output);
     }
 
-    @Override
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      if (!getNameBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
       }
       if (!value_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, value_);
       }
-      if (contentType_ != ContentTypeProto.ContentType.UNDEFINED.getNumber()) {
+      if (contentType_ != com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.UNDEFINED.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(3, contentType_);
       }
@@ -340,45 +431,49 @@ public final class SigningProto {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(4, artifactSignature_);
       }
-      if (!getSubTypeBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(subType_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, subType_);
       }
       if (!signedTimeStamp_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(6, signedTimeStamp_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(associatedSource_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, associatedSource_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof AttributeSigning)) {
+      if (!(obj instanceof com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning)) {
         return super.equals(obj);
       }
-      AttributeSigning other = (AttributeSigning) obj;
+      com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning other = (com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning) obj;
 
-      boolean result = true;
-      result = result && getName()
-          .equals(other.getName());
-      result = result && getValue()
-          .equals(other.getValue());
-      result = result && contentType_ == other.contentType_;
-      result = result && getArtifactSignature()
-          .equals(other.getArtifactSignature());
-      result = result && getSubType()
-          .equals(other.getSubType());
-      result = result && getSignedTimeStamp()
-          .equals(other.getSignedTimeStamp());
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (!getName()
+          .equals(other.getName())) return false;
+      if (!getValue()
+          .equals(other.getValue())) return false;
+      if (contentType_ != other.contentType_) return false;
+      if (!getArtifactSignature()
+          .equals(other.getArtifactSignature())) return false;
+      if (!getSubType()
+          .equals(other.getSubType())) return false;
+      if (!getSignedTimeStamp()
+          .equals(other.getSignedTimeStamp())) return false;
+      if (!getAssociatedSource()
+          .equals(other.getAssociatedSource())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -397,74 +492,76 @@ public final class SigningProto {
       hash = (53 * hash) + getSubType().hashCode();
       hash = (37 * hash) + SIGNED_TIME_STAMP_FIELD_NUMBER;
       hash = (53 * hash) + getSignedTimeStamp().hashCode();
+      hash = (37 * hash) + ASSOCIATED_SOURCE_FIELD_NUMBER;
+      hash = (53 * hash) + getAssociatedSource().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static AttributeSigning parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static AttributeSigning parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static AttributeSigning parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static AttributeSigning parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static AttributeSigning parseFrom(byte[] data)
+    public static com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static AttributeSigning parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static AttributeSigning parseFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static AttributeSigning parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static AttributeSigning parseDelimitedFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static AttributeSigning parseDelimitedFrom(
+    public static com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static AttributeSigning parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static AttributeSigning parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -472,23 +569,23 @@ public final class SigningProto {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(AttributeSigning prototype) {
+    public static Builder newBuilder(com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @Override
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -498,18 +595,18 @@ public final class SigningProto {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:attrpubapi_v1.AttributeSigning)
-        AttributeSigningOrBuilder {
+        com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigningOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return SigningProto.internal_static_attrpubapi_v1_AttributeSigning_descriptor;
+        return com.yoti.api.client.spi.remote.proto.SigningProto.internal_static_attrpubapi_v1_AttributeSigning_descriptor;
       }
 
-      @Override
-      protected FieldAccessorTable
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return SigningProto.internal_static_attrpubapi_v1_AttributeSigning_fieldAccessorTable
+        return com.yoti.api.client.spi.remote.proto.SigningProto.internal_static_attrpubapi_v1_AttributeSigning_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                AttributeSigning.class, Builder.class);
+                com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning.class, com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning.Builder.class);
       }
 
       // Construct using com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning.newBuilder()
@@ -518,7 +615,7 @@ public final class SigningProto {
       }
 
       private Builder(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -527,7 +624,7 @@ public final class SigningProto {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @Override
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         name_ = "";
@@ -542,86 +639,89 @@ public final class SigningProto {
 
         signedTimeStamp_ = com.google.protobuf.ByteString.EMPTY;
 
+        associatedSource_ = "";
+
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return SigningProto.internal_static_attrpubapi_v1_AttributeSigning_descriptor;
+        return com.yoti.api.client.spi.remote.proto.SigningProto.internal_static_attrpubapi_v1_AttributeSigning_descriptor;
       }
 
-      @Override
-      public AttributeSigning getDefaultInstanceForType() {
-        return AttributeSigning.getDefaultInstance();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning getDefaultInstanceForType() {
+        return com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning.getDefaultInstance();
       }
 
-      @Override
-      public AttributeSigning build() {
-        AttributeSigning result = buildPartial();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning build() {
+        com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @Override
-      public AttributeSigning buildPartial() {
-        AttributeSigning result = new AttributeSigning(this);
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning buildPartial() {
+        com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning result = new com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning(this);
         result.name_ = name_;
         result.value_ = value_;
         result.contentType_ = contentType_;
         result.artifactSignature_ = artifactSignature_;
         result.subType_ = subType_;
         result.signedTimeStamp_ = signedTimeStamp_;
+        result.associatedSource_ = associatedSource_;
         onBuilt();
         return result;
       }
 
-      @Override
+      @java.lang.Override
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
-      @Override
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.setField(field, value);
+          java.lang.Object value) {
+        return super.setField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
-      @Override
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
-      @Override
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
       }
-      @Override
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof AttributeSigning) {
-          return mergeFrom((AttributeSigning)other);
+        if (other instanceof com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning) {
+          return mergeFrom((com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(AttributeSigning other) {
-        if (other == AttributeSigning.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning other) {
+        if (other == com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning.getDefaultInstance()) return this;
         if (!other.getName().isEmpty()) {
           name_ = other.name_;
           onChanged();
@@ -642,26 +742,30 @@ public final class SigningProto {
         if (other.getSignedTimeStamp() != com.google.protobuf.ByteString.EMPTY) {
           setSignedTimeStamp(other.getSignedTimeStamp());
         }
+        if (!other.getAssociatedSource().isEmpty()) {
+          associatedSource_ = other.associatedSource_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        AttributeSigning parsedMessage = null;
+        com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (AttributeSigning) e.getUnfinishedMessage();
+          parsedMessage = (com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -671,32 +775,34 @@ public final class SigningProto {
         return this;
       }
 
-      private Object name_ = "";
+      private java.lang.Object name_ = "";
       /**
        * <code>string name = 1;</code>
+       * @return The name.
        */
-      public String getName() {
-        Object ref = name_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+          java.lang.String s = bs.toStringUtf8();
           name_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
        * <code>string name = 1;</code>
+       * @return The bytes for name.
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
-        Object ref = name_;
+        java.lang.Object ref = name_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           name_ = b;
           return b;
         } else {
@@ -705,9 +811,11 @@ public final class SigningProto {
       }
       /**
        * <code>string name = 1;</code>
+       * @param value The name to set.
+       * @return This builder for chaining.
        */
       public Builder setName(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -718,6 +826,7 @@ public final class SigningProto {
       }
       /**
        * <code>string name = 1;</code>
+       * @return This builder for chaining.
        */
       public Builder clearName() {
         
@@ -727,6 +836,8 @@ public final class SigningProto {
       }
       /**
        * <code>string name = 1;</code>
+       * @param value The bytes for name to set.
+       * @return This builder for chaining.
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
@@ -743,12 +854,16 @@ public final class SigningProto {
       private com.google.protobuf.ByteString value_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>bytes value = 2;</code>
+       * @return The value.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getValue() {
         return value_;
       }
       /**
        * <code>bytes value = 2;</code>
+       * @param value The value to set.
+       * @return This builder for chaining.
        */
       public Builder setValue(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -761,6 +876,7 @@ public final class SigningProto {
       }
       /**
        * <code>bytes value = 2;</code>
+       * @return This builder for chaining.
        */
       public Builder clearValue() {
         
@@ -772,30 +888,38 @@ public final class SigningProto {
       private int contentType_ = 0;
       /**
        * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
+       * @return The enum numeric value on the wire for contentType.
        */
-      public int getContentTypeValue() {
+      @java.lang.Override public int getContentTypeValue() {
         return contentType_;
       }
       /**
        * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
+       * @param value The enum numeric value on the wire for contentType to set.
+       * @return This builder for chaining.
        */
       public Builder setContentTypeValue(int value) {
+        
         contentType_ = value;
         onChanged();
         return this;
       }
       /**
        * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
+       * @return The contentType.
        */
-      public ContentTypeProto.ContentType getContentType() {
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType getContentType() {
         @SuppressWarnings("deprecation")
-        ContentTypeProto.ContentType result = ContentTypeProto.ContentType.valueOf(contentType_);
-        return result == null ? ContentTypeProto.ContentType.UNRECOGNIZED : result;
+        com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType result = com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.valueOf(contentType_);
+        return result == null ? com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType.UNRECOGNIZED : result;
       }
       /**
        * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
+       * @param value The contentType to set.
+       * @return This builder for chaining.
        */
-      public Builder setContentType(ContentTypeProto.ContentType value) {
+      public Builder setContentType(com.yoti.api.client.spi.remote.proto.ContentTypeProto.ContentType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -806,6 +930,7 @@ public final class SigningProto {
       }
       /**
        * <code>.attrpubapi_v1.ContentType content_type = 3;</code>
+       * @return This builder for chaining.
        */
       public Builder clearContentType() {
         
@@ -817,12 +942,16 @@ public final class SigningProto {
       private com.google.protobuf.ByteString artifactSignature_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>bytes artifact_signature = 4;</code>
+       * @return The artifactSignature.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getArtifactSignature() {
         return artifactSignature_;
       }
       /**
        * <code>bytes artifact_signature = 4;</code>
+       * @param value The artifactSignature to set.
+       * @return This builder for chaining.
        */
       public Builder setArtifactSignature(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -835,6 +964,7 @@ public final class SigningProto {
       }
       /**
        * <code>bytes artifact_signature = 4;</code>
+       * @return This builder for chaining.
        */
       public Builder clearArtifactSignature() {
         
@@ -843,32 +973,34 @@ public final class SigningProto {
         return this;
       }
 
-      private Object subType_ = "";
+      private java.lang.Object subType_ = "";
       /**
        * <code>string sub_type = 5;</code>
+       * @return The subType.
        */
-      public String getSubType() {
-        Object ref = subType_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getSubType() {
+        java.lang.Object ref = subType_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+          java.lang.String s = bs.toStringUtf8();
           subType_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
        * <code>string sub_type = 5;</code>
+       * @return The bytes for subType.
        */
       public com.google.protobuf.ByteString
           getSubTypeBytes() {
-        Object ref = subType_;
+        java.lang.Object ref = subType_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           subType_ = b;
           return b;
         } else {
@@ -877,9 +1009,11 @@ public final class SigningProto {
       }
       /**
        * <code>string sub_type = 5;</code>
+       * @param value The subType to set.
+       * @return This builder for chaining.
        */
       public Builder setSubType(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -890,6 +1024,7 @@ public final class SigningProto {
       }
       /**
        * <code>string sub_type = 5;</code>
+       * @return This builder for chaining.
        */
       public Builder clearSubType() {
         
@@ -899,6 +1034,8 @@ public final class SigningProto {
       }
       /**
        * <code>string sub_type = 5;</code>
+       * @param value The bytes for subType to set.
+       * @return This builder for chaining.
        */
       public Builder setSubTypeBytes(
           com.google.protobuf.ByteString value) {
@@ -915,12 +1052,16 @@ public final class SigningProto {
       private com.google.protobuf.ByteString signedTimeStamp_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>bytes signed_time_stamp = 6;</code>
+       * @return The signedTimeStamp.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getSignedTimeStamp() {
         return signedTimeStamp_;
       }
       /**
        * <code>bytes signed_time_stamp = 6;</code>
+       * @param value The signedTimeStamp to set.
+       * @return This builder for chaining.
        */
       public Builder setSignedTimeStamp(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -933,6 +1074,7 @@ public final class SigningProto {
       }
       /**
        * <code>bytes signed_time_stamp = 6;</code>
+       * @return This builder for chaining.
        */
       public Builder clearSignedTimeStamp() {
         
@@ -940,13 +1082,89 @@ public final class SigningProto {
         onChanged();
         return this;
       }
-      @Override
+
+      private java.lang.Object associatedSource_ = "";
+      /**
+       * <code>string associated_source = 7;</code>
+       * @return The associatedSource.
+       */
+      public java.lang.String getAssociatedSource() {
+        java.lang.Object ref = associatedSource_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          associatedSource_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string associated_source = 7;</code>
+       * @return The bytes for associatedSource.
+       */
+      public com.google.protobuf.ByteString
+          getAssociatedSourceBytes() {
+        java.lang.Object ref = associatedSource_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          associatedSource_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string associated_source = 7;</code>
+       * @param value The associatedSource to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAssociatedSource(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        associatedSource_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string associated_source = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAssociatedSource() {
+        
+        associatedSource_ = getDefaultInstance().getAssociatedSource();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string associated_source = 7;</code>
+       * @param value The bytes for associatedSource to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAssociatedSourceBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        associatedSource_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
+        return super.setUnknownFields(unknownFields);
       }
 
-      @Override
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -957,18 +1175,18 @@ public final class SigningProto {
     }
 
     // @@protoc_insertion_point(class_scope:attrpubapi_v1.AttributeSigning)
-    private static final AttributeSigning DEFAULT_INSTANCE;
+    private static final com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new AttributeSigning();
+      DEFAULT_INSTANCE = new com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning();
     }
 
-    public static AttributeSigning getDefaultInstance() {
+    public static com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<AttributeSigning>
         PARSER = new com.google.protobuf.AbstractParser<AttributeSigning>() {
-      @Override
+      @java.lang.Override
       public AttributeSigning parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -981,13 +1199,13 @@ public final class SigningProto {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<AttributeSigning> getParserForType() {
       return PARSER;
     }
 
-    @Override
-    public AttributeSigning getDefaultInstanceForType() {
+    @java.lang.Override
+    public com.yoti.api.client.spi.remote.proto.SigningProto.AttributeSigning getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1006,37 +1224,33 @@ public final class SigningProto {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n\rSigning.proto\022\rattrpubapi_v1\032\021ContentT" +
-      "ype.proto\"\252\001\n\020AttributeSigning\022\014\n\004name\030\001" +
+      "ype.proto\"\305\001\n\020AttributeSigning\022\014\n\004name\030\001" +
       " \001(\t\022\r\n\005value\030\002 \001(\014\0220\n\014content_type\030\003 \001(" +
       "\0162\032.attrpubapi_v1.ContentType\022\032\n\022artifac" +
       "t_signature\030\004 \001(\014\022\020\n\010sub_type\030\005 \001(\t\022\031\n\021s" +
-      "igned_time_stamp\030\006 \001(\014Bo\n$com.yoti.api.c" +
-      "lient.spi.remote.protoB\014SigningProtoZ\ryo" +
-      "tiprotoattr\252\002\034Yoti.Auth.ProtoBuf.Attribu" +
-      "te\312\002\nAttrpubapib\006proto3"
+      "igned_time_stamp\030\006 \001(\014\022\031\n\021associated_sou" +
+      "rce\030\007 \001(\tB\343\001\n$com.yoti.api.client.spi.re" +
+      "mote.protoB\014SigningProtoZ/github.com/get" +
+      "yoti/yoti-go-sdk/v3/yotiprotoattr\252\002\034Yoti" +
+      ".Auth.ProtoBuf.Attribute\312\002\030Yoti\\Protobuf" +
+      "\\Attrpubapi\342\002$Yoti\\Protobuf\\Attrpubapi\\G" +
+      "PBMetadata\352\002\032Yoti::Protobuf::Attrpubapib" +
+      "\006proto3"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
-    com.google.protobuf.Descriptors.FileDescriptor
+    descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          ContentTypeProto.getDescriptor(),
-        }, assigner);
+          com.yoti.api.client.spi.remote.proto.ContentTypeProto.getDescriptor(),
+        });
     internal_static_attrpubapi_v1_AttributeSigning_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_attrpubapi_v1_AttributeSigning_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_attrpubapi_v1_AttributeSigning_descriptor,
-        new String[] { "Name", "Value", "ContentType", "ArtifactSignature", "SubType", "SignedTimeStamp", });
-    ContentTypeProto.getDescriptor();
+        new java.lang.String[] { "Name", "Value", "ContentType", "ArtifactSignature", "SubType", "SignedTimeStamp", "AssociatedSource", });
+    com.yoti.api.client.spi.remote.proto.ContentTypeProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

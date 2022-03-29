@@ -21,12 +21,12 @@ public final class ExtraDataProto {
     /**
      * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
      */
-    java.util.List<DataEntryProto.DataEntry>
+    java.util.List<com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry> 
         getListList();
     /**
      * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
      */
-    DataEntryProto.DataEntry getList(int index);
+    com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry getList(int index);
     /**
      * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
      */
@@ -34,18 +34,18 @@ public final class ExtraDataProto {
     /**
      * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
      */
-    java.util.List<? extends DataEntryProto.DataEntryOrBuilder>
+    java.util.List<? extends com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntryOrBuilder> 
         getListOrBuilderList();
     /**
      * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
      */
-    DataEntryProto.DataEntryOrBuilder getListOrBuilder(
-            int index);
+    com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntryOrBuilder getListOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code sharepubapi_v1.ExtraData}
    */
-  public  static final class ExtraData extends
+  public static final class ExtraData extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:sharepubapi_v1.ExtraData)
       ExtraDataOrBuilder {
@@ -58,7 +58,14 @@ public final class ExtraDataProto {
       list_ = java.util.Collections.emptyList();
     }
 
-    @Override
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new ExtraData();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -69,7 +76,7 @@ public final class ExtraDataProto {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new NullPointerException();
+        throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
@@ -83,16 +90,16 @@ public final class ExtraDataProto {
               done = true;
               break;
             case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                list_ = new java.util.ArrayList<DataEntryProto.DataEntry>();
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                list_ = new java.util.ArrayList<com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry>();
                 mutable_bitField0_ |= 0x00000001;
               }
               list_.add(
-                  input.readMessage(DataEntryProto.DataEntry.parser(), extensionRegistry));
+                  input.readMessage(com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.parser(), extensionRegistry));
               break;
             }
             default: {
-              if (!parseUnknownFieldProto3(
+              if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
@@ -106,7 +113,7 @@ public final class ExtraDataProto {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+        if (((mutable_bitField0_ & 0x00000001) != 0)) {
           list_ = java.util.Collections.unmodifiableList(list_);
         }
         this.unknownFields = unknownFields.build();
@@ -115,54 +122,59 @@ public final class ExtraDataProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ExtraDataProto.internal_static_sharepubapi_v1_ExtraData_descriptor;
+      return com.yoti.api.client.spi.remote.proto.ExtraDataProto.internal_static_sharepubapi_v1_ExtraData_descriptor;
     }
 
-    @Override
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ExtraDataProto.internal_static_sharepubapi_v1_ExtraData_fieldAccessorTable
+      return com.yoti.api.client.spi.remote.proto.ExtraDataProto.internal_static_sharepubapi_v1_ExtraData_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              ExtraData.class, Builder.class);
+              com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData.class, com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData.Builder.class);
     }
 
     public static final int LIST_FIELD_NUMBER = 1;
-    private java.util.List<DataEntryProto.DataEntry> list_;
+    private java.util.List<com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry> list_;
     /**
      * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
      */
-    public java.util.List<DataEntryProto.DataEntry> getListList() {
+    @java.lang.Override
+    public java.util.List<com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry> getListList() {
       return list_;
     }
     /**
      * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
      */
-    public java.util.List<? extends DataEntryProto.DataEntryOrBuilder>
+    @java.lang.Override
+    public java.util.List<? extends com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntryOrBuilder> 
         getListOrBuilderList() {
       return list_;
     }
     /**
      * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
      */
+    @java.lang.Override
     public int getListCount() {
       return list_.size();
     }
     /**
      * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
      */
-    public DataEntryProto.DataEntry getList(int index) {
+    @java.lang.Override
+    public com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry getList(int index) {
       return list_.get(index);
     }
     /**
      * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
      */
-    public DataEntryProto.DataEntryOrBuilder getListOrBuilder(
+    @java.lang.Override
+    public com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntryOrBuilder getListOrBuilder(
         int index) {
       return list_.get(index);
     }
 
     private byte memoizedIsInitialized = -1;
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -172,7 +184,7 @@ public final class ExtraDataProto {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       for (int i = 0; i < list_.size(); i++) {
@@ -181,7 +193,7 @@ public final class ExtraDataProto {
       unknownFields.writeTo(output);
     }
 
-    @Override
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -196,24 +208,23 @@ public final class ExtraDataProto {
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof ExtraData)) {
+      if (!(obj instanceof com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData)) {
         return super.equals(obj);
       }
-      ExtraData other = (ExtraData) obj;
+      com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData other = (com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData) obj;
 
-      boolean result = true;
-      result = result && getListList()
-          .equals(other.getListList());
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (!getListList()
+          .equals(other.getListList())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -229,69 +240,69 @@ public final class ExtraDataProto {
       return hash;
     }
 
-    public static ExtraData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ExtraData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ExtraData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ExtraData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ExtraData parseFrom(byte[] data)
+    public static com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ExtraData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ExtraData parseFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static ExtraData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static ExtraData parseDelimitedFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static ExtraData parseDelimitedFrom(
+    public static com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static ExtraData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static ExtraData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -299,21 +310,21 @@ public final class ExtraDataProto {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(ExtraData prototype) {
+    public static Builder newBuilder(com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @Override
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
@@ -325,18 +336,18 @@ public final class ExtraDataProto {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:sharepubapi_v1.ExtraData)
-        ExtraDataOrBuilder {
+        com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraDataOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ExtraDataProto.internal_static_sharepubapi_v1_ExtraData_descriptor;
+        return com.yoti.api.client.spi.remote.proto.ExtraDataProto.internal_static_sharepubapi_v1_ExtraData_descriptor;
       }
 
-      @Override
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ExtraDataProto.internal_static_sharepubapi_v1_ExtraData_fieldAccessorTable
+        return com.yoti.api.client.spi.remote.proto.ExtraDataProto.internal_static_sharepubapi_v1_ExtraData_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                ExtraData.class, Builder.class);
+                com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData.class, com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData.Builder.class);
       }
 
       // Construct using com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData.newBuilder()
@@ -355,7 +366,7 @@ public final class ExtraDataProto {
           getListFieldBuilder();
         }
       }
-      @Override
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         if (listBuilder_ == null) {
@@ -367,32 +378,32 @@ public final class ExtraDataProto {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ExtraDataProto.internal_static_sharepubapi_v1_ExtraData_descriptor;
+        return com.yoti.api.client.spi.remote.proto.ExtraDataProto.internal_static_sharepubapi_v1_ExtraData_descriptor;
       }
 
-      @Override
-      public ExtraData getDefaultInstanceForType() {
-        return ExtraData.getDefaultInstance();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData getDefaultInstanceForType() {
+        return com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData.getDefaultInstance();
       }
 
-      @Override
-      public ExtraData build() {
-        ExtraData result = buildPartial();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData build() {
+        com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @Override
-      public ExtraData buildPartial() {
-        ExtraData result = new ExtraData(this);
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData buildPartial() {
+        com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData result = new com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData(this);
         int from_bitField0_ = bitField0_;
         if (listBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          if (((bitField0_ & 0x00000001) != 0)) {
             list_ = java.util.Collections.unmodifiableList(list_);
             bitField0_ = (bitField0_ & ~0x00000001);
           }
@@ -404,50 +415,50 @@ public final class ExtraDataProto {
         return result;
       }
 
-      @Override
+      @java.lang.Override
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
-      @Override
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.setField(field, value);
+          java.lang.Object value) {
+        return super.setField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
-      @Override
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
-      @Override
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
       }
-      @Override
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof ExtraData) {
-          return mergeFrom((ExtraData)other);
+        if (other instanceof com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData) {
+          return mergeFrom((com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(ExtraData other) {
-        if (other == ExtraData.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData other) {
+        if (other == com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData.getDefaultInstance()) return this;
         if (listBuilder_ == null) {
           if (!other.list_.isEmpty()) {
             if (list_.isEmpty()) {
@@ -466,7 +477,7 @@ public final class ExtraDataProto {
               listBuilder_ = null;
               list_ = other.list_;
               bitField0_ = (bitField0_ & ~0x00000001);
-              listBuilder_ =
+              listBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getListFieldBuilder() : null;
             } else {
@@ -479,21 +490,21 @@ public final class ExtraDataProto {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        ExtraData parsedMessage = null;
+        com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (ExtraData) e.getUnfinishedMessage();
+          parsedMessage = (com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -504,22 +515,22 @@ public final class ExtraDataProto {
       }
       private int bitField0_;
 
-      private java.util.List<DataEntryProto.DataEntry> list_ =
+      private java.util.List<com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry> list_ =
         java.util.Collections.emptyList();
       private void ensureListIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          list_ = new java.util.ArrayList<DataEntryProto.DataEntry>(list_);
+        if (!((bitField0_ & 0x00000001) != 0)) {
+          list_ = new java.util.ArrayList<com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry>(list_);
           bitField0_ |= 0x00000001;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          DataEntryProto.DataEntry, DataEntryProto.DataEntry.Builder, DataEntryProto.DataEntryOrBuilder> listBuilder_;
+          com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry, com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Builder, com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntryOrBuilder> listBuilder_;
 
       /**
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
-      public java.util.List<DataEntryProto.DataEntry> getListList() {
+      public java.util.List<com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry> getListList() {
         if (listBuilder_ == null) {
           return java.util.Collections.unmodifiableList(list_);
         } else {
@@ -539,7 +550,7 @@ public final class ExtraDataProto {
       /**
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
-      public DataEntryProto.DataEntry getList(int index) {
+      public com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry getList(int index) {
         if (listBuilder_ == null) {
           return list_.get(index);
         } else {
@@ -550,7 +561,7 @@ public final class ExtraDataProto {
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
       public Builder setList(
-          int index, DataEntryProto.DataEntry value) {
+          int index, com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry value) {
         if (listBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -567,7 +578,7 @@ public final class ExtraDataProto {
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
       public Builder setList(
-          int index, DataEntryProto.DataEntry.Builder builderForValue) {
+          int index, com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Builder builderForValue) {
         if (listBuilder_ == null) {
           ensureListIsMutable();
           list_.set(index, builderForValue.build());
@@ -580,7 +591,7 @@ public final class ExtraDataProto {
       /**
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
-      public Builder addList(DataEntryProto.DataEntry value) {
+      public Builder addList(com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry value) {
         if (listBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -597,7 +608,7 @@ public final class ExtraDataProto {
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
       public Builder addList(
-          int index, DataEntryProto.DataEntry value) {
+          int index, com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry value) {
         if (listBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -614,7 +625,7 @@ public final class ExtraDataProto {
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
       public Builder addList(
-          DataEntryProto.DataEntry.Builder builderForValue) {
+          com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Builder builderForValue) {
         if (listBuilder_ == null) {
           ensureListIsMutable();
           list_.add(builderForValue.build());
@@ -628,7 +639,7 @@ public final class ExtraDataProto {
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
       public Builder addList(
-          int index, DataEntryProto.DataEntry.Builder builderForValue) {
+          int index, com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Builder builderForValue) {
         if (listBuilder_ == null) {
           ensureListIsMutable();
           list_.add(index, builderForValue.build());
@@ -642,7 +653,7 @@ public final class ExtraDataProto {
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
       public Builder addAllList(
-          Iterable<? extends DataEntryProto.DataEntry> values) {
+          java.lang.Iterable<? extends com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry> values) {
         if (listBuilder_ == null) {
           ensureListIsMutable();
           com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -682,14 +693,14 @@ public final class ExtraDataProto {
       /**
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
-      public DataEntryProto.DataEntry.Builder getListBuilder(
+      public com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Builder getListBuilder(
           int index) {
         return getListFieldBuilder().getBuilder(index);
       }
       /**
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
-      public DataEntryProto.DataEntryOrBuilder getListOrBuilder(
+      public com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntryOrBuilder getListOrBuilder(
           int index) {
         if (listBuilder_ == null) {
           return list_.get(index);  } else {
@@ -699,7 +710,7 @@ public final class ExtraDataProto {
       /**
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
-      public java.util.List<? extends DataEntryProto.DataEntryOrBuilder>
+      public java.util.List<? extends com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntryOrBuilder> 
            getListOrBuilderList() {
         if (listBuilder_ != null) {
           return listBuilder_.getMessageOrBuilderList();
@@ -710,46 +721,46 @@ public final class ExtraDataProto {
       /**
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
-      public DataEntryProto.DataEntry.Builder addListBuilder() {
+      public com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Builder addListBuilder() {
         return getListFieldBuilder().addBuilder(
-            DataEntryProto.DataEntry.getDefaultInstance());
+            com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.getDefaultInstance());
       }
       /**
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
-      public DataEntryProto.DataEntry.Builder addListBuilder(
+      public com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Builder addListBuilder(
           int index) {
         return getListFieldBuilder().addBuilder(
-            index, DataEntryProto.DataEntry.getDefaultInstance());
+            index, com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.getDefaultInstance());
       }
       /**
        * <code>repeated .sharepubapi_v1.DataEntry list = 1;</code>
        */
-      public java.util.List<DataEntryProto.DataEntry.Builder>
+      public java.util.List<com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Builder> 
            getListBuilderList() {
         return getListFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          DataEntryProto.DataEntry, DataEntryProto.DataEntry.Builder, DataEntryProto.DataEntryOrBuilder>
+          com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry, com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Builder, com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntryOrBuilder> 
           getListFieldBuilder() {
         if (listBuilder_ == null) {
           listBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              DataEntryProto.DataEntry, DataEntryProto.DataEntry.Builder, DataEntryProto.DataEntryOrBuilder>(
+              com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry, com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Builder, com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntryOrBuilder>(
                   list_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  ((bitField0_ & 0x00000001) != 0),
                   getParentForChildren(),
                   isClean());
           list_ = null;
         }
         return listBuilder_;
       }
-      @Override
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
+        return super.setUnknownFields(unknownFields);
       }
 
-      @Override
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -760,18 +771,18 @@ public final class ExtraDataProto {
     }
 
     // @@protoc_insertion_point(class_scope:sharepubapi_v1.ExtraData)
-    private static final ExtraData DEFAULT_INSTANCE;
+    private static final com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new ExtraData();
+      DEFAULT_INSTANCE = new com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData();
     }
 
-    public static ExtraData getDefaultInstance() {
+    public static com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<ExtraData>
         PARSER = new com.google.protobuf.AbstractParser<ExtraData>() {
-      @Override
+      @java.lang.Override
       public ExtraData parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -784,13 +795,13 @@ public final class ExtraDataProto {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<ExtraData> getParserForType() {
       return PARSER;
     }
 
-    @Override
-    public ExtraData getDefaultInstanceForType() {
+    @java.lang.Override
+    public com.yoti.api.client.spi.remote.proto.ExtraDataProto.ExtraData getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -798,7 +809,7 @@ public final class ExtraDataProto {
 
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sharepubapi_v1_ExtraData_descriptor;
-  private static final
+  private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sharepubapi_v1_ExtraData_fieldAccessorTable;
 
@@ -809,36 +820,29 @@ public final class ExtraDataProto {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n\017ExtraData.proto\022\016sharepubapi_v1\032\017DataE" +
       "ntry.proto\"4\n\tExtraData\022\'\n\004list\030\001 \003(\0132\031." +
-      "sharepubapi_v1.DataEntryB\257\001\n$com.yoti.ap" +
+      "sharepubapi_v1.DataEntryB\345\001\n$com.yoti.ap" +
       "i.client.spi.remote.protoB\016ExtraDataProt" +
-      "oZ\016yotiprotoshare\252\002\030Yoti.Auth.ProtoBuf.S" +
-      "hare\312\002\020Yoti\\Sharepubapi\342\002\034Yoti\\Sharepuba" +
-      "pi\\GPBMetadata\352\002\031Yoti.Protobuf.Sharepuba" +
-      "pib\006proto3"
+      "oZ0github.com/getyoti/yoti-go-sdk/v3/yot" +
+      "iprotoshare\252\002\030Yoti.Auth.ProtoBuf.Share\312\002" +
+      "\031Yoti\\Protobuf\\Sharepubapi\342\002%Yoti\\Protob" +
+      "uf\\Sharepubapi\\GPBMetadata\352\002\033Yoti::Proto" +
+      "buf::Sharepubapib\006proto3"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
-    com.google.protobuf.Descriptors.FileDescriptor
+    descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          DataEntryProto.getDescriptor(),
-        }, assigner);
+          com.yoti.api.client.spi.remote.proto.DataEntryProto.getDescriptor(),
+        });
     internal_static_sharepubapi_v1_ExtraData_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_sharepubapi_v1_ExtraData_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sharepubapi_v1_ExtraData_descriptor,
-        new String[] { "List", });
-    DataEntryProto.getDescriptor();
+        new java.lang.String[] { "List", });
+    com.yoti.api.client.spi.remote.proto.DataEntryProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)
