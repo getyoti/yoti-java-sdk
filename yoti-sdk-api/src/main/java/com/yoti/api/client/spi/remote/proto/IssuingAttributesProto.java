@@ -20,10 +20,12 @@ public final class IssuingAttributesProto {
 
     /**
      * <code>string expiry_date = 1;</code>
+     * @return The expiryDate.
      */
-    String getExpiryDate();
+    java.lang.String getExpiryDate();
     /**
      * <code>string expiry_date = 1;</code>
+     * @return The bytes for expiryDate.
      */
     com.google.protobuf.ByteString
         getExpiryDateBytes();
@@ -31,12 +33,12 @@ public final class IssuingAttributesProto {
     /**
      * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
      */
-    java.util.List<Definition>
+    java.util.List<com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition> 
         getDefinitionsList();
     /**
      * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
      */
-    Definition getDefinitions(int index);
+    com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition getDefinitions(int index);
     /**
      * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
      */
@@ -44,18 +46,18 @@ public final class IssuingAttributesProto {
     /**
      * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
      */
-    java.util.List<? extends DefinitionOrBuilder>
+    java.util.List<? extends com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.DefinitionOrBuilder> 
         getDefinitionsOrBuilderList();
     /**
      * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
      */
-    DefinitionOrBuilder getDefinitionsOrBuilder(
-            int index);
+    com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.DefinitionOrBuilder getDefinitionsOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code sharepubapi_v1.IssuingAttributes}
    */
-  public  static final class IssuingAttributes extends
+  public static final class IssuingAttributes extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:sharepubapi_v1.IssuingAttributes)
       IssuingAttributesOrBuilder {
@@ -69,7 +71,14 @@ public final class IssuingAttributesProto {
       definitions_ = java.util.Collections.emptyList();
     }
 
-    @Override
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new IssuingAttributes();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -80,7 +89,7 @@ public final class IssuingAttributesProto {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new NullPointerException();
+        throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
@@ -94,22 +103,22 @@ public final class IssuingAttributesProto {
               done = true;
               break;
             case 10: {
-              String s = input.readStringRequireUtf8();
+              java.lang.String s = input.readStringRequireUtf8();
 
               expiryDate_ = s;
               break;
             }
             case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                definitions_ = new java.util.ArrayList<Definition>();
-                mutable_bitField0_ |= 0x00000002;
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                definitions_ = new java.util.ArrayList<com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition>();
+                mutable_bitField0_ |= 0x00000001;
               }
               definitions_.add(
-                  input.readMessage(Definition.parser(), extensionRegistry));
+                  input.readMessage(com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.parser(), extensionRegistry));
               break;
             }
             default: {
-              if (!parseUnknownFieldProto3(
+              if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
@@ -123,7 +132,7 @@ public final class IssuingAttributesProto {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+        if (((mutable_bitField0_ & 0x00000001) != 0)) {
           definitions_ = java.util.Collections.unmodifiableList(definitions_);
         }
         this.unknownFields = unknownFields.build();
@@ -132,45 +141,48 @@ public final class IssuingAttributesProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return IssuingAttributesProto.internal_static_sharepubapi_v1_IssuingAttributes_descriptor;
+      return com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.internal_static_sharepubapi_v1_IssuingAttributes_descriptor;
     }
 
-    @Override
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return IssuingAttributesProto.internal_static_sharepubapi_v1_IssuingAttributes_fieldAccessorTable
+      return com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.internal_static_sharepubapi_v1_IssuingAttributes_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              IssuingAttributes.class, Builder.class);
+              com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.class, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.Builder.class);
     }
 
-    private int bitField0_;
     public static final int EXPIRY_DATE_FIELD_NUMBER = 1;
-    private volatile Object expiryDate_;
+    private volatile java.lang.Object expiryDate_;
     /**
      * <code>string expiry_date = 1;</code>
+     * @return The expiryDate.
      */
-    public String getExpiryDate() {
-      Object ref = expiryDate_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getExpiryDate() {
+      java.lang.Object ref = expiryDate_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
+        com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         expiryDate_ = s;
         return s;
       }
     }
     /**
      * <code>string expiry_date = 1;</code>
+     * @return The bytes for expiryDate.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getExpiryDateBytes() {
-      Object ref = expiryDate_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
+      java.lang.Object ref = expiryDate_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         expiryDate_ = b;
         return b;
       } else {
@@ -179,42 +191,47 @@ public final class IssuingAttributesProto {
     }
 
     public static final int DEFINITIONS_FIELD_NUMBER = 2;
-    private java.util.List<Definition> definitions_;
+    private java.util.List<com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition> definitions_;
     /**
      * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
      */
-    public java.util.List<Definition> getDefinitionsList() {
+    @java.lang.Override
+    public java.util.List<com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition> getDefinitionsList() {
       return definitions_;
     }
     /**
      * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
      */
-    public java.util.List<? extends DefinitionOrBuilder>
+    @java.lang.Override
+    public java.util.List<? extends com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.DefinitionOrBuilder> 
         getDefinitionsOrBuilderList() {
       return definitions_;
     }
     /**
      * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
      */
+    @java.lang.Override
     public int getDefinitionsCount() {
       return definitions_.size();
     }
     /**
      * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
      */
-    public Definition getDefinitions(int index) {
+    @java.lang.Override
+    public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition getDefinitions(int index) {
       return definitions_.get(index);
     }
     /**
      * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
      */
-    public DefinitionOrBuilder getDefinitionsOrBuilder(
+    @java.lang.Override
+    public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.DefinitionOrBuilder getDefinitionsOrBuilder(
         int index) {
       return definitions_.get(index);
     }
 
     private byte memoizedIsInitialized = -1;
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -224,10 +241,10 @@ public final class IssuingAttributesProto {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!getExpiryDateBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(expiryDate_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, expiryDate_);
       }
       for (int i = 0; i < definitions_.size(); i++) {
@@ -236,13 +253,13 @@ public final class IssuingAttributesProto {
       unknownFields.writeTo(output);
     }
 
-    @Override
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      if (!getExpiryDateBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(expiryDate_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, expiryDate_);
       }
       for (int i = 0; i < definitions_.size(); i++) {
@@ -254,26 +271,25 @@ public final class IssuingAttributesProto {
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof IssuingAttributes)) {
+      if (!(obj instanceof com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes)) {
         return super.equals(obj);
       }
-      IssuingAttributes other = (IssuingAttributes) obj;
+      com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes other = (com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes) obj;
 
-      boolean result = true;
-      result = result && getExpiryDate()
-          .equals(other.getExpiryDate());
-      result = result && getDefinitionsList()
-          .equals(other.getDefinitionsList());
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (!getExpiryDate()
+          .equals(other.getExpiryDate())) return false;
+      if (!getDefinitionsList()
+          .equals(other.getDefinitionsList())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -291,69 +307,69 @@ public final class IssuingAttributesProto {
       return hash;
     }
 
-    public static IssuingAttributes parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static IssuingAttributes parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static IssuingAttributes parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static IssuingAttributes parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static IssuingAttributes parseFrom(byte[] data)
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static IssuingAttributes parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static IssuingAttributes parseFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static IssuingAttributes parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static IssuingAttributes parseDelimitedFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static IssuingAttributes parseDelimitedFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static IssuingAttributes parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static IssuingAttributes parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -361,21 +377,21 @@ public final class IssuingAttributesProto {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(IssuingAttributes prototype) {
+    public static Builder newBuilder(com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @Override
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
@@ -387,18 +403,18 @@ public final class IssuingAttributesProto {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:sharepubapi_v1.IssuingAttributes)
-        IssuingAttributesOrBuilder {
+        com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributesOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return IssuingAttributesProto.internal_static_sharepubapi_v1_IssuingAttributes_descriptor;
+        return com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.internal_static_sharepubapi_v1_IssuingAttributes_descriptor;
       }
 
-      @Override
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return IssuingAttributesProto.internal_static_sharepubapi_v1_IssuingAttributes_fieldAccessorTable
+        return com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.internal_static_sharepubapi_v1_IssuingAttributes_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                IssuingAttributes.class, Builder.class);
+                com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.class, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.Builder.class);
       }
 
       // Construct using com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.newBuilder()
@@ -417,104 +433,102 @@ public final class IssuingAttributesProto {
           getDefinitionsFieldBuilder();
         }
       }
-      @Override
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         expiryDate_ = "";
 
         if (definitionsBuilder_ == null) {
           definitions_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
           definitionsBuilder_.clear();
         }
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return IssuingAttributesProto.internal_static_sharepubapi_v1_IssuingAttributes_descriptor;
+        return com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.internal_static_sharepubapi_v1_IssuingAttributes_descriptor;
       }
 
-      @Override
-      public IssuingAttributes getDefaultInstanceForType() {
-        return IssuingAttributes.getDefaultInstance();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes getDefaultInstanceForType() {
+        return com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.getDefaultInstance();
       }
 
-      @Override
-      public IssuingAttributes build() {
-        IssuingAttributes result = buildPartial();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes build() {
+        com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @Override
-      public IssuingAttributes buildPartial() {
-        IssuingAttributes result = new IssuingAttributes(this);
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes buildPartial() {
+        com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes result = new com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes(this);
         int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
         result.expiryDate_ = expiryDate_;
         if (definitionsBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          if (((bitField0_ & 0x00000001) != 0)) {
             definitions_ = java.util.Collections.unmodifiableList(definitions_);
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000001);
           }
           result.definitions_ = definitions_;
         } else {
           result.definitions_ = definitionsBuilder_.build();
         }
-        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
 
-      @Override
+      @java.lang.Override
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
-      @Override
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.setField(field, value);
+          java.lang.Object value) {
+        return super.setField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
-      @Override
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
-      @Override
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
       }
-      @Override
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof IssuingAttributes) {
-          return mergeFrom((IssuingAttributes)other);
+        if (other instanceof com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes) {
+          return mergeFrom((com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(IssuingAttributes other) {
-        if (other == IssuingAttributes.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes other) {
+        if (other == com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.getDefaultInstance()) return this;
         if (!other.getExpiryDate().isEmpty()) {
           expiryDate_ = other.expiryDate_;
           onChanged();
@@ -523,7 +537,7 @@ public final class IssuingAttributesProto {
           if (!other.definitions_.isEmpty()) {
             if (definitions_.isEmpty()) {
               definitions_ = other.definitions_;
-              bitField0_ = (bitField0_ & ~0x00000002);
+              bitField0_ = (bitField0_ & ~0x00000001);
             } else {
               ensureDefinitionsIsMutable();
               definitions_.addAll(other.definitions_);
@@ -536,8 +550,8 @@ public final class IssuingAttributesProto {
               definitionsBuilder_.dispose();
               definitionsBuilder_ = null;
               definitions_ = other.definitions_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-              definitionsBuilder_ =
+              bitField0_ = (bitField0_ & ~0x00000001);
+              definitionsBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getDefinitionsFieldBuilder() : null;
             } else {
@@ -550,21 +564,21 @@ public final class IssuingAttributesProto {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        IssuingAttributes parsedMessage = null;
+        com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (IssuingAttributes) e.getUnfinishedMessage();
+          parsedMessage = (com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -575,32 +589,34 @@ public final class IssuingAttributesProto {
       }
       private int bitField0_;
 
-      private Object expiryDate_ = "";
+      private java.lang.Object expiryDate_ = "";
       /**
        * <code>string expiry_date = 1;</code>
+       * @return The expiryDate.
        */
-      public String getExpiryDate() {
-        Object ref = expiryDate_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getExpiryDate() {
+        java.lang.Object ref = expiryDate_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+          java.lang.String s = bs.toStringUtf8();
           expiryDate_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
        * <code>string expiry_date = 1;</code>
+       * @return The bytes for expiryDate.
        */
       public com.google.protobuf.ByteString
           getExpiryDateBytes() {
-        Object ref = expiryDate_;
+        java.lang.Object ref = expiryDate_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           expiryDate_ = b;
           return b;
         } else {
@@ -609,28 +625,33 @@ public final class IssuingAttributesProto {
       }
       /**
        * <code>string expiry_date = 1;</code>
+       * @param value The expiryDate to set.
+       * @return This builder for chaining.
        */
       public Builder setExpiryDate(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-
+  
         expiryDate_ = value;
         onChanged();
         return this;
       }
       /**
        * <code>string expiry_date = 1;</code>
+       * @return This builder for chaining.
        */
       public Builder clearExpiryDate() {
-
+        
         expiryDate_ = getDefaultInstance().getExpiryDate();
         onChanged();
         return this;
       }
       /**
        * <code>string expiry_date = 1;</code>
+       * @param value The bytes for expiryDate to set.
+       * @return This builder for chaining.
        */
       public Builder setExpiryDateBytes(
           com.google.protobuf.ByteString value) {
@@ -638,28 +659,28 @@ public final class IssuingAttributesProto {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-
+        
         expiryDate_ = value;
         onChanged();
         return this;
       }
 
-      private java.util.List<Definition> definitions_ =
+      private java.util.List<com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition> definitions_ =
         java.util.Collections.emptyList();
       private void ensureDefinitionsIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          definitions_ = new java.util.ArrayList<Definition>(definitions_);
-          bitField0_ |= 0x00000002;
+        if (!((bitField0_ & 0x00000001) != 0)) {
+          definitions_ = new java.util.ArrayList<com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition>(definitions_);
+          bitField0_ |= 0x00000001;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          Definition, Definition.Builder, DefinitionOrBuilder> definitionsBuilder_;
+          com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.DefinitionOrBuilder> definitionsBuilder_;
 
       /**
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
-      public java.util.List<Definition> getDefinitionsList() {
+      public java.util.List<com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition> getDefinitionsList() {
         if (definitionsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(definitions_);
         } else {
@@ -679,7 +700,7 @@ public final class IssuingAttributesProto {
       /**
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
-      public Definition getDefinitions(int index) {
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition getDefinitions(int index) {
         if (definitionsBuilder_ == null) {
           return definitions_.get(index);
         } else {
@@ -690,7 +711,7 @@ public final class IssuingAttributesProto {
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
       public Builder setDefinitions(
-          int index, Definition value) {
+          int index, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition value) {
         if (definitionsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -707,7 +728,7 @@ public final class IssuingAttributesProto {
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
       public Builder setDefinitions(
-          int index, Definition.Builder builderForValue) {
+          int index, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder builderForValue) {
         if (definitionsBuilder_ == null) {
           ensureDefinitionsIsMutable();
           definitions_.set(index, builderForValue.build());
@@ -720,7 +741,7 @@ public final class IssuingAttributesProto {
       /**
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
-      public Builder addDefinitions(Definition value) {
+      public Builder addDefinitions(com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition value) {
         if (definitionsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -737,7 +758,7 @@ public final class IssuingAttributesProto {
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
       public Builder addDefinitions(
-          int index, Definition value) {
+          int index, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition value) {
         if (definitionsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -754,7 +775,7 @@ public final class IssuingAttributesProto {
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
       public Builder addDefinitions(
-          Definition.Builder builderForValue) {
+          com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder builderForValue) {
         if (definitionsBuilder_ == null) {
           ensureDefinitionsIsMutable();
           definitions_.add(builderForValue.build());
@@ -768,7 +789,7 @@ public final class IssuingAttributesProto {
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
       public Builder addDefinitions(
-          int index, Definition.Builder builderForValue) {
+          int index, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder builderForValue) {
         if (definitionsBuilder_ == null) {
           ensureDefinitionsIsMutable();
           definitions_.add(index, builderForValue.build());
@@ -782,7 +803,7 @@ public final class IssuingAttributesProto {
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
       public Builder addAllDefinitions(
-          Iterable<? extends Definition> values) {
+          java.lang.Iterable<? extends com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition> values) {
         if (definitionsBuilder_ == null) {
           ensureDefinitionsIsMutable();
           com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -799,7 +820,7 @@ public final class IssuingAttributesProto {
       public Builder clearDefinitions() {
         if (definitionsBuilder_ == null) {
           definitions_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
           onChanged();
         } else {
           definitionsBuilder_.clear();
@@ -822,14 +843,14 @@ public final class IssuingAttributesProto {
       /**
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
-      public Definition.Builder getDefinitionsBuilder(
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder getDefinitionsBuilder(
           int index) {
         return getDefinitionsFieldBuilder().getBuilder(index);
       }
       /**
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
-      public DefinitionOrBuilder getDefinitionsOrBuilder(
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.DefinitionOrBuilder getDefinitionsOrBuilder(
           int index) {
         if (definitionsBuilder_ == null) {
           return definitions_.get(index);  } else {
@@ -839,7 +860,7 @@ public final class IssuingAttributesProto {
       /**
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
-      public java.util.List<? extends DefinitionOrBuilder>
+      public java.util.List<? extends com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.DefinitionOrBuilder> 
            getDefinitionsOrBuilderList() {
         if (definitionsBuilder_ != null) {
           return definitionsBuilder_.getMessageOrBuilderList();
@@ -850,46 +871,46 @@ public final class IssuingAttributesProto {
       /**
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
-      public Definition.Builder addDefinitionsBuilder() {
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder addDefinitionsBuilder() {
         return getDefinitionsFieldBuilder().addBuilder(
-            Definition.getDefaultInstance());
+            com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.getDefaultInstance());
       }
       /**
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
-      public Definition.Builder addDefinitionsBuilder(
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder addDefinitionsBuilder(
           int index) {
         return getDefinitionsFieldBuilder().addBuilder(
-            index, Definition.getDefaultInstance());
+            index, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.getDefaultInstance());
       }
       /**
        * <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
        */
-      public java.util.List<Definition.Builder>
+      public java.util.List<com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder> 
            getDefinitionsBuilderList() {
         return getDefinitionsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          Definition, Definition.Builder, DefinitionOrBuilder>
+          com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.DefinitionOrBuilder> 
           getDefinitionsFieldBuilder() {
         if (definitionsBuilder_ == null) {
           definitionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              Definition, Definition.Builder, DefinitionOrBuilder>(
+              com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.DefinitionOrBuilder>(
                   definitions_,
-                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  ((bitField0_ & 0x00000001) != 0),
                   getParentForChildren(),
                   isClean());
           definitions_ = null;
         }
         return definitionsBuilder_;
       }
-      @Override
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
+        return super.setUnknownFields(unknownFields);
       }
 
-      @Override
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -900,18 +921,18 @@ public final class IssuingAttributesProto {
     }
 
     // @@protoc_insertion_point(class_scope:sharepubapi_v1.IssuingAttributes)
-    private static final IssuingAttributes DEFAULT_INSTANCE;
+    private static final com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new IssuingAttributes();
+      DEFAULT_INSTANCE = new com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes();
     }
 
-    public static IssuingAttributes getDefaultInstance() {
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<IssuingAttributes>
         PARSER = new com.google.protobuf.AbstractParser<IssuingAttributes>() {
-      @Override
+      @java.lang.Override
       public IssuingAttributes parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -924,13 +945,13 @@ public final class IssuingAttributesProto {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<IssuingAttributes> getParserForType() {
       return PARSER;
     }
 
-    @Override
-    public IssuingAttributes getDefaultInstanceForType() {
+    @java.lang.Override
+    public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -942,10 +963,12 @@ public final class IssuingAttributesProto {
 
     /**
      * <code>string name = 1;</code>
+     * @return The name.
      */
-    String getName();
+    java.lang.String getName();
     /**
      * <code>string name = 1;</code>
+     * @return The bytes for name.
      */
     com.google.protobuf.ByteString
         getNameBytes();
@@ -953,7 +976,7 @@ public final class IssuingAttributesProto {
   /**
    * Protobuf type {@code sharepubapi_v1.Definition}
    */
-  public  static final class Definition extends
+  public static final class Definition extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:sharepubapi_v1.Definition)
       DefinitionOrBuilder {
@@ -966,7 +989,14 @@ public final class IssuingAttributesProto {
       name_ = "";
     }
 
-    @Override
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new Definition();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -977,9 +1007,8 @@ public final class IssuingAttributesProto {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new NullPointerException();
+        throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -991,13 +1020,13 @@ public final class IssuingAttributesProto {
               done = true;
               break;
             case 10: {
-              String s = input.readStringRequireUtf8();
+              java.lang.String s = input.readStringRequireUtf8();
 
               name_ = s;
               break;
             }
             default: {
-              if (!parseUnknownFieldProto3(
+              if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
@@ -1017,44 +1046,48 @@ public final class IssuingAttributesProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return IssuingAttributesProto.internal_static_sharepubapi_v1_Definition_descriptor;
+      return com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.internal_static_sharepubapi_v1_Definition_descriptor;
     }
 
-    @Override
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return IssuingAttributesProto.internal_static_sharepubapi_v1_Definition_fieldAccessorTable
+      return com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.internal_static_sharepubapi_v1_Definition_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              Definition.class, Builder.class);
+              com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.class, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder.class);
     }
 
     public static final int NAME_FIELD_NUMBER = 1;
-    private volatile Object name_;
+    private volatile java.lang.Object name_;
     /**
      * <code>string name = 1;</code>
+     * @return The name.
      */
-    public String getName() {
-      Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
+        com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         name_ = s;
         return s;
       }
     }
     /**
      * <code>string name = 1;</code>
+     * @return The bytes for name.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getNameBytes() {
-      Object ref = name_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         name_ = b;
         return b;
       } else {
@@ -1063,7 +1096,7 @@ public final class IssuingAttributesProto {
     }
 
     private byte memoizedIsInitialized = -1;
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1073,22 +1106,22 @@ public final class IssuingAttributesProto {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!getNameBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
       }
       unknownFields.writeTo(output);
     }
 
-    @Override
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      if (!getNameBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
       }
       size += unknownFields.getSerializedSize();
@@ -1096,24 +1129,23 @@ public final class IssuingAttributesProto {
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof Definition)) {
+      if (!(obj instanceof com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition)) {
         return super.equals(obj);
       }
-      Definition other = (Definition) obj;
+      com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition other = (com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition) obj;
 
-      boolean result = true;
-      result = result && getName()
-          .equals(other.getName());
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (!getName()
+          .equals(other.getName())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -1127,69 +1159,69 @@ public final class IssuingAttributesProto {
       return hash;
     }
 
-    public static Definition parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Definition parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Definition parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Definition parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Definition parseFrom(byte[] data)
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Definition parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Definition parseFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static Definition parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static Definition parseDelimitedFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static Definition parseDelimitedFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static Definition parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static Definition parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1197,21 +1229,21 @@ public final class IssuingAttributesProto {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(Definition prototype) {
+    public static Builder newBuilder(com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @Override
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
@@ -1223,18 +1255,18 @@ public final class IssuingAttributesProto {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:sharepubapi_v1.Definition)
-        DefinitionOrBuilder {
+        com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.DefinitionOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return IssuingAttributesProto.internal_static_sharepubapi_v1_Definition_descriptor;
+        return com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.internal_static_sharepubapi_v1_Definition_descriptor;
       }
 
-      @Override
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return IssuingAttributesProto.internal_static_sharepubapi_v1_Definition_fieldAccessorTable
+        return com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.internal_static_sharepubapi_v1_Definition_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                Definition.class, Builder.class);
+                com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.class, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder.class);
       }
 
       // Construct using com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.newBuilder()
@@ -1252,7 +1284,7 @@ public final class IssuingAttributesProto {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @Override
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         name_ = "";
@@ -1260,78 +1292,78 @@ public final class IssuingAttributesProto {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return IssuingAttributesProto.internal_static_sharepubapi_v1_Definition_descriptor;
+        return com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.internal_static_sharepubapi_v1_Definition_descriptor;
       }
 
-      @Override
-      public Definition getDefaultInstanceForType() {
-        return Definition.getDefaultInstance();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition getDefaultInstanceForType() {
+        return com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.getDefaultInstance();
       }
 
-      @Override
-      public Definition build() {
-        Definition result = buildPartial();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition build() {
+        com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @Override
-      public Definition buildPartial() {
-        Definition result = new Definition(this);
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition buildPartial() {
+        com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition result = new com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition(this);
         result.name_ = name_;
         onBuilt();
         return result;
       }
 
-      @Override
+      @java.lang.Override
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
-      @Override
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.setField(field, value);
+          java.lang.Object value) {
+        return super.setField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
-      @Override
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
-      @Override
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
       }
-      @Override
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof Definition) {
-          return mergeFrom((Definition)other);
+        if (other instanceof com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition) {
+          return mergeFrom((com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(Definition other) {
-        if (other == Definition.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition other) {
+        if (other == com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.getDefaultInstance()) return this;
         if (!other.getName().isEmpty()) {
           name_ = other.name_;
           onChanged();
@@ -1341,21 +1373,21 @@ public final class IssuingAttributesProto {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        Definition parsedMessage = null;
+        com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (Definition) e.getUnfinishedMessage();
+          parsedMessage = (com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1365,32 +1397,34 @@ public final class IssuingAttributesProto {
         return this;
       }
 
-      private Object name_ = "";
+      private java.lang.Object name_ = "";
       /**
        * <code>string name = 1;</code>
+       * @return The name.
        */
-      public String getName() {
-        Object ref = name_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+          java.lang.String s = bs.toStringUtf8();
           name_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
        * <code>string name = 1;</code>
+       * @return The bytes for name.
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
-        Object ref = name_;
+        java.lang.Object ref = name_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           name_ = b;
           return b;
         } else {
@@ -1399,28 +1433,33 @@ public final class IssuingAttributesProto {
       }
       /**
        * <code>string name = 1;</code>
+       * @param value The name to set.
+       * @return This builder for chaining.
        */
       public Builder setName(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-
+  
         name_ = value;
         onChanged();
         return this;
       }
       /**
        * <code>string name = 1;</code>
+       * @return This builder for chaining.
        */
       public Builder clearName() {
-
+        
         name_ = getDefaultInstance().getName();
         onChanged();
         return this;
       }
       /**
        * <code>string name = 1;</code>
+       * @param value The bytes for name to set.
+       * @return This builder for chaining.
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
@@ -1428,18 +1467,18 @@ public final class IssuingAttributesProto {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-
+        
         name_ = value;
         onChanged();
         return this;
       }
-      @Override
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
+        return super.setUnknownFields(unknownFields);
       }
 
-      @Override
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -1450,18 +1489,18 @@ public final class IssuingAttributesProto {
     }
 
     // @@protoc_insertion_point(class_scope:sharepubapi_v1.Definition)
-    private static final Definition DEFAULT_INSTANCE;
+    private static final com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new Definition();
+      DEFAULT_INSTANCE = new com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition();
     }
 
-    public static Definition getDefaultInstance() {
+    public static com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<Definition>
         PARSER = new com.google.protobuf.AbstractParser<Definition>() {
-      @Override
+      @java.lang.Override
       public Definition parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1474,13 +1513,13 @@ public final class IssuingAttributesProto {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<Definition> getParserForType() {
       return PARSER;
     }
 
-    @Override
-    public Definition getDefaultInstanceForType() {
+    @java.lang.Override
+    public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1488,12 +1527,12 @@ public final class IssuingAttributesProto {
 
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sharepubapi_v1_IssuingAttributes_descriptor;
-  private static final
+  private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sharepubapi_v1_IssuingAttributes_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sharepubapi_v1_Definition_descriptor;
-  private static final
+  private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sharepubapi_v1_Definition_fieldAccessorTable;
 
@@ -1504,41 +1543,35 @@ public final class IssuingAttributesProto {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n\027IssuingAttributes.proto\022\016sharepubapi_v" +
       "1\"Y\n\021IssuingAttributes\022\023\n\013expiry_date\030\001 " +
       "\001(\t\022/\n\013definitions\030\002 \003(\0132\032.sharepubapi_v" +
       "1.Definition\"\032\n\nDefinition\022\014\n\004name\030\001 \001(\t" +
-      "B\267\001\n$com.yoti.api.client.spi.remote.prot" +
-      "oB\026IssuingAttributesProtoZ\016yotiprotoshar" +
-      "e\252\002\030Yoti.Auth.ProtoBuf.Share\312\002\020Yoti\\Shar" +
-      "epubapi\342\002\034Yoti\\Sharepubapi\\GPBMetadata\352\002" +
-      "\031Yoti.Protobuf.Sharepubapib\006proto3"
+      "B\355\001\n$com.yoti.api.client.spi.remote.prot" +
+      "oB\026IssuingAttributesProtoZ0github.com/ge" +
+      "tyoti/yoti-go-sdk/v3/yotiprotoshare\252\002\030Yo" +
+      "ti.Auth.ProtoBuf.Share\312\002\031Yoti\\Protobuf\\S" +
+      "harepubapi\342\002%Yoti\\Protobuf\\Sharepubapi\\G" +
+      "PBMetadata\352\002\033Yoti::Protobuf::Sharepubapi" +
+      "b\006proto3"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
-    com.google.protobuf.Descriptors.FileDescriptor
+    descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+        });
     internal_static_sharepubapi_v1_IssuingAttributes_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_sharepubapi_v1_IssuingAttributes_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sharepubapi_v1_IssuingAttributes_descriptor,
-        new String[] { "ExpiryDate", "Definitions", });
+        new java.lang.String[] { "ExpiryDate", "Definitions", });
     internal_static_sharepubapi_v1_Definition_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_sharepubapi_v1_Definition_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sharepubapi_v1_Definition_descriptor,
-        new String[] { "Name", });
+        new java.lang.String[] { "Name", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

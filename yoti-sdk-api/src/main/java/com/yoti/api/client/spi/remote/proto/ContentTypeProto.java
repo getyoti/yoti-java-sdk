@@ -90,20 +90,26 @@ public final class ContentTypeProto {
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
             "Can't get the number of an unknown enum value.");
       }
       return value;
     }
 
     /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
      * @deprecated Use {@link #forNumber(int)} instead.
      */
-    @Deprecated
+    @java.lang.Deprecated
     public static ContentType valueOf(int value) {
       return forNumber(value);
     }
 
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
     public static ContentType forNumber(int value) {
       switch (value) {
         case 0: return UNDEFINED;
@@ -132,6 +138,10 @@ public final class ContentTypeProto {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -140,7 +150,7 @@ public final class ContentTypeProto {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return ContentTypeProto.getDescriptor().getEnumTypes().get(0);
+      return com.yoti.api.client.spi.remote.proto.ContentTypeProto.getDescriptor().getEnumTypes().get(0);
     }
 
     private static final ContentType[] VALUES = values();
@@ -148,7 +158,7 @@ public final class ContentTypeProto {
     public static ContentType valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new IllegalArgumentException(
+        throw new java.lang.IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
@@ -174,27 +184,22 @@ public final class ContentTypeProto {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n\021ContentType.proto\022\rattrpubapi_v1*i\n\013Co" +
       "ntentType\022\r\n\tUNDEFINED\020\000\022\n\n\006STRING\020\001\022\010\n\004" +
       "JPEG\020\002\022\010\n\004DATE\020\003\022\007\n\003PNG\020\004\022\010\n\004JSON\020\005\022\017\n\013M" +
-      "ULTI_VALUE\020\006\022\007\n\003INT\020\007Bs\n$com.yoti.api.cl" +
-      "ient.spi.remote.protoB\020ContentTypeProtoZ" +
-      "\ryotiprotoattr\252\002\034Yoti.Auth.ProtoBuf.Attr" +
-      "ibute\312\002\nAttrpubapib\006proto3"
+      "ULTI_VALUE\020\006\022\007\n\003INT\020\007B\347\001\n$com.yoti.api.c" +
+      "lient.spi.remote.protoB\020ContentTypeProto" +
+      "Z/github.com/getyoti/yoti-go-sdk/v3/yoti" +
+      "protoattr\252\002\034Yoti.Auth.ProtoBuf.Attribute" +
+      "\312\002\030Yoti\\Protobuf\\Attrpubapi\342\002$Yoti\\Proto" +
+      "buf\\Attrpubapi\\GPBMetadata\352\002\032Yoti::Proto" +
+      "buf::Attrpubapib\006proto3"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
-    com.google.protobuf.Descriptors.FileDescriptor
+    descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+        });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
