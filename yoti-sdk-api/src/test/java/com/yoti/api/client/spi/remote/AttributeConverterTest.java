@@ -9,7 +9,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
@@ -31,12 +32,10 @@ import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
 import com.yoti.api.client.spi.remote.util.AnchorType;
 
 import com.google.protobuf.ByteString;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.*;
+import org.mockito.junit.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AttributeConverterTest {
@@ -287,6 +286,12 @@ public class AttributeConverterTest {
         assertImageValue(list.get(0), "image/png", SOME_IMAGE_BYTES);
     }
 
+    private static void assertImageValue(Object result, String mimeType, byte[] content) {
+        Image image = (Image) result;
+        assertThat(image.getMimeType(), is(mimeType));
+        assertThat(image.getContent(), is(content));
+    }
+
     @Test
     public void shouldParseStringAttributeWithEmptyValue() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
@@ -406,12 +411,6 @@ public class AttributeConverterTest {
                 .build();
     }
 
-    private static void assertImageValue(Object result, String mimeType, byte[] content) {
-        Image image = (Image) result;
-        assertThat(image.getMimeType(), is(mimeType));
-        assertThat(image.getContent(), is(content));
-    }
-
     @Test
     public void shouldParseAnIntValue() throws Exception {
         AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
@@ -422,6 +421,39 @@ public class AttributeConverterTest {
 
         Attribute<Integer> result = testObj.convertAttribute(attribute);
 
+        assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
+        assertEquals(SOME_INT_VALUE, result.getValue());
+    }
+
+    @Test
+    public void shouldReturnNullIdWhenNotSet() throws ParseException, IOException {
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setContentType(ContentTypeProto.ContentType.INT)
+                .setName(SOME_ATTRIBUTE_NAME)
+                .setValue(ByteString.copyFromUtf8(String.valueOf(SOME_INT_VALUE)))
+                .build();
+
+        Attribute<Integer> result = testObj.convertAttribute(attribute);
+
+        assertNull(result.getId());
+        assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
+        assertEquals(SOME_INT_VALUE, result.getValue());
+    }
+
+    @Test
+    public void shouldReturnTheIdWhenSet() throws ParseException, IOException {
+        String anId = "anId";
+
+        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+                .setEphemeralId(anId)
+                .setContentType(ContentTypeProto.ContentType.INT)
+                .setName(SOME_ATTRIBUTE_NAME)
+                .setValue(ByteString.copyFromUtf8(String.valueOf(SOME_INT_VALUE)))
+                .build();
+
+        Attribute<Integer> result = testObj.convertAttribute(attribute);
+
+        assertEquals(anId, result.getId());
         assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
         assertEquals(SOME_INT_VALUE, result.getValue());
     }

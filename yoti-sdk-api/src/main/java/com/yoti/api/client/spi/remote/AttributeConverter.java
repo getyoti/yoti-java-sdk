@@ -47,7 +47,11 @@ class AttributeConverter {
         List<Anchor> anchors = convertAnchors(attribute);
         List<Anchor> sources = filterAnchors(anchors, AnchorType.SOURCE.name());
         List<Anchor> verifiers = filterAnchors(anchors, AnchorType.VERIFIER.name());
-        return new Attribute(attribute.getName(), value, sources, verifiers, anchors);
+        return new Attribute(emptyToNull(attribute.getEphemeralId()), attribute.getName(), value, sources, verifiers, anchors);
+    }
+
+    private static String emptyToNull(String value) {
+        return value == null || value.isEmpty() ? null : value;
     }
 
     private Object convertValueFromProto(AttrProto.Attribute attribute) throws ParseException, IOException {
