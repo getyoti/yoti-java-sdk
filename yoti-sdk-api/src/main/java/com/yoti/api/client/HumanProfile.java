@@ -193,4 +193,14 @@ public class HumanProfile extends Profile {
         return (Attribute<List<Image>>) a;
     }
 
+    /**
+     * JSON object containing identity assertion and the verification report.
+     * This will be null if not provided by Yoti.
+     *
+     * @return the identity profile report
+     */
+    public Attribute<Map<String, Object>> getIdentityProfileReport() {
+        return getAttribute(AttributeConstants.HumanProfileAttributes.IDENTITY_PROFILE_REPORT, (Class) Map.class);
+    }
+
 }

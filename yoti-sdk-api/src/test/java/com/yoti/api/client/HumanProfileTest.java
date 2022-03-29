@@ -4,23 +4,30 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.isOneOf;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
-import org.junit.Test;
+import com.yoti.api.client.spi.remote.AttributeParser;
+import com.yoti.api.client.spi.remote.proto.AttrProto;
+import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
+
+import com.google.protobuf.ByteString;
+import org.junit.*;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.*;
+import org.mockito.junit.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HumanProfileTest {
@@ -335,7 +342,38 @@ public class HumanProfileTest {
 
         assertSame(ageUnder18Attribute, result.getAttribute());
     }
-    
+
+    @Test
+    public void getIdentityProfileReport_shouldReturnValueForIdentityProfileReport() throws ParseException, IOException {
+        String identityReportJson = "{\"identity_assertion\":\"\",\"verification_report\":{"
+                + "\"report_id\":\"anId\",\"timestamp\":\"2022-07-20T02:00:00Z\",\"subject_id\":\"aSubject\","
+                + "\"trust_framework\":\"aFramework\"}}";
+
+        String attributeName = "identity_profile_report";
+
+        AttrProto.Attribute identity_profile_report = AttrProto.Attribute.newBuilder()
+                .setName(attributeName)
+                .setContentType(ContentTypeProto.ContentType.JSON)
+                .setValue(ByteString.copyFromUtf8(identityReportJson))
+                .build();
+
+        List<Attribute<?>> attributes = new ArrayList<>();
+
+        attributes.add(AttributeParser.fromProto(identity_profile_report));
+
+        HumanProfile humanProfile = new HumanProfile(attributes);
+
+        Attribute<Map<String, Object>> identityProfileReport = humanProfile.getIdentityProfileReport();
+
+        assertThat(identityProfileReport, is(notNullValue()));
+        assertThat(identityProfileReport.getName(), is(equalTo(attributeName)));
+
+        Map<?, ?> value = identityProfileReport.getValue();
+        assertThat(value, is(notNullValue()));
+        assertThat(value.get("identity_assertion"), is(notNullValue()));
+        assertThat(value.get("verification_report"), is(notNullValue()));
+    }
+
     private static <T> List<Attribute<?>> asAttributeList(String key, T o) {
         Attribute<?> a = createAttribute(key, o);
         return Collections.singletonList(a);
