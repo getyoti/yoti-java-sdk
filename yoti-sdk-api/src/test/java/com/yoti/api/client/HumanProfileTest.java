@@ -379,15 +379,32 @@ public class HumanProfileTest {
     @Test
     public void getAttributeById_shouldReturnAttributeById() {
         String anId = "anId";
-        Attribute<JpegAttributeValue> imageAttribute = createImageAttribute(anId);
+        Attribute<JpegAttributeValue> imageAttribute = createImageAttribute(anId, "attr_1");
 
         List<Attribute<?>> attributes = new ArrayList<>();
         attributes.add(imageAttribute);
-        attributes.add(createImageAttribute("anotherId"));
+        attributes.add(createImageAttribute("anotherId", "attr_2"));
 
         HumanProfile humanProfile = new HumanProfile(attributes);
 
-        Attribute<?> attribute = humanProfile.getAttributeById(anId);
+        Attribute<Object> attribute = humanProfile.getAttributeById(anId);
+
+        assertThat(attribute, is(imageAttribute));
+    }
+
+    @Test
+    public void getAttributeById_AttributeWithSameName_shouldReturnAttributeById() {
+        String anId = "anId";
+        String aName = "aName";
+        Attribute<JpegAttributeValue> imageAttribute = createImageAttribute(anId, aName);
+
+        List<Attribute<?>> attributes = new ArrayList<>();
+        attributes.add(imageAttribute);
+        attributes.add(createImageAttribute("anotherId", aName));
+
+        HumanProfile humanProfile = new HumanProfile(attributes);
+
+        Attribute<Object> attribute = humanProfile.getAttributeById(anId);
 
         assertThat(attribute, is(imageAttribute));
     }
@@ -395,22 +412,18 @@ public class HumanProfileTest {
     @Test
     public void getAttributeById_shouldReturnNull() {
         List<Attribute<?>> attributes = new ArrayList<>();
-        attributes.add(createImageAttribute("anId"));
-        attributes.add(createImageAttribute("anotherId"));
+        attributes.add(createImageAttribute("anId", "attr_1"));
+        attributes.add(createImageAttribute("anotherId", "attr_2"));
 
         HumanProfile humanProfile = new HumanProfile(attributes);
 
-        Attribute<?> attribute = humanProfile.getAttributeById("unknown_id");
+        Attribute<Object> attribute = humanProfile.getAttributeById("unknown_id");
 
         assertNull(attribute);
     }
 
-    private static Attribute<JpegAttributeValue> createImageAttribute(String id) {
-        return new Attribute<>(
-                id,
-                String.format("name_%s", id),
-                new JpegAttributeValue("image".getBytes(StandardCharsets.UTF_8))
-        );
+    private static Attribute<JpegAttributeValue> createImageAttribute(String id, String name) {
+        return new Attribute<>(id, name, new JpegAttributeValue("image".getBytes(StandardCharsets.UTF_8)));
     }
 
     private static <T> List<Attribute<?>> asAttributeList(String key, T o) {

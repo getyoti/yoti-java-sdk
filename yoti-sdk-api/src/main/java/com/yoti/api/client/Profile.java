@@ -121,12 +121,12 @@ public abstract class Profile {
      * @param id the ID to match
      * @return attribute value, <code>null</code> if there was no match
      */
-    public Attribute<?> getAttributeById(String id) {
+    public Attribute<Object> getAttributeById(String id) {
         if (id == null) {
             throw new IllegalArgumentException("Attribute ID must not be null");
         }
 
-        return protectedAttributes.values()
+        return (Attribute<Object>) protectedAttributes.values()
                 .stream()
                 .flatMap(List::stream)
                 .filter(attribute -> Objects.equals(attribute.getId(), id))
