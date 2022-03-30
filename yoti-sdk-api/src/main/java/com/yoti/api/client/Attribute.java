@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class Attribute<T> {
 
+    private final String id;
     private final String name;
     private final T value;
     private final List<Anchor> sources;
@@ -21,7 +22,21 @@ public class Attribute<T> {
         this(name, value, Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
     }
 
+    public Attribute(String id, String name, T value) {
+        this(id, name, value, Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
+    }
+
     public Attribute(String name, T value, List<Anchor> sources, List<Anchor> verifiers, List<Anchor> allAnchors) {
+        this.id = null;
+        this.name = name;
+        this.value = value;
+        this.sources = notNull(sources, "sources");
+        this.verifiers = notNull(verifiers, "verifiers");
+        this.allAnchors = notNull(allAnchors, "allAnchors");
+    }
+
+    public Attribute(String id, String name, T value, List<Anchor> sources, List<Anchor> verifiers, List<Anchor> allAnchors) {
+        this.id = id;
         this.name = name;
         this.value = value;
         this.sources = notNull(sources, "sources");
@@ -30,7 +45,17 @@ public class Attribute<T> {
     }
 
     /**
+     * The ID of the attribute
+     *
+     * @return attribute ID
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
      * The name of the attribute
+     *
      * @return name of the attribute
      */
     public String getName() {

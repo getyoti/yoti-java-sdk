@@ -20,18 +20,20 @@ public final class EncryptedDataProto {
 
     /**
      * <code>bytes iv = 1;</code>
+     * @return The iv.
      */
     com.google.protobuf.ByteString getIv();
 
     /**
      * <code>bytes cipher_text = 2;</code>
+     * @return The cipherText.
      */
     com.google.protobuf.ByteString getCipherText();
   }
   /**
    * Protobuf type {@code compubapi_v1.EncryptedData}
    */
-  public  static final class EncryptedData extends
+  public static final class EncryptedData extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:compubapi_v1.EncryptedData)
       EncryptedDataOrBuilder {
@@ -45,7 +47,14 @@ public final class EncryptedDataProto {
       cipherText_ = com.google.protobuf.ByteString.EMPTY;
     }
 
-    @Override
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new EncryptedData();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -56,9 +65,8 @@ public final class EncryptedDataProto {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new NullPointerException();
+        throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -80,7 +88,7 @@ public final class EncryptedDataProto {
               break;
             }
             default: {
-              if (!parseUnknownFieldProto3(
+              if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
@@ -100,22 +108,24 @@ public final class EncryptedDataProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_descriptor;
+      return com.yoti.api.client.spi.remote.proto.EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_descriptor;
     }
 
-    @Override
-    protected FieldAccessorTable
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_fieldAccessorTable
+      return com.yoti.api.client.spi.remote.proto.EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              EncryptedData.class, Builder.class);
+              com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData.class, com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData.Builder.class);
     }
 
     public static final int IV_FIELD_NUMBER = 1;
     private com.google.protobuf.ByteString iv_;
     /**
      * <code>bytes iv = 1;</code>
+     * @return The iv.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getIv() {
       return iv_;
     }
@@ -124,13 +134,15 @@ public final class EncryptedDataProto {
     private com.google.protobuf.ByteString cipherText_;
     /**
      * <code>bytes cipher_text = 2;</code>
+     * @return The cipherText.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getCipherText() {
       return cipherText_;
     }
 
     private byte memoizedIsInitialized = -1;
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -140,7 +152,7 @@ public final class EncryptedDataProto {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (!iv_.isEmpty()) {
@@ -152,7 +164,7 @@ public final class EncryptedDataProto {
       unknownFields.writeTo(output);
     }
 
-    @Override
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -171,26 +183,25 @@ public final class EncryptedDataProto {
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof EncryptedData)) {
+      if (!(obj instanceof com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData)) {
         return super.equals(obj);
       }
-      EncryptedData other = (EncryptedData) obj;
+      com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData other = (com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData) obj;
 
-      boolean result = true;
-      result = result && getIv()
-          .equals(other.getIv());
-      result = result && getCipherText()
-          .equals(other.getCipherText());
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (!getIv()
+          .equals(other.getIv())) return false;
+      if (!getCipherText()
+          .equals(other.getCipherText())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -206,69 +217,69 @@ public final class EncryptedDataProto {
       return hash;
     }
 
-    public static EncryptedData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static EncryptedData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static EncryptedData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static EncryptedData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static EncryptedData parseFrom(byte[] data)
+    public static com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static EncryptedData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static EncryptedData parseFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static EncryptedData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static EncryptedData parseDelimitedFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static EncryptedData parseDelimitedFrom(
+    public static com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static EncryptedData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static EncryptedData parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -276,23 +287,23 @@ public final class EncryptedDataProto {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(EncryptedData prototype) {
+    public static Builder newBuilder(com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @Override
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -302,18 +313,18 @@ public final class EncryptedDataProto {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:compubapi_v1.EncryptedData)
-        EncryptedDataOrBuilder {
+        com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedDataOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_descriptor;
+        return com.yoti.api.client.spi.remote.proto.EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_descriptor;
       }
 
-      @Override
-      protected FieldAccessorTable
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_fieldAccessorTable
+        return com.yoti.api.client.spi.remote.proto.EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                EncryptedData.class, Builder.class);
+                com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData.class, com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData.Builder.class);
       }
 
       // Construct using com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData.newBuilder()
@@ -322,7 +333,7 @@ public final class EncryptedDataProto {
       }
 
       private Builder(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -331,7 +342,7 @@ public final class EncryptedDataProto {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @Override
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         iv_ = com.google.protobuf.ByteString.EMPTY;
@@ -341,79 +352,79 @@ public final class EncryptedDataProto {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_descriptor;
+        return com.yoti.api.client.spi.remote.proto.EncryptedDataProto.internal_static_compubapi_v1_EncryptedData_descriptor;
       }
 
-      @Override
-      public EncryptedData getDefaultInstanceForType() {
-        return EncryptedData.getDefaultInstance();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData getDefaultInstanceForType() {
+        return com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData.getDefaultInstance();
       }
 
-      @Override
-      public EncryptedData build() {
-        EncryptedData result = buildPartial();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData build() {
+        com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @Override
-      public EncryptedData buildPartial() {
-        EncryptedData result = new EncryptedData(this);
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData buildPartial() {
+        com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData result = new com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData(this);
         result.iv_ = iv_;
         result.cipherText_ = cipherText_;
         onBuilt();
         return result;
       }
 
-      @Override
+      @java.lang.Override
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
-      @Override
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.setField(field, value);
+          java.lang.Object value) {
+        return super.setField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
-      @Override
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
-      @Override
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
       }
-      @Override
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof EncryptedData) {
-          return mergeFrom((EncryptedData)other);
+        if (other instanceof com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData) {
+          return mergeFrom((com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(EncryptedData other) {
-        if (other == EncryptedData.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData other) {
+        if (other == com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData.getDefaultInstance()) return this;
         if (other.getIv() != com.google.protobuf.ByteString.EMPTY) {
           setIv(other.getIv());
         }
@@ -425,21 +436,21 @@ public final class EncryptedDataProto {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        EncryptedData parsedMessage = null;
+        com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (EncryptedData) e.getUnfinishedMessage();
+          parsedMessage = (com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -452,12 +463,16 @@ public final class EncryptedDataProto {
       private com.google.protobuf.ByteString iv_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>bytes iv = 1;</code>
+       * @return The iv.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getIv() {
         return iv_;
       }
       /**
        * <code>bytes iv = 1;</code>
+       * @param value The iv to set.
+       * @return This builder for chaining.
        */
       public Builder setIv(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -470,6 +485,7 @@ public final class EncryptedDataProto {
       }
       /**
        * <code>bytes iv = 1;</code>
+       * @return This builder for chaining.
        */
       public Builder clearIv() {
         
@@ -481,12 +497,16 @@ public final class EncryptedDataProto {
       private com.google.protobuf.ByteString cipherText_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>bytes cipher_text = 2;</code>
+       * @return The cipherText.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getCipherText() {
         return cipherText_;
       }
       /**
        * <code>bytes cipher_text = 2;</code>
+       * @param value The cipherText to set.
+       * @return This builder for chaining.
        */
       public Builder setCipherText(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -499,6 +519,7 @@ public final class EncryptedDataProto {
       }
       /**
        * <code>bytes cipher_text = 2;</code>
+       * @return This builder for chaining.
        */
       public Builder clearCipherText() {
         
@@ -506,13 +527,13 @@ public final class EncryptedDataProto {
         onChanged();
         return this;
       }
-      @Override
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
+        return super.setUnknownFields(unknownFields);
       }
 
-      @Override
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -523,18 +544,18 @@ public final class EncryptedDataProto {
     }
 
     // @@protoc_insertion_point(class_scope:compubapi_v1.EncryptedData)
-    private static final EncryptedData DEFAULT_INSTANCE;
+    private static final com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new EncryptedData();
+      DEFAULT_INSTANCE = new com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData();
     }
 
-    public static EncryptedData getDefaultInstance() {
+    public static com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<EncryptedData>
         PARSER = new com.google.protobuf.AbstractParser<EncryptedData>() {
-      @Override
+      @java.lang.Override
       public EncryptedData parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -547,13 +568,13 @@ public final class EncryptedDataProto {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<EncryptedData> getParserForType() {
       return PARSER;
     }
 
-    @Override
-    public EncryptedData getDefaultInstanceForType() {
+    @java.lang.Override
+    public com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -572,32 +593,27 @@ public final class EncryptedDataProto {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n\023EncryptedData.proto\022\014compubapi_v1\"0\n\rE" +
       "ncryptedData\022\n\n\002iv\030\001 \001(\014\022\023\n\013cipher_text\030" +
-      "\002 \001(\014Bp\n$com.yoti.api.client.spi.remote." +
-      "protoB\022EncryptedDataProtoZ\014yotiprotocom\252" +
-      "\002\031Yoti.Auth.ProtoBuf.Common\312\002\tCompubapib" +
-      "\006proto3"
+      "\002 \001(\014B\342\001\n$com.yoti.api.client.spi.remote" +
+      ".protoB\022EncryptedDataProtoZ.github.com/g" +
+      "etyoti/yoti-go-sdk/v3/yotiprotocom\252\002\031Yot" +
+      "i.Auth.ProtoBuf.Common\312\002\027Yoti\\Protobuf\\C" +
+      "ompubapi\342\002#Yoti\\Protobuf\\Compubapi\\GPBMe" +
+      "tadata\352\002\031Yoti::Protobuf::Compubapib\006prot" +
+      "o3"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
-    com.google.protobuf.Descriptors.FileDescriptor
+    descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+        });
     internal_static_compubapi_v1_EncryptedData_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_compubapi_v1_EncryptedData_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_compubapi_v1_EncryptedData_descriptor,
-        new String[] { "Iv", "CipherText", });
+        new java.lang.String[] { "Iv", "CipherText", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

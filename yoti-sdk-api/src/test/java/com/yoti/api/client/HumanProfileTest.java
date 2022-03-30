@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.yoti.api.client.spi.remote.AttributeParser;
+import com.yoti.api.client.spi.remote.JpegAttributeValue;
 import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
 
@@ -372,6 +374,56 @@ public class HumanProfileTest {
         assertThat(value, is(notNullValue()));
         assertThat(value.get("identity_assertion"), is(notNullValue()));
         assertThat(value.get("verification_report"), is(notNullValue()));
+    }
+
+    @Test
+    public void getAttributeById_shouldReturnAttributeById() {
+        String anId = "anId";
+        Attribute<JpegAttributeValue> imageAttribute = createImageAttribute(anId, "attr_1");
+
+        List<Attribute<?>> attributes = new ArrayList<>();
+        attributes.add(imageAttribute);
+        attributes.add(createImageAttribute("anotherId", "attr_2"));
+
+        HumanProfile humanProfile = new HumanProfile(attributes);
+
+        Attribute<Object> attribute = humanProfile.getAttributeById(anId);
+
+        assertThat(attribute, is(imageAttribute));
+    }
+
+    @Test
+    public void getAttributeById_AttributeWithSameName_shouldReturnAttributeById() {
+        String anId = "anId";
+        String aName = "aName";
+        Attribute<JpegAttributeValue> imageAttribute = createImageAttribute(anId, aName);
+
+        List<Attribute<?>> attributes = new ArrayList<>();
+        attributes.add(imageAttribute);
+        attributes.add(createImageAttribute("anotherId", aName));
+
+        HumanProfile humanProfile = new HumanProfile(attributes);
+
+        Attribute<Object> attribute = humanProfile.getAttributeById(anId);
+
+        assertThat(attribute, is(imageAttribute));
+    }
+
+    @Test
+    public void getAttributeById_shouldReturnNull() {
+        List<Attribute<?>> attributes = new ArrayList<>();
+        attributes.add(createImageAttribute("anId", "attr_1"));
+        attributes.add(createImageAttribute("anotherId", "attr_2"));
+
+        HumanProfile humanProfile = new HumanProfile(attributes);
+
+        Attribute<Object> attribute = humanProfile.getAttributeById("unknown_id");
+
+        assertNull(attribute);
+    }
+
+    private static Attribute<JpegAttributeValue> createImageAttribute(String id, String name) {
+        return new Attribute<>(id, name, new JpegAttributeValue("image".getBytes(StandardCharsets.UTF_8)));
     }
 
     private static <T> List<Attribute<?>> asAttributeList(String key, T o) {
