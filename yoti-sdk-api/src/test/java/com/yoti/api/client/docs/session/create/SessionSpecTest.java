@@ -1,26 +1,29 @@
 package com.yoti.api.client.docs.session.create;
 
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
+
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
-import java.time.OffsetDateTime;
+import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.yoti.api.client.common.IdentityProfile;
+import com.yoti.api.client.common.IdentityProfileScheme;
 import com.yoti.api.client.docs.session.create.check.RequestedDocumentAuthenticityCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedLivenessCheck;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
 import com.yoti.api.client.docs.session.create.task.RequestedIdDocTextExtractionTask;
+import com.yoti.api.client.shareurl.policy.DynamicPolicy;
 
-import org.junit.Test;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.*;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.*;
+import org.mockito.junit.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SessionSpecTest {
@@ -40,6 +43,8 @@ public class SessionSpecTest {
 
     private static final String SOME_SDK_CONFIG_SUCCESS_URL = "https://yourdomain.com/some/success/endpoint";
     private static final String SOME_SDK_CONFIG_ERROR_URL = "https://yourdomain.com/some/error/endpoint";
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Mock RequiredDocument requiredDocumentMock;
     @Mock IbvOptions ibvOptionsMock;
@@ -221,6 +226,62 @@ public class SessionSpecTest {
                 .build();
 
         assertThat(result.getSessionDeadline(), is(sessionDeadlineMock));
+    }
+
+    @Test
+    public void buildWithIdentityProfile() throws IOException {
+        IdentityProfileScheme scheme = new IdentityProfileScheme("A_TYPE", "AN_OBJECTIVE");
+
+        IdentityProfile identityProfile = new IdentityProfile("A_FRAMEWORK", scheme);
+
+        JsonNode json = toSessionSpecJson(identityProfile);
+
+        assertThat(json.get(Property.TRUST_FRAMEWORK).asText(), is(equalTo(identityProfile.getFramework())));
+
+        JsonNode schemeJsonNode = json.get(Property.SCHEME);
+        assertThat(schemeJsonNode.get(Property.TYPE).asText(), is(equalTo(scheme.getType())));
+        assertThat(schemeJsonNode.get(Property.OBJECTIVE).asText(), is(equalTo(scheme.getObjective())));
+    }
+
+    @Test
+    public void buildWithIdentityProfileMap() throws IOException {
+        Map<String, Object> scheme = new HashMap<>();
+        scheme.put(Property.TYPE, "A_TYPE");
+        scheme.put(Property.OBJECTIVE, "AN_OBJECTIVE");
+
+        Map<String, Object> identityProfile = new HashMap<>();
+        identityProfile.put(Property.TRUST_FRAMEWORK, "A_FRAMEWORK");
+        identityProfile.put(Property.SCHEME, scheme);
+
+        JsonNode json = toSessionSpecJson(identityProfile);
+
+        assertThat(
+                json.get(Property.TRUST_FRAMEWORK).asText(),
+                is(equalTo(identityProfile.get(Property.TRUST_FRAMEWORK)))
+        );
+
+        JsonNode schemeJsonNode = json.get(Property.SCHEME);
+        assertThat(schemeJsonNode.get(Property.TYPE).asText(), is(equalTo(scheme.get(Property.TYPE))));
+        assertThat(schemeJsonNode.get(Property.OBJECTIVE).asText(), is(equalTo(scheme.get(Property.OBJECTIVE))));
+    }
+
+    private static JsonNode toSessionSpecJson(Object obj) throws IOException {
+        SessionSpec session = SessionSpec.builder()
+                .withIdentityProfile(obj)
+                .build();
+
+        return MAPPER.readTree(MAPPER.writeValueAsString(session.getIdentityProfile()).getBytes(DEFAULT_CHARSET));
+    }
+
+    private static final class Property {
+
+        private static final String TYPE = "type";
+        private static final String SCHEME = "scheme";
+        private static final String OBJECTIVE = "objective";
+        private static final String TRUST_FRAMEWORK = "trust_framework";
+
+        private Property() { }
+
     }
 
 }
