@@ -7,36 +7,43 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GetSessionResult {
 
-    @JsonProperty("client_session_token_ttl")
+    @JsonProperty(Property.CLIENT_SESSION_TOKEN_TTL)
     private long clientSessionTokenTtl;
 
-    @JsonProperty("session_id")
+    @JsonProperty(Property.SESSION_ID)
     private String sessionId;
 
-    @JsonProperty("user_tracking_id")
+    @JsonProperty(Property.USER_TRACKING_ID)
     private String userTrackingId;
 
-    @JsonProperty("state")
+    @JsonProperty(Property.STATE)
     private String state;
 
-    @JsonProperty("client_session_token")
+    @JsonProperty(Property.CLIENT_SESSION_TOKEN)
     private String clientSessionToken;
 
-    @JsonProperty("biometric_consent")
+    @JsonProperty(Property.BIOMETRIC_CONSENT)
     private String biometricConsent;
 
-    @JsonProperty("checks")
+    @JsonProperty(Property.CHECKS)
     private List<? extends CheckResponse> checks;
 
-    @JsonProperty("resources")
+    @JsonProperty(Property.RESOURCES)
     private ResourceContainer resources;
+
+    @JsonProperty(Property.IDENTITY_PROFILE)
+    private IdentityProfileResponse identityProfile;
+
+    public long getClientSessionTokenTtl() {
+        return clientSessionTokenTtl;
+    }
 
     public String getSessionId() {
         return sessionId;
     }
 
-    public long getClientSessionTokenTtl() {
-        return clientSessionTokenTtl;
+    public String getUserTrackingId() {
+        return userTrackingId;
     }
 
     public String getState() {
@@ -59,8 +66,8 @@ public class GetSessionResult {
         return resources;
     }
 
-    public String getUserTrackingId() {
-        return userTrackingId;
+    public IdentityProfileResponse getIdentityProfile() {
+        return identityProfile;
     }
 
     public List<AuthenticityCheckResponse> getAuthenticityChecks() {
@@ -104,6 +111,22 @@ public class GetSessionResult {
                 .filter(clazz::isInstance)
                 .map(clazz::cast)
                 .collect(Collectors.toList());
+    }
+
+    private static final class Property {
+
+        private static final String CLIENT_SESSION_TOKEN_TTL = "client_session_token_ttl";
+        private static final String SESSION_ID = "session_id";
+        private static final String USER_TRACKING_ID = "user_tracking_id";
+        private static final String STATE = "state";
+        private static final String CLIENT_SESSION_TOKEN = "client_session_token";
+        private static final String BIOMETRIC_CONSENT = "biometric_consent";
+        private static final String CHECKS = "checks";
+        private static final String RESOURCES = "resources";
+        private static final String IDENTITY_PROFILE = "identity_profile";
+
+        private Property() { }
+
     }
 
 }
