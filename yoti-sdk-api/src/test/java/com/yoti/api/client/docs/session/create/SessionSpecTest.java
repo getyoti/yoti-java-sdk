@@ -12,14 +12,15 @@ import java.util.Map;
 
 import com.yoti.api.client.common.IdentityProfile;
 import com.yoti.api.client.common.IdentityProfileScheme;
+import com.yoti.api.client.common.Subject;
 import com.yoti.api.client.docs.session.create.check.RequestedDocumentAuthenticityCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedLivenessCheck;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
 import com.yoti.api.client.docs.session.create.task.RequestedIdDocTextExtractionTask;
-import com.yoti.api.client.shareurl.policy.DynamicPolicy;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.*;
@@ -271,6 +272,23 @@ public class SessionSpecTest {
                 .build();
 
         return MAPPER.readTree(MAPPER.writeValueAsString(session.getIdentityProfile()).getBytes(DEFAULT_CHARSET));
+    }
+
+    @Test
+    public void buildWithSubject() throws IOException {
+        Subject subject = new Subject("A_SUBJECT_ID");
+
+        SessionSpec session = SessionSpec.builder()
+                .withSubject(subject)
+                .build();
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        JsonNode json = mapper.readTree(
+                mapper.writeValueAsString(session.getSubject()).getBytes(DEFAULT_CHARSET)
+        );
+
+        assertThat(json.get("subject_id").asText(), is(Matchers.equalTo(subject.getId())));
     }
 
     private static final class Property {
