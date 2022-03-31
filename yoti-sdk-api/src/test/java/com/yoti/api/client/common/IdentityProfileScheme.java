@@ -1,4 +1,4 @@
-package com.yoti.api.client.shareurl.policy;
+package com.yoti.api.client.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +10,7 @@ public final class IdentityProfileScheme {
     @JsonProperty("objective")
     private final String objective;
 
-    IdentityProfileScheme(String type, String objective) {
+    public IdentityProfileScheme(String type, String objective) {
         this.type = type;
         this.objective = objective;
     }

@@ -15,38 +15,44 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SessionSpec {
 
-    @JsonProperty("client_session_token_ttl")
+    @JsonProperty(Property.CLIENT_SESSION_TOKEN_TTL)
     private final Integer clientSessionTokenTtl;
 
-    @JsonProperty("session_deadline")
+    @JsonProperty(Property.SESSION_DEADLINE)
     private final ZonedDateTime sessionDeadline;
 
-    @JsonProperty("resources_ttl")
+    @JsonProperty(Property.RESOURCES_TTL)
     private final Integer resourcesTtl;
 
-    @JsonProperty("user_tracking_id")
+    @JsonProperty(Property.USER_TRACKING_ID)
     private final String userTrackingId;
 
-    @JsonProperty("notifications")
+    @JsonProperty(Property.NOTIFICATIONS)
     private final NotificationConfig notifications;
 
-    @JsonProperty("requested_checks")
+    @JsonProperty(Property.REQUESTED_CHECKS)
     private final List<RequestedCheck<?>> requestedChecks;
 
-    @JsonProperty("requested_tasks")
+    @JsonProperty(Property.REQUESTED_TASKS)
     private final List<RequestedTask<?>> requestedTasks;
 
-    @JsonProperty("sdk_config")
+    @JsonProperty(Property.SDK_CONFIG)
     private final SdkConfig sdkConfig;
 
-    @JsonProperty("required_documents")
+    @JsonProperty(Property.REQUIRED_DOCUMENTS)
     private final List<RequiredDocument> requiredDocuments;
 
-    @JsonProperty("block_biometric_consent")
+    @JsonProperty(Property.BLOCK_BIOMETRIC_CONSENT)
     private final Boolean blockBiometricConsent;
 
-    @JsonProperty("ibv_options")
+    @JsonProperty(Property.IBV_OPTIONS)
     private final IbvOptions ibvOptions;
+
+    @JsonProperty(Property.IDENTITY_PROFILE_REQUIREMENTS)
+    private final Object identityProfile;
+
+    @JsonProperty(Property.SUBJECT)
+    private final Object subject;
 
     SessionSpec(Integer clientSessionTokenTtl,
             Integer resourcesTtl,
@@ -58,7 +64,9 @@ public class SessionSpec {
             List<RequiredDocument> requiredDocuments,
             Boolean blockBiometricConsent,
             IbvOptions ibvOptions,
-            ZonedDateTime sessionDeadline) {
+            ZonedDateTime sessionDeadline,
+            Object identityProfile,
+            Object subject) {
         this.clientSessionTokenTtl = clientSessionTokenTtl;
         this.resourcesTtl = resourcesTtl;
         this.userTrackingId = userTrackingId;
@@ -70,9 +78,11 @@ public class SessionSpec {
         this.blockBiometricConsent = blockBiometricConsent;
         this.ibvOptions = ibvOptions;
         this.sessionDeadline = sessionDeadline;
+        this.identityProfile = identityProfile;
+        this.subject = subject;
     }
 
-    public static SessionSpec.Builder builder() {
+    public static Builder builder() {
         return new SessionSpec.Builder();
     }
 
@@ -176,11 +186,29 @@ public class SessionSpec {
         return sessionDeadline;
     }
 
+    /**
+     * Defines a required identity profile within the scope of a trust framework and scheme.
+     *
+     * @return Identity Profile
+     */
+    public Object getIdentityProfile() {
+        return identityProfile;
+    }
+
+    /**
+     * The subject for which the identity assertion will be performed for the session.
+     *
+     * @return subject
+     */
+    public Object getSubject() {
+        return subject;
+    }
+
     public static class Builder {
 
-        private final List<RequestedCheck<?>> requestedChecks = new ArrayList<>();
-        private final List<RequestedTask<?>> requestedTasks = new ArrayList<>();
-        private final List<RequiredDocument> requiredDocuments = new ArrayList<>();
+        private final List<RequestedCheck<?>> requestedChecks;
+        private final List<RequestedTask<?>> requestedTasks;
+        private final List<RequiredDocument> requiredDocuments;
         private Integer clientSessionTokenTtl;
         private Integer resourcesTtl;
         private String userTrackingId;
@@ -189,8 +217,13 @@ public class SessionSpec {
         private Boolean blockBiometricConsent;
         private IbvOptions ibvOptions;
         private ZonedDateTime sessionDeadline;
+        private Object identityProfile;
+        private Object subject;
 
         private Builder() {
+            requestedChecks = new ArrayList<>();
+            requestedTasks = new ArrayList<>();
+            requiredDocuments = new ArrayList<>();
         }
 
         /**
@@ -252,7 +285,7 @@ public class SessionSpec {
          * Adds a {@link RequestedTask} to the list
          *
          * @param requestedTask the {@link RequestedTask}
-         * @return
+         * @return the builder
          */
         public Builder withRequestedTask(RequestedTask<?> requestedTask) {
             this.requestedTasks.add(requestedTask);
@@ -316,6 +349,28 @@ public class SessionSpec {
         }
 
         /**
+         * Sets the Identity Profile Requirements for the session
+         *
+         * @param identityProfile the Identity Profile
+         * @return the Builder
+         */
+        public Builder withIdentityProfile(Object identityProfile) {
+            this.identityProfile = identityProfile;
+            return this;
+        }
+
+        /**
+         * Sets the subject for which the identity assertion will be performed for the session.
+         *
+         * @param subject the subject
+         * @return the Builder
+         */
+        public Builder withSubject(Object subject) {
+            this.subject = subject;
+            return this;
+        }
+
+        /**
          * Builds the {@link SessionSpec} based on the values supplied to the builder
          *
          * @return the built {@link SessionSpec}
@@ -332,9 +387,31 @@ public class SessionSpec {
                     requiredDocuments,
                     blockBiometricConsent,
                     ibvOptions,
-                    sessionDeadline
+                    sessionDeadline,
+                    identityProfile,
+                    subject
             );
         }
+    }
+
+    private static final class Property {
+
+        private static final String CLIENT_SESSION_TOKEN_TTL = "client_session_token_ttl";
+        private static final String SESSION_DEADLINE = "session_deadline";
+        private static final String RESOURCES_TTL = "resources_ttl";
+        private static final String USER_TRACKING_ID = "user_tracking_id";
+        private static final String NOTIFICATIONS = "notifications";
+        private static final String REQUESTED_CHECKS = "requested_checks";
+        private static final String REQUESTED_TASKS = "requested_tasks";
+        private static final String SDK_CONFIG = "sdk_config";
+        private static final String REQUIRED_DOCUMENTS = "required_documents";
+        private static final String BLOCK_BIOMETRIC_CONSENT = "block_biometric_consent";
+        private static final String IBV_OPTIONS = "ibv_options";
+        private static final String IDENTITY_PROFILE_REQUIREMENTS = "identity_profile_requirements";
+        private static final String SUBJECT = "subject";
+
+        private Property() { }
+
     }
 
 }

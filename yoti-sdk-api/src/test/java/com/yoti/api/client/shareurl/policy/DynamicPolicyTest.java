@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.yoti.api.client.common.IdentityProfile;
+import com.yoti.api.client.common.IdentityProfileScheme;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Description;
