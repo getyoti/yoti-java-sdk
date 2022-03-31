@@ -1,4 +1,4 @@
-package com.yoti.api.client.shareurl;
+package com.yoti.api.client.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -7,7 +7,7 @@ public class Subject {
     @JsonProperty("subject_id")
     private final String id;
 
-    Subject(String id) {
+    public Subject(String id) {
         this.id = id;
     }
 

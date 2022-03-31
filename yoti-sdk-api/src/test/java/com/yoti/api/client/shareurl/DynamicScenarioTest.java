@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.*;
 
 import java.io.IOException;
 
+import com.yoti.api.client.common.Subject;
 import com.yoti.api.client.shareurl.extension.Extension;
 import com.yoti.api.client.shareurl.policy.DynamicPolicy;
 

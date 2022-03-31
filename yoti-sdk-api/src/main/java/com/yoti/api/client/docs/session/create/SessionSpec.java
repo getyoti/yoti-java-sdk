@@ -51,6 +51,9 @@ public class SessionSpec {
     @JsonProperty(Property.IDENTITY_PROFILE_REQUIREMENTS)
     private final Object identityProfile;
 
+    @JsonProperty(Property.SUBJECT)
+    private final Object subject;
+
     SessionSpec(Integer clientSessionTokenTtl,
             Integer resourcesTtl,
             String userTrackingId,
@@ -62,7 +65,8 @@ public class SessionSpec {
             Boolean blockBiometricConsent,
             IbvOptions ibvOptions,
             ZonedDateTime sessionDeadline,
-            Object identityProfile) {
+            Object identityProfile,
+            Object subject) {
         this.clientSessionTokenTtl = clientSessionTokenTtl;
         this.resourcesTtl = resourcesTtl;
         this.userTrackingId = userTrackingId;
@@ -75,6 +79,7 @@ public class SessionSpec {
         this.ibvOptions = ibvOptions;
         this.sessionDeadline = sessionDeadline;
         this.identityProfile = identityProfile;
+        this.subject = subject;
     }
 
     public static Builder builder() {
@@ -190,9 +195,18 @@ public class SessionSpec {
         return identityProfile;
     }
 
+    /**
+     * The subject for which the identity assertion will be performed for the session.
+     *
+     * @return subject
+     */
+    public Object getSubject() {
+        return subject;
+    }
+
     public static class Builder {
 
-        private final List<RequestedCheck<?>> requestedChecks ;
+        private final List<RequestedCheck<?>> requestedChecks;
         private final List<RequestedTask<?>> requestedTasks;
         private final List<RequiredDocument> requiredDocuments;
         private Integer clientSessionTokenTtl;
@@ -204,6 +218,7 @@ public class SessionSpec {
         private IbvOptions ibvOptions;
         private ZonedDateTime sessionDeadline;
         private Object identityProfile;
+        private Object subject;
 
         private Builder() {
             requestedChecks = new ArrayList<>();
@@ -345,6 +360,17 @@ public class SessionSpec {
         }
 
         /**
+         * Sets the subject for which the identity assertion will be performed for the session.
+         *
+         * @param subject the subject
+         * @return the Builder
+         */
+        public Builder withSubject(Object subject) {
+            this.subject = subject;
+            return this;
+        }
+
+        /**
          * Builds the {@link SessionSpec} based on the values supplied to the builder
          *
          * @return the built {@link SessionSpec}
@@ -362,7 +388,8 @@ public class SessionSpec {
                     blockBiometricConsent,
                     ibvOptions,
                     sessionDeadline,
-                    identityProfile
+                    identityProfile,
+                    subject
             );
         }
     }
@@ -381,6 +408,7 @@ public class SessionSpec {
         private static final String BLOCK_BIOMETRIC_CONSENT = "block_biometric_consent";
         private static final String IBV_OPTIONS = "ibv_options";
         private static final String IDENTITY_PROFILE_REQUIREMENTS = "identity_profile_requirements";
+        private static final String SUBJECT = "subject";
 
         private Property() { }
 
