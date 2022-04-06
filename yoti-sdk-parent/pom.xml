@@ -99,25 +99,36 @@
     <commons.lang3.version>3.12.0</commons.lang3.version>
     
     <!-- maven + plugin versions -->
-    <maven.compiler.version>3.10.1</maven.compiler.version>
-    <maven.source.version>3.2.1</maven.source.version>
-    <maven.enforcer.version>3.0.0</maven.enforcer.version>
-    <findbugs.version>3.0.5</findbugs.version>
-    <findsecbugs.version>1.11.0</findsecbugs.version>
-    <owasp.version>7.0.4</owasp.version>
-    <owasp.dependency.check.cvss.limit>4</owasp.dependency.check.cvss.limit>
-    <owasp.dependency.check.cve.update.limit>12</owasp.dependency.check.cve.update.limit>
-    <maven.reports.version>3.2.2</maven.reports.version>
-    <animal.sniffer.version>1.21</animal.sniffer.version>
+    <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+
+    <findbugs-maven-plugin.version>3.0.5</findbugs-maven-plugin.version>
+    <findsecbugs-plugin.version>1.11.0</findsecbugs-plugin.version>
+
+    <dependency-check-maven.version>7.0.4</dependency-check-maven.version>
+    <dependency-check-maven.cvss.limit>4</dependency-check-maven.cvss.limit>
+    <dependency-check-maven.cve.update.limit>12</dependency-check-maven.cve.update.limit>
+
+    <animal-sniffer-maven-plugin.version>1.21</animal-sniffer-maven-plugin.version>
     <mojo.signature.artefact>java18</mojo.signature.artefact>
     <mojo.signature.version>1.0</mojo.signature.version>
-    <mojo.extra.rules.version>1.5.1</mojo.extra.rules.version>
-    <nexus.plugin.version>1.6.12</nexus.plugin.version>
-    <javadoc.plugin.version>3.3.2</javadoc.plugin.version>
-    <javadoc.plugin.source>8</javadoc.plugin.source>
-    <gpg.plugin.version>3.0.1</gpg.plugin.version>
-    <coveralls.plugin.version>4.3.0</coveralls.plugin.version>
-    <jacoco.plugin.version>0.8.7</jacoco.plugin.version>
+
+    <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
+    <extra-enforcer-rules.version>1.5.1</extra-enforcer-rules.version>
+
+    <nnexus-staging-maven-plugin.version>1.6.12</nnexus-staging-maven-plugin.version>
+
+    <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+
+    <maven-javadoc-plugin.version>3.3.2</maven-javadoc-plugin.version>
+    <maven-javadoc-plugin.source>8</maven-javadoc-plugin.source>
+
+    <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
+
+    <maven-project-info-reports-plugin.version>3.2.2</maven-project-info-reports-plugin.version>
+
+    <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
+
+    <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
   </properties>
   
   <dependencyManagement>
@@ -247,8 +258,9 @@
       <plugins>
         
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>${maven.compiler.version}</version>
+          <version>${maven-compiler-plugin.version}</version>
           <configuration>
             <source>${supported.java.version}</source>
             <target>${supported.java.version}</target>
@@ -258,7 +270,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>findbugs-maven-plugin</artifactId>
-          <version>${findbugs.version}</version>
+          <version>${findbugs-maven-plugin.version}</version>
           <configuration>
             <effort>Max</effort>
             <threshold>Low</threshold>
@@ -268,7 +280,7 @@
               <plugin>
                 <groupId>com.h3xstream.findsecbugs</groupId>
                 <artifactId>findsecbugs-plugin</artifactId>
-                <version>${findsecbugs.version}</version>
+                <version>${findsecbugs-plugin.version}</version>
               </plugin>
             </plugins>
           </configuration>
@@ -285,10 +297,10 @@
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>${owasp.version}</version>
+          <version>${dependency-check-maven.version}</version>
           <configuration>
-            <failBuildOnCVSS>${owasp.dependency.check.cvss.limit}</failBuildOnCVSS>
-            <cveValidForHours>${owasp.dependency.check.cve.update.limit}</cveValidForHours>
+            <failBuildOnCVSS>${dependency-check-maven.cvss.limit}</failBuildOnCVSS>
+            <cveValidForHours>${dependency-check-maven.cve.update.limit}</cveValidForHours>
             <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
             <suppressionFile>${basedir}/../yoti-sdk-parent/suppressed-cves.xml</suppressionFile>
           </configuration>
@@ -305,7 +317,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>animal-sniffer-maven-plugin</artifactId>
-          <version>${animal.sniffer.version}</version>
+          <version>${animal-sniffer-maven-plugin.version}</version>
           <configuration>
             <signature>
               <groupId>org.codehaus.mojo.signature</groupId>
@@ -327,7 +339,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>${maven.enforcer.version}</version>
+          <version>${maven-enforcer-plugin.version}</version>
           <executions>
             <execution>
               <id>enforce-bytecode-version</id>
@@ -360,7 +372,7 @@
             <dependency>
               <groupId>org.codehaus.mojo</groupId>
               <artifactId>extra-enforcer-rules</artifactId>
-              <version>${mojo.extra.rules.version}</version>
+              <version>${extra-enforcer-rules.version}</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -368,7 +380,7 @@
         <plugin>
           <groupId>org.sonatype.plugins</groupId>
           <artifactId>nexus-staging-maven-plugin</artifactId>
-          <version>${nexus.plugin.version}</version>
+          <version>${nnexus-staging-maven-plugin.version}</version>
           <extensions>true</extensions>
           <configuration>
             <serverId>ossrh</serverId>
@@ -380,7 +392,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
-          <version>${maven.source.version}</version>
+          <version>${maven-source-plugin.version}</version>
           <executions>
             <execution>
               <id>attach-sources</id>
@@ -394,9 +406,9 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>${javadoc.plugin.version}</version>
+          <version>${maven-javadoc-plugin.version}</version>
           <configuration>
-            <source>${javadoc.plugin.source}</source>
+            <source>${maven-javadoc-plugin.source}</source>
           </configuration>
           <executions>
             <execution>
@@ -411,7 +423,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
-          <version>${gpg.plugin.version}</version>
+          <version>${maven-gpg-plugin.version}</version>
           <executions>
             <execution>
               <id>sign-artifacts</id>
@@ -426,19 +438,19 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>${maven.reports.version}</version>
+          <version>${maven-project-info-reports-plugin.version}</version>
         </plugin>
         
         <plugin>
           <groupId>org.eluder.coveralls</groupId>
           <artifactId>coveralls-maven-plugin</artifactId>
-          <version>${coveralls.plugin.version}</version>
+          <version>${coveralls-maven-plugin.version}</version>
         </plugin>
         
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>${jacoco.plugin.version}</version>
+          <version>${jacoco-maven-plugin.version}</version>
           <executions>
             <execution>
               <id>default-prepare-agent</id>
