@@ -122,9 +122,9 @@ public class GetSessionResultTest {
         return MAPPER.convertValue(obj, GetSessionResult.class);
     }
 
-    private static JsonNode toSessionJson(Object obj) throws IOException {
+    private static JsonNode toSessionJson(Map<String, Object> identityProfile) throws IOException {
         SessionSpec session = SessionSpec.builder()
-                .withIdentityProfile(obj)
+                .withIdentityProfile(identityProfile)
                 .build();
 
         return MAPPER.readTree(MAPPER.writeValueAsString(session.getIdentityProfile()).getBytes(DEFAULT_CHARSET));

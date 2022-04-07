@@ -8,8 +8,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.yoti.api.client.common.Subject;
 import com.yoti.api.client.shareurl.extension.Extension;
 import com.yoti.api.client.shareurl.policy.DynamicPolicy;
 
@@ -21,6 +22,7 @@ import org.mockito.*;
 
 public class DynamicScenarioTest {
 
+    private static final String SUBJECT_ID = "subject_id";
     private static final String SOME_ENDPOINT = "someEndpoint";
 
     @Mock DynamicPolicy dynamicPolicyMock;
@@ -44,7 +46,8 @@ public class DynamicScenarioTest {
 
     @Test
     public void buildWithSubject() throws IOException {
-        Subject subject = new Subject("A_SUBJECT_ID");
+        Map<String, Object> subject = new HashMap<>();
+        subject.put(SUBJECT_ID, "A_SUBJECT_ID");
 
         DynamicScenario result = DynamicScenario.builder()
                 .withSubject(subject)
@@ -56,7 +59,7 @@ public class DynamicScenarioTest {
                 mapper.writeValueAsString(result.subject()).getBytes(DEFAULT_CHARSET)
         );
 
-        assertThat(json.get("subject_id").asText(), is(Matchers.equalTo(subject.getId())));
+        assertThat(json.get("subject_id").asText(), is(Matchers.equalTo(subject.get(SUBJECT_ID))));
     }
 
 }

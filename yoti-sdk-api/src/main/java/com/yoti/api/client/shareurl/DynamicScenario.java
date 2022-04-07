@@ -2,6 +2,7 @@ package com.yoti.api.client.shareurl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.yoti.api.client.shareurl.extension.Extension;
 import com.yoti.api.client.shareurl.policy.DynamicPolicy;
@@ -23,13 +24,13 @@ public class DynamicScenario {
     private final List<Extension<?>> extensions;
 
     @JsonProperty(Property.SUBJECT)
-    private final Object subject;
+    private final Map<String, Object> subject;
 
     DynamicScenario(
             String callbackEndpoint,
             DynamicPolicy dynamicPolicy,
             List<Extension<?>> extensions,
-            Object subject) {
+            Map<String, Object> subject) {
         this.callbackEndpoint = callbackEndpoint;
         this.dynamicPolicy = dynamicPolicy;
         this.extensions = extensions;
@@ -73,7 +74,7 @@ public class DynamicScenario {
         private String callbackEndpoint;
         private DynamicPolicy dynamicPolicy;
         private final List<Extension<?>> extensions = new ArrayList<>();
-        private Object subject;
+        private Map<String, Object> subject;
 
         public Builder withCallbackEndpoint(String callbackEndpoint) {
             this.callbackEndpoint = callbackEndpoint;
@@ -90,7 +91,7 @@ public class DynamicScenario {
             return this;
         }
 
-        public Builder withSubject(Object subject) {
+        public Builder withSubject(Map<String, Object> subject) {
             this.subject = subject;
             return this;
         }

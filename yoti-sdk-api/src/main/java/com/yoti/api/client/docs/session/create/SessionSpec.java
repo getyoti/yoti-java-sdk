@@ -3,6 +3,7 @@ package com.yoti.api.client.docs.session.create;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.yoti.api.client.docs.session.create.check.RequestedCheck;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
@@ -49,10 +50,10 @@ public class SessionSpec {
     private final IbvOptions ibvOptions;
 
     @JsonProperty(Property.IDENTITY_PROFILE_REQUIREMENTS)
-    private final Object identityProfile;
+    private final Map<String, Object> identityProfile;
 
     @JsonProperty(Property.SUBJECT)
-    private final Object subject;
+    private final Map<String, Object> subject;
 
     SessionSpec(Integer clientSessionTokenTtl,
             Integer resourcesTtl,
@@ -65,8 +66,8 @@ public class SessionSpec {
             Boolean blockBiometricConsent,
             IbvOptions ibvOptions,
             ZonedDateTime sessionDeadline,
-            Object identityProfile,
-            Object subject) {
+            Map<String, Object> identityProfile,
+            Map<String, Object> subject) {
         this.clientSessionTokenTtl = clientSessionTokenTtl;
         this.resourcesTtl = resourcesTtl;
         this.userTrackingId = userTrackingId;
@@ -200,7 +201,7 @@ public class SessionSpec {
      *
      * @return subject
      */
-    public Object getSubject() {
+    public Map<String, Object> getSubject() {
         return subject;
     }
 
@@ -217,8 +218,8 @@ public class SessionSpec {
         private Boolean blockBiometricConsent;
         private IbvOptions ibvOptions;
         private ZonedDateTime sessionDeadline;
-        private Object identityProfile;
-        private Object subject;
+        private Map<String, Object> identityProfile;
+        private Map<String, Object> subject;
 
         private Builder() {
             requestedChecks = new ArrayList<>();
@@ -354,7 +355,7 @@ public class SessionSpec {
          * @param identityProfile the Identity Profile
          * @return the Builder
          */
-        public Builder withIdentityProfile(Object identityProfile) {
+        public Builder withIdentityProfile(Map<String, Object> identityProfile) {
             this.identityProfile = identityProfile;
             return this;
         }
@@ -365,7 +366,7 @@ public class SessionSpec {
          * @param subject the subject
          * @return the Builder
          */
-        public Builder withSubject(Object subject) {
+        public Builder withSubject(Map<String, Object> subject) {
             this.subject = subject;
             return this;
         }
