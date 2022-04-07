@@ -10,9 +10,6 @@ import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.yoti.api.client.common.IdentityProfile;
-import com.yoti.api.client.common.IdentityProfileScheme;
-import com.yoti.api.client.common.Subject;
 import com.yoti.api.client.docs.session.create.check.RequestedDocumentAuthenticityCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedLivenessCheck;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
@@ -231,21 +228,6 @@ public class SessionSpecTest {
 
     @Test
     public void buildWithIdentityProfile() throws IOException {
-        IdentityProfileScheme scheme = new IdentityProfileScheme("A_TYPE", "AN_OBJECTIVE");
-
-        IdentityProfile identityProfile = new IdentityProfile("A_FRAMEWORK", scheme);
-
-        JsonNode json = toSessionSpecJson(identityProfile);
-
-        assertThat(json.get(Property.TRUST_FRAMEWORK).asText(), is(equalTo(identityProfile.getFramework())));
-
-        JsonNode schemeJsonNode = json.get(Property.SCHEME);
-        assertThat(schemeJsonNode.get(Property.TYPE).asText(), is(equalTo(scheme.getType())));
-        assertThat(schemeJsonNode.get(Property.OBJECTIVE).asText(), is(equalTo(scheme.getObjective())));
-    }
-
-    @Test
-    public void buildWithIdentityProfileMap() throws IOException {
         Map<String, Object> scheme = new HashMap<>();
         scheme.put(Property.TYPE, "A_TYPE");
         scheme.put(Property.OBJECTIVE, "AN_OBJECTIVE");
@@ -266,7 +248,7 @@ public class SessionSpecTest {
         assertThat(schemeJsonNode.get(Property.OBJECTIVE).asText(), is(equalTo(scheme.get(Property.OBJECTIVE))));
     }
 
-    private static JsonNode toSessionSpecJson(Object obj) throws IOException {
+    private static JsonNode toSessionSpecJson(Map<String, Object> obj) throws IOException {
         SessionSpec session = SessionSpec.builder()
                 .withIdentityProfile(obj)
                 .build();
@@ -276,7 +258,8 @@ public class SessionSpecTest {
 
     @Test
     public void buildWithSubject() throws IOException {
-        Subject subject = new Subject("A_SUBJECT_ID");
+        Map<String, Object> subject = new HashMap<>();
+        subject.put(Property.SUBJECT_ID, "A_SUBJECT_ID");
 
         SessionSpec session = SessionSpec.builder()
                 .withSubject(subject)
@@ -288,7 +271,7 @@ public class SessionSpecTest {
                 mapper.writeValueAsString(session.getSubject()).getBytes(DEFAULT_CHARSET)
         );
 
-        assertThat(json.get("subject_id").asText(), is(Matchers.equalTo(subject.getId())));
+        assertThat(json.get("subject_id").asText(), is(Matchers.equalTo(subject.get(Property.SUBJECT_ID))));
     }
 
     private static final class Property {
@@ -297,6 +280,7 @@ public class SessionSpecTest {
         private static final String SCHEME = "scheme";
         private static final String OBJECTIVE = "objective";
         private static final String TRUST_FRAMEWORK = "trust_framework";
+        private static final String SUBJECT_ID = "subject_id";
 
         private Property() { }
 

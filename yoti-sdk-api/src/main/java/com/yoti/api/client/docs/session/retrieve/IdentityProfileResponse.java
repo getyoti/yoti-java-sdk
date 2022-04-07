@@ -1,5 +1,7 @@
 package com.yoti.api.client.docs.session.retrieve;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class IdentityProfileResponse {
@@ -14,7 +16,7 @@ public class IdentityProfileResponse {
     private IdentityProfileFailureResponse failureReason;
 
     @JsonProperty(Property.IDENTITY_PROFILE_REPORT)
-    private Object identityProfileReport;
+    private Map<String, Object> identityProfileReport;
 
     public String getSubjectId() {
         return subjectId;
@@ -28,7 +30,7 @@ public class IdentityProfileResponse {
         return failureReason;
     }
 
-    public Object getIdentityProfileReport() {
+    public Map<String, Object> getIdentityProfileReport() {
         return identityProfileReport;
     }
 
