@@ -17,6 +17,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class GetSessionResultCheckTest {
 
+    private static final int SESSION_CHECKS = 9;
+
     @Mock AuthenticityCheckResponse authenticityCheckResponse;
     @Mock FaceMatchCheckResponse faceMatchCheckResponse;
     @Mock TextDataCheckResponse textDataCheckResponse;
@@ -25,6 +27,7 @@ public class GetSessionResultCheckTest {
     @Mock IdDocumentComparisonCheckResponse idDocumentComparisonCheckResponse;
     @Mock ThirdPartyIdentityCheckResponse thirdPartyIdentityCheckResponse;
     @Mock WatchlistScreeningCheckResponse watchlistScreeningCheckResponse;
+    @Mock ThirdPartyIdentityFraudOneCheckResponse thirdPartyIdentityFraudOneCheckResponse;
 
     GetSessionResult getSessionResult;
 
@@ -35,7 +38,7 @@ public class GetSessionResultCheckTest {
         setupGetSessionResult();
 
         List<AuthenticityCheckResponse> result = getSessionResult.getAuthenticityChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(8));
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
@@ -46,7 +49,7 @@ public class GetSessionResultCheckTest {
         setupGetSessionResult();
 
         List<LivenessCheckResponse> result = getSessionResult.getLivenessChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(8));
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
@@ -57,7 +60,7 @@ public class GetSessionResultCheckTest {
         setupGetSessionResult();
 
         List<TextDataCheckResponse> result = getSessionResult.getIdDocumentTextDataChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(8));
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
@@ -68,7 +71,7 @@ public class GetSessionResultCheckTest {
         setupGetSessionResult();
 
         List<SupplementaryDocumentTextDataCheckResponse> result = getSessionResult.getSupplementaryDocumentTextDataChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(8));
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
@@ -79,7 +82,7 @@ public class GetSessionResultCheckTest {
         setupGetSessionResult();
 
         List<FaceMatchCheckResponse> result = getSessionResult.getFaceMatchChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(8));
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
@@ -90,7 +93,7 @@ public class GetSessionResultCheckTest {
         setupGetSessionResult();
 
         List<IdDocumentComparisonCheckResponse> result = getSessionResult.getIdDocumentComparisonChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(8));
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
@@ -101,7 +104,7 @@ public class GetSessionResultCheckTest {
         setupGetSessionResult();
 
         List<ThirdPartyIdentityCheckResponse> result = getSessionResult.getThirdPartyIdentityChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(8));
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
@@ -112,7 +115,18 @@ public class GetSessionResultCheckTest {
         setupGetSessionResult();
 
         List<WatchlistScreeningCheckResponse> result = getSessionResult.getWatchlistScreeningChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(8));
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
+    public void shouldFilterThirdPartyIdentityFraudOneCheck() {
+        getSessionResult = new GetSessionResult();
+
+        setupGetSessionResult();
+
+        List<ThirdPartyIdentityFraudOneCheckResponse> result = getSessionResult.getThirdPartyIdentityFraudOneChecks();
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
@@ -132,6 +146,7 @@ public class GetSessionResultCheckTest {
         assertThat(getSessionResult.getIdDocumentTextDataChecks(), hasSize(0));
         assertThat(getSessionResult.getSupplementaryDocumentTextDataChecks(), hasSize(0));
         assertThat(getSessionResult.getLivenessChecks(), hasSize(0));
+        assertThat(getSessionResult.getThirdPartyIdentityFraudOneChecks(), hasSize(0));
     }
 
     private void setupGetSessionResult() {
@@ -146,7 +161,8 @@ public class GetSessionResultCheckTest {
                         faceMatchCheckResponse,
                         idDocumentComparisonCheckResponse,
                         thirdPartyIdentityCheckResponse,
-                        watchlistScreeningCheckResponse
+                        watchlistScreeningCheckResponse,
+                        thirdPartyIdentityFraudOneCheckResponse
                 )
         );
     }

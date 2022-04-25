@@ -252,6 +252,28 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Third Party Identity Fraud One Checks -->
+                <div th:if="${sessionResult.getThirdPartyIdentityFraudOneChecks().size() > 0}" class="card">
+                    <div class="card-header" id="third-party-identity-fraud-one-checks">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    data-target="#collapse-third-party-identity-fraud-one-checks" aria-expanded="true"
+                                    aria-controls="collapse-third-party-identity-fraud-one-checks">
+                                Third Party Identity Fraud One Checks
+                            </button>
+                        </h3>
+                    </div>
+                    <div id="collapse-third-party-identity-fraud-one-checks" class="collapse"
+                         aria-labelledby="third-party-identity-fraud-one-checks">
+                        <div class="card-body">
+                            <table th:each="check : ${sessionResult.getThirdPartyIdentityFraudOneChecks()}"
+                                   th:include="fragments/checks :: check-template(${check})"
+                                   class="table table-striped">
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

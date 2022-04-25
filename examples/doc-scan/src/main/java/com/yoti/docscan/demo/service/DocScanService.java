@@ -14,10 +14,8 @@ import com.yoti.api.client.docs.session.create.check.RequestedIdDocumentComparis
 import com.yoti.api.client.docs.session.create.check.RequestedLivenessCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedThirdPartyIdentityCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedWatchlistAdvancedCaCheck;
-import com.yoti.api.client.docs.session.create.check.RequestedWatchlistAdvancedCaConfig;
 import com.yoti.api.client.docs.session.create.check.RequestedWatchlistScreeningCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedWatchlistScreeningConfig;
-import com.yoti.api.client.docs.session.create.check.RequestedYotiAccountWatchlistAdvancedCaConfig;
 import com.yoti.api.client.docs.session.create.filters.OrthogonalRestrictionsFilter;
 import com.yoti.api.client.docs.session.create.filters.RequiredIdDocument;
 import com.yoti.api.client.docs.session.create.filters.RequiredSupplementaryDocument;
