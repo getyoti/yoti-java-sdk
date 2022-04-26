@@ -106,6 +106,10 @@ public class GetSessionResult {
         return filterChecksByType(WatchlistAdvancedCaCheckResponse.class);
     }
 
+    public List<ThirdPartyIdentityFraudOneCheckResponse> getThirdPartyIdentityFraudOneChecks() {
+        return filterChecksByType(ThirdPartyIdentityFraudOneCheckResponse.class);
+    }
+
     private <T extends CheckResponse> List<T> filterChecksByType(Class<T> clazz) {
         return checks.stream()
                 .filter(clazz::isInstance)
