@@ -159,10 +159,10 @@ public class YotiLoginController extends WebMvcConfigurerAdapter {
     }
 
     @RequestMapping("/dbs-check")
-    public String dbsStandard(final Model model) {
+    public String dbsCheck(final Model model) {
         Map<String, Object> scheme = new HashMap<>();
         scheme.put("type", "DBS");
-        scheme.put("objective", "STANDARD");
+        scheme.put("objective", "BASIC");
 
         Map<String, Object> identityProfile = new HashMap<>();
         identityProfile.put("trust_framework", "UK_TFIDA");
