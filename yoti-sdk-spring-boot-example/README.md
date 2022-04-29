@@ -31,8 +31,10 @@ Before you start, you'll need to create an Application in [Yoti Hub](https://hub
 ## Running
 * You can run your server-app by executing `java -jar target/yoti-sdk-spring-boot-example-3.4.0-SNAPSHOT.jar`
   * If you are using Java 9, you can run the server-app as follows `java -jar target/yoti-sdk-spring-boot-example-3.4.0-SNAPSHOT.jar --add-exports java.base/jdk.internal.ref=ALL-UNNAMED`
-* Navigate to `https://localhost:8443`
-* You can then initiate a login using Yoti.  The Spring demo is listening for the response on `https://localhost:8443/login`.
+* Navigate to:
+  * `https://localhost:8443` to initiate a login using Yoti. The Spring demo is listening for the response on `https://localhost:8443/login`.
+  * `https://localhost:8443/dynamic-share` to initiate a dynamic share with location with result displayed in profile page.
+  * `https://localhost:8443/dbs-check` to initiate a BDS standard check with location with result displayed in profile page.
 
 In order to receive calls on your /login endpoint, you need to expose your server-app to the outside world. We require that you use the domain from the Callback URL and HTTPS.
 

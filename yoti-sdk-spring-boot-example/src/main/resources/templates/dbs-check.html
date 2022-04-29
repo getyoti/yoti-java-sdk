@@ -3,11 +3,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="yoti-html" lang="en">
 
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <title>Yoti client example</title>
-        <link rel="stylesheet" type="text/css" th:href="@{/static/index.css}" />
-        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+      <title>DBS Standard Example</title>
+      <link rel="stylesheet" type="text/css" href="/static/index.css" />
+      <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
     </head>
 
     <body class="yoti-body">
@@ -57,20 +57,20 @@
 
         <script src="https://www.yoti.com/share/client/"></script>
         <script th:inline="javascript">
-          window.Yoti.Share.init({
-            "elements": [{
-              "domId": "yoti-share-button",
-                "scenarioId": /*[[${scenarioId}]]*/ "",
-                "clientSdkId": /*[[${clientSdkId}]]*/ "",
-                "button": {
-                    "label": "Use Yoti",
-                    "align": "center",
-                    "width": "auto",
-                    "verticalAlign": "top"
-                },
-                "type": "modal"
-            }]
-          });
-        </script>
+              window.Yoti.Share.init({
+                "elements": [{
+                    "domId": "yoti-share-button",
+                    "shareUrl": /*[[${yotiShareUrl}]]*/ "",
+                    "clientSdkId": /*[[${clientSdkId}]]*/ "",
+                    "button": {
+                      "label": "Use Yoti",
+                      "align": "center",
+                      "width": "auto",
+                      "verticalAlign": "top"
+                    },
+                    "type": "modal"
+                }]
+              });
+            </script>
     </body>
 </html>
