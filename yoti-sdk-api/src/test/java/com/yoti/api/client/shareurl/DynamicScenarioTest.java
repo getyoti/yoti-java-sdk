@@ -1,18 +1,28 @@
 package com.yoti.api.client.shareurl;
 
+import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.yoti.api.client.shareurl.extension.Extension;
 import com.yoti.api.client.shareurl.policy.DynamicPolicy;
 
-import org.junit.Test;
-import org.mockito.Mock;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
+import org.junit.*;
+import org.mockito.*;
 
 public class DynamicScenarioTest {
 
+    private static final String SUBJECT_ID = "subject_id";
     private static final String SOME_ENDPOINT = "someEndpoint";
 
     @Mock DynamicPolicy dynamicPolicyMock;
@@ -32,6 +42,24 @@ public class DynamicScenarioTest {
         assertThat(result.policy(), equalTo(dynamicPolicyMock));
         assertThat(result.extensions(), hasSize(2));
         assertThat(result.extensions(), hasItems(extension1Mock, extension2Mock));
+    }
+
+    @Test
+    public void buildWithSubject() throws IOException {
+        Map<String, Object> subject = new HashMap<>();
+        subject.put(SUBJECT_ID, "A_SUBJECT_ID");
+
+        DynamicScenario result = DynamicScenario.builder()
+                .withSubject(subject)
+                .build();
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        JsonNode json = mapper.readTree(
+                mapper.writeValueAsString(result.subject()).getBytes(DEFAULT_CHARSET)
+        );
+
+        assertThat(json.get("subject_id").asText(), is(Matchers.equalTo(subject.get(SUBJECT_ID))));
     }
 
 }

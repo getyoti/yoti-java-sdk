@@ -1,22 +1,21 @@
 package com.yoti.api.spring.security.web;
 
-import com.yoti.api.spring.security.auth.YotiAuthenticationToken;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.security.authentication.AuthenticationDetailsSource;
-import org.springframework.security.authentication.AuthenticationManager;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import com.yoti.api.spring.security.auth.YotiAuthenticationToken;
+
+import org.junit.*;
+import org.junit.runner.RunWith;
+import org.mockito.*;
+import org.mockito.junit.*;
+import org.springframework.security.authentication.AuthenticationDetailsSource;
+import org.springframework.security.authentication.AuthenticationManager;
 
 @RunWith(MockitoJUnitRunner.class)
 public class YotiAuthenticationFilterTest {
@@ -81,4 +80,5 @@ public class YotiAuthenticationFilterTest {
         when(mockRequest.getParameter(TOKEN_PARAM)).thenReturn(TOKEN);
         when(mockDetailsSource.buildDetails(any(HttpServletRequest.class))).thenReturn(null);
     }
+
 }

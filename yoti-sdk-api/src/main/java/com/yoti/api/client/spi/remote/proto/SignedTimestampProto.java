@@ -20,38 +20,44 @@ public final class SignedTimestampProto {
 
     /**
      * <code>int32 version = 1;</code>
+     * @return The version.
      */
     int getVersion();
 
     /**
      * <code>uint64 timestamp = 2;</code>
+     * @return The timestamp.
      */
     long getTimestamp();
 
     /**
      * <code>bytes message_digest = 3;</code>
+     * @return The messageDigest.
      */
     com.google.protobuf.ByteString getMessageDigest();
 
     /**
      * <code>bytes chain_digest = 4;</code>
+     * @return The chainDigest.
      */
     com.google.protobuf.ByteString getChainDigest();
 
     /**
      * <code>bytes chain_digest_skip1 = 5;</code>
+     * @return The chainDigestSkip1.
      */
     com.google.protobuf.ByteString getChainDigestSkip1();
 
     /**
      * <code>bytes chain_digest_skip2 = 6;</code>
+     * @return The chainDigestSkip2.
      */
     com.google.protobuf.ByteString getChainDigestSkip2();
   }
   /**
    * Protobuf type {@code compubapi_v1.SignedTimestamp}
    */
-  public  static final class SignedTimestamp extends
+  public static final class SignedTimestamp extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:compubapi_v1.SignedTimestamp)
       SignedTimestampOrBuilder {
@@ -61,15 +67,20 @@ public final class SignedTimestampProto {
       super(builder);
     }
     private SignedTimestamp() {
-      version_ = 0;
-      timestamp_ = 0L;
       messageDigest_ = com.google.protobuf.ByteString.EMPTY;
       chainDigest_ = com.google.protobuf.ByteString.EMPTY;
       chainDigestSkip1_ = com.google.protobuf.ByteString.EMPTY;
       chainDigestSkip2_ = com.google.protobuf.ByteString.EMPTY;
     }
 
-    @Override
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new SignedTimestamp();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -80,9 +91,8 @@ public final class SignedTimestampProto {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new NullPointerException();
+        throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -124,7 +134,7 @@ public final class SignedTimestampProto {
               break;
             }
             default: {
-              if (!parseUnknownFieldProto3(
+              if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
@@ -144,22 +154,24 @@ public final class SignedTimestampProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_descriptor;
+      return com.yoti.api.client.spi.remote.proto.SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_descriptor;
     }
 
-    @Override
-    protected FieldAccessorTable
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_fieldAccessorTable
+      return com.yoti.api.client.spi.remote.proto.SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              SignedTimestamp.class, Builder.class);
+              com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp.class, com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp.Builder.class);
     }
 
     public static final int VERSION_FIELD_NUMBER = 1;
     private int version_;
     /**
      * <code>int32 version = 1;</code>
+     * @return The version.
      */
+    @java.lang.Override
     public int getVersion() {
       return version_;
     }
@@ -168,7 +180,9 @@ public final class SignedTimestampProto {
     private long timestamp_;
     /**
      * <code>uint64 timestamp = 2;</code>
+     * @return The timestamp.
      */
+    @java.lang.Override
     public long getTimestamp() {
       return timestamp_;
     }
@@ -177,7 +191,9 @@ public final class SignedTimestampProto {
     private com.google.protobuf.ByteString messageDigest_;
     /**
      * <code>bytes message_digest = 3;</code>
+     * @return The messageDigest.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getMessageDigest() {
       return messageDigest_;
     }
@@ -186,7 +202,9 @@ public final class SignedTimestampProto {
     private com.google.protobuf.ByteString chainDigest_;
     /**
      * <code>bytes chain_digest = 4;</code>
+     * @return The chainDigest.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getChainDigest() {
       return chainDigest_;
     }
@@ -195,7 +213,9 @@ public final class SignedTimestampProto {
     private com.google.protobuf.ByteString chainDigestSkip1_;
     /**
      * <code>bytes chain_digest_skip1 = 5;</code>
+     * @return The chainDigestSkip1.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getChainDigestSkip1() {
       return chainDigestSkip1_;
     }
@@ -204,13 +224,15 @@ public final class SignedTimestampProto {
     private com.google.protobuf.ByteString chainDigestSkip2_;
     /**
      * <code>bytes chain_digest_skip2 = 6;</code>
+     * @return The chainDigestSkip2.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getChainDigestSkip2() {
       return chainDigestSkip2_;
     }
 
     private byte memoizedIsInitialized = -1;
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -220,7 +242,7 @@ public final class SignedTimestampProto {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (version_ != 0) {
@@ -244,7 +266,7 @@ public final class SignedTimestampProto {
       unknownFields.writeTo(output);
     }
 
-    @Override
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -279,34 +301,33 @@ public final class SignedTimestampProto {
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof SignedTimestamp)) {
+      if (!(obj instanceof com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp)) {
         return super.equals(obj);
       }
-      SignedTimestamp other = (SignedTimestamp) obj;
+      com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp other = (com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp) obj;
 
-      boolean result = true;
-      result = result && (getVersion()
-          == other.getVersion());
-      result = result && (getTimestamp()
-          == other.getTimestamp());
-      result = result && getMessageDigest()
-          .equals(other.getMessageDigest());
-      result = result && getChainDigest()
-          .equals(other.getChainDigest());
-      result = result && getChainDigestSkip1()
-          .equals(other.getChainDigestSkip1());
-      result = result && getChainDigestSkip2()
-          .equals(other.getChainDigestSkip2());
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (getVersion()
+          != other.getVersion()) return false;
+      if (getTimestamp()
+          != other.getTimestamp()) return false;
+      if (!getMessageDigest()
+          .equals(other.getMessageDigest())) return false;
+      if (!getChainDigest()
+          .equals(other.getChainDigest())) return false;
+      if (!getChainDigestSkip1()
+          .equals(other.getChainDigestSkip1())) return false;
+      if (!getChainDigestSkip2()
+          .equals(other.getChainDigestSkip2())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -331,69 +352,69 @@ public final class SignedTimestampProto {
       return hash;
     }
 
-    public static SignedTimestamp parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static SignedTimestamp parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static SignedTimestamp parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static SignedTimestamp parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static SignedTimestamp parseFrom(byte[] data)
+    public static com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static SignedTimestamp parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static SignedTimestamp parseFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static SignedTimestamp parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static SignedTimestamp parseDelimitedFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static SignedTimestamp parseDelimitedFrom(
+    public static com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static SignedTimestamp parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static SignedTimestamp parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -401,23 +422,23 @@ public final class SignedTimestampProto {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(SignedTimestamp prototype) {
+    public static Builder newBuilder(com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @Override
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -427,18 +448,18 @@ public final class SignedTimestampProto {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:compubapi_v1.SignedTimestamp)
-        SignedTimestampOrBuilder {
+        com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestampOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_descriptor;
+        return com.yoti.api.client.spi.remote.proto.SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_descriptor;
       }
 
-      @Override
-      protected FieldAccessorTable
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_fieldAccessorTable
+        return com.yoti.api.client.spi.remote.proto.SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                SignedTimestamp.class, Builder.class);
+                com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp.class, com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp.Builder.class);
       }
 
       // Construct using com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp.newBuilder()
@@ -447,7 +468,7 @@ public final class SignedTimestampProto {
       }
 
       private Builder(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -456,7 +477,7 @@ public final class SignedTimestampProto {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @Override
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         version_ = 0;
@@ -474,29 +495,29 @@ public final class SignedTimestampProto {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_descriptor;
+        return com.yoti.api.client.spi.remote.proto.SignedTimestampProto.internal_static_compubapi_v1_SignedTimestamp_descriptor;
       }
 
-      @Override
-      public SignedTimestamp getDefaultInstanceForType() {
-        return SignedTimestamp.getDefaultInstance();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp getDefaultInstanceForType() {
+        return com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp.getDefaultInstance();
       }
 
-      @Override
-      public SignedTimestamp build() {
-        SignedTimestamp result = buildPartial();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp build() {
+        com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @Override
-      public SignedTimestamp buildPartial() {
-        SignedTimestamp result = new SignedTimestamp(this);
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp buildPartial() {
+        com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp result = new com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp(this);
         result.version_ = version_;
         result.timestamp_ = timestamp_;
         result.messageDigest_ = messageDigest_;
@@ -507,50 +528,50 @@ public final class SignedTimestampProto {
         return result;
       }
 
-      @Override
+      @java.lang.Override
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
-      @Override
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.setField(field, value);
+          java.lang.Object value) {
+        return super.setField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
-      @Override
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
-      @Override
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
       }
-      @Override
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof SignedTimestamp) {
-          return mergeFrom((SignedTimestamp)other);
+        if (other instanceof com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp) {
+          return mergeFrom((com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(SignedTimestamp other) {
-        if (other == SignedTimestamp.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp other) {
+        if (other == com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp.getDefaultInstance()) return this;
         if (other.getVersion() != 0) {
           setVersion(other.getVersion());
         }
@@ -574,21 +595,21 @@ public final class SignedTimestampProto {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        SignedTimestamp parsedMessage = null;
+        com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (SignedTimestamp) e.getUnfinishedMessage();
+          parsedMessage = (com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -601,12 +622,16 @@ public final class SignedTimestampProto {
       private int version_ ;
       /**
        * <code>int32 version = 1;</code>
+       * @return The version.
        */
+      @java.lang.Override
       public int getVersion() {
         return version_;
       }
       /**
        * <code>int32 version = 1;</code>
+       * @param value The version to set.
+       * @return This builder for chaining.
        */
       public Builder setVersion(int value) {
         
@@ -616,6 +641,7 @@ public final class SignedTimestampProto {
       }
       /**
        * <code>int32 version = 1;</code>
+       * @return This builder for chaining.
        */
       public Builder clearVersion() {
         
@@ -627,12 +653,16 @@ public final class SignedTimestampProto {
       private long timestamp_ ;
       /**
        * <code>uint64 timestamp = 2;</code>
+       * @return The timestamp.
        */
+      @java.lang.Override
       public long getTimestamp() {
         return timestamp_;
       }
       /**
        * <code>uint64 timestamp = 2;</code>
+       * @param value The timestamp to set.
+       * @return This builder for chaining.
        */
       public Builder setTimestamp(long value) {
         
@@ -642,6 +672,7 @@ public final class SignedTimestampProto {
       }
       /**
        * <code>uint64 timestamp = 2;</code>
+       * @return This builder for chaining.
        */
       public Builder clearTimestamp() {
         
@@ -653,12 +684,16 @@ public final class SignedTimestampProto {
       private com.google.protobuf.ByteString messageDigest_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>bytes message_digest = 3;</code>
+       * @return The messageDigest.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getMessageDigest() {
         return messageDigest_;
       }
       /**
        * <code>bytes message_digest = 3;</code>
+       * @param value The messageDigest to set.
+       * @return This builder for chaining.
        */
       public Builder setMessageDigest(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -671,6 +706,7 @@ public final class SignedTimestampProto {
       }
       /**
        * <code>bytes message_digest = 3;</code>
+       * @return This builder for chaining.
        */
       public Builder clearMessageDigest() {
         
@@ -682,12 +718,16 @@ public final class SignedTimestampProto {
       private com.google.protobuf.ByteString chainDigest_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>bytes chain_digest = 4;</code>
+       * @return The chainDigest.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getChainDigest() {
         return chainDigest_;
       }
       /**
        * <code>bytes chain_digest = 4;</code>
+       * @param value The chainDigest to set.
+       * @return This builder for chaining.
        */
       public Builder setChainDigest(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -700,6 +740,7 @@ public final class SignedTimestampProto {
       }
       /**
        * <code>bytes chain_digest = 4;</code>
+       * @return This builder for chaining.
        */
       public Builder clearChainDigest() {
         
@@ -711,12 +752,16 @@ public final class SignedTimestampProto {
       private com.google.protobuf.ByteString chainDigestSkip1_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>bytes chain_digest_skip1 = 5;</code>
+       * @return The chainDigestSkip1.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getChainDigestSkip1() {
         return chainDigestSkip1_;
       }
       /**
        * <code>bytes chain_digest_skip1 = 5;</code>
+       * @param value The chainDigestSkip1 to set.
+       * @return This builder for chaining.
        */
       public Builder setChainDigestSkip1(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -729,6 +774,7 @@ public final class SignedTimestampProto {
       }
       /**
        * <code>bytes chain_digest_skip1 = 5;</code>
+       * @return This builder for chaining.
        */
       public Builder clearChainDigestSkip1() {
         
@@ -740,12 +786,16 @@ public final class SignedTimestampProto {
       private com.google.protobuf.ByteString chainDigestSkip2_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>bytes chain_digest_skip2 = 6;</code>
+       * @return The chainDigestSkip2.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getChainDigestSkip2() {
         return chainDigestSkip2_;
       }
       /**
        * <code>bytes chain_digest_skip2 = 6;</code>
+       * @param value The chainDigestSkip2 to set.
+       * @return This builder for chaining.
        */
       public Builder setChainDigestSkip2(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -758,6 +808,7 @@ public final class SignedTimestampProto {
       }
       /**
        * <code>bytes chain_digest_skip2 = 6;</code>
+       * @return This builder for chaining.
        */
       public Builder clearChainDigestSkip2() {
         
@@ -765,13 +816,13 @@ public final class SignedTimestampProto {
         onChanged();
         return this;
       }
-      @Override
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
+        return super.setUnknownFields(unknownFields);
       }
 
-      @Override
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -782,18 +833,18 @@ public final class SignedTimestampProto {
     }
 
     // @@protoc_insertion_point(class_scope:compubapi_v1.SignedTimestamp)
-    private static final SignedTimestamp DEFAULT_INSTANCE;
+    private static final com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new SignedTimestamp();
+      DEFAULT_INSTANCE = new com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp();
     }
 
-    public static SignedTimestamp getDefaultInstance() {
+    public static com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<SignedTimestamp>
         PARSER = new com.google.protobuf.AbstractParser<SignedTimestamp>() {
-      @Override
+      @java.lang.Override
       public SignedTimestamp parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -806,13 +857,13 @@ public final class SignedTimestampProto {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<SignedTimestamp> getParserForType() {
       return PARSER;
     }
 
-    @Override
-    public SignedTimestamp getDefaultInstanceForType() {
+    @java.lang.Override
+    public com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -831,34 +882,29 @@ public final class SignedTimestampProto {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n\025SignedTimestamp.proto\022\014compubapi_v1\"\233\001" +
       "\n\017SignedTimestamp\022\017\n\007version\030\001 \001(\005\022\021\n\tti" +
       "mestamp\030\002 \001(\004\022\026\n\016message_digest\030\003 \001(\014\022\024\n" +
       "\014chain_digest\030\004 \001(\014\022\032\n\022chain_digest_skip" +
-      "1\030\005 \001(\014\022\032\n\022chain_digest_skip2\030\006 \001(\014Br\n$c" +
-      "om.yoti.api.client.spi.remote.protoB\024Sig" +
-      "nedTimestampProtoZ\014yotiprotocom\252\002\031Yoti.A" +
-      "uth.ProtoBuf.Common\312\002\tCompubapib\006proto3"
+      "1\030\005 \001(\014\022\032\n\022chain_digest_skip2\030\006 \001(\014B\344\001\n$" +
+      "com.yoti.api.client.spi.remote.protoB\024Si" +
+      "gnedTimestampProtoZ.github.com/getyoti/y" +
+      "oti-go-sdk/v3/yotiprotocom\252\002\031Yoti.Auth.P" +
+      "rotoBuf.Common\312\002\027Yoti\\Protobuf\\Compubapi" +
+      "\342\002#Yoti\\Protobuf\\Compubapi\\GPBMetadata\352\002" +
+      "\031Yoti::Protobuf::Compubapib\006proto3"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
-    com.google.protobuf.Descriptors.FileDescriptor
+    descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+        });
     internal_static_compubapi_v1_SignedTimestamp_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_compubapi_v1_SignedTimestamp_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_compubapi_v1_SignedTimestamp_descriptor,
-        new String[] { "Version", "Timestamp", "MessageDigest", "ChainDigest", "ChainDigestSkip1", "ChainDigestSkip2", });
+        new java.lang.String[] { "Version", "Timestamp", "MessageDigest", "ChainDigest", "ChainDigestSkip1", "ChainDigestSkip2", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

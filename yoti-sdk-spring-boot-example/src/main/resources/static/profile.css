@@ -14,7 +14,8 @@
 .yoti-icon-verified,
 .yoti-icon-address,
 .yoti-icon-gender,
-.yoti-icon-nationality {
+.yoti-icon-nationality,
+.yoti-icon-document {
   display: inline-block;
   height: 28px;
   width: 28px;
@@ -51,6 +52,10 @@
 
 .yoti-icon-nationality {
   background: no-repeat url('/static/assets/icons/nationality.svg');
+}
+
+.yoti-icon-document {
+    background: no-repeat url('/static/assets/icons/document.svg');
 }
 
 .yoti-profile-layout {

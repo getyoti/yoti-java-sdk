@@ -6,8 +6,7 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -132,7 +131,7 @@ public class AttributeListConverterTest {
 
         assertThat(result, hasSize(1));
         assertThat(result, hasItem(postalAddressMock));
-        verifyZeroInteractions(addressTransformerMock);
+        verifyNoInteractions(addressTransformerMock);
     }
 
     @Test
@@ -145,7 +144,7 @@ public class AttributeListConverterTest {
 
         assertThat(result, hasSize(3));
         assertThat(result, hasItems(stringAttributeMock, dateAttributeMock, jsonAttributeMock));
-        verifyZeroInteractions(addressTransformerMock);
+        verifyNoInteractions(addressTransformerMock);
     }
 
     @Test

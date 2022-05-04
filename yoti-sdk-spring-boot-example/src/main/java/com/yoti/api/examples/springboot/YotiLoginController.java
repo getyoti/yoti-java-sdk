@@ -1,6 +1,10 @@
 package com.yoti.api.examples.springboot;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.yoti.api.attributes.AttributeConstants;
@@ -12,6 +16,7 @@ import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.YotiClient;
 import com.yoti.api.client.shareurl.DynamicScenario;
 import com.yoti.api.client.shareurl.DynamicShareException;
+import com.yoti.api.client.shareurl.ShareUrlResult;
 import com.yoti.api.client.shareurl.extension.Extension;
 import com.yoti.api.client.shareurl.extension.LocationConstraintContent;
 import com.yoti.api.client.shareurl.extension.LocationConstraintExtensionBuilder;
@@ -20,6 +25,7 @@ import com.yoti.api.client.shareurl.policy.WantedAttribute;
 import com.yoti.api.spring.YotiClientProperties;
 import com.yoti.api.spring.YotiProperties;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,6 +158,43 @@ public class YotiLoginController extends WebMvcConfigurerAdapter {
         return "profile";
     }
 
+    @RequestMapping("/dbs-check")
+    public String dbsCheck(final Model model) {
+        Map<String, Object> scheme = new HashMap<>();
+        scheme.put("type", "DBS");
+        scheme.put("objective", "BASIC");
+
+        Map<String, Object> identityProfile = new HashMap<>();
+        identityProfile.put("trust_framework", "UK_TFIDA");
+        identityProfile.put("scheme", scheme);
+
+        DynamicPolicy dynamicPolicy = DynamicPolicy.builder()
+                .withIdentityProfile(identityProfile)
+                .build();
+
+        Map<String, Object> subject = new HashMap<>();
+        scheme.put("subject_id", "a_subject_id");;
+
+        DynamicScenario dynamicScenario = DynamicScenario.builder()
+                .withCallbackEndpoint("/login")
+                .withPolicy(dynamicPolicy)
+                .withSubject(subject)
+                .build();
+
+        try {
+            ShareUrlResult result = client.createShareUrl(dynamicScenario);
+
+            String shareUrl = result.getUrl();
+            model.addAttribute("yotiShareUrl", shareUrl);
+        } catch (DynamicShareException e) {
+            LOG.error(e.getMessage());
+        }
+
+        model.addAttribute("clientSdkId", properties.getClientSdkId());
+
+        return "dbs-check";
+    }
+
     private DisplayAttribute mapToDisplayAttribute(Attribute attribute) {
         switch (attribute.getName()) {
             case AttributeConstants.HumanProfileAttributes.FULL_NAME:
@@ -176,6 +219,8 @@ public class YotiLoginController extends WebMvcConfigurerAdapter {
                 return null; // Do nothing - we already display the selfie
             case AttributeConstants.HumanProfileAttributes.GENDER:
                 return new DisplayAttribute("Gender", attribute, "yoti-icon-gender");
+            case AttributeConstants.HumanProfileAttributes.IDENTITY_PROFILE_REPORT:
+                return new DisplayAttribute("Identity Profile Report", toJsonAttribute(attribute), "yoti-icon-document");
 
             default:
                 if (attribute.getName().contains(":")) {
@@ -184,6 +229,21 @@ public class YotiLoginController extends WebMvcConfigurerAdapter {
                     return handleProfileAttribute(attribute);
                 }
         }
+    }
+
+    private Attribute<String> toJsonAttribute(Attribute attribute) {
+        ObjectMapper MAPPER = new ObjectMapper();
+
+        String json;
+
+        try {
+            json = MAPPER.readTree(MAPPER.writeValueAsString(attribute.getValue()).getBytes(StandardCharsets.UTF_8))
+                    .toString();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        return new Attribute<>(attribute.getName(), json);
     }
 
     private DisplayAttribute handleAgeVerification(Attribute attribute) {

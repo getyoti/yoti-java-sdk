@@ -20,26 +20,29 @@ public final class ThirdPartyAttributeProto {
 
     /**
      * <code>bytes issuance_token = 1;</code>
+     * @return The issuanceToken.
      */
     com.google.protobuf.ByteString getIssuanceToken();
 
     /**
      * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
+     * @return Whether the issuingAttributes field is set.
      */
     boolean hasIssuingAttributes();
     /**
      * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
+     * @return The issuingAttributes.
      */
-    IssuingAttributesProto.IssuingAttributes getIssuingAttributes();
+    com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes getIssuingAttributes();
     /**
      * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
      */
-    IssuingAttributesProto.IssuingAttributesOrBuilder getIssuingAttributesOrBuilder();
+    com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributesOrBuilder getIssuingAttributesOrBuilder();
   }
   /**
    * Protobuf type {@code sharepubapi_v1.ThirdPartyAttribute}
    */
-  public  static final class ThirdPartyAttribute extends
+  public static final class ThirdPartyAttribute extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:sharepubapi_v1.ThirdPartyAttribute)
       ThirdPartyAttributeOrBuilder {
@@ -52,7 +55,14 @@ public final class ThirdPartyAttributeProto {
       issuanceToken_ = com.google.protobuf.ByteString.EMPTY;
     }
 
-    @Override
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new ThirdPartyAttribute();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -63,9 +73,8 @@ public final class ThirdPartyAttributeProto {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new NullPointerException();
+        throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -82,11 +91,11 @@ public final class ThirdPartyAttributeProto {
               break;
             }
             case 18: {
-              IssuingAttributesProto.IssuingAttributes.Builder subBuilder = null;
+              com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.Builder subBuilder = null;
               if (issuingAttributes_ != null) {
                 subBuilder = issuingAttributes_.toBuilder();
               }
-              issuingAttributes_ = input.readMessage(IssuingAttributesProto.IssuingAttributes.parser(), extensionRegistry);
+              issuingAttributes_ = input.readMessage(com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(issuingAttributes_);
                 issuingAttributes_ = subBuilder.buildPartial();
@@ -95,7 +104,7 @@ public final class ThirdPartyAttributeProto {
               break;
             }
             default: {
-              if (!parseUnknownFieldProto3(
+              if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
@@ -115,49 +124,56 @@ public final class ThirdPartyAttributeProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ThirdPartyAttributeProto.internal_static_sharepubapi_v1_ThirdPartyAttribute_descriptor;
+      return com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.internal_static_sharepubapi_v1_ThirdPartyAttribute_descriptor;
     }
 
-    @Override
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ThirdPartyAttributeProto.internal_static_sharepubapi_v1_ThirdPartyAttribute_fieldAccessorTable
+      return com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.internal_static_sharepubapi_v1_ThirdPartyAttribute_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              ThirdPartyAttribute.class, Builder.class);
+              com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute.class, com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute.Builder.class);
     }
 
     public static final int ISSUANCE_TOKEN_FIELD_NUMBER = 1;
     private com.google.protobuf.ByteString issuanceToken_;
     /**
      * <code>bytes issuance_token = 1;</code>
+     * @return The issuanceToken.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getIssuanceToken() {
       return issuanceToken_;
     }
 
     public static final int ISSUING_ATTRIBUTES_FIELD_NUMBER = 2;
-    private IssuingAttributesProto.IssuingAttributes issuingAttributes_;
+    private com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes issuingAttributes_;
     /**
      * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
+     * @return Whether the issuingAttributes field is set.
      */
+    @java.lang.Override
     public boolean hasIssuingAttributes() {
       return issuingAttributes_ != null;
     }
     /**
      * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
+     * @return The issuingAttributes.
      */
-    public IssuingAttributesProto.IssuingAttributes getIssuingAttributes() {
-      return issuingAttributes_ == null ? IssuingAttributesProto.IssuingAttributes.getDefaultInstance() : issuingAttributes_;
+    @java.lang.Override
+    public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes getIssuingAttributes() {
+      return issuingAttributes_ == null ? com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.getDefaultInstance() : issuingAttributes_;
     }
     /**
      * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
      */
-    public IssuingAttributesProto.IssuingAttributesOrBuilder getIssuingAttributesOrBuilder() {
+    @java.lang.Override
+    public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributesOrBuilder getIssuingAttributesOrBuilder() {
       return getIssuingAttributes();
     }
 
     private byte memoizedIsInitialized = -1;
-    @Override
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -167,7 +183,7 @@ public final class ThirdPartyAttributeProto {
       return true;
     }
 
-    @Override
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (!issuanceToken_.isEmpty()) {
@@ -179,7 +195,7 @@ public final class ThirdPartyAttributeProto {
       unknownFields.writeTo(output);
     }
 
-    @Override
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -198,29 +214,28 @@ public final class ThirdPartyAttributeProto {
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof ThirdPartyAttribute)) {
+      if (!(obj instanceof com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute)) {
         return super.equals(obj);
       }
-      ThirdPartyAttribute other = (ThirdPartyAttribute) obj;
+      com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute other = (com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute) obj;
 
-      boolean result = true;
-      result = result && getIssuanceToken()
-          .equals(other.getIssuanceToken());
-      result = result && (hasIssuingAttributes() == other.hasIssuingAttributes());
+      if (!getIssuanceToken()
+          .equals(other.getIssuanceToken())) return false;
+      if (hasIssuingAttributes() != other.hasIssuingAttributes()) return false;
       if (hasIssuingAttributes()) {
-        result = result && getIssuingAttributes()
-            .equals(other.getIssuingAttributes());
+        if (!getIssuingAttributes()
+            .equals(other.getIssuingAttributes())) return false;
       }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -238,69 +253,69 @@ public final class ThirdPartyAttributeProto {
       return hash;
     }
 
-    public static ThirdPartyAttribute parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ThirdPartyAttribute parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ThirdPartyAttribute parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ThirdPartyAttribute parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ThirdPartyAttribute parseFrom(byte[] data)
+    public static com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ThirdPartyAttribute parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ThirdPartyAttribute parseFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static ThirdPartyAttribute parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static ThirdPartyAttribute parseDelimitedFrom(java.io.InputStream input)
+    public static com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static ThirdPartyAttribute parseDelimitedFrom(
+    public static com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static ThirdPartyAttribute parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static ThirdPartyAttribute parseFrom(
+    public static com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -308,21 +323,21 @@ public final class ThirdPartyAttributeProto {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(ThirdPartyAttribute prototype) {
+    public static Builder newBuilder(com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @Override
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
@@ -334,18 +349,18 @@ public final class ThirdPartyAttributeProto {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:sharepubapi_v1.ThirdPartyAttribute)
-        ThirdPartyAttributeOrBuilder {
+        com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttributeOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ThirdPartyAttributeProto.internal_static_sharepubapi_v1_ThirdPartyAttribute_descriptor;
+        return com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.internal_static_sharepubapi_v1_ThirdPartyAttribute_descriptor;
       }
 
-      @Override
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ThirdPartyAttributeProto.internal_static_sharepubapi_v1_ThirdPartyAttribute_fieldAccessorTable
+        return com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.internal_static_sharepubapi_v1_ThirdPartyAttribute_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                ThirdPartyAttribute.class, Builder.class);
+                com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute.class, com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute.Builder.class);
       }
 
       // Construct using com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute.newBuilder()
@@ -363,7 +378,7 @@ public final class ThirdPartyAttributeProto {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @Override
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         issuanceToken_ = com.google.protobuf.ByteString.EMPTY;
@@ -377,29 +392,29 @@ public final class ThirdPartyAttributeProto {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ThirdPartyAttributeProto.internal_static_sharepubapi_v1_ThirdPartyAttribute_descriptor;
+        return com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.internal_static_sharepubapi_v1_ThirdPartyAttribute_descriptor;
       }
 
-      @Override
-      public ThirdPartyAttribute getDefaultInstanceForType() {
-        return ThirdPartyAttribute.getDefaultInstance();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute getDefaultInstanceForType() {
+        return com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute.getDefaultInstance();
       }
 
-      @Override
-      public ThirdPartyAttribute build() {
-        ThirdPartyAttribute result = buildPartial();
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute build() {
+        com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @Override
-      public ThirdPartyAttribute buildPartial() {
-        ThirdPartyAttribute result = new ThirdPartyAttribute(this);
+      @java.lang.Override
+      public com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute buildPartial() {
+        com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute result = new com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute(this);
         result.issuanceToken_ = issuanceToken_;
         if (issuingAttributesBuilder_ == null) {
           result.issuingAttributes_ = issuingAttributes_;
@@ -410,50 +425,50 @@ public final class ThirdPartyAttributeProto {
         return result;
       }
 
-      @Override
+      @java.lang.Override
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
-      @Override
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.setField(field, value);
+          java.lang.Object value) {
+        return super.setField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
-      @Override
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
-      @Override
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
       }
-      @Override
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
       }
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof ThirdPartyAttribute) {
-          return mergeFrom((ThirdPartyAttribute)other);
+        if (other instanceof com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute) {
+          return mergeFrom((com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(ThirdPartyAttribute other) {
-        if (other == ThirdPartyAttribute.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute other) {
+        if (other == com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute.getDefaultInstance()) return this;
         if (other.getIssuanceToken() != com.google.protobuf.ByteString.EMPTY) {
           setIssuanceToken(other.getIssuanceToken());
         }
@@ -465,21 +480,21 @@ public final class ThirdPartyAttributeProto {
         return this;
       }
 
-      @Override
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @Override
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        ThirdPartyAttribute parsedMessage = null;
+        com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (ThirdPartyAttribute) e.getUnfinishedMessage();
+          parsedMessage = (com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -492,47 +507,54 @@ public final class ThirdPartyAttributeProto {
       private com.google.protobuf.ByteString issuanceToken_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>bytes issuance_token = 1;</code>
+       * @return The issuanceToken.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getIssuanceToken() {
         return issuanceToken_;
       }
       /**
        * <code>bytes issuance_token = 1;</code>
+       * @param value The issuanceToken to set.
+       * @return This builder for chaining.
        */
       public Builder setIssuanceToken(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-
+  
         issuanceToken_ = value;
         onChanged();
         return this;
       }
       /**
        * <code>bytes issuance_token = 1;</code>
+       * @return This builder for chaining.
        */
       public Builder clearIssuanceToken() {
-
+        
         issuanceToken_ = getDefaultInstance().getIssuanceToken();
         onChanged();
         return this;
       }
 
-      private IssuingAttributesProto.IssuingAttributes issuingAttributes_ = null;
+      private com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes issuingAttributes_;
       private com.google.protobuf.SingleFieldBuilderV3<
-          IssuingAttributesProto.IssuingAttributes, IssuingAttributesProto.IssuingAttributes.Builder, IssuingAttributesProto.IssuingAttributesOrBuilder> issuingAttributesBuilder_;
+          com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.Builder, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributesOrBuilder> issuingAttributesBuilder_;
       /**
        * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
+       * @return Whether the issuingAttributes field is set.
        */
       public boolean hasIssuingAttributes() {
         return issuingAttributesBuilder_ != null || issuingAttributes_ != null;
       }
       /**
        * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
+       * @return The issuingAttributes.
        */
-      public IssuingAttributesProto.IssuingAttributes getIssuingAttributes() {
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes getIssuingAttributes() {
         if (issuingAttributesBuilder_ == null) {
-          return issuingAttributes_ == null ? IssuingAttributesProto.IssuingAttributes.getDefaultInstance() : issuingAttributes_;
+          return issuingAttributes_ == null ? com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.getDefaultInstance() : issuingAttributes_;
         } else {
           return issuingAttributesBuilder_.getMessage();
         }
@@ -540,7 +562,7 @@ public final class ThirdPartyAttributeProto {
       /**
        * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
        */
-      public Builder setIssuingAttributes(IssuingAttributesProto.IssuingAttributes value) {
+      public Builder setIssuingAttributes(com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes value) {
         if (issuingAttributesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -557,7 +579,7 @@ public final class ThirdPartyAttributeProto {
        * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
        */
       public Builder setIssuingAttributes(
-          IssuingAttributesProto.IssuingAttributes.Builder builderForValue) {
+          com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.Builder builderForValue) {
         if (issuingAttributesBuilder_ == null) {
           issuingAttributes_ = builderForValue.build();
           onChanged();
@@ -570,11 +592,11 @@ public final class ThirdPartyAttributeProto {
       /**
        * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
        */
-      public Builder mergeIssuingAttributes(IssuingAttributesProto.IssuingAttributes value) {
+      public Builder mergeIssuingAttributes(com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes value) {
         if (issuingAttributesBuilder_ == null) {
           if (issuingAttributes_ != null) {
             issuingAttributes_ =
-              IssuingAttributesProto.IssuingAttributes.newBuilder(issuingAttributes_).mergeFrom(value).buildPartial();
+              com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.newBuilder(issuingAttributes_).mergeFrom(value).buildPartial();
           } else {
             issuingAttributes_ = value;
           }
@@ -602,31 +624,31 @@ public final class ThirdPartyAttributeProto {
       /**
        * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
        */
-      public IssuingAttributesProto.IssuingAttributes.Builder getIssuingAttributesBuilder() {
-
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.Builder getIssuingAttributesBuilder() {
+        
         onChanged();
         return getIssuingAttributesFieldBuilder().getBuilder();
       }
       /**
        * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
        */
-      public IssuingAttributesProto.IssuingAttributesOrBuilder getIssuingAttributesOrBuilder() {
+      public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributesOrBuilder getIssuingAttributesOrBuilder() {
         if (issuingAttributesBuilder_ != null) {
           return issuingAttributesBuilder_.getMessageOrBuilder();
         } else {
           return issuingAttributes_ == null ?
-              IssuingAttributesProto.IssuingAttributes.getDefaultInstance() : issuingAttributes_;
+              com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.getDefaultInstance() : issuingAttributes_;
         }
       }
       /**
        * <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          IssuingAttributesProto.IssuingAttributes, IssuingAttributesProto.IssuingAttributes.Builder, IssuingAttributesProto.IssuingAttributesOrBuilder>
+          com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.Builder, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributesOrBuilder> 
           getIssuingAttributesFieldBuilder() {
         if (issuingAttributesBuilder_ == null) {
           issuingAttributesBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              IssuingAttributesProto.IssuingAttributes, IssuingAttributesProto.IssuingAttributes.Builder, IssuingAttributesProto.IssuingAttributesOrBuilder>(
+              com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.Builder, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributesOrBuilder>(
                   getIssuingAttributes(),
                   getParentForChildren(),
                   isClean());
@@ -634,13 +656,13 @@ public final class ThirdPartyAttributeProto {
         }
         return issuingAttributesBuilder_;
       }
-      @Override
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
+        return super.setUnknownFields(unknownFields);
       }
 
-      @Override
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -651,18 +673,18 @@ public final class ThirdPartyAttributeProto {
     }
 
     // @@protoc_insertion_point(class_scope:sharepubapi_v1.ThirdPartyAttribute)
-    private static final ThirdPartyAttribute DEFAULT_INSTANCE;
+    private static final com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new ThirdPartyAttribute();
+      DEFAULT_INSTANCE = new com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute();
     }
 
-    public static ThirdPartyAttribute getDefaultInstance() {
+    public static com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<ThirdPartyAttribute>
         PARSER = new com.google.protobuf.AbstractParser<ThirdPartyAttribute>() {
-      @Override
+      @java.lang.Override
       public ThirdPartyAttribute parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -675,13 +697,13 @@ public final class ThirdPartyAttributeProto {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<ThirdPartyAttribute> getParserForType() {
       return PARSER;
     }
 
-    @Override
-    public ThirdPartyAttribute getDefaultInstanceForType() {
+    @java.lang.Override
+    public com.yoti.api.client.spi.remote.proto.ThirdPartyAttributeProto.ThirdPartyAttribute getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -689,7 +711,7 @@ public final class ThirdPartyAttributeProto {
 
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sharepubapi_v1_ThirdPartyAttribute_descriptor;
-  private static final
+  private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sharepubapi_v1_ThirdPartyAttribute_fieldAccessorTable;
 
@@ -700,38 +722,31 @@ public final class ThirdPartyAttributeProto {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n\031ThirdPartyAttribute.proto\022\016sharepubapi" +
       "_v1\032\027IssuingAttributes.proto\"l\n\023ThirdPar" +
       "tyAttribute\022\026\n\016issuance_token\030\001 \001(\014\022=\n\022i" +
       "ssuing_attributes\030\002 \001(\0132!.sharepubapi_v1" +
-      ".IssuingAttributesB\271\001\n$com.yoti.api.clie" +
+      ".IssuingAttributesB\357\001\n$com.yoti.api.clie" +
       "nt.spi.remote.protoB\030ThirdPartyAttribute" +
-      "ProtoZ\016yotiprotoshare\252\002\030Yoti.Auth.ProtoB" +
-      "uf.Share\312\002\020Yoti\\Sharepubapi\342\002\034Yoti\\Share" +
-      "pubapi\\GPBMetadata\352\002\031Yoti.Protobuf.Share" +
-      "pubapib\006proto3"
+      "ProtoZ0github.com/getyoti/yoti-go-sdk/v3" +
+      "/yotiprotoshare\252\002\030Yoti.Auth.ProtoBuf.Sha" +
+      "re\312\002\031Yoti\\Protobuf\\Sharepubapi\342\002%Yoti\\Pr" +
+      "otobuf\\Sharepubapi\\GPBMetadata\352\002\033Yoti::P" +
+      "rotobuf::Sharepubapib\006proto3"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
-    com.google.protobuf.Descriptors.FileDescriptor
+    descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          IssuingAttributesProto.getDescriptor(),
-        }, assigner);
+          com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.getDescriptor(),
+        });
     internal_static_sharepubapi_v1_ThirdPartyAttribute_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_sharepubapi_v1_ThirdPartyAttribute_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sharepubapi_v1_ThirdPartyAttribute_descriptor,
-        new String[] { "IssuanceToken", "IssuingAttributes", });
-    IssuingAttributesProto.getDescriptor();
+        new java.lang.String[] { "IssuanceToken", "IssuingAttributes", });
+    com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

@@ -1,6 +1,6 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="yoti-html">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="yoti-html" lang="en">
 
     <head>
         <meta charset="utf-8" />
@@ -12,7 +12,6 @@
 
     <body class="yoti-body">
         <main class="yoti-profile-layout">
-
             <section class="yoti-profile-user-section">
                 <div class="yoti-profile-picture-powered-section">
                     <span class="yoti-profile-picture-powered">Powered by</span>
@@ -34,10 +33,10 @@
             </section>
 
             <section class="yoti-attributes-section">
-
                 <div th:if="${appLogo == null}">
                     <img class="yoti-company-logo" th:src="@{/static/assets/company-logo.jpg}" alt="company logo" />
                 </div>
+                
                 <div th:if="${appLogo != null}">
                     <img class="yoti-company-logo" th:src="${appLogo}" alt="company logo" />
                 </div>
@@ -57,12 +56,11 @@
                 </div>
 
                 <div class="yoti-attribute-list">
-
                     <div th:each="attribute : ${displayAttributes}" class="yoti-attribute-list-item">
 
                         <div class="yoti-attribute-name">
                             <div class="yoti-attribute-name-cell">
-                                <i th:class="${attribute.icon}" />
+                                <i th:class="${attribute.icon}"></i>
                                 <span class="yoti-attribute-name-cell-text" th:text="${attribute.displayName}" />
                             </div>
                         </div>
@@ -79,6 +77,9 @@
                                 </div>
                                 <div th:case="document_images">
                                     <img th:src="${attribute.attribute.value[0].base64Content}" alt="document_image" />
+                                </div>
+                                <div th:case="Identity_profile_report">
+                                    <img th:src="${attribute.attribute.value[0]}" alt="document_image" />
                                 </div>
                                 <div th:case="*" class="yoti-attribute-value-text" th:text="${attribute.displayValue}"></div>
                             </div>
@@ -101,12 +102,9 @@
                                 <div class="yoti-attribute-anchors -subtype" th:text="${anchor.subType}" />
                             </div>
                         </div>
-
                     </div>
-
                 </div>
             </section>
-
         </main>
     </body>
 </html>
