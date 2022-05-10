@@ -5,26 +5,19 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom
 
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.security.KeyPair;
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.*;
+import org.mockito.junit.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProfileServiceTest {
@@ -32,14 +25,14 @@ public class ProfileServiceTest {
     private static final Receipt RECEIPT = new Receipt.Builder()
             .withProfile(new byte[] { 1, 2, 3, 4 })
             .build();
+
     private static final ProfileResponse PROFILE_RESPONSE = new ProfileResponse.ProfileResponseBuilder()
             .setReceipt(RECEIPT)
             .setSessionData("1234")
-            .createProfileResonse();
+            .build();
     private static final String APP_ID = "test-app";
     private static final String TOKEN = "test-token";
     private static final String GENERATED_PROFILE_PATH = "generatedProfilePath";
-    private static final Map<String, String> SOME_HEADERS = new HashMap<>();
     private static String B64_PUBLIC_KEY;
     private static KeyPair KEY_PAIR;
 
@@ -47,15 +40,12 @@ public class ProfileServiceTest {
 
     @Mock UnsignedPathFactory unsignedPathFactory;
 
-    @Mock SignedRequest signedRequestMock;
+    @Mock SignedRequest signedRequest;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
         KEY_PAIR = generateKeyPairFrom(KEY_PAIR_PEM);
-        B64_PUBLIC_KEY = Base64.getEncoder()
-                .encodeToString(KEY_PAIR.getPublic()
-                        .getEncoded());
-        SOME_HEADERS.put("someKey", "someValue");
+        B64_PUBLIC_KEY = Base64.getEncoder().encodeToString(KEY_PAIR.getPublic().getEncoded());
     }
 
     @Before
@@ -65,8 +55,8 @@ public class ProfileServiceTest {
 
     @Test
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
-        doReturn(signedRequestMock).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
-        when(signedRequestMock.execute(ProfileResponse.class)).thenReturn(PROFILE_RESPONSE);
+        doReturn(signedRequest).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
+        when(signedRequest.execute(ProfileResponse.class)).thenReturn(PROFILE_RESPONSE);
 
         Receipt result = testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);
         assertSame(RECEIPT, result);
@@ -75,8 +65,8 @@ public class ProfileServiceTest {
     @Test
     public void shouldThrowExceptionForIOError() throws Exception {
         IOException ioException = new IOException("Test exception");
-        doReturn(signedRequestMock).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
-        when(signedRequestMock.execute(ProfileResponse.class)).thenThrow(ioException);
+        doReturn(signedRequest).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
+        when(signedRequest.execute(ProfileResponse.class)).thenThrow(ioException);
 
         try {
             testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);
@@ -89,8 +79,8 @@ public class ProfileServiceTest {
     @Test
     public void shouldThrowExceptionWithResourceExceptionCause() throws Throwable {
         ResourceException resourceException = new ResourceException(404, "Not Found", "Test exception");
-        doReturn(signedRequestMock).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
-        when(signedRequestMock.execute(ProfileResponse.class)).thenThrow(resourceException);
+        doReturn(signedRequest).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
+        when(signedRequest.execute(ProfileResponse.class)).thenThrow(resourceException);
 
         try {
             testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);

@@ -50,6 +50,10 @@ public class ProfileService {
     }
 
     public Receipt getReceipt(KeyPair keyPair, String appId, String connectToken) throws ProfileException {
+        return getProfile(keyPair, appId, connectToken).getReceipt();
+    }
+
+    public ProfileResponse getProfile(KeyPair keyPair, String appId, String connectToken) throws ProfileException {
         notNull(keyPair, "Key pair");
         notNull(appId, "Application id");
         notNull(connectToken, "Connect token");
@@ -57,8 +61,7 @@ public class ProfileService {
         String path = unsignedPathFactory.createProfilePath(appId, connectToken);
 
         try {
-            String authKey = Base64.getEncoder()
-                    .encodeToString(keyPair.getPublic().getEncoded());
+            String authKey = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
 
             SignedRequest signedRequest = createSignedRequest(keyPair, path, authKey);
             return fetchReceipt(signedRequest);
@@ -67,21 +70,20 @@ public class ProfileService {
         }
     }
 
-    private Receipt fetchReceipt(SignedRequest signedRequest) throws IOException, ProfileException {
+    private ProfileResponse fetchReceipt(SignedRequest signedRequest) throws IOException, ProfileException {
         LOG.info("Fetching profile from resource at '{}'", signedRequest.getUri());
+
         try {
-            ProfileResponse response = signedRequest.execute(ProfileResponse.class);
-            return response.getReceipt();
-        } catch (ResourceException re) {
-            int responseCode = re.getResponseCode();
+            return signedRequest.execute(ProfileResponse.class);
+        } catch (ResourceException ex) {
+            int responseCode = ex.getResponseCode();
             switch (responseCode) {
                 case HTTP_INTERNAL_ERROR:
-                    throw new ProfileException("Error completing sharing: " + re.getResponseBody(), re);
+                    throw new ProfileException("Error completing sharing: " + ex.getResponseBody(), ex);
                 case HTTP_NOT_FOUND:
-                    throw new ProfileException("Profile not found. This can be due to a used or expired token. Details: "
-                            + re.getResponseBody(), re);
+                    throw new ProfileException("Profile not found. This can be due to a used or expired token. Details: " + ex.getResponseBody(), ex);
                 default:
-                    throw new ProfileException("Unexpected response: " + responseCode + " " + re.getResponseBody(), re);
+                    throw new ProfileException("Unexpected response: " + responseCode + " " + ex.getResponseBody(), ex);
             }
         }
     }
