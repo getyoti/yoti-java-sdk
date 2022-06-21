@@ -87,8 +87,8 @@
     <httpmime.version>4.5.13</httpmime.version>
     
     <!-- spring versions -->
-    <spring-boot.version>2.7.0</spring-boot.version>
-    <spring.core.version>5.3.19</spring.core.version>
+    <spring-framework.boot.version>2.7.0</spring-framework.boot.version>
+    <spring-framework.version>5.3.21</spring-framework.version>
     <spring.security.version>5.6.2</spring.security.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
     
@@ -180,27 +180,27 @@
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-autoconfigure</artifactId>
-        <version>${spring-boot.version}</version>
+        <version>${spring-framework.boot.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-core</artifactId>
-        <version>${spring.core.version}</version>
+        <version>${spring-framework.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-aop</artifactId>
-        <version>${spring.core.version}</version>
+        <version>${spring-framework.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-beans</artifactId>
-        <version>${spring.core.version}</version>
+        <version>${spring-framework.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-web</artifactId>
-        <version>${spring.core.version}</version>
+        <version>${spring-framework.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework.security</groupId>
@@ -210,12 +210,12 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
-        <version>${spring.core.version}</version>
+        <version>${spring-framework.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-expression</artifactId>
-        <version>${spring.core.version}</version>
+        <version>${spring-framework.version}</version>
       </dependency>
       <dependency>
         <groupId>javax.servlet</groupId>
