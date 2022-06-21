@@ -5,9 +5,11 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.util.Base64;
+import java.util.Optional;
 
 import com.yoti.api.client.ActivityFailureException;
 import com.yoti.api.client.ProfileException;
+import com.yoti.api.client.spi.remote.call.ProfileResponse;
 import com.yoti.api.client.spi.remote.call.ProfileService;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.util.DecryptionHelper;
@@ -31,11 +33,13 @@ public class ReceiptFetcher {
 
     public Receipt fetch(String encryptedConnectToken, KeyPair keyPair, String appId) throws ProfileException {
         LOG.debug("Decrypting connect token: '{}'", encryptedConnectToken);
+
         String connectToken = decryptConnectToken(encryptedConnectToken, keyPair.getPrivate());
         LOG.debug("Connect token decrypted: '{}'", connectToken);
-        Receipt receipt = profileService.getReceipt(keyPair, appId, connectToken);
-        validateReceipt(receipt, connectToken);
-        return receipt;
+
+        ProfileResponse profile = profileService.getProfile(keyPair, appId, connectToken);
+        validateReceipt(profile, connectToken);
+        return profile.getReceipt();
     }
 
     private String decryptConnectToken(String encryptedConnectToken, PrivateKey privateKey) throws ProfileException {
@@ -43,17 +47,23 @@ public class ReceiptFetcher {
             byte[] byteValue = Base64.getUrlDecoder().decode(encryptedConnectToken);
             byte[] decryptedToken = DecryptionHelper.decryptAsymmetric(byteValue, privateKey);
             return new String(decryptedToken, DEFAULT_CHARSET);
-        } catch (Exception e) {
-            throw new ProfileException("Cannot decrypt connect token", e);
+        } catch (Exception ex) {
+            throw new ProfileException("Cannot decrypt connect token", ex);
         }
     }
 
-    private void validateReceipt(Receipt receipt, String connectToken) throws ProfileException {
-        if (receipt == null) {
-            throw new ProfileException("No receipt for '" + connectToken + "' was found");
-        }
-        if (receipt.getOutcome() == null || !receipt.getOutcome().isSuccessful()) {
-            throw new ActivityFailureException("Sharing activity unsuccessful for " + receipt.getDisplayReceiptId());
+    private void validateReceipt(ProfileResponse profile, String connectToken) throws ProfileException {
+        Receipt receipt = Optional.ofNullable(profile)
+                .map(ProfileResponse::getReceipt)
+                .orElseThrow(() -> new ProfileException("No profile for '" + connectToken + "' was found"));
+
+        if (!receipt.hasOutcome(Receipt.Outcome.SUCCESS)) {
+            throw new ActivityFailureException(
+                    String.format("Sharing activity unsuccessful for %s%s",
+                            receipt.getDisplayReceiptId(),
+                            Optional.ofNullable(profile.getError()).map(e -> String.format(" - %s", e)).orElse("")
+                    )
+            );
         }
     }
 

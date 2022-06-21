@@ -6,13 +6,14 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom
 
 import static org.bouncycastle.util.encoders.Base64.decode;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import java.security.KeyPair;
 import java.security.PublicKey;
@@ -20,16 +21,16 @@ import java.util.Base64;
 
 import com.yoti.api.client.ActivityFailureException;
 import com.yoti.api.client.ProfileException;
+import com.yoti.api.client.spi.remote.call.ErrorDetails;
+import com.yoti.api.client.spi.remote.call.ProfileResponse;
 import com.yoti.api.client.spi.remote.call.ProfileService;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.*;
+import org.mockito.junit.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReceiptFetcherTest {
@@ -41,7 +42,7 @@ public class ReceiptFetcherTest {
 
     @InjectMocks ReceiptFetcher testObj;
 
-    @Mock ProfileService profileServiceMock;
+    @Mock ProfileService profileService;
 
     KeyPair keyPair;
     String encryptedToken;
@@ -54,37 +55,37 @@ public class ReceiptFetcherTest {
     }
 
     @Test
-    public void shouldFailForNullToken() throws Exception {
+    public void shouldFailForNullToken() {
         try {
             testObj.fetch(null, keyPair, APP_ID);
-        } catch (ProfileException e) {
-            assertThat(e.getMessage(), containsString("Cannot decrypt connect token"));
-            assertTrue(e.getCause() instanceof NullPointerException);
+        } catch (ProfileException ex) {
+            assertThat(ex.getMessage(), containsString("Cannot decrypt connect token"));
+            assertTrue(ex.getCause() instanceof NullPointerException);
             return;
         }
         fail("Expected an Exception");
     }
 
     @Test
-    public void shouldFailForNonBase64Token() throws Exception {
+    public void shouldFailForNonBase64Token() {
         try {
             testObj.fetch(TOKEN, keyPair, APP_ID);
-        } catch (ProfileException e) {
-            assertThat(e.getMessage(), containsString("Cannot decrypt connect token"));
-            assertTrue(e.getCause() instanceof IllegalArgumentException);
+        } catch (ProfileException ex) {
+            assertThat(ex.getMessage(), containsString("Cannot decrypt connect token"));
+            assertTrue(ex.getCause() instanceof IllegalArgumentException);
             return;
         }
         fail("Expected an Exception");
     }
 
     @Test
-    public void shouldFailForBadlyEncryptedToken() throws Exception {
+    public void shouldFailForBadlyEncryptedToken() {
         try {
             testObj.fetch(Base64.getEncoder().encodeToString(TOKEN.getBytes()), keyPair, APP_ID);
-        } catch (ProfileException e) {
-            assertThat(e.getMessage(), containsString("Cannot decrypt connect token"));
-            assertTrue(e.getCause() instanceof ProfileException);
-            assertThat(e.getCause().getMessage(), containsString("Error decrypting data"));
+        } catch (ProfileException ex) {
+            assertThat(ex.getMessage(), containsString("Cannot decrypt connect token"));
+            assertTrue(ex.getCause() instanceof ProfileException);
+            assertThat(ex.getCause().getMessage(), containsString("Error decrypting data"));
             return;
         }
         fail("Expected an Exception");
@@ -93,25 +94,25 @@ public class ReceiptFetcherTest {
     @Test
     public void shouldFailWithExceptionFromProfileService() throws Exception {
         ProfileException profileException = new ProfileException("Test exception");
-        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenThrow(profileException);
+        when(profileService.getProfile(any(KeyPair.class), anyString(), anyString())).thenThrow(profileException);
 
         try {
             testObj.fetch(encryptedToken, keyPair, APP_ID);
-        } catch (ProfileException e) {
-            assertSame(profileException, e);
+        } catch (ProfileException ex) {
+            assertSame(profileException, ex);
             return;
         }
         fail("Expected an Exception");
     }
 
     @Test
-    public void shouldFailWhenNoReceiptReturned() throws Exception {
-        when(profileServiceMock.getReceipt(any(KeyPair.class), anyString(), anyString())).thenReturn(null);
+    public void shouldFailWhenNoProfileReturned() throws Exception {
+        when(profileService.getProfile(any(KeyPair.class), anyString(), anyString())).thenReturn(null);
 
         try {
             testObj.fetch(encryptedToken, keyPair, APP_ID);
         } catch (ProfileException e) {
-            assertThat(e.getMessage(), containsString("No receipt"));
+            assertThat(e.getMessage(), containsString("No profile"));
             assertThat(e.getMessage(), containsString(TOKEN));
             return;
         }
@@ -119,17 +120,63 @@ public class ReceiptFetcherTest {
     }
 
     @Test
-    public void shouldFailForFailureReceipt() throws Exception {
+    public void shouldFailWhenNoReceiptReturned() throws Exception {
+        when(profileService.getProfile(any(KeyPair.class), anyString(), anyString()))
+                .thenReturn(new ProfileResponse.ProfileResponseBuilder().build());
+
+        try {
+            testObj.fetch(encryptedToken, keyPair, APP_ID);
+        } catch (ProfileException e) {
+            assertThat(e.getMessage(), containsString("No profile"));
+            assertThat(e.getMessage(), containsString(TOKEN));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void shouldFailForFailureReceiptWithErrorCode() throws Exception {
         Receipt receipt = new Receipt.Builder()
                 .withReceiptId(DECODED_RECEIPT_BYTES)
                 .withOutcome(Receipt.Outcome.FAILURE)
                 .build();
-        when(profileServiceMock.getReceipt(keyPair, APP_ID, TOKEN)).thenReturn(receipt);
+
+        String errorCode = "anErrorCode";
+        String errorDescription = "anErrorDescription";
+        ErrorDetails error = ErrorDetails.builder().code(errorCode).description(errorDescription).build();
+
+        ProfileResponse profileResponse = new ProfileResponse.ProfileResponseBuilder()
+                .setReceipt(receipt)
+                .setError(error)
+                .build();
+        when(profileService.getProfile(keyPair, APP_ID, TOKEN)).thenReturn(profileResponse);
 
         try {
             testObj.fetch(encryptedToken, keyPair, APP_ID);
-        } catch (ActivityFailureException e) {
-            assertThat(e.getMessage(), containsString(ENCODED_RECEIPT_STRING));
+        } catch (ActivityFailureException ex) {
+            assertThat(ex.getMessage(), containsString(ENCODED_RECEIPT_STRING));
+            assertThat(ex.getMessage(), containsString(errorCode));
+            assertThat(ex.getMessage(), containsString(errorDescription));
+            return;
+        }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void shouldFailForFailureReceiptWithNoErrorCode() throws Exception {
+        Receipt receipt = new Receipt.Builder()
+                .withReceiptId(DECODED_RECEIPT_BYTES)
+                .withOutcome(Receipt.Outcome.FAILURE)
+                .build();
+
+        ProfileResponse profileResponse = new ProfileResponse.ProfileResponseBuilder().setReceipt(receipt).build();
+        when(profileService.getProfile(keyPair, APP_ID, TOKEN)).thenReturn(profileResponse);
+
+        try {
+            testObj.fetch(encryptedToken, keyPair, APP_ID);
+        } catch (ActivityFailureException ex) {
+            assertThat(ex.getMessage(), containsString(ENCODED_RECEIPT_STRING));
+            assertThat(ex.getMessage(), not(containsString("error")));
             return;
         }
         fail("Expected an Exception");
@@ -140,7 +187,9 @@ public class ReceiptFetcherTest {
         Receipt receipt = new Receipt.Builder()
                 .withOutcome(Receipt.Outcome.SUCCESS)
                 .build();
-        when(profileServiceMock.getReceipt(keyPair, APP_ID, TOKEN)).thenReturn(receipt);
+
+        ProfileResponse profileResponse = new ProfileResponse.ProfileResponseBuilder().setReceipt(receipt).build();
+        when(profileService.getProfile(keyPair, APP_ID, TOKEN)).thenReturn(profileResponse);
 
         Receipt result = testObj.fetch(encryptedToken, keyPair, APP_ID);
 
