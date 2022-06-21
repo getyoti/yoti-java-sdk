@@ -87,7 +87,7 @@
     <httpmime.version>4.5.13</httpmime.version>
     
     <!-- spring versions -->
-    <springboot.version>2.6.5</springboot.version>
+    <spring-boot.version>2.7.0</spring-boot.version>
     <spring.core.version>5.3.19</spring.core.version>
     <spring.security.version>5.6.2</spring.security.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
@@ -180,7 +180,7 @@
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-autoconfigure</artifactId>
-        <version>${springboot.version}</version>
+        <version>${spring-boot.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
