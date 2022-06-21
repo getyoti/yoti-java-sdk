@@ -83,7 +83,7 @@
     <bouncy.castle.version>1.70</bouncy.castle.version>
     <jackson.version>2.13.2</jackson.version>
     <jackson-databind.version>2.13.2.1</jackson-databind.version>
-    <google.protobuf.version>3.19.4</google.protobuf.version>
+    <protobuf-java.version>3.21.1</protobuf-java.version>
     <httpmime.version>4.5.13</httpmime.version>
     
     <!-- spring versions -->
@@ -153,7 +153,7 @@
       <dependency>
         <groupId>com.google.protobuf</groupId>
         <artifactId>protobuf-java</artifactId>
-        <version>${google.protobuf.version}</version>
+        <version>${protobuf-java.version}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
