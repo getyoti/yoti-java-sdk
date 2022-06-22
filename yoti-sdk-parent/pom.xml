@@ -115,7 +115,7 @@
     <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
     <extra-enforcer-rules.version>1.5.1</extra-enforcer-rules.version>
 
-    <nnexus-staging-maven-plugin.version>1.6.12</nnexus-staging-maven-plugin.version>
+    <nnexus-staging-maven-plugin.version>1.6.13</nnexus-staging-maven-plugin.version>
 
     <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
 
