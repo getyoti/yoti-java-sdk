@@ -173,7 +173,7 @@ public class YotiLoginController extends WebMvcConfigurerAdapter {
                 .build();
 
         Map<String, Object> subject = new HashMap<>();
-        scheme.put("subject_id", "a_subject_id");;
+        subject.put("subject_id", "00000000-1111-2222-3333-444444444444");
 
         DynamicScenario dynamicScenario = DynamicScenario.builder()
                 .withCallbackEndpoint("/login")
