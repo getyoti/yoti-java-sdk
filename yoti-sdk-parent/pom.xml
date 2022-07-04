@@ -87,7 +87,7 @@
     <httpmime.version>4.5.13</httpmime.version>
     
     <!-- spring versions -->
-    <spring-framework.boot.version>2.7.0</spring-framework.boot.version>
+    <spring-framework.boot.version>2.7.1</spring-framework.boot.version>
     <spring-framework.version>5.3.21</spring-framework.version>
     <spring-framework.security.version>5.7.2</spring-framework.security.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
