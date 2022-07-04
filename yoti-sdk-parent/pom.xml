@@ -89,7 +89,7 @@
     <!-- spring versions -->
     <spring-framework.boot.version>2.7.0</spring-framework.boot.version>
     <spring-framework.version>5.3.21</spring-framework.version>
-    <spring.security.version>5.6.2</spring.security.version>
+    <spring-framework.security.version>5.7.2</spring-framework.security.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
     
     <!-- test libraries -->
@@ -205,7 +205,7 @@
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-web</artifactId>
-        <version>${spring.security.version}</version>
+        <version>${spring-framework.security.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
