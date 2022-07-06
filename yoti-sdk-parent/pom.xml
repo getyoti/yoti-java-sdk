@@ -83,7 +83,7 @@
     <bouncy.castle.version>1.70</bouncy.castle.version>
     <jackson.version>2.13.3</jackson.version>
     <jackson-databind.version>2.13.3</jackson-databind.version>
-    <protobuf-java.version>3.21.1</protobuf-java.version>
+    <protobuf-java.version>3.21.2</protobuf-java.version>
     <httpmime.version>4.5.13</httpmime.version>
     
     <!-- spring versions -->
