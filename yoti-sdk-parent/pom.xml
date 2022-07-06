@@ -81,8 +81,8 @@
     <!-- sdk dependency versions -->
     <slf4j.version>1.7.36</slf4j.version>
     <bouncy.castle.version>1.70</bouncy.castle.version>
-    <jackson.version>2.13.2</jackson.version>
-    <jackson-databind.version>2.13.2.1</jackson-databind.version>
+    <jackson.version>2.13.3</jackson.version>
+    <jackson-databind.version>2.13.3</jackson-databind.version>
     <protobuf-java.version>3.21.1</protobuf-java.version>
     <httpmime.version>4.5.13</httpmime.version>
     
