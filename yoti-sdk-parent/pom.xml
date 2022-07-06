@@ -5,7 +5,7 @@
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-parent</artifactId>
   <packaging>pom</packaging>
-  <version>3.6.0-SNAPSHOT</version>
+  <version>3.5.1-SNAPSHOT</version>
   <name>Yoti SDK Parent Pom</name>
   <description>Parent pom for the Java SDK projects</description>
   <url>https://github.com/getyoti/yoti-java-sdk</url>
@@ -81,9 +81,9 @@
     <!-- sdk dependency versions -->
     <slf4j.version>1.7.36</slf4j.version>
     <bouncy.castle.version>1.70</bouncy.castle.version>
-    <jackson.version>2.13.2</jackson.version>
-    <jackson-databind.version>2.13.2.1</jackson-databind.version>
-    <protobuf-java.version>3.21.1</protobuf-java.version>
+    <jackson.version>2.13.3</jackson.version>
+    <jackson-databind.version>2.13.3</jackson-databind.version>
+    <protobuf-java.version>3.21.2</protobuf-java.version>
     <httpmime.version>4.5.13</httpmime.version>
     
     <!-- spring versions -->
@@ -94,7 +94,7 @@
     
     <!-- test libraries -->
     <junit.version>4.13.2</junit.version>
-    <mockito.version>4.4.0</mockito.version>
+    <mockito.version>4.6.1</mockito.version>
     <hamcrest.version>2.2</hamcrest.version>
     <commons.lang3.version>3.12.0</commons.lang3.version>
     
@@ -102,7 +102,7 @@
     <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
 
     <findbugs-maven-plugin.version>3.0.5</findbugs-maven-plugin.version>
-    <findsecbugs-plugin.version>1.11.0</findsecbugs-plugin.version>
+    <findsecbugs-plugin.version>1.12.0</findsecbugs-plugin.version>
 
     <dependency-check-maven.version>7.0.4</dependency-check-maven.version>
     <dependency-check-maven.cvss.limit>4</dependency-check-maven.cvss.limit>
@@ -128,7 +128,7 @@
 
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
 
-    <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
+    <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
   </properties>
   
   <dependencyManagement>
