@@ -58,12 +58,7 @@ public class ReceiptFetcher {
                 .orElseThrow(() -> new ProfileException("No profile for '" + connectToken + "' was found"));
 
         if (!receipt.hasOutcome(Receipt.Outcome.SUCCESS)) {
-            throw new ActivityFailureException(
-                    String.format("Sharing activity unsuccessful for %s%s",
-                            receipt.getDisplayReceiptId(),
-                            Optional.ofNullable(profile.getError()).map(e -> String.format(" - %s", e)).orElse("")
-                    )
-            );
+            throw new ActivityFailureException(profile);
         }
     }
 

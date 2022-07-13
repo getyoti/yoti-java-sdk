@@ -1,12 +1,15 @@
 package com.yoti.api.client.spi.remote.call;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(builder = ErrorDetails.Builder.class)
-public final class ErrorDetails {
+public final class ErrorDetails implements Serializable {
+
+    private static final long serialVersionUID = -6429196723990930305L;
 
     private final String code;
     private final String description;
