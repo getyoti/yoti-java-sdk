@@ -154,11 +154,18 @@ public class ReceiptFetcherTest {
         try {
             testObj.fetch(encryptedToken, keyPair, APP_ID);
         } catch (ActivityFailureException ex) {
-            assertThat(ex.getMessage(), containsString(ENCODED_RECEIPT_STRING));
-            assertThat(ex.getMessage(), containsString(errorCode));
-            assertThat(ex.getMessage(), containsString(errorDescription));
+            String exMsg = ex.getMessage();
+            assertThat(exMsg, containsString(ENCODED_RECEIPT_STRING));
+            assertThat(exMsg, containsString(errorCode));
+            assertThat(exMsg, containsString(errorDescription));
+
+            ErrorDetails exError = ex.errorDetails();
+            assertThat(exError.getCode(), is(equalTo(errorCode)));
+            assertThat(exError.getDescription(), is(equalTo(errorDescription)));
+
             return;
         }
+
         fail("Expected an Exception");
     }
 
