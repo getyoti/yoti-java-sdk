@@ -104,7 +104,7 @@
     <findbugs-maven-plugin.version>3.0.5</findbugs-maven-plugin.version>
     <findsecbugs-plugin.version>1.12.0</findsecbugs-plugin.version>
 
-    <dependency-check-maven.version>7.0.4</dependency-check-maven.version>
+    <dependency-check-maven.version>7.3.2</dependency-check-maven.version>
     <dependency-check-maven.cvss.limit>4</dependency-check-maven.cvss.limit>
     <dependency-check-maven.cve.update.limit>12</dependency-check-maven.cve.update.limit>
 
