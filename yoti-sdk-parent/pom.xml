@@ -86,9 +86,8 @@
     <httpmime.version>4.5.14</httpmime.version>
     
     <!-- spring versions -->
-    <spring-framework.boot.version>2.7.1</spring-framework.boot.version>
-    <spring-framework.version>5.3.21</spring-framework.version>
-    <spring-framework.security.version>5.7.2</spring-framework.security.version>
+    <!-- Spring Framework 6.0.x requires JDK 17+   -->
+    <spring-boot-dependencies.version>2.7.8</spring-boot-dependencies.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
     
     <!-- test libraries -->
@@ -171,47 +170,12 @@
         <artifactId>httpmime</artifactId>
         <version>${httpmime.version}</version>
       </dependency>
-      
-      <!-- spring dependencies -->
       <dependency>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-autoconfigure</artifactId>
-        <version>${spring-framework.boot.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-core</artifactId>
-        <version>${spring-framework.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-aop</artifactId>
-        <version>${spring-framework.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-beans</artifactId>
-        <version>${spring-framework.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-web</artifactId>
-        <version>${spring-framework.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-web</artifactId>
-        <version>${spring-framework.security.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>${spring-framework.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-expression</artifactId>
-        <version>${spring-framework.version}</version>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot-dependencies.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>javax.servlet</groupId>
