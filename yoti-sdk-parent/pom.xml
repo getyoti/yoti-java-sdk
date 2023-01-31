@@ -88,7 +88,8 @@
     <!-- spring versions -->
     <!-- Spring Framework 6.0.x requires JDK 17+   -->
     <spring-framework.version>5.3.25</spring-framework.version>
-    <spring-framework.boot.version>2.7.1</spring-framework.boot.version>
+    <!-- Spring Framework Boot 3.0.x requires JDK 17+   -->
+    <spring-framework.boot.version>2.7.8</spring-framework.boot.version>
     <spring-framework.security.version>5.7.2</spring-framework.security.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
     
