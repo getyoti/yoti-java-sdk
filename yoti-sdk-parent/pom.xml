@@ -111,7 +111,7 @@
     <mojo.signature.version>1.0</mojo.signature.version>
 
     <maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
-    <extra-enforcer-rules.version>1.5.1</extra-enforcer-rules.version>
+    <extra-enforcer-rules.version>1.6.1</extra-enforcer-rules.version>
 
     <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
 
