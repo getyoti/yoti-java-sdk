@@ -22,18 +22,18 @@ public class JsonResourceFetcherTest {
     @Mock RawResourceFetcher rawResourceFetcherMock;
 
     @Mock SignedRequest signedRequestMock;
-    @Mock SignedRequestResponse signedRequestResponseMock;
+    @Mock Response responseMock;
 
     Object parsedResponse = new Object();
 
     @Before
     public void setUp() throws Exception {
-        when(rawResourceFetcherMock.doRequest(signedRequestMock)).thenReturn(signedRequestResponseMock);
+        when(rawResourceFetcherMock.doRequest(signedRequestMock)).thenReturn(responseMock);
     }
 
     @Test
     public void fetchResource_shouldReturnResource() throws Exception {
-        when(objectMapperMock.readValue(signedRequestResponseMock.getResponseBody(), Object.class)).thenReturn(parsedResponse);
+        when(objectMapperMock.readValue(responseMock.body(), Object.class)).thenReturn(parsedResponse);
 
         Object result = testObj.doRequest(signedRequestMock, Object.class);
 
@@ -42,14 +42,14 @@ public class JsonResourceFetcherTest {
 
     @Test(expected = IOException.class)
     public void fetchResource_shouldThrowIOExceptionForInvalidResponse() throws Exception {
-        when(objectMapperMock.readValue(signedRequestResponseMock.getResponseBody(), Object.class)).thenThrow(new IOException());
+        when(objectMapperMock.readValue(responseMock.body(), Object.class)).thenThrow(new IOException());
 
         testObj.doRequest(signedRequestMock, Object.class);
     }
 
     @Test
     public void doRequest_shouldReturnResource() throws Exception {
-        when(objectMapperMock.readValue(signedRequestResponseMock.getResponseBody(), Object.class)).thenReturn(parsedResponse);
+        when(objectMapperMock.readValue(responseMock.body(), Object.class)).thenReturn(parsedResponse);
 
         Object result = testObj.doRequest(signedRequestMock, Object.class);
 
@@ -58,7 +58,7 @@ public class JsonResourceFetcherTest {
 
     @Test(expected = IOException.class)
     public void doRequest_shouldThrowIOExceptionForInvalidResponse() throws Exception {
-        when(objectMapperMock.readValue(signedRequestResponseMock.getResponseBody(), Object.class)).thenThrow(new IOException());
+        when(objectMapperMock.readValue(responseMock.body(), Object.class)).thenThrow(new IOException());
 
         testObj.doRequest(signedRequestMock, Object.class);
     }

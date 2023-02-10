@@ -62,7 +62,7 @@
   </Match>
 
   <Match>
-    <Class name="com.yoti.api.client.spi.remote.call.SignedRequestResponse"/>
+    <Class name="com.yoti.api.client.spi.remote.call.Response"/>
     <Bug pattern="EI_EXPOSE_REP"/>
   </Match>
 

@@ -37,8 +37,8 @@ public final class JsonResourceFetcher {
     }
 
     public <T> T doRequest(SignedRequest signedRequest, Class<T> resourceClass) throws ResourceException, IOException {
-        SignedRequestResponse signedRequestResponse = rawResourceFetcher.doRequest(signedRequest);
-        return objectMapper.readValue(signedRequestResponse.getResponseBody(), resourceClass);
+        Response response = rawResourceFetcher.doRequest(signedRequest);
+        return objectMapper.readValue(response.body(), resourceClass);
     }
 
 }

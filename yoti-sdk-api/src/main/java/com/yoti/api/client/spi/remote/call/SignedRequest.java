@@ -56,7 +56,7 @@ public class SignedRequest {
         return jsonResourceFetcher.doRequest(this, clazz);
     }
 
-    public SignedRequestResponse execute() throws ResourceException, IOException {
+    public Response execute() throws ResourceException, IOException {
         return rawResourceFetcher.doRequest(this);
     }
 

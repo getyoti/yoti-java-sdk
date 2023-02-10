@@ -29,21 +29,19 @@ class ImageResourceFetcher {
     }
 
     Image doRequest(SignedRequest signedRequest) throws IOException, ResourceException {
-        SignedRequestResponse response = rawResourceFetcher.doRequest(signedRequest);
-        String contentType = Optional.ofNullable(response.getResponseHeaders().get(CONTENT_TYPE))
+        Response response = rawResourceFetcher.doRequest(signedRequest);
+        String contentType = Optional.ofNullable(response.headers().get(CONTENT_TYPE))
                 .map(values -> values.get(0))
-                .orElseThrow(() ->
-                        new ResourceException(response.getResponseCode(), "No Content Type found in response headers")
-                );
+                .orElseThrow(() -> new ResourceException(response.code(), "No Content Type found in response"));
 
         switch (contentType) {
             case CONTENT_TYPE_PNG:
-                return new PngAttributeValue(response.getResponseBody());
+                return new PngAttributeValue(response.body());
             case CONTENT_TYPE_JPEG:
-                return new JpegAttributeValue(response.getResponseBody());
+                return new JpegAttributeValue(response.body());
             default:
                 LOG.error("Failed to convert image of type: (" + contentType + ")");
-                throw new ResourceException(response.getResponseCode(), "Failed to convert image of type: (" + contentType + ")", null);
+                throw new ResourceException(response.code(), "Failed to convert image of type: (" + contentType + ")", null);
         }
     }
 

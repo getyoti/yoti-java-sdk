@@ -35,7 +35,7 @@ import com.yoti.api.client.spi.remote.MediaValue;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
 import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
-import com.yoti.api.client.spi.remote.call.SignedRequestResponse;
+import com.yoti.api.client.spi.remote.call.Response;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -220,12 +220,12 @@ final class DocScanService {
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
                     .build();
-            SignedRequestResponse response = signedRequest.execute();
+            Response response = signedRequest.execute();
 
-            if (response.getResponseCode() == HTTP_STATUS_NO_CONTENT) {
+            if (response.code() == HTTP_STATUS_NO_CONTENT) {
                 return null;
             }
-            return new MediaValue(findContentType(response), response.getResponseBody());
+            return new MediaValue(findContentType(response), response.body());
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
@@ -377,12 +377,12 @@ final class DocScanService {
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
                     .build();
-            SignedRequestResponse response = signedRequest.execute();
+            Response response = signedRequest.execute();
 
-            if (response.getResponseCode() == HTTP_STATUS_NO_CONTENT) {
+            if (response.code() == HTTP_STATUS_NO_CONTENT) {
                 return null;
             }
-            return new MediaValue(findContentType(response), response.getResponseBody());
+            return new MediaValue(findContentType(response), response.body());
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
@@ -527,9 +527,9 @@ final class DocScanService {
         }
     }
 
-    private String findContentType(SignedRequestResponse response) {
+    private String findContentType(Response response) {
         List<String> contentTypeValues = null;
-        for (Map.Entry<String, List<String>> entry : response.getResponseHeaders().entrySet()) {
+        for (Map.Entry<String, List<String>> entry : response.headers().entrySet()) {
             if (entry.getKey() != null && entry.getKey().toLowerCase(Locale.ENGLISH).equals(CONTENT_TYPE.toLowerCase(Locale.ENGLISH))) {
                 contentTypeValues = entry.getValue();
                 break;

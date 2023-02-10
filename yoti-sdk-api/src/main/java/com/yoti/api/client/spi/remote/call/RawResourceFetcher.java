@@ -18,12 +18,12 @@ class RawResourceFetcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(RawResourceFetcher.class);
 
-    SignedRequestResponse doRequest(SignedRequest signedRequest) throws IOException, ResourceException {
+    Response doRequest(SignedRequest signedRequest) throws IOException, ResourceException {
         UrlConnector urlConnector = UrlConnector.get(signedRequest.getUri().toString());
         return doRequest(urlConnector, signedRequest.getMethod(), signedRequest.getData(), signedRequest.getHeaders());
     }
 
-    SignedRequestResponse doRequest(UrlConnector urlConnector, String method, byte[] data, Map<String, String> headers)
+    Response doRequest(UrlConnector urlConnector, String method, byte[] data, Map<String, String> headers)
             throws IOException, ResourceException {
         HttpURLConnection httpUrlConnection = openConnection(urlConnector, method, headers);
         sendBody(data, httpUrlConnection);
@@ -81,13 +81,13 @@ class RawResourceFetcher {
      * @param httpUrlConnection the url connection
      * @return the response
      */
-    private SignedRequestResponse parseResponse(HttpURLConnection httpUrlConnection) throws ResourceException, IOException {
+    private Response parseResponse(HttpURLConnection httpUrlConnection) throws ResourceException, IOException {
         int responseCode = httpUrlConnection.getResponseCode();
         if (responseCode >= HttpURLConnection.HTTP_BAD_REQUEST) {
             String responseBody = readError(httpUrlConnection);
             throw new ResourceException(responseCode, httpUrlConnection.getResponseMessage(), responseBody);
         }
-        return new SignedRequestResponse(responseCode, readBody(httpUrlConnection), httpUrlConnection.getHeaderFields());
+        return new Response(responseCode, readBody(httpUrlConnection), httpUrlConnection.getHeaderFields());
     }
 
     /**
