@@ -19,10 +19,8 @@ import com.yoti.api.client.spi.remote.call.JsonResourceFetcher;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.ResourceFetcher;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
 import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.YotiConstants;
-import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -45,11 +43,13 @@ public class YotiSandboxClient {
         return new YotiSandboxClientBuilder();
     }
 
-    YotiSandboxClient(String appId,
+    YotiSandboxClient(
+            String appId,
             KeyPair keyPair,
             SandboxPathFactory pathFactory,
             ObjectMapper mapper,
-            ResourceFetcher resourceFetcher, SignedRequestBuilderFactory signedRequestBuilderFactory) {
+            ResourceFetcher resourceFetcher,
+            SignedRequestBuilderFactory signedRequestBuilderFactory) {
         this.appId = appId;
         this.keyPair = keyPair;
         this.sandboxPathFactory = pathFactory;

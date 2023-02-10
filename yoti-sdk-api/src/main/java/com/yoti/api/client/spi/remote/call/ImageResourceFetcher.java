@@ -5,8 +5,7 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JPE
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_PNG;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 import com.yoti.api.client.Image;
 import com.yoti.api.client.spi.remote.JpegAttributeValue;
@@ -21,7 +20,7 @@ class ImageResourceFetcher {
 
     private final RawResourceFetcher rawResourceFetcher;
 
-    public static ImageResourceFetcher newInstance(RawResourceFetcher rawResourceFetcher) {
+    static ImageResourceFetcher newInstance(RawResourceFetcher rawResourceFetcher) {
         return new ImageResourceFetcher(rawResourceFetcher);
     }
 
@@ -30,26 +29,22 @@ class ImageResourceFetcher {
     }
 
     Image doRequest(SignedRequest signedRequest) throws IOException, ResourceException {
-        SignedRequestResponse signedRequestResponse = rawResourceFetcher.doRequest(signedRequest);
-        String contentType = getContentType(signedRequestResponse.getResponseHeaders());
-        byte[] responseBody = signedRequestResponse.getResponseBody();
+        SignedRequestResponse response = rawResourceFetcher.doRequest(signedRequest);
+        String contentType = Optional.ofNullable(response.getResponseHeaders().get(CONTENT_TYPE))
+                .map(values -> values.get(0))
+                .orElseThrow(() ->
+                        new ResourceException(response.getResponseCode(), "No Content Type found in response headers")
+                );
+
         switch (contentType) {
             case CONTENT_TYPE_PNG:
-                return new PngAttributeValue(responseBody);
+                return new PngAttributeValue(response.getResponseBody());
             case CONTENT_TYPE_JPEG:
-                return new JpegAttributeValue(responseBody);
+                return new JpegAttributeValue(response.getResponseBody());
             default:
                 LOG.error("Failed to convert image of type: (" + contentType + ")");
-                throw new ResourceException(signedRequestResponse.getResponseCode(), "Failed to convert image of type: (" + contentType + ")", null);
+                throw new ResourceException(response.getResponseCode(), "Failed to convert image of type: (" + contentType + ")", null);
         }
-    }
-
-    private String getContentType(Map<String, List<String>> responseHeaders) {
-        List<String> values = responseHeaders.get(CONTENT_TYPE);
-        if (values != null && values.size() > 0) {
-            return values.get(0);
-        }
-        return null;
     }
 
 }

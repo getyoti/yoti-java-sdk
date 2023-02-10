@@ -18,16 +18,12 @@ class RawResourceFetcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(RawResourceFetcher.class);
 
-    private static Scanner createScanner(InputStream inputStream) {
-        return new Scanner(inputStream, DEFAULT_CHARSET).useDelimiter("\\A");
-    }
-
-    public SignedRequestResponse doRequest(SignedRequest signedRequest) throws IOException, ResourceException {
+    SignedRequestResponse doRequest(SignedRequest signedRequest) throws IOException, ResourceException {
         UrlConnector urlConnector = UrlConnector.get(signedRequest.getUri().toString());
         return doRequest(urlConnector, signedRequest.getMethod(), signedRequest.getData(), signedRequest.getHeaders());
     }
 
-    public SignedRequestResponse doRequest(UrlConnector urlConnector, String method, byte[] data, Map<String, String> headers)
+    SignedRequestResponse doRequest(UrlConnector urlConnector, String method, byte[] data, Map<String, String> headers)
             throws IOException, ResourceException {
         HttpURLConnection httpUrlConnection = openConnection(urlConnector, method, headers);
         sendBody(data, httpUrlConnection);
@@ -41,7 +37,6 @@ class RawResourceFetcher {
      * @param httpMethod   the HTTP Method
      * @param headers      {@link Map} of headers
      * @return {@link HttpURLConnection} the url connection
-     * @throws IOException
      */
     private HttpURLConnection openConnection(UrlConnector urlConnector, String httpMethod, Map<String, String> headers) throws IOException {
         LOG.debug("Connecting to: '{}'", urlConnector.getUrlString());
@@ -71,7 +66,6 @@ class RawResourceFetcher {
      *
      * @param body              the request body
      * @param httpUrlConnection the http connection
-     * @throws IOException
      */
     private void sendBody(byte[] body, HttpURLConnection httpUrlConnection) throws IOException {
         if (body != null) {
@@ -86,8 +80,6 @@ class RawResourceFetcher {
      *
      * @param httpUrlConnection the url connection
      * @return the response
-     * @throws ResourceException
-     * @throws IOException
      */
     private SignedRequestResponse parseResponse(HttpURLConnection httpUrlConnection) throws ResourceException, IOException {
         int responseCode = httpUrlConnection.getResponseCode();
@@ -110,6 +102,11 @@ class RawResourceFetcher {
             return scanner.get().hasNext() ? scanner.get().next() : "";
         }
     }
+
+    private static Scanner createScanner(InputStream inputStream) {
+        return new Scanner(inputStream, DEFAULT_CHARSET).useDelimiter("\\A");
+    }
+
 
     private byte[] readBody(HttpURLConnection httpURLConnection) throws IOException {
         try (QuietCloseable<InputStream> inputStream = new QuietCloseable<>(httpURLConnection.getInputStream())) {

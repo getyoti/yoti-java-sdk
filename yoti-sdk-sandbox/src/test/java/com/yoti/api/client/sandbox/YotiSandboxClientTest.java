@@ -1,28 +1,14 @@
 package com.yoti.api.client.sandbox;
 
-import static com.yoti.api.client.sandbox.YotiSandboxClient.YOTI_SANDBOX_PATH_PREFIX;
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DIGEST_HEADER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.JAVA;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.SDK_VERSION;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_HEADER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_VERSION_HEADER;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
 import static org.mockito.Answers.RETURNS_SELF;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
-import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.security.KeyPair;
-import java.util.Map;
 
 import com.yoti.api.client.KeyPairSource;
 import com.yoti.api.client.sandbox.profile.request.YotiTokenRequest;
@@ -33,18 +19,13 @@ import com.yoti.api.client.spi.remote.call.ResourceFetcher;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
 import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
 import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
-import com.yoti.api.client.spi.remote.call.UrlConnector;
-import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.*;
+import org.mockito.junit.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class YotiSandboxClientTest {

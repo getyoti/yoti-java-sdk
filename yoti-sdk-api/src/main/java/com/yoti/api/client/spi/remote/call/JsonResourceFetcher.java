@@ -17,12 +17,15 @@ public final class JsonResourceFetcher implements ResourceFetcher {
         return JsonResourceFetcher.newInstance(new RawResourceFetcher());
     }
 
-    public static JsonResourceFetcher newInstance(RawResourceFetcher rawResourceFetcher) {
+    static JsonResourceFetcher newInstance(RawResourceFetcher rawResourceFetcher) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addDeserializer(RequiredLivenessResourceResponse.class, new ForceSubTypeDeserializer<>(RequiredLivenessResourceResponse.class));
+        simpleModule.addDeserializer(
+                RequiredLivenessResourceResponse.class,
+                new ForceSubTypeDeserializer<>(RequiredLivenessResourceResponse.class)
+        );
         objectMapper.registerModule(simpleModule);
 
         return new JsonResourceFetcher(objectMapper, rawResourceFetcher);

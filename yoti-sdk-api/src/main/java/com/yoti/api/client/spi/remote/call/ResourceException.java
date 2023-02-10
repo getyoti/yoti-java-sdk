@@ -11,6 +11,12 @@ public class ResourceException extends Exception {
         this.responseBody = responseBody;
     }
 
+    public ResourceException(int responseCode, String responseMessage) {
+        super(responseMessage);
+        this.responseCode = responseCode;
+        responseBody = null;
+    }
+
     public String getResponseBody() {
         return responseBody;
     }
