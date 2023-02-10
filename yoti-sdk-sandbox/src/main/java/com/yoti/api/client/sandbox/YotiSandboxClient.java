@@ -17,7 +17,6 @@ import com.yoti.api.client.sandbox.profile.response.YotiTokenResponse;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 import com.yoti.api.client.spi.remote.call.JsonResourceFetcher;
 import com.yoti.api.client.spi.remote.call.ResourceException;
-import com.yoti.api.client.spi.remote.call.ResourceFetcher;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
 import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.YotiConstants;
@@ -28,15 +27,12 @@ import org.slf4j.LoggerFactory;
 
 public class YotiSandboxClient {
 
-    public static final String YOTI_SANDBOX_PATH_PREFIX = "/sandbox/v1";
-    private static final String DEFAULT_SANDBOX_API_URL = DEFAULT_YOTI_HOST + YOTI_SANDBOX_PATH_PREFIX;
-
     private final String appId;
     private final KeyPair keyPair;
     private final String sandboxBasePath;
     private final ObjectMapper mapper;
     private final SandboxPathFactory sandboxPathFactory;
-    private final ResourceFetcher resourceFetcher;
+    private final JsonResourceFetcher resourceFetcher;
     private final SignedRequestBuilderFactory signedRequestBuilderFactory;
 
     public static YotiSandboxClientBuilder builder() {
@@ -48,7 +44,7 @@ public class YotiSandboxClient {
             KeyPair keyPair,
             SandboxPathFactory pathFactory,
             ObjectMapper mapper,
-            ResourceFetcher resourceFetcher,
+            JsonResourceFetcher resourceFetcher,
             SignedRequestBuilderFactory signedRequestBuilderFactory) {
         this.appId = appId;
         this.keyPair = keyPair;
@@ -57,7 +53,10 @@ public class YotiSandboxClient {
         this.resourceFetcher = resourceFetcher;
         this.signedRequestBuilderFactory = signedRequestBuilderFactory;
 
-        this.sandboxBasePath = System.getProperty(YotiConstants.PROPERTY_YOTI_API_URL, DEFAULT_SANDBOX_API_URL);
+        this.sandboxBasePath = System.getProperty(
+                YotiConstants.PROPERTY_YOTI_API_URL,
+                DEFAULT_YOTI_HOST + "/sandbox/v1"
+        );
         notNullOrEmpty(sandboxBasePath, "Sandbox base path");
     }
 

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
-public final class JsonResourceFetcher implements ResourceFetcher {
+public final class JsonResourceFetcher {
 
     private final ObjectMapper objectMapper;
     private final RawResourceFetcher rawResourceFetcher;
@@ -31,13 +31,11 @@ public final class JsonResourceFetcher implements ResourceFetcher {
         return new JsonResourceFetcher(objectMapper, rawResourceFetcher);
     }
 
-    private JsonResourceFetcher(ObjectMapper objectMapper,
-            RawResourceFetcher rawResourceFetcher) {
+    private JsonResourceFetcher(ObjectMapper objectMapper, RawResourceFetcher rawResourceFetcher) {
         this.objectMapper = objectMapper;
         this.rawResourceFetcher = rawResourceFetcher;
     }
 
-    @Override
     public <T> T doRequest(SignedRequest signedRequest, Class<T> resourceClass) throws ResourceException, IOException {
         SignedRequestResponse signedRequestResponse = rawResourceFetcher.doRequest(signedRequest);
         return objectMapper.readValue(signedRequestResponse.getResponseBody(), resourceClass);
