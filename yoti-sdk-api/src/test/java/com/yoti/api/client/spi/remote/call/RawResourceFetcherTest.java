@@ -113,8 +113,8 @@ public class RawResourceFetcherTest {
             testObj.doRequest(urlConnectorMock, HttpMethod.GET, null, TEST_HEADERS);
             fail("ResourceException expected");
         } catch (ResourceException re) {
-            assertEquals(HTTP_BAD_REQUEST, re.getResponseCode());
-            assertEquals(ERROR_BODY, re.getResponseBody());
+            assertEquals(HTTP_BAD_REQUEST, re.code());
+            assertEquals(ERROR_BODY, re.body());
             verify(errorStreamSpy).close();
         }
     }
@@ -153,9 +153,9 @@ public class RawResourceFetcherTest {
         try {
             testObj.doRequest(urlConnectorMock, HttpMethod.GET, null, TEST_HEADERS);
             fail("ResourceException expected");
-        } catch (ResourceException re) {
-            assertEquals(HTTP_BAD_REQUEST, re.getResponseCode());
-            assertEquals(ERROR_BODY, re.getResponseBody());
+        } catch (ResourceException ex) {
+            assertEquals(HTTP_BAD_REQUEST, ex.code());
+            assertEquals(ERROR_BODY, ex.body());
             verify(errorStreamSpy).close();
         }
     }

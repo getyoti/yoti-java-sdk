@@ -75,14 +75,14 @@ public class ProfileService {
         try {
             return signedRequest.execute(ProfileResponse.class);
         } catch (ResourceException ex) {
-            int responseCode = ex.getResponseCode();
+            int responseCode = ex.code();
             switch (responseCode) {
                 case HTTP_INTERNAL_ERROR:
-                    throw new ProfileException("Error completing sharing: " + ex.getResponseBody(), ex);
+                    throw new ProfileException("Error completing sharing: " + ex.body(), ex);
                 case HTTP_NOT_FOUND:
-                    throw new ProfileException("Profile not found. This can be due to a used or expired token. Details: " + ex.getResponseBody(), ex);
+                    throw new ProfileException("Profile not found. This can be due to a used or expired token. Details: " + ex.body(), ex);
                 default:
-                    throw new ProfileException("Unexpected response: " + responseCode + " " + ex.getResponseBody(), ex);
+                    throw new ProfileException("Unexpected response: " + responseCode + " " + ex.body(), ex);
             }
         }
     }

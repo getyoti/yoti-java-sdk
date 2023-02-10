@@ -69,16 +69,16 @@ public class RemoteAmlService {
         }
     }
 
-    private AmlException createExceptionFromStatusCode(ResourceException e) {
-        switch (e.getResponseCode()) {
+    private AmlException createExceptionFromStatusCode(ResourceException ex) {
+        switch (ex.code()) {
             case HTTP_BAD_REQUEST:
-                return new AmlException("Failed validation:\n" + e.getResponseBody(), e);
+                return new AmlException("Failed validation:\n" + ex.body(), ex);
             case HTTP_UNAUTHORIZED:
-                return new AmlException("Failed authorization with the given key:\n" + e.getResponseBody(), e);
+                return new AmlException("Failed authorization with the given key:\n" + ex.body(), ex);
             case HTTP_INTERNAL_ERROR:
-                return new AmlException("An unexpected error occured on the server:\n" + e.getResponseBody(), e);
+                return new AmlException("An unexpected error occured on the server:\n" + ex.body(), ex);
             default:
-                return new AmlException("Unexpected error:\n" + e.getResponseBody(), e);
+                return new AmlException("Unexpected error:\n" + ex.body(), ex);
         }
     }
 

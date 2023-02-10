@@ -2,32 +2,32 @@ package com.yoti.api.client.spi.remote.call;
 
 public class ResourceException extends Exception {
 
-    private final int responseCode;
-    private final String responseBody;
+    private final int code;
+    private final String body;
 
-    public ResourceException(int responseCode, String responseMessage, String responseBody) {
-        super(responseMessage);
-        this.responseCode = responseCode;
-        this.responseBody = responseBody;
+    public ResourceException(int code, String message, String body) {
+        super(message);
+        this.code = code;
+        this.body = body;
     }
 
-    public ResourceException(int responseCode, String responseMessage) {
-        super(responseMessage);
-        this.responseCode = responseCode;
-        responseBody = null;
+    public ResourceException(int code, String message) {
+        super(message);
+        this.code = code;
+        body = null;
     }
 
-    public String getResponseBody() {
-        return responseBody;
+    public String body() {
+        return body;
     }
 
-    public int getResponseCode() {
-        return responseCode;
+    public int code() {
+        return code;
     }
 
     @Override
     public String toString() {
-        return String.format("%s, code: %s, body: %s", super.toString(), responseCode, responseBody);
+        return String.format("%s, code: %s, body: %s", super.toString(), code, body);
     }
 
 }
