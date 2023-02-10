@@ -8,6 +8,8 @@ import java.security.SecureRandom;
 import java.security.Signature;
 import java.util.Base64;
 
+import com.yoti.api.client.spi.remote.call.HttpMethod;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class SignedMessageFactory {
@@ -22,12 +24,12 @@ public class SignedMessageFactory {
         this.messageFactory = messageFactory;
     }
 
-    public String create(PrivateKey privateKey, String httpMethod, String path) throws GeneralSecurityException {
+    public String create(PrivateKey privateKey, HttpMethod httpMethod, String path) throws GeneralSecurityException {
         byte[] message = messageFactory.create(httpMethod, path, null);
         return signMessage(message, privateKey);
     }
 
-    public String create(PrivateKey privateKey, String httpMethod, String path, byte[] body) throws GeneralSecurityException {
+    public String create(PrivateKey privateKey, HttpMethod httpMethod, String path, byte[] body) throws GeneralSecurityException {
         byte[] message = messageFactory.create(httpMethod, path, body);
         return signMessage(message, privateKey);
     }

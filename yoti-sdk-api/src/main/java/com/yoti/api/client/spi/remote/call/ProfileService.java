@@ -3,7 +3,6 @@ package com.yoti.api.client.spi.remote.call;
 import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.AUTH_KEY_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_API_URL;
@@ -94,7 +93,7 @@ public class ProfileService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_GET)
+                    .withHttpMethod(HttpMethod.GET)
                     .withHeader(AUTH_KEY_HEADER, authKey)
                     .build();
         } catch (GeneralSecurityException ex) {

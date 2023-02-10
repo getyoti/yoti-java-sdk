@@ -23,7 +23,7 @@ class RawResourceFetcher {
         return doRequest(urlConnector, signedRequest.getMethod(), signedRequest.getData(), signedRequest.getHeaders());
     }
 
-    Response doRequest(UrlConnector urlConnector, String method, byte[] data, Map<String, String> headers)
+    Response doRequest(UrlConnector urlConnector, HttpMethod method, byte[] data, Map<String, String> headers)
             throws IOException, ResourceException {
         HttpURLConnection httpUrlConnection = openConnection(urlConnector, method, headers);
         sendBody(data, httpUrlConnection);
@@ -38,10 +38,10 @@ class RawResourceFetcher {
      * @param headers      {@link Map} of headers
      * @return {@link HttpURLConnection} the url connection
      */
-    private HttpURLConnection openConnection(UrlConnector urlConnector, String httpMethod, Map<String, String> headers) throws IOException {
+    private HttpURLConnection openConnection(UrlConnector urlConnector, HttpMethod httpMethod, Map<String, String> headers) throws IOException {
         LOG.debug("Connecting to: '{}'", urlConnector.getUrlString());
         HttpURLConnection httpUrlConnection = urlConnector.getHttpUrlConnection();
-        httpUrlConnection.setRequestMethod(httpMethod);
+        httpUrlConnection.setRequestMethod(httpMethod.name());
         setHeaders(headers, httpUrlConnection);
         return httpUrlConnection;
     }

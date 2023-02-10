@@ -4,7 +4,6 @@ import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_API_URL;
@@ -19,6 +18,7 @@ import java.security.KeyPair;
 import com.yoti.api.client.AmlException;
 import com.yoti.api.client.aml.AmlProfile;
 import com.yoti.api.client.aml.AmlResult;
+import com.yoti.api.client.spi.remote.call.HttpMethod;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
 import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
@@ -89,7 +89,7 @@ public class RemoteAmlService {
                     .withBaseUrl(apiUrl)
                     .withEndpoint(resourcePath)
                     .withPayload(body)
-                    .withHttpMethod(HTTP_POST)
+                    .withHttpMethod(HttpMethod.POST)
                     .build();
         } catch (GeneralSecurityException generalSecurityException) {
             throw new AmlException("Cannot sign request", generalSecurityException);

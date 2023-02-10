@@ -1,6 +1,5 @@
 package com.yoti.api.client.spi.remote.call;
 
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DIGEST_HEADER;
@@ -84,18 +83,6 @@ public class SignedRequestBuilderTest {
     @Mock HeaderElement headerElementMock;
 
     @Test
-    public void withHttpMethod_shouldThrowExceptionWhenSuppliedWithUnsupportedHttpMethod() {
-        try {
-            signedRequestBuilder.withHttpMethod("someNonsenseHere");
-        } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), containsString("someNonsenseHere"));
-            return;
-        }
-        fail("Expected an IllegalArgumentException");
-
-    }
-
-    @Test
     public void build_shouldThrowExceptionWhenMissingKeyPair() throws Exception {
         try {
             signedRequestBuilder.build();
@@ -152,7 +139,7 @@ public class SignedRequestBuilderTest {
         SignedRequest result = signedRequestBuilder.withKeyPair(KEY_PAIR)
                 .withBaseUrl(SOME_BASE_URL)
                 .withEndpoint(SOME_ENDPOINT)
-                .withHttpMethod(HTTP_GET)
+                .withHttpMethod(HttpMethod.GET)
                 .withQueryParameter("someQueryParam", "someParamValue")
                 .build();
 
@@ -164,7 +151,7 @@ public class SignedRequestBuilderTest {
         SignedRequest result = signedRequestBuilder.withKeyPair(KEY_PAIR)
                 .withBaseUrl(DEFAULT_YOTI_API_URL)
                 .withEndpoint(SOME_ENDPOINT)
-                .withHttpMethod(HTTP_GET)
+                .withHttpMethod(HttpMethod.GET)
                 .withHeader("myCustomHeader", "customHeaderValue")
                 .build();
 
@@ -174,13 +161,13 @@ public class SignedRequestBuilderTest {
     @Test
     public void build_shouldIgnoreAnyProvidedSignedRequestHeaders() throws Exception {
         when(pathFactoryMock.createSignatureParams()).thenReturn(SIGNATURE_PARAMS_STRING);
-        when(signedMessageFactoryMock.create(any(PrivateKey.class), anyString(), anyString())).thenReturn(SOME_SIGNATURE);
+        when(signedMessageFactoryMock.create(any(PrivateKey.class), any(HttpMethod.class), anyString())).thenReturn(SOME_SIGNATURE);
         when(headersFactoryMock.create(SOME_SIGNATURE)).thenReturn(SIGNED_REQUEST_HEADERS);
 
         SignedRequest result = signedRequestBuilder.withKeyPair(KEY_PAIR)
                 .withBaseUrl(DEFAULT_YOTI_API_URL)
                 .withEndpoint(SOME_ENDPOINT)
-                .withHttpMethod(HTTP_GET)
+                .withHttpMethod(HttpMethod.GET)
                 .withHeader(DIGEST_HEADER, "customHeaderValue")
                 .build();
 
@@ -248,7 +235,7 @@ public class SignedRequestBuilderTest {
         SignedRequest simpleSignedRequest = signedRequestBuilder.withKeyPair(KEY_PAIR)
                 .withBaseUrl(SOME_BASE_URL + "////////////")
                 .withEndpoint(SOME_ENDPOINT)
-                .withHttpMethod(HTTP_GET)
+                .withHttpMethod(HttpMethod.GET)
                 .build();
 
         assertThat(simpleSignedRequest.getUri().toString(), containsString(SOME_BASE_URL + SOME_ENDPOINT));
@@ -257,19 +244,19 @@ public class SignedRequestBuilderTest {
     @Test
     public void shouldCreateSignedRequestSuccessfullyWithRequiredFieldsOnly() throws Exception {
         when(pathFactoryMock.createSignatureParams()).thenReturn(SIGNATURE_PARAMS_STRING);
-        when(signedMessageFactoryMock.create(any(PrivateKey.class), anyString(), anyString())).thenReturn(SOME_SIGNATURE);
+        when(signedMessageFactoryMock.create(any(PrivateKey.class), any(HttpMethod.class), anyString())).thenReturn(SOME_SIGNATURE);
         when(headersFactoryMock.create(SOME_SIGNATURE)).thenReturn(SIGNED_REQUEST_HEADERS);
 
         SignedRequest result = signedRequestBuilder.withKeyPair(KEY_PAIR)
                 .withBaseUrl(SOME_BASE_URL)
                 .withEndpoint(SOME_ENDPOINT)
-                .withHttpMethod(HTTP_GET)
+                .withHttpMethod(HttpMethod.GET)
                 .build();
 
-        verify(signedMessageFactoryMock).create(eq(KEY_PAIR.getPrivate()), eq(HTTP_GET), pathCaptor.capture());
+        verify(signedMessageFactoryMock).create(eq(KEY_PAIR.getPrivate()), eq(HttpMethod.GET), pathCaptor.capture());
         assertThat(pathCaptor.getValue(), is(SOME_ENDPOINT + "?" + SIGNATURE_PARAMS_STRING));
         assertThat(result.getUri().toString(), is(SOME_BASE_URL + pathCaptor.getValue()));
-        assertThat(result.getMethod(), is(HTTP_GET));
+        assertThat(result.getMethod(), is(HttpMethod.GET));
         assertThat(result.getHeaders().get(DIGEST_HEADER), containsString(SOME_SIGNATURE));
         assertThat(result.getHeaders(), hasEntry(DIGEST_HEADER, SOME_SIGNATURE));
         assertNull(result.getData());
@@ -278,22 +265,22 @@ public class SignedRequestBuilderTest {
     @Test
     public void shouldCreatedSignedRequestSuccessfullyWithAllProperties() throws Exception {
         when(pathFactoryMock.createSignatureParams()).thenReturn(SIGNATURE_PARAMS_STRING);
-        when(signedMessageFactoryMock.create(any(PrivateKey.class), anyString(), anyString(), any(byte[].class))).thenReturn(SOME_SIGNATURE);
+        when(signedMessageFactoryMock.create(any(PrivateKey.class), any(HttpMethod.class), anyString(), any(byte[].class))).thenReturn(SOME_SIGNATURE);
         when(headersFactoryMock.create(SOME_SIGNATURE)).thenReturn(SIGNED_REQUEST_HEADERS);
 
         SignedRequest result = signedRequestBuilder.withKeyPair(KEY_PAIR)
                 .withBaseUrl(SOME_BASE_URL)
                 .withEndpoint(SOME_ENDPOINT)
-                .withHttpMethod(HTTP_GET)
+                .withHttpMethod(HttpMethod.GET)
                 .withQueryParameter("someQueryParam", "someParamValue")
                 .withHeader("myCustomHeader", "customHeaderValue")
                 .withPayload(SOME_BYTES)
                 .build();
 
-        verify(signedMessageFactoryMock).create(eq(KEY_PAIR.getPrivate()), eq(HTTP_GET), pathCaptor.capture(), eq(SOME_BYTES));
+        verify(signedMessageFactoryMock).create(eq(KEY_PAIR.getPrivate()), eq(HttpMethod.GET), pathCaptor.capture(), eq(SOME_BYTES));
         assertThat(pathCaptor.getValue(), is(SOME_ENDPOINT + "?someQueryParam=someParamValue&" + SIGNATURE_PARAMS_STRING));
         assertThat(result.getUri().toString(), is(SOME_BASE_URL + pathCaptor.getValue()));
-        assertThat(result.getMethod(), is(HTTP_GET));
+        assertThat(result.getMethod(), is(HttpMethod.GET));
         assertThat(result.getHeaders().get(DIGEST_HEADER), containsString(SOME_SIGNATURE));
         assertThat(result.getHeaders(), hasEntry(DIGEST_HEADER, SOME_SIGNATURE));
         assertThat(result.getHeaders(), hasEntry("myCustomHeader", "customHeaderValue"));
@@ -303,7 +290,7 @@ public class SignedRequestBuilderTest {
     @Test
     public void shouldSetContentTypeToMultipartWhenUserHasSetRequestTypeToMultipart() throws Exception {
         when(pathFactoryMock.createSignatureParams()).thenReturn(SIGNATURE_PARAMS_STRING);
-        when(signedMessageFactoryMock.create(any(PrivateKey.class), anyString(), anyString(), any(byte[].class))).thenReturn(SOME_SIGNATURE);
+        when(signedMessageFactoryMock.create(any(PrivateKey.class), any(HttpMethod.class), anyString(), any(byte[].class))).thenReturn(SOME_SIGNATURE);
         when(headersFactoryMock.create(SOME_SIGNATURE)).thenReturn(SIGNED_REQUEST_HEADERS);
         when(multipartEntityBuilderMock.build()).thenReturn(httpEntityMock);
 
@@ -328,7 +315,7 @@ public class SignedRequestBuilderTest {
                     .withMultipartBinaryBody(SOME_MULTIPART_BODY_NAME, SOME_MULTIPART_BODY, SOME_MULTIPART_CONTENT_TYPE, SOME_MULTIPART_FILE_NAME)
                     .withBaseUrl(SOME_BASE_URL)
                     .withEndpoint(SOME_ENDPOINT)
-                    .withHttpMethod(HTTP_GET)
+                    .withHttpMethod(HttpMethod.GET)
                     .build();
 
             assertThat(result.getHeaders().get(CONTENT_TYPE), is(SOME_MULTIPART_CONTENT_TYPE.toString()));
@@ -351,15 +338,20 @@ public class SignedRequestBuilderTest {
         try (MockedStatic<MultipartEntityBuilder> ms = Mockito.mockStatic(MultipartEntityBuilder.class)) {
             ms.when(MultipartEntityBuilder::create).thenReturn(multipartEntityBuilderMock);
 
-            IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-                signedRequestBuilder.withKeyPair(KEY_PAIR)
-                                .withMultipartBoundary(SOME_MULTIPART_BOUNDARY)
-                                .withMultipartBinaryBody(SOME_MULTIPART_BODY_NAME, SOME_MULTIPART_BODY, SOME_MULTIPART_CONTENT_TYPE, SOME_MULTIPART_FILE_NAME)
-                                .withBaseUrl(SOME_BASE_URL)
-                                .withEndpoint(SOME_ENDPOINT)
-                                .withHttpMethod(HTTP_GET)
-                                .build();
-                    });
+            IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                    signedRequestBuilder.withKeyPair(KEY_PAIR)
+                            .withMultipartBoundary(SOME_MULTIPART_BOUNDARY)
+                            .withMultipartBinaryBody(
+                                    SOME_MULTIPART_BODY_NAME,
+                                    SOME_MULTIPART_BODY,
+                                    SOME_MULTIPART_CONTENT_TYPE,
+                                    SOME_MULTIPART_FILE_NAME
+                            )
+                            .withBaseUrl(SOME_BASE_URL)
+                            .withEndpoint(SOME_ENDPOINT)
+                            .withHttpMethod(HttpMethod.GET)
+                            .build()
+            );
 
             assertThat(exception.getCause(), is(ioException));
         }

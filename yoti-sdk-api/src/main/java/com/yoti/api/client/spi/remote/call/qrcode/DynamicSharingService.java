@@ -14,9 +14,9 @@ import java.security.KeyPair;
 import com.yoti.api.client.shareurl.DynamicScenario;
 import com.yoti.api.client.shareurl.DynamicShareException;
 import com.yoti.api.client.shareurl.ShareUrlResult;
+import com.yoti.api.client.spi.remote.call.HttpMethod;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
 import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
@@ -80,7 +80,7 @@ public final class DynamicSharingService {
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withPayload(body)
-                    .withHttpMethod("POST")
+                    .withHttpMethod(HttpMethod.POST)
                     .build();
         } catch (GeneralSecurityException ex) {
             throw new DynamicShareException("Error signing the request: ", ex);

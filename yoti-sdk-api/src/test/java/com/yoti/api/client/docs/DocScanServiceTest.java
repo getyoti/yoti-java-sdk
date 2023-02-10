@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -234,7 +235,7 @@ public class DocScanServiceTest {
         verify(signedRequestBuilder).withKeyPair(KEY_PAIR);
         verify(signedRequestBuilder).withEndpoint(SOME_PATH);
         verify(signedRequestBuilder).withBaseUrl(SOME_API_URL);
-        verify(signedRequestBuilder).withHttpMethod(HttpMethod.HTTP_POST);
+        verify(signedRequestBuilder).withHttpMethod(HttpMethod.POST);
         verify(signedRequestBuilder).withPayload(SOME_SESSION_SPEC_BYTES);
         verify(signedRequestBuilder).withHeader(CONTENT_TYPE, CONTENT_TYPE_JSON);
     }
@@ -377,7 +378,7 @@ public class DocScanServiceTest {
         verify(signedRequestBuilder).withKeyPair(KEY_PAIR);
         verify(signedRequestBuilder).withEndpoint(SOME_PATH);
         verify(signedRequestBuilder).withBaseUrl(SOME_API_URL);
-        verify(signedRequestBuilder).withHttpMethod(HttpMethod.HTTP_GET);
+        verify(signedRequestBuilder).withHttpMethod(HttpMethod.GET);
     }
 
     @Test
@@ -513,7 +514,7 @@ public class DocScanServiceTest {
         verify(signedRequestBuilder).withKeyPair(KEY_PAIR);
         verify(signedRequestBuilder).withEndpoint(SOME_PATH);
         verify(signedRequestBuilder).withBaseUrl(SOME_API_URL);
-        verify(signedRequestBuilder).withHttpMethod(HttpMethod.HTTP_DELETE);
+        verify(signedRequestBuilder).withHttpMethod(HttpMethod.DELETE);
     }
 
     @Test
@@ -671,7 +672,7 @@ public class DocScanServiceTest {
         verify(signedRequestBuilder).withKeyPair(KEY_PAIR);
         verify(signedRequestBuilder).withEndpoint(SOME_PATH);
         verify(signedRequestBuilder).withBaseUrl(SOME_API_URL);
-        verify(signedRequestBuilder).withHttpMethod(HttpMethod.HTTP_GET);
+        verify(signedRequestBuilder).withHttpMethod(HttpMethod.GET);
     }
 
     @Test
@@ -716,7 +717,7 @@ public class DocScanServiceTest {
 
     private Map<String, List<String>> createHeadersMap(String key, String value) {
         Map<String, List<String>> headers = new HashMap<>();
-        headers.put(key, asList(value));
+        headers.put(key, Collections.singletonList(value));
         return headers;
     }
 
@@ -874,7 +875,7 @@ public class DocScanServiceTest {
         verify(signedRequestBuilder).withKeyPair(KEY_PAIR);
         verify(signedRequestBuilder).withEndpoint(SOME_PATH);
         verify(signedRequestBuilder).withBaseUrl(SOME_API_URL);
-        verify(signedRequestBuilder).withHttpMethod(HttpMethod.HTTP_DELETE);
+        verify(signedRequestBuilder).withHttpMethod(HttpMethod.DELETE);
     }
 
     @Test

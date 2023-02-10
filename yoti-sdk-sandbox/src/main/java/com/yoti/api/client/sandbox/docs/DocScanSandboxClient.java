@@ -67,7 +67,7 @@ public class DocScanSandboxClient {
                     .withBaseUrl(docScanBaseUrl)
                     .withEndpoint(path)
                     .withKeyPair(keyPair)
-                    .withHttpMethod(HttpMethod.HTTP_PUT)
+                    .withHttpMethod(HttpMethod.PUT)
                     .withPayload(body)
                     .withQueryParameter("sdkId", sdkId)
                     .build();
@@ -81,7 +81,6 @@ public class DocScanSandboxClient {
     /**
      * Configures the default response for the application
      *
-     * @param sandboxExpectation
      */
     public void configureApplicationResponse(ResponseConfig sandboxExpectation) throws SandboxException {
         String path = String.format("/apps/%s/response-config", sdkId);
@@ -93,7 +92,7 @@ public class DocScanSandboxClient {
                     .withBaseUrl(docScanBaseUrl)
                     .withEndpoint(path)
                     .withKeyPair(keyPair)
-                    .withHttpMethod(HttpMethod.HTTP_PUT)
+                    .withHttpMethod(HttpMethod.PUT)
                     .withPayload(body)
                     .build();
 

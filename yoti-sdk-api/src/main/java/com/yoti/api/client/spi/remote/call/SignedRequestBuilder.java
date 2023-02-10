@@ -1,6 +1,5 @@
 package com.yoti.api.client.spi.remote.call;
 
-import static com.yoti.api.client.spi.remote.call.HttpMethod.SUPPORTED_HTTP_METHODS;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JSON;
 
@@ -33,7 +32,7 @@ public class SignedRequestBuilder {
     private byte[] payload;
     private final Map<String, String> queryParameters = new HashMap<>();
     private final Map<String, String> headers = new HashMap<>();
-    private String httpMethod;
+    private HttpMethod httpMethod;
 
     private final PathFactory pathFactory;
     private final SignedMessageFactory signedMessageFactory;
@@ -43,7 +42,8 @@ public class SignedRequestBuilder {
     private final ImageResourceFetcher imageResourceFetcher;
     private MultipartEntityBuilder multipartEntityBuilder;
 
-    SignedRequestBuilder(PathFactory pathFactory,
+    SignedRequestBuilder(
+            PathFactory pathFactory,
             SignedMessageFactory signedMessageFactory,
             HeadersFactory headersFactory,
             JsonResourceFetcher jsonResourceFetcher,
@@ -132,18 +132,16 @@ public class SignedRequestBuilder {
      * @param httpMethod the HTTP method
      * @return the updated builder
      */
-    public SignedRequestBuilder withHttpMethod(String httpMethod) throws IllegalArgumentException {
-        Validation.withinList(httpMethod, SUPPORTED_HTTP_METHODS);
+    public SignedRequestBuilder withHttpMethod(HttpMethod httpMethod) throws IllegalArgumentException {
         this.httpMethod = httpMethod;
         return this;
     }
 
-    private SignedRequestBuilder forMultipartRequest() {
+    private void forMultipartRequest() {
         if (this.multipartEntityBuilder == null) {
             this.multipartEntityBuilder = MultipartEntityBuilder.create();
         }
         this.payload = null;
-        return this;
     }
 
     /**
@@ -230,7 +228,7 @@ public class SignedRequestBuilder {
         Validation.notNull(keyPair, "keyPair");
         Validation.notNullOrEmpty(baseUrl, "baseUrl");
         Validation.notNullOrEmpty(endpoint, "endpoint");
-        Validation.notNullOrEmpty(httpMethod, "httpMethod");
+        Validation.notNull(httpMethod, "httpMethod");
     }
 
     private String createQueryParameterString(Map<String, String> queryParameters) throws UnsupportedEncodingException {

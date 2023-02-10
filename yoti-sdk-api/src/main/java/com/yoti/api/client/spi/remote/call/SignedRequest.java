@@ -9,21 +9,21 @@ import com.yoti.api.client.Image;
 public class SignedRequest {
 
     private final URI uri;
-    private final String method;
+    private final HttpMethod method;
     private final byte[] data;
     private final Map<String, String> headers;
     private final JsonResourceFetcher jsonResourceFetcher;
     private final RawResourceFetcher rawResourceFetcher;
     private final ImageResourceFetcher imageResourceFetcher;
 
-    SignedRequest(final URI uri,
-            final String method,
+    SignedRequest(
+            final URI uri,
+            final HttpMethod method,
             final byte[] data,
             final Map<String, String> headers,
             JsonResourceFetcher jsonResourceFetcher,
             RawResourceFetcher rawResourceFetcher,
             ImageResourceFetcher imageResourceFetcher) {
-
         this.uri = uri;
         this.method = method;
         this.data = data;
@@ -37,7 +37,7 @@ public class SignedRequest {
         return uri;
     }
 
-    public String getMethod() {
+    public HttpMethod getMethod() {
         return method;
     }
 

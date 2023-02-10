@@ -1,9 +1,5 @@
 package com.yoti.api.client.docs;
 
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_DELETE;
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_PUT;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JSON;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_DOCS_URL;
@@ -32,6 +28,7 @@ import com.yoti.api.client.docs.session.retrieve.instructions.ContactProfileResp
 import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsResponse;
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.MediaValue;
+import com.yoti.api.client.spi.remote.call.HttpMethod;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
 import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
@@ -104,7 +101,7 @@ final class DocScanService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_POST)
+                    .withHttpMethod(HttpMethod.POST)
                     .withPayload(payload)
                     .withHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
                     .build();
@@ -143,7 +140,7 @@ final class DocScanService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_GET)
+                    .withHttpMethod(HttpMethod.GET)
                     .build();
 
             return signedRequest.execute(GetSessionResult.class);
@@ -179,7 +176,7 @@ final class DocScanService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_DELETE)
+                    .withHttpMethod(HttpMethod.DELETE)
                     .build();
 
             signedRequest.execute();
@@ -218,7 +215,7 @@ final class DocScanService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_GET)
+                    .withHttpMethod(HttpMethod.GET)
                     .build();
             Response response = signedRequest.execute();
 
@@ -258,7 +255,7 @@ final class DocScanService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_DELETE)
+                    .withHttpMethod(HttpMethod.DELETE)
                     .build();
 
             signedRequest.execute();
@@ -287,7 +284,7 @@ final class DocScanService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_PUT)
+                    .withHttpMethod(HttpMethod.PUT)
                     .withPayload(payload)
                     .build();
 
@@ -314,7 +311,7 @@ final class DocScanService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_GET)
+                    .withHttpMethod(HttpMethod.GET)
                     .build();
 
             return signedRequest.execute(InstructionsResponse.class);
@@ -349,7 +346,7 @@ final class DocScanService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_GET)
+                    .withHttpMethod(HttpMethod.GET)
                     .build();
 
             return signedRequest.execute(ContactProfileResponse.class);
@@ -375,7 +372,7 @@ final class DocScanService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_GET)
+                    .withHttpMethod(HttpMethod.GET)
                     .build();
             Response response = signedRequest.execute();
 
@@ -405,7 +402,7 @@ final class DocScanService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_GET)
+                    .withHttpMethod(HttpMethod.GET)
                     .build();
 
             return signedRequest.execute(SessionConfigurationResponse.class);
@@ -438,7 +435,7 @@ final class DocScanService {
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withPayload(payload)
-                    .withHttpMethod(HTTP_POST)
+                    .withHttpMethod(HttpMethod.POST)
                     .build();
 
             return signedRequest.execute(CreateFaceCaptureResourceResponse.class);
@@ -473,7 +470,7 @@ final class DocScanService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_PUT)
+                    .withHttpMethod(HttpMethod.PUT)
                     .build()
                     .execute();
         } catch (GeneralSecurityException | ResourceException ex) {
@@ -493,7 +490,7 @@ final class DocScanService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_GET)
+                    .withHttpMethod(HttpMethod.GET)
                     .build();
 
             return signedRequest.execute(SupportedDocumentsResponse.class);
@@ -517,7 +514,7 @@ final class DocScanService {
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withHttpMethod(HTTP_POST)
+                    .withHttpMethod(HttpMethod.POST)
                     .build()
                     .execute();
         } catch (GeneralSecurityException | ResourceException ex) {

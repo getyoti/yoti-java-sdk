@@ -9,6 +9,8 @@ import static org.mockito.Mockito.when;
 import java.security.KeyPair;
 import java.util.Base64;
 
+import com.yoti.api.client.spi.remote.call.HttpMethod;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +21,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class SignedMessageFactoryTest {
 
-    private static final String SOME_METHOD = "someMethod";
+    private static final HttpMethod SOME_METHOD = HttpMethod.GET;
     private static final String SOME_PATH = "somePath";
     private static final String SOME_MESSAGE = "someMessage";
     private static final String SOME_BODY = "someBody";

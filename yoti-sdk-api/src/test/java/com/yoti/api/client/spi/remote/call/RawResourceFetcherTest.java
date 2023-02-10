@@ -35,7 +35,7 @@ public class RawResourceFetcherTest {
     private static final String ERROR_BODY = "errorBody";
     private static final String TEST_HEADER_KEY = "testHeader";
     private static final String TEST_HEADER_VALUE = "testValue";
-    private static final Map<String, String> TEST_HEADERS = new HashMap();
+    private static final Map<String, String> TEST_HEADERS = new HashMap<>();
 
     @Spy @InjectMocks RawResourceFetcher testObj;
 
@@ -66,7 +66,7 @@ public class RawResourceFetcherTest {
         when(httpURLConnectionMock.getInputStream()).thenReturn(inputStreamSpy);
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
 
-        Response result = testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_GET, null, TEST_HEADERS);
+        Response result = testObj.doRequest(urlConnectorMock, HttpMethod.GET, null, TEST_HEADERS);
 
         verify(httpURLConnectionMock).setRequestMethod("GET");
         verify(httpURLConnectionMock).setRequestProperty(TEST_HEADER_KEY, TEST_HEADER_VALUE);
@@ -82,7 +82,7 @@ public class RawResourceFetcherTest {
         when(httpURLConnectionMock.getInputStream()).thenReturn(smallerSizeByteArray);
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
 
-        Response result = testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_GET, null, TEST_HEADERS);
+        Response result = testObj.doRequest(urlConnectorMock, HttpMethod.GET, null, TEST_HEADERS);
 
         verify(httpURLConnectionMock).setRequestMethod("GET");
         verify(httpURLConnectionMock).setRequestProperty(TEST_HEADER_KEY, TEST_HEADER_VALUE);
@@ -98,7 +98,7 @@ public class RawResourceFetcherTest {
         when(httpURLConnectionMock.getInputStream()).thenReturn(largerSizeByteArray);
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
 
-        Response result = testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_GET, null, TEST_HEADERS);
+        Response result = testObj.doRequest(urlConnectorMock, HttpMethod.GET, null, TEST_HEADERS);
 
         verify(httpURLConnectionMock).setRequestMethod("GET");
         verify(httpURLConnectionMock).setRequestProperty(TEST_HEADER_KEY, TEST_HEADER_VALUE);
@@ -110,7 +110,7 @@ public class RawResourceFetcherTest {
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_BAD_REQUEST);
 
         try {
-            testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_GET, null, TEST_HEADERS);
+            testObj.doRequest(urlConnectorMock, HttpMethod.GET, null, TEST_HEADERS);
             fail("ResourceException expected");
         } catch (ResourceException re) {
             assertEquals(HTTP_BAD_REQUEST, re.getResponseCode());
@@ -127,7 +127,7 @@ public class RawResourceFetcherTest {
         doThrow(new IOException()).when(inputStreamSpy).read(any(byte[].class));
 
         try {
-            testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_GET, null, TEST_HEADERS);
+            testObj.doRequest(urlConnectorMock, HttpMethod.GET, null, TEST_HEADERS);
             fail("IOException expected");
         } catch (IOException ioe) {
             verify(inputStreamSpy).close();
@@ -140,7 +140,7 @@ public class RawResourceFetcherTest {
         when(httpURLConnectionMock.getInputStream()).thenReturn(inputStreamSpy);
         doThrow(new IOException()).when(inputStreamSpy).close();
 
-        testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_GET, null, TEST_HEADERS);
+        testObj.doRequest(urlConnectorMock, HttpMethod.GET, null, TEST_HEADERS);
 
         verify(inputStreamSpy).close();
     }
@@ -151,7 +151,7 @@ public class RawResourceFetcherTest {
         doThrow(new IOException()).when(errorStreamSpy).close();
 
         try {
-            testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_GET, null, TEST_HEADERS);
+            testObj.doRequest(urlConnectorMock, HttpMethod.GET, null, TEST_HEADERS);
             fail("ResourceException expected");
         } catch (ResourceException re) {
             assertEquals(HTTP_BAD_REQUEST, re.getResponseCode());
@@ -165,7 +165,7 @@ public class RawResourceFetcherTest {
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
         when(httpURLConnectionMock.getInputStream()).thenReturn(inputStreamSpy);
 
-        Response result = testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_POST, requestBody, TEST_HEADERS);
+        Response result = testObj.doRequest(urlConnectorMock, HttpMethod.POST, requestBody, TEST_HEADERS);
 
         verify(httpURLConnectionMock).setRequestMethod("POST");
         verify(httpURLConnectionMock).setRequestProperty(TEST_HEADER_KEY, TEST_HEADER_VALUE);

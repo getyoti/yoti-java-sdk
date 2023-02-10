@@ -1,6 +1,5 @@
 package com.yoti.api.client.sandbox;
 
-import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_HOST;
 import static com.yoti.api.client.spi.remote.util.Validation.notNull;
 import static com.yoti.api.client.spi.remote.util.Validation.notNullOrEmpty;
@@ -15,6 +14,7 @@ import com.yoti.api.client.KeyPairSource;
 import com.yoti.api.client.sandbox.profile.request.YotiTokenRequest;
 import com.yoti.api.client.sandbox.profile.response.YotiTokenResponse;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
+import com.yoti.api.client.spi.remote.call.HttpMethod;
 import com.yoti.api.client.spi.remote.call.JsonResourceFetcher;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
@@ -68,7 +68,7 @@ public class YotiSandboxClient {
                     .withBaseUrl(sandboxBasePath)
                     .withEndpoint(requestPath)
                     .withKeyPair(keyPair)
-                    .withHttpMethod(HTTP_POST)
+                    .withHttpMethod(HttpMethod.POST)
                     .withPayload(body)
                     .build();
             YotiTokenResponse yotiTokenResponse = resourceFetcher.doRequest(signedRequest, YotiTokenResponse.class);
