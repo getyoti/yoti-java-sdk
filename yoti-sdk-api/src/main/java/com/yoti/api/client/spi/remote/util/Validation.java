@@ -30,6 +30,12 @@ public class Validation {
         }
     }
 
+    public static void notMissing(Object value, String name) {
+        if (value == null) {
+            throw new IllegalStateException(format("'%s' is required and cannot be null.", name));
+        }
+    }
+
     public static void notEqualTo(Object value, Object notAllowed, String name) {
         if (notEqualTo(value, notAllowed)) {
             throw new IllegalArgumentException(format("'%s' value may not be equalTo '%s'", name, notAllowed));

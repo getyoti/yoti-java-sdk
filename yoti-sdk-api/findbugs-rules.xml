@@ -90,5 +90,15 @@
     <Bug pattern="IMPROPER_UNICODE"/>
   </Match>
 
+  <Match>
+    <Class name="com.yoti.api.client.spi.remote.http.fetcher.UrlConnector"/>
+    <Bug pattern="URLCONNECTION_SSRF_FD"/>
+  </Match>
+
+  <Match>
+    <Class name="com.yoti.api.client.spi.remote.http.Endpoint"/>
+    <Bug pattern="FORMAT_STRING_MANIPULATION"/>
+  </Match>
+
 </FindBugsFilter>
 
