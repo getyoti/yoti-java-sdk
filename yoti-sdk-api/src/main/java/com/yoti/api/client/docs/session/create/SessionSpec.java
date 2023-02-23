@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.yoti.api.client.docs.session.create.check.RequestedCheck;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
+import com.yoti.api.client.docs.session.create.resources.ResourceCreationContainer;
 import com.yoti.api.client.docs.session.create.task.RequestedTask;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -55,6 +56,9 @@ public class SessionSpec {
     @JsonProperty(Property.SUBJECT)
     private final Map<String, Object> subject;
 
+    @JsonProperty(Property.RESOURCES)
+    private final ResourceCreationContainer resources;
+
     SessionSpec(Integer clientSessionTokenTtl,
             Integer resourcesTtl,
             String userTrackingId,
@@ -67,7 +71,8 @@ public class SessionSpec {
             IbvOptions ibvOptions,
             ZonedDateTime sessionDeadline,
             Map<String, Object> identityProfile,
-            Map<String, Object> subject) {
+            Map<String, Object> subject,
+            ResourceCreationContainer resources) {
         this.clientSessionTokenTtl = clientSessionTokenTtl;
         this.resourcesTtl = resourcesTtl;
         this.userTrackingId = userTrackingId;
@@ -81,6 +86,7 @@ public class SessionSpec {
         this.sessionDeadline = sessionDeadline;
         this.identityProfile = identityProfile;
         this.subject = subject;
+        this.resources = resources;
     }
 
     public static Builder builder() {
@@ -205,6 +211,15 @@ public class SessionSpec {
         return subject;
     }
 
+    /**
+     * The resources that should be created, when the session is created.
+     *
+     * @return resources
+     */
+    public ResourceCreationContainer getResources() {
+        return resources;
+    }
+
     public static class Builder {
 
         private final List<RequestedCheck<?>> requestedChecks;
@@ -220,6 +235,7 @@ public class SessionSpec {
         private ZonedDateTime sessionDeadline;
         private Map<String, Object> identityProfile;
         private Map<String, Object> subject;
+        private ResourceCreationContainer resources;
 
         private Builder() {
             requestedChecks = new ArrayList<>();
@@ -372,6 +388,17 @@ public class SessionSpec {
         }
 
         /**
+         * Sets the resources that should be created, when the session is created.
+         *
+         * @param resources the resources
+         * @return the Builder
+         */
+        public Builder withResources(ResourceCreationContainer resources) {
+            this.resources = resources;
+            return this;
+        }
+
+        /**
          * Builds the {@link SessionSpec} based on the values supplied to the builder
          *
          * @return the built {@link SessionSpec}
@@ -390,7 +417,8 @@ public class SessionSpec {
                     ibvOptions,
                     sessionDeadline,
                     identityProfile,
-                    subject
+                    subject,
+                    resources
             );
         }
     }
@@ -410,6 +438,7 @@ public class SessionSpec {
         private static final String IBV_OPTIONS = "ibv_options";
         private static final String IDENTITY_PROFILE_REQUIREMENTS = "identity_profile_requirements";
         private static final String SUBJECT = "subject";
+        private static final String RESOURCES = "resources";
 
         private Property() { }
 
