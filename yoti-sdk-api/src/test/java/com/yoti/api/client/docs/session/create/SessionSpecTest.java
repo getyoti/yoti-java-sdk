@@ -13,6 +13,7 @@ import java.util.Map;
 import com.yoti.api.client.docs.session.create.check.RequestedDocumentAuthenticityCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedLivenessCheck;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
+import com.yoti.api.client.docs.session.create.resources.ResourceCreationContainer;
 import com.yoti.api.client.docs.session.create.task.RequestedIdDocTextExtractionTask;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -47,6 +48,7 @@ public class SessionSpecTest {
     @Mock RequiredDocument requiredDocumentMock;
     @Mock IbvOptions ibvOptionsMock;
     @Mock ZonedDateTime sessionDeadlineMock;
+    @Mock ResourceCreationContainer resourceCreationContainerMock;
 
     @Test
     public void shouldBuildWithMinimalConfiguration() {
@@ -229,23 +231,23 @@ public class SessionSpecTest {
     @Test
     public void buildWithIdentityProfile() throws IOException {
         Map<String, Object> scheme = new HashMap<>();
-        scheme.put(Property.TYPE, "A_TYPE");
-        scheme.put(Property.OBJECTIVE, "AN_OBJECTIVE");
+        scheme.put(IdentityProperty.TYPE, "A_TYPE");
+        scheme.put(IdentityProperty.OBJECTIVE, "AN_OBJECTIVE");
 
         Map<String, Object> identityProfile = new HashMap<>();
-        identityProfile.put(Property.TRUST_FRAMEWORK, "A_FRAMEWORK");
-        identityProfile.put(Property.SCHEME, scheme);
+        identityProfile.put(IdentityProperty.TRUST_FRAMEWORK, "A_FRAMEWORK");
+        identityProfile.put(IdentityProperty.SCHEME, scheme);
 
         JsonNode json = toSessionSpecJson(identityProfile);
 
         assertThat(
-                json.get(Property.TRUST_FRAMEWORK).asText(),
-                is(equalTo(identityProfile.get(Property.TRUST_FRAMEWORK)))
+                json.get(IdentityProperty.TRUST_FRAMEWORK).asText(),
+                is(equalTo(identityProfile.get(IdentityProperty.TRUST_FRAMEWORK)))
         );
 
-        JsonNode schemeJsonNode = json.get(Property.SCHEME);
-        assertThat(schemeJsonNode.get(Property.TYPE).asText(), is(equalTo(scheme.get(Property.TYPE))));
-        assertThat(schemeJsonNode.get(Property.OBJECTIVE).asText(), is(equalTo(scheme.get(Property.OBJECTIVE))));
+        JsonNode schemeJsonNode = json.get(IdentityProperty.SCHEME);
+        assertThat(schemeJsonNode.get(IdentityProperty.TYPE).asText(), is(equalTo(scheme.get(IdentityProperty.TYPE))));
+        assertThat(schemeJsonNode.get(IdentityProperty.OBJECTIVE).asText(), is(equalTo(scheme.get(IdentityProperty.OBJECTIVE))));
     }
 
     private static JsonNode toSessionSpecJson(Map<String, Object> obj) throws IOException {
@@ -259,7 +261,7 @@ public class SessionSpecTest {
     @Test
     public void buildWithSubject() throws IOException {
         Map<String, Object> subject = new HashMap<>();
-        subject.put(Property.SUBJECT_ID, "A_SUBJECT_ID");
+        subject.put(SubjectProperty.SUBJECT_ID, "A_SUBJECT_ID");
 
         SessionSpec session = SessionSpec.builder()
                 .withSubject(subject)
@@ -271,18 +273,34 @@ public class SessionSpecTest {
                 mapper.writeValueAsString(session.getSubject()).getBytes(DEFAULT_CHARSET)
         );
 
-        assertThat(json.get("subject_id").asText(), is(Matchers.equalTo(subject.get(Property.SUBJECT_ID))));
+        assertThat(json.get("subject_id").asText(), is(Matchers.equalTo(subject.get(SubjectProperty.SUBJECT_ID))));
     }
 
-    private static final class Property {
+    @Test
+    public void shouldBuildWithResourceContainer() {
+        SessionSpec sessionSpec = SessionSpec.builder()
+                .withResources(resourceCreationContainerMock)
+                .build();
+
+        assertThat(sessionSpec.getResources(), is(resourceCreationContainerMock));
+    }
+
+    private static final class IdentityProperty {
 
         private static final String TYPE = "type";
         private static final String SCHEME = "scheme";
         private static final String OBJECTIVE = "objective";
         private static final String TRUST_FRAMEWORK = "trust_framework";
+
+        private IdentityProperty() { }
+
+    }
+
+    private static final class SubjectProperty {
+
         private static final String SUBJECT_ID = "subject_id";
 
-        private Property() { }
+        private SubjectProperty() {}
 
     }
 
