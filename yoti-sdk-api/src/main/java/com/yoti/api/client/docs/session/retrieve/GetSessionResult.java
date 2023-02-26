@@ -78,6 +78,10 @@ public class GetSessionResult {
         return filterChecksByType(FaceMatchCheckResponse.class);
     }
 
+    public List<FaceComparisonCheckResponse> getFaceComparisonChecks() {
+        return filterChecksByType(FaceComparisonCheckResponse.class);
+    }
+
     public List<TextDataCheckResponse> getIdDocumentTextDataChecks() {
         return filterChecksByType(TextDataCheckResponse.class);
     }
