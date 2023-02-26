@@ -8,6 +8,7 @@ import com.yoti.api.client.docs.session.retrieve.configuration.capture.document.
 import com.yoti.api.client.docs.session.retrieve.configuration.capture.document.RequiredSupplementaryDocumentResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.configuration.capture.facecapture.RequiredFaceCaptureResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.configuration.capture.liveness.RequiredLivenessResourceResponse;
+import com.yoti.api.client.docs.session.retrieve.configuration.capture.liveness.RequiredStaticLivenessResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.configuration.capture.liveness.RequiredZoomLivenessResourceResponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -82,6 +83,15 @@ public class CaptureResponse {
      */
     public List<RequiredZoomLivenessResourceResponse> getZoomLivenessResourceRequirements() {
         return filter(RequiredZoomLivenessResourceResponse.class);
+    }
+
+    /**
+     * Returns a list of all the static liveness resource requirements
+     *
+     * @return the zoom liveness resource requirements
+     */
+    public List<RequiredStaticLivenessResourceResponse> getStaticLivenessResourceRequirements() {
+        return filter(RequiredStaticLivenessResourceResponse.class);
     }
 
     /**
