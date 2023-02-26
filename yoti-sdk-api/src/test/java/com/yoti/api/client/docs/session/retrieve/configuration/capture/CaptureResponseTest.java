@@ -12,6 +12,7 @@ import com.yoti.api.client.docs.session.retrieve.configuration.capture.document.
 import com.yoti.api.client.docs.session.retrieve.configuration.capture.document.RequiredSupplementaryDocumentResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.configuration.capture.facecapture.RequiredFaceCaptureResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.configuration.capture.liveness.RequiredLivenessResourceResponse;
+import com.yoti.api.client.docs.session.retrieve.configuration.capture.liveness.RequiredStaticLivenessResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.configuration.capture.liveness.RequiredZoomLivenessResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.configuration.capture.liveness.UnknownRequiredLivenessResourceResponse;
 import com.yoti.api.client.spi.remote.util.FieldSetter;
@@ -28,6 +29,7 @@ public class CaptureResponseTest {
     @Mock RequiredIdDocumentResourceResponse idDocRequirementMock;
     @Mock RequiredSupplementaryDocumentResourceResponse supplementaryDocRequirementMock;
     @Mock RequiredZoomLivenessResourceResponse zoomRequirementMock;
+    @Mock RequiredStaticLivenessResourceResponse staticRequirementMock;
     @Mock UnknownRequiredLivenessResourceResponse unknownLivenessRequirementMock;
     @Mock RequiredFaceCaptureResourceResponse faceCaptureRequirementMock;
 
@@ -38,6 +40,7 @@ public class CaptureResponseTest {
         final List<RequiredResourceResponse> requirements = Arrays.asList(idDocRequirementMock,
                 supplementaryDocRequirementMock,
                 zoomRequirementMock,
+                staticRequirementMock,
                 unknownLivenessRequirementMock,
                 faceCaptureRequirementMock);
         captureResponse = new CaptureResponse();
@@ -48,11 +51,12 @@ public class CaptureResponseTest {
     public void getResourceRequirements_shouldReturnAllRequiredResources() {
         List<RequiredResourceResponse> result = captureResponse.getResourceRequirements();
 
-        assertThat(result, hasSize(5));
+        assertThat(result, hasSize(6));
         assertThat(result, containsInAnyOrder(
                 idDocRequirementMock,
                 supplementaryDocRequirementMock,
                 zoomRequirementMock,
+                staticRequirementMock,
                 unknownLivenessRequirementMock,
                 faceCaptureRequirementMock)
         );
@@ -86,8 +90,8 @@ public class CaptureResponseTest {
     public void getLivenessResourceRequirements_shouldReturnAllLivenessResourceRequirements() {
         List<RequiredLivenessResourceResponse> result = captureResponse.getLivenessResourceRequirements();
 
-        assertThat(result, hasSize(2));
-        assertThat(result, containsInAnyOrder(zoomRequirementMock, unknownLivenessRequirementMock));
+        assertThat(result, hasSize(3));
+        assertThat(result, containsInAnyOrder(zoomRequirementMock, staticRequirementMock, unknownLivenessRequirementMock));
     }
 
     @Test
@@ -96,6 +100,14 @@ public class CaptureResponseTest {
 
         assertThat(result, hasSize(1));
         assertThat(result, containsInAnyOrder(zoomRequirementMock));
+    }
+
+    @Test
+    public void getStaticLivenessResourceRequirements_shouldReturnOnlyStaticLivenessResourceRequirements() {
+        List<RequiredStaticLivenessResourceResponse> result = captureResponse.getStaticLivenessResourceRequirements();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, containsInAnyOrder(staticRequirementMock));
     }
 
     @Test

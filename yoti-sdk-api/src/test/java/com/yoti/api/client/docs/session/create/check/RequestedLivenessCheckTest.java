@@ -38,6 +38,18 @@ public class RequestedLivenessCheckTest {
         assertThat(configResult.getMaxRetries(), is(MAX_RETRIES_VALUE));
     }
 
+    @Test
+    public void shouldBuildRequestedLivenessCheckWithStaticLivenessType() {
+        RequestedLivenessCheck requestedCheck = RequestedLivenessCheck.builder()
+                .forStaticLiveness()
+                .withMaxRetries(MAX_RETRIES_VALUE)
+                .build();
+
+        RequestedLivenessConfig configResult = requestedCheck.getConfig();
+        assertThat(configResult.getLivenessType(), is("STATIC"));
+        assertThat(configResult.getMaxRetries(), is(MAX_RETRIES_VALUE));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void build_shouldFailForNullLivenessType() {
         RequestedLivenessCheck.builder()
