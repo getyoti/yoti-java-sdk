@@ -13,6 +13,7 @@ public class DocScanConstants {
     public static final String ID_DOCUMENT_TEXT_DATA_CHECK = "ID_DOCUMENT_TEXT_DATA_CHECK";
     public static final String ID_DOCUMENT_TEXT_DATA_EXTRACTION = "ID_DOCUMENT_TEXT_DATA_EXTRACTION";
     public static final String ID_DOCUMENT_FACE_MATCH = "ID_DOCUMENT_FACE_MATCH";
+    public static final String FACE_COMPARISON = "FACE_COMPARISON";
     public static final String THIRD_PARTY_IDENTITY = "THIRD_PARTY_IDENTITY";
     public static final String THIRD_PARTY_IDENTITY_FRAUD_ONE = "THIRD_PARTY_IDENTITY_FRAUD_1";
     public static final String WATCHLIST_SCREENING = "WATCHLIST_SCREENING";

@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = TextDataCheckResponse.class, name = DocScanConstants.ID_DOCUMENT_TEXT_DATA_CHECK),
         @JsonSubTypes.Type(value = LivenessCheckResponse.class, name = DocScanConstants.LIVENESS),
         @JsonSubTypes.Type(value = FaceMatchCheckResponse.class, name = DocScanConstants.ID_DOCUMENT_FACE_MATCH),
+        @JsonSubTypes.Type(value = FaceComparisonCheckResponse.class, name = DocScanConstants.FACE_COMPARISON),
         @JsonSubTypes.Type(value = IdDocumentComparisonCheckResponse.class, name = DocScanConstants.ID_DOCUMENT_COMPARISON),
         @JsonSubTypes.Type(value = SupplementaryDocumentTextDataCheckResponse.class, name = DocScanConstants.SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK),
         @JsonSubTypes.Type(value = ThirdPartyIdentityCheckResponse.class, name = DocScanConstants.THIRD_PARTY_IDENTITY),

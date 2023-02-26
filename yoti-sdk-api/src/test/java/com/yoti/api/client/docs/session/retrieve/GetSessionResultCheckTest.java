@@ -17,10 +17,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class GetSessionResultCheckTest {
 
-    private static final int SESSION_CHECKS = 9;
+    private static final int SESSION_CHECKS = 10;
 
     @Mock AuthenticityCheckResponse authenticityCheckResponse;
     @Mock FaceMatchCheckResponse faceMatchCheckResponse;
+    @Mock FaceComparisonCheckResponse faceComparisonCheckResponse;
     @Mock TextDataCheckResponse textDataCheckResponse;
     @Mock SupplementaryDocumentTextDataCheckResponse supplementaryDocumentTextDataCheckResponse;
     @Mock LivenessCheckResponse livenessCheckResponse;
@@ -82,6 +83,17 @@ public class GetSessionResultCheckTest {
         setupGetSessionResult();
 
         List<FaceMatchCheckResponse> result = getSessionResult.getFaceMatchChecks();
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
+    public void shouldFilterFaceComparisonChecks() {
+        getSessionResult = new GetSessionResult();
+
+        setupGetSessionResult();
+
+        List<FaceComparisonCheckResponse> result = getSessionResult.getFaceComparisonChecks();
         assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
@@ -159,6 +171,7 @@ public class GetSessionResultCheckTest {
                         textDataCheckResponse,
                         supplementaryDocumentTextDataCheckResponse,
                         faceMatchCheckResponse,
+                        faceComparisonCheckResponse,
                         idDocumentComparisonCheckResponse,
                         thirdPartyIdentityCheckResponse,
                         watchlistScreeningCheckResponse,
