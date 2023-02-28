@@ -17,8 +17,8 @@ public class DocumentRestrictionsFilter extends DocumentFilter {
     @JsonProperty("documents")
     private final List<DocumentRestriction> documents;
 
-    DocumentRestrictionsFilter(String inclusion, List<DocumentRestriction> documents, Boolean allowNonLatinDocuments) {
-        super(DocScanConstants.DOCUMENT_RESTRICTIONS, allowNonLatinDocuments);
+    DocumentRestrictionsFilter(String inclusion, List<DocumentRestriction> documents, Boolean allowNonLatinDocuments, Boolean allowExpiredDocuments) {
+        super(DocScanConstants.DOCUMENT_RESTRICTIONS, allowNonLatinDocuments, allowExpiredDocuments);
         this.inclusion = inclusion;
         this.documents = documents;
     }
@@ -40,6 +40,7 @@ public class DocumentRestrictionsFilter extends DocumentFilter {
         private String inclusion;
         private final List<DocumentRestriction> documents;
         private Boolean allowNonLatinDocuments;
+        private Boolean allowExpiredDocuments;
 
         private Builder() {
             this.documents = new ArrayList<>();
@@ -89,7 +90,7 @@ public class DocumentRestrictionsFilter extends DocumentFilter {
         }
 
         /**
-         * Sets the flag whether allow non latin documents or not
+         * Sets the flag to allow/disallow non latin documents
          *
          * @param allowNonLatinDocuments the flag
          * @return the builder
@@ -99,9 +100,20 @@ public class DocumentRestrictionsFilter extends DocumentFilter {
             return this;
         }
 
+        /**
+         * Sets the flag to allow/disallow expired documents
+         *
+         * @param allowExpiredDocuments the flag
+         * @return the builder
+         */
+        public Builder withAllowExpiredDocuments(boolean allowExpiredDocuments) {
+            this.allowExpiredDocuments = allowExpiredDocuments;
+            return this;
+        }
+
         public DocumentRestrictionsFilter build() {
             notNullOrEmpty(inclusion, "inclusion");
-            return new DocumentRestrictionsFilter(inclusion, documents, allowNonLatinDocuments);
+            return new DocumentRestrictionsFilter(inclusion, documents, allowNonLatinDocuments, allowExpiredDocuments);
         }
 
     }
