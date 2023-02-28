@@ -14,8 +14,8 @@ public class OrthogonalRestrictionsFilter extends DocumentFilter {
     @JsonProperty("type_restriction")
     private final TypeRestriction typeRestriction;
 
-    OrthogonalRestrictionsFilter(CountryRestriction countryRestriction, TypeRestriction typeRestriction) {
-        super(DocScanConstants.ORTHOGONAL_RESTRICTIONS);
+    OrthogonalRestrictionsFilter(CountryRestriction countryRestriction, TypeRestriction typeRestriction, Boolean allowNonLatinDocuments) {
+        super(DocScanConstants.ORTHOGONAL_RESTRICTIONS, allowNonLatinDocuments);
         this.countryRestriction = countryRestriction;
         this.typeRestriction = typeRestriction;
     }
@@ -36,31 +36,67 @@ public class OrthogonalRestrictionsFilter extends DocumentFilter {
 
         private CountryRestriction countryRestriction;
         private TypeRestriction typeRestriction;
+        private Boolean allowNonLatinDocuments;
 
         private Builder() {}
 
+        /**
+         * Sets the allowed countries by country codes
+         *
+         * @param countryCodes the country codes
+         * @return the builder
+         */
         public Builder withWhitelistedCountries(List<String> countryCodes) {
             countryRestriction = new CountryRestriction(DocScanConstants.INCLUSION_WHITELIST, countryCodes);
             return this;
         }
 
+        /**
+         * Sets the disallowed documents by country code
+         *
+         * @param countryCodes the country codes
+         * @return the builder
+         */
         public Builder withBlacklistedCountries(List<String> countryCodes) {
             countryRestriction = new CountryRestriction(DocScanConstants.INCLUSION_BLACKLIST, countryCodes);
             return this;
         }
 
+        /**
+         * Sets the allowed document types
+         *
+         * @param documentTypes the document types
+         * @return the builder
+         */
         public Builder withWhitelistedDocumentTypes(List<String> documentTypes) {
             typeRestriction = new TypeRestriction(DocScanConstants.INCLUSION_WHITELIST, documentTypes);
             return this;
         }
 
+        /**
+         * Sets the disallowed document types
+         *
+         * @param documentTypes the document types
+         * @return the builder
+         */
         public Builder withBlacklistedDocumentTypes(List<String> documentTypes) {
             typeRestriction = new TypeRestriction(DocScanConstants.INCLUSION_BLACKLIST, documentTypes);
             return this;
         }
 
+        /**
+         * Sets the flag whether to allow non latin documents or not
+         *
+         * @param allowNonLatinDocuments the flag
+         * @return the builder
+         */
+        public Builder withAllowExpiredDocuments(boolean allowNonLatinDocuments) {
+            this.allowNonLatinDocuments = allowNonLatinDocuments;
+            return this;
+        }
+
         public OrthogonalRestrictionsFilter build() {
-            return new OrthogonalRestrictionsFilter(countryRestriction, typeRestriction);
+            return new OrthogonalRestrictionsFilter(countryRestriction, typeRestriction, allowNonLatinDocuments);
         }
         
     }

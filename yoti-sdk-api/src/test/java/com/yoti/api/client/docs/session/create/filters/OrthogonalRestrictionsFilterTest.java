@@ -79,4 +79,21 @@ public class OrthogonalRestrictionsFilterTest {
         assertThat(result.getTypeRestriction().getDocumentTypes(), containsInAnyOrder("PASSPORT", "DRIVING_LICENCE"));
     }
 
+    @Test
+    public void shouldSetAllowExpiredDocumentsFlag() {
+        OrthogonalRestrictionsFilter result = OrthogonalRestrictionsFilter.builder()
+                .withAllowExpiredDocuments(true)
+                .build();
+
+        assertThat(result.getAllowNonLatinDocuments(), is(true));
+    }
+
+    @Test
+    public void shouldSetNullForAllowNonLatinDocumentsFlagWhenNotProvidedExplicitly() {
+        OrthogonalRestrictionsFilter result = OrthogonalRestrictionsFilter.builder()
+                .build();
+
+        assertThat(result.getAllowNonLatinDocuments(), nullValue());
+    }
+
 }
