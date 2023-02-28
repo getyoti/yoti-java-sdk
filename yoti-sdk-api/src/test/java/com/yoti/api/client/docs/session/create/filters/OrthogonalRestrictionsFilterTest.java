@@ -80,9 +80,9 @@ public class OrthogonalRestrictionsFilterTest {
     }
 
     @Test
-    public void shouldSetAllowExpiredDocumentsFlag() {
+    public void shouldSetAllowNonLatinDocumentsFlag() {
         OrthogonalRestrictionsFilter result = OrthogonalRestrictionsFilter.builder()
-                .withAllowExpiredDocuments(true)
+                .withAllowNonLatinDocuments(true)
                 .build();
 
         assertThat(result.getAllowNonLatinDocuments(), is(true));

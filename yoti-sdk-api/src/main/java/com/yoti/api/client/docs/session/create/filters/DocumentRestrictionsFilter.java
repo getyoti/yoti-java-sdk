@@ -94,7 +94,7 @@ public class DocumentRestrictionsFilter extends DocumentFilter {
          * @param allowNonLatinDocuments the flag
          * @return the builder
          */
-        public Builder withAllowExpiredDocuments(boolean allowNonLatinDocuments) {
+        public Builder withAllowNonLatinDocuments(boolean allowNonLatinDocuments) {
             this.allowNonLatinDocuments = allowNonLatinDocuments;
             return this;
         }

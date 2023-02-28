@@ -97,7 +97,7 @@ public class DocumentRestrictionsFilterTest {
     public void shouldSetAllowNonLatinDocumentsFlag() {
         DocumentRestrictionsFilter result = DocumentRestrictionsFilter.builder()
                 .forWhitelist()
-                .withAllowExpiredDocuments(true)
+                .withAllowNonLatinDocuments(true)
                 .build();
 
         assertThat(result.getAllowNonLatinDocuments(), is(true));
