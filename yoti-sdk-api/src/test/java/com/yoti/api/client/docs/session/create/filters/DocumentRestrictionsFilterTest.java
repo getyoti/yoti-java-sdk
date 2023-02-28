@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
@@ -90,6 +91,25 @@ public class DocumentRestrictionsFilterTest {
 
         assertThat(result.getDocuments(), hasSize(1));
         assertThat(result.getDocuments(), containsInAnyOrder(documentRestrictionMock));
+    }
+
+    @Test
+    public void shouldSetAllowNonLatinDocumentsFlag() {
+        DocumentRestrictionsFilter result = DocumentRestrictionsFilter.builder()
+                .forWhitelist()
+                .withAllowExpiredDocuments(true)
+                .build();
+
+        assertThat(result.getAllowNonLatinDocuments(), is(true));
+    }
+
+    @Test
+    public void shouldSetNullForAllowNonLatinDocumentsFlagWhenNotProvidedExplicitly() {
+        DocumentRestrictionsFilter result = DocumentRestrictionsFilter.builder()
+                .forWhitelist()
+                .build();
+
+        assertThat(result.getAllowNonLatinDocuments(), nullValue());
     }
 
 }
