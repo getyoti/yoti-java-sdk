@@ -87,15 +87,6 @@ public class DigitalIdentityClientTest {
     }
 
     @Test
-    public void build_MissingKeyPairSource_IllegalArgumentException() {
-        DigitalIdentityClient.Builder builder = DigitalIdentityClient.builder().withClientSdkId(AN_SDK_ID);
-
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, builder::build);
-
-        assertThat(ex.getMessage(), containsString("Key Pair Source"));
-    }
-
-    @Test
     public void build_NoKeyPairInFile_InitialisationException() {
         KeyPairSource invalidKeyPairSource = new KeyPairSourceTest("no-key-pair-in-file");
 
@@ -164,15 +155,18 @@ public class DigitalIdentityClientTest {
     }
 
     @Test
-    public void client_CreateShareQrCodeException_DigitalIdentityException() {
+    public void client_CreateShareQrCodeException_DigitalIdentityException() throws IOException {
+        when(keyPairSource.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPair);
+
         DigitalIdentityClient identityClient = new DigitalIdentityClient(
                 AN_SDK_ID,
-                validKeyPairSource,
+                keyPairSource,
                 identityService
         );
 
         String exMessage = "Create Share QR Error";
-        when(identityService.createShareQrCode(A_SESSION_ID)).thenThrow(new DigitalIdentityException(exMessage));
+        when(identityService.createShareQrCode(AN_SDK_ID, keyPair, A_SESSION_ID))
+                .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,

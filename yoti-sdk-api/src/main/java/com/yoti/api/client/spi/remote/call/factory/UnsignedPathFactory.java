@@ -20,6 +20,7 @@ public class UnsignedPathFactory {
     private static final String DOCS_UPLOAD_FACE_CAPTURE_IMAGE_PATH_TEMPLATE = "/sessions/%s/resources/face-capture/%s/image?sdkId=%s";
     private static final String DOCS_TRIGGER_IBV_NOTIFICATION_PATH_TEMPLATE = "/sessions/%s/instructions/email?sdkId=%s";
     private static final String IDENTITY_SESSION_CREATION_TEMPLATE = "/v2/sessions";
+    private static final String IDENTITY_SESSION_QR_CODE_CREATION_TEMPLATE = "/v2/sessions/%s/qr-codes";
 
     public String createProfilePath(String appId, String connectToken) {
         return format(PROFILE_PATH_TEMPLATE, connectToken, appId);
@@ -83,6 +84,10 @@ public class UnsignedPathFactory {
 
     public String createIdentitySessionPath() {
         return IDENTITY_SESSION_CREATION_TEMPLATE;
+    }
+
+    public String createIdentitySessionQrCodePath(String sessionId) {
+        return format(IDENTITY_SESSION_QR_CODE_CREATION_TEMPLATE, sessionId);
     }
 
 }
