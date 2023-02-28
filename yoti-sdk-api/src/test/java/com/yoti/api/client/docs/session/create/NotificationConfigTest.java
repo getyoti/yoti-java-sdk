@@ -76,6 +76,7 @@ public class NotificationConfigTest {
                 .forTaskCompletion()
                 .forCheckCompletion()
                 .forSessionCompletion()
+                .forClientSessionCompletion()
                 .withEndpoint(SOME_ENDPOINT)
                 .withTopic(SOME_TOPIC)
                 .build();
@@ -84,7 +85,8 @@ public class NotificationConfigTest {
                 "RESOURCE_UPDATE",
                 "SESSION_COMPLETION",
                 "CHECK_COMPLETION",
-                "SESSION_COMPLETION"
+                "SESSION_COMPLETION",
+                "CLIENT_SESSION_TOKEN_DELETED"
         ));
     }
 

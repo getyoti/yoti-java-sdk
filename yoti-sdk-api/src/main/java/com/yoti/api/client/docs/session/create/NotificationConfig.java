@@ -167,6 +167,15 @@ public class NotificationConfig {
         }
 
         /**
+         * Adds CLIENT_SESSION_TOKEN_DELETED to the list of topics that trigger notification messages
+         *
+         * @return the builder
+         */
+        public Builder forClientSessionCompletion() {
+            return withTopic(DocScanConstants.CLIENT_SESSION_TOKEN_DELETED);
+        }
+
+        /**
          * Adds a topic to the list of topics that trigger notification messages
          *
          * @param topicName the topic name
