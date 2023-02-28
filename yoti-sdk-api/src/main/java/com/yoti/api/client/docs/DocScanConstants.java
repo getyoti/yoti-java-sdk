@@ -46,6 +46,7 @@ public class DocScanConstants {
     public static final String TASK_COMPLETION = "TASK_COMPLETION";
     public static final String CHECK_COMPLETION = "CHECK_COMPLETION";
     public static final String SESSION_COMPLETION = "SESSION_COMPLETION";
+    public static final String CLIENT_SESSION_TOKEN_DELETED = "CLIENT_SESSION_TOKEN_DELETED";
 
     public static final String ALWAYS = "ALWAYS";
     public static final String FALLBACK = "FALLBACK";
