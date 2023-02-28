@@ -23,7 +23,12 @@
             <p> Status: <strong th:text="${session_status}"></strong></p>
             <p> Expiry: <strong th:text="${session_expiry}"></strong></p>
         </div>
-    </section>
+
+        <div>
+            <p><strong>Session QR Code</strong></p>
+            <p> Id: <strong th:text="${session_qrcode_id}"></strong></p>
+            <p> URI: <strong th:text="${session_qrcode_uri}"></strong></p>
+        </div>
     </section>
 </main>
 

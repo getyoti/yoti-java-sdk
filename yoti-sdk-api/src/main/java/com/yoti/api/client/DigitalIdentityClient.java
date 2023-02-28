@@ -8,6 +8,7 @@ import java.security.KeyPair;
 import java.security.Security;
 
 import com.yoti.api.client.identity.ShareSession;
+import com.yoti.api.client.identity.ShareSessionQrCode;
 import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityException;
@@ -26,6 +27,9 @@ public class DigitalIdentityClient {
     private final DigitalIdentityService identityService;
 
     DigitalIdentityClient(String sdkId, KeyPairSource keyPair, DigitalIdentityService identityService) {
+        notNullOrEmpty(sdkId, "SDK ID");
+        notNull(keyPair, "Application Key Pair");
+
         this.sdkId = sdkId;
         this.keyPair = loadKeyPair(keyPair);
         this.identityService = identityService;
@@ -34,45 +38,34 @@ public class DigitalIdentityClient {
     /**
      * Create a sharing session to initiate a sharing process based on a policy
      *
-     * @param request
-     *              Details of the request like policy, extensions and push notification for the application
-     * @return an {@link ShareSession}
-     *              Id, status and expiry of the newly created Share Session
-     * @throws DigitalIdentityException
-     *              Aggregate exception signalling issues during the call
+     * @param request Details of the request like policy, extensions and push notification for the application
+     * @return an {@link ShareSession} ID, status and expiry of the newly created Share Session
+     * @throws DigitalIdentityException Thrown if the session creation is unsuccessful
      */
     public ShareSession createShareSession(ShareSessionRequest request) throws DigitalIdentityException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application Key Pair");
-
         return identityService.createShareSession(sdkId, keyPair, request);
     }
 
     public Object fetchShareSession(String sessionId) {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application Key Pair");
-
         return identityService.fetchShareSession(sessionId);
     }
 
-    public Object createShareQrCode(String sessionId) {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application Key Pair");
-
-        return identityService.createShareQrCode(sessionId);
+    /**
+     * Create a sharing session QR code to initiate a sharing process based on a policy
+     *
+     * @param sessionId Session ID the QR code will belong to
+     * @return ID and URI of the newly created Share Session QR code
+     * @throws DigitalIdentityException Thrown if the QR code creation is unsuccessful
+     */
+    public ShareSessionQrCode createShareQrCode(String sessionId) throws DigitalIdentityException {
+        return identityService.createShareQrCode(sdkId, keyPair, sessionId);
     }
 
     public Object fetchShareQrCode(String qrCodeId) {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application Key Pair");
-
         return identityService.fetchShareQrCode(qrCodeId);
     }
 
     public Object fetchShareReceipt(String receiptId) {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application Key Pair");
-
         return identityService.fetchShareReceipt(receiptId);
     }
 
@@ -110,9 +103,6 @@ public class DigitalIdentityClient {
         }
 
         public DigitalIdentityClient build() {
-            notNull(sdkId, "SDK ID");
-            notNull(keyPairSource, "Key Pair Source");
-
             return new DigitalIdentityClient(sdkId, keyPairSource, DigitalIdentityService.newInstance());
         }
 
