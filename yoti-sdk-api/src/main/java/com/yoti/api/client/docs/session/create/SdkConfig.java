@@ -9,35 +9,38 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SdkConfig {
 
-    @JsonProperty("allowed_capture_methods")
+    @JsonProperty(Property.ALLOWED_CAPTURE_METHODS)
     private final String allowedCaptureMethods;
 
-    @JsonProperty("primary_colour")
+    @JsonProperty(Property.PRIMARY_COLOUR)
     private final String primaryColour;
 
-    @JsonProperty("secondary_colour")
+    @JsonProperty(Property.SECONDARY_COLOUR)
     private final String secondaryColour;
 
-    @JsonProperty("font_colour")
+    @JsonProperty(Property.FONT_COLOUR)
     private final String fontColour;
 
-    @JsonProperty("locale")
+    @JsonProperty(Property.LOCALE)
     private final String locale;
 
-    @JsonProperty("preset_issuing_country")
+    @JsonProperty(Property.PRESET_ISSUING_COUNTRY)
     private final String presetIssuingCountry;
 
-    @JsonProperty("success_url")
+    @JsonProperty(Property.SUCCESS_URL)
     private final String successUrl;
 
-    @JsonProperty("error_url")
+    @JsonProperty(Property.ERROR_URL)
     private final String errorUrl;
 
-    @JsonProperty("privacy_policy_url")
+    @JsonProperty(Property.PRIVACY_POLICY_URL)
     private final String privacyPolicyUrl;
 
-    @JsonProperty("allow_handoff")
+    @JsonProperty(Property.ALLOW_HANDOFF)
     private final Boolean allowHandoff;
+
+    @JsonProperty(Property.ATTEMPTS_CONFIGURATION)
+    private final AttemptsConfiguration attemptsConfiguration;
 
     SdkConfig(String allowedCaptureMethods,
             String primaryColour,
@@ -48,7 +51,8 @@ public class SdkConfig {
             String successUrl,
             String errorUrl,
             String privacyPolicyUrl,
-            Boolean allowHandoff) {
+            Boolean allowHandoff,
+            AttemptsConfiguration attemptsConfiguration) {
         this.allowedCaptureMethods = allowedCaptureMethods;
         this.primaryColour = primaryColour;
         this.secondaryColour = secondaryColour;
@@ -59,6 +63,7 @@ public class SdkConfig {
         this.errorUrl = errorUrl;
         this.privacyPolicyUrl = privacyPolicyUrl;
         this.allowHandoff = allowHandoff;
+        this.attemptsConfiguration = attemptsConfiguration;
     }
 
     public static SdkConfig.Builder builder() {
@@ -156,6 +161,15 @@ public class SdkConfig {
     }
 
     /**
+     * The number of allowed attempts for certain tasks
+     *
+     * @return the attempts configuration
+     */
+    public AttemptsConfiguration getAttemptsConfiguration() {
+        return attemptsConfiguration;
+    }
+
+    /**
      * Builder to assist in the creation of {@link SdkConfig}.
      */
     public static class Builder {
@@ -170,9 +184,9 @@ public class SdkConfig {
         private String errorUrl;
         private String privacyPolicyUrl;
         private Boolean allowHandoff;
+        private AttemptsConfiguration attemptsConfiguration;
 
-        private Builder() {
-        }
+        private Builder() {}
 
         /**
          * Sets the allowed capture method to "CAMERA"
@@ -303,6 +317,17 @@ public class SdkConfig {
         }
 
         /**
+         * Sets the {@link AttemptsConfiguration} for the session
+         *
+         * @param attemptsConfiguration the configuration for retries
+         * @return the builder
+         */
+        public Builder withAttemptsConfiguration(AttemptsConfiguration attemptsConfiguration) {
+            this.attemptsConfiguration = attemptsConfiguration;
+            return this;
+        }
+
+        /**
          * Builds the {@link SdkConfig} using the values supplied to the builder
          *
          * @return the {@link SdkConfig}
@@ -318,9 +343,28 @@ public class SdkConfig {
                     successUrl,
                     errorUrl,
                     privacyPolicyUrl,
-                    allowHandoff
+                    allowHandoff,
+                    attemptsConfiguration
             );
         }
+    }
+
+    private static final class Property {
+
+        private static final String ALLOWED_CAPTURE_METHODS = "allowed_capture_methods";
+        private static final String PRIMARY_COLOUR = "primary_colour";
+        private static final String SECONDARY_COLOUR = "secondary_colour";
+        private static final String FONT_COLOUR = "font_colour";
+        private static final String LOCALE = "locale";
+        private static final String PRESET_ISSUING_COUNTRY = "preset_issuing_country";
+        private static final String SUCCESS_URL = "success_url";
+        private static final String ERROR_URL = "error_url";
+        private static final String PRIVACY_POLICY_URL = "privacy_policy_url";
+        private static final String ALLOW_HANDOFF = "allow_handoff";
+        private static final String ATTEMPTS_CONFIGURATION = "attempts_configuration";
+
+        private Property() {}
+
     }
 
 }

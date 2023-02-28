@@ -5,7 +5,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class SdkConfigTest {
 
     private static final String SOME_PRIMARY_COLOUR = "#FFFFFF";
@@ -17,6 +21,8 @@ public class SdkConfigTest {
     private static final String SOME_SUCCESS_URL = "https://yourdomain.com/some/success/endpoint";
     private static final String SOME_ERROR_URL = "https://yourdomain.com/some/error/endpoint";
     private static final String SOME_PRIVACY_POLICY_URL = "https://yourdomain.com/some/privacy/policy";
+
+    @Mock AttemptsConfiguration attemptsConfigurationMock;
 
     @Test
     public void shouldBuildSimpleSdkConfigWithAllOptions() {
@@ -31,6 +37,7 @@ public class SdkConfigTest {
                 .withErrorUrl(SOME_ERROR_URL)
                 .withPrivacyPolicyUrl(SOME_PRIVACY_POLICY_URL)
                 .withAllowHandoff(true)
+                .withAttemptsConfiguration(attemptsConfigurationMock)
                 .build();
 
         assertThat(result, is(instanceOf(SdkConfig.class)));
@@ -45,6 +52,7 @@ public class SdkConfigTest {
         assertThat(result.getErrorUrl(), is(SOME_ERROR_URL));
         assertThat(result.getPrivacyPolicyUrl(), is(SOME_PRIVACY_POLICY_URL));
         assertThat(result.getAllowHandoff(), is(true));
+        assertThat(result.getAttemptsConfiguration(), is(attemptsConfigurationMock));
     }
 
     @Test
