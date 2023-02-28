@@ -2,16 +2,16 @@ package com.yoti.api.examples.springboot;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.function.Supplier;
 
 import com.yoti.api.client.DigitalIdentityClient;
 import com.yoti.api.client.identity.ShareSession;
+import com.yoti.api.client.identity.ShareSessionQrCode;
 import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.identity.policy.Policy;
 import com.yoti.api.spring.ClientProperties;
 import com.yoti.api.spring.DigitalIdentityProperties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -30,8 +30,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 @RequestMapping("/v2")
 public class DigitalIdentityController implements WebMvcConfigurer {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DigitalIdentityController.class);
 
     private final DigitalIdentityClient client;
     private final ClientProperties properties;
@@ -56,7 +54,8 @@ public class DigitalIdentityController implements WebMvcConfigurer {
 
     @RequestMapping("/digital-identity-share")
     public String identityShare(Model model) throws URISyntaxException {
-        model.addAttribute("message", "Example page for identity share using Yoti web-share");
+        model.addAttribute("sdkId", properties.getClientSdkId());
+        model.addAttribute("message", "Example page for identity share");
 
         Policy policy = Policy.builder().build();
 
@@ -65,22 +64,35 @@ public class DigitalIdentityController implements WebMvcConfigurer {
                 .withRedirectUri(new URI("https://host/redirect/"))
                 .build();
 
-        ShareSession result = null;
-        try {
-            result = client.createShareSession(shareSessionRequest);
-        } catch (Exception ex) {
-            LOG.error(ex.getMessage());
+        ShareSession session = execute(() -> client.createShareSession(shareSessionRequest), model);
+        if (session == null) {
+            return "error";
         }
 
-        model.addAttribute("message", "Identity creation example");
+        String sessionId = session.getId();
 
-        model.addAttribute("sdkId", properties.getClientSdkId());
+        ShareSessionQrCode sessionQrCode = execute(() -> client.createShareQrCode(sessionId), model);
+        if (sessionQrCode == null) {
+            return "error";
+        }
 
-        model.addAttribute("session_id", result.getId());
-        model.addAttribute("session_status", result.getStatus());
-        model.addAttribute("session_expiry", result.getExpiry());
+        model.addAttribute("session_id", sessionId);
+        model.addAttribute("session_status", session.getStatus());
+        model.addAttribute("session_expiry", session.getExpiry());
+
+        model.addAttribute("session_qrcode_id", sessionQrCode.getId());
+        model.addAttribute("session_qrcode_uri", sessionQrCode.getUri());
 
         return "digital-identity-share";
+    }
+
+    private static <T> T execute(Supplier<T> supplier, Model model) {
+        try {
+            return supplier.get();
+        } catch (Exception ex) {
+            model.addAttribute("error", ex.getMessage());
+            return null;
+        }
     }
 
 }
