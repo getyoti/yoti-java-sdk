@@ -11,8 +11,12 @@ public abstract class DocumentFilter {
     @JsonProperty("type")
     private final String type;
 
-    DocumentFilter(String type) {
+    @JsonProperty("allow_non_latin_documents")
+    private final Boolean allowNonLatinDocuments;
+
+    DocumentFilter(String type, Boolean allowNonLatinDocuments) {
         this.type = type;
+        this.allowNonLatinDocuments = allowNonLatinDocuments;
     }
 
     /**
@@ -22,6 +26,15 @@ public abstract class DocumentFilter {
      */
     public String getType() {
         return type;
+    }
+
+    /**
+     * Whether allow non latin documents
+     *
+     * @return boolean flag
+     */
+    public Boolean getAllowNonLatinDocuments() {
+        return allowNonLatinDocuments;
     }
 
 }
