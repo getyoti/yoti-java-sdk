@@ -59,6 +59,9 @@ public class SessionSpec {
     @JsonProperty(Property.RESOURCES)
     private final ResourceCreationContainer resources;
 
+    @JsonProperty(Property.CREATE_IDENTITY_PROFILE_PREVIEW)
+    private final Boolean createIdentityProfilePreview;
+
     SessionSpec(Integer clientSessionTokenTtl,
             Integer resourcesTtl,
             String userTrackingId,
@@ -72,7 +75,8 @@ public class SessionSpec {
             ZonedDateTime sessionDeadline,
             Map<String, Object> identityProfile,
             Map<String, Object> subject,
-            ResourceCreationContainer resources) {
+            ResourceCreationContainer resources,
+            Boolean createIdentityProfilePreview) {
         this.clientSessionTokenTtl = clientSessionTokenTtl;
         this.resourcesTtl = resourcesTtl;
         this.userTrackingId = userTrackingId;
@@ -87,6 +91,7 @@ public class SessionSpec {
         this.identityProfile = identityProfile;
         this.subject = subject;
         this.resources = resources;
+        this.createIdentityProfilePreview = createIdentityProfilePreview;
     }
 
     public static Builder builder() {
@@ -220,6 +225,15 @@ public class SessionSpec {
         return resources;
     }
 
+    /**
+     * Whether or not to create the identity profile preview
+     *
+     * @return should create the identity profile preview
+     */
+    public Boolean getCreateIdentityProfilePreview() {
+        return createIdentityProfilePreview;
+    }
+
     public static class Builder {
 
         private final List<RequestedCheck<?>> requestedChecks;
@@ -236,6 +250,7 @@ public class SessionSpec {
         private Map<String, Object> identityProfile;
         private Map<String, Object> subject;
         private ResourceCreationContainer resources;
+        private Boolean createIdentityProfilePreview;
 
         private Builder() {
             requestedChecks = new ArrayList<>();
@@ -399,6 +414,17 @@ public class SessionSpec {
         }
 
         /**
+         * Sets whether to create the identity profile preview
+         *
+         * @param createIdentityProfilePreview block collection of biometric consent
+         * @return the builder
+         */
+        public Builder withCreateIdentityProfilePreview(boolean createIdentityProfilePreview) {
+            this.createIdentityProfilePreview = createIdentityProfilePreview;
+            return this;
+        }
+
+        /**
          * Builds the {@link SessionSpec} based on the values supplied to the builder
          *
          * @return the built {@link SessionSpec}
@@ -418,8 +444,8 @@ public class SessionSpec {
                     sessionDeadline,
                     identityProfile,
                     subject,
-                    resources
-            );
+                    resources,
+                    createIdentityProfilePreview);
         }
     }
 
@@ -439,6 +465,7 @@ public class SessionSpec {
         private static final String IDENTITY_PROFILE_REQUIREMENTS = "identity_profile_requirements";
         private static final String SUBJECT = "subject";
         private static final String RESOURCES = "resources";
+        private static final String CREATE_IDENTITY_PROFILE_PREVIEW = "create_identity_profile_preview";
 
         private Property() { }
 
