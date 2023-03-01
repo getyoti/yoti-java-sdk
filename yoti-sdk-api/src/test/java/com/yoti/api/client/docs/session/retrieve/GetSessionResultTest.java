@@ -118,6 +118,48 @@ public class GetSessionResultTest {
         );
     }
 
+    @Test
+    public void shouldReturnIdentityProfilePreview() {
+        Map<String, Object> media = new HashMap<>();
+        media.put(Property.ID, "someId");
+        media.put(Property.TYPE, "someType");
+        media.put(Property.CREATED, "someCreatedTime");
+        media.put(Property.LAST_UPDATED, "someLastUpdatedTime");
+
+        Map<String, Object> identityProfilePreview = new HashMap<>();
+        identityProfilePreview.put(Property.MEDIA, media);
+
+        Map<String, Object> session = new HashMap<>();
+        session.put(Property.IDENTITY_PROFILE_PREVIEW, identityProfilePreview);
+
+        GetSessionResult sessionResult = toGetSessionResult(session);
+
+        IdentityProfilePreviewResponse sessionResultIdentityProfilePreview = sessionResult.getIdentityProfilePreview();
+
+        assertThat(sessionResultIdentityProfilePreview, is(notNullValue()));
+
+        MediaResponse identityProfilePreviewMedia = sessionResultIdentityProfilePreview.getMedia();
+
+        assertThat(identityProfilePreviewMedia, is(notNullValue()));
+
+        assertThat(
+                identityProfilePreviewMedia.getId(),
+                is(equalTo(media.get(Property.ID)))
+        );
+        assertThat(
+                identityProfilePreviewMedia.getType(),
+                is(equalTo(media.get(Property.TYPE)))
+        );
+        assertThat(
+                identityProfilePreviewMedia.getCreated(),
+                is(equalTo(media.get(Property.CREATED)))
+        );
+        assertThat(
+                identityProfilePreviewMedia.getLastUpdated(),
+                is(equalTo(media.get(Property.LAST_UPDATED)))
+        );
+    }
+
     private static GetSessionResult toGetSessionResult(Object obj) {
         return MAPPER.convertValue(obj, GetSessionResult.class);
     }
@@ -140,6 +182,7 @@ public class GetSessionResultTest {
     private static final class Property {
 
         private static final String IDENTITY_PROFILE = "identity_profile";
+        private static final String IDENTITY_PROFILE_PREVIEW = "identity_profile_preview";
         private static final String SUBJECT_ID = "subject_id";
         private static final String RESULT = "result";
         private static final String FAILURE_REASON = "failure_reason";
@@ -152,6 +195,8 @@ public class GetSessionResultTest {
         private static final String MEDIA = "media";
         private static final String ID = "id";
         private static final String TYPE = "type";
+        private static final String CREATED = "created";
+        private static final String LAST_UPDATED = "last_updated";
 
         private Property() { }
 
