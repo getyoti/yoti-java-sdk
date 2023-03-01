@@ -1,5 +1,6 @@
 package com.yoti.api.client.spi.remote.call.identity;
 
+import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_POST;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.AUTH_ID_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
@@ -15,12 +16,14 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
+import java.util.Optional;
 
 import com.yoti.api.client.identity.ShareSession;
 import com.yoti.api.client.identity.ShareSessionQrCode;
 import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
+import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
 import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 import com.yoti.json.ResourceMapper;
@@ -31,6 +34,8 @@ import org.slf4j.LoggerFactory;
 public class DigitalIdentityService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DigitalIdentityService.class);
+
+    private static final byte[] EMPTY_JSON = "{}".getBytes(StandardCharsets.UTF_8);
 
     private final UnsignedPathFactory pathFactory;
     private final SignedRequestBuilderFactory requestBuilderFactory;
@@ -60,7 +65,7 @@ public class DigitalIdentityService {
 
         try {
             byte[] payload = ResourceMapper.writeValueAsString(shareSessionRequest);
-            SignedRequest request = createSignedRequest(sdkId, keyPair, path, payload);
+            SignedRequest request = createSignedRequest(sdkId, keyPair, path, HTTP_POST, payload);
 
             return request.execute(ShareSession.class);
         } catch (IOException ex) {
@@ -89,7 +94,7 @@ public class DigitalIdentityService {
         LOG.debug("Requesting Share Session QR code Creation for session ID '{}' at '{}'", sessionId, path);
 
         try {
-            SignedRequest request = createSignedRequest(sdkId, keyPair, path, "{}".getBytes(StandardCharsets.UTF_8));
+            SignedRequest request = createSignedRequest(sdkId, keyPair, path, HTTP_POST, EMPTY_JSON);
 
             return request.execute(ShareSessionQrCode.class);
         } catch (GeneralSecurityException ex) {
@@ -99,25 +104,50 @@ public class DigitalIdentityService {
         }
     }
 
-    public Object fetchShareQrCode(String qrCodeId) {
-        return null;
+    public ShareSessionQrCode fetchShareQrCode(String sdkId, KeyPair keyPair, String qrCodeId)
+            throws DigitalIdentityException {
+        notNullOrEmpty(sdkId, "SDK ID");
+        notNull(keyPair, "Application Key Pair");
+        notNullOrEmpty(qrCodeId, "QR Code ID");
+
+        String path = pathFactory.createIdentitySessionQrCodeRetrievalPath(qrCodeId);
+
+        LOG.info("Requesting Share Session QR code with ID '{} at '{}'", qrCodeId, path);
+
+        try {
+            SignedRequest request = createSignedRequest(sdkId, keyPair, path);
+
+            return request.execute(ShareSessionQrCode.class);
+        } catch (GeneralSecurityException ex) {
+            throw new DigitalIdentityException("Error while signing the share QR code fetch request ", ex);
+        } catch (IOException | URISyntaxException | ResourceException ex) {
+            throw new DigitalIdentityException("Error while executing the share QR code fetch request ", ex);
+        }
     }
 
     public Object fetchShareReceipt(String receiptId) {
         return null;
     }
 
-    SignedRequest createSignedRequest(String sdkId, KeyPair keyPair, String path, byte[] payload)
+    SignedRequest createSignedRequest(String sdkId, KeyPair keyPair, String path)
             throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
-        return requestBuilderFactory.create()
+        return createSignedRequest(sdkId, keyPair, path, HTTP_GET, null);
+    }
+
+    SignedRequest createSignedRequest(String sdkId, KeyPair keyPair, String path, String method, byte[] payload)
+            throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
+        SignedRequestBuilder requestBuilder = requestBuilderFactory.create()
                 .withKeyPair(keyPair)
                 .withBaseUrl(apiUrl)
                 .withEndpoint(path)
                 .withHeader(AUTH_ID_HEADER, sdkId)
-                .withHttpMethod(HTTP_POST)
-                .withHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
-                .withPayload(payload)
-                .build();
+                .withHttpMethod(method);
+
+        Optional.ofNullable(payload).map(v ->
+                requestBuilder.withPayload(v).withHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
+        );
+
+        return requestBuilder.build();
     }
 
 }

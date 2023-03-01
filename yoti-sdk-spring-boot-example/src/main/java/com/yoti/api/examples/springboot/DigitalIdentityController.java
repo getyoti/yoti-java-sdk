@@ -71,17 +71,31 @@ public class DigitalIdentityController implements WebMvcConfigurer {
 
         String sessionId = session.getId();
 
+        model.addAttribute("session_id", sessionId);
+        model.addAttribute("session_status", session.getStatus());
+        model.addAttribute("session_expiry", session.getExpiry());
+
         ShareSessionQrCode sessionQrCode = execute(() -> client.createShareQrCode(sessionId), model);
         if (sessionQrCode == null) {
             return "error";
         }
 
-        model.addAttribute("session_id", sessionId);
-        model.addAttribute("session_status", session.getStatus());
-        model.addAttribute("session_expiry", session.getExpiry());
+        String qrCodeId = sessionQrCode.getId();
 
-        model.addAttribute("session_qrcode_id", sessionQrCode.getId());
+        model.addAttribute("session_qrcode_id", qrCodeId);
         model.addAttribute("session_qrcode_uri", sessionQrCode.getUri());
+
+        ShareSessionQrCode fetchQrCode = execute(() -> client.fetchShareQrCode(qrCodeId), model);
+        if (fetchQrCode == null) {
+            return "error";
+        }
+
+        model.addAttribute("qrcode_expiry", fetchQrCode.getExpiry());
+        model.addAttribute("qrcode_extensions", fetchQrCode.getExtensions());
+        model.addAttribute("qrcode_redirect_uri", fetchQrCode.getRedirectUri());
+        model.addAttribute("qrcode_session_id", fetchQrCode.getSession().getId());
+        model.addAttribute("qrcode_session_status", fetchQrCode.getSession().getStatus());
+        model.addAttribute("qrcode_session_expiry", fetchQrCode.getSession().getExpiry());
 
         return "digital-identity-share";
     }
