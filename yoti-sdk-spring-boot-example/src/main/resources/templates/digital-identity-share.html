@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/static/index.css"/>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet"/>
 </head>
-<body>
+<body class="yoti-body">>
 <main>
     <section class="yoti-top-section">
         <div class="yoti-logo-section">
@@ -28,6 +28,16 @@
             <p><strong>Session QR Code</strong></p>
             <p> Id: <strong th:text="${session_qrcode_id}"></strong></p>
             <p> URI: <strong th:text="${session_qrcode_uri}"></strong></p>
+        </div>
+
+        <div>
+            <p><strong>Fetched Session QR Code</strong></p>
+            <p> Expiry: <strong th:text="${qrcode_expiry}"></strong></p>
+            <p> Extensions: <strong th:text="${qrcode_extensions}"></strong></p>
+            <p> Redirect URI: <strong th:text="${qrcode_redirect_uri}"></strong></p>
+            <p> Session ID: <strong th:text="${qrcode_session_id}"></strong></p>
+            <p> Session Status: <strong th:text="${qrcode_session_status}"></strong></p>
+            <p> Session Expiry: <strong th:text="${qrcode_session_expiry}"></strong></p>
         </div>
     </section>
 </main>

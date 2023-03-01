@@ -77,6 +77,7 @@ public class DigitalIdentityClientTest {
 
         assertThat(ex.getMessage(), containsString("Key Pair Source"));
     }
+
     @Test
     public void build_MissingSdkId_IllegalArgumentException() {
         DigitalIdentityClient.Builder builder = DigitalIdentityClient.builder().withKeyPairSource(validKeyPairSource);
@@ -177,15 +178,18 @@ public class DigitalIdentityClientTest {
     }
 
     @Test
-    public void client_FetchShareQrCodeException_DigitalIdentityException() {
+    public void client_FetchShareQrCodeException_DigitalIdentityException() throws IOException {
+        when(keyPairSource.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPair);
+
         DigitalIdentityClient identityClient = new DigitalIdentityClient(
                 AN_SDK_ID,
-                validKeyPairSource,
+                keyPairSource,
                 identityService
         );
 
         String exMessage = "Fetch Share QR Error";
-        when(identityService.fetchShareQrCode(A_QR_CODE_ID)).thenThrow(new DigitalIdentityException(exMessage));
+        when(identityService.fetchShareQrCode(AN_SDK_ID, keyPair, A_QR_CODE_ID))
+                .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
