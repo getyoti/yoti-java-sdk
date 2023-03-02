@@ -18,6 +18,7 @@ public class DocScanConstants {
     public static final String THIRD_PARTY_IDENTITY_FRAUD_ONE = "THIRD_PARTY_IDENTITY_FRAUD_1";
     public static final String WATCHLIST_SCREENING = "WATCHLIST_SCREENING";
     public static final String WATCHLIST_ADVANCED_CA = "WATCHLIST_ADVANCED_CA";
+    public static final String IBV_VISUAL_REVIEW_CHECK = "IBV_VISUAL_REVIEW_CHECK";
 
     public static final String WITH_YOTI_ACCOUNT = "WITH_YOTI_ACCOUNT";
     public static final String WITH_CUSTOM_ACCOUNT = "WITH_CUSTOM_ACCOUNT";
