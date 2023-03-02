@@ -29,6 +29,7 @@ public class GetSessionResultCheckTest {
     @Mock ThirdPartyIdentityCheckResponse thirdPartyIdentityCheckResponse;
     @Mock WatchlistScreeningCheckResponse watchlistScreeningCheckResponse;
     @Mock ThirdPartyIdentityFraudOneCheckResponse thirdPartyIdentityFraudOneCheckResponse;
+    @Mock IbvVisualReviewCheckResponse ibvVisualReviewCheckResponse;
 
     GetSessionResult getSessionResult;
 
@@ -132,6 +133,17 @@ public class GetSessionResultCheckTest {
     }
 
     @Test
+    public void shouldFilterIbvVisualReviewChecks() {
+        getSessionResult = new GetSessionResult();
+
+        setupGetSessionResult();
+
+        List<IbvVisualReviewCheckResponse> result = getSessionResult.getIbvVisualReviewChecks();
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
     public void shouldFilterThirdPartyIdentityFraudOneCheck() {
         getSessionResult = new GetSessionResult();
 
@@ -175,7 +187,8 @@ public class GetSessionResultCheckTest {
                         idDocumentComparisonCheckResponse,
                         thirdPartyIdentityCheckResponse,
                         watchlistScreeningCheckResponse,
-                        thirdPartyIdentityFraudOneCheckResponse
+                        thirdPartyIdentityFraudOneCheckResponse,
+                        ibvVisualReviewCheckResponse
                 )
         );
     }
