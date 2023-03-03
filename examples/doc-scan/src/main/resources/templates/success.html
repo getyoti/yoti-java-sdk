@@ -296,6 +296,28 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Synectics Identity Fraud Checks -->
+                <div th:if="${sessionResult.getSynecticsIdentityFraudChecks().size() > 0}" class="card">
+                    <div class="card-header" id="synectics-identity-fraud-checks">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    data-target="#collapse-synectics-identity-fraud-checks" aria-expanded="true"
+                                    aria-controls="collapse-synectics-identity-fraud-checks">
+                                Synectics Identity Fraud Checks
+                            </button>
+                        </h3>
+                    </div>
+                    <div id="collapse-synectics-identity-fraud-checks" class="collapse"
+                         aria-labelledby="synectics-identity-fraud-checks">
+                        <div class="card-body">
+                            <table th:each="check : ${sessionResult.getSynecticsIdentityFraudChecks()()}"
+                                   th:include="fragments/checks :: check-template(${check})"
+                                   class="table table-striped">
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
