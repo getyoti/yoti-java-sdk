@@ -44,6 +44,15 @@ public class RequestedLivenessCheck extends RequestedCheck<RequestedLivenessConf
         }
 
         /**
+         * Sets the type to be of a STATIC liveness check
+         *
+         * @return the builder
+         */
+        public Builder forStaticLiveness() {
+            return forLivenessType(DocScanConstants.STATIC);
+        }
+
+        /**
          * Sets the type of the liveness check to the supplied value
          *
          * @param livenessType the type of the liveness check

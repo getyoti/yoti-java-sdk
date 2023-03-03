@@ -33,6 +33,7 @@ public class DocScanConstants {
 
     public static final String LIVENESS = "LIVENESS";
     public static final String ZOOM = "ZOOM";
+    public static final String STATIC = "STATIC";
 
     public static final String FACE_CAPTURE = "FACE_CAPTURE";
 
