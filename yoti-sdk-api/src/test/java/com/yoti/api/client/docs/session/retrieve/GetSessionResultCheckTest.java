@@ -17,7 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class GetSessionResultCheckTest {
 
-    private static final int SESSION_CHECKS = 13;
+    private static final int SESSION_CHECKS = 14;
 
     @Mock AuthenticityCheckResponse authenticityCheckResponse;
     @Mock FaceMatchCheckResponse faceMatchCheckResponse;
@@ -32,6 +32,7 @@ public class GetSessionResultCheckTest {
     @Mock IbvVisualReviewCheckResponse ibvVisualReviewCheckResponse;
     @Mock DocumentSchemeValidityCheckResponse documentSchemeValidityCheckResponse;
     @Mock ProfileDocumentMatchCheckResponse profileDocumentMatchCheckResponse;
+    @Mock SynecticsIdentityFraudCheckResponse synecticsIdentityFraudCheckResponse;
 
     GetSessionResult getSessionResult;
 
@@ -179,6 +180,17 @@ public class GetSessionResultCheckTest {
     }
 
     @Test
+    public void shouldFilterSynecticsIdentityFraudCheck() {
+        getSessionResult = new GetSessionResult();
+
+        setupGetSessionResult();
+
+        List<SynecticsIdentityFraudCheckResponse> result = getSessionResult.getSynecticsIdentityFraudChecks();
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
     public void shouldReturnEmptyLists() {
         getSessionResult = new GetSessionResult();
 
@@ -195,6 +207,7 @@ public class GetSessionResultCheckTest {
         assertThat(getSessionResult.getSupplementaryDocumentTextDataChecks(), hasSize(0));
         assertThat(getSessionResult.getLivenessChecks(), hasSize(0));
         assertThat(getSessionResult.getThirdPartyIdentityFraudOneChecks(), hasSize(0));
+        assertThat(getSessionResult.getSynecticsIdentityFraudChecks(), hasSize(0));
     }
 
     private void setupGetSessionResult() {
@@ -214,7 +227,8 @@ public class GetSessionResultCheckTest {
                         thirdPartyIdentityFraudOneCheckResponse,
                         ibvVisualReviewCheckResponse,
                         documentSchemeValidityCheckResponse,
-                        profileDocumentMatchCheckResponse
+                        profileDocumentMatchCheckResponse,
+                        synecticsIdentityFraudCheckResponse
                 )
         );
     }

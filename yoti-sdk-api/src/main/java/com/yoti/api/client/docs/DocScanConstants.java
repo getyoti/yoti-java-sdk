@@ -21,6 +21,7 @@ public class DocScanConstants {
     public static final String IBV_VISUAL_REVIEW_CHECK = "IBV_VISUAL_REVIEW_CHECK";
     public static final String DOCUMENT_SCHEME_VALIDITY_CHECK = "DOCUMENT_SCHEME_VALIDITY_CHECK";
     public static final String PROFILE_DOCUMENT_MATCH = "PROFILE_DOCUMENT_MATCH";
+    public static final String SYNECTICS_IDENTITY_FRAUD = "SYNECTICS_IDENTITY_FRAUD";
 
     public static final String WITH_YOTI_ACCOUNT = "WITH_YOTI_ACCOUNT";
     public static final String WITH_CUSTOM_ACCOUNT = "WITH_CUSTOM_ACCOUNT";

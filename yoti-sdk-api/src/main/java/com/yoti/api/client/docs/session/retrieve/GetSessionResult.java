@@ -109,6 +109,10 @@ public class GetSessionResult {
         return filterChecksByType(ThirdPartyIdentityCheckResponse.class);
     }
 
+    public List<SynecticsIdentityFraudCheckResponse> getSynecticsIdentityFraudChecks() {
+        return filterChecksByType(SynecticsIdentityFraudCheckResponse.class);
+    }
+
     public List<WatchlistScreeningCheckResponse> getWatchlistScreeningChecks() {
         return filterChecksByType(WatchlistScreeningCheckResponse.class);
     }
