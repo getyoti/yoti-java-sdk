@@ -185,12 +185,23 @@ public class DocScanClient {
     /**
      * Gets a list of supported documents.
      *
+     * @param includeNonLatin the includeNonLatin flag
+     * @return the supported documents
+     * @throws DocScanException if an error has occurred
+     */
+    public SupportedDocumentsResponse getSupportedDocuments(boolean includeNonLatin) throws DocScanException {
+        LOG.debug("Getting all supported documents");
+        return docScanService.getSupportedDocuments(keyPair, includeNonLatin);
+    }
+
+    /**
+     * Gets a list of supported documents only with latin documents.
+     *
      * @return the supported documents
      * @throws DocScanException if an error has occurred
      */
     public SupportedDocumentsResponse getSupportedDocuments() throws DocScanException {
-        LOG.debug("Getting all supported documents");
-        return docScanService.getSupportedDocuments(keyPair);
+        return getSupportedDocuments(false);
     }
 
     /**
