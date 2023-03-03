@@ -121,6 +121,10 @@ public class GetSessionResult {
         return filterChecksByType(IbvVisualReviewCheckResponse.class);
     }
 
+    public List<DocumentSchemeValidityCheckResponse> getDocumentSchemeValidityChecks() {
+        return filterChecksByType(DocumentSchemeValidityCheckResponse.class);
+    }
+
     public List<ThirdPartyIdentityFraudOneCheckResponse> getThirdPartyIdentityFraudOneChecks() {
         return filterChecksByType(ThirdPartyIdentityFraudOneCheckResponse.class);
     }
