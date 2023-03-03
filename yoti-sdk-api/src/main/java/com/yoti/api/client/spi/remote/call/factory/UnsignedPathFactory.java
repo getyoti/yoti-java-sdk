@@ -13,7 +13,7 @@ public class UnsignedPathFactory {
     static final String DOCS_PUT_IBV_INSTRUCTIONS_PATH_TEMPLATE = "/sessions/%s/instructions?sdkId=%s";
     static final String DOCS_FETCH_IBV_INSTRUCTIONS_PATH_TEMPLATE = "/sessions/%s/instructions?sdkId=%s";
     static final String DOCS_FETCH_IBV_INSTRUCTIONS_PDF_PATH_TEMPLATE = "/sessions/%s/instructions/pdf?sdkId=%s";
-    static final String DOCS_SUPPORTED_DOCUMENTS_PATH = "/supported-documents";
+    static final String DOCS_SUPPORTED_DOCUMENTS_PATH = "/supported-documents?includeNonLatin=%s";
     static final String DOCS_FETCH_INSTRUCTION_CONTACT_PROFILE_PATH_TEMPLATE = "/sessions/%s/instructions/contact-profile?sdkId=%s";
     static final String DOCS_FETCH_SESSION_CONFIGURATION_PATH_TEMPLATE = "/sessions/%s/configuration?sdkId=%s";
     static final String DOCS_NEW_FACE_CAPTURE_RESOURCE_PATH_TEMPLATE = "/sessions/%s/resources/face-capture?sdkId=%s";
@@ -56,8 +56,8 @@ public class UnsignedPathFactory {
         return format(DOCS_FETCH_INSTRUCTION_CONTACT_PROFILE_PATH_TEMPLATE, sessionId, appId);
     }
 
-    public String createGetSupportedDocumentsPath() {
-        return DOCS_SUPPORTED_DOCUMENTS_PATH;
+    public String createGetSupportedDocumentsPath(boolean includeNonLatin) {
+        return format(DOCS_SUPPORTED_DOCUMENTS_PATH, includeNonLatin);
     }
 
     public String createFetchIbvInstructionsPdfPath(String sdkId, String sessionId) {

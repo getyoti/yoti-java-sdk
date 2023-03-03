@@ -83,10 +83,11 @@ public class PathFactoryTest {
 
     @Test
     public void shouldCreateSupportedDocumentsPath() {
-        String result = testObj.createGetSupportedDocumentsPath();
+        String result = testObj.createGetSupportedDocumentsPath(true);
 
         URI uri = URI.create(result);
         assertEquals("/supported-documents", uri.getPath());
+        assertTrue(uri.getQuery().contains("includeNonLatin=true"));
         assertTrue(uri.getQuery().matches("(.*)nonce=(?i)[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}(.*)"));
         assertTrue(uri.getQuery().contains("timestamp="));
     }

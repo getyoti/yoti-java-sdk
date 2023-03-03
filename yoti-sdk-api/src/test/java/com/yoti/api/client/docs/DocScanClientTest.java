@@ -227,7 +227,7 @@ public class DocScanClientTest {
     public void getSupportedDocuments_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
 
-        doThrow(original).when(docScanServiceMock).getSupportedDocuments(any(KeyPair.class));
+        doThrow(original).when(docScanServiceMock).getSupportedDocuments(any(KeyPair.class), any(Boolean.class));
 
         try {
             DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);

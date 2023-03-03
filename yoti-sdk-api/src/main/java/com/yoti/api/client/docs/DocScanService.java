@@ -483,10 +483,10 @@ final class DocScanService {
         }
     }
 
-    public SupportedDocumentsResponse getSupportedDocuments(KeyPair keyPair) throws DocScanException {
+    public SupportedDocumentsResponse getSupportedDocuments(KeyPair keyPair, boolean includeNonLatin) throws DocScanException {
         notNull(keyPair, "Application key Pair");
 
-        String path = unsignedPathFactory.createGetSupportedDocumentsPath();
+        String path = unsignedPathFactory.createGetSupportedDocumentsPath(includeNonLatin);
 
         try {
             SignedRequest signedRequest = signedRequestBuilderFactory.create()

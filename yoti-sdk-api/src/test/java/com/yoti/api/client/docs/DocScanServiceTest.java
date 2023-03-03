@@ -1634,7 +1634,7 @@ public class DocScanServiceTest {
     @Test
     public void getSupportedDocuments_shouldThrowExceptionWhenKeyPairIsNull() throws Exception {
         try {
-            docScanService.getSupportedDocuments(null);
+            docScanService.getSupportedDocuments(null, false);
         } catch (IllegalArgumentException ex) {
             assertThat(ex.getMessage(), containsString("Application key Pair"));
             return;
@@ -1649,7 +1649,7 @@ public class DocScanServiceTest {
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
         try {
-            docScanService.getSupportedDocuments(KEY_PAIR);
+            docScanService.getSupportedDocuments(KEY_PAIR, false);
         } catch (DocScanException ex) {
             assertSame(ex.getCause(), gse);
             assertThat(ex.getMessage(), containsString("Error executing the GET: some gse"));
@@ -1666,7 +1666,7 @@ public class DocScanServiceTest {
         when(signedRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(resourceException);
 
         try {
-            docScanService.getSupportedDocuments(KEY_PAIR);
+            docScanService.getSupportedDocuments(KEY_PAIR, false);
         } catch (DocScanException ex) {
             assertSame(ex.getCause(), resourceException);
             assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
@@ -1683,7 +1683,7 @@ public class DocScanServiceTest {
         when(signedRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(ioException);
 
         try {
-            docScanService.getSupportedDocuments(KEY_PAIR);
+            docScanService.getSupportedDocuments(KEY_PAIR, false);
         } catch (DocScanException ex) {
             assertSame(ex.getCause(), ioException);
             assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
@@ -1699,7 +1699,7 @@ public class DocScanServiceTest {
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         try {
-            docScanService.getSupportedDocuments(KEY_PAIR);
+            docScanService.getSupportedDocuments(KEY_PAIR, false);
         } catch (DocScanException ex) {
             assertSame(ex.getCause(), uriSyntaxException);
             assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
@@ -1712,9 +1712,9 @@ public class DocScanServiceTest {
     public void getSupportedDocuments_shouldReturnSupportedDocuments() throws Exception {
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(SupportedDocumentsResponse.class)).thenReturn(supportedDocumentsResponseMock);
-        when(unsignedPathFactoryMock.createGetSupportedDocumentsPath()).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createGetSupportedDocumentsPath(false)).thenReturn(SOME_PATH);
 
-        SupportedDocumentsResponse result = docScanService.getSupportedDocuments(KEY_PAIR);
+        SupportedDocumentsResponse result = docScanService.getSupportedDocuments(KEY_PAIR, false);
 
         assertThat(result, is(instanceOf(SupportedDocumentsResponse.class)));
     }
