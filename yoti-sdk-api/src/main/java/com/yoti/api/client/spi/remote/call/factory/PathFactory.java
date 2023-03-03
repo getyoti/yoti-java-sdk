@@ -41,8 +41,8 @@ public class PathFactory {
         return unsignedPathFactory.createMediaContentPath(appId, sessionId, mediaId) + "&" + createSignatureParams();
     }
 
-    public String createGetSupportedDocumentsPath() {
-        return unsignedPathFactory.createGetSupportedDocumentsPath() + "?" + createSignatureParams();
+    public String createGetSupportedDocumentsPath(boolean includeNonLatin) {
+        return unsignedPathFactory.createGetSupportedDocumentsPath(includeNonLatin) + "&" + createSignatureParams();
     }
 
     protected long createTimestamp() {
