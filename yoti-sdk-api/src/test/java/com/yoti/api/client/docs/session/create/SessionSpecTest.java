@@ -49,6 +49,7 @@ public class SessionSpecTest {
     @Mock IbvOptions ibvOptionsMock;
     @Mock ZonedDateTime sessionDeadlineMock;
     @Mock ResourceCreationContainer resourceCreationContainerMock;
+    @Mock ImportTokenPayload importTokenMock;
 
     @Test
     public void shouldBuildWithMinimalConfiguration() {
@@ -300,6 +301,15 @@ public class SessionSpecTest {
                 .build();
 
         assertThat(sessionSpec.getCreateIdentityProfilePreview(), nullValue());
+    }
+
+    @Test
+    public void shouldBuildWithImportToken() {
+        SessionSpec sessionSpec = SessionSpec.builder()
+                .withImportToken(importTokenMock)
+                .build();
+
+        assertThat(sessionSpec.getImportToken(), is(importTokenMock));
     }
 
     private static final class IdentityProperty {

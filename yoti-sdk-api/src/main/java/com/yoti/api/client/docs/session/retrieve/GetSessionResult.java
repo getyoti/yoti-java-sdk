@@ -37,6 +37,9 @@ public class GetSessionResult {
     @JsonProperty(Property.IDENTITY_PROFILE_PREVIEW)
     private IdentityProfilePreviewResponse identityProfilePreview;
 
+    @JsonProperty(Property.IMPORT_TOKEN)
+    private ImportTokenResponse importToken;
+
     public long getClientSessionTokenTtl() {
         return clientSessionTokenTtl;
     }
@@ -75,6 +78,10 @@ public class GetSessionResult {
 
     public IdentityProfilePreviewResponse getIdentityProfilePreview() {
         return identityProfilePreview;
+    }
+
+    public ImportTokenResponse getImportToken() {
+        return importToken;
     }
 
     public List<AuthenticityCheckResponse> getAuthenticityChecks() {
@@ -156,6 +163,7 @@ public class GetSessionResult {
         private static final String RESOURCES = "resources";
         private static final String IDENTITY_PROFILE = "identity_profile";
         private static final String IDENTITY_PROFILE_PREVIEW = "identity_profile_preview";
+        private static final String IMPORT_TOKEN = "import_token";
 
         private Property() { }
 
