@@ -17,7 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class GetSessionResultCheckTest {
 
-    private static final int SESSION_CHECKS = 10;
+    private static final int SESSION_CHECKS = 11;
 
     @Mock AuthenticityCheckResponse authenticityCheckResponse;
     @Mock FaceMatchCheckResponse faceMatchCheckResponse;
@@ -30,6 +30,7 @@ public class GetSessionResultCheckTest {
     @Mock WatchlistScreeningCheckResponse watchlistScreeningCheckResponse;
     @Mock ThirdPartyIdentityFraudOneCheckResponse thirdPartyIdentityFraudOneCheckResponse;
     @Mock IbvVisualReviewCheckResponse ibvVisualReviewCheckResponse;
+    @Mock DocumentSchemeValidityCheckResponse documentSchemeValidityCheckResponse;
 
     GetSessionResult getSessionResult;
 
@@ -144,6 +145,17 @@ public class GetSessionResultCheckTest {
     }
 
     @Test
+    public void shouldFilterDocumentSchemeValidityChecks() {
+        getSessionResult = new GetSessionResult();
+
+        setupGetSessionResult();
+
+        List<DocumentSchemeValidityCheckResponse> result = getSessionResult.getDocumentSchemeValidityChecks();
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
     public void shouldFilterThirdPartyIdentityFraudOneCheck() {
         getSessionResult = new GetSessionResult();
 
@@ -188,7 +200,8 @@ public class GetSessionResultCheckTest {
                         thirdPartyIdentityCheckResponse,
                         watchlistScreeningCheckResponse,
                         thirdPartyIdentityFraudOneCheckResponse,
-                        ibvVisualReviewCheckResponse
+                        ibvVisualReviewCheckResponse,
+                        documentSchemeValidityCheckResponse
                 )
         );
     }
