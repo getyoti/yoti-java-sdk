@@ -14,8 +14,8 @@ public class OrthogonalRestrictionsFilter extends DocumentFilter {
     @JsonProperty("type_restriction")
     private final TypeRestriction typeRestriction;
 
-    OrthogonalRestrictionsFilter(CountryRestriction countryRestriction, TypeRestriction typeRestriction, Boolean allowNonLatinDocuments) {
-        super(DocScanConstants.ORTHOGONAL_RESTRICTIONS, allowNonLatinDocuments);
+    OrthogonalRestrictionsFilter(CountryRestriction countryRestriction, TypeRestriction typeRestriction, Boolean allowNonLatinDocuments, Boolean allowExpiredDocuments) {
+        super(DocScanConstants.ORTHOGONAL_RESTRICTIONS, allowNonLatinDocuments, allowExpiredDocuments);
         this.countryRestriction = countryRestriction;
         this.typeRestriction = typeRestriction;
     }
@@ -37,6 +37,7 @@ public class OrthogonalRestrictionsFilter extends DocumentFilter {
         private CountryRestriction countryRestriction;
         private TypeRestriction typeRestriction;
         private Boolean allowNonLatinDocuments;
+        private Boolean allowExpiredDocuments;
 
         private Builder() {}
 
@@ -85,18 +86,29 @@ public class OrthogonalRestrictionsFilter extends DocumentFilter {
         }
 
         /**
-         * Sets the flag whether to allow non latin documents or not
+         * Sets the flag whether to allow/disallow non latin documents
          *
          * @param allowNonLatinDocuments the flag
          * @return the builder
          */
-        public Builder withAllowExpiredDocuments(boolean allowNonLatinDocuments) {
+        public Builder withAllowNonLatinDocuments(boolean allowNonLatinDocuments) {
             this.allowNonLatinDocuments = allowNonLatinDocuments;
             return this;
         }
 
+        /**
+         * Sets the flag to allow/disallow expired documents
+         *
+         * @param allowExpiredDocuments the flag
+         * @return the builder
+         */
+        public Builder withAllowExpiredDocuments(boolean allowExpiredDocuments) {
+            this.allowExpiredDocuments = allowExpiredDocuments;
+            return this;
+        }
+
         public OrthogonalRestrictionsFilter build() {
-            return new OrthogonalRestrictionsFilter(countryRestriction, typeRestriction, allowNonLatinDocuments);
+            return new OrthogonalRestrictionsFilter(countryRestriction, typeRestriction, allowNonLatinDocuments, allowExpiredDocuments);
         }
         
     }

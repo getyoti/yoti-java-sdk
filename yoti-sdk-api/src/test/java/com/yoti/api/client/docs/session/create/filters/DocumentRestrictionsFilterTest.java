@@ -97,7 +97,7 @@ public class DocumentRestrictionsFilterTest {
     public void shouldSetAllowNonLatinDocumentsFlag() {
         DocumentRestrictionsFilter result = DocumentRestrictionsFilter.builder()
                 .forWhitelist()
-                .withAllowExpiredDocuments(true)
+                .withAllowNonLatinDocuments(true)
                 .build();
 
         assertThat(result.getAllowNonLatinDocuments(), is(true));
@@ -110,6 +110,25 @@ public class DocumentRestrictionsFilterTest {
                 .build();
 
         assertThat(result.getAllowNonLatinDocuments(), nullValue());
+    }
+
+    @Test
+    public void shouldSetAllowExpiredDocumentsFlag() {
+        DocumentRestrictionsFilter result = DocumentRestrictionsFilter.builder()
+                .forWhitelist()
+                .withAllowExpiredDocuments(true)
+                .build();
+
+        assertThat(result.getAllowExpiredDocuments(), is(true));
+    }
+
+    @Test
+    public void shouldSetNullForAllowExpiredDocumentsFlagWhenNotProvidedExplicitly() {
+        DocumentRestrictionsFilter result = DocumentRestrictionsFilter.builder()
+                .forWhitelist()
+                .build();
+
+        assertThat(result.getAllowExpiredDocuments(), nullValue());
     }
 
 }
