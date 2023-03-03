@@ -7,6 +7,9 @@ public class SupportedDocumentResponse {
     @JsonProperty("type")
     private String type;
 
+    @JsonProperty("is_strictly_latin")
+    private Boolean isStrictlyLatin;
+
     /**
      * Returns the type of document that is supported.
      *
@@ -14,6 +17,15 @@ public class SupportedDocumentResponse {
      */
     public String getType() {
         return type;
+    }
+
+    /**
+     * Returns the flag of whether documents should be only latin or not.
+     *
+     * @return the flag
+     */
+    public Boolean getStrictlyLatin() {
+        return isStrictlyLatin;
     }
 
 }
