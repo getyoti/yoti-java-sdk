@@ -26,6 +26,9 @@ public class SessionSpec {
     @JsonProperty(Property.RESOURCES_TTL)
     private final Integer resourcesTtl;
 
+    @JsonProperty(Property.IMPORT_TOKEN)
+    private final ImportTokenPayload importToken;
+
     @JsonProperty(Property.USER_TRACKING_ID)
     private final String userTrackingId;
 
@@ -64,6 +67,7 @@ public class SessionSpec {
 
     SessionSpec(Integer clientSessionTokenTtl,
             Integer resourcesTtl,
+            ImportTokenPayload importToken,
             String userTrackingId,
             NotificationConfig notifications,
             List<RequestedCheck<?>> requestedChecks,
@@ -79,6 +83,7 @@ public class SessionSpec {
             Boolean createIdentityProfilePreview) {
         this.clientSessionTokenTtl = clientSessionTokenTtl;
         this.resourcesTtl = resourcesTtl;
+        this.importToken = importToken;
         this.userTrackingId = userTrackingId;
         this.notifications = notifications;
         this.requestedChecks = requestedChecks;
@@ -114,6 +119,15 @@ public class SessionSpec {
      */
     public Integer getResourcesTtl() {
         return resourcesTtl;
+    }
+
+    /**
+     * Import token, allow documents verified in an IDV session to create a digital ID in the Yoti app
+     *
+     * @return the import token
+     */
+    public ImportTokenPayload getImportToken() {
+        return importToken;
     }
 
     /**
@@ -241,6 +255,7 @@ public class SessionSpec {
         private final List<RequiredDocument> requiredDocuments;
         private Integer clientSessionTokenTtl;
         private Integer resourcesTtl;
+        private ImportTokenPayload importToken;
         private String userTrackingId;
         private NotificationConfig notifications;
         private SdkConfig sdkConfig;
@@ -277,6 +292,17 @@ public class SessionSpec {
          */
         public Builder withResourcesTtl(Integer resourcesTtl) {
             this.resourcesTtl = resourcesTtl;
+            return this;
+        }
+
+        /**
+         * Sets the {@link ImportTokenPayload}
+         *
+         * @param importToken the {@link ImportTokenPayload}
+         * @return the builder
+         */
+        public Builder withImportToken(ImportTokenPayload importToken) {
+            this.importToken = importToken;
             return this;
         }
 
@@ -433,6 +459,7 @@ public class SessionSpec {
             return new SessionSpec(
                     clientSessionTokenTtl,
                     resourcesTtl,
+                    importToken,
                     userTrackingId,
                     notifications,
                     requestedChecks,
@@ -466,6 +493,7 @@ public class SessionSpec {
         private static final String SUBJECT = "subject";
         private static final String RESOURCES = "resources";
         private static final String CREATE_IDENTITY_PROFILE_PREVIEW = "create_identity_profile_preview";
+        private static final String IMPORT_TOKEN = "import_token";
 
         private Property() { }
 
