@@ -125,6 +125,10 @@ public class GetSessionResult {
         return filterChecksByType(DocumentSchemeValidityCheckResponse.class);
     }
 
+    public List<ProfileDocumentMatchCheckResponse> getProfileDocumentMatchChecks() {
+        return filterChecksByType(ProfileDocumentMatchCheckResponse.class);
+    }
+
     public List<ThirdPartyIdentityFraudOneCheckResponse> getThirdPartyIdentityFraudOneChecks() {
         return filterChecksByType(ThirdPartyIdentityFraudOneCheckResponse.class);
     }
