@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "liveness_type", defaultImpl = LivenessResourceResponse.class, visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = ZoomLivenessResourceResponse.class, name = DocScanConstants.ZOOM),
+        @JsonSubTypes.Type(value = StaticLivenessResourceResponse.class, name = DocScanConstants.STATIC),
 })
 public class LivenessResourceResponse extends ResourceResponse {
 

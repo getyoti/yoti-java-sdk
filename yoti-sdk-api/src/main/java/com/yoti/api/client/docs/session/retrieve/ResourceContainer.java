@@ -55,9 +55,21 @@ public class ResourceContainer {
         return faceCapture;
     }
 
+    /**
+     * Returns a filtered list of {@link LivenessResourceResponse} as {@link ZoomLivenessResourceResponse}
+     *
+     * @return the list of zoom liveness resources
+     */
     public List<ZoomLivenessResourceResponse> getZoomLivenessResources() {
         return filterLivenessResourcesByType(ZoomLivenessResourceResponse.class);
     }
+
+    /**
+     * Returns a filtered list of {@link LivenessResourceResponse} as {@link StaticLivenessResourceResponse}
+     *
+     * @return the list of static liveness resources
+     */
+    public List<StaticLivenessResourceResponse> getStaticLivenessResources() { return filterLivenessResourcesByType(StaticLivenessResourceResponse.class); }
 
     private <T extends LivenessResourceResponse> List<T> filterLivenessResourcesByType(Class<T> clazz) {
         List<T> filteredList = new ArrayList<>();

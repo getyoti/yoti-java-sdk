@@ -18,6 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class ResourceContainerTest {
 
     @Mock ZoomLivenessResourceResponse zoomLivenessResourceResponseMock;
+    @Mock StaticLivenessResourceResponse staticLivenessResourceResponseMock;
     @Mock LivenessResourceResponse livenessResourceResponse;
 
     ResourceContainer simpleResourceContainer;
@@ -37,6 +38,25 @@ public class ResourceContainerTest {
         );
 
         List<ZoomLivenessResourceResponse> result = simpleResourceContainer.getZoomLivenessResources();
+        assertThat(simpleResourceContainer.getLivenessCapture(), hasSize(3));
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
+    public void shouldFilterStaticLivenessResources() {
+        simpleResourceContainer = new ResourceContainer();
+
+        FieldSetter.setField(
+                simpleResourceContainer,
+                "livenessCapture",
+                Arrays.asList(
+                        staticLivenessResourceResponseMock,
+                        livenessResourceResponse,
+                        livenessResourceResponse
+                )
+        );
+
+        List<StaticLivenessResourceResponse> result = simpleResourceContainer.getStaticLivenessResources();
         assertThat(simpleResourceContainer.getLivenessCapture(), hasSize(3));
         assertThat(result, hasSize(1));
     }
