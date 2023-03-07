@@ -3,5 +3,6 @@
     <suppress>
       <cve>CVE-2020-5408</cve>
       <cve>CVE-2016-1000027</cve>
+      <cve>CVE-2022-45688</cve>
     </suppress>
 </suppressions>

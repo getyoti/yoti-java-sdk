@@ -1,1 +1,3 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.yoti.api.spring.YotiClientAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.yoti.api.spring.YotiClientAutoConfiguration,\
+  com.yoti.api.spring.DigitalIdentityClientAutoConfiguration

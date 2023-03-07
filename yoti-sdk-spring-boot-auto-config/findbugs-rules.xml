@@ -6,8 +6,14 @@
 
 <FindBugsFilter>
 
-    <Match>
-        <Bug pattern="CRLF_INJECTION_LOGS"/>
-    </Match>
+  <Match>
+    <Bug pattern="CRLF_INJECTION_LOGS"/>
+  </Match>
+
+  <Match>
+    <Class name="com.yoti.api.spring.SpringResourceKeyPairSource"/>
+    <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
+  </Match>
+
 </FindBugsFilter>
 

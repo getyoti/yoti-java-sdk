@@ -22,7 +22,7 @@ import com.yoti.api.client.shareurl.extension.LocationConstraintContent;
 import com.yoti.api.client.shareurl.extension.LocationConstraintExtensionBuilder;
 import com.yoti.api.client.shareurl.policy.DynamicPolicy;
 import com.yoti.api.client.shareurl.policy.WantedAttribute;
-import com.yoti.api.spring.YotiClientProperties;
+import com.yoti.api.spring.ClientProperties;
 import com.yoti.api.spring.YotiProperties;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,20 +38,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.util.StringUtils;
 
 @Configuration
 @ConditionalOnClass(YotiClient.class)
-@EnableConfigurationProperties({ YotiClientProperties.class, YotiProperties.class })
+@EnableConfigurationProperties({ ClientProperties.class, YotiProperties.class })
 @Controller
 @EnableWebMvc
-public class YotiLoginController extends WebMvcConfigurerAdapter {
+public class YotiLoginController implements WebMvcConfigurer {
 
     private static final Logger LOG = LoggerFactory.getLogger(YotiLoginController.class);
 
     private final YotiClient client;
-    private final YotiClientProperties properties;
+    private final ClientProperties properties;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -59,7 +59,7 @@ public class YotiLoginController extends WebMvcConfigurerAdapter {
     }
 
     @Autowired
-    public YotiLoginController(final YotiClient client, YotiClientProperties properties) {
+    public YotiLoginController(final YotiClient client, ClientProperties properties) {
         this.client = client;
         this.properties = properties;
     }
