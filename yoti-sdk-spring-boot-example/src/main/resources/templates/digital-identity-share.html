@@ -15,6 +15,15 @@
         </div>
 
         <h2 th:text="${message}">Digital Identity Share Example page</h2>
+
+        <p> SdkId: <strong th:text="${sdkId}"></strong></p>
+
+        <div>
+            <p> Id: <strong th:text="${session_id}"></strong></p>
+            <p> Status: <strong th:text="${session_status}"></strong></p>
+            <p> Expiry: <strong th:text="${session_expiry}"></strong></p>
+        </div>
+    </section>
     </section>
 </main>
 
