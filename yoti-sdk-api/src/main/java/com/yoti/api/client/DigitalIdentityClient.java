@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.security.KeyPair;
 import java.security.Security;
 
+import com.yoti.api.client.identity.ShareSession;
+import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
+import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityException;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityService;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -28,11 +31,21 @@ public class DigitalIdentityClient {
         this.identityService = identityService;
     }
 
-    public Object createShareSession() {
+    /**
+     * Create a sharing session to initiate a sharing process based on a policy
+     *
+     * @param request
+     *              Details of the request like policy, extensions and push notification for the application
+     * @return an {@link ShareSession}
+     *              Id, status and expiry of the newly created Share Session
+     * @throws DigitalIdentityException
+     *              Aggregate exception signalling issues during the call
+     */
+    public ShareSession createShareSession(ShareSessionRequest request) throws DigitalIdentityException {
         notNullOrEmpty(sdkId, "SDK ID");
         notNull(keyPair, "Application Key Pair");
 
-        return identityService.createShareSession();
+        return identityService.createShareSession(sdkId, keyPair, request);
     }
 
     public Object fetchShareSession(String sessionId) {
@@ -63,9 +76,9 @@ public class DigitalIdentityClient {
         return identityService.fetchShareReceipt(receiptId);
     }
 
-    private KeyPair loadKeyPair(KeyPairSource keyPair) throws InitialisationException {
+    private KeyPair loadKeyPair(KeyPairSource keyPairSource) throws InitialisationException {
         try {
-            return keyPair.getFromStream(new KeyStreamVisitor());
+            return keyPairSource.getFromStream(new KeyStreamVisitor());
         } catch (IOException ex) {
             throw new InitialisationException("Cannot load Key Pair", ex);
         }
