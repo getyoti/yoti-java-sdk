@@ -15,9 +15,33 @@
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
+  <profiles>
+    <profile>
+      <id>java-8</id>
+      <activation>
+        <jdk>1.8</jdk>
+      </activation>
+      <properties>
+        <maven.compiler.source>${supported.java.version}</maven.compiler.source>
+        <maven.compiler.target>${supported.java.version}</maven.compiler.target>
+      </properties>
+    </profile>
+    <profile>
+      <id>java-9+</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <properties>
+        <maven.compiler.release>${supported.java.release.version}</maven.compiler.release>
+      </properties>
+    </profile>
+  </profiles>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.8</java.version>
+
+    <supported.java.version>1.8</supported.java.version>
+    <supported.java.release.version>8</supported.java.release.version>
 
     <guava.version>31.1-jre</guava.version>
   </properties>
@@ -68,6 +92,15 @@
   </dependencies>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven-compiler-plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
