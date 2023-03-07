@@ -2,12 +2,10 @@ package com.yoti.api.spring;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "com.yoti")
-public class YotiProperties {
+@ConfigurationProperties(prefix = "com.yoti.identity")
+public class DigitalIdentityProperties {
 
     private String applicationId;
-
-    private String scenarioId;
 
     public String getApplicationId() {
         return applicationId;
@@ -15,14 +13,6 @@ public class YotiProperties {
 
     public void setApplicationId(String id) {
         applicationId = id;
-    }
-
-    public String getScenarioId() {
-        return scenarioId;
-    }
-
-    public void setScenarioId(String id) {
-        scenarioId = id;
     }
 
 }

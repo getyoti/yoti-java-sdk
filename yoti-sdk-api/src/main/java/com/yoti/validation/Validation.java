@@ -1,19 +1,17 @@
-package com.yoti.api.client.spi.remote.util;
+package com.yoti.validation;
 
 import static java.lang.String.format;
 
 import java.util.Collection;
 import java.util.List;
 
-/**
- * @deprecated replaced by {@link com.yoti.validation.Validation}
- */
-@Deprecated
-public class Validation {
+public final class Validation {
+
+    private Validation() { }
 
     public static <T> T notNull(T value, String name) {
         if (value == null) {
-            throw new IllegalArgumentException(format("'%s' must not be null.", name));
+            throw new IllegalArgumentException(format("'%s' must not be null", name));
         }
         return value;
     }
