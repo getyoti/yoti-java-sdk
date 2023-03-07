@@ -31,6 +31,25 @@
   
   <profiles>
     <profile>
+      <id>java-8</id>
+      <activation>
+        <jdk>1.8</jdk>
+      </activation>
+      <properties>
+        <maven.compiler.source>${supported.java.version}</maven.compiler.source>
+        <maven.compiler.target>${supported.java.version}</maven.compiler.target>
+      </properties>
+    </profile>
+    <profile>
+      <id>java-9+</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <properties>
+        <maven.compiler.release>${supported.java.release.version}</maven.compiler.release>
+      </properties>
+    </profile>
+    <profile>
       <id>sonatype</id>
       <activation>
         <activeByDefault>false</activeByDefault>
@@ -74,10 +93,10 @@
     
     <!-- java version -->
     <yoti.java.sdk.version>${project.version}</yoti.java.sdk.version>
+
     <supported.java.version>1.8</supported.java.version>
-    <maven.compiler.source>${supported.java.version}</maven.compiler.source>
-    <maven.compiler.target>${supported.java.version}</maven.compiler.target>
-    
+    <supported.java.release.version>8</supported.java.release.version>
+
     <!-- sdk dependency versions -->
     <slf4j.version>2.0.6</slf4j.version>
     <bouncy.castle.version>1.70</bouncy.castle.version>
@@ -216,17 +235,12 @@
   <build>
     <pluginManagement>
       <plugins>
-        
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${maven-compiler-plugin.version}</version>
-          <configuration>
-            <source>${supported.java.version}</source>
-            <target>${supported.java.version}</target>
-          </configuration>
         </plugin>
-        
+
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>findbugs-maven-plugin</artifactId>
@@ -253,7 +267,7 @@
             </execution>
           </executions>
         </plugin>
-        
+
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
