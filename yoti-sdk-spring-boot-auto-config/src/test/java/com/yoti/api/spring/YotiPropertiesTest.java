@@ -1,11 +1,10 @@
 package com.yoti.api.spring;
 
-import org.junit.Test;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
+
+import org.junit.*;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 public class YotiPropertiesTest {
 
@@ -14,21 +13,21 @@ public class YotiPropertiesTest {
     private static final String YOTI_PREFIX = "com.yoti";
 
     @Test
-    public void applicationIdShouldBeSet() throws Exception {
+    public void applicationIdShouldBeSet() {
         final YotiProperties properties = new YotiProperties();
         properties.setApplicationId(APPLICATION_ID);
         assertThat(properties.getApplicationId(), is(APPLICATION_ID));
     }
 
     @Test
-    public void scenarioIdShouldBeSet() throws Exception {
+    public void scenarioIdShouldBeSet() {
         final YotiProperties properties = new YotiProperties();
         properties.setScenarioId(SCENARIO_ID);
         assertThat(properties.getScenarioId(), is(SCENARIO_ID));
     }
 
     @Test
-    public void defaultValuesShouldBeNull() throws Exception {
+    public void defaultValuesShouldBeNull() {
         final YotiProperties properties = new YotiProperties();
         assertThat(properties.getApplicationId(), nullValue());
         assertThat(properties.getScenarioId(), nullValue());
@@ -38,7 +37,7 @@ public class YotiPropertiesTest {
      * Just here as a guard against someone changing the prefix as this would cause any existing client applications to break.
      */
     @Test
-    public void configurationPrefixShouldBeAsExpected() throws Exception {
+    public void configurationPrefixShouldBeAsExpected() {
         final ConfigurationProperties annotation = YotiProperties.class.getAnnotation(ConfigurationProperties.class);
         assertThat(annotation.prefix(), is(YOTI_PREFIX));
     }

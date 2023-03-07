@@ -30,7 +30,8 @@ public interface KeyPairSource {
      */
     KeyPair getFromStream(StreamVisitor streamVisitor) throws IOException, InitialisationException;
 
-    public static interface StreamVisitor {
+    interface StreamVisitor {
         KeyPair accept(InputStream stream) throws IOException, InitialisationException;
     }
+
 }

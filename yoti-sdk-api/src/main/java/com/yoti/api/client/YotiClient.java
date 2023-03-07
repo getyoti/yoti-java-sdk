@@ -118,7 +118,6 @@ public class YotiClient {
 
     private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {
         try {
-            LOG.debug("Loading key pair from '{}'", kpSource);
             return kpSource.getFromStream(new KeyStreamVisitor());
         } catch (IOException e) {
             throw new InitialisationException("Cannot load key pair", e);
