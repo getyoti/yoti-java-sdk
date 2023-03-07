@@ -14,6 +14,10 @@ public final class YotiConstants {
     public static final String YOTI_DOCS_PATH_PREFIX = "/idverify/v1";
     public static final String DEFAULT_YOTI_DOCS_URL = DEFAULT_YOTI_HOST + YOTI_DOCS_PATH_PREFIX;
 
+    public static final String IDENTITY_PREFIX = "/share";
+    public static final String DEFAULT_IDENTITY_URL = DEFAULT_YOTI_HOST + IDENTITY_PREFIX;
+
+    public static final String AUTH_ID_HEADER = "X-Yoti-Auth-Id";
     public static final String AUTH_KEY_HEADER = "X-Yoti-Auth-Key";
     public static final String DIGEST_HEADER = "X-Yoti-Auth-Digest";
     public static final String YOTI_SDK_HEADER = "X-Yoti-SDK";
