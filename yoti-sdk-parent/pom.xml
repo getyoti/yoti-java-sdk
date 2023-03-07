@@ -106,7 +106,7 @@
     <dependency-check-maven.cvss.limit>4</dependency-check-maven.cvss.limit>
     <dependency-check-maven.cve.update.limit>12</dependency-check-maven.cve.update.limit>
 
-    <animal-sniffer-maven-plugin.version>1.21</animal-sniffer-maven-plugin.version>
+    <animal-sniffer-maven-plugin.version>1.22</animal-sniffer-maven-plugin.version>
     <mojo.signature.artefact>java18</mojo.signature.artefact>
     <mojo.signature.version>1.0</mojo.signature.version>
 
