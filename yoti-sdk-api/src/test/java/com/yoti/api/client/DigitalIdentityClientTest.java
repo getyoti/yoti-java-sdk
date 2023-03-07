@@ -4,6 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Answers.RETURNS_DEEP_STUBS;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayInputStream;
@@ -11,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyPair;
 
+import com.yoti.api.client.identity.ShareSessionRequest;
+import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityException;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityService;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
@@ -24,12 +28,15 @@ import org.mockito.junit.*;
 @RunWith(MockitoJUnitRunner.class)
 public class DigitalIdentityClientTest {
 
-    private static final String AN_APP_ID = "anAppId";
+    private static final String AN_SDK_ID = "anSdkId";
     private static final String A_QR_CODE_ID = "aQrCodeId";
     private static final String A_SESSION_ID = "aSessionId";
     private static final String A_RECEIPT_ID = "aReceiptId";
 
+    @Mock KeyPairSource keyPairSource;
+    @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPair;
     @Mock DigitalIdentityService identityService;
+    @Mock ShareSessionRequest shareSessionRequest;
 
     private KeyPairSource validKeyPairSource;
 
@@ -61,7 +68,7 @@ public class DigitalIdentityClientTest {
     @Test
     public void builderWithKeyPairSource_NullKeyPairSource_IllegalArgumentException() {
         DigitalIdentityClient.Builder builder = DigitalIdentityClient.builder()
-                .withClientSdkId(AN_APP_ID);
+                .withClientSdkId(AN_SDK_ID);
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -81,7 +88,7 @@ public class DigitalIdentityClientTest {
 
     @Test
     public void build_MissingKeyPairSource_IllegalArgumentException() {
-        DigitalIdentityClient.Builder builder = DigitalIdentityClient.builder().withClientSdkId(AN_APP_ID);
+        DigitalIdentityClient.Builder builder = DigitalIdentityClient.builder().withClientSdkId(AN_SDK_ID);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, builder::build);
 
@@ -93,7 +100,7 @@ public class DigitalIdentityClientTest {
         KeyPairSource invalidKeyPairSource = new KeyPairSourceTest("no-key-pair-in-file");
 
         DigitalIdentityClient.Builder builder = DigitalIdentityClient.builder()
-                .withClientSdkId(AN_APP_ID)
+                .withClientSdkId(AN_SDK_ID)
                 .withKeyPairSource(invalidKeyPairSource);
 
         InitialisationException ex = assertThrows(InitialisationException.class, builder::build);
@@ -106,7 +113,7 @@ public class DigitalIdentityClientTest {
         KeyPairSource invalidKeyPairSource = new KeyPairSourceTest(CryptoUtil.INVALID_KEY_PAIR_PEM);
 
         DigitalIdentityClient.Builder builder = DigitalIdentityClient.builder()
-                .withClientSdkId(AN_APP_ID)
+                .withClientSdkId(AN_SDK_ID)
                 .withKeyPairSource(invalidKeyPairSource);
 
         InitialisationException ex = assertThrows(InitialisationException.class, builder::build);
@@ -116,19 +123,22 @@ public class DigitalIdentityClientTest {
     }
 
     @Test
-    public void client_CreateShareSessionException_DigitalIdentityException() {
+    public void client_CreateShareSessionException_DigitalIdentityException() throws IOException {
+        when(keyPairSource.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPair);
+
         DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_APP_ID,
-                validKeyPairSource,
+                AN_SDK_ID,
+                keyPairSource,
                 identityService
         );
 
         String exMessage = "Create Share Session Error";
-        when(identityService.createShareSession()).thenThrow(new DigitalIdentityException(exMessage));
+        when(identityService.createShareSession(AN_SDK_ID, keyPair, shareSessionRequest))
+                .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
-                identityClient::createShareSession
+                () -> identityClient.createShareSession(shareSessionRequest)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));
@@ -137,7 +147,7 @@ public class DigitalIdentityClientTest {
     @Test
     public void client_FetchShareSessionException_DigitalIdentityException() {
         DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_APP_ID,
+                AN_SDK_ID,
                 validKeyPairSource,
                 identityService
         );
@@ -156,7 +166,7 @@ public class DigitalIdentityClientTest {
     @Test
     public void client_CreateShareQrCodeException_DigitalIdentityException() {
         DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_APP_ID,
+                AN_SDK_ID,
                 validKeyPairSource,
                 identityService
         );
@@ -175,7 +185,7 @@ public class DigitalIdentityClientTest {
     @Test
     public void client_FetchShareQrCodeException_DigitalIdentityException() {
         DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_APP_ID,
+                AN_SDK_ID,
                 validKeyPairSource,
                 identityService
         );
@@ -194,7 +204,7 @@ public class DigitalIdentityClientTest {
     @Test
     public void client_FetchShareReceiptException_DigitalIdentityException() {
         DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_APP_ID,
+                AN_SDK_ID,
                 validKeyPairSource,
                 identityService
         );
