@@ -12,10 +12,12 @@ import static com.yoti.validation.Validation.notNullOrEmpty;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 
 import com.yoti.api.client.identity.ShareSession;
+import com.yoti.api.client.identity.ShareSessionQrCode;
 import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
@@ -52,9 +54,9 @@ public class DigitalIdentityService {
         notNull(keyPair, "Application Key Pair");
         notNull(shareSessionRequest, "Share Session request");
 
-        LOG.debug("Requesting Share Session Creation for SDK ID '{}", sdkId);
-
         String path = pathFactory.createIdentitySessionPath();
+
+        LOG.debug("Requesting Share Session Creation for SDK ID '{}' at '{}'", sdkId, path);
 
         try {
             byte[] payload = ResourceMapper.writeValueAsString(shareSessionRequest);
@@ -62,35 +64,39 @@ public class DigitalIdentityService {
 
             return request.execute(ShareSession.class);
         } catch (IOException ex) {
-            throw new DigitalIdentityException("Error parsing the request: ", ex);
+            throw new DigitalIdentityException("Error while parsing the share session creation request ", ex);
         } catch (URISyntaxException ex) {
-            throw new DigitalIdentityException("Error building the request: ", ex);
+            throw new DigitalIdentityException("Error while building the share session creation request ", ex);
         } catch (GeneralSecurityException ex) {
-            throw new DigitalIdentityException("Error signing the request: ", ex);
+            throw new DigitalIdentityException("Error while signing the share session creation request ", ex);
         } catch (ResourceException ex) {
-            throw new DigitalIdentityException("Error posting the request: ", ex);
+            throw new DigitalIdentityException("Error while executing the share session creation request ", ex);
         }
-    }
-
-    SignedRequest createSignedRequest(String appId, KeyPair keyPair, String path, byte[] payload)
-            throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
-        return requestBuilderFactory.create()
-                .withKeyPair(keyPair)
-                .withBaseUrl(apiUrl)
-                .withEndpoint(path)
-                .withHeader(AUTH_ID_HEADER, appId)
-                .withHttpMethod(HTTP_POST)
-                .withHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
-                .withPayload(payload)
-                .build();
     }
 
     public Object fetchShareSession(String sessionId) {
         return null;
     }
 
-    public Object createShareQrCode(String sessionId) {
-        return null;
+    public ShareSessionQrCode createShareQrCode(String sdkId, KeyPair keyPair, String sessionId)
+            throws DigitalIdentityException {
+        notNullOrEmpty(sdkId, "SDK ID");
+        notNull(keyPair, "Application Key Pair");
+        notNullOrEmpty(sessionId, "Session ID");
+
+        String path = pathFactory.createIdentitySessionQrCodePath(sessionId);
+
+        LOG.debug("Requesting Share Session QR code Creation for session ID '{}' at '{}'", sessionId, path);
+
+        try {
+            SignedRequest request = createSignedRequest(sdkId, keyPair, path, "{}".getBytes(StandardCharsets.UTF_8));
+
+            return request.execute(ShareSessionQrCode.class);
+        } catch (GeneralSecurityException ex) {
+            throw new DigitalIdentityException("Error while signing the share QR code creation request ", ex);
+        } catch (IOException | URISyntaxException | ResourceException ex) {
+            throw new DigitalIdentityException("Error while executing the share QR code creation request ", ex);
+        }
     }
 
     public Object fetchShareQrCode(String qrCodeId) {
@@ -99,6 +105,19 @@ public class DigitalIdentityService {
 
     public Object fetchShareReceipt(String receiptId) {
         return null;
+    }
+
+    SignedRequest createSignedRequest(String sdkId, KeyPair keyPair, String path, byte[] payload)
+            throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
+        return requestBuilderFactory.create()
+                .withKeyPair(keyPair)
+                .withBaseUrl(apiUrl)
+                .withEndpoint(path)
+                .withHeader(AUTH_ID_HEADER, sdkId)
+                .withHttpMethod(HTTP_POST)
+                .withHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
+                .withPayload(payload)
+                .build();
     }
 
 }
