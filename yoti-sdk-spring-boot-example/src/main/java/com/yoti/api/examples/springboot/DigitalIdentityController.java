@@ -97,6 +97,19 @@ public class DigitalIdentityController implements WebMvcConfigurer {
         model.addAttribute("qrcode_session_status", fetchQrCode.getSession().getStatus());
         model.addAttribute("qrcode_session_expiry", fetchQrCode.getSession().getExpiry());
 
+        ShareSession fetchSession = execute(() -> client.fetchShareSession(sessionId), model);
+        if (fetchSession == null) {
+            return "error";
+        }
+
+        model.addAttribute("fetch_session_id", fetchSession.getId());
+        model.addAttribute("fetch_session_created", fetchSession.getCreated());
+        model.addAttribute("fetch_session_updated", fetchSession.getUpdated());
+        model.addAttribute("fetch_session_expiry", fetchSession.getExpiry());
+        model.addAttribute("fetch_session_status", fetchSession.getStatus());
+        model.addAttribute("fetch_session_qrcode_id", fetchSession.getQrCodeId());
+        model.addAttribute("fetch_session_receipt_id", fetchSession.getReceiptId());
+
         return "digital-identity-share";
     }
 

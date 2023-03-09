@@ -39,22 +39,29 @@ public class DigitalIdentityClient {
      * Create a sharing session to initiate a sharing process based on a policy
      *
      * @param request Details of the request like policy, extensions and push notification for the application
-     * @return an {@link ShareSession} ID, status and expiry of the newly created Share Session
+     * @return ID, status and expiry of the newly created share session
      * @throws DigitalIdentityException Thrown if the session creation is unsuccessful
      */
     public ShareSession createShareSession(ShareSessionRequest request) throws DigitalIdentityException {
         return identityService.createShareSession(sdkId, keyPair, request);
     }
 
-    public Object fetchShareSession(String sessionId) {
-        return identityService.fetchShareSession(sessionId);
+    /**
+     * Retrieve the sharing session
+     *
+     * @param sessionId ID of the session to retrieve
+     * @return ID, status and expiry of the share session
+     * @throws DigitalIdentityException Thrown if the session retrieval is unsuccessful
+     */
+    public ShareSession fetchShareSession(String sessionId) throws DigitalIdentityException {
+        return identityService.fetchShareSession(sdkId, keyPair, sessionId);
     }
 
     /**
      * Create a sharing session QR code to initiate a sharing process based on a policy
      *
      * @param sessionId Session ID the QR code will belong to
-     * @return ID and URI of the newly created Share Session QR code
+     * @return ID and URI of the newly created share session QR code
      * @throws DigitalIdentityException Thrown if the QR code creation is unsuccessful
      */
     public ShareSessionQrCode createShareQrCode(String sessionId) throws DigitalIdentityException {
@@ -65,7 +72,7 @@ public class DigitalIdentityClient {
      * Retrieve the sharing session QR code
      *
      * @param qrCodeId ID of the QR code to retrieve
-     * @return The content of the Share Session QR code
+     * @return The content of the share session QR code
      * @throws DigitalIdentityException Thrown if the QR code retrieval is unsuccessful
      */
     public ShareSessionQrCode fetchShareQrCode(String qrCodeId) throws DigitalIdentityException {
