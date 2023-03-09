@@ -137,15 +137,18 @@ public class DigitalIdentityClientTest {
     }
 
     @Test
-    public void client_FetchShareSessionException_DigitalIdentityException() {
+    public void client_FetchShareSessionException_DigitalIdentityException() throws IOException {
+        when(keyPairSource.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPair);
+
         DigitalIdentityClient identityClient = new DigitalIdentityClient(
                 AN_SDK_ID,
-                validKeyPairSource,
+                keyPairSource,
                 identityService
         );
 
         String exMessage = "Fetch Share Session Error";
-        when(identityService.fetchShareSession(A_SESSION_ID)).thenThrow(new DigitalIdentityException(exMessage));
+        when(identityService.fetchShareSession(AN_SDK_ID, keyPair, A_SESSION_ID))
+                .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
