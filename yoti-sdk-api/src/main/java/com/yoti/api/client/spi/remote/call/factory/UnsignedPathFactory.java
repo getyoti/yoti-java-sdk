@@ -9,8 +9,9 @@ public class UnsignedPathFactory {
 
     // Share V2
     private static final String IDENTITY_SESSION_CREATION = "/v2/sessions";
+    private static final String IDENTITY_SESSION_RETRIEVAL = "/v2/sessions/%s";
     private static final String IDENTITY_SESSION_QR_CODE_CREATION = "/v2/sessions/%s/qr-codes";
-    private static final String IDENTITY_SESSION_QR_CODE_RETRIEVAL_TEMPLATE = "/v2/qr-codes/%s";
+    private static final String IDENTITY_SESSION_QR_CODE_RETRIEVAL = "/v2/qr-codes/%s";
 
     // Share V1
     private static final String PROFILE = "/profile/%s?appId=%s";
@@ -38,12 +39,16 @@ public class UnsignedPathFactory {
         return IDENTITY_SESSION_CREATION;
     }
 
+    public String createIdentitySessionRetrievalPath(String sessionId) {
+        return format(IDENTITY_SESSION_RETRIEVAL, sessionId);
+    }
+
     public String createIdentitySessionQrCodePath(String sessionId) {
         return format(IDENTITY_SESSION_QR_CODE_CREATION, sessionId);
     }
 
     public String createIdentitySessionQrCodeRetrievalPath(String qrCodeId) {
-        return format(IDENTITY_SESSION_QR_CODE_RETRIEVAL_TEMPLATE, qrCodeId);
+        return format(IDENTITY_SESSION_QR_CODE_RETRIEVAL, qrCodeId);
     }
 
     public String createProfilePath(String appId, String connectToken) {

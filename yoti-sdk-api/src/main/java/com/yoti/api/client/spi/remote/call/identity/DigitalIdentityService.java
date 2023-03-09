@@ -61,7 +61,7 @@ public class DigitalIdentityService {
 
         String path = pathFactory.createIdentitySessionPath();
 
-        LOG.debug("Requesting Share Session Creation for SDK ID '{}' at '{}'", sdkId, path);
+        LOG.debug("Requesting share session creation for SDK ID '{}' at '{}'", sdkId, path);
 
         try {
             byte[] payload = ResourceMapper.writeValueAsString(shareSessionRequest);
@@ -79,8 +79,26 @@ public class DigitalIdentityService {
         }
     }
 
-    public Object fetchShareSession(String sessionId) {
-        return null;
+    public ShareSession fetchShareSession(String sdkId, KeyPair keyPair, String sessionId)
+            throws DigitalIdentityException {
+        notNullOrEmpty(sdkId, "SDK ID");
+        notNull(keyPair, "Application Key Pair");
+        notNull(sessionId, "Session ID");
+
+        String path = pathFactory.createIdentitySessionRetrievalPath(sessionId);
+
+        LOG.debug("Requesting share session with ID '{}' at '{}'", sessionId, path);
+
+        try {
+            SignedRequest request = createSignedRequest(sdkId, keyPair, path);
+
+            return request.execute(ShareSession.class);
+        } catch (Exception ex) {
+            throw new DigitalIdentityException(
+                    String.format("Error while fetching the share session with ID '{%s}' ", sessionId),
+                    ex
+            );
+        }
     }
 
     public ShareSessionQrCode createShareQrCode(String sdkId, KeyPair keyPair, String sessionId)
@@ -91,7 +109,7 @@ public class DigitalIdentityService {
 
         String path = pathFactory.createIdentitySessionQrCodePath(sessionId);
 
-        LOG.debug("Requesting Share Session QR code Creation for session ID '{}' at '{}'", sessionId, path);
+        LOG.debug("Requesting share session '{}' QR code creation at '{}'", sessionId, path);
 
         try {
             SignedRequest request = createSignedRequest(sdkId, keyPair, path, HTTP_POST, EMPTY_JSON);
@@ -112,16 +130,17 @@ public class DigitalIdentityService {
 
         String path = pathFactory.createIdentitySessionQrCodeRetrievalPath(qrCodeId);
 
-        LOG.info("Requesting Share Session QR code with ID '{} at '{}'", qrCodeId, path);
+        LOG.info("Requesting share session QR code with ID '{} at '{}'", qrCodeId, path);
 
         try {
             SignedRequest request = createSignedRequest(sdkId, keyPair, path);
 
             return request.execute(ShareSessionQrCode.class);
-        } catch (GeneralSecurityException ex) {
-            throw new DigitalIdentityException("Error while signing the share QR code fetch request ", ex);
-        } catch (IOException | URISyntaxException | ResourceException ex) {
-            throw new DigitalIdentityException("Error while executing the share QR code fetch request ", ex);
+        } catch (Exception ex) {
+            throw new DigitalIdentityException(
+                    String.format("Error while fetching the share session QR code with ID '{%s}' ", qrCodeId),
+                    ex
+            );
         }
     }
 
