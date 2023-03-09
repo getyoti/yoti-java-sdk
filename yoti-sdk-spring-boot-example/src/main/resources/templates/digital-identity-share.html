@@ -19,14 +19,15 @@
         <p> SdkId: <strong th:text="${sdkId}"></strong></p>
 
         <div>
-            <p> Id: <strong th:text="${session_id}"></strong></p>
+            <p><strong>Created Session</strong></p>
+            <p> ID: <strong th:text="${session_id}"></strong></p>
             <p> Status: <strong th:text="${session_status}"></strong></p>
             <p> Expiry: <strong th:text="${session_expiry}"></strong></p>
         </div>
 
         <div>
-            <p><strong>Session QR Code</strong></p>
-            <p> Id: <strong th:text="${session_qrcode_id}"></strong></p>
+            <p><strong>Created Session QR Code</strong></p>
+            <p> ID: <strong th:text="${session_qrcode_id}"></strong></p>
             <p> URI: <strong th:text="${session_qrcode_uri}"></strong></p>
         </div>
 
@@ -35,9 +36,18 @@
             <p> Expiry: <strong th:text="${qrcode_expiry}"></strong></p>
             <p> Extensions: <strong th:text="${qrcode_extensions}"></strong></p>
             <p> Redirect URI: <strong th:text="${qrcode_redirect_uri}"></strong></p>
-            <p> Session ID: <strong th:text="${qrcode_session_id}"></strong></p>
             <p> Session Status: <strong th:text="${qrcode_session_status}"></strong></p>
             <p> Session Expiry: <strong th:text="${qrcode_session_expiry}"></strong></p>
+        </div>
+
+        <div>
+            <p><strong>Fetched Session</strong></p>
+            <p> Created: <strong th:text="${fetch_session_created}"></strong></p>
+            <p> Updated: <strong th:text="${fetch_session_updated}"></strong></p>
+            <p> Expiry: <strong th:text="${fetch_session_expiry}"></strong></p>
+            <p> Status: <strong th:text="${fetch_session_status}"></strong></p>
+            <p> QR Code ID: <strong th:text="${fetch_session_qrcode_id}"></strong></p>
+            <p> Receipt ID: <strong th:text="${fetch_session_receipt_id}"></strong></p>
         </div>
     </section>
 </main>
