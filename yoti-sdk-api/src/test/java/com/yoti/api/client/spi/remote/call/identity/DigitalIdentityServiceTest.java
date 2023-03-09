@@ -33,7 +33,9 @@ public class DigitalIdentityServiceTest {
 
     private static final String SDK_ID = "anSdkId";
     private static final String SESSION_ID = "aSessionId";
+    private static final String QR_CODE_ID = "aQrCodeId";
     private static final String SESSION_CREATION_PATH = "aSessionCreationPath";
+    private static final String POST = "POST";
     private static final byte[] A_BODY_BYTES = "aBody".getBytes(StandardCharsets.UTF_8);
 
     @Spy @InjectMocks DigitalIdentityService identityService;
@@ -111,15 +113,14 @@ public class DigitalIdentityServiceTest {
     }
 
     @Test
-    public void createShareSession_BuildingRequestWithWrongUri_Exception()
-            throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
+    public void createShareSession_BuildingRequestWithWrongUri_Exception() throws Exception {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(shareSessionRequest)).thenReturn(A_BODY_BYTES);
             when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
 
             String exMessage = "URI wrong format";
             URISyntaxException causeEx = new URISyntaxException("", exMessage);
-            when(identityService.createSignedRequest(SDK_ID, keyPair, SESSION_CREATION_PATH, A_BODY_BYTES))
+            when(identityService.createSignedRequest(SDK_ID, keyPair, SESSION_CREATION_PATH, POST, A_BODY_BYTES))
                     .thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
@@ -142,7 +143,7 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "Wrong query params format";
             UnsupportedEncodingException causeEx = new UnsupportedEncodingException(exMessage);
-            when(identityService.createSignedRequest(SDK_ID, keyPair, SESSION_CREATION_PATH, A_BODY_BYTES))
+            when(identityService.createSignedRequest(SDK_ID, keyPair, SESSION_CREATION_PATH, POST, A_BODY_BYTES))
                     .thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
@@ -165,7 +166,7 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "Wrong digest";
             GeneralSecurityException causeEx = new GeneralSecurityException(exMessage);
-            when(identityService.createSignedRequest(SDK_ID, keyPair, SESSION_CREATION_PATH, A_BODY_BYTES))
+            when(identityService.createSignedRequest(SDK_ID, keyPair, SESSION_CREATION_PATH, POST, A_BODY_BYTES))
                     .thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
@@ -186,7 +187,7 @@ public class DigitalIdentityServiceTest {
 
             when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
 
-            when(identityService.createSignedRequest(SDK_ID, keyPair, SESSION_CREATION_PATH, A_BODY_BYTES))
+            when(identityService.createSignedRequest(SDK_ID, keyPair, SESSION_CREATION_PATH, POST, A_BODY_BYTES))
                     .thenReturn(signedRequest);
 
             when(signedRequest.execute(ShareSession.class)).thenReturn(shareSession);
@@ -236,6 +237,44 @@ public class DigitalIdentityServiceTest {
         assertThat(ex.getMessage(), containsString("Session ID"));
     }
 
+    @Test
+    public void fetchShareQrCode_NullSdkId_Exception() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> identityService.fetchShareQrCode(null, keyPair, QR_CODE_ID)
+        );
 
+        assertThat(ex.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void fetchShareQrCode_EmptySdkId_Exception() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> identityService.fetchShareQrCode("", keyPair, QR_CODE_ID)
+        );
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void fetchShareQrCode_NullKeyPair_Exception() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> identityService.fetchShareQrCode(SDK_ID, null, QR_CODE_ID)
+        );
+
+        assertThat(ex.getMessage(), containsString("Application Key Pair"));
+    }
+
+    @Test
+    public void fetchShareQrCode_NullSessionId_Exception() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> identityService.fetchShareQrCode(SDK_ID, keyPair, null)
+        );
+
+        assertThat(ex.getMessage(), containsString("QR Code ID"));
+    }
 
 }

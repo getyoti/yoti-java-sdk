@@ -61,8 +61,15 @@ public class DigitalIdentityClient {
         return identityService.createShareQrCode(sdkId, keyPair, sessionId);
     }
 
-    public Object fetchShareQrCode(String qrCodeId) {
-        return identityService.fetchShareQrCode(qrCodeId);
+    /**
+     * Retrieve the sharing session QR code
+     *
+     * @param qrCodeId ID of the QR code to retrieve
+     * @return The content of the Share Session QR code
+     * @throws DigitalIdentityException Thrown if the QR code retrieval is unsuccessful
+     */
+    public ShareSessionQrCode fetchShareQrCode(String qrCodeId) throws DigitalIdentityException {
+        return identityService.fetchShareQrCode(sdkId, keyPair, qrCodeId);
     }
 
     public Object fetchShareReceipt(String receiptId) {
