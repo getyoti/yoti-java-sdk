@@ -1,10 +1,10 @@
 package com.yoti.api.client.identity;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNullOrEmpty;
-
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.yoti.validation.Validation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -85,7 +85,7 @@ public final class ShareSessionNotification {
         }
 
         public ShareSessionNotification build() {
-            notNullOrEmpty(url, Property.URL);
+            Validation.notNullOrEmpty(url, Property.URL);
 
             return new ShareSessionNotification(this);
         }

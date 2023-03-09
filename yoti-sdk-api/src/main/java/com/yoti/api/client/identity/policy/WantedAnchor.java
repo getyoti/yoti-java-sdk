@@ -1,7 +1,8 @@
 package com.yoti.api.client.identity.policy;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
-import static com.yoti.api.client.spi.remote.util.Validation.notNullOrEmpty;
+import java.util.Objects;
+
+import com.yoti.validation.Validation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -26,6 +27,23 @@ public class WantedAnchor {
         return subType;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        WantedAnchor that = (WantedAnchor) o;
+        return Objects.equals(value, that.value) && Objects.equals(subType, that.subType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, subType);
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -46,8 +64,8 @@ public class WantedAnchor {
         }
 
         public WantedAnchor build() {
-            notNullOrEmpty(value, Property.NAME);
-            notNull(subType, Property.SUB_TYPE);
+            Validation.notNullOrEmpty(value, Property.NAME);
+            Validation.notNull(subType, Property.SUB_TYPE);
 
             return new WantedAnchor(this);
         }

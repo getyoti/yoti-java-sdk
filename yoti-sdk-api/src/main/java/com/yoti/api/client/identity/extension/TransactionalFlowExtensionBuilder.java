@@ -1,10 +1,8 @@
 package com.yoti.api.client.identity.extension;
 
-import com.yoti.api.client.spi.remote.util.Validation;
+import com.yoti.validation.Validation;
 
 public class TransactionalFlowExtensionBuilder implements ExtensionBuilder<Object> {
-
-    public static final String TYPE = "TRANSACTIONAL_FLOW";
 
     private Object content;
 
@@ -17,7 +15,7 @@ public class TransactionalFlowExtensionBuilder implements ExtensionBuilder<Objec
 
     @Override
     public Extension<Object> build() {
-        return new Extension<>(TYPE, content);
+        return new Extension<>("TRANSACTIONAL_FLOW", content);
     }
 
     private static final class Property {

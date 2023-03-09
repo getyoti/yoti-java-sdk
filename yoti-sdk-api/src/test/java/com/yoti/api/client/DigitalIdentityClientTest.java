@@ -203,15 +203,18 @@ public class DigitalIdentityClientTest {
     }
 
     @Test
-    public void client_FetchShareReceiptException_DigitalIdentityException() {
+    public void client_FetchShareReceiptException_DigitalIdentityException() throws IOException {
+        when(keyPairSource.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPair);
+
         DigitalIdentityClient identityClient = new DigitalIdentityClient(
                 AN_SDK_ID,
-                validKeyPairSource,
+                keyPairSource,
                 identityService
         );
 
         String exMessage = "Fetch Share Receipt Error";
-        when(identityService.fetchShareReceipt(A_RECEIPT_ID)).thenThrow(new DigitalIdentityException(exMessage));
+        when(identityService.fetchShareReceipt(AN_SDK_ID, keyPair, A_RECEIPT_ID))
+                .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,

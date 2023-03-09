@@ -1,10 +1,8 @@
 package com.yoti.api.client.identity.extension;
 
-import com.yoti.api.client.spi.remote.util.Validation;
+import com.yoti.validation.Validation;
 
 public class LocationConstraintExtensionBuilder implements ExtensionBuilder<LocationConstraintContent> {
-
-    public static final String TYPE = "LOCATION_CONSTRAINT";
 
     private double latitude;
     private double longitude;
@@ -42,7 +40,7 @@ public class LocationConstraintExtensionBuilder implements ExtensionBuilder<Loca
     @Override
     public Extension<LocationConstraintContent> build() {
         LocationConstraintContent content = new LocationConstraintContent(latitude, longitude, radius, maxUncertainty);
-        return new Extension<>(TYPE, content);
+        return new Extension<>("LOCATION_CONSTRAINT", content);
     }
 
     private static final class Property {
