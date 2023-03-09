@@ -1,5 +1,6 @@
 package com.yoti.api.client.identity.extension;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Extension<T> {
@@ -10,7 +11,8 @@ public class Extension<T> {
     @JsonProperty(Property.CONTENT)
     private final T content;
 
-    Extension(String type, T content) {
+    @JsonCreator
+    Extension(@JsonProperty(Property.TYPE) String type, @JsonProperty(Property.CONTENT) T content) {
         this.type = type;
         this.content = content;
     }

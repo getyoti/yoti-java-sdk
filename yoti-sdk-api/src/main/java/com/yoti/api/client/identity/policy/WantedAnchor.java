@@ -1,7 +1,6 @@
 package com.yoti.api.client.identity.policy;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
-import static com.yoti.api.client.spi.remote.util.Validation.notNullOrEmpty;
+import com.yoti.validation.Validation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -46,8 +45,8 @@ public class WantedAnchor {
         }
 
         public WantedAnchor build() {
-            notNullOrEmpty(value, Property.NAME);
-            notNull(subType, Property.SUB_TYPE);
+            Validation.notNullOrEmpty(value, Property.NAME);
+            Validation.notNull(subType, Property.SUB_TYPE);
 
             return new WantedAnchor(this);
         }

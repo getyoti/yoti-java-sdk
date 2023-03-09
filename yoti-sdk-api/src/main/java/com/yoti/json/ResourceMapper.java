@@ -1,6 +1,9 @@
 package com.yoti.json;
 
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -10,6 +13,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public final class ResourceMapper {
 
@@ -20,8 +24,19 @@ public final class ResourceMapper {
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .setVisibility(configureVisibility(MAPPER.getDeserializationConfig()))
-                .setDefaultSetterInfo(JsonSetter.Value.forValueNulls(Nulls.SKIP));
+                .setDefaultSetterInfo(JsonSetter.Value.forValueNulls(Nulls.SKIP))
+                .setDateFormat(utc())
+                .registerModule(new JavaTimeModule());
     }
+
+    private static SimpleDateFormat utc() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ROOT);
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        return format;
+    }
+
+    private ResourceMapper() { }
 
     private static VisibilityChecker<?> configureVisibility(MapperConfig<?> config) {
         return config.getDefaultVisibilityChecker()

@@ -12,6 +12,8 @@ public class UnsignedPathFactory {
     private static final String IDENTITY_SESSION_RETRIEVAL = "/v2/sessions/%s";
     private static final String IDENTITY_SESSION_QR_CODE_CREATION = "/v2/sessions/%s/qr-codes";
     private static final String IDENTITY_SESSION_QR_CODE_RETRIEVAL = "/v2/qr-codes/%s";
+    private static final String IDENTITY_SESSION_RECEIPT_RETRIEVAL = "/v2/receipts/%s";
+    private static final String IDENTITY_SESSION_RECEIPT_KEY_RETRIEVAL = "/v2/wrapped-item-keys/%s";
 
     // Share V1
     private static final String PROFILE = "/profile/%s?appId=%s";
@@ -40,15 +42,27 @@ public class UnsignedPathFactory {
     }
 
     public String createIdentitySessionRetrievalPath(String sessionId) {
-        return format(IDENTITY_SESSION_RETRIEVAL, sessionId);
+        return format(IDENTITY_SESSION_RETRIEVAL, base64ToBase64url(sessionId));
     }
 
     public String createIdentitySessionQrCodePath(String sessionId) {
-        return format(IDENTITY_SESSION_QR_CODE_CREATION, sessionId);
+        return format(IDENTITY_SESSION_QR_CODE_CREATION, base64ToBase64url(sessionId));
     }
 
     public String createIdentitySessionQrCodeRetrievalPath(String qrCodeId) {
-        return format(IDENTITY_SESSION_QR_CODE_RETRIEVAL, qrCodeId);
+        return format(IDENTITY_SESSION_QR_CODE_RETRIEVAL, base64ToBase64url(qrCodeId));
+    }
+
+    public String createIdentitySessionReceiptRetrievalPath(String receiptId) {
+        return format(IDENTITY_SESSION_RECEIPT_RETRIEVAL, base64ToBase64url(receiptId));
+    }
+
+    public String createIdentitySessionReceiptKeyRetrievalPath(String wrappedItemKeyId) {
+        return format(IDENTITY_SESSION_RECEIPT_KEY_RETRIEVAL, base64ToBase64url(wrappedItemKeyId));
+    }
+
+    private static String base64ToBase64url(String value) {
+        return value.replace('+', '-').replace('/', '_');
     }
 
     public String createProfilePath(String appId, String connectToken) {

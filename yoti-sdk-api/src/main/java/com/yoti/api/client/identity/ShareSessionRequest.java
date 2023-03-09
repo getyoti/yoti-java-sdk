@@ -1,8 +1,5 @@
 package com.yoti.api.client.identity;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
-import static com.yoti.api.client.spi.remote.util.Validation.notNullOrEmpty;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +8,7 @@ import java.util.Map;
 
 import com.yoti.api.client.identity.extension.Extension;
 import com.yoti.api.client.identity.policy.Policy;
+import com.yoti.validation.Validation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,7 +21,7 @@ public class ShareSessionRequest {
     private final Policy policy;
 
     @JsonProperty(Property.EXTENSIONS)
-    private final List<Extension> extensions;
+    private final List<Extension<?>> extensions;
 
     @JsonProperty(Property.REDIRECT_URI)
     private final String redirectUri;
@@ -47,7 +45,7 @@ public class ShareSessionRequest {
         return policy;
     }
 
-    public List<Extension> getExtensions() {
+    public List<Extension<?>> getExtensions() {
         return extensions;
     }
 
@@ -67,7 +65,7 @@ public class ShareSessionRequest {
 
         private Map<String, Object> subject;
         private Policy policy;
-        private List<Extension> extensions;
+        private List<Extension<?>> extensions;
         private String redirectUri;
         private ShareSessionNotification notification;
 
@@ -85,12 +83,12 @@ public class ShareSessionRequest {
             return this;
         }
 
-        public Builder withExtensions(List<Extension> extensions) {
+        public Builder withExtensions(List<Extension<?>> extensions) {
             this.extensions = Collections.unmodifiableList(extensions);
             return this;
         }
 
-        public Builder withExtension(Extension extension) {
+        public Builder withExtension(Extension<?> extension) {
             extensions.add(extension);
             return this;
         }
@@ -106,8 +104,8 @@ public class ShareSessionRequest {
         }
 
         public ShareSessionRequest build() {
-            notNull(policy, Property.POLICY);
-            notNullOrEmpty(redirectUri, Property.REDIRECT_URI);
+            Validation.notNull(policy, Property.POLICY);
+            Validation.notNullOrEmpty(redirectUri, Property.REDIRECT_URI);
 
             return new ShareSessionRequest(this);
         }
