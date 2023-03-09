@@ -1,12 +1,11 @@
 package com.yoti.api.client.identity.policy;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNullOrEmpty;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import com.yoti.api.client.identity.constraint.Constraint;
+import com.yoti.validation.Validation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -102,7 +101,7 @@ public class WantedAttribute {
         }
 
         public WantedAttribute build() {
-            notNullOrEmpty(name, Property.NAME);
+            Validation.notNullOrEmpty(name, Property.NAME);
 
             return new WantedAttribute(this);
         }

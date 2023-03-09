@@ -2,10 +2,10 @@ package com.yoti.json;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
-import java.util.Date;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,7 +75,7 @@ public class ResourceMapperTest {
         String thirdPartyAttributeDefinition = "aDefinition";
         Extension<ThirdPartyAttributeContent> extension = new ThirdPartyAttributeExtensionBuilder()
                 .withDefinition(thirdPartyAttributeDefinition)
-                .withExpiryDate(new Date())
+                .withExpiryDate(OffsetDateTime.now())
                 .build();
 
         String redirectUriValue = "aRedirectUri";
