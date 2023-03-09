@@ -18,14 +18,14 @@ public class ExtraDataReader {
         this.extraDataConverter = extraDataConverter;
     }
 
-    static ExtraDataReader newInstance() {
+    public static ExtraDataReader newInstance() {
         return new ExtraDataReader(
                 EncryptedDataReader.newInstance(),
                 ExtraDataConverter.newInstance()
         );
     }
 
-    ExtraData read(byte[] encryptedBytes, Key secretKey) throws ProfileException, ExtraDataException {
+    public ExtraData read(byte[] encryptedBytes, Key secretKey) throws ProfileException, ExtraDataException {
         ExtraData extraData;
         if (encryptedBytes != null && encryptedBytes.length > 0) {
             byte[] extraDataBytes = encryptedDataReader.decryptBytes(encryptedBytes, secretKey);
@@ -36,4 +36,5 @@ public class ExtraDataReader {
 
         return extraData;
     }
+
 }

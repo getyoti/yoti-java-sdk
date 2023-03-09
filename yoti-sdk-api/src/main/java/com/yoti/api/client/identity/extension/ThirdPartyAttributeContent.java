@@ -12,22 +12,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ThirdPartyAttributeContent {
 
-    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(YotiConstants.RFC3339_PATTERN_MILLIS);
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(YotiConstants.RFC3339_PATTERN_MILLIS);
 
-    private final Date expiryDate;
+    private final Date expiry;
 
     @JsonProperty(Property.DEFINITIONS)
     private final List<AttributeDefinition> definitions;
 
-    ThirdPartyAttributeContent(Date expiryDate, List<AttributeDefinition> definitions) {
-        this.expiryDate = expiryDate;
+    ThirdPartyAttributeContent(Date expiry, List<AttributeDefinition> definitions) {
+        this.expiry = expiry;
         this.definitions = definitions;
     }
 
     @JsonProperty(Property.EXPIRY_DATE)
     public String getExpiryDate() {
         DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return DATE_FORMAT.format(expiryDate.getTime());
+        return DATE_FORMAT.format(expiry.getTime());
     }
 
     public List<AttributeDefinition> getDefinitions() {

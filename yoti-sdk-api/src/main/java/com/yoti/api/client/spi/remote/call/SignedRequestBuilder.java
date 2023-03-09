@@ -19,7 +19,7 @@ import java.util.Map;
 import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
 import com.yoti.api.client.spi.remote.call.factory.PathFactory;
 import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
-import com.yoti.api.client.spi.remote.util.Validation;
+import com.yoti.validation.Validation;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;

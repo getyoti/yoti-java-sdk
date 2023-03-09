@@ -90,5 +90,10 @@
     <Bug pattern="IMPROPER_UNICODE"/>
   </Match>
 
+  <Match>
+    <Class name="com.yoti.api.client.spi.remote.call.identity.ReceiptItemKey$Builder"/>
+    <Bug pattern="STATIC_IV"/>
+  </Match>
+
 </FindBugsFilter>
 

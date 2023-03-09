@@ -23,6 +23,8 @@ public final class ResourceMapper {
                 .setDefaultSetterInfo(JsonSetter.Value.forValueNulls(Nulls.SKIP));
     }
 
+    private ResourceMapper() { }
+
     private static VisibilityChecker<?> configureVisibility(MapperConfig<?> config) {
         return config.getDefaultVisibilityChecker()
                 .withFieldVisibility(JsonAutoDetect.Visibility.NONE)

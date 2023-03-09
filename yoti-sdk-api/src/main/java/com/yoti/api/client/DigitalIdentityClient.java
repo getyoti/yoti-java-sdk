@@ -1,8 +1,5 @@
 package com.yoti.api.client;
 
-import static com.yoti.validation.Validation.notNull;
-import static com.yoti.validation.Validation.notNullOrEmpty;
-
 import java.io.IOException;
 import java.security.KeyPair;
 import java.security.Security;
@@ -13,6 +10,8 @@ import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityException;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityService;
+import com.yoti.api.client.spi.remote.call.identity.Receipt;
+import com.yoti.validation.Validation;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -27,8 +26,8 @@ public class DigitalIdentityClient {
     private final DigitalIdentityService identityService;
 
     DigitalIdentityClient(String sdkId, KeyPairSource keyPair, DigitalIdentityService identityService) {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application Key Pair");
+        Validation.notNullOrEmpty(sdkId, "SDK ID");
+        Validation.notNull(keyPair, "Application Key Pair");
 
         this.sdkId = sdkId;
         this.keyPair = loadKeyPair(keyPair);
@@ -79,8 +78,17 @@ public class DigitalIdentityClient {
         return identityService.fetchShareQrCode(sdkId, keyPair, qrCodeId);
     }
 
-    public Object fetchShareReceipt(String receiptId) {
-        return identityService.fetchShareReceipt(receiptId);
+    /**
+     * Retrieve the decrypted share receipt.
+     *
+     * <p>A receipt will contain the shared user attributes.</p>
+     *
+     * @param receiptId ID of the receipt
+     * @return Shared user attributes
+     * @throws DigitalIdentityException Thrown if the receipt retrieval is unsuccessful
+     */
+    public Receipt fetchShareReceipt(String receiptId) throws DigitalIdentityException {
+        return identityService.fetchShareReceipt(sdkId, keyPair, receiptId);
     }
 
     private KeyPair loadKeyPair(KeyPairSource keyPairSource) throws InitialisationException {
@@ -103,14 +111,14 @@ public class DigitalIdentityClient {
         private Builder() { }
 
         public Builder withClientSdkId(String sdkId) {
-            notNullOrEmpty(sdkId, "SDK ID");
+            Validation.notNullOrEmpty(sdkId, "SDK ID");
 
             this.sdkId = sdkId;
             return this;
         }
 
         public Builder withKeyPairSource(KeyPairSource keyPairSource) {
-            notNull(keyPairSource, "Key Pair Source");
+            Validation.notNull(keyPairSource, "Key Pair Source");
 
             this.keyPairSource = keyPairSource;
             return this;
