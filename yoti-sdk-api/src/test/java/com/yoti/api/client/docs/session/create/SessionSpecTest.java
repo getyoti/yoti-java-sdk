@@ -285,6 +285,23 @@ public class SessionSpecTest {
         assertThat(sessionSpec.getResources(), is(resourceCreationContainerMock));
     }
 
+    @Test
+    public void shouldBuildWithCreateIdentityProfilePreview() {
+        SessionSpec sessionSpec = SessionSpec.builder()
+                .withCreateIdentityProfilePreview(true)
+                .build();
+
+        assertThat(sessionSpec.getCreateIdentityProfilePreview(), is(true));
+    }
+
+    @Test
+    public void shouldSetNullForCreateIdentityProfilePreviewWhenNotProvidedExplicitly() {
+        SessionSpec sessionSpec = SessionSpec.builder()
+                .build();
+
+        assertThat(sessionSpec.getCreateIdentityProfilePreview(), nullValue());
+    }
+
     private static final class IdentityProperty {
 
         private static final String TYPE = "type";
