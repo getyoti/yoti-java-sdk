@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = ProfileDocumentMatchCheckResponse.class, name = DocScanConstants.PROFILE_DOCUMENT_MATCH),
         @JsonSubTypes.Type(value = DocumentSchemeValidityCheckResponse.class, name = DocScanConstants.DOCUMENT_SCHEME_VALIDITY_CHECK),
         @JsonSubTypes.Type(value = ThirdPartyIdentityFraudOneCheckResponse.class, name = DocScanConstants.THIRD_PARTY_IDENTITY_FRAUD_ONE),
+        @JsonSubTypes.Type(value = SynecticsIdentityFraudCheckResponse.class, name = DocScanConstants.SYNECTICS_IDENTITY_FRAUD),
 })
 public class CheckResponse {
 
