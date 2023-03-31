@@ -77,4 +77,6 @@ public class DocScanConstants {
     public static final String RELYING_BUSINESS = "RELYING_BUSINESS";
     public static final String IBV = "IBV";
 
+    public static final String GBP = "GBP";
+
 }
