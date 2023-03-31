@@ -117,6 +117,18 @@ public class GetSessionResult {
         return filterChecksByType(WatchlistAdvancedCaCheckResponse.class);
     }
 
+    public List<IbvVisualReviewCheckResponse> getIbvVisualReviewChecks() {
+        return filterChecksByType(IbvVisualReviewCheckResponse.class);
+    }
+
+    public List<DocumentSchemeValidityCheckResponse> getDocumentSchemeValidityChecks() {
+        return filterChecksByType(DocumentSchemeValidityCheckResponse.class);
+    }
+
+    public List<ProfileDocumentMatchCheckResponse> getProfileDocumentMatchChecks() {
+        return filterChecksByType(ProfileDocumentMatchCheckResponse.class);
+    }
+
     public List<ThirdPartyIdentityFraudOneCheckResponse> getThirdPartyIdentityFraudOneChecks() {
         return filterChecksByType(ThirdPartyIdentityFraudOneCheckResponse.class);
     }

@@ -17,7 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class GetSessionResultCheckTest {
 
-    private static final int SESSION_CHECKS = 10;
+    private static final int SESSION_CHECKS = 13;
 
     @Mock AuthenticityCheckResponse authenticityCheckResponse;
     @Mock FaceMatchCheckResponse faceMatchCheckResponse;
@@ -29,6 +29,9 @@ public class GetSessionResultCheckTest {
     @Mock ThirdPartyIdentityCheckResponse thirdPartyIdentityCheckResponse;
     @Mock WatchlistScreeningCheckResponse watchlistScreeningCheckResponse;
     @Mock ThirdPartyIdentityFraudOneCheckResponse thirdPartyIdentityFraudOneCheckResponse;
+    @Mock IbvVisualReviewCheckResponse ibvVisualReviewCheckResponse;
+    @Mock DocumentSchemeValidityCheckResponse documentSchemeValidityCheckResponse;
+    @Mock ProfileDocumentMatchCheckResponse profileDocumentMatchCheckResponse;
 
     GetSessionResult getSessionResult;
 
@@ -132,6 +135,39 @@ public class GetSessionResultCheckTest {
     }
 
     @Test
+    public void shouldFilterIbvVisualReviewChecks() {
+        getSessionResult = new GetSessionResult();
+
+        setupGetSessionResult();
+
+        List<IbvVisualReviewCheckResponse> result = getSessionResult.getIbvVisualReviewChecks();
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
+    public void shouldFilterDocumentSchemeValidityChecks() {
+        getSessionResult = new GetSessionResult();
+
+        setupGetSessionResult();
+
+        List<DocumentSchemeValidityCheckResponse> result = getSessionResult.getDocumentSchemeValidityChecks();
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
+    public void shouldFilterProfileDocumentMatchChecks() {
+        getSessionResult = new GetSessionResult();
+
+        setupGetSessionResult();
+
+        List<ProfileDocumentMatchCheckResponse> result = getSessionResult.getProfileDocumentMatchChecks();
+        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
     public void shouldFilterThirdPartyIdentityFraudOneCheck() {
         getSessionResult = new GetSessionResult();
 
@@ -175,7 +211,10 @@ public class GetSessionResultCheckTest {
                         idDocumentComparisonCheckResponse,
                         thirdPartyIdentityCheckResponse,
                         watchlistScreeningCheckResponse,
-                        thirdPartyIdentityFraudOneCheckResponse
+                        thirdPartyIdentityFraudOneCheckResponse,
+                        ibvVisualReviewCheckResponse,
+                        documentSchemeValidityCheckResponse,
+                        profileDocumentMatchCheckResponse
                 )
         );
     }
