@@ -760,6 +760,45 @@
             </div>
         </th:block>
     </th:block>
+
+    <th:block th:if="${sessionResult.getResources().getApplicantProfiles().size() > 0}">
+        <div class="row pt-4">
+            <div class="col">
+                <h2>Applicant Profile Resources</h2>
+            </div>
+        </div>
+        <th:block th:each="applicantProfile,iter : ${sessionResult.getResources().getApplicantProfiles()}">
+            <div class="row pt-4">
+                <div class="col">
+                    <table class="table table-striped table-light">
+                        <tbody>
+                        <tr>
+                            <td>ID</td>
+                            <td th:text="${applicantProfile.getId()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="accordion mt-3">
+                        <div class="card" th:if="${applicantProfile.getMedia() != null}">
+                            <table class="table table-striped table-light">
+                                <tbody>
+                                <tr>
+                                    <td>JSON</td>
+                                    <td>
+                                        <a th:href="${'/media?mediaId=' + applicantProfile.getMedia().getId()}"
+                                           th:text="${applicantProfile.getMedia().getId()}">
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </th:block>
+
 </div>
 
 <div th:replace="fragments/components :: footer"></div>
