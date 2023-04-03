@@ -19,6 +19,9 @@ public class ResourceContainer {
     @JsonProperty("face_capture")
     private List<FaceCaptureResourceResponse> faceCapture;
 
+    @JsonProperty("applicant_profiles")
+    private List<ApplicantProfileResourceResponse> applicantProfiles;
+
     /**
      * Returns ID documents that were uploaded by the user
      *
@@ -70,6 +73,15 @@ public class ResourceContainer {
      * @return the list of static liveness resources
      */
     public List<StaticLivenessResourceResponse> getStaticLivenessResources() { return filterLivenessResourcesByType(StaticLivenessResourceResponse.class); }
+
+    /**
+     * Returns ApplicantProfile resources uploaded by the user/relying business
+     *
+     * @return the list of applicant profile resources
+     */
+    public List<ApplicantProfileResourceResponse> getApplicantProfiles() {
+        return applicantProfiles;
+    }
 
     private <T extends LivenessResourceResponse> List<T> filterLivenessResourcesByType(Class<T> clazz) {
         List<T> filteredList = new ArrayList<>();
