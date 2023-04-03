@@ -12,7 +12,7 @@ public class UserPrice {
     @JsonProperty(Property.CURRENCY)
     private final String currency;
 
-    public UserPrice(String amount, String currency) {
+    private UserPrice(String amount, String currency) {
         this.amount = amount;
         this.currency = currency;
     }
