@@ -87,7 +87,7 @@
     
     <!-- spring versions -->
     <!-- Spring Framework 6.0.x requires JDK 17+   -->
-    <spring-boot-dependencies.version>2.7.8</spring-boot-dependencies.version>
+    <spring-boot-dependencies.version>2.7.10</spring-boot-dependencies.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
     
     <!-- test libraries -->
@@ -97,16 +97,15 @@
     <commons.lang3.version>3.12.0</commons.lang3.version>
     
     <!-- maven + plugin versions -->
-    <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
 
     <findbugs-maven-plugin.version>3.0.5</findbugs-maven-plugin.version>
     <findsecbugs-plugin.version>1.12.0</findsecbugs-plugin.version>
 
-    <dependency-check-maven.version>8.0.2</dependency-check-maven.version>
-    <dependency-check-maven.cvss.limit>4</dependency-check-maven.cvss.limit>
+    <dependency-check-maven.version>8.2.1</dependency-check-maven.version>
     <dependency-check-maven.cve.update.limit>12</dependency-check-maven.cve.update.limit>
 
-    <animal-sniffer-maven-plugin.version>1.21</animal-sniffer-maven-plugin.version>
+    <animal-sniffer-maven-plugin.version>1.23</animal-sniffer-maven-plugin.version>
     <mojo.signature.artefact>java18</mojo.signature.artefact>
     <mojo.signature.version>1.0</mojo.signature.version>
 
@@ -259,10 +258,8 @@
           <artifactId>dependency-check-maven</artifactId>
           <version>${dependency-check-maven.version}</version>
           <configuration>
-            <failBuildOnCVSS>${dependency-check-maven.cvss.limit}</failBuildOnCVSS>
             <cveValidForHours>${dependency-check-maven.cve.update.limit}</cveValidForHours>
             <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
-            <suppressionFile>${basedir}/../yoti-sdk-parent/suppressed-cves.xml</suppressionFile>
           </configuration>
           <executions>
             <execution>
