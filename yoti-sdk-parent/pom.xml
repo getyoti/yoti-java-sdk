@@ -99,7 +99,8 @@
     <!-- maven + plugin versions -->
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
 
-    <findbugs-maven-plugin.version>3.0.5</findbugs-maven-plugin.version>
+    <spotbugs.version>4.7.3</spotbugs.version>
+    <spotbugs-maven-plugin.version>4.7.3.4</spotbugs-maven-plugin.version>
     <findsecbugs-plugin.version>1.12.0</findsecbugs-plugin.version>
 
     <dependency-check-maven.version>8.2.1</dependency-check-maven.version>
@@ -225,16 +226,18 @@
             <target>${supported.java.version}</target>
           </configuration>
         </plugin>
-        
+
         <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>findbugs-maven-plugin</artifactId>
-          <version>${findbugs-maven-plugin.version}</version>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>${spotbugs-maven-plugin.version}</version>
           <configuration>
+            <addSourceDirs>true</addSourceDirs>
+            <spotbugsXmlOutputDirectory>${project.basedir}/target/spotbugs</spotbugsXmlOutputDirectory>
+            <spotbugsXmlOutputFilename>report.xml</spotbugsXmlOutputFilename>
+            <excludeFilterFile>${project.basedir}/spotbugs/exclude-filter.xml</excludeFilterFile>
             <effort>Max</effort>
             <threshold>Low</threshold>
-            <excludeFilterFile>findbugs-rules.xml</excludeFilterFile>
-            <xmlOutput>true</xmlOutput>
             <plugins>
               <plugin>
                 <groupId>com.h3xstream.findsecbugs</groupId>
@@ -243,6 +246,13 @@
               </plugin>
             </plugins>
           </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.github.spotbugs</groupId>
+              <artifactId>spotbugs</artifactId>
+              <version>${spotbugs.version}</version>
+            </dependency>
+          </dependencies>
           <executions>
             <execution>
               <goals>
