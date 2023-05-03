@@ -2,6 +2,10 @@
 
 <FindBugsFilter>
 
+  <!-- These patterns became completely broken after 4.3 - ignored them -->
+  <!-- See https://github.com/spotbugs/spotbugs/issues/1797 -->
+  <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+
   <Match>
     <Bug pattern="CRLF_INJECTION_LOGS"/>
   </Match>
