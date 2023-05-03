@@ -4,16 +4,17 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.encryptSymmetric;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateSymmetricKey;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.mockito.Mockito.when;
 
 import java.security.Key;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.yoti.api.client.Attribute;
-import com.yoti.api.client.spi.remote.proto.AttrProto;
+import com.yoti.api.client.spi.remote.proto.AttributeProto;
 import com.yoti.api.client.spi.remote.proto.AttributeListProto;
 import com.yoti.api.client.spi.remote.proto.EncryptedDataProto;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
@@ -30,7 +31,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class AttributeListReaderTest {
 
     private static final String STRING_ATTRIBUTE_NAME = "testStringAttr";
-    private static final AttrProto.Attribute STRING_ATTRIBUTE_PROTO = AttrProto.Attribute.newBuilder()
+    private static final AttributeProto.Attribute STRING_ATTRIBUTE_PROTO = AttributeProto.Attribute.newBuilder()
             .setName(STRING_ATTRIBUTE_NAME)
             .build();
     private static final byte[] PROFILE_DATA_BYTES = AttributeListProto.AttributeList.newBuilder()
@@ -40,8 +41,8 @@ public class AttributeListReaderTest {
 
     @InjectMocks AttributeListReader testObj;
 
-    @Mock EncryptedDataReader encryptedDataReaderMock;
-    @Mock AttributeListConverter attributeListConverterMock;
+    @Mock EncryptedDataReader encryptedDataReader;
+    @Mock AttributeListConverter attributeListConverter;
 
     CryptoUtil.EncryptionResult validProfileEncryptionResult;
     Key receiptKey;
@@ -67,8 +68,9 @@ public class AttributeListReaderTest {
                 .setIv(ByteString.copyFrom(validProfileEncryptionResult.iv))
                 .build()
                 .toByteArray();
-        when(attributeListConverterMock.parseAttributeList(PROFILE_DATA_BYTES)).thenReturn(Arrays.asList(stringAttribute));
-        when(encryptedDataReaderMock.decryptBytes(profileContent, receiptKey)).thenReturn(PROFILE_DATA_BYTES);
+        when(attributeListConverter.parseAttributeList(PROFILE_DATA_BYTES))
+                .thenReturn(Collections.singletonList(stringAttribute));
+        when(encryptedDataReader.decryptBytes(profileContent, receiptKey)).thenReturn(PROFILE_DATA_BYTES);
 
         List<Attribute<?>> result = testObj.read(profileContent, receiptKey);
 

@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.text.ParseException;
 
 import com.yoti.api.client.Attribute;
-import com.yoti.api.client.spi.remote.proto.AttrProto;
+import com.yoti.api.client.spi.remote.proto.AttributeProto;
 
 public class AttributeParser {
 
     static AttributeConverter converter = newInstance();
 
-    public static Attribute<?> fromProto(AttrProto.Attribute proto) throws ParseException, IOException {
+    public static Attribute<?> fromProto(AttributeProto.Attribute proto) throws ParseException, IOException {
         return converter.convertAttribute(proto);
     }
 

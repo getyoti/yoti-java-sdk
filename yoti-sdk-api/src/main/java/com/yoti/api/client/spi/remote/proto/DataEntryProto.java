@@ -19,18 +19,28 @@ public final class DataEntryProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>.sharepubapi_v1.DataEntry.Type type = 1;</code>
+     * <code>optional .sharepubapi_v1.DataEntry.Type type = 1;</code>
+     * @return Whether the type field is set.
+     */
+    boolean hasType();
+    /**
+     * <code>optional .sharepubapi_v1.DataEntry.Type type = 1;</code>
      * @return The enum numeric value on the wire for type.
      */
     int getTypeValue();
     /**
-     * <code>.sharepubapi_v1.DataEntry.Type type = 1;</code>
+     * <code>optional .sharepubapi_v1.DataEntry.Type type = 1;</code>
      * @return The type.
      */
     com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Type getType();
 
     /**
-     * <code>bytes value = 2;</code>
+     * <code>optional bytes value = 2;</code>
+     * @return Whether the value field is set.
+     */
+    boolean hasValue();
+    /**
+     * <code>optional bytes value = 2;</code>
      * @return The value.
      */
     com.google.protobuf.ByteString getValue();
@@ -72,6 +82,7 @@ public final class DataEntryProto {
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
+      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -84,12 +95,12 @@ public final class DataEntryProto {
               break;
             case 8: {
               int rawValue = input.readEnum();
-
+              bitField0_ |= 0x00000001;
               type_ = rawValue;
               break;
             }
             case 18: {
-
+              bitField0_ |= 0x00000002;
               value_ = input.readBytes();
               break;
             }
@@ -104,6 +115,8 @@ public final class DataEntryProto {
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
@@ -278,17 +291,25 @@ public final class DataEntryProto {
       // @@protoc_insertion_point(enum_scope:sharepubapi_v1.DataEntry.Type)
     }
 
+    private int bitField0_;
     public static final int TYPE_FIELD_NUMBER = 1;
     private int type_;
     /**
-     * <code>.sharepubapi_v1.DataEntry.Type type = 1;</code>
+     * <code>optional .sharepubapi_v1.DataEntry.Type type = 1;</code>
+     * @return Whether the type field is set.
+     */
+    @java.lang.Override public boolean hasType() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional .sharepubapi_v1.DataEntry.Type type = 1;</code>
      * @return The enum numeric value on the wire for type.
      */
     @java.lang.Override public int getTypeValue() {
       return type_;
     }
     /**
-     * <code>.sharepubapi_v1.DataEntry.Type type = 1;</code>
+     * <code>optional .sharepubapi_v1.DataEntry.Type type = 1;</code>
      * @return The type.
      */
     @java.lang.Override public com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Type getType() {
@@ -300,7 +321,15 @@ public final class DataEntryProto {
     public static final int VALUE_FIELD_NUMBER = 2;
     private com.google.protobuf.ByteString value_;
     /**
-     * <code>bytes value = 2;</code>
+     * <code>optional bytes value = 2;</code>
+     * @return Whether the value field is set.
+     */
+    @java.lang.Override
+    public boolean hasValue() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <code>optional bytes value = 2;</code>
      * @return The value.
      */
     @java.lang.Override
@@ -322,10 +351,10 @@ public final class DataEntryProto {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (type_ != com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Type.UNDEFINED.getNumber()) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         output.writeEnum(1, type_);
       }
-      if (!value_.isEmpty()) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         output.writeBytes(2, value_);
       }
       unknownFields.writeTo(output);
@@ -337,11 +366,11 @@ public final class DataEntryProto {
       if (size != -1) return size;
 
       size = 0;
-      if (type_ != com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Type.UNDEFINED.getNumber()) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(1, type_);
       }
-      if (!value_.isEmpty()) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, value_);
       }
@@ -360,9 +389,15 @@ public final class DataEntryProto {
       }
       com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry other = (com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry) obj;
 
-      if (type_ != other.type_) return false;
-      if (!getValue()
-          .equals(other.getValue())) return false;
+      if (hasType() != other.hasType()) return false;
+      if (hasType()) {
+        if (type_ != other.type_) return false;
+      }
+      if (hasValue() != other.hasValue()) return false;
+      if (hasValue()) {
+        if (!getValue()
+            .equals(other.getValue())) return false;
+      }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -374,10 +409,14 @@ public final class DataEntryProto {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + TYPE_FIELD_NUMBER;
-      hash = (53 * hash) + type_;
-      hash = (37 * hash) + VALUE_FIELD_NUMBER;
-      hash = (53 * hash) + getValue().hashCode();
+      if (hasType()) {
+        hash = (37 * hash) + TYPE_FIELD_NUMBER;
+        hash = (53 * hash) + type_;
+      }
+      if (hasValue()) {
+        hash = (37 * hash) + VALUE_FIELD_NUMBER;
+        hash = (53 * hash) + getValue().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -512,9 +551,9 @@ public final class DataEntryProto {
       public Builder clear() {
         super.clear();
         type_ = 0;
-
+        bitField0_ = (bitField0_ & ~0x00000001);
         value_ = com.google.protobuf.ByteString.EMPTY;
-
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
@@ -541,8 +580,17 @@ public final class DataEntryProto {
       @java.lang.Override
       public com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry buildPartial() {
         com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry result = new com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          to_bitField0_ |= 0x00000001;
+        }
         result.type_ = type_;
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          to_bitField0_ |= 0x00000002;
+        }
         result.value_ = value_;
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -591,10 +639,10 @@ public final class DataEntryProto {
 
       public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry other) {
         if (other == com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.getDefaultInstance()) return this;
-        if (other.type_ != 0) {
-          setTypeValue(other.getTypeValue());
+        if (other.hasType()) {
+          setType(other.getType());
         }
-        if (other.getValue() != com.google.protobuf.ByteString.EMPTY) {
+        if (other.hasValue()) {
           setValue(other.getValue());
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -625,28 +673,36 @@ public final class DataEntryProto {
         }
         return this;
       }
+      private int bitField0_;
 
       private int type_ = 0;
       /**
-       * <code>.sharepubapi_v1.DataEntry.Type type = 1;</code>
+       * <code>optional .sharepubapi_v1.DataEntry.Type type = 1;</code>
+       * @return Whether the type field is set.
+       */
+      @java.lang.Override public boolean hasType() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <code>optional .sharepubapi_v1.DataEntry.Type type = 1;</code>
        * @return The enum numeric value on the wire for type.
        */
       @java.lang.Override public int getTypeValue() {
         return type_;
       }
       /**
-       * <code>.sharepubapi_v1.DataEntry.Type type = 1;</code>
+       * <code>optional .sharepubapi_v1.DataEntry.Type type = 1;</code>
        * @param value The enum numeric value on the wire for type to set.
        * @return This builder for chaining.
        */
       public Builder setTypeValue(int value) {
-        
+        bitField0_ |= 0x00000001;
         type_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>.sharepubapi_v1.DataEntry.Type type = 1;</code>
+       * <code>optional .sharepubapi_v1.DataEntry.Type type = 1;</code>
        * @return The type.
        */
       @java.lang.Override
@@ -656,7 +712,7 @@ public final class DataEntryProto {
         return result == null ? com.yoti.api.client.spi.remote.proto.DataEntryProto.DataEntry.Type.UNRECOGNIZED : result;
       }
       /**
-       * <code>.sharepubapi_v1.DataEntry.Type type = 1;</code>
+       * <code>optional .sharepubapi_v1.DataEntry.Type type = 1;</code>
        * @param value The type to set.
        * @return This builder for chaining.
        */
@@ -664,17 +720,17 @@ public final class DataEntryProto {
         if (value == null) {
           throw new NullPointerException();
         }
-        
+        bitField0_ |= 0x00000001;
         type_ = value.getNumber();
         onChanged();
         return this;
       }
       /**
-       * <code>.sharepubapi_v1.DataEntry.Type type = 1;</code>
+       * <code>optional .sharepubapi_v1.DataEntry.Type type = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearType() {
-        
+        bitField0_ = (bitField0_ & ~0x00000001);
         type_ = 0;
         onChanged();
         return this;
@@ -682,7 +738,15 @@ public final class DataEntryProto {
 
       private com.google.protobuf.ByteString value_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>bytes value = 2;</code>
+       * <code>optional bytes value = 2;</code>
+       * @return Whether the value field is set.
+       */
+      @java.lang.Override
+      public boolean hasValue() {
+        return ((bitField0_ & 0x00000002) != 0);
+      }
+      /**
+       * <code>optional bytes value = 2;</code>
        * @return The value.
        */
       @java.lang.Override
@@ -690,7 +754,7 @@ public final class DataEntryProto {
         return value_;
       }
       /**
-       * <code>bytes value = 2;</code>
+       * <code>optional bytes value = 2;</code>
        * @param value The value to set.
        * @return This builder for chaining.
        */
@@ -698,17 +762,17 @@ public final class DataEntryProto {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+  bitField0_ |= 0x00000002;
         value_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>bytes value = 2;</code>
+       * <code>optional bytes value = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearValue() {
-        
+        bitField0_ = (bitField0_ & ~0x00000002);
         value_ = getDefaultInstance().getValue();
         onChanged();
         return this;
@@ -780,19 +844,15 @@ public final class DataEntryProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\017DataEntry.proto\022\016sharepubapi_v1\"\335\001\n\tDa" +
-      "taEntry\022,\n\004type\030\001 \001(\0162\036.sharepubapi_v1.D" +
-      "ataEntry.Type\022\r\n\005value\030\002 \001(\014\"\222\001\n\004Type\022\r\n" +
-      "\tUNDEFINED\020\000\022\013\n\007INVOICE\020\001\022\027\n\023PAYMENT_TRA" +
-      "NSACTION\020\002\022\014\n\010LOCATION\020\003\022\017\n\013TRANSACTION\020" +
-      "\004\022\033\n\027AGE_VERIFICATION_SECRET\020\005\022\031\n\025THIRD_" +
-      "PARTY_ATTRIBUTE\020\006B\345\001\n$com.yoti.api.clien" +
-      "t.spi.remote.protoB\016DataEntryProtoZ0gith" +
-      "ub.com/getyoti/yoti-go-sdk/v3/yotiprotos" +
-      "hare\252\002\030Yoti.Auth.ProtoBuf.Share\312\002\031Yoti\\P" +
-      "rotobuf\\Sharepubapi\342\002%Yoti\\Protobuf\\Shar" +
-      "epubapi\\GPBMetadata\352\002\033Yoti::Protobuf::Sh" +
-      "arepubapib\006proto3"
+      "\n\017DataEntry.proto\022\016sharepubapi_v1\"\372\001\n\tDa" +
+      "taEntry\0221\n\004type\030\001 \001(\0162\036.sharepubapi_v1.D" +
+      "ataEntry.TypeH\000\210\001\001\022\022\n\005value\030\002 \001(\014H\001\210\001\001\"\222" +
+      "\001\n\004Type\022\r\n\tUNDEFINED\020\000\022\013\n\007INVOICE\020\001\022\027\n\023P" +
+      "AYMENT_TRANSACTION\020\002\022\014\n\010LOCATION\020\003\022\017\n\013TR" +
+      "ANSACTION\020\004\022\033\n\027AGE_VERIFICATION_SECRET\020\005" +
+      "\022\031\n\025THIRD_PARTY_ATTRIBUTE\020\006B\007\n\005_typeB\010\n\006" +
+      "_valueB6\n$com.yoti.api.client.spi.remote" +
+      ".protoB\016DataEntryProtob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -803,7 +863,7 @@ public final class DataEntryProto {
     internal_static_sharepubapi_v1_DataEntry_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sharepubapi_v1_DataEntry_descriptor,
-        new java.lang.String[] { "Type", "Value", });
+        new java.lang.String[] { "Type", "Value", "Type", "Value", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

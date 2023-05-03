@@ -14,7 +14,7 @@ import java.util.List;
 import com.yoti.api.client.Anchor;
 import com.yoti.api.client.DateTime;
 import com.yoti.api.client.SignedTimestamp;
-import com.yoti.api.client.spi.remote.proto.AttrProto;
+import com.yoti.api.client.spi.remote.proto.AttributeProto;
 import com.yoti.api.client.spi.remote.proto.SignedTimestampProto;
 import com.yoti.api.client.spi.remote.util.AnchorType;
 
@@ -32,7 +32,7 @@ class AnchorConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(AnchorConverter.class);
 
-    Anchor convert(AttrProto.Anchor anchorProto) throws CertificateException, IOException {
+    Anchor convert(AttributeProto.Anchor anchorProto) throws CertificateException, IOException {
         List<X509Certificate> certificates = convertCertificates(anchorProto);
         AnchorTypeAndValue anchorTypeAndValue = determineAnchorType(certificates);
         String anchorType = anchorTypeAndValue.anchorType.name();
@@ -42,7 +42,7 @@ class AnchorConverter {
         return new Anchor(anchorType, anchorProto.getSubType(), value, certificates, signedTimestamp);
     }
 
-    private List<X509Certificate> convertCertificates(AttrProto.Anchor anchorProto) throws CertificateException {
+    private List<X509Certificate> convertCertificates(AttributeProto.Anchor anchorProto) throws CertificateException {
         List<X509Certificate> certificates = new ArrayList<>();
         CertificateFactory factory = CertificateFactory.getInstance("X.509");
         ByteArrayInputStream byteArrayInputStream;

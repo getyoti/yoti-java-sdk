@@ -12,7 +12,7 @@ import java.security.GeneralSecurityException;
 import java.security.Key;
 
 import com.yoti.api.client.ProfileException;
-import com.yoti.api.client.spi.remote.proto.AttrProto;
+import com.yoti.api.client.spi.remote.proto.AttributeProto;
 import com.yoti.api.client.spi.remote.proto.AttributeListProto;
 import com.yoti.api.client.spi.remote.proto.EncryptedDataProto;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
@@ -29,7 +29,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class EncryptedDataReaderTest {
 
     private static final String STRING_ATTRIBUTE_NAME = "testStringAttr";
-    private static final AttrProto.Attribute STRING_ATTRIBUTE_PROTO = AttrProto.Attribute.newBuilder()
+    private static final AttributeProto.Attribute STRING_ATTRIBUTE_PROTO = AttributeProto.Attribute.newBuilder()
             .setName(STRING_ATTRIBUTE_NAME)
             .build();
     private static final byte[] PROFILE_DATA_BYTES = AttributeListProto.AttributeList.newBuilder()
@@ -80,7 +80,7 @@ public class EncryptedDataReaderTest {
     }
 
     @Test
-    public void shouldWrapExcetionFromInvalidIV() {
+    public void shouldWrapExceptionFromInvalidIV() {
         byte[] profileContent = EncryptedDataProto.EncryptedData.newBuilder()
                 .setCipherText(ByteString.copyFrom(validProfileEncryptionResult.data))
                 .setIv(ByteString.copyFrom(new byte[]{1, 2}))
@@ -115,7 +115,7 @@ public class EncryptedDataReaderTest {
     }
 
     @Test
-    public void shouldWrapExcetionFromInvalidEncryptedData() {
+    public void shouldWrapExceptionFromInvalidEncryptedData() {
         byte[] profileContent = EncryptedDataProto.EncryptedData.newBuilder()
                 .setCipherText(ByteString.copyFrom(new byte[]{1, 2}))
                 .setIv(ByteString.copyFrom(validProfileEncryptionResult.iv))
@@ -131,6 +131,5 @@ public class EncryptedDataReaderTest {
         }
         fail("Expected an Exception");
     }
-
 
 }

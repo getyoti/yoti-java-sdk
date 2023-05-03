@@ -3,10 +3,10 @@ package com.yoti.api.client.spi.remote;
 import static java.util.Arrays.asList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -27,8 +27,7 @@ import com.yoti.api.client.Date;
 import com.yoti.api.client.DocumentDetails;
 import com.yoti.api.client.HumanProfile;
 import com.yoti.api.client.Image;
-import com.yoti.api.client.spi.remote.proto.AttrProto;
-import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
+import com.yoti.api.client.spi.remote.proto.AttributeProto;
 import com.yoti.api.client.spi.remote.util.AnchorType;
 
 import com.google.protobuf.ByteString;
@@ -60,11 +59,11 @@ public class AttributeConverterTest {
     @Mock
     DocumentDetails documentDetailsMock;
     @Mock
-    AttrProto.Anchor verifierProtoMock;
+    AttributeProto.Anchor verifierProtoMock;
     @Mock
-    AttrProto.Anchor sourceProtoMock;
+    AttributeProto.Anchor sourceProtoMock;
     @Mock
-    AttrProto.Anchor unknownProtoMock;
+    AttributeProto.Anchor unknownProtoMock;
     @Mock
     Anchor verifierAnchorMock;
     @Mock
@@ -81,8 +80,8 @@ public class AttributeConverterTest {
 
     @Test
     public void shouldParseStringAttribute() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.STRING)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.STRING)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(SOME_STRING_VALUE))
                 .build();
@@ -95,8 +94,8 @@ public class AttributeConverterTest {
 
     @Test
     public void shouldParseDateAttribute() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.DATE)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.DATE)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(SOME_DATE_VALUE))
                 .build();
@@ -109,8 +108,8 @@ public class AttributeConverterTest {
 
     @Test
     public void shouldParseJpegAttribute() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.JPEG)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.JPEG)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFrom(SOME_IMAGE_BYTES))
                 .build();
@@ -123,8 +122,8 @@ public class AttributeConverterTest {
 
     @Test
     public void shouldParsePngAttribute() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.PNG)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.PNG)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFrom(SOME_IMAGE_BYTES))
                 .build();
@@ -138,25 +137,25 @@ public class AttributeConverterTest {
     @Test
     public void shouldParseJsonAttribute() throws Exception {
         String json = "{ \"simpleKey\": \"simpleValue\", \"objectKey\": { \"nestedKey\" : \"nestedValue\" } }";
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.JSON)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.JSON)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(json))
                 .build();
 
-        Attribute<Map> result = testObj.convertAttribute(attribute);
+        Attribute<Map<String, Object>> result = testObj.convertAttribute(attribute);
 
         assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
         Map<String, Object> value = result.getValue();
         assertEquals(2, value.size());
-        assertThat(value, hasEntry("simpleKey", (Object) "simpleValue"));
-        assertThat(value, hasEntry("objectKey", (Object) Collections.singletonMap("nestedKey", "nestedValue")));
+        assertThat(value, hasEntry("simpleKey", "simpleValue"));
+        assertThat(value, hasEntry("objectKey", Collections.singletonMap("nestedKey", "nestedValue")));
     }
 
     @Test
     public void shouldFallbackToStringForUnknownType() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.UNDEFINED)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.UNDEFINED)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(SOME_STRING_VALUE))
                 .build();
@@ -169,8 +168,8 @@ public class AttributeConverterTest {
 
     @Test
     public void shouldParseDocumentDetailsAttribute() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.STRING)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.STRING)
                 .setName(AttributeConstants.HumanProfileAttributes.DOCUMENT_DETAILS)
                 .setValue(ByteString.copyFromUtf8(SOME_STRING_VALUE))
                 .build();
@@ -184,8 +183,8 @@ public class AttributeConverterTest {
 
     @Test
     public void shouldParseGenderAttribute() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.STRING)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.STRING)
                 .setName(AttributeConstants.HumanProfileAttributes.GENDER)
                 .setValue(ByteString.copyFromUtf8(GENDER_MALE))
                 .build();
@@ -198,7 +197,7 @@ public class AttributeConverterTest {
 
     @Test
     public void shouldParseAllAnchorsSuccessfully() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(SOME_STRING_VALUE))
                 .addAllAnchors(asList(verifierProtoMock, sourceProtoMock, unknownProtoMock))
@@ -210,13 +209,13 @@ public class AttributeConverterTest {
         Attribute<String> result = testObj.convertAttribute(attribute);
 
         assertListContains(result.getAnchors(), asList(verifierAnchorMock, sourceAnchorMock, unknownAnchorMock));
-        assertListContains(result.getVerifiers(), asList(verifierAnchorMock));
-        assertListContains(result.getSources(), asList(sourceAnchorMock));
+        assertListContains(result.getVerifiers(), Collections.singletonList(verifierAnchorMock));
+        assertListContains(result.getSources(), Collections.singletonList(sourceAnchorMock));
     }
 
     @Test
     public void shouldTolerateFailureToParseAnAnchor() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(SOME_STRING_VALUE))
                 .addAllAnchors(asList(verifierProtoMock, sourceProtoMock, unknownProtoMock))
@@ -228,13 +227,13 @@ public class AttributeConverterTest {
         Attribute<String> result = testObj.convertAttribute(attribute);
 
         assertListContains(result.getAnchors(), asList(verifierAnchorMock, sourceAnchorMock));
-        assertListContains(result.getVerifiers(), asList(verifierAnchorMock));
-        assertListContains(result.getSources(), asList(sourceAnchorMock));
+        assertListContains(result.getVerifiers(), Collections.singletonList(verifierAnchorMock));
+        assertListContains(result.getSources(), Collections.singletonList(sourceAnchorMock));
     }
 
     @Test
     public void shouldTolerateFailureToParseAnyAnchors() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(SOME_STRING_VALUE))
                 .addAllAnchors(asList(verifierProtoMock, sourceProtoMock, unknownProtoMock))
@@ -252,10 +251,10 @@ public class AttributeConverterTest {
 
     @Test
     public void shouldParseMultiValueAttributeWithAnyContent() throws Exception {
-        AttrProto.MultiValue outer = createMultiValueTestData();
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+        AttributeProto.MultiValue outer = createMultiValueTestData();
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
                 .setName(SOME_ATTRIBUTE_NAME)
-                .setContentType(ContentTypeProto.ContentType.MULTI_VALUE)
+                .setContentType(AttributeProto.ContentType.MULTI_VALUE)
                 .setValue(outer.toByteString())
                 .build();
 
@@ -264,16 +263,16 @@ public class AttributeConverterTest {
         assertEquals(SOME_ATTRIBUTE_NAME, result.getName());
         List<Object> outerList = result.getValue();
         assertThat(outerList.size(), is(2));
-        assertImageValue(outerList.get(0), "image/png", SOME_IMAGE_BYTES);
+        assertImageValue(outerList.get(0), "image/png");
         List<Object> innerList = (List<Object>) outerList.get(1);
-        assertImageValue(innerList.get(0), "image/jpeg", SOME_IMAGE_BYTES);
+        assertImageValue(innerList.get(0), "image/jpeg");
     }
 
     @Test
     public void shouldParseDocumentImages() throws Exception {
-        AttrProto.MultiValue outer = createMultiValueTestData();
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.MULTI_VALUE)
+        AttributeProto.MultiValue outer = createMultiValueTestData();
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.MULTI_VALUE)
                 .setName(AttributeConstants.HumanProfileAttributes.DOCUMENT_IMAGES)
                 .setValue(outer.toByteString())
                 .build();
@@ -283,19 +282,19 @@ public class AttributeConverterTest {
         assertEquals(AttributeConstants.HumanProfileAttributes.DOCUMENT_IMAGES, result.getName());
         List<Object> list = result.getValue();
         assertThat(list.size(), is(1));
-        assertImageValue(list.get(0), "image/png", SOME_IMAGE_BYTES);
+        assertImageValue(list.get(0), "image/png");
     }
 
-    private static void assertImageValue(Object result, String mimeType, byte[] content) {
+    private static void assertImageValue(Object result, String mimeType) {
         Image image = (Image) result;
         assertThat(image.getMimeType(), is(mimeType));
-        assertThat(image.getContent(), is(content));
+        assertThat(image.getContent(), is(AttributeConverterTest.SOME_IMAGE_BYTES));
     }
 
     @Test
     public void shouldParseStringAttributeWithEmptyValue() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.STRING)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.STRING)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(""))
                 .build();
@@ -308,73 +307,73 @@ public class AttributeConverterTest {
 
     @Test(expected = ParseException.class)
     public void shouldNotParseDateWithEmptyValue() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.DATE)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.DATE)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(EMPTY_STRING))
                 .build();
 
-        Attribute<Date> result = testObj.convertAttribute(attribute);
+        testObj.convertAttribute(attribute);
     }
 
     @Test(expected = ParseException.class)
     public void shouldNotParseJpegAttributeWithEmptyValue() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.JPEG)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.JPEG)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(EMPTY_STRING))
                 .build();
 
-        Attribute<JpegAttributeValue> result = testObj.convertAttribute(attribute);
+        testObj.convertAttribute(attribute);
     }
 
     @Test(expected = ParseException.class)
     public void shouldNotParsePngAttributeWithEmptyValue() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.PNG)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.PNG)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(EMPTY_STRING))
                 .build();
 
-        Attribute<PngAttributeValue> result = testObj.convertAttribute(attribute);
+        testObj.convertAttribute(attribute);
     }
 
     @Test(expected = ParseException.class)
     public void shouldNotParseJsonAttributeWithEmptyValue() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.JSON)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.JSON)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(EMPTY_STRING))
                 .build();
 
-        Attribute<Map> result = testObj.convertAttribute(attribute);
+        testObj.convertAttribute(attribute);
     }
 
     @Test(expected = ParseException.class)
     public void shouldNotParseMultiValueAttributeWithEmptyValue() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.MULTI_VALUE)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.MULTI_VALUE)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(EMPTY_STRING))
                 .build();
 
-        Attribute<List<Object>> result = testObj.convertAttribute(attribute);
+        testObj.convertAttribute(attribute);
     }
 
     @Test(expected = ParseException.class)
     public void shouldNotParseIntAttributeWithEmptyValue() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.INT)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.INT)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(EMPTY_STRING))
                 .build();
 
-        Attribute<Integer> result = testObj.convertAttribute(attribute);
+        testObj.convertAttribute(attribute);
     }
 
     @Test
     public void shouldParseActualThirdPartyAssignedAttribute() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.parseFrom(TEST_THIRD_PARTY_ASSIGNED_ATTRIBUTE_BYTES);
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.parseFrom(TEST_THIRD_PARTY_ASSIGNED_ATTRIBUTE_BYTES);
         AttributeConverter attributeConverter = AttributeConverter.newInstance();
 
         Attribute<String> result = attributeConverter.convertAttribute(attribute);
@@ -389,32 +388,31 @@ public class AttributeConverterTest {
         assertThat(result.getVerifiers().get(0).getSubType(), is("orgName"));
     }
 
-    private static AttrProto.MultiValue createMultiValueTestData() {
-        AttrProto.MultiValue.Value jpgImageValue = createMultiValueValue(ContentTypeProto.ContentType.JPEG, ByteString.copyFrom(SOME_IMAGE_BYTES));
-        AttrProto.MultiValue inner = createMultiValue(jpgImageValue);
-        AttrProto.MultiValue.Value innerValue = createMultiValueValue(ContentTypeProto.ContentType.MULTI_VALUE, inner.toByteString());
-        AttrProto.MultiValue.Value pngImageValue = createMultiValueValue(ContentTypeProto.ContentType.PNG, ByteString.copyFrom(SOME_IMAGE_BYTES));
-        AttrProto.MultiValue outer = createMultiValue(pngImageValue, innerValue);
-        return outer;
+    private static AttributeProto.MultiValue createMultiValueTestData() {
+        AttributeProto.MultiValue.Value jpgImageValue = createMultiValueValue(AttributeProto.ContentType.JPEG, ByteString.copyFrom(SOME_IMAGE_BYTES));
+        AttributeProto.MultiValue inner = createMultiValue(jpgImageValue);
+        AttributeProto.MultiValue.Value innerValue = createMultiValueValue(AttributeProto.ContentType.MULTI_VALUE, inner.toByteString());
+        AttributeProto.MultiValue.Value pngImageValue = createMultiValueValue(AttributeProto.ContentType.PNG, ByteString.copyFrom(SOME_IMAGE_BYTES));
+        return createMultiValue(pngImageValue, innerValue);
     }
 
-    private static AttrProto.MultiValue.Value createMultiValueValue(ContentTypeProto.ContentType contentType, ByteString byteString) {
-        return AttrProto.MultiValue.Value.newBuilder()
+    private static AttributeProto.MultiValue.Value createMultiValueValue(AttributeProto.ContentType contentType, ByteString byteString) {
+        return AttributeProto.MultiValue.Value.newBuilder()
                 .setContentType(contentType)
                 .setData(byteString)
                 .build();
     }
 
-    private static AttrProto.MultiValue createMultiValue(AttrProto.MultiValue.Value... values) {
-        return AttrProto.MultiValue.newBuilder()
+    private static AttributeProto.MultiValue createMultiValue(AttributeProto.MultiValue.Value... values) {
+        return AttributeProto.MultiValue.newBuilder()
                 .addAllValues(asList(values))
                 .build();
     }
 
     @Test
     public void shouldParseAnIntValue() throws Exception {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.INT)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.INT)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(String.valueOf(SOME_INT_VALUE)))
                 .build();
@@ -427,8 +425,8 @@ public class AttributeConverterTest {
 
     @Test
     public void shouldReturnNullIdWhenNotSet() throws ParseException, IOException {
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
-                .setContentType(ContentTypeProto.ContentType.INT)
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
+                .setContentType(AttributeProto.ContentType.INT)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(String.valueOf(SOME_INT_VALUE)))
                 .build();
@@ -444,9 +442,9 @@ public class AttributeConverterTest {
     public void shouldReturnTheIdWhenSet() throws ParseException, IOException {
         String anId = "anId";
 
-        AttrProto.Attribute attribute = AttrProto.Attribute.newBuilder()
+        AttributeProto.Attribute attribute = AttributeProto.Attribute.newBuilder()
                 .setEphemeralId(anId)
-                .setContentType(ContentTypeProto.ContentType.INT)
+                .setContentType(AttributeProto.ContentType.INT)
                 .setName(SOME_ATTRIBUTE_NAME)
                 .setValue(ByteString.copyFromUtf8(String.valueOf(SOME_INT_VALUE)))
                 .build();

@@ -1,10 +1,8 @@
 package com.yoti.api.client.spi.remote;
 
-import static java.util.Arrays.asList;
-
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.Assert.assertEquals;
 
 import java.security.Security;
@@ -13,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -20,15 +19,14 @@ import com.yoti.api.client.Anchor;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.SignedTimestamp;
 import com.yoti.api.client.Time;
-import com.yoti.api.client.spi.remote.proto.AttrProto;
+import com.yoti.api.client.spi.remote.proto.AttributeProto;
 import com.yoti.api.client.spi.remote.util.AnchorType;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.hamcrest.collection.IsCollectionWithSize;
-import org.hamcrest.core.IsCollectionContaining;
-import org.junit.Test;
+import org.junit.*;
 
 public class AnchorConverterTest {
 
@@ -49,7 +47,7 @@ public class AnchorConverterTest {
 
     @Test
     public void shouldConvertPassportAnchor() throws Exception {
-        AttrProto.Anchor anchorProto = AttrProto.Anchor.parseFrom(Base64.getDecoder().decode(TestAnchors.PP_ANCHOR));
+        AttributeProto.Anchor anchorProto = AttributeProto.Anchor.parseFrom(Base64.getDecoder().decode(TestAnchors.PP_ANCHOR));
 
         Anchor result = testObj.convert(anchorProto);
 
@@ -62,7 +60,7 @@ public class AnchorConverterTest {
 
     @Test
     public void shouldConvertDrivingLicenseAnchor() throws Exception {
-        AttrProto.Anchor anchorProto = AttrProto.Anchor.parseFrom(Base64.getDecoder().decode(TestAnchors.DL_ANCHOR));
+        AttributeProto.Anchor anchorProto = AttributeProto.Anchor.parseFrom(Base64.getDecoder().decode(TestAnchors.DL_ANCHOR));
 
         Anchor result = testObj.convert(anchorProto);
 
@@ -75,7 +73,7 @@ public class AnchorConverterTest {
 
     @Test
     public void shouldConvertYotiAdminAnchor() throws Exception {
-        AttrProto.Anchor anchorProto = AttrProto.Anchor.parseFrom(Base64.getDecoder().decode(TestAnchors.YOTI_ADMIN_ANCHOR));
+        AttributeProto.Anchor anchorProto = AttributeProto.Anchor.parseFrom(Base64.getDecoder().decode(TestAnchors.YOTI_ADMIN_ANCHOR));
 
         Anchor result = testObj.convert(anchorProto);
 
@@ -88,7 +86,7 @@ public class AnchorConverterTest {
 
     @Test
     public void shouldConvertYotiUnknownAnchor() throws Exception {
-        AttrProto.Anchor anchorProto = AttrProto.Anchor.parseFrom(Base64.getDecoder().decode(TestAnchors.YOTI_UNKNOWN_ANCHOR));
+        AttributeProto.Anchor anchorProto = AttributeProto.Anchor.parseFrom(Base64.getDecoder().decode(TestAnchors.YOTI_UNKNOWN_ANCHOR));
 
         Anchor result = testObj.convert(anchorProto);
 
@@ -101,7 +99,12 @@ public class AnchorConverterTest {
     }
 
     private void verifyCertificates(List<X509Certificate> certificates, String issuer, String nonCriticalExtIds) {
-        CertficateMatcher expectedCertificate = new CertficateMatcher(issuer, SHA256_ALGO, asList(CRITICAL_EXT_ID), asList(nonCriticalExtIds));
+        CertficateMatcher expectedCertificate = new CertficateMatcher(
+                issuer,
+                SHA256_ALGO,
+                Collections.singletonList(CRITICAL_EXT_ID),
+                Collections.singletonList(nonCriticalExtIds)
+        );
         assertThat(certificates, hasSize(1));
         assertThat(certificates, hasItem(expectedCertificate));
     }
@@ -160,7 +163,7 @@ public class AnchorConverterTest {
 
         private boolean hasExpectedItems(List<String> expected, Set<String> actual) {
             return IsCollectionWithSize.hasSize(expected.size()).matches(actual)
-                    && IsCollectionContaining.hasItems(expected.toArray()).matches(actual);
+                    && hasItems(expected.toArray()).matches(actual);
         }
 
         private static String describe(String issuer,

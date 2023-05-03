@@ -19,37 +19,67 @@ public final class SignedTimestampProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int32 version = 1;</code>
+     * <code>optional int32 version = 1;</code>
+     * @return Whether the version field is set.
+     */
+    boolean hasVersion();
+    /**
+     * <code>optional int32 version = 1;</code>
      * @return The version.
      */
     int getVersion();
 
     /**
-     * <code>uint64 timestamp = 2;</code>
+     * <code>optional uint64 timestamp = 2;</code>
+     * @return Whether the timestamp field is set.
+     */
+    boolean hasTimestamp();
+    /**
+     * <code>optional uint64 timestamp = 2;</code>
      * @return The timestamp.
      */
     long getTimestamp();
 
     /**
-     * <code>bytes message_digest = 3;</code>
+     * <code>optional bytes message_digest = 3;</code>
+     * @return Whether the messageDigest field is set.
+     */
+    boolean hasMessageDigest();
+    /**
+     * <code>optional bytes message_digest = 3;</code>
      * @return The messageDigest.
      */
     com.google.protobuf.ByteString getMessageDigest();
 
     /**
-     * <code>bytes chain_digest = 4;</code>
+     * <code>optional bytes chain_digest = 4;</code>
+     * @return Whether the chainDigest field is set.
+     */
+    boolean hasChainDigest();
+    /**
+     * <code>optional bytes chain_digest = 4;</code>
      * @return The chainDigest.
      */
     com.google.protobuf.ByteString getChainDigest();
 
     /**
-     * <code>bytes chain_digest_skip1 = 5;</code>
+     * <code>optional bytes chain_digest_skip1 = 5;</code>
+     * @return Whether the chainDigestSkip1 field is set.
+     */
+    boolean hasChainDigestSkip1();
+    /**
+     * <code>optional bytes chain_digest_skip1 = 5;</code>
      * @return The chainDigestSkip1.
      */
     com.google.protobuf.ByteString getChainDigestSkip1();
 
     /**
-     * <code>bytes chain_digest_skip2 = 6;</code>
+     * <code>optional bytes chain_digest_skip2 = 6;</code>
+     * @return Whether the chainDigestSkip2 field is set.
+     */
+    boolean hasChainDigestSkip2();
+    /**
+     * <code>optional bytes chain_digest_skip2 = 6;</code>
      * @return The chainDigestSkip2.
      */
     com.google.protobuf.ByteString getChainDigestSkip2();
@@ -93,6 +123,7 @@ public final class SignedTimestampProto {
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
+      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -104,32 +135,32 @@ public final class SignedTimestampProto {
               done = true;
               break;
             case 8: {
-
+              bitField0_ |= 0x00000001;
               version_ = input.readInt32();
               break;
             }
             case 16: {
-
+              bitField0_ |= 0x00000002;
               timestamp_ = input.readUInt64();
               break;
             }
             case 26: {
-
+              bitField0_ |= 0x00000004;
               messageDigest_ = input.readBytes();
               break;
             }
             case 34: {
-
+              bitField0_ |= 0x00000008;
               chainDigest_ = input.readBytes();
               break;
             }
             case 42: {
-
+              bitField0_ |= 0x00000010;
               chainDigestSkip1_ = input.readBytes();
               break;
             }
             case 50: {
-
+              bitField0_ |= 0x00000020;
               chainDigestSkip2_ = input.readBytes();
               break;
             }
@@ -144,6 +175,8 @@ public final class SignedTimestampProto {
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
@@ -165,10 +198,19 @@ public final class SignedTimestampProto {
               com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp.class, com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp.Builder.class);
     }
 
+    private int bitField0_;
     public static final int VERSION_FIELD_NUMBER = 1;
     private int version_;
     /**
-     * <code>int32 version = 1;</code>
+     * <code>optional int32 version = 1;</code>
+     * @return Whether the version field is set.
+     */
+    @java.lang.Override
+    public boolean hasVersion() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional int32 version = 1;</code>
      * @return The version.
      */
     @java.lang.Override
@@ -179,7 +221,15 @@ public final class SignedTimestampProto {
     public static final int TIMESTAMP_FIELD_NUMBER = 2;
     private long timestamp_;
     /**
-     * <code>uint64 timestamp = 2;</code>
+     * <code>optional uint64 timestamp = 2;</code>
+     * @return Whether the timestamp field is set.
+     */
+    @java.lang.Override
+    public boolean hasTimestamp() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <code>optional uint64 timestamp = 2;</code>
      * @return The timestamp.
      */
     @java.lang.Override
@@ -190,7 +240,15 @@ public final class SignedTimestampProto {
     public static final int MESSAGE_DIGEST_FIELD_NUMBER = 3;
     private com.google.protobuf.ByteString messageDigest_;
     /**
-     * <code>bytes message_digest = 3;</code>
+     * <code>optional bytes message_digest = 3;</code>
+     * @return Whether the messageDigest field is set.
+     */
+    @java.lang.Override
+    public boolean hasMessageDigest() {
+      return ((bitField0_ & 0x00000004) != 0);
+    }
+    /**
+     * <code>optional bytes message_digest = 3;</code>
      * @return The messageDigest.
      */
     @java.lang.Override
@@ -201,7 +259,15 @@ public final class SignedTimestampProto {
     public static final int CHAIN_DIGEST_FIELD_NUMBER = 4;
     private com.google.protobuf.ByteString chainDigest_;
     /**
-     * <code>bytes chain_digest = 4;</code>
+     * <code>optional bytes chain_digest = 4;</code>
+     * @return Whether the chainDigest field is set.
+     */
+    @java.lang.Override
+    public boolean hasChainDigest() {
+      return ((bitField0_ & 0x00000008) != 0);
+    }
+    /**
+     * <code>optional bytes chain_digest = 4;</code>
      * @return The chainDigest.
      */
     @java.lang.Override
@@ -212,7 +278,15 @@ public final class SignedTimestampProto {
     public static final int CHAIN_DIGEST_SKIP1_FIELD_NUMBER = 5;
     private com.google.protobuf.ByteString chainDigestSkip1_;
     /**
-     * <code>bytes chain_digest_skip1 = 5;</code>
+     * <code>optional bytes chain_digest_skip1 = 5;</code>
+     * @return Whether the chainDigestSkip1 field is set.
+     */
+    @java.lang.Override
+    public boolean hasChainDigestSkip1() {
+      return ((bitField0_ & 0x00000010) != 0);
+    }
+    /**
+     * <code>optional bytes chain_digest_skip1 = 5;</code>
      * @return The chainDigestSkip1.
      */
     @java.lang.Override
@@ -223,7 +297,15 @@ public final class SignedTimestampProto {
     public static final int CHAIN_DIGEST_SKIP2_FIELD_NUMBER = 6;
     private com.google.protobuf.ByteString chainDigestSkip2_;
     /**
-     * <code>bytes chain_digest_skip2 = 6;</code>
+     * <code>optional bytes chain_digest_skip2 = 6;</code>
+     * @return Whether the chainDigestSkip2 field is set.
+     */
+    @java.lang.Override
+    public boolean hasChainDigestSkip2() {
+      return ((bitField0_ & 0x00000020) != 0);
+    }
+    /**
+     * <code>optional bytes chain_digest_skip2 = 6;</code>
      * @return The chainDigestSkip2.
      */
     @java.lang.Override
@@ -245,22 +327,22 @@ public final class SignedTimestampProto {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (version_ != 0) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         output.writeInt32(1, version_);
       }
-      if (timestamp_ != 0L) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         output.writeUInt64(2, timestamp_);
       }
-      if (!messageDigest_.isEmpty()) {
+      if (((bitField0_ & 0x00000004) != 0)) {
         output.writeBytes(3, messageDigest_);
       }
-      if (!chainDigest_.isEmpty()) {
+      if (((bitField0_ & 0x00000008) != 0)) {
         output.writeBytes(4, chainDigest_);
       }
-      if (!chainDigestSkip1_.isEmpty()) {
+      if (((bitField0_ & 0x00000010) != 0)) {
         output.writeBytes(5, chainDigestSkip1_);
       }
-      if (!chainDigestSkip2_.isEmpty()) {
+      if (((bitField0_ & 0x00000020) != 0)) {
         output.writeBytes(6, chainDigestSkip2_);
       }
       unknownFields.writeTo(output);
@@ -272,27 +354,27 @@ public final class SignedTimestampProto {
       if (size != -1) return size;
 
       size = 0;
-      if (version_ != 0) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(1, version_);
       }
-      if (timestamp_ != 0L) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(2, timestamp_);
       }
-      if (!messageDigest_.isEmpty()) {
+      if (((bitField0_ & 0x00000004) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(3, messageDigest_);
       }
-      if (!chainDigest_.isEmpty()) {
+      if (((bitField0_ & 0x00000008) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(4, chainDigest_);
       }
-      if (!chainDigestSkip1_.isEmpty()) {
+      if (((bitField0_ & 0x00000010) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(5, chainDigestSkip1_);
       }
-      if (!chainDigestSkip2_.isEmpty()) {
+      if (((bitField0_ & 0x00000020) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(6, chainDigestSkip2_);
       }
@@ -311,18 +393,36 @@ public final class SignedTimestampProto {
       }
       com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp other = (com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp) obj;
 
-      if (getVersion()
-          != other.getVersion()) return false;
-      if (getTimestamp()
-          != other.getTimestamp()) return false;
-      if (!getMessageDigest()
-          .equals(other.getMessageDigest())) return false;
-      if (!getChainDigest()
-          .equals(other.getChainDigest())) return false;
-      if (!getChainDigestSkip1()
-          .equals(other.getChainDigestSkip1())) return false;
-      if (!getChainDigestSkip2()
-          .equals(other.getChainDigestSkip2())) return false;
+      if (hasVersion() != other.hasVersion()) return false;
+      if (hasVersion()) {
+        if (getVersion()
+            != other.getVersion()) return false;
+      }
+      if (hasTimestamp() != other.hasTimestamp()) return false;
+      if (hasTimestamp()) {
+        if (getTimestamp()
+            != other.getTimestamp()) return false;
+      }
+      if (hasMessageDigest() != other.hasMessageDigest()) return false;
+      if (hasMessageDigest()) {
+        if (!getMessageDigest()
+            .equals(other.getMessageDigest())) return false;
+      }
+      if (hasChainDigest() != other.hasChainDigest()) return false;
+      if (hasChainDigest()) {
+        if (!getChainDigest()
+            .equals(other.getChainDigest())) return false;
+      }
+      if (hasChainDigestSkip1() != other.hasChainDigestSkip1()) return false;
+      if (hasChainDigestSkip1()) {
+        if (!getChainDigestSkip1()
+            .equals(other.getChainDigestSkip1())) return false;
+      }
+      if (hasChainDigestSkip2() != other.hasChainDigestSkip2()) return false;
+      if (hasChainDigestSkip2()) {
+        if (!getChainDigestSkip2()
+            .equals(other.getChainDigestSkip2())) return false;
+      }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -334,19 +434,31 @@ public final class SignedTimestampProto {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + VERSION_FIELD_NUMBER;
-      hash = (53 * hash) + getVersion();
-      hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getTimestamp());
-      hash = (37 * hash) + MESSAGE_DIGEST_FIELD_NUMBER;
-      hash = (53 * hash) + getMessageDigest().hashCode();
-      hash = (37 * hash) + CHAIN_DIGEST_FIELD_NUMBER;
-      hash = (53 * hash) + getChainDigest().hashCode();
-      hash = (37 * hash) + CHAIN_DIGEST_SKIP1_FIELD_NUMBER;
-      hash = (53 * hash) + getChainDigestSkip1().hashCode();
-      hash = (37 * hash) + CHAIN_DIGEST_SKIP2_FIELD_NUMBER;
-      hash = (53 * hash) + getChainDigestSkip2().hashCode();
+      if (hasVersion()) {
+        hash = (37 * hash) + VERSION_FIELD_NUMBER;
+        hash = (53 * hash) + getVersion();
+      }
+      if (hasTimestamp()) {
+        hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getTimestamp());
+      }
+      if (hasMessageDigest()) {
+        hash = (37 * hash) + MESSAGE_DIGEST_FIELD_NUMBER;
+        hash = (53 * hash) + getMessageDigest().hashCode();
+      }
+      if (hasChainDigest()) {
+        hash = (37 * hash) + CHAIN_DIGEST_FIELD_NUMBER;
+        hash = (53 * hash) + getChainDigest().hashCode();
+      }
+      if (hasChainDigestSkip1()) {
+        hash = (37 * hash) + CHAIN_DIGEST_SKIP1_FIELD_NUMBER;
+        hash = (53 * hash) + getChainDigestSkip1().hashCode();
+      }
+      if (hasChainDigestSkip2()) {
+        hash = (37 * hash) + CHAIN_DIGEST_SKIP2_FIELD_NUMBER;
+        hash = (53 * hash) + getChainDigestSkip2().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -481,17 +593,17 @@ public final class SignedTimestampProto {
       public Builder clear() {
         super.clear();
         version_ = 0;
-
+        bitField0_ = (bitField0_ & ~0x00000001);
         timestamp_ = 0L;
-
+        bitField0_ = (bitField0_ & ~0x00000002);
         messageDigest_ = com.google.protobuf.ByteString.EMPTY;
-
+        bitField0_ = (bitField0_ & ~0x00000004);
         chainDigest_ = com.google.protobuf.ByteString.EMPTY;
-
+        bitField0_ = (bitField0_ & ~0x00000008);
         chainDigestSkip1_ = com.google.protobuf.ByteString.EMPTY;
-
+        bitField0_ = (bitField0_ & ~0x00000010);
         chainDigestSkip2_ = com.google.protobuf.ByteString.EMPTY;
-
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -518,12 +630,33 @@ public final class SignedTimestampProto {
       @java.lang.Override
       public com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp buildPartial() {
         com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp result = new com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp(this);
-        result.version_ = version_;
-        result.timestamp_ = timestamp_;
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.version_ = version_;
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.timestamp_ = timestamp_;
+          to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          to_bitField0_ |= 0x00000004;
+        }
         result.messageDigest_ = messageDigest_;
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          to_bitField0_ |= 0x00000008;
+        }
         result.chainDigest_ = chainDigest_;
+        if (((from_bitField0_ & 0x00000010) != 0)) {
+          to_bitField0_ |= 0x00000010;
+        }
         result.chainDigestSkip1_ = chainDigestSkip1_;
+        if (((from_bitField0_ & 0x00000020) != 0)) {
+          to_bitField0_ |= 0x00000020;
+        }
         result.chainDigestSkip2_ = chainDigestSkip2_;
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -572,22 +705,22 @@ public final class SignedTimestampProto {
 
       public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp other) {
         if (other == com.yoti.api.client.spi.remote.proto.SignedTimestampProto.SignedTimestamp.getDefaultInstance()) return this;
-        if (other.getVersion() != 0) {
+        if (other.hasVersion()) {
           setVersion(other.getVersion());
         }
-        if (other.getTimestamp() != 0L) {
+        if (other.hasTimestamp()) {
           setTimestamp(other.getTimestamp());
         }
-        if (other.getMessageDigest() != com.google.protobuf.ByteString.EMPTY) {
+        if (other.hasMessageDigest()) {
           setMessageDigest(other.getMessageDigest());
         }
-        if (other.getChainDigest() != com.google.protobuf.ByteString.EMPTY) {
+        if (other.hasChainDigest()) {
           setChainDigest(other.getChainDigest());
         }
-        if (other.getChainDigestSkip1() != com.google.protobuf.ByteString.EMPTY) {
+        if (other.hasChainDigestSkip1()) {
           setChainDigestSkip1(other.getChainDigestSkip1());
         }
-        if (other.getChainDigestSkip2() != com.google.protobuf.ByteString.EMPTY) {
+        if (other.hasChainDigestSkip2()) {
           setChainDigestSkip2(other.getChainDigestSkip2());
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -618,10 +751,19 @@ public final class SignedTimestampProto {
         }
         return this;
       }
+      private int bitField0_;
 
       private int version_ ;
       /**
-       * <code>int32 version = 1;</code>
+       * <code>optional int32 version = 1;</code>
+       * @return Whether the version field is set.
+       */
+      @java.lang.Override
+      public boolean hasVersion() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <code>optional int32 version = 1;</code>
        * @return The version.
        */
       @java.lang.Override
@@ -629,22 +771,22 @@ public final class SignedTimestampProto {
         return version_;
       }
       /**
-       * <code>int32 version = 1;</code>
+       * <code>optional int32 version = 1;</code>
        * @param value The version to set.
        * @return This builder for chaining.
        */
       public Builder setVersion(int value) {
-        
+        bitField0_ |= 0x00000001;
         version_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 version = 1;</code>
+       * <code>optional int32 version = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearVersion() {
-        
+        bitField0_ = (bitField0_ & ~0x00000001);
         version_ = 0;
         onChanged();
         return this;
@@ -652,7 +794,15 @@ public final class SignedTimestampProto {
 
       private long timestamp_ ;
       /**
-       * <code>uint64 timestamp = 2;</code>
+       * <code>optional uint64 timestamp = 2;</code>
+       * @return Whether the timestamp field is set.
+       */
+      @java.lang.Override
+      public boolean hasTimestamp() {
+        return ((bitField0_ & 0x00000002) != 0);
+      }
+      /**
+       * <code>optional uint64 timestamp = 2;</code>
        * @return The timestamp.
        */
       @java.lang.Override
@@ -660,22 +810,22 @@ public final class SignedTimestampProto {
         return timestamp_;
       }
       /**
-       * <code>uint64 timestamp = 2;</code>
+       * <code>optional uint64 timestamp = 2;</code>
        * @param value The timestamp to set.
        * @return This builder for chaining.
        */
       public Builder setTimestamp(long value) {
-        
+        bitField0_ |= 0x00000002;
         timestamp_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>uint64 timestamp = 2;</code>
+       * <code>optional uint64 timestamp = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearTimestamp() {
-        
+        bitField0_ = (bitField0_ & ~0x00000002);
         timestamp_ = 0L;
         onChanged();
         return this;
@@ -683,7 +833,15 @@ public final class SignedTimestampProto {
 
       private com.google.protobuf.ByteString messageDigest_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>bytes message_digest = 3;</code>
+       * <code>optional bytes message_digest = 3;</code>
+       * @return Whether the messageDigest field is set.
+       */
+      @java.lang.Override
+      public boolean hasMessageDigest() {
+        return ((bitField0_ & 0x00000004) != 0);
+      }
+      /**
+       * <code>optional bytes message_digest = 3;</code>
        * @return The messageDigest.
        */
       @java.lang.Override
@@ -691,7 +849,7 @@ public final class SignedTimestampProto {
         return messageDigest_;
       }
       /**
-       * <code>bytes message_digest = 3;</code>
+       * <code>optional bytes message_digest = 3;</code>
        * @param value The messageDigest to set.
        * @return This builder for chaining.
        */
@@ -699,17 +857,17 @@ public final class SignedTimestampProto {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+  bitField0_ |= 0x00000004;
         messageDigest_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>bytes message_digest = 3;</code>
+       * <code>optional bytes message_digest = 3;</code>
        * @return This builder for chaining.
        */
       public Builder clearMessageDigest() {
-        
+        bitField0_ = (bitField0_ & ~0x00000004);
         messageDigest_ = getDefaultInstance().getMessageDigest();
         onChanged();
         return this;
@@ -717,7 +875,15 @@ public final class SignedTimestampProto {
 
       private com.google.protobuf.ByteString chainDigest_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>bytes chain_digest = 4;</code>
+       * <code>optional bytes chain_digest = 4;</code>
+       * @return Whether the chainDigest field is set.
+       */
+      @java.lang.Override
+      public boolean hasChainDigest() {
+        return ((bitField0_ & 0x00000008) != 0);
+      }
+      /**
+       * <code>optional bytes chain_digest = 4;</code>
        * @return The chainDigest.
        */
       @java.lang.Override
@@ -725,7 +891,7 @@ public final class SignedTimestampProto {
         return chainDigest_;
       }
       /**
-       * <code>bytes chain_digest = 4;</code>
+       * <code>optional bytes chain_digest = 4;</code>
        * @param value The chainDigest to set.
        * @return This builder for chaining.
        */
@@ -733,17 +899,17 @@ public final class SignedTimestampProto {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+  bitField0_ |= 0x00000008;
         chainDigest_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>bytes chain_digest = 4;</code>
+       * <code>optional bytes chain_digest = 4;</code>
        * @return This builder for chaining.
        */
       public Builder clearChainDigest() {
-        
+        bitField0_ = (bitField0_ & ~0x00000008);
         chainDigest_ = getDefaultInstance().getChainDigest();
         onChanged();
         return this;
@@ -751,7 +917,15 @@ public final class SignedTimestampProto {
 
       private com.google.protobuf.ByteString chainDigestSkip1_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>bytes chain_digest_skip1 = 5;</code>
+       * <code>optional bytes chain_digest_skip1 = 5;</code>
+       * @return Whether the chainDigestSkip1 field is set.
+       */
+      @java.lang.Override
+      public boolean hasChainDigestSkip1() {
+        return ((bitField0_ & 0x00000010) != 0);
+      }
+      /**
+       * <code>optional bytes chain_digest_skip1 = 5;</code>
        * @return The chainDigestSkip1.
        */
       @java.lang.Override
@@ -759,7 +933,7 @@ public final class SignedTimestampProto {
         return chainDigestSkip1_;
       }
       /**
-       * <code>bytes chain_digest_skip1 = 5;</code>
+       * <code>optional bytes chain_digest_skip1 = 5;</code>
        * @param value The chainDigestSkip1 to set.
        * @return This builder for chaining.
        */
@@ -767,17 +941,17 @@ public final class SignedTimestampProto {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+  bitField0_ |= 0x00000010;
         chainDigestSkip1_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>bytes chain_digest_skip1 = 5;</code>
+       * <code>optional bytes chain_digest_skip1 = 5;</code>
        * @return This builder for chaining.
        */
       public Builder clearChainDigestSkip1() {
-        
+        bitField0_ = (bitField0_ & ~0x00000010);
         chainDigestSkip1_ = getDefaultInstance().getChainDigestSkip1();
         onChanged();
         return this;
@@ -785,7 +959,15 @@ public final class SignedTimestampProto {
 
       private com.google.protobuf.ByteString chainDigestSkip2_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>bytes chain_digest_skip2 = 6;</code>
+       * <code>optional bytes chain_digest_skip2 = 6;</code>
+       * @return Whether the chainDigestSkip2 field is set.
+       */
+      @java.lang.Override
+      public boolean hasChainDigestSkip2() {
+        return ((bitField0_ & 0x00000020) != 0);
+      }
+      /**
+       * <code>optional bytes chain_digest_skip2 = 6;</code>
        * @return The chainDigestSkip2.
        */
       @java.lang.Override
@@ -793,7 +975,7 @@ public final class SignedTimestampProto {
         return chainDigestSkip2_;
       }
       /**
-       * <code>bytes chain_digest_skip2 = 6;</code>
+       * <code>optional bytes chain_digest_skip2 = 6;</code>
        * @param value The chainDigestSkip2 to set.
        * @return This builder for chaining.
        */
@@ -801,17 +983,17 @@ public final class SignedTimestampProto {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+  bitField0_ |= 0x00000020;
         chainDigestSkip2_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>bytes chain_digest_skip2 = 6;</code>
+       * <code>optional bytes chain_digest_skip2 = 6;</code>
        * @return This builder for chaining.
        */
       public Builder clearChainDigestSkip2() {
-        
+        bitField0_ = (bitField0_ & ~0x00000020);
         chainDigestSkip2_ = getDefaultInstance().getChainDigestSkip2();
         onChanged();
         return this;
@@ -883,17 +1065,17 @@ public final class SignedTimestampProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\025SignedTimestamp.proto\022\014compubapi_v1\"\233\001" +
-      "\n\017SignedTimestamp\022\017\n\007version\030\001 \001(\005\022\021\n\tti" +
-      "mestamp\030\002 \001(\004\022\026\n\016message_digest\030\003 \001(\014\022\024\n" +
-      "\014chain_digest\030\004 \001(\014\022\032\n\022chain_digest_skip" +
-      "1\030\005 \001(\014\022\032\n\022chain_digest_skip2\030\006 \001(\014B\344\001\n$" +
-      "com.yoti.api.client.spi.remote.protoB\024Si" +
-      "gnedTimestampProtoZ.github.com/getyoti/y" +
-      "oti-go-sdk/v3/yotiprotocom\252\002\031Yoti.Auth.P" +
-      "rotoBuf.Common\312\002\027Yoti\\Protobuf\\Compubapi" +
-      "\342\002#Yoti\\Protobuf\\Compubapi\\GPBMetadata\352\002" +
-      "\031Yoti::Protobuf::Compubapib\006proto3"
+      "\n\025SignedTimestamp.proto\022\014compubapi_v1\"\245\002" +
+      "\n\017SignedTimestamp\022\024\n\007version\030\001 \001(\005H\000\210\001\001\022" +
+      "\026\n\ttimestamp\030\002 \001(\004H\001\210\001\001\022\033\n\016message_diges" +
+      "t\030\003 \001(\014H\002\210\001\001\022\031\n\014chain_digest\030\004 \001(\014H\003\210\001\001\022" +
+      "\037\n\022chain_digest_skip1\030\005 \001(\014H\004\210\001\001\022\037\n\022chai" +
+      "n_digest_skip2\030\006 \001(\014H\005\210\001\001B\n\n\010_versionB\014\n" +
+      "\n_timestampB\021\n\017_message_digestB\017\n\r_chain" +
+      "_digestB\025\n\023_chain_digest_skip1B\025\n\023_chain" +
+      "_digest_skip2B<\n$com.yoti.api.client.spi" +
+      ".remote.protoB\024SignedTimestampProtob\006pro" +
+      "to3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -904,7 +1086,7 @@ public final class SignedTimestampProto {
     internal_static_compubapi_v1_SignedTimestamp_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_compubapi_v1_SignedTimestamp_descriptor,
-        new java.lang.String[] { "Version", "Timestamp", "MessageDigest", "ChainDigest", "ChainDigestSkip1", "ChainDigestSkip2", });
+        new java.lang.String[] { "Version", "Timestamp", "MessageDigest", "ChainDigest", "ChainDigestSkip1", "ChainDigestSkip2", "Version", "Timestamp", "MessageDigest", "ChainDigest", "ChainDigestSkip1", "ChainDigestSkip2", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

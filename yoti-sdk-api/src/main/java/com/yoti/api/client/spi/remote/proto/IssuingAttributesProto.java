@@ -19,12 +19,17 @@ public final class IssuingAttributesProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>string expiry_date = 1;</code>
+     * <code>optional string expiry_date = 1;</code>
+     * @return Whether the expiryDate field is set.
+     */
+    boolean hasExpiryDate();
+    /**
+     * <code>optional string expiry_date = 1;</code>
      * @return The expiryDate.
      */
     java.lang.String getExpiryDate();
     /**
-     * <code>string expiry_date = 1;</code>
+     * <code>optional string expiry_date = 1;</code>
      * @return The bytes for expiryDate.
      */
     com.google.protobuf.ByteString
@@ -104,14 +109,14 @@ public final class IssuingAttributesProto {
               break;
             case 10: {
               java.lang.String s = input.readStringRequireUtf8();
-
+              bitField0_ |= 0x00000001;
               expiryDate_ = s;
               break;
             }
             case 18: {
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
                 definitions_ = new java.util.ArrayList<com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition>();
-                mutable_bitField0_ |= 0x00000001;
+                mutable_bitField0_ |= 0x00000002;
               }
               definitions_.add(
                   input.readMessage(com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.parser(), extensionRegistry));
@@ -128,11 +133,13 @@ public final class IssuingAttributesProto {
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000001) != 0)) {
+        if (((mutable_bitField0_ & 0x00000002) != 0)) {
           definitions_ = java.util.Collections.unmodifiableList(definitions_);
         }
         this.unknownFields = unknownFields.build();
@@ -152,10 +159,19 @@ public final class IssuingAttributesProto {
               com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.class, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.Builder.class);
     }
 
+    private int bitField0_;
     public static final int EXPIRY_DATE_FIELD_NUMBER = 1;
     private volatile java.lang.Object expiryDate_;
     /**
-     * <code>string expiry_date = 1;</code>
+     * <code>optional string expiry_date = 1;</code>
+     * @return Whether the expiryDate field is set.
+     */
+    @java.lang.Override
+    public boolean hasExpiryDate() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional string expiry_date = 1;</code>
      * @return The expiryDate.
      */
     @java.lang.Override
@@ -172,7 +188,7 @@ public final class IssuingAttributesProto {
       }
     }
     /**
-     * <code>string expiry_date = 1;</code>
+     * <code>optional string expiry_date = 1;</code>
      * @return The bytes for expiryDate.
      */
     @java.lang.Override
@@ -244,7 +260,7 @@ public final class IssuingAttributesProto {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(expiryDate_)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, expiryDate_);
       }
       for (int i = 0; i < definitions_.size(); i++) {
@@ -259,7 +275,7 @@ public final class IssuingAttributesProto {
       if (size != -1) return size;
 
       size = 0;
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(expiryDate_)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, expiryDate_);
       }
       for (int i = 0; i < definitions_.size(); i++) {
@@ -281,8 +297,11 @@ public final class IssuingAttributesProto {
       }
       com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes other = (com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes) obj;
 
-      if (!getExpiryDate()
-          .equals(other.getExpiryDate())) return false;
+      if (hasExpiryDate() != other.hasExpiryDate()) return false;
+      if (hasExpiryDate()) {
+        if (!getExpiryDate()
+            .equals(other.getExpiryDate())) return false;
+      }
       if (!getDefinitionsList()
           .equals(other.getDefinitionsList())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
@@ -296,8 +315,10 @@ public final class IssuingAttributesProto {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + EXPIRY_DATE_FIELD_NUMBER;
-      hash = (53 * hash) + getExpiryDate().hashCode();
+      if (hasExpiryDate()) {
+        hash = (37 * hash) + EXPIRY_DATE_FIELD_NUMBER;
+        hash = (53 * hash) + getExpiryDate().hashCode();
+      }
       if (getDefinitionsCount() > 0) {
         hash = (37 * hash) + DEFINITIONS_FIELD_NUMBER;
         hash = (53 * hash) + getDefinitionsList().hashCode();
@@ -437,10 +458,10 @@ public final class IssuingAttributesProto {
       public Builder clear() {
         super.clear();
         expiryDate_ = "";
-
+        bitField0_ = (bitField0_ & ~0x00000001);
         if (definitionsBuilder_ == null) {
           definitions_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           definitionsBuilder_.clear();
         }
@@ -471,16 +492,21 @@ public final class IssuingAttributesProto {
       public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes buildPartial() {
         com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes result = new com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes(this);
         int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          to_bitField0_ |= 0x00000001;
+        }
         result.expiryDate_ = expiryDate_;
         if (definitionsBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) != 0)) {
+          if (((bitField0_ & 0x00000002) != 0)) {
             definitions_ = java.util.Collections.unmodifiableList(definitions_);
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
           }
           result.definitions_ = definitions_;
         } else {
           result.definitions_ = definitionsBuilder_.build();
         }
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -529,7 +555,8 @@ public final class IssuingAttributesProto {
 
       public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes other) {
         if (other == com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.IssuingAttributes.getDefaultInstance()) return this;
-        if (!other.getExpiryDate().isEmpty()) {
+        if (other.hasExpiryDate()) {
+          bitField0_ |= 0x00000001;
           expiryDate_ = other.expiryDate_;
           onChanged();
         }
@@ -537,7 +564,7 @@ public final class IssuingAttributesProto {
           if (!other.definitions_.isEmpty()) {
             if (definitions_.isEmpty()) {
               definitions_ = other.definitions_;
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
             } else {
               ensureDefinitionsIsMutable();
               definitions_.addAll(other.definitions_);
@@ -550,7 +577,7 @@ public final class IssuingAttributesProto {
               definitionsBuilder_.dispose();
               definitionsBuilder_ = null;
               definitions_ = other.definitions_;
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
               definitionsBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getDefinitionsFieldBuilder() : null;
@@ -591,7 +618,14 @@ public final class IssuingAttributesProto {
 
       private java.lang.Object expiryDate_ = "";
       /**
-       * <code>string expiry_date = 1;</code>
+       * <code>optional string expiry_date = 1;</code>
+       * @return Whether the expiryDate field is set.
+       */
+      public boolean hasExpiryDate() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <code>optional string expiry_date = 1;</code>
        * @return The expiryDate.
        */
       public java.lang.String getExpiryDate() {
@@ -607,7 +641,7 @@ public final class IssuingAttributesProto {
         }
       }
       /**
-       * <code>string expiry_date = 1;</code>
+       * <code>optional string expiry_date = 1;</code>
        * @return The bytes for expiryDate.
        */
       public com.google.protobuf.ByteString
@@ -624,7 +658,7 @@ public final class IssuingAttributesProto {
         }
       }
       /**
-       * <code>string expiry_date = 1;</code>
+       * <code>optional string expiry_date = 1;</code>
        * @param value The expiryDate to set.
        * @return This builder for chaining.
        */
@@ -633,23 +667,23 @@ public final class IssuingAttributesProto {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+  bitField0_ |= 0x00000001;
         expiryDate_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string expiry_date = 1;</code>
+       * <code>optional string expiry_date = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearExpiryDate() {
-        
+        bitField0_ = (bitField0_ & ~0x00000001);
         expiryDate_ = getDefaultInstance().getExpiryDate();
         onChanged();
         return this;
       }
       /**
-       * <code>string expiry_date = 1;</code>
+       * <code>optional string expiry_date = 1;</code>
        * @param value The bytes for expiryDate to set.
        * @return This builder for chaining.
        */
@@ -659,7 +693,7 @@ public final class IssuingAttributesProto {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-        
+        bitField0_ |= 0x00000001;
         expiryDate_ = value;
         onChanged();
         return this;
@@ -668,9 +702,9 @@ public final class IssuingAttributesProto {
       private java.util.List<com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition> definitions_ =
         java.util.Collections.emptyList();
       private void ensureDefinitionsIsMutable() {
-        if (!((bitField0_ & 0x00000001) != 0)) {
+        if (!((bitField0_ & 0x00000002) != 0)) {
           definitions_ = new java.util.ArrayList<com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition>(definitions_);
-          bitField0_ |= 0x00000001;
+          bitField0_ |= 0x00000002;
          }
       }
 
@@ -820,7 +854,7 @@ public final class IssuingAttributesProto {
       public Builder clearDefinitions() {
         if (definitionsBuilder_ == null) {
           definitions_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
         } else {
           definitionsBuilder_.clear();
@@ -897,7 +931,7 @@ public final class IssuingAttributesProto {
           definitionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.DefinitionOrBuilder>(
                   definitions_,
-                  ((bitField0_ & 0x00000001) != 0),
+                  ((bitField0_ & 0x00000002) != 0),
                   getParentForChildren(),
                   isClean());
           definitions_ = null;
@@ -962,12 +996,17 @@ public final class IssuingAttributesProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>string name = 1;</code>
+     * <code>optional string name = 1;</code>
+     * @return Whether the name field is set.
+     */
+    boolean hasName();
+    /**
+     * <code>optional string name = 1;</code>
      * @return The name.
      */
     java.lang.String getName();
     /**
-     * <code>string name = 1;</code>
+     * <code>optional string name = 1;</code>
      * @return The bytes for name.
      */
     com.google.protobuf.ByteString
@@ -1009,6 +1048,7 @@ public final class IssuingAttributesProto {
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
+      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -1021,7 +1061,7 @@ public final class IssuingAttributesProto {
               break;
             case 10: {
               java.lang.String s = input.readStringRequireUtf8();
-
+              bitField0_ |= 0x00000001;
               name_ = s;
               break;
             }
@@ -1036,6 +1076,8 @@ public final class IssuingAttributesProto {
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
@@ -1057,10 +1099,19 @@ public final class IssuingAttributesProto {
               com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.class, com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.Builder.class);
     }
 
+    private int bitField0_;
     public static final int NAME_FIELD_NUMBER = 1;
     private volatile java.lang.Object name_;
     /**
-     * <code>string name = 1;</code>
+     * <code>optional string name = 1;</code>
+     * @return Whether the name field is set.
+     */
+    @java.lang.Override
+    public boolean hasName() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional string name = 1;</code>
      * @return The name.
      */
     @java.lang.Override
@@ -1077,7 +1128,7 @@ public final class IssuingAttributesProto {
       }
     }
     /**
-     * <code>string name = 1;</code>
+     * <code>optional string name = 1;</code>
      * @return The bytes for name.
      */
     @java.lang.Override
@@ -1109,7 +1160,7 @@ public final class IssuingAttributesProto {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
       }
       unknownFields.writeTo(output);
@@ -1121,7 +1172,7 @@ public final class IssuingAttributesProto {
       if (size != -1) return size;
 
       size = 0;
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
       }
       size += unknownFields.getSerializedSize();
@@ -1139,8 +1190,11 @@ public final class IssuingAttributesProto {
       }
       com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition other = (com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition) obj;
 
-      if (!getName()
-          .equals(other.getName())) return false;
+      if (hasName() != other.hasName()) return false;
+      if (hasName()) {
+        if (!getName()
+            .equals(other.getName())) return false;
+      }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -1152,8 +1206,10 @@ public final class IssuingAttributesProto {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + NAME_FIELD_NUMBER;
-      hash = (53 * hash) + getName().hashCode();
+      if (hasName()) {
+        hash = (37 * hash) + NAME_FIELD_NUMBER;
+        hash = (53 * hash) + getName().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1288,7 +1344,7 @@ public final class IssuingAttributesProto {
       public Builder clear() {
         super.clear();
         name_ = "";
-
+        bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
 
@@ -1315,7 +1371,13 @@ public final class IssuingAttributesProto {
       @java.lang.Override
       public com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition buildPartial() {
         com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition result = new com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          to_bitField0_ |= 0x00000001;
+        }
         result.name_ = name_;
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -1364,7 +1426,8 @@ public final class IssuingAttributesProto {
 
       public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition other) {
         if (other == com.yoti.api.client.spi.remote.proto.IssuingAttributesProto.Definition.getDefaultInstance()) return this;
-        if (!other.getName().isEmpty()) {
+        if (other.hasName()) {
+          bitField0_ |= 0x00000001;
           name_ = other.name_;
           onChanged();
         }
@@ -1396,10 +1459,18 @@ public final class IssuingAttributesProto {
         }
         return this;
       }
+      private int bitField0_;
 
       private java.lang.Object name_ = "";
       /**
-       * <code>string name = 1;</code>
+       * <code>optional string name = 1;</code>
+       * @return Whether the name field is set.
+       */
+      public boolean hasName() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <code>optional string name = 1;</code>
        * @return The name.
        */
       public java.lang.String getName() {
@@ -1415,7 +1486,7 @@ public final class IssuingAttributesProto {
         }
       }
       /**
-       * <code>string name = 1;</code>
+       * <code>optional string name = 1;</code>
        * @return The bytes for name.
        */
       public com.google.protobuf.ByteString
@@ -1432,7 +1503,7 @@ public final class IssuingAttributesProto {
         }
       }
       /**
-       * <code>string name = 1;</code>
+       * <code>optional string name = 1;</code>
        * @param value The name to set.
        * @return This builder for chaining.
        */
@@ -1441,23 +1512,23 @@ public final class IssuingAttributesProto {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+  bitField0_ |= 0x00000001;
         name_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string name = 1;</code>
+       * <code>optional string name = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearName() {
-        
+        bitField0_ = (bitField0_ & ~0x00000001);
         name_ = getDefaultInstance().getName();
         onChanged();
         return this;
       }
       /**
-       * <code>string name = 1;</code>
+       * <code>optional string name = 1;</code>
        * @param value The bytes for name to set.
        * @return This builder for chaining.
        */
@@ -1467,7 +1538,7 @@ public final class IssuingAttributesProto {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-        
+        bitField0_ |= 0x00000001;
         name_ = value;
         onChanged();
         return this;
@@ -1545,16 +1616,12 @@ public final class IssuingAttributesProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\027IssuingAttributes.proto\022\016sharepubapi_v" +
-      "1\"Y\n\021IssuingAttributes\022\023\n\013expiry_date\030\001 " +
-      "\001(\t\022/\n\013definitions\030\002 \003(\0132\032.sharepubapi_v" +
-      "1.Definition\"\032\n\nDefinition\022\014\n\004name\030\001 \001(\t" +
-      "B\355\001\n$com.yoti.api.client.spi.remote.prot" +
-      "oB\026IssuingAttributesProtoZ0github.com/ge" +
-      "tyoti/yoti-go-sdk/v3/yotiprotoshare\252\002\030Yo" +
-      "ti.Auth.ProtoBuf.Share\312\002\031Yoti\\Protobuf\\S" +
-      "harepubapi\342\002%Yoti\\Protobuf\\Sharepubapi\\G" +
-      "PBMetadata\352\002\033Yoti::Protobuf::Sharepubapi" +
-      "b\006proto3"
+      "1\"n\n\021IssuingAttributes\022\030\n\013expiry_date\030\001 " +
+      "\001(\tH\000\210\001\001\022/\n\013definitions\030\002 \003(\0132\032.sharepub" +
+      "api_v1.DefinitionB\016\n\014_expiry_date\"(\n\nDef" +
+      "inition\022\021\n\004name\030\001 \001(\tH\000\210\001\001B\007\n\005_nameB>\n$c" +
+      "om.yoti.api.client.spi.remote.protoB\026Iss" +
+      "uingAttributesProtob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1565,13 +1632,13 @@ public final class IssuingAttributesProto {
     internal_static_sharepubapi_v1_IssuingAttributes_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sharepubapi_v1_IssuingAttributes_descriptor,
-        new java.lang.String[] { "ExpiryDate", "Definitions", });
+        new java.lang.String[] { "ExpiryDate", "Definitions", "ExpiryDate", });
     internal_static_sharepubapi_v1_Definition_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_sharepubapi_v1_Definition_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sharepubapi_v1_Definition_descriptor,
-        new java.lang.String[] { "Name", });
+        new java.lang.String[] { "Name", "Name", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

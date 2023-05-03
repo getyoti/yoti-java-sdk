@@ -1,9 +1,8 @@
 package com.yoti.api.client.spi.remote;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
-import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
@@ -18,16 +17,14 @@ import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.ProfileException;
-import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.AttributeListProto;
+import com.yoti.api.client.spi.remote.proto.AttributeProto;
 
 import com.google.protobuf.InvalidProtocolBufferException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.*;
+import org.mockito.junit.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AttributeListConverterTest {
@@ -36,42 +33,47 @@ public class AttributeListConverterTest {
     private static final String DATE_ATTRIBUTE_NAME = "testDateAttr";
     private static final String JSON_ATTRIBUTE_NAME = "testJsonAttr";
 
-    private static final AttrProto.Attribute STRING_ATTRIBUTE_PROTO = AttrProto.Attribute.newBuilder()
+    private static final AttributeProto.Attribute STRING_ATTRIBUTE_PROTO = AttributeProto.Attribute.newBuilder()
             .setName(STRING_ATTRIBUTE_NAME)
             .build();
 
-    private static final AttrProto.Attribute DATE_ATTRIBUTE_PROTO = AttrProto.Attribute.newBuilder()
+    private static final AttributeProto.Attribute DATE_ATTRIBUTE_PROTO = AttributeProto.Attribute.newBuilder()
             .setName(DATE_ATTRIBUTE_NAME)
             .build();
 
-    private static final AttrProto.Attribute JSON_ATTRIBUTE_PROTO = AttrProto.Attribute.newBuilder()
+    private static final AttributeProto.Attribute JSON_ATTRIBUTE_PROTO = AttributeProto.Attribute.newBuilder()
             .setName(JSON_ATTRIBUTE_NAME)
             .build();
 
-    private static final AttrProto.Attribute POSTAL_ADDRESS_PROTO = AttrProto.Attribute.newBuilder()
+    private static final AttributeProto.Attribute POSTAL_ADDRESS_PROTO = AttributeProto.Attribute.newBuilder()
             .setName(AttributeConstants.HumanProfileAttributes.POSTAL_ADDRESS)
             .build();
 
-    private static final AttrProto.Attribute STRUCTURED_ADDRESS_PROTO = AttrProto.Attribute.newBuilder()
+    private static final AttributeProto.Attribute STRUCTURED_ADDRESS_PROTO = AttributeProto.Attribute.newBuilder()
             .setName(AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS)
             .build();
 
-    private static final byte[] PROFILE_DATA = createProfileData(STRING_ATTRIBUTE_PROTO, DATE_ATTRIBUTE_PROTO, JSON_ATTRIBUTE_PROTO);
+    private static final byte[] PROFILE_DATA = createProfileData(
+            STRING_ATTRIBUTE_PROTO,
+            DATE_ATTRIBUTE_PROTO,
+            JSON_ATTRIBUTE_PROTO
+    );
 
     @InjectMocks AttributeListConverter testObj;
 
-    @Mock AttributeConverter attributeConverterMock;
-    @Mock AddressTransformer addressTransformerMock;
+    @Mock AttributeConverter attributeConverter;
+    @Mock AddressTransformer addressTransformer;
 
-    @Mock Attribute<String> stringAttributeMock;
-    @Mock Attribute<Date> dateAttributeMock;
-    @Mock Attribute<Map> jsonAttributeMock;
-    @Mock Attribute<String> postalAddressMock;
-    @Mock Attribute<Map> structuredAddressMock;
+    @Mock Attribute<String> stringAttribute;
+    @Mock Attribute<Date> dateAttribute;
+    @Mock Attribute<Map<String, Object>> jsonAttribute;
+    @Mock Attribute<String> postalAddress;
+    @Mock Attribute<Map<String, Object>> structuredAddress;
 
     @Before
     public void setUp() throws Exception {
-        when(structuredAddressMock.getName()).thenReturn(AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS);
+        when(structuredAddress.getName())
+                .thenReturn(AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS);
     }
 
     @Test
@@ -89,7 +91,7 @@ public class AttributeListConverterTest {
     }
 
     @Test
-    public void shouldWrapInvalidProtocolBufferException() throws Exception {
+    public void shouldWrapInvalidProtocolBufferException() {
         try {
             testObj.parseAttributeList(new byte[] { 1, 2, 3 });
         } catch (ProfileException e) {
@@ -100,76 +102,79 @@ public class AttributeListConverterTest {
     }
 
     @Test
-    public void shouldSuccesfullyConvertAttributes() throws Exception {
-        when(attributeConverterMock.<String>convertAttribute(STRING_ATTRIBUTE_PROTO)).thenReturn(stringAttributeMock);
-        when(attributeConverterMock.<Date>convertAttribute(DATE_ATTRIBUTE_PROTO)).thenReturn(dateAttributeMock);
-        when(attributeConverterMock.<Map>convertAttribute(JSON_ATTRIBUTE_PROTO)).thenReturn(jsonAttributeMock);
+    public void shouldSuccessfullyConvertAttributes() throws Exception {
+        when(attributeConverter.<String>convertAttribute(STRING_ATTRIBUTE_PROTO)).thenReturn(stringAttribute);
+        when(attributeConverter.<Date>convertAttribute(DATE_ATTRIBUTE_PROTO)).thenReturn(dateAttribute);
+        when(attributeConverter.<Map<String, Object>>convertAttribute(JSON_ATTRIBUTE_PROTO)).thenReturn(jsonAttribute);
 
         List<Attribute<?>> result = testObj.parseAttributeList(PROFILE_DATA);
 
         assertThat(result, hasSize(3));
-        assertThat(result, hasItems(stringAttributeMock, dateAttributeMock, jsonAttributeMock));
+        assertThat(result, hasItems(stringAttribute, dateAttribute, jsonAttribute));
     }
 
     @Test
     public void shouldTolerateFailureToParseSomeAttributes() throws Exception {
-        when(attributeConverterMock.<String>convertAttribute(STRING_ATTRIBUTE_PROTO)).thenReturn(stringAttributeMock);
-        when(attributeConverterMock.<Date>convertAttribute(DATE_ATTRIBUTE_PROTO)).thenThrow(new IOException());
-        when(attributeConverterMock.<Map>convertAttribute(JSON_ATTRIBUTE_PROTO)).thenThrow(new ParseException("some message", 1));
+        when(attributeConverter.<String>convertAttribute(STRING_ATTRIBUTE_PROTO)).thenReturn(stringAttribute);
+        when(attributeConverter.<Date>convertAttribute(DATE_ATTRIBUTE_PROTO)).thenThrow(new IOException());
+        when(attributeConverter.<Map<String, Object>>convertAttribute(JSON_ATTRIBUTE_PROTO))
+                .thenThrow(new ParseException("some message", 1));
 
         List<Attribute<?>> result = testObj.parseAttributeList(PROFILE_DATA);
 
         assertThat(result, hasSize(1));
-        assertThat(result, hasItem(stringAttributeMock));
+        assertThat(result, hasItem(stringAttribute));
     }
 
     @Test
     public void shouldNotSubstituteStructuredAddressWhenPostalAddressIsPresent() throws Exception {
-        when(attributeConverterMock.<String>convertAttribute(POSTAL_ADDRESS_PROTO)).thenReturn(postalAddressMock);
+        when(attributeConverter.<String>convertAttribute(POSTAL_ADDRESS_PROTO)).thenReturn(postalAddress);
 
         List<Attribute<?>> result = testObj.parseAttributeList(createProfileData(POSTAL_ADDRESS_PROTO));
 
         assertThat(result, hasSize(1));
-        assertThat(result, hasItem(postalAddressMock));
-        verifyNoInteractions(addressTransformerMock);
+        assertThat(result, hasItem(postalAddress));
+        verifyNoInteractions(addressTransformer);
     }
 
     @Test
     public void shouldNotSubstituteStructuredAddressWhenItsNotPresent() throws Exception {
-        when(attributeConverterMock.<String>convertAttribute(STRING_ATTRIBUTE_PROTO)).thenReturn(stringAttributeMock);
-        when(attributeConverterMock.<Date>convertAttribute(DATE_ATTRIBUTE_PROTO)).thenReturn(dateAttributeMock);
-        when(attributeConverterMock.<Map>convertAttribute(JSON_ATTRIBUTE_PROTO)).thenReturn(jsonAttributeMock);
+        when(attributeConverter.<String>convertAttribute(STRING_ATTRIBUTE_PROTO)).thenReturn(stringAttribute);
+        when(attributeConverter.<Date>convertAttribute(DATE_ATTRIBUTE_PROTO)).thenReturn(dateAttribute);
+        when(attributeConverter.<Map<String, Object>>convertAttribute(JSON_ATTRIBUTE_PROTO)).thenReturn(jsonAttribute);
 
         List<Attribute<?>> result = testObj.parseAttributeList(PROFILE_DATA);
 
         assertThat(result, hasSize(3));
-        assertThat(result, hasItems(stringAttributeMock, dateAttributeMock, jsonAttributeMock));
-        verifyNoInteractions(addressTransformerMock);
+        assertThat(result, hasItems(stringAttribute, dateAttribute, jsonAttribute));
+        verifyNoInteractions(addressTransformer);
     }
 
     @Test
     public void shouldSubstituteStructuredAddressForMissingPostalAddress() throws Exception {
-        when(attributeConverterMock.<Map>convertAttribute(STRUCTURED_ADDRESS_PROTO)).thenReturn(structuredAddressMock);
-        when(addressTransformerMock.transform(structuredAddressMock)).thenReturn(postalAddressMock);
+        when(attributeConverter.<Map<String, Object>>convertAttribute(STRUCTURED_ADDRESS_PROTO))
+                .thenReturn(structuredAddress);
+        when(addressTransformer.transform(structuredAddress)).thenReturn(postalAddress);
 
         List<Attribute<?>> result = testObj.parseAttributeList(createProfileData(STRUCTURED_ADDRESS_PROTO));
 
         assertThat(result, hasSize(2));
-        assertThat(result, hasItems(structuredAddressMock, postalAddressMock));
+        assertThat(result, hasItems(structuredAddress, postalAddress));
     }
 
     @Test
     public void shouldNotAddNullTransformedAddress() throws Exception {
-        when(attributeConverterMock.<Map>convertAttribute(STRUCTURED_ADDRESS_PROTO)).thenReturn(structuredAddressMock);
-        when(addressTransformerMock.transform(structuredAddressMock)).thenReturn(null);
+        when(attributeConverter.<Map<String, Object>>convertAttribute(STRUCTURED_ADDRESS_PROTO))
+                .thenReturn(structuredAddress);
+        when(addressTransformer.transform(structuredAddress)).thenReturn(null);
 
         List<Attribute<?>> result = testObj.parseAttributeList(createProfileData(STRUCTURED_ADDRESS_PROTO));
 
         assertThat(result, hasSize(1));
-        assertThat(result, hasItem(structuredAddressMock));
+        assertThat(result, hasItem(structuredAddress));
     }
 
-    private static byte[] createProfileData(AttrProto.Attribute... attributes) {
+    private static byte[] createProfileData(AttributeProto.Attribute... attributes) {
         return AttributeListProto.AttributeList.newBuilder()
                 .addAllAttributes(Arrays.asList(attributes))
                 .build()

@@ -109,6 +109,8 @@ public final class ExtraDataProto {
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
@@ -823,13 +825,9 @@ public final class ExtraDataProto {
     java.lang.String[] descriptorData = {
       "\n\017ExtraData.proto\022\016sharepubapi_v1\032\017DataE" +
       "ntry.proto\"4\n\tExtraData\022\'\n\004list\030\001 \003(\0132\031." +
-      "sharepubapi_v1.DataEntryB\345\001\n$com.yoti.ap" +
-      "i.client.spi.remote.protoB\016ExtraDataProt" +
-      "oZ0github.com/getyoti/yoti-go-sdk/v3/yot" +
-      "iprotoshare\252\002\030Yoti.Auth.ProtoBuf.Share\312\002" +
-      "\031Yoti\\Protobuf\\Sharepubapi\342\002%Yoti\\Protob" +
-      "uf\\Sharepubapi\\GPBMetadata\352\002\033Yoti::Proto" +
-      "buf::Sharepubapib\006proto3"
+      "sharepubapi_v1.DataEntryB6\n$com.yoti.api" +
+      ".client.spi.remote.protoB\016ExtraDataProto" +
+      "b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

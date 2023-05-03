@@ -15,8 +15,7 @@ import com.yoti.api.client.Anchor;
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.Date;
 import com.yoti.api.client.Image;
-import com.yoti.api.client.spi.remote.proto.AttrProto;
-import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
+import com.yoti.api.client.spi.remote.proto.AttributeProto;
 import com.yoti.api.client.spi.remote.util.AnchorType;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,7 +40,7 @@ class AttributeConverter {
         return new AttributeConverter(new DocumentDetailsAttributeParser(), new AnchorConverter());
     }
 
-    <T> Attribute<T> convertAttribute(AttrProto.Attribute attribute) throws ParseException, IOException {
+    <T> Attribute<T> convertAttribute(AttributeProto.Attribute attribute) throws ParseException, IOException {
         Object value = convertValueFromProto(attribute);
         value = convertSpecialType(attribute, value);
         List<Anchor> anchors = convertAnchors(attribute);
@@ -54,12 +53,12 @@ class AttributeConverter {
         return value == null || value.isEmpty() ? null : value;
     }
 
-    private Object convertValueFromProto(AttrProto.Attribute attribute) throws ParseException, IOException {
+    private Object convertValueFromProto(AttributeProto.Attribute attribute) throws ParseException, IOException {
         return convertValue(attribute.getContentType(), attribute.getValue());
     }
 
-    private Object convertValue(ContentTypeProto.ContentType contentType, ByteString value) throws ParseException, IOException {
-        boolean isInvalid = (contentType != ContentTypeProto.ContentType.STRING && value.isEmpty());
+    private Object convertValue(AttributeProto.ContentType contentType, ByteString value) throws ParseException, IOException {
+        boolean isInvalid = (contentType != AttributeProto.ContentType.STRING && value.isEmpty());
         if (isInvalid) {
             throw new ParseException("Only STRING attributes can have an empty value", 0);
         }
@@ -87,14 +86,14 @@ class AttributeConverter {
 
     private List<Object> convertMultiValue(ByteString value) throws IOException, ParseException {
         List<Object> list = new ArrayList<>();
-        for (AttrProto.MultiValue.Value thisValue : AttrProto.MultiValue.parseFrom(value).getValuesList()) {
+        for (AttributeProto.MultiValue.Value thisValue : AttributeProto.MultiValue.parseFrom(value).getValuesList()) {
             Object o = convertValue(thisValue.getContentType(), thisValue.getData());
             list.add(o);
         }
         return list;
     }
 
-    private Object convertSpecialType(AttrProto.Attribute attribute, Object value) throws UnsupportedEncodingException, ParseException {
+    private Object convertSpecialType(AttributeProto.Attribute attribute, Object value) throws UnsupportedEncodingException, ParseException {
         switch (attribute.getName()) {
             case AttributeConstants.HumanProfileAttributes.DOCUMENT_DETAILS:
                 return documentDetailsAttributeParser.parseFrom((String) value);
@@ -117,14 +116,14 @@ class AttributeConverter {
         return Collections.unmodifiableList(list);
     }
 
-    private List<Anchor> convertAnchors(AttrProto.Attribute attrProto) {
+    private List<Anchor> convertAnchors(AttributeProto.Attribute AttributeProto) {
         List<Anchor> entries = new ArrayList<>();
-        for (AttrProto.Anchor anchorProto : attrProto.getAnchorsList()) {
+        for (AttributeProto.Anchor anchorProto : AttributeProto.getAnchorsList()) {
             try {
                 entries.add(anchorConverter.convert(anchorProto));
             } catch (Exception e) {
-                LOG.warn("Failed to read '{}' Anchor for Attribute '{}'", anchorProto.getSubType(), attrProto.getName());
-                LOG.debug("Converting Anchor on Attribute '{}' resulted in exception '{}'", attrProto.getName(), e);
+                LOG.warn("Failed to read '{}' Anchor for Attribute '{}'", anchorProto.getSubType(), AttributeProto.getName());
+                LOG.debug("Converting Anchor on Attribute '{}' resulted in exception '{}'", AttributeProto.getName(), e);
             }
         }
         return Collections.unmodifiableList(entries);

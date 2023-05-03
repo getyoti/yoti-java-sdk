@@ -19,13 +19,23 @@ public final class EncryptedDataProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>bytes iv = 1;</code>
+     * <code>optional bytes iv = 1;</code>
+     * @return Whether the iv field is set.
+     */
+    boolean hasIv();
+    /**
+     * <code>optional bytes iv = 1;</code>
      * @return The iv.
      */
     com.google.protobuf.ByteString getIv();
 
     /**
-     * <code>bytes cipher_text = 2;</code>
+     * <code>optional bytes cipher_text = 2;</code>
+     * @return Whether the cipherText field is set.
+     */
+    boolean hasCipherText();
+    /**
+     * <code>optional bytes cipher_text = 2;</code>
      * @return The cipherText.
      */
     com.google.protobuf.ByteString getCipherText();
@@ -67,6 +77,7 @@ public final class EncryptedDataProto {
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
+      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -78,12 +89,12 @@ public final class EncryptedDataProto {
               done = true;
               break;
             case 10: {
-
+              bitField0_ |= 0x00000001;
               iv_ = input.readBytes();
               break;
             }
             case 18: {
-
+              bitField0_ |= 0x00000002;
               cipherText_ = input.readBytes();
               break;
             }
@@ -98,6 +109,8 @@ public final class EncryptedDataProto {
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
@@ -119,10 +132,19 @@ public final class EncryptedDataProto {
               com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData.class, com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData.Builder.class);
     }
 
+    private int bitField0_;
     public static final int IV_FIELD_NUMBER = 1;
     private com.google.protobuf.ByteString iv_;
     /**
-     * <code>bytes iv = 1;</code>
+     * <code>optional bytes iv = 1;</code>
+     * @return Whether the iv field is set.
+     */
+    @java.lang.Override
+    public boolean hasIv() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional bytes iv = 1;</code>
      * @return The iv.
      */
     @java.lang.Override
@@ -133,7 +155,15 @@ public final class EncryptedDataProto {
     public static final int CIPHER_TEXT_FIELD_NUMBER = 2;
     private com.google.protobuf.ByteString cipherText_;
     /**
-     * <code>bytes cipher_text = 2;</code>
+     * <code>optional bytes cipher_text = 2;</code>
+     * @return Whether the cipherText field is set.
+     */
+    @java.lang.Override
+    public boolean hasCipherText() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <code>optional bytes cipher_text = 2;</code>
      * @return The cipherText.
      */
     @java.lang.Override
@@ -155,10 +185,10 @@ public final class EncryptedDataProto {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!iv_.isEmpty()) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         output.writeBytes(1, iv_);
       }
-      if (!cipherText_.isEmpty()) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         output.writeBytes(2, cipherText_);
       }
       unknownFields.writeTo(output);
@@ -170,11 +200,11 @@ public final class EncryptedDataProto {
       if (size != -1) return size;
 
       size = 0;
-      if (!iv_.isEmpty()) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(1, iv_);
       }
-      if (!cipherText_.isEmpty()) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, cipherText_);
       }
@@ -193,10 +223,16 @@ public final class EncryptedDataProto {
       }
       com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData other = (com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData) obj;
 
-      if (!getIv()
-          .equals(other.getIv())) return false;
-      if (!getCipherText()
-          .equals(other.getCipherText())) return false;
+      if (hasIv() != other.hasIv()) return false;
+      if (hasIv()) {
+        if (!getIv()
+            .equals(other.getIv())) return false;
+      }
+      if (hasCipherText() != other.hasCipherText()) return false;
+      if (hasCipherText()) {
+        if (!getCipherText()
+            .equals(other.getCipherText())) return false;
+      }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -208,10 +244,14 @@ public final class EncryptedDataProto {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + IV_FIELD_NUMBER;
-      hash = (53 * hash) + getIv().hashCode();
-      hash = (37 * hash) + CIPHER_TEXT_FIELD_NUMBER;
-      hash = (53 * hash) + getCipherText().hashCode();
+      if (hasIv()) {
+        hash = (37 * hash) + IV_FIELD_NUMBER;
+        hash = (53 * hash) + getIv().hashCode();
+      }
+      if (hasCipherText()) {
+        hash = (37 * hash) + CIPHER_TEXT_FIELD_NUMBER;
+        hash = (53 * hash) + getCipherText().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -346,9 +386,9 @@ public final class EncryptedDataProto {
       public Builder clear() {
         super.clear();
         iv_ = com.google.protobuf.ByteString.EMPTY;
-
+        bitField0_ = (bitField0_ & ~0x00000001);
         cipherText_ = com.google.protobuf.ByteString.EMPTY;
-
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
@@ -375,8 +415,17 @@ public final class EncryptedDataProto {
       @java.lang.Override
       public com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData buildPartial() {
         com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData result = new com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          to_bitField0_ |= 0x00000001;
+        }
         result.iv_ = iv_;
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          to_bitField0_ |= 0x00000002;
+        }
         result.cipherText_ = cipherText_;
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -425,10 +474,10 @@ public final class EncryptedDataProto {
 
       public Builder mergeFrom(com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData other) {
         if (other == com.yoti.api.client.spi.remote.proto.EncryptedDataProto.EncryptedData.getDefaultInstance()) return this;
-        if (other.getIv() != com.google.protobuf.ByteString.EMPTY) {
+        if (other.hasIv()) {
           setIv(other.getIv());
         }
-        if (other.getCipherText() != com.google.protobuf.ByteString.EMPTY) {
+        if (other.hasCipherText()) {
           setCipherText(other.getCipherText());
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -459,10 +508,19 @@ public final class EncryptedDataProto {
         }
         return this;
       }
+      private int bitField0_;
 
       private com.google.protobuf.ByteString iv_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>bytes iv = 1;</code>
+       * <code>optional bytes iv = 1;</code>
+       * @return Whether the iv field is set.
+       */
+      @java.lang.Override
+      public boolean hasIv() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <code>optional bytes iv = 1;</code>
        * @return The iv.
        */
       @java.lang.Override
@@ -470,7 +528,7 @@ public final class EncryptedDataProto {
         return iv_;
       }
       /**
-       * <code>bytes iv = 1;</code>
+       * <code>optional bytes iv = 1;</code>
        * @param value The iv to set.
        * @return This builder for chaining.
        */
@@ -478,17 +536,17 @@ public final class EncryptedDataProto {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+  bitField0_ |= 0x00000001;
         iv_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>bytes iv = 1;</code>
+       * <code>optional bytes iv = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearIv() {
-        
+        bitField0_ = (bitField0_ & ~0x00000001);
         iv_ = getDefaultInstance().getIv();
         onChanged();
         return this;
@@ -496,7 +554,15 @@ public final class EncryptedDataProto {
 
       private com.google.protobuf.ByteString cipherText_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>bytes cipher_text = 2;</code>
+       * <code>optional bytes cipher_text = 2;</code>
+       * @return Whether the cipherText field is set.
+       */
+      @java.lang.Override
+      public boolean hasCipherText() {
+        return ((bitField0_ & 0x00000002) != 0);
+      }
+      /**
+       * <code>optional bytes cipher_text = 2;</code>
        * @return The cipherText.
        */
       @java.lang.Override
@@ -504,7 +570,7 @@ public final class EncryptedDataProto {
         return cipherText_;
       }
       /**
-       * <code>bytes cipher_text = 2;</code>
+       * <code>optional bytes cipher_text = 2;</code>
        * @param value The cipherText to set.
        * @return This builder for chaining.
        */
@@ -512,17 +578,17 @@ public final class EncryptedDataProto {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+  bitField0_ |= 0x00000002;
         cipherText_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>bytes cipher_text = 2;</code>
+       * <code>optional bytes cipher_text = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearCipherText() {
-        
+        bitField0_ = (bitField0_ & ~0x00000002);
         cipherText_ = getDefaultInstance().getCipherText();
         onChanged();
         return this;
@@ -594,15 +660,11 @@ public final class EncryptedDataProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\023EncryptedData.proto\022\014compubapi_v1\"0\n\rE" +
-      "ncryptedData\022\n\n\002iv\030\001 \001(\014\022\023\n\013cipher_text\030" +
-      "\002 \001(\014B\342\001\n$com.yoti.api.client.spi.remote" +
-      ".protoB\022EncryptedDataProtoZ.github.com/g" +
-      "etyoti/yoti-go-sdk/v3/yotiprotocom\252\002\031Yot" +
-      "i.Auth.ProtoBuf.Common\312\002\027Yoti\\Protobuf\\C" +
-      "ompubapi\342\002#Yoti\\Protobuf\\Compubapi\\GPBMe" +
-      "tadata\352\002\031Yoti::Protobuf::Compubapib\006prot" +
-      "o3"
+      "\n\023EncryptedData.proto\022\014compubapi_v1\"Q\n\rE" +
+      "ncryptedData\022\017\n\002iv\030\001 \001(\014H\000\210\001\001\022\030\n\013cipher_" +
+      "text\030\002 \001(\014H\001\210\001\001B\005\n\003_ivB\016\n\014_cipher_textB:" +
+      "\n$com.yoti.api.client.spi.remote.protoB\022" +
+      "EncryptedDataProtob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -613,7 +675,7 @@ public final class EncryptedDataProto {
     internal_static_compubapi_v1_EncryptedData_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_compubapi_v1_EncryptedData_descriptor,
-        new java.lang.String[] { "Iv", "CipherText", });
+        new java.lang.String[] { "Iv", "CipherText", "Iv", "CipherText", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

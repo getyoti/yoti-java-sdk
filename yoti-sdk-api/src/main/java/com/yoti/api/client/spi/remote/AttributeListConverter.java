@@ -11,8 +11,8 @@ import java.util.List;
 
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.ProfileException;
-import com.yoti.api.client.spi.remote.proto.AttrProto;
 import com.yoti.api.client.spi.remote.proto.AttributeListProto;
+import com.yoti.api.client.spi.remote.proto.AttributeProto;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.slf4j.Logger;
@@ -56,7 +56,7 @@ class AttributeListConverter {
 
     private List<Attribute<?>> parseAttributes(AttributeListProto.AttributeList message) {
         List<Attribute<?>> parsedAttributes = new ArrayList<>();
-        for (AttrProto.Attribute attribute : message.getAttributesList()) {
+        for (AttributeProto.Attribute attribute : message.getAttributesList()) {
             try {
                 parsedAttributes.add(attributeConverter.convertAttribute(attribute));
             } catch (IOException | ParseException e) {

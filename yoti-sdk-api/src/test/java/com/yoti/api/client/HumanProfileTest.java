@@ -22,13 +22,12 @@ import java.util.Map;
 
 import com.yoti.api.client.spi.remote.AttributeParser;
 import com.yoti.api.client.spi.remote.JpegAttributeValue;
-import com.yoti.api.client.spi.remote.proto.AttrProto;
-import com.yoti.api.client.spi.remote.proto.ContentTypeProto;
+import com.yoti.api.client.spi.remote.proto.AttributeProto;
 
 import com.google.protobuf.ByteString;
+import org.hamcrest.Matcher;
 import org.junit.*;
 import org.junit.runner.RunWith;
-import org.mockito.*;
 import org.mockito.junit.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,8 +39,6 @@ public class HumanProfileTest {
     private static final Integer INTEGER_VALUE = 1;
 
     HumanProfile testObj;
-
-    @Mock Profile profileMock;
 
     Attribute<String> ageUnder18Attribute = new Attribute<>("age_under:18", "false");
     Attribute<String> ageUnder21Attribute = new Attribute<>("age_under:21", "true");
@@ -291,10 +288,16 @@ public class HumanProfileTest {
 
         assertThat(result, hasSize(4));
         assertThat(new HashSet<>(result), hasSize(4));
-        assertThat(result.get(0).getAttribute(), isOneOf(ageUnder18Attribute, ageUnder21Attribute, ageOver18Attribute, ageOver21Attribute));
-        assertThat(result.get(1).getAttribute(), isOneOf(ageUnder18Attribute, ageUnder21Attribute, ageOver18Attribute, ageOver21Attribute));
-        assertThat(result.get(2).getAttribute(), isOneOf(ageUnder18Attribute, ageUnder21Attribute, ageOver18Attribute, ageOver21Attribute));
-        assertThat(result.get(3).getAttribute(), isOneOf(ageUnder18Attribute, ageUnder21Attribute, ageOver18Attribute, ageOver21Attribute));
+        Matcher<Attribute<String>> ageDerivation = is(oneOf(
+                ageUnder18Attribute,
+                ageUnder21Attribute,
+                ageOver18Attribute,
+                ageOver21Attribute
+        ));
+        assertThat(result.get(0).getAttribute(), ageDerivation);
+        assertThat(result.get(1).getAttribute(), ageDerivation);
+        assertThat(result.get(2).getAttribute(), ageDerivation);
+        assertThat(result.get(3).getAttribute(), ageDerivation);
     }
 
     @Test
@@ -353,9 +356,9 @@ public class HumanProfileTest {
 
         String attributeName = "identity_profile_report";
 
-        AttrProto.Attribute identity_profile_report = AttrProto.Attribute.newBuilder()
+        AttributeProto.Attribute identity_profile_report = AttributeProto.Attribute.newBuilder()
                 .setName(attributeName)
-                .setContentType(ContentTypeProto.ContentType.JSON)
+                .setContentType(AttributeProto.ContentType.JSON)
                 .setValue(ByteString.copyFromUtf8(identityReportJson))
                 .build();
 
