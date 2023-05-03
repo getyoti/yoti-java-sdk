@@ -11,6 +11,12 @@
     <Package name="com.yoti.api.client.spi.remote.proto"/>
   </Match>
 
+  <!-- The IV comes from a trusted source  -->
+  <Match>
+    <Class name="com.yoti.api.client.spi.remote.call.identity.ReceiptItemKey$Builder"/>
+    <Bug pattern="STATIC_IV"/>
+  </Match>
+
   <!-- Legacy exclusions -->
   <Match>
     <Bug pattern="CRLF_INJECTION_LOGS"/>
