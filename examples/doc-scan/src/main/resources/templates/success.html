@@ -311,7 +311,7 @@
                     <div id="collapse-synectics-identity-fraud-checks" class="collapse"
                          aria-labelledby="synectics-identity-fraud-checks">
                         <div class="card-body">
-                            <table th:each="check : ${sessionResult.getSynecticsIdentityFraudChecks()()}"
+                            <table th:each="check : ${sessionResult.getSynecticsIdentityFraudChecks()}"
                                    th:include="fragments/checks :: check-template(${check})"
                                    class="table table-striped">
                             </table>
