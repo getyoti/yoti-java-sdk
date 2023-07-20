@@ -65,6 +65,16 @@ public class RequestedIbvVisualReviewCheck extends RequestedCheck<RequestedIbvVi
             return this;
         }
 
+        /**
+         * Sets the manual check value to IBV of a config that will be used for ibv visual review check
+         *
+         * @return the builder
+         */
+        public Builder withManualCheckIbv() {
+            this.manualCheck = DocScanConstants.IBV;
+            return this;
+        }
+
         public RequestedIbvVisualReviewCheck build() {
             notNullOrEmpty(manualCheck, "manualCheck");
 

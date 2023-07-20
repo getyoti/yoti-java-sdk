@@ -50,6 +50,20 @@ public class RequestedIbvVisualReviewCheckTest {
         assertThat(configResult.getManualCheck(), Matchers.is("NEVER"));
     }
 
+    @Test
+    public void shouldBuildWithManualCheckIbv() {
+        RequestedIbvVisualReviewCheck result = RequestedIbvVisualReviewCheck.builder()
+                .withManualCheckIbv()
+                .build();
+
+        assertThat(result, Matchers.is(instanceOf(RequestedIbvVisualReviewCheck.class)));
+        assertThat(result.getConfig(), Matchers.is(instanceOf(RequestedIbvVisualReviewConfig.class)));
+        assertThat(result.getType(), Matchers.is("IBV_VISUAL_REVIEW_CHECK"));
+
+        RequestedIbvVisualReviewConfig configResult = result.getConfig();
+        assertThat(configResult.getManualCheck(), Matchers.is("IBV"));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void shouldRaiseForNullManualCheckType() {
         RequestedIbvVisualReviewCheck.builder()
