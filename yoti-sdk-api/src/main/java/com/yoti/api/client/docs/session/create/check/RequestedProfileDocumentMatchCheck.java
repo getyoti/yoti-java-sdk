@@ -65,6 +65,16 @@ public class RequestedProfileDocumentMatchCheck extends RequestedCheck<Requested
             return this;
         }
 
+        /**
+         * Sets the manual check value to IBV of a config that will be used for profile document match check
+         *
+         * @return the builder
+         */
+        public Builder withManualCheckIbv() {
+            this.manualCheck = DocScanConstants.IBV;
+            return this;
+        }
+
         public RequestedProfileDocumentMatchCheck build() {
             notNullOrEmpty(manualCheck, "manualCheck");
 

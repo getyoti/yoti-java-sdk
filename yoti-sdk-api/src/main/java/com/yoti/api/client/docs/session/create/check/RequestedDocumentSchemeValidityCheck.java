@@ -67,6 +67,16 @@ public class RequestedDocumentSchemeValidityCheck extends RequestedCheck<Request
         }
 
         /**
+         * Sets the manual check value to IBV of a config that will be used for document scheme validity check
+         *
+         * @return the builder
+         */
+        public Builder withManualCheckIbv() {
+            this.manualCheck = DocScanConstants.IBV;
+            return this;
+        }
+
+        /**
          * Sets the scheme value of a config that will be used for document scheme validity check
          *
          * @return the builder

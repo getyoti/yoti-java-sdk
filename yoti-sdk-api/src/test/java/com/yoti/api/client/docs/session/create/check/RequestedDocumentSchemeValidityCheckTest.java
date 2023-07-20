@@ -58,6 +58,22 @@ public class RequestedDocumentSchemeValidityCheckTest {
         assertThat(configResult.getScheme(), Matchers.is(SOME_SCHEME));
     }
 
+    @Test
+    public void shouldBuildWithManualCheckIbvAndScheme() {
+        RequestedDocumentSchemeValidityCheck result = RequestedDocumentSchemeValidityCheck.builder()
+                .withManualCheckIbv()
+                .withScheme(SOME_SCHEME)
+                .build();
+
+        assertThat(result, Matchers.is(instanceOf(RequestedDocumentSchemeValidityCheck.class)));
+        assertThat(result.getConfig(), Matchers.is(instanceOf(RequestedDocumentSchemeValidityConfig.class)));
+        assertThat(result.getType(), Matchers.is("DOCUMENT_SCHEME_VALIDITY_CHECK"));
+
+        RequestedDocumentSchemeValidityConfig configResult = result.getConfig();
+        assertThat(configResult.getManualCheck(), Matchers.is("IBV"));
+        assertThat(configResult.getScheme(), Matchers.is(SOME_SCHEME));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void shouldRaiseForNullManualCheckType() {
         RequestedDocumentSchemeValidityCheck.builder()

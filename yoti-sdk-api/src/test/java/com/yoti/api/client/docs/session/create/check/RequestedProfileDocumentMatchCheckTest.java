@@ -50,6 +50,20 @@ public class RequestedProfileDocumentMatchCheckTest {
         assertThat(configResult.getManualCheck(), Matchers.is("NEVER"));
     }
 
+    @Test
+    public void shouldBuildWithManualCheckIbv() {
+        RequestedProfileDocumentMatchCheck result = RequestedProfileDocumentMatchCheck.builder()
+                .withManualCheckIbv()
+                .build();
+
+        assertThat(result, Matchers.is(instanceOf(RequestedProfileDocumentMatchCheck.class)));
+        assertThat(result.getConfig(), Matchers.is(instanceOf(RequestedProfileDocumentMatchConfig.class)));
+        assertThat(result.getType(), Matchers.is("PROFILE_DOCUMENT_MATCH"));
+
+        RequestedProfileDocumentMatchConfig configResult = result.getConfig();
+        assertThat(configResult.getManualCheck(), Matchers.is("IBV"));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void shouldRaiseForNullManualCheckType() {
         RequestedProfileDocumentMatchCheck.builder()
