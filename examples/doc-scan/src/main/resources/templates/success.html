@@ -870,23 +870,23 @@
             <div class="col">
                 <h2>Identity Profile Preview</h2>
             </div>
-            <div class="row pt-4">
-                <div class="col">
-                    <div class="accordion mt-3">
-                        <div class="card" th:if="${sessionResult.getIdentityProfilePreview().getMedia() != null}">
-                            <table class="table table-striped table-light">
-                                <tbody>
-                                <tr>
-                                    <td>JSON</td>
-                                    <td>
-                                        <a th:href="${'/media?mediaId=' + sessionResult.getIdentityProfilePreview().getMedia().getId()}"
-                                           th:text="${sessionResult.getIdentityProfilePreview().getMedia().getId()}">
-                                        </a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+        </div>
+        <div class="row pt-4">
+            <div class="col">
+                <div class="accordion mt-3">
+                    <div class="card" th:if="${sessionResult.getIdentityProfilePreview().getMedia() != null}">
+                        <table class="table table-striped table-light">
+                            <tbody>
+                            <tr>
+                                <td>JSON</td>
+                                <td>
+                                    <a th:href="${'/media?mediaId=' + sessionResult.getIdentityProfilePreview().getMedia().getId()}"
+                                       th:text="${sessionResult.getIdentityProfilePreview().getMedia().getId()}">
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -898,26 +898,26 @@
             <div class="col">
                 <h2>Import Token</h2>
             </div>
-            <div class="row pt-4">
-                <div class="col">
-                    <div class="accordion mt-3">
-                        <div class="card" th:if="${sessionResult.getImportToken().getFailureReason() != null}">
-                            Failure Reason: <span th:text="${sessionResult.getImportToken().getFailureReason()}"></span>
-                        </div>
-                        <div class="card" th:if="${sessionResult.getImportToken().getMedia() != null}">
-                            <table class="table table-striped table-light">
-                                <tbody>
-                                <tr>
-                                    <td>JSON</td>
-                                    <td>
-                                        <a th:href="${'/media?mediaId=' + sessionResult.getImportToken().getMedia().getId()}"
-                                           th:text="${sessionResult.getImportToken().getMedia().getId()}">
-                                        </a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+        </div>
+        <div class="row pt-4">
+            <div class="col">
+                <div class="accordion mt-3">
+                    <div class="card" th:if="${sessionResult.getImportToken().getFailureReason() != null}">
+                        Failure Reason: <span th:text="${sessionResult.getImportToken().getFailureReason()}"></span>
+                    </div>
+                    <div class="card" th:if="${sessionResult.getImportToken().getMedia() != null}">
+                        <table class="table table-striped table-light">
+                            <tbody>
+                            <tr>
+                                <td>JSON</td>
+                                <td>
+                                    <a th:href="${'/media?mediaId=' + sessionResult.getImportToken().getMedia().getId()}"
+                                       th:text="${sessionResult.getImportToken().getMedia().getId()}">
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
