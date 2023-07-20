@@ -318,6 +318,72 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- IBV Visual Review Checks -->
+                <div th:if="${sessionResult.getIbvVisualReviewChecks().size() > 0}" class="card">
+                    <div class="card-header" id="ibv-visual-review-checks">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    data-target="#collapse-ibv-visual-review-checks" aria-expanded="true"
+                                    aria-controls="collapse-ibv-visual-review-checks">
+                                IBV Visual Review Checks
+                            </button>
+                        </h3>
+                    </div>
+                    <div id="collapse-ibv-visual-review-checks" class="collapse"
+                         aria-labelledby="ibv-visual-review-checks">
+                        <div class="card-body">
+                            <table th:each="check : ${sessionResult.getIbvVisualReviewChecks()}"
+                                   th:include="fragments/checks :: check-template(${check})"
+                                   class="table table-striped">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Document Scheme Validity Checks -->
+                <div th:if="${sessionResult.getDocumentSchemeValidityChecks().size() > 0}" class="card">
+                    <div class="card-header" id="document-scheme-validity-checks">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    data-target="#collapse-document-scheme-validity-checks" aria-expanded="true"
+                                    aria-controls="collapse-document-scheme-validity-checks">
+                                Document Scheme Validity Checks
+                            </button>
+                        </h3>
+                    </div>
+                    <div id="collapse-document-scheme-validity-checks" class="collapse"
+                         aria-labelledby="document-scheme-validity-checks">
+                        <div class="card-body">
+                            <table th:each="check : ${sessionResult.getDocumentSchemeValidityChecks()}"
+                                   th:include="fragments/checks :: check-template(${check})"
+                                   class="table table-striped">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Document Match Checks -->
+                <div th:if="${sessionResult.getProfileDocumentMatchChecks().size() > 0}" class="card">
+                    <div class="card-header" id="profile-document-match-checks">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    data-target="#collapse-profile-document-match-checks" aria-expanded="true"
+                                    aria-controls="collapse-profile-document-match-checks">
+                                Profile Document Match Checks
+                            </button>
+                        </h3>
+                    </div>
+                    <div id="collapse-profile-document-match-checks" class="collapse"
+                         aria-labelledby="profile-document-match-checks">
+                        <div class="card-body">
+                            <table th:each="check : ${sessionResult.getProfileDocumentMatchChecks()}"
+                                   th:include="fragments/checks :: check-template(${check})"
+                                   class="table table-striped">
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
