@@ -541,7 +541,7 @@
                         <div class="collapse"
                              th:id="${'collapse-document-pages-' + iter.index + '-' + pageIter.index}"
                              th:attr="aria-labelledby='document-pages-' + ${iter.index} + '-' + ${pageIter.index}">
-                            <div class="card-group">
+                            <div class="card-group" th:if="${page.getMedia() != null}">
                                 <div class="card" style="width: 18rem;">
                                     <img class="card-img-top"
                                          th:src="${'/media?mediaId=' + page.getMedia().getId()}" alt="Page Image"/>
