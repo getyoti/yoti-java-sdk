@@ -23,6 +23,7 @@
     <!-- plugin versions -->
     <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
     <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.7.3.4</spotbugs-maven-plugin.version>
   </properties>
 
   <build>
@@ -59,6 +60,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs-maven-plugin.version}</version>
       </plugin>
     </plugins>
   </build>

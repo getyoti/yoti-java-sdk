@@ -44,6 +44,7 @@
     <supported.java.release.version>8</supported.java.release.version>
 
     <guava.version>32.1.1-jre</guava.version>
+    <spotbugs-maven-plugin.version>4.7.3.4</spotbugs-maven-plugin.version>
   </properties>
 
   <licenses>
@@ -92,6 +93,7 @@
   </dependencies>
 
   <build>
+    <finalName>${project.artifactId}</finalName>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -118,6 +120,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs-maven-plugin.version}</version>
       </plugin>
     </plugins>
   </build>
