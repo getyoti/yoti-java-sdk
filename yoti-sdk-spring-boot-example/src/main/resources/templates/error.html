@@ -1,14 +1,27 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<title>Welcome</title>
-		<link rel="stylesheet" type="text/css" th:href="@{/static/style.css}" />
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	</head>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <title>Error</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/static/error.css}"/>
+  <link rel="shortcut icon" type="image/x-icon" href="https://www.yoti.com/wp-content/uploads/yoti-favicon.png"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet"/>
+</head>
 
-	<body>
-		<h2><a href="/">Home</a></h2>
-		<h3>Could not login user for the following reason: <span th:text="${error} "/> </h3>
-	</body>
+<body class="yoti-body">
+<main>
+  <section class="yoti-top-section">
+    <div class="yoti-logo-section">
+      <img class="yoti-logo-image" src="/static/assets/logo.png" srcset="/static/assets/logo@2x.png 2x" alt="Yoti"/>
+    </div>
+    <div class="box">
+      <h2><a href="/v2/digital-identity-share">Home</a></h2>
+      <h3>Oops, something went wrong.</h3>
+      <h3>Error: <span th:text="${error}"/></h3>
+    </div>
+  </section>
+</main>
+</body>
+
 </html>

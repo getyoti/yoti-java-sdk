@@ -1,13 +1,11 @@
 package com.yoti.api.examples.springboot;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.yoti.api.attributes.AttributeConstants;
 import com.yoti.api.client.ActivityDetails;
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.HumanProfile;
@@ -22,10 +20,11 @@ import com.yoti.api.client.shareurl.extension.LocationConstraintContent;
 import com.yoti.api.client.shareurl.extension.LocationConstraintExtensionBuilder;
 import com.yoti.api.client.shareurl.policy.DynamicPolicy;
 import com.yoti.api.client.shareurl.policy.WantedAttribute;
+import com.yoti.api.examples.springboot.attribute.AttributeMapper;
+import com.yoti.api.examples.springboot.attribute.DisplayAttribute;
 import com.yoti.api.spring.ClientProperties;
 import com.yoti.api.spring.YotiProperties;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.thymeleaf.util.StringUtils;
 
 @Configuration
 @ConditionalOnClass(YotiClient.class)
@@ -149,8 +147,8 @@ public class YotiLoginController implements WebMvcConfigurer {
         }
 
         List<DisplayAttribute> displayAttributes = humanProfile.getAttributes().stream()
-                .map(this::mapToDisplayAttribute)
-                .filter(displayAttribute -> displayAttribute != null)
+                .map(AttributeMapper::mapToDisplayAttribute)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         model.addAttribute("displayAttributes", displayAttributes);
@@ -193,66 +191,6 @@ public class YotiLoginController implements WebMvcConfigurer {
         model.addAttribute("clientSdkId", properties.getClientSdkId());
 
         return "dbs-check";
-    }
-
-    private DisplayAttribute mapToDisplayAttribute(Attribute attribute) {
-        switch (attribute.getName()) {
-            case AttributeConstants.HumanProfileAttributes.FULL_NAME:
-                return new DisplayAttribute("Full name", attribute, "yoti-icon-profile");
-            case AttributeConstants.HumanProfileAttributes.GIVEN_NAMES:
-                return new DisplayAttribute("Given names", attribute, "yoti-icon-profile");
-            case AttributeConstants.HumanProfileAttributes.FAMILY_NAME:
-                return new DisplayAttribute("Family name", attribute, "yoti-icon-profile");
-            case AttributeConstants.HumanProfileAttributes.NATIONALITY:
-                return new DisplayAttribute("Nationality", attribute, "yoti-icon-nationality");
-            case AttributeConstants.HumanProfileAttributes.POSTAL_ADDRESS:
-                return new DisplayAttribute("Address", attribute, "yoti-icon-address");
-            case AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS:
-                return new DisplayAttribute("Structured Postal Address", attribute, "yoti-icon-address");
-            case AttributeConstants.HumanProfileAttributes.PHONE_NUMBER:
-                return new DisplayAttribute("Mobile number", attribute, "yoti-icon-phone");
-            case AttributeConstants.HumanProfileAttributes.EMAIL_ADDRESS:
-                return new DisplayAttribute("Email address", attribute, "yoti-icon-email");
-            case AttributeConstants.HumanProfileAttributes.DATE_OF_BIRTH:
-                return new DisplayAttribute("Date of birth", attribute, "yoti-icon-calendar");
-            case AttributeConstants.HumanProfileAttributes.SELFIE:
-                return null; // Do nothing - we already display the selfie
-            case AttributeConstants.HumanProfileAttributes.GENDER:
-                return new DisplayAttribute("Gender", attribute, "yoti-icon-gender");
-            case AttributeConstants.HumanProfileAttributes.IDENTITY_PROFILE_REPORT:
-                return new DisplayAttribute("Identity Profile Report", toJsonAttribute(attribute), "yoti-icon-document");
-
-            default:
-                if (attribute.getName().contains(":")) {
-                    return handleAgeVerification(attribute);
-                } else {
-                    return handleProfileAttribute(attribute);
-                }
-        }
-    }
-
-    private Attribute<String> toJsonAttribute(Attribute attribute) {
-        ObjectMapper MAPPER = new ObjectMapper();
-
-        String json;
-
-        try {
-            json = MAPPER.readTree(MAPPER.writeValueAsString(attribute.getValue()).getBytes(StandardCharsets.UTF_8))
-                    .toString();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-
-        return new Attribute<>(attribute.getName(), json);
-    }
-
-    private DisplayAttribute handleAgeVerification(Attribute attribute) {
-        return new DisplayAttribute("Age Verification/", "Age verified", attribute, "yoti-icon-verified");
-    }
-
-    private DisplayAttribute handleProfileAttribute(Attribute attribute) {
-        String attributeName = StringUtils.capitalize(attribute.getName());
-        return new DisplayAttribute(attributeName, attribute, "yoti-icon-profile");
     }
 
 }

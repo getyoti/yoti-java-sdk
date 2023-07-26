@@ -1,0 +1,79 @@
+.yoti-body {
+    margin: 0;
+    font-family: Roboto, sans-serif;
+}
+
+.yoti-top-section {
+    display: flex;
+    flex-direction: column;
+
+    padding: 38px 0;
+
+    background-color: #f7f8f9;
+
+    align-items: center;
+}
+
+.yoti-logo-section {
+    margin-bottom: 25px;
+}
+
+.yoti-logo-image {
+    display: block;
+}
+
+.yoti-top-header {
+    font-family: Roboto, sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: 80px;
+    text-align: center;
+
+    color: #000;
+}
+
+.yoti-sponsor-app-section {
+    display: flex;
+    flex-direction: column;
+
+    padding: 50px 0;
+
+    align-items: center;
+}
+
+.yoti-sponsor-app-header {
+    font-family: Roboto, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+
+    margin: 0;
+
+    text-align: center;
+
+    color: #000;
+}
+
+.yoti-store-buttons-section {
+    margin-top: 40px;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (min-width: 600px) {
+    .yoti-top-header {
+        line-height: 1.4;
+    }
+}
+
+.yoti-sdk-integration-section {
+    margin: 30px 0;
+}
+
+.box {
+    inline-size: 600px;
+    overflow-wrap: break-word;
+}
