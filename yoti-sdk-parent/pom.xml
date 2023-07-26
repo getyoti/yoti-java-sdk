@@ -81,8 +81,8 @@
     <!-- sdk dependency versions -->
     <slf4j.version>2.0.7</slf4j.version>
     <bouncy.castle.version>1.70</bouncy.castle.version>
-    <jackson.version>2.15.0</jackson.version>
-    <protobuf-java.version>3.22.3</protobuf-java.version>
+    <jackson.version>2.15.2</jackson.version>
+    <protobuf-java.version>3.22.4</protobuf-java.version>
     <httpmime.version>4.5.14</httpmime.version>
     
     <!-- spring versions -->
@@ -103,7 +103,7 @@
     <spotbugs-maven-plugin.version>4.7.3.4</spotbugs-maven-plugin.version>
     <findsecbugs-plugin.version>1.12.0</findsecbugs-plugin.version>
 
-    <dependency-check-maven.version>8.2.1</dependency-check-maven.version>
+    <dependency-check-maven.version>8.3.1</dependency-check-maven.version>
     <dependency-check-maven.cve.update.limit>12</dependency-check-maven.cve.update.limit>
 
     <animal-sniffer-maven-plugin.version>1.23</animal-sniffer-maven-plugin.version>
@@ -120,7 +120,7 @@
     <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
     <maven-javadoc-plugin.source>8</maven-javadoc-plugin.source>
 
-    <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
+    <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
 
     <maven-project-info-reports-plugin.version>3.4.3</maven-project-info-reports-plugin.version>
 
