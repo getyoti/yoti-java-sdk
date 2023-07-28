@@ -294,8 +294,8 @@ Instructions on how to run the Spring example projects can be found at the follo
 This major update does not have any major updates to the API, but instead builds upon and
 standardizes our implementation.
 
-### Dropped support for Java 7
-Minimum supported Java version is now 8.
+### Dropped  for Java 7
+Minimum ed Java version is now 8.
 
 ### Builder are now in-line classes
 Most builders for the request objects are now in-line classes, and can be accessed with a static `.builder()` method (instead of using factories to instantiate new builders)
@@ -416,9 +416,9 @@ Using the new (correctly encoded) file should now be compatible with versions 1.
     * [X] Logo `getApplicationLogo()`
     * [X] Receipt Background Color `getApplicationReceiptBgColor()`
 
-## Support
+## 
 
-For any questions or support please email [clientsupport@yoti.com](mailto:clientupport@yoti.com).
+For any questions or support please contact us here: https://support.yoti.com
 Please provide the following to get you up and working as quickly as possible:
 
 * Computer type
