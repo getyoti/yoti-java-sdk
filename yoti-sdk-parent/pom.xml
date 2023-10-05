@@ -106,7 +106,7 @@
     
     <!-- spring versions -->
     <!-- Spring Framework 6.0.x requires JDK 17+   -->
-    <spring-boot-dependencies.version>2.7.10</spring-boot-dependencies.version>
+    <spring-boot-dependencies.version>2.7.16</spring-boot-dependencies.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
     
     <!-- test libraries -->
