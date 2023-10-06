@@ -5,6 +5,10 @@ import static java.lang.String.format;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * @deprecated replaced by {@link com.yoti.validation.Validation}
+ */
+@Deprecated
 public class Validation {
 
     public static <T> T notNull(T value, String name) {

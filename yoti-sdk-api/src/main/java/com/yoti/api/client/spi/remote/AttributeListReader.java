@@ -7,25 +7,26 @@ import java.util.List;
 import com.yoti.api.client.Attribute;
 import com.yoti.api.client.ProfileException;
 
-class AttributeListReader {
+public class AttributeListReader {
 
     private final EncryptedDataReader encryptedDataReader;
     private final AttributeListConverter attributeListConverter;
 
-    private AttributeListReader(EncryptedDataReader encryptedDataReader,
-                          AttributeListConverter attributeListConverter) {
+    private AttributeListReader(
+            EncryptedDataReader encryptedDataReader,
+            AttributeListConverter attributeListConverter) {
         this.encryptedDataReader = encryptedDataReader;
         this.attributeListConverter = attributeListConverter;
     }
 
-    static AttributeListReader newInstance() {
+    public static AttributeListReader newInstance() {
         return new AttributeListReader(
                 EncryptedDataReader.newInstance(),
                 AttributeListConverter.newInstance()
         );
     }
 
-    List<Attribute<?>> read(byte[] encryptedProfileBytes, Key secretKey) throws ProfileException {
+    public List<Attribute<?>> read(byte[] encryptedProfileBytes, Key secretKey) throws ProfileException {
         List<Attribute<?>> attributeList = new ArrayList<>();
         if (encryptedProfileBytes != null && encryptedProfileBytes.length > 0) {
             byte[] profileData = encryptedDataReader.decryptBytes(encryptedProfileBytes, secretKey);

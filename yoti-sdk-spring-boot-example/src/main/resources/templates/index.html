@@ -1,76 +1,77 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" class="yoti-html" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <title>Yoti client example</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/static/index.css}"/>
+  <link rel="shortcut icon" type="image/x-icon" href="https://www.yoti.com/wp-content/uploads/yoti-favicon.png"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet"/>
+</head>
 
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <title>Yoti client example</title>
-        <link rel="stylesheet" type="text/css" th:href="@{/static/index.css}" />
-        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
-    </head>
+<body class="yoti-body">
+<main>
+  <section class="yoti-top-section">
+    <div class="yoti-logo-section">
+      <img class="yoti-logo-image" src="/static/assets/logo.png" srcset="/static/assets/logo@2x.png 2x" alt="Yoti"/>
+    </div>
+    
+    <h1 class="yoti-top-header">We now accept Yoti</h1>
+    
+    <div class="yoti-sdk-integration-section">
+      <div id="yoti-share-button"></div>
+    </div>
+    
+    <div class="yoti-login-or-separator">or</div>
+    
+    <div class="yoti-login-dialog">
+      <h2 class="yoti-login-dialog-header">Login with your email:</h2>
+      
+      <input class="yoti-input" type="text" placeholder="Name"/>
+      
+      <input class="yoti-input" type="text" placeholder="Email address"/>
+      
+      <div class="yoti-login-actions">
+        <span class="yoti-login-forgot-button">forgot password?</span>
+        
+        <button class="yoti-login-button">login</button>
+      </div>
+    </div>
+  </section>
+  
+  <section class="yoti-sponsor-app-section">
+    <h3 class="yoti-sponsor-app-header">The Yoti app is free to download and use:</h3>
+    
+    <div class="yoti-store-buttons-section">
+      <a href="https://itunes.apple.com/us/app/yoti/id983980808?ls=1&amp;mt=8" class="yoti-app-button-link">
+        <img src="/static/assets/app-store-badge.png" srcset="/static/assets/app-store-badge@2x.png 2x"
+             alt="Download on the App Store"/>
+      </a>
+      
+      <a href="https://play.google.com/store/apps/details?id=com.yoti.mobile.android.live" class="yoti-app-button-link">
+        <img src="/static/assets/google-play-badge.png" srcset="/static/assets/google-play-badge@2x.png 2x"
+             alt="get it on Google Play"/>
+      </a>
+    </div>
+  </section>
+</main>
 
-    <body class="yoti-body">
-        <main>
-            <section class="yoti-top-section">
-                <div class="yoti-logo-section">
-                    <img class="yoti-logo-image" src="/static/assets/logo.png" srcset="/static/assets/logo@2x.png 2x" alt="Yoti" />
-                </div>
-
-                <h1 class="yoti-top-header">We now accept Yoti</h1>
-
-                <div class="yoti-sdk-integration-section">
-                    <div id="yoti-share-button"></div>
-                </div>
-
-                <div class="yoti-login-or-separator">or</div>
-
-                <div class="yoti-login-dialog">
-                    <h2 class="yoti-login-dialog-header">Login with your email:</h2>
-
-                    <input class="yoti-input" type="text" placeholder="Name"/>
-
-                    <input class="yoti-input" type="text" placeholder="Email address"/>
-
-                    <div class="yoti-login-actions">
-                        <span class="yoti-login-forgot-button">forgot password?</span>
-
-                        <button class="yoti-login-button">login</button>
-                    </div>
-                </div>
-            </section>
-
-            <section class="yoti-sponsor-app-section">
-                <h3 class="yoti-sponsor-app-header">The Yoti app is free to download and use:</h3>
-
-                <div class="yoti-store-buttons-section">
-                    <a href="https://itunes.apple.com/us/app/yoti/id983980808?ls=1&amp;mt=8" class="yoti-app-button-link">
-                        <img src="/static/assets/app-store-badge.png" srcset="/static/assets/app-store-badge@2x.png 2x" alt="Download on the App Store" />
-                    </a>
-
-                    <a href="https://play.google.com/store/apps/details?id=com.yoti.mobile.android.live" class="yoti-app-button-link">
-                        <img src="/static/assets/google-play-badge.png" srcset="/static/assets/google-play-badge@2x.png 2x" alt="get it on Google Play" />
-                    </a>
-                </div>
-            </section>
-        </main>
-
-        <script src="https://www.yoti.com/share/client/"></script>
-        <script th:inline="javascript">
-          window.Yoti.Share.init({
-            "elements": [{
-              "domId": "yoti-share-button",
-                "scenarioId": /*[[${scenarioId}]]*/ "",
-                "clientSdkId": /*[[${clientSdkId}]]*/ "",
-                "button": {
-                    "label": "Use Yoti",
-                    "align": "center",
-                    "width": "auto",
-                    "verticalAlign": "top"
-                },
-                "type": "modal"
-            }]
-          });
-        </script>
-    </body>
+<script src="https://www.yoti.com/share/client/"></script>
+<script th:inline="javascript">
+  window.Yoti.Share.init({
+    "elements": [{
+      "domId": "yoti-share-button",
+      "scenarioId": /*[[${scenarioId}]]*/ "",
+      "clientSdkId": /*[[${clientSdkId}]]*/ "",
+      "button": {
+        "label": "Use Yoti",
+        "align": "center",
+        "width": "auto",
+        "verticalAlign": "top"
+      },
+      "type": "modal"
+    }]
+  });
+</script>
+</body>
 </html>

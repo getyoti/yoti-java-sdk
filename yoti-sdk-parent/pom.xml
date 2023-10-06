@@ -31,6 +31,25 @@
   
   <profiles>
     <profile>
+      <id>java-8</id>
+      <activation>
+        <jdk>1.8</jdk>
+      </activation>
+      <properties>
+        <maven.compiler.source>${supported.java.version}</maven.compiler.source>
+        <maven.compiler.target>${supported.java.version}</maven.compiler.target>
+      </properties>
+    </profile>
+    <profile>
+      <id>java-9+</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <properties>
+        <maven.compiler.release>${supported.java.release.version}</maven.compiler.release>
+      </properties>
+    </profile>
+    <profile>
       <id>sonatype</id>
       <activation>
         <activeByDefault>false</activeByDefault>
@@ -74,27 +93,27 @@
     
     <!-- java version -->
     <yoti.java.sdk.version>${project.version}</yoti.java.sdk.version>
+
     <supported.java.version>1.8</supported.java.version>
-    <maven.compiler.source>${supported.java.version}</maven.compiler.source>
-    <maven.compiler.target>${supported.java.version}</maven.compiler.target>
-    
+    <supported.java.release.version>8</supported.java.release.version>
+
     <!-- sdk dependency versions -->
-    <slf4j.version>2.0.7</slf4j.version>
+    <slf4j.version>2.0.9</slf4j.version>
     <bouncy.castle.version>1.70</bouncy.castle.version>
     <jackson.version>2.15.2</jackson.version>
-    <protobuf-java.version>3.22.4</protobuf-java.version>
+    <protobuf-java.version>3.24.4</protobuf-java.version>
     <httpmime.version>4.5.14</httpmime.version>
     
     <!-- spring versions -->
     <!-- Spring Framework 6.0.x requires JDK 17+   -->
-    <spring-boot-dependencies.version>2.7.10</spring-boot-dependencies.version>
+    <spring-boot-dependencies.version>2.7.16</spring-boot-dependencies.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
     
     <!-- test libraries -->
     <junit.version>4.13.2</junit.version>
     <mockito.version>4.11.0</mockito.version>
     <hamcrest.version>2.2</hamcrest.version>
-    <commons.lang3.version>3.12.0</commons.lang3.version>
+    <commons.lang3.version>3.13.0</commons.lang3.version>
     
     <!-- maven + plugin versions -->
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
@@ -103,7 +122,7 @@
     <spotbugs-maven-plugin.version>4.7.3.4</spotbugs-maven-plugin.version>
     <findsecbugs-plugin.version>1.12.0</findsecbugs-plugin.version>
 
-    <dependency-check-maven.version>8.3.1</dependency-check-maven.version>
+    <dependency-check-maven.version>8.4.0</dependency-check-maven.version>
     <dependency-check-maven.cve.update.limit>12</dependency-check-maven.cve.update.limit>
 
     <animal-sniffer-maven-plugin.version>1.23</animal-sniffer-maven-plugin.version>
@@ -111,7 +130,7 @@
     <mojo.signature.version>1.0</mojo.signature.version>
 
     <maven-enforcer-plugin.version>3.3.0</maven-enforcer-plugin.version>
-    <extra-enforcer-rules.version>1.6.2</extra-enforcer-rules.version>
+    <extra-enforcer-rules.version>1.7.0</extra-enforcer-rules.version>
 
     <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
 
@@ -216,15 +235,10 @@
   <build>
     <pluginManagement>
       <plugins>
-        
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${maven-compiler-plugin.version}</version>
-          <configuration>
-            <source>${supported.java.version}</source>
-            <target>${supported.java.version}</target>
-          </configuration>
         </plugin>
 
         <plugin>
@@ -262,7 +276,7 @@
             </execution>
           </executions>
         </plugin>
-        
+
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>

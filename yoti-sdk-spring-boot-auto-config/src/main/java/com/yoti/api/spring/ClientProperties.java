@@ -3,10 +3,10 @@ package com.yoti.api.spring;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Allows properties to the Yoti client to be supplied via spring properties (e.g. YAML or properties file).
+ * Allows properties to the clients to be supplied via spring properties (e.g. YAML or properties file).
  */
 @ConfigurationProperties(prefix = "com.yoti.client")
-public class YotiClientProperties {
+public class ClientProperties {
 
     /**
      * The SDK client ID provided by Yoti Hub.
@@ -37,7 +37,7 @@ public class YotiClientProperties {
      *
      * @param clientSdkId the Yoti client SDK ID.
      */
-    public void setClientSdkId(final String clientSdkId) {
+    public void setClientSdkId(String clientSdkId) {
         this.clientSdkId = clientSdkId;
     }
 
@@ -46,14 +46,18 @@ public class YotiClientProperties {
      *
      * @return the Yoti scenario ID.
      */
-    public String getScenarioId() { return scenarioId; };
+    public String getScenarioId() {
+        return scenarioId;
+    }
 
     /**
      * Sets the Yoti scenario ID that is provided to the client developer via Yoti Hub.
      *
      * @param scenarioId the Yoti scenario ID.
      */
-    public void setScenarioId(final String scenarioId) { this.scenarioId = scenarioId; }
+    public void setScenarioId(String scenarioId) {
+        this.scenarioId = scenarioId;
+    }
 
     /**
      * Gets the location for the key pair.
@@ -70,37 +74,8 @@ public class YotiClientProperties {
      * @param accessSecurityKey the key pair location in spring resource format e.g. classpath: or file: or as a URL.
      * @see org.springframework.core.io.Resource
      */
-    public void setAccessSecurityKey(final String accessSecurityKey) {
+    public void setAccessSecurityKey(String accessSecurityKey) {
         this.accessSecurityKey = accessSecurityKey;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        YotiClientProperties that = (YotiClientProperties) o;
-        if (scenarioId != null ? !scenarioId.equals(that.scenarioId) : that.scenarioId != null) return false;
-        if (clientSdkId != null ? !clientSdkId.equals(that.clientSdkId) : that.clientSdkId != null) return false;
-
-        return accessSecurityKey != null ? accessSecurityKey.equals(that.accessSecurityKey) : that.accessSecurityKey == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = scenarioId != null ? scenarioId.hashCode() : 0;
-        result = 31 * result + (clientSdkId != null ? clientSdkId.hashCode() : 0);
-        result = 31 * result + (accessSecurityKey != null ? accessSecurityKey.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("YotiClientProperties{");
-        sb.append("scenarioId='").append(scenarioId).append('\'');
-        sb.append(", clientSdkId='").append(clientSdkId).append('\'');
-        sb.append(", accessSecurityKey='").append(accessSecurityKey).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
 }
