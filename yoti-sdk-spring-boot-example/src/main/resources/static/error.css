@@ -1,0 +1,28 @@
+.yoti-body {
+    margin: 0;
+    font-family: Roboto, sans-serif;
+}
+
+.yoti-top-section {
+    display: flex;
+    flex-direction: column;
+
+    padding: 38px 0;
+
+    background-color: #f7f8f9;
+
+    align-items: center;
+}
+
+.yoti-logo-section {
+    margin-bottom: 25px;
+}
+
+.yoti-logo-image {
+    display: block;
+}
+
+.box {
+    inline-size: 600px;
+    overflow-wrap: break-word;
+}

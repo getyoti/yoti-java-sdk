@@ -1,0 +1,81 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <title>Digital Identity Example</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/static/digital-identity-share.css}"/>
+  <link rel="shortcut icon" type="image/x-icon" href="https://www.yoti.com/wp-content/uploads/yoti-favicon.png"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet"/>
+</head>
+
+<body class="yoti-body">
+<main>
+  <section class="yoti-top-section">
+    <div class="yoti-logo-section">
+      <img class="yoti-logo-image" src="/static/assets/logo.png" srcset="/static/assets/logo@2x.png 2x" alt="Yoti"/>
+    </div>
+    
+    <h2 th:text="${message}">Digital Identity Share Example page</h2>
+    
+    <p> SdkId: <strong th:text="${sdkId}"></strong></p>
+    
+    <div class="yoti-sdk-integration-section">
+      <div id="webshare-target"></div>
+    </div>
+  
+  </section>
+  
+  <section class="yoti-sponsor-app-section">
+    <h3 class="yoti-sponsor-app-header">The Yoti app is free to download and use:</h3>
+    
+    <div class="yoti-store-buttons-section">
+      <a href="https://itunes.apple.com/us/app/yoti/id983980808?ls=1&amp;mt=8" class="yoti-app-button-link">
+        <img src="/static/assets/app-store-badge.png" srcset="/static/assets/app-store-badge@2x.png 2x"
+             alt="Download on the App Store"/>
+      </a>
+      
+      <a href="https://play.google.com/store/apps/details?id=com.yoti.mobile.android.live"
+         class="yoti-app-button-link">
+        <img src="/static/assets/google-play-badge.png" srcset="/static/assets/google-play-badge@2x.png 2x"
+             alt="get it on Google Play"/>
+      </a>
+    </div>
+  </section>
+</main>
+
+<script>
+  async function onSessionIdResolver() {
+    const response = await fetch('https://localhost:8443/v2/digital-identity-session', {method: 'GET'})
+    const data = await response.json()
+    return data.sessionId
+  }
+  
+  function onErrorListener(...data) {
+    console.warn('onErrorListener:', ...data)
+  }
+  
+  async function onReadyToStart() {
+    const {Yoti} = window
+    await Yoti.createWebShare({
+      name: 'Use Yoti',
+      domId: 'webshare-target',
+      sdkId: '[[${sdkId}]]',
+      hooks: {
+        sessionIdResolver: onSessionIdResolver,
+        errorListener: onErrorListener
+      },
+      flow: "REVEAL_MODAL"
+    })
+  }
+  
+  async function onClientLoaded() {
+    const {Yoti} = window
+    await Yoti.ready()
+    await onReadyToStart()
+  }
+</script>
+<script src="https://www.yoti.com/share/client/v2" onload="onClientLoaded()"></script>
+
+</body>
+</html>

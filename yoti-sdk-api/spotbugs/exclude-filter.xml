@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FindBugsFilter>
+
+  <!-- These patterns became completely broken after 4.3 - ignored them -->
+  <!-- See https://github.com/spotbugs/spotbugs/issues/1797 -->
+  <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+
+  <!-- Exclude generated classes from protobuf  -->
+  <Match>
+    <Package name="com.yoti.api.client.spi.remote.proto"/>
+  </Match>
+
+  <!-- The IV comes from a trusted source  -->
+  <Match>
+    <Class name="com.yoti.api.client.spi.remote.call.identity.ReceiptItemKey$Builder"/>
+    <Bug pattern="STATIC_IV"/>
+  </Match>
+
+  <!-- Legacy exclusions -->
+  <Match>
+    <Bug pattern="CRLF_INJECTION_LOGS"/>
+  </Match>
+
+  <Match>
+    <Class name="com.yoti.api.client.spi.remote.call.SignedRequest"/>
+    <Bug pattern="PZLA_PREFER_ZERO_LENGTH_ARRAYS"/>
+  </Match>
+
+  <Match>
+    <Class name="com.yoti.api.client.spi.remote.call.SignedRequestBuilder"/>
+    <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"/>
+  </Match>
+
+  <Match>
+    <Class name="com.yoti.api.client.spi.remote.EncryptedDataReader"/>
+    <Bug pattern="CIPHER_INTEGRITY"/>
+  </Match>
+
+  <Match>
+    <Or>
+      <Class name="com.yoti.api.client.UrlKeyPairSource"/>
+      <Class name="com.yoti.api.client.spi.remote.call.UrlConnector"/>
+    </Or>
+    <Bug pattern="URLCONNECTION_SSRF_FD"/>
+  </Match>
+
+  <Match>
+    <Class name="com.yoti.api.client.docs.DocScanService"/>
+    <Bug pattern="IMPROPER_UNICODE"/>
+  </Match>
+
+</FindBugsFilter>
