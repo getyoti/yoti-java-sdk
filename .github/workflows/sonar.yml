@@ -15,10 +15,10 @@ jobs:
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
-      - name: Set up Java 11
+      - name: Set up Java 17
         uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 17
           architecture: x64
       - name: Scan SDK
         run: mvn -B clean install sonar:sonar -Ddependency-check.skip=true -Dgpg.skip=true -Dfindbugs.skip=true
