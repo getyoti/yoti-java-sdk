@@ -47,7 +47,7 @@
 
     <guava.version>32.1.1-jre</guava.version>
 
-    <spotbugs-maven-plugin.version>4.7.3.4</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.7.3.6</spotbugs-maven-plugin.version>
     <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
     <extra-enforcer-rules.version>1.7.0</extra-enforcer-rules.version>
   </properties>
