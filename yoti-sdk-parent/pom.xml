@@ -116,6 +116,8 @@
     <commons.lang3.version>3.13.0</commons.lang3.version>
     
     <!-- maven + plugin versions -->
+    <maven.min.version>3.8.5</maven.min.version>
+
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
 
     <spotbugs.version>4.7.3</spotbugs.version>
@@ -343,6 +345,9 @@
               <configuration>
                 <rules>
                   <dependencyConvergence/>
+                  <requireMavenVersion>
+                    <version>${maven.min.version}</version>
+                  </requireMavenVersion>
                 </rules>
               </configuration>
             </execution>
@@ -449,6 +454,11 @@
       <plugin>
         <artifactId>maven-gpg-plugin</artifactId>
       </plugin>
+
+      <plugin>
+        <artifactId>maven-enforcer-plugin</artifactId>
+      </plugin>
+
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
