@@ -18,10 +18,19 @@
     <div class="box">
       <h2><a href="/v2/digital-identity-share">Home</a></h2>
       <h3>Oops, something went wrong.</h3>
-      <h3>Error: <span th:text="${error}"/></h3>
+      <h3>Error:</h3>
+      <span th:text="${error}"/>
+      <div th:if="${errorReason}">
+        <h3>Reason:</h3>
+        <pre id="error-reason-json" style="white-space: pre-wrap;"></pre>
+      </div>
     </div>
   </section>
 </main>
 </body>
+
+<script th:inline="javascript">
+  document.getElementById("error-reason-json").textContent = JSON.stringify(/*[(${errorReason})]*/ '', null, 2);
+</script>
 
 </html>
