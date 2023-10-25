@@ -73,11 +73,15 @@ public class ReceiptParser {
     }
 
     public Receipt create(WrappedReceipt failureReceipt) {
-        return Receipt.forReceipt(failureReceipt.getId())
+        Receipt.Builder receipt = Receipt.forReceipt(failureReceipt.getId())
                 .sessionId(failureReceipt.getSessionId())
                 .timestamp(failureReceipt.getTimestamp())
-                .error(failureReceipt.getError())
-                .build();
+                .error(failureReceipt.getError());
+
+        Optional.ofNullable(failureReceipt.getErrorReason())
+                .ifPresent(receipt::errorReason);
+
+        return receipt.build();
     }
 
     private static Key decryptReceiptKey(byte[] wrappedKey, ReceiptItemKey wrappedItemKey, PrivateKey privateKey) {

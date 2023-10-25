@@ -2,9 +2,12 @@ package com.yoti.api.client.spi.remote.call.identity;
 
 import java.time.OffsetDateTime;
 import java.util.Base64;
+import java.util.Map;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(builder = WrappedReceipt.Builder.class)
@@ -20,6 +23,7 @@ public final class WrappedReceipt {
     private final byte[] parentRememberMeId;
     private final byte[] wrappedKey;
     private final String error;
+    private final String errorReason;
 
     private WrappedReceipt(Builder builder) {
         id = builder.id;
@@ -32,6 +36,7 @@ public final class WrappedReceipt {
         parentRememberMeId = builder.parentRememberMeId;
         wrappedKey = builder.wrappedKey;
         error = builder.error;
+        errorReason = builder.errorReason;
     }
 
     public String getId() {
@@ -83,6 +88,10 @@ public final class WrappedReceipt {
         return error;
     }
 
+    public String getErrorReason() {
+        return errorReason;
+    }
+
     public static final class Builder {
 
         private String id;
@@ -95,6 +104,7 @@ public final class WrappedReceipt {
         private byte[] parentRememberMeId;
         private byte[] wrappedKey;
         private String error;
+        private String errorReason;
 
         private Builder() { }
 
@@ -158,6 +168,16 @@ public final class WrappedReceipt {
             return this;
         }
 
+        @JsonProperty(Property.ERROR_REASON)
+        public Builder errorReason(Map<String, Object> reason) {
+            try {
+                this.errorReason = new ObjectMapper().writeValueAsString(reason);
+            } catch (JsonProcessingException e) {
+                throw new DigitalIdentityException("The reason of the failed share has an unexpected format");
+            }
+            return this;
+        }
+
         public WrappedReceipt build() {
             return new WrappedReceipt(this);
         }
@@ -209,6 +229,7 @@ public final class WrappedReceipt {
         private static final String WRAPPED_ITEM_KEY_ID = "wrappedItemKeyId";
         private static final String WRAPPED_KEY = "wrappedKey";
         private static final String ERROR = "error";
+        private static final String ERROR_REASON = "errorReason";
 
         private static class Content {
 
