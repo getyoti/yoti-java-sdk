@@ -21,7 +21,10 @@ public class ActivityFailureException extends ProfileException {
                 String.format(
                         ERROR_MSG,
                         profile.getReceipt().getDisplayReceiptId(),
-                        Optional.ofNullable(profile.getError()).map(e -> String.format(" - %s", e)).orElse(""))
+                        Optional.ofNullable(profile.getError())
+                                .map(error -> String.format(" - %s", error))
+                                .orElse("")
+                )
         );
         errorDetails = profile.getError();
     }

@@ -18,6 +18,8 @@ import static org.mockito.Mockito.*;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.yoti.api.client.ActivityFailureException;
 import com.yoti.api.client.ProfileException;
@@ -27,6 +29,7 @@ import com.yoti.api.client.spi.remote.call.ProfileService;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.*;
@@ -39,6 +42,8 @@ public class ReceiptFetcherTest {
     private static final String APP_ID = "appId";
     private static final String ENCODED_RECEIPT_STRING = "base64EncodedReceipt";
     private static final byte[] DECODED_RECEIPT_BYTES = decode(ENCODED_RECEIPT_STRING);
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @InjectMocks ReceiptFetcher testObj;
 
@@ -186,6 +191,47 @@ public class ReceiptFetcherTest {
             assertThat(ex.getMessage(), not(containsString("error")));
             return;
         }
+        fail("Expected an Exception");
+    }
+
+    @Test
+    public void shouldFailForFailureReceiptWithErrorReason() throws Exception {
+        Receipt receipt = new Receipt.Builder()
+                .withReceiptId(DECODED_RECEIPT_BYTES)
+                .withOutcome(Receipt.Outcome.FAILURE)
+                .build();
+
+        String errorCode = "anErrorCode";
+
+        Map<String, Object> errorReason = new HashMap<>();
+        errorReason.put("aReasonKey", "aReasonValue");
+
+        ErrorDetails error = ErrorDetails.builder()
+                .code(errorCode)
+                .reason(errorReason)
+                .build();
+
+        ProfileResponse profileResponse = new ProfileResponse.ProfileResponseBuilder()
+                .setReceipt(receipt)
+                .setError(error)
+                .build();
+        when(profileService.getProfile(keyPair, APP_ID, TOKEN)).thenReturn(profileResponse);
+
+        try {
+            testObj.fetch(encryptedToken, keyPair, APP_ID);
+        } catch (ActivityFailureException ex) {
+            String exMsg = ex.getMessage();
+            assertThat(exMsg, containsString(ENCODED_RECEIPT_STRING));
+            assertThat(exMsg, containsString(errorCode));
+            assertThat(exMsg, containsString("aReasonValue"));
+
+            ErrorDetails exError = ex.errorDetails();
+            assertThat(exError.getCode(), is(equalTo(errorCode)));
+            assertThat(exError.getReason(), is(equalTo(MAPPER.writeValueAsString(errorReason))));
+
+            return;
+        }
+
         fail("Expected an Exception");
     }
 
