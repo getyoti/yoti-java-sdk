@@ -17,6 +17,7 @@ public final class Receipt {
     private final ApplicationContent applicationContent;
     private final UserContent userContent;
     private final String error;
+    private final String errorReason;
 
     private Receipt(Builder builder) {
         id = builder.id;
@@ -27,6 +28,7 @@ public final class Receipt {
         applicationContent = builder.applicationContent;
         userContent = builder.userContent;
         error = builder.error;
+        errorReason = builder.errorReason;
     }
 
     public String getId() {
@@ -69,6 +71,10 @@ public final class Receipt {
         return Optional.ofNullable(error);
     }
 
+    public Optional<String> getErrorReason() {
+        return Optional.ofNullable(errorReason);
+    }
+
     public static Builder forReceipt(String id) {
         return new Builder(id);
     }
@@ -84,6 +90,7 @@ public final class Receipt {
         private ApplicationContent applicationContent;
         private UserContent userContent;
         private String error;
+        private String errorReason;
 
         private Builder(String id) {
             this.id = id;
@@ -121,6 +128,11 @@ public final class Receipt {
 
         public Builder error(String error) {
             this.error = error;
+            return this;
+        }
+
+        public Builder errorReason(String reason) {
+            errorReason = reason;
             return this;
         }
 

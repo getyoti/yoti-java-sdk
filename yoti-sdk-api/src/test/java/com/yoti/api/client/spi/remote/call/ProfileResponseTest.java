@@ -133,6 +133,27 @@ public class ProfileResponseTest {
         assertThat(error.getDescription(), equalTo(errorDescription));
     }
 
+    @Test
+    public void failureReceipt_shouldParseErrorReasonFromJson() throws Exception {
+        String errorCode = "anErrorCode";
+
+        Map<String, Object> reason = new HashMap<>();
+        reason.put("aReasonKey", "aReasonValue");
+
+        HashMap<String, Object> errorJson = new HashMap<>();
+        errorJson.put(Property.ERROR_CODE, errorCode);
+        errorJson.put(Property.ERROR_REASON, reason);
+
+        HashMap<String, Object> json = new HashMap<>();
+        json.put(Property.ERROR_DETAILS, errorJson);
+
+        ProfileResponse obj = OBJECT_MAPPER.convertValue(json, ProfileResponse.class);
+
+        ErrorDetails error = obj.getError();
+        assertThat(error.getCode(), equalTo(errorCode));
+        assertThat(error.getReason(), equalTo(OBJECT_MAPPER.writeValueAsString(reason)));
+    }
+
     private static Receipt createReceipt() {
         return new Receipt.Builder()
                 .withProfile(VALID_CONTENT)
@@ -167,6 +188,7 @@ public class ProfileResponseTest {
         private static final String ERROR_DETAILS = "error_details";
         private static final String ERROR_CODE = "error_code";
         private static final String ERROR_DESCRIPTION = "description";
+        private static final String ERROR_REASON = "error_reason";
 
     }
 

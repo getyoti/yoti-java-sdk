@@ -100,13 +100,13 @@
     <!-- sdk dependency versions -->
     <slf4j.version>2.0.9</slf4j.version>
     <bouncy.castle.version>1.70</bouncy.castle.version>
-    <jackson.version>2.15.2</jackson.version>
+    <jackson.version>2.15.3</jackson.version>
     <protobuf-java.version>3.24.4</protobuf-java.version>
     <httpmime.version>4.5.14</httpmime.version>
     
     <!-- spring versions -->
     <!-- Spring Framework 6.0.x requires JDK 17+   -->
-    <spring-boot-dependencies.version>2.7.16</spring-boot-dependencies.version>
+    <spring-boot-dependencies.version>2.7.17</spring-boot-dependencies.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
     
     <!-- test libraries -->
@@ -116,36 +116,38 @@
     <commons.lang3.version>3.13.0</commons.lang3.version>
     
     <!-- maven + plugin versions -->
+    <maven.min.version>3.8.5</maven.min.version>
+
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
 
     <spotbugs.version>4.7.3</spotbugs.version>
-    <spotbugs-maven-plugin.version>4.7.3.4</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.7.3.6</spotbugs-maven-plugin.version>
     <findsecbugs-plugin.version>1.12.0</findsecbugs-plugin.version>
 
-    <dependency-check-maven.version>8.4.0</dependency-check-maven.version>
+    <dependency-check-maven.version>8.4.2</dependency-check-maven.version>
     <dependency-check-maven.cve.update.limit>12</dependency-check-maven.cve.update.limit>
 
     <animal-sniffer-maven-plugin.version>1.23</animal-sniffer-maven-plugin.version>
     <mojo.signature.artefact>java18</mojo.signature.artefact>
     <mojo.signature.version>1.0</mojo.signature.version>
 
-    <maven-enforcer-plugin.version>3.3.0</maven-enforcer-plugin.version>
+    <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
     <extra-enforcer-rules.version>1.7.0</extra-enforcer-rules.version>
 
     <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
 
-    <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+    <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 
-    <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
+    <maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
     <maven-javadoc-plugin.source>8</maven-javadoc-plugin.source>
 
     <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
 
-    <maven-project-info-reports-plugin.version>3.4.3</maven-project-info-reports-plugin.version>
+    <maven-project-info-reports-plugin.version>3.4.5</maven-project-info-reports-plugin.version>
 
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
 
-    <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+    <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
   </properties>
   
   <dependencyManagement>
@@ -236,7 +238,6 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${maven-compiler-plugin.version}</version>
         </plugin>
@@ -318,7 +319,6 @@
         </plugin>
         
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>${maven-enforcer-plugin.version}</version>
           <executions>
@@ -345,6 +345,9 @@
               <configuration>
                 <rules>
                   <dependencyConvergence/>
+                  <requireMavenVersion>
+                    <version>${maven.min.version}</version>
+                  </requireMavenVersion>
                 </rules>
               </configuration>
             </execution>
@@ -371,7 +374,6 @@
         </plugin>
         
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>${maven-source-plugin.version}</version>
           <executions>
@@ -385,7 +387,6 @@
         </plugin>
         
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${maven-javadoc-plugin.version}</version>
           <configuration>
@@ -402,7 +403,6 @@
         </plugin>
         
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
           <version>${maven-gpg-plugin.version}</version>
           <executions>
@@ -417,7 +417,6 @@
         </plugin>
         
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>${maven-project-info-reports-plugin.version}</version>
         </plugin>
@@ -453,9 +452,13 @@
     
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
       </plugin>
+
+      <plugin>
+        <artifactId>maven-enforcer-plugin</artifactId>
+      </plugin>
+
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>

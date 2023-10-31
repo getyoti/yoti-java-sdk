@@ -71,22 +71,31 @@ public class IdentityLoginController implements WebMvcConfigurer {
     public String receipt(@RequestParam("receiptId") String receiptId, Model model) {
         Receipt receipt = execute(() -> client.fetchShareReceipt(receiptId), model);
 
-        if (receipt == null || receipt.getError().isPresent()) {
-            model.addAttribute("error", receipt.getError().get());
-            return "error";
-        }
+        return Optional.ofNullable(receipt)
+                .map(r -> r.getError()
+                        .map(error -> {
+                            model.addAttribute("error", error);
+                            r.getErrorReason().ifPresent(reason ->
+                                    model.addAttribute("errorReason", reason)
+                            );
+                            return "error";
+                        })
+                        .orElseGet(() -> setProfile(receipt, model))
+                )
+                .orElse("error");
+    }
 
-        Receipt.ApplicationContent applicationContent = receipt.getApplicationContent();
-
-        Optional.ofNullable(applicationContent.getProfile())
+    private String setProfile(Receipt receipt, Model model) {
+        Optional.ofNullable(receipt.getApplicationContent().getProfile())
                 .map(ApplicationProfile::getApplicationLogo)
                 .map(attr -> model.addAttribute("appLogo", attr.getValue().getBase64Content()));
 
-        receipt.getProfile().map(HumanProfile::getSelfie)
+        Optional<HumanProfile> profile = receipt.getProfile();
+        profile.map(HumanProfile::getSelfie)
                 .map(attr -> model.addAttribute("base64Selfie", attr.getValue().getBase64Content()));
-        receipt.getProfile().map(HumanProfile::getFullName)
+        profile.map(HumanProfile::getFullName)
                 .map(attr -> model.addAttribute("fullName", attr.getValue()));
-        receipt.getProfile().map(HumanProfile::getAttributes)
+        profile.map(HumanProfile::getAttributes)
                 .map(attr -> model.addAttribute("displayAttributes", mapAttributes(attr)));
 
         return "profile";

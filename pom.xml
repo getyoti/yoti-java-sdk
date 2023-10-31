@@ -20,17 +20,68 @@
   </modules>
 
   <properties>
+    <supported.java.version>1.8</supported.java.version>
+
+    <maven.min.version>3.8.5</maven.min.version>
+
     <!-- plugin versions -->
     <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
-    <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
-    <spotbugs-maven-plugin.version>4.7.3.4</spotbugs-maven-plugin.version>
+    <properties-maven-plugin.version>1.2.0</properties-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.7.3.6</spotbugs-maven-plugin.version>
+    <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
+    <extra-enforcer-rules.version>1.7.0</extra-enforcer-rules.version>
   </properties>
 
   <build>
-    <plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>${maven-enforcer-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>enforce-bytecode-version</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <phase>verify</phase>
+              <configuration>
+                <rules>
+                  <enforceBytecodeVersion>
+                    <maxJdkVersion>${supported.java.version}</maxJdkVersion>
+                  </enforceBytecodeVersion>
+                </rules>
+                <fail>true</fail>
+              </configuration>
+            </execution>
+            <execution>
+              <id>enforce-dependency-versions</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <dependencyConvergence/>
+                  <requireMavenVersion>
+                    <version>${maven.min.version}</version>
+                  </requireMavenVersion>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+          <dependencies>
+            <dependency>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>extra-enforcer-rules</artifactId>
+              <version>${extra-enforcer-rules.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
 
+    <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
         <version>${maven-deploy-plugin.version}</version>
         <configuration>
@@ -61,6 +112,10 @@
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${spotbugs-maven-plugin.version}</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-enforcer-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

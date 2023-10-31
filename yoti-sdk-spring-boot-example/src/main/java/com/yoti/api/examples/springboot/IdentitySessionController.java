@@ -37,8 +37,8 @@ public class IdentitySessionController {
     public String identityShareSession() {
         ShareSession session = client.createShareSession(
                 // forMinimalShare()
-                forDynamicScenarioShare()
-                // forIdentityProfileShare()
+                // forDynamicScenarioShare()
+                forIdentityProfileShare()
                 // forLocationExtensionShare()
         );
 
