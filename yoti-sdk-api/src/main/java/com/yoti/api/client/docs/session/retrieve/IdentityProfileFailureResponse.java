@@ -9,7 +9,7 @@ public class IdentityProfileFailureResponse {
     @JsonProperty("reason_code")
     private String reasonCode;
 
-    @JsonProperty("requirement_not_met_details")
+    @JsonProperty("requirements_not_met_details")
     private List<RequirementNotMetDetailsResponse> requirementNotMetDetails;
 
     public String getReasonCode() {
