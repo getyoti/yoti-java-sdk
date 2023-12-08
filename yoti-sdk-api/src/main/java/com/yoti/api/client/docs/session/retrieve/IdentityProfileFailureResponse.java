@@ -1,5 +1,7 @@
 package com.yoti.api.client.docs.session.retrieve;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class IdentityProfileFailureResponse {
@@ -8,13 +10,13 @@ public class IdentityProfileFailureResponse {
     private String reasonCode;
 
     @JsonProperty("requirement_not_met_details")
-    private RequirementNotMetDetailsResponse requirementNotMetDetails;
+    private List<RequirementNotMetDetailsResponse> requirementNotMetDetails;
 
     public String getReasonCode() {
         return reasonCode;
     }
 
-    public RequirementNotMetDetailsResponse getRequirementNotMetDetails() {
+    public List<RequirementNotMetDetailsResponse> getRequirementNotMetDetails() {
         return requirementNotMetDetails;
     }
 
