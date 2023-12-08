@@ -924,6 +924,37 @@
         </div>
     </th:block>
 
+    <th:block th:if="${sessionResult.getIdentityProfile() != null}">
+        <div class="row pt-4">
+            <div class="col">
+                <h2>Identity Profile</h2>
+            </div>
+        </div>
+
+        <!-- Identity Profile Failure Reason -->
+        <th:block th:if="${sessionResult.getIdentityProfile().getFailureReason() != null}">
+            <div class="row pt-4">
+                <div class="col">
+                    <div class="accordion mt-3">
+                        <div class="card" th:if="${sessionResult.getIdentityProfile().getFailureReason() != null}">
+                            Failure Reason: <span th:text="${sessionResult.getIdentityProfile().getFailureReason().getReasonCode()}"></span>
+                            <th:block th:if="${sessionResult.getIdentityProfile().getFailureReason().getRequirementNotMetDetails() != null}">
+                                <th:block th:with="requirementsNotMetDetails=${sessionResult.getIdentityProfile().getFailureReason().getRequirementNotMetDetails()}">
+                                    <span th:if="${requirementsNotMetDetails.getFailureType() != null}">Failure Type: <span th:text="${requirementsNotMetDetails.getFailureType()}"></span></span>
+                                    <span th:if="${requirementsNotMetDetails.getDocumentType() != null}">Document Type: <span th:text="${requirementsNotMetDetails.getDocumentType()}"></span></span>
+                                    <span th:if="${requirementsNotMetDetails.getDocumentCountryIsoCode() != null}">Document Country ISO Code: <span th:text="${requirementsNotMetDetails.getDocumentCountryIsoCode()}"></span></span>
+                                    <span th:if="${requirementsNotMetDetails.getAuditId() != null}">Audit ID: <span th:text="${requirementsNotMetDetails.getAuditId()}"></span></span>
+                                    <span th:if="${requirementsNotMetDetails.getDetails() != null}">Details: <span th:text="${requirementsNotMetDetails.getDetails()}"></span></span>
+                                </th:block>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+
+    </th:block>
+
 </div>
 
 <div th:replace="fragments/components :: footer"></div>
