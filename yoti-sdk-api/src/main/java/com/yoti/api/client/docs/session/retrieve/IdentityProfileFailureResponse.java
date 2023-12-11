@@ -10,14 +10,14 @@ public class IdentityProfileFailureResponse {
     private String reasonCode;
 
     @JsonProperty("requirements_not_met_details")
-    private List<RequirementNotMetDetailsResponse> requirementNotMetDetails;
+    private List<RequirementNotMetDetailsResponse> requirementsNotMetDetails;
 
     public String getReasonCode() {
         return reasonCode;
     }
 
-    public List<RequirementNotMetDetailsResponse> getRequirementNotMetDetails() {
-        return requirementNotMetDetails;
+    public List<RequirementNotMetDetailsResponse> getRequirementsNotMetDetails() {
+        return requirementsNotMetDetails;
     }
 
 }
