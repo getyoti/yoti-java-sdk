@@ -124,7 +124,7 @@
     <spotbugs-maven-plugin.version>4.8.3.1</spotbugs-maven-plugin.version>
     <findsecbugs-plugin.version>1.13.0</findsecbugs-plugin.version>
 
-    <dependency-check-maven.version>8.4.2</dependency-check-maven.version>
+    <dependency-check-maven.version>8.4.3</dependency-check-maven.version>
     <dependency-check-maven.cve.update.limit>12</dependency-check-maven.cve.update.limit>
 
     <animal-sniffer-maven-plugin.version>1.23</animal-sniffer-maven-plugin.version>
