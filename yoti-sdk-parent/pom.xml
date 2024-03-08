@@ -138,7 +138,7 @@
 
     <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 
-    <maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
+    <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
     <maven-javadoc-plugin.source>8</maven-javadoc-plugin.source>
 
     <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
