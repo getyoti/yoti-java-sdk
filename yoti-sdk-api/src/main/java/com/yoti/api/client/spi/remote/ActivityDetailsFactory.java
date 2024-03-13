@@ -3,7 +3,7 @@ package com.yoti.api.client.spi.remote;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.RFC3339_PATTERN;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.SYMMETRIC_CIPHER;
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
+import static com.yoti.validation.Validation.notNull;
 
 import java.io.UnsupportedEncodingException;
 import java.security.Key;
@@ -53,11 +53,11 @@ public class ActivityDetailsFactory {
         byte[] decryptedKey = DecryptionHelper.decryptAsymmetric(receipt.getWrappedReceiptKey(), privateKey);
         Key secretKey = new SecretKeySpec(decryptedKey, SYMMETRIC_CIPHER);
 
-        List<Attribute<?>> userProfileAttr = attributeListReader.read(receipt.getOtherPartyProfile(), secretKey);
-        List<Attribute<?>> applicationProfileAttr = attributeListReader.read(receipt.getProfile(), secretKey);
+        List<Attribute<?>> otherPartyAttr = attributeListReader.read(receipt.getOtherPartyProfile(), secretKey);
+        List<Attribute<?>> thisPartyAttr = attributeListReader.read(receipt.getProfile(), secretKey);
 
-        HumanProfile userProfile = new HumanProfile(userProfileAttr);
-        ApplicationProfile applicationProfile = new ApplicationProfile(applicationProfileAttr);
+        HumanProfile otherPartyProfile = new HumanProfile(otherPartyAttr);
+        ApplicationProfile thisPartyProfile = new ApplicationProfile(thisPartyAttr);
 
         ExtraData extraData = parseExtraData(receipt.getExtraData(), secretKey);
 
@@ -65,7 +65,15 @@ public class ActivityDetailsFactory {
         String parentRememberMeId = parseRememberMeId(receipt.getParentRememberMeId());
         Date timestamp = parseTimestamp(receipt.getTimestamp());
 
-        return new ActivityDetails(rememberMeId, parentRememberMeId, userProfile, applicationProfile, extraData, timestamp, receipt.getReceiptId());
+        return new ActivityDetails(
+                rememberMeId,
+                parentRememberMeId,
+                otherPartyProfile,
+                thisPartyProfile,
+                extraData,
+                timestamp,
+                receipt.getReceiptId()
+        );
     }
 
     private ExtraData parseExtraData(byte[] extraDataBytes, Key secretKey) throws ProfileException {
