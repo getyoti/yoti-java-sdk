@@ -14,9 +14,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import java.security.GeneralSecurityException;
 import java.security.Key;
@@ -31,17 +30,14 @@ import java.util.GregorianCalendar;
 
 import com.yoti.api.client.ActivityDetails;
 import com.yoti.api.client.ExtraData;
-import com.yoti.api.client.Profile;
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.*;
+import org.mockito.junit.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ActivityDetailsFactoryTest {
@@ -68,8 +64,6 @@ public class ActivityDetailsFactoryTest {
 
     KeyPair keyPair;
     byte[] validReceiptKey;
-    @Mock Profile profileMock;
-    @Mock Profile otherProfileMock;
     @Mock ExtraData extraDataMock;
 
     @Before

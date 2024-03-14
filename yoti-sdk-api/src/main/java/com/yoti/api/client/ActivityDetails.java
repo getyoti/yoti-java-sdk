@@ -1,6 +1,6 @@
 package com.yoti.api.client;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
+import static com.yoti.validation.Validation.notNull;
 
 import static org.bouncycastle.util.encoders.Base64.toBase64String;
 
@@ -13,26 +13,26 @@ public final class ActivityDetails {
 
     private final String rememberMeId;
     private final String parentRememberMeId;
-    private final ApplicationProfile applicationProfile;
-    private final HumanProfile userProfile;
+    private final ApplicationProfile thisPartyProfile;
+    private final HumanProfile otherPartyProfile;
     private final Date timestamp;
     private final String receiptId;
     private final ExtraData extraData;
 
     public ActivityDetails(String rememberMeId,
             String parentRememberMeId,
-            HumanProfile userProfile,
-            ApplicationProfile applicationProfile,
+            HumanProfile otherPartyProfile,
+            ApplicationProfile thisPartyProfile,
             ExtraData extraData,
             Date timestamp,
             byte[] receiptId) {
-        this.rememberMeId = notNull(rememberMeId, "Remember Me id");
+        this.rememberMeId = rememberMeId;
         this.parentRememberMeId = parentRememberMeId;
-        this.userProfile = notNull(userProfile, "User profile");
-        this.applicationProfile = notNull(applicationProfile, "Application profile");
+        this.otherPartyProfile = notNull(otherPartyProfile, "User profile");
+        this.thisPartyProfile = notNull(thisPartyProfile, "Application profile");
         this.timestamp = notNull(timestamp, "Timestamp");
         this.receiptId = toBase64String(notNull(receiptId, "Receipt id"));
-        this.extraData = notNull(extraData, "extraData");
+        this.extraData = extraData;
     }
 
     /**
@@ -41,7 +41,7 @@ public final class ActivityDetails {
      * @return profile containing attributes for the user
      */
     public HumanProfile getUserProfile() {
-        return userProfile;
+        return otherPartyProfile;
     }
 
     /**
@@ -50,7 +50,7 @@ public final class ActivityDetails {
      * @return profile containing attributes for the application
      */
     public ApplicationProfile getApplicationProfile() {
-        return applicationProfile;
+        return thisPartyProfile;
     }
 
     /**

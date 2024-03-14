@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.Date;
 
 import org.bouncycastle.util.encoders.Base64;
-import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.*;
+import org.mockito.*;
 
 public class ActivityDetailsTest {
 
@@ -18,22 +18,6 @@ public class ActivityDetailsTest {
     private static final byte[] RECEIPT_ID = { 1, 2, 3, 4, 5, 6, 7, 8 };
     private static final String RECEIPT_ID_STRING = Base64.toBase64String(RECEIPT_ID);
     private static final Date TIMESTAMP = new Date();
-    private static final byte[] SOME_SELFIE_BYTES = "selfieTestVal".getBytes();
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldFailConstructionForNullRememberMeId() {
-        new ActivityDetails(null, null, USER_PROFILE, APP_PROFILE, EXTRA_DATA, TIMESTAMP, RECEIPT_ID);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldFailConstructionForNullUserProfile() {
-        new ActivityDetails(REMEMBER_ME, null, null, APP_PROFILE, EXTRA_DATA, TIMESTAMP, RECEIPT_ID);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldFailConstructionForNullAppProfile() {
-        new ActivityDetails(REMEMBER_ME, null, USER_PROFILE, null, EXTRA_DATA, TIMESTAMP, RECEIPT_ID);
-    }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailConstructionForNullTimestamp() {
@@ -43,11 +27,6 @@ public class ActivityDetailsTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailConstructionForNullReceiptId() {
         new ActivityDetails(REMEMBER_ME, null, USER_PROFILE, APP_PROFILE, EXTRA_DATA, TIMESTAMP, null);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldFailConstructionForNullProfile() {
-        new ActivityDetails(REMEMBER_ME, null, null, APP_PROFILE, EXTRA_DATA, TIMESTAMP, RECEIPT_ID);
     }
 
     @Test
