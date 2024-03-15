@@ -4,49 +4,48 @@ import static com.yoti.validation.Validation.notNullOrEmpty;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.yoti.api.client.shareurl.constraint.Constraint;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Type and content of an user detail
+ * Type and content of a user detail
  */
 public class WantedAttribute {
 
-    @JsonProperty("name")
+    @JsonProperty(Property.NAME)
     private final String name;
 
-    @JsonProperty("derivation")
+    @JsonProperty(Property.DERIVATION)
     private final String derivation;
 
-    @JsonProperty("optional")
+    @JsonProperty(Property.OPTIONAL)
     private final boolean optional;
 
-    @JsonProperty("accept_self_asserted")
+    @JsonProperty(Property.ACCEPT_SELF_ASSERTED)
     private final Boolean acceptSelfAsserted;
 
-    @JsonProperty("constraints")
+    @JsonProperty(Property.CONSTRAINTS)
     private final List<Constraint> constraints;
 
-    WantedAttribute(String name, String derivation, boolean optional, Boolean acceptSelfAsserted, List<Constraint> constraints) {
-        notNullOrEmpty(name, "name");
+    @JsonProperty(Property.ALTERNATIVE_NAMES)
+    private final Set<String> alternativeNames;
 
-        this.name = name;
-        this.derivation = derivation;
-        this.optional = optional;
-        this.acceptSelfAsserted = acceptSelfAsserted;
-
-        if (constraints == null) {
-            this.constraints = Collections.emptyList();
-        } else {
-            this.constraints = constraints;
-        }
+    private WantedAttribute(Builder builder) {
+        name = builder.name;
+        derivation = builder.derivation;
+        optional = builder.optional;
+        acceptSelfAsserted = builder.acceptSelfAsserted;
+        constraints = Collections.unmodifiableList(builder.constraints);
+        alternativeNames = Collections.unmodifiableSet(builder.alternativeNames);
     }
 
-    public static WantedAttribute.Builder builder() {
-        return new WantedAttribute.Builder();
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -78,6 +77,7 @@ public class WantedAttribute {
 
     /**
      * Allows self asserted attributes
+     *
      * @return accept self asserted
      */
     public Boolean getAcceptSelfAsserted() {
@@ -93,6 +93,21 @@ public class WantedAttribute {
         return constraints;
     }
 
+    /**
+     * <pre>
+     * Alternatives for the attribute name that is being requested.
+     *
+     * The provided alternative attribute will be used exactly in the same way:
+     *     - if a derivation is requested it will be applied on the alternative
+     *     - if constraints are defined the alternative attribute will have to comply
+     * </pre>
+     *
+     * @return the Set of alternative names
+     */
+    public Set<String> getAlternativeNames() {
+        return alternativeNames;
+    }
+
     public static class Builder {
 
         private String name;
@@ -100,9 +115,11 @@ public class WantedAttribute {
         private boolean optional;
         private Boolean acceptSelfAsserted;
         private List<Constraint> constraints;
+        private Set<String> alternativeNames;
 
         private Builder() {
-            this.constraints = new ArrayList<>();
+            constraints = new ArrayList<>();
+            alternativeNames = new HashSet<>();
         }
         
         public Builder withName(String name) {
@@ -126,18 +143,43 @@ public class WantedAttribute {
         }
 
         public Builder withConstraints(List<Constraint> constraints) {
-            this.constraints = Collections.unmodifiableList(constraints);
+            this.constraints.addAll(constraints);
             return this;
         }
 
         public Builder withConstraint(Constraint constraint) {
-            this.constraints.add(constraint);
+            constraints.add(constraint);
+            return this;
+        }
+
+        public Builder withAlternativeNames(Set<String> alternativeNames) {
+            this.alternativeNames.addAll(alternativeNames);
+            return this;
+        }
+
+        public Builder withAlternativeName(String alternativeName) {
+            alternativeNames.add(alternativeName);
             return this;
         }
 
         public WantedAttribute build() {
-            return new WantedAttribute(name, derivation, optional, acceptSelfAsserted, constraints);
+            notNullOrEmpty(name, Property.NAME);
+
+            return new WantedAttribute(this);
         }
+
+    }
+
+    private static final class Property {
+
+        private static final String NAME = "name";
+        private static final String DERIVATION = "derivation";
+        private static final String OPTIONAL = "optional";
+        private static final String ACCEPT_SELF_ASSERTED = "accept_self_asserted";
+        private static final String CONSTRAINTS = "constraints";
+        private static final String ALTERNATIVE_NAMES = "alternative_names";
+
+        private Property() { }
 
     }
 
