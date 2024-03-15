@@ -1,6 +1,6 @@
 package com.yoti.api.client.shareurl.policy;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNullOrEmpty;
+import static com.yoti.validation.Validation.notNullOrEmpty;
 
 import java.util.ArrayList;
 import java.util.Collections;

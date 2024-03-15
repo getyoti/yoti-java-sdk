@@ -1,11 +1,12 @@
 package com.yoti.api.client.identity.policy;
 
+import static com.yoti.validation.Validation.notNullOrEmpty;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import com.yoti.api.client.identity.constraint.Constraint;
-import com.yoti.validation.Validation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
