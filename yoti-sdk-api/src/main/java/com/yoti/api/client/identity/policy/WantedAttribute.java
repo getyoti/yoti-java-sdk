@@ -4,7 +4,9 @@ import static com.yoti.validation.Validation.notNullOrEmpty;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.yoti.api.client.identity.constraint.Constraint;
 
@@ -27,12 +29,16 @@ public class WantedAttribute {
     @JsonProperty(Property.CONSTRAINTS)
     private final List<Constraint> constraints;
 
+    @JsonProperty(Property.ALTERNATIVE_NAMES)
+    private final Set<String> alternativeNames;
+
     private WantedAttribute(Builder builder) {
         name = builder.name;
         derivation = builder.derivation;
         optional = builder.optional;
         acceptSelfAsserted = builder.acceptSelfAsserted;
-        constraints = builder.constraints;
+        constraints = Collections.unmodifiableList(builder.constraints);
+        alternativeNames = Collections.unmodifiableSet(builder.alternativeNames);
     }
 
     public String getName() {
@@ -59,6 +65,10 @@ public class WantedAttribute {
         return !constraints.isEmpty();
     }
 
+    public Set<String> getAlternativeNames() {
+        return alternativeNames;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -70,9 +80,11 @@ public class WantedAttribute {
         private boolean optional;
         private Boolean acceptSelfAsserted;
         private List<Constraint> constraints;
+        private Set<String> alternativeNames;
 
         private Builder() {
-            this.constraints = new ArrayList<>();
+            constraints = new ArrayList<>();
+            alternativeNames = new HashSet<>();
         }
         
         public Builder withName(String name) {
@@ -96,17 +108,27 @@ public class WantedAttribute {
         }
 
         public Builder withConstraints(List<Constraint> constraints) {
-            this.constraints = Collections.unmodifiableList(constraints);
+            this.constraints.addAll(constraints);
             return this;
         }
 
         public Builder withConstraint(Constraint constraint) {
-            this.constraints.add(constraint);
+            constraints.add(constraint);
+            return this;
+        }
+
+        public Builder withAlternativeNames(Set<String> alternativeNames) {
+            this.alternativeNames.addAll(alternativeNames);
+            return this;
+        }
+
+        public Builder withAlternativeName(String alternativeName) {
+            alternativeNames.add(alternativeName);
             return this;
         }
 
         public WantedAttribute build() {
-            Validation.notNullOrEmpty(name, Property.NAME);
+            notNullOrEmpty(name, Property.NAME);
 
             return new WantedAttribute(this);
         }
@@ -120,6 +142,9 @@ public class WantedAttribute {
         private static final String OPTIONAL = "optional";
         private static final String ACCEPT_SELF_ASSERTED = "accept_self_asserted";
         private static final String CONSTRAINTS = "constraints";
+        private static final String ALTERNATIVE_NAMES = "alternative_names";
+
+        private Property() { }
 
     }
 
