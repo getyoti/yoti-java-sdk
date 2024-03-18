@@ -36,6 +36,7 @@ Note that:
     * [https://localhost:8443](https://localhost:8443) to initiate a login using Yoti. The Spring demo is listening for the response on `https://localhost:8443/login`
     * [https://localhost:8443/dynamic-share](https://localhost:8443/dynamic-share) to initiate a dynamic share with location with result displayed in profile page.
     * [https://localhost:8443/dbs-check](https://localhost:8443/dbs-check) to initiate a BDS standard check with location with result displayed in profile page.
+    * [https://localhost:8443/advanced-identity-profile-check](https://localhost:8443/advanced-identity-profile-check) to initiate a multi scheme identity profile check (**UK_TFIDA**[DBS, RTW], **YOTI_GLOBAL**[IDENTITY]) with result displayed in profile page.
 
 The logic for all the v1 share examples can be found in the `YotiLoginController`
 
