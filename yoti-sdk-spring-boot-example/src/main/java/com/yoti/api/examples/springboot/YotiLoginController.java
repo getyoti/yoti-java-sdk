@@ -1,5 +1,7 @@
 package com.yoti.api.examples.springboot;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import com.yoti.api.client.shareurl.policy.DynamicPolicy;
 import com.yoti.api.client.shareurl.policy.WantedAttribute;
 import com.yoti.api.examples.springboot.attribute.AttributeMapper;
 import com.yoti.api.examples.springboot.attribute.DisplayAttribute;
+import com.yoti.api.examples.springboot.data.Share;
 import com.yoti.api.spring.ClientProperties;
 import com.yoti.api.spring.YotiProperties;
 
@@ -159,19 +162,19 @@ public class YotiLoginController implements WebMvcConfigurer {
     @RequestMapping("/dbs-check")
     public String dbsCheck(final Model model) {
         Map<String, Object> scheme = new HashMap<>();
-        scheme.put("type", "DBS");
-        scheme.put("objective", "BASIC");
+        scheme.put(Share.Policy.Profile.TYPE, "DBS");
+        scheme.put(Share.Policy.Profile.OBJECTIVE, "BASIC");
 
         Map<String, Object> identityProfile = new HashMap<>();
-        identityProfile.put("trust_framework", "UK_TFIDA");
-        identityProfile.put("scheme", scheme);
+        identityProfile.put(Share.Policy.Profile.TRUST_FRAMEWORK, "UK_TFIDA");
+        identityProfile.put(Share.Policy.Profile.SCHEME, scheme);
 
         DynamicPolicy dynamicPolicy = DynamicPolicy.builder()
                 .withIdentityProfile(identityProfile)
                 .build();
 
         Map<String, Object> subject = new HashMap<>();
-        subject.put("subject_id", "00000000-1111-2222-3333-444444444444");
+        subject.put(Share.Subject.SUBJECT_ID, "00000000-1111-2222-3333-444444444444");
 
         DynamicScenario dynamicScenario = DynamicScenario.builder()
                 .withCallbackEndpoint("/login")
@@ -191,6 +194,83 @@ public class YotiLoginController implements WebMvcConfigurer {
         model.addAttribute("clientSdkId", properties.getClientSdkId());
 
         return "dbs-check";
+    }
+
+    @RequestMapping("/advanced-identity-profile-check")
+    public String advancedDbsCheck(final Model model) {
+        // UK_TFIDA
+        Map<String, Object> dbsScheme = new HashMap<>();
+        dbsScheme.put(Share.Policy.Profile.TYPE, "DBS");
+        dbsScheme.put(Share.Policy.Profile.LABEL, "LB000");
+        dbsScheme.put(Share.Policy.Profile.OBJECTIVE, "BASIC");
+
+        Map<String, Object> rtwScheme = new HashMap<>();
+        rtwScheme.put(Share.Policy.Profile.TYPE, "RTW");
+        rtwScheme.put(Share.Policy.Profile.LABEL, "LB001");
+
+        Map<String, Object> ukTfidaProfile = new HashMap<>();
+        ukTfidaProfile.put(Share.Policy.Profile.TRUST_FRAMEWORK, "UK_TFIDA");
+        ukTfidaProfile.put(Share.Policy.Profile.SCHEMES, toArray(dbsScheme, rtwScheme));
+
+        // YOTI_GLOBAL
+        Map<String, Object> documents = new HashMap<>();
+        documents.put(Share.Policy.Profile.COUNTRY_CODES, toArray("GBR"));
+        documents.put(Share.Policy.Profile.DOCUMENT_TYPES, toArray("PASSPORT", "DRIVING_LICENCE"));
+
+        Map<String, Object> filter = new HashMap<>();
+        filter.put(Share.Policy.Profile.TYPE, "DOCUMENT_RESTRICTIONS");
+        filter.put(Share.Policy.Profile.INCLUSION, "INCLUDE");
+        filter.put(Share.Policy.Profile.DOCUMENTS, toArray(documents));
+
+        Map<String, Object> config = new HashMap<>();
+        config.put(Share.Policy.Profile.FILTER, filter);
+
+        Map<String, Object> identityScheme = new HashMap<>();
+        identityScheme.put(Share.Policy.Profile.TYPE, "IDENTITY");
+        identityScheme.put(Share.Policy.Profile.LABEL, "LB002");
+        identityScheme.put(Share.Policy.Profile.OBJECTIVE, "AL_L1");
+        identityScheme.put(Share.Policy.Profile.CONFIG, config);
+
+        Map<String, Object> yotiGlobalProfile = new HashMap<>();
+        yotiGlobalProfile.put(Share.Policy.Profile.TRUST_FRAMEWORK, "YOTI_GLOBAL");
+        yotiGlobalProfile.put(Share.Policy.Profile.SCHEMES, toArray(identityScheme));
+
+        Map<String, Object> advancedIdentityProfile = new HashMap<>();
+        advancedIdentityProfile.put(Share.Policy.Profile.PROFILES, toArray(ukTfidaProfile, yotiGlobalProfile));
+
+        DynamicPolicy dynamicPolicy = DynamicPolicy.builder()
+                .withAdvancedIdentityProfile(advancedIdentityProfile)
+                .build();
+
+        Map<String, Object> subject = new HashMap<>();
+        subject.put(Share.Subject.SUBJECT_ID, "00000000-1111-2222-3333-444444444444");
+
+        DynamicScenario dynamicScenario = DynamicScenario.builder()
+                .withCallbackEndpoint("/login")
+                .withPolicy(dynamicPolicy)
+                .withSubject(subject)
+                .build();
+
+        try {
+            ShareUrlResult result = client.createShareUrl(dynamicScenario);
+
+            String shareUrl = result.getUrl();
+            model.addAttribute("yotiShareUrl", shareUrl);
+        } catch (DynamicShareException e) {
+            LOG.error(e.getMessage());
+        }
+
+        model.addAttribute("clientSdkId", properties.getClientSdkId());
+
+        return "dbs-check";
+    }
+
+    private static List<Map<String, Object>> toArray(Map<String, Object>... items) {
+        return new ArrayList<>(Arrays.asList(items));
+    }
+
+    private static List<String> toArray(String... items) {
+        return new ArrayList<>(Arrays.asList(items));
     }
 
 }
