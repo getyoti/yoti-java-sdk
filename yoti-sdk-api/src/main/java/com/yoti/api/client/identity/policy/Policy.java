@@ -32,12 +32,16 @@ public class Policy {
     @JsonProperty(Property.IDENTITY_PROFILE_REQUIREMENTS)
     private final Object identityProfile;
 
+    @JsonProperty(Property.ADVANCED_IDENTITY_PROFILE_REQUIREMENTS)
+    private final Object advancedIdentityProfile;
+
     private Policy(Builder builder) {
         wantedAttributes = builder.wantedAttributes.values();
         wantedAuthTypes = builder.wantedAuthTypes;
         wantedRememberMe = builder.wantedRememberMe;
         wantedRememberMeOptional = builder.wantedRememberMeOptional;
         identityProfile = builder.identityProfile;
+        advancedIdentityProfile = builder.advancedIdentityProfile;
     }
 
     public Collection<WantedAttribute> getWantedAttributes() {
@@ -60,6 +64,10 @@ public class Policy {
         return identityProfile;
     }
 
+    public Object getAdvancedIdentityProfile() {
+        return advancedIdentityProfile;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -75,6 +83,7 @@ public class Policy {
         private boolean wantedRememberMe;
         private boolean wantedRememberMeOptional;
         private Object identityProfile;
+        private Object advancedIdentityProfile;
 
         private Builder() {
             wantedAttributes = new HashMap<>();
@@ -266,6 +275,11 @@ public class Policy {
             this.identityProfile = identityProfile;
             return this;
         }
+
+        public Builder withAdvancedIdentityProfile(Object advancedIdentityProfile) {
+            this.advancedIdentityProfile = advancedIdentityProfile;
+            return this;
+        }
         
         public Policy build() {
             return new Policy(this);
@@ -280,6 +294,7 @@ public class Policy {
         private static final String WANTED_REMEMBER_ME = "wanted_remember_me";
         private static final String WANTED_REMEMBER_ME_OPTIONAL = "wanted_remember_me_optional";
         private static final String IDENTITY_PROFILE_REQUIREMENTS = "identity_profile_requirements";
+        private static final String ADVANCED_IDENTITY_PROFILE_REQUIREMENTS = "advanced_identity_profile_requirements";
 
     }
 

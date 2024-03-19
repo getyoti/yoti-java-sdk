@@ -15,7 +15,6 @@ import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.
 import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.POSTAL_ADDRESS;
 import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.SELFIE;
 import static com.yoti.api.attributes.AttributeConstants.HumanProfileAttributes.STRUCTURED_POSTAL_ADDRESS;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -24,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,8 +32,10 @@ import java.util.Map;
 
 import com.yoti.api.client.common.IdentityProfile;
 import com.yoti.api.client.common.IdentityProfileScheme;
+import com.yoti.api.client.common.Share;
 import com.yoti.api.client.identity.constraint.Constraint;
 import com.yoti.api.client.identity.constraint.SourceConstraint;
+import com.yoti.api.client.shareurl.policy.DynamicPolicy;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -371,55 +373,102 @@ public class PolicyTest {
 
         IdentityProfile identityProfile = new IdentityProfile("A_FRAMEWORK", scheme);
 
-        JsonNode json = toJson(identityProfile);
+        JsonNode json = parse(Policy.builder()
+                .withIdentityProfile(identityProfile)
+                .build()
+        ).get(Share.Policy.Profile.IDENTITY_PROFILE_REQUIREMENTS);
 
-        assertThat(json.get(Property.TRUST_FRAMEWORK).asText(), is(equalTo(identityProfile.getFramework())));
+        assertThat(json.get(Share.Policy.Profile.TRUST_FRAMEWORK).asText(), is(equalTo(identityProfile.getFramework())));
 
-        JsonNode schemeJsonNode = json.get(Property.SCHEME);
-        assertThat(schemeJsonNode.get(Property.TYPE).asText(), is(equalTo(scheme.getType())));
-        assertThat(schemeJsonNode.get(Property.OBJECTIVE).asText(), is(equalTo(scheme.getObjective())));
+        JsonNode schemeJsonNode = json.get(Share.Policy.Profile.SCHEME);
+        assertThat(schemeJsonNode.get(Share.Policy.Profile.TYPE).asText(), is(equalTo(scheme.getType())));
+        assertThat(schemeJsonNode.get(Share.Policy.Profile.OBJECTIVE).asText(), is(equalTo(scheme.getObjective())));
     }
 
     @Test
     public void buildWithIdentityProfileMap() throws IOException {
         Map<String, Object> scheme = new HashMap<>();
-        scheme.put(Property.TYPE, "A_TYPE");
-        scheme.put(Property.OBJECTIVE, "AN_OBJECTIVE");
+        scheme.put(Share.Policy.Profile.TYPE, "A_TYPE");
+        scheme.put(Share.Policy.Profile.OBJECTIVE, "AN_OBJECTIVE");
 
         Map<String, Object> identityProfile = new HashMap<>();
-        identityProfile.put(Property.TRUST_FRAMEWORK, "A_FRAMEWORK");
-        identityProfile.put(Property.SCHEME, scheme);
+        identityProfile.put(Share.Policy.Profile.TRUST_FRAMEWORK, "A_FRAMEWORK");
+        identityProfile.put(Share.Policy.Profile.SCHEME, scheme);
 
-        JsonNode json = toJson(identityProfile);
+        JsonNode json = parse(Policy.builder()
+                .withIdentityProfile(identityProfile)
+                .build()
+        ).get(Share.Policy.Profile.IDENTITY_PROFILE_REQUIREMENTS);
 
         assertThat(
-                json.get(Property.TRUST_FRAMEWORK).asText(),
-                is(equalTo(identityProfile.get(Property.TRUST_FRAMEWORK)))
+                json.get(Share.Policy.Profile.TRUST_FRAMEWORK).asText(),
+                is(equalTo(identityProfile.get(Share.Policy.Profile.TRUST_FRAMEWORK)))
         );
 
-        JsonNode schemeJsonNode = json.get(Property.SCHEME);
-        assertThat(schemeJsonNode.get(Property.TYPE).asText(), is(equalTo(scheme.get(Property.TYPE))));
-        assertThat(schemeJsonNode.get(Property.OBJECTIVE).asText(), is(equalTo(scheme.get(
-                Property.OBJECTIVE))));
+        JsonNode schemeJsonNode = json.get(Share.Policy.Profile.SCHEME);
+        assertThat(schemeJsonNode.get(Share.Policy.Profile.TYPE).asText(), is(equalTo(scheme.get(Share.Policy.Profile.TYPE))));
+        assertThat(schemeJsonNode.get(Share.Policy.Profile.OBJECTIVE).asText(), is(equalTo(scheme.get(Share.Policy.Profile.OBJECTIVE))));
     }
 
-    private static JsonNode toJson(Object obj) throws IOException {
-        Policy policy = Policy.builder()
-                .withIdentityProfile(obj)
-                .build();
+    @Test
+    public void buildWithAdvancedIdentityProfileMap() throws IOException {
+        Map<String, Object> scheme1 = new HashMap<>();
+        scheme1.put(Share.Policy.Profile.TYPE, "A_TYPE_1");
+        scheme1.put(Share.Policy.Profile.LABEL, "A_LABEL_1");
+        scheme1.put(Share.Policy.Profile.OBJECTIVE, "AN_OBJECTIVE_1");
 
-        return MAPPER.readTree(MAPPER.writeValueAsString(policy.getIdentityProfile()).getBytes(DEFAULT_CHARSET));
+        Map<String, Object> scheme2 = new HashMap<>();
+        scheme2.put(Share.Policy.Profile.TYPE, "A_TYPE_2");
+        scheme2.put(Share.Policy.Profile.LABEL, "A_LABEL_2");
+
+        Map<String, Object> aProfile = new HashMap<>();
+        aProfile.put(Share.Policy.Profile.TRUST_FRAMEWORK, "A_FRAMEWORK_1");
+        aProfile.put(Share.Policy.Profile.SCHEMES, toArray(scheme1, scheme2));
+
+        Map<String, Object> documents = new HashMap<>();
+        documents.put(Share.Policy.Profile.COUNTRY_CODES, toArray("GBR"));
+        documents.put(Share.Policy.Profile.DOCUMENT_TYPES, toArray("PASSPORT", "DRIVING_LICENCE"));
+
+        Map<String, Object> filter = new HashMap<>();
+        filter.put(Share.Policy.Profile.TYPE, "DOCUMENT_RESTRICTIONS");
+        filter.put(Share.Policy.Profile.INCLUSION, "INCLUDE");
+        filter.put(Share.Policy.Profile.DOCUMENTS, toArray(documents));
+
+        Map<String, Object> config = new HashMap<>();
+        config.put(Share.Policy.Profile.FILTER, filter);
+
+        Map<String, Object> anotherProfileScheme = new HashMap<>();
+        anotherProfileScheme.put(Share.Policy.Profile.TYPE, "A_TYPE_3");
+        anotherProfileScheme.put(Share.Policy.Profile.LABEL, "A_LABEL_3");
+        anotherProfileScheme.put(Share.Policy.Profile.OBJECTIVE, "AN_OBJECTIVE_3");
+        anotherProfileScheme.put(Share.Policy.Profile.CONFIG, config);
+
+        Map<String, Object> anotherProfile = new HashMap<>();
+        anotherProfile.put(Share.Policy.Profile.TRUST_FRAMEWORK, "A_FRAMEWORK_2");
+        anotherProfile.put(Share.Policy.Profile.SCHEMES, toArray(anotherProfileScheme));
+
+        Map<String, Object> advancedIdentityProfile = new HashMap<>();
+        advancedIdentityProfile.put(Share.Policy.Profile.PROFILES, toArray(aProfile, anotherProfile));
+
+        JsonNode advancedIdentityProfileJson = parse(
+                DynamicPolicy.builder()
+                        .withAdvancedIdentityProfile(advancedIdentityProfile)
+                        .build()
+        ).get(Share.Policy.Profile.ADVANCED_IDENTITY_PROFILE_REQUIREMENTS);
+
+        assertTrue(advancedIdentityProfileJson.equals(parse(advancedIdentityProfile)));
     }
 
-    private static final class Property {
+    private static List<Map<String, Object>> toArray(Map<String, Object>... items) {
+        return new ArrayList<>(Arrays.asList(items));
+    }
 
-        private Property() { }
+    private static List<String> toArray(String... items) {
+        return new ArrayList<>(Arrays.asList(items));
+    }
 
-        private static final String TYPE = "type";
-        private static final String SCHEME = "scheme";
-        private static final String OBJECTIVE = "objective";
-        private static final String TRUST_FRAMEWORK = "trust_framework";
-
+    private static JsonNode parse(Object obj) throws IOException {
+        return MAPPER.readTree(MAPPER.writeValueAsString(obj));
     }
 
     private static class WantedAttributeMatcher extends TypeSafeDiagnosingMatcher<WantedAttribute> {
