@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public final class IdentityProfileScheme {
 
-    @JsonProperty("type")
+    @JsonProperty(Share.Policy.Profile.TYPE)
     private final String type;
 
-    @JsonProperty("objective")
+    @JsonProperty(Share.Policy.Profile.OBJECTIVE)
     private final String objective;
 
     public IdentityProfileScheme(String type, String objective) {

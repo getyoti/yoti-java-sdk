@@ -13,9 +13,6 @@ import com.yoti.api.client.shareurl.constraint.Constraint;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Set of data required to request a sharing transaction
- */
 public class DynamicPolicy {
 
     @JsonProperty(Property.WANTED)
@@ -33,65 +30,44 @@ public class DynamicPolicy {
     @JsonProperty(Property.IDENTITY_PROFILE_REQUIREMENTS)
     private final Object identityProfile;
 
-    DynamicPolicy(Collection<WantedAttribute> wantedAttributes,
-            Set<Integer> wantedAuthTypes,
-            boolean wantedRememberMe,
-            boolean wantedRememberMeOptional,
-            Object identityProfile) {
-        this.wantedAttributes = wantedAttributes;
-        this.wantedAuthTypes = wantedAuthTypes;
-        this.wantedRememberMe = wantedRememberMe;
-        this.wantedRememberMeOptional = wantedRememberMeOptional;
-        this.identityProfile = identityProfile;
+    @JsonProperty(Property.ADVANCED_IDENTITY_PROFILE_REQUIREMENTS)
+    private final Object advancedIdentityProfile;
+
+    private DynamicPolicy(Builder builder) {
+        wantedAttributes = builder.wantedAttributes.values();
+        wantedAuthTypes = builder.wantedAuthTypes;
+        wantedRememberMe = builder.wantedRememberMe;
+        wantedRememberMeOptional = builder.wantedRememberMeOptional;
+        identityProfile = builder.identityProfile;
+        advancedIdentityProfile = builder.advancedIdentityProfile;
     }
 
     public static DynamicPolicy.Builder builder() {
         return new DynamicPolicy.Builder();
     }
 
-    /**
-     * Set of required {@link WantedAttribute}
-     *
-     * @return attributes
-     */
     public Collection<WantedAttribute> getWantedAttributes() {
         return wantedAttributes;
     }
 
-    /**
-     * Type of authentications
-     *
-     * @return authentication types
-     */
     public Set<Integer> getWantedAuthTypes() {
         return wantedAuthTypes;
     }
 
-    /**
-     * Allows to remember the {@link DynamicPolicy}
-     *
-     * @return RememberMe
-     */
     public boolean isWantedRememberMe() {
         return wantedRememberMe;
     }
 
-    /**
-     * Defines the {@link #isWantedRememberMe()} optional for the sharing
-     *
-     * @return RememberMeOptional
-     */
     public boolean isWantedRememberMeOptional() {
         return wantedRememberMeOptional;
     }
 
-    /**
-     * Defines a required identity profile within the scope of a trust framework and scheme.
-     *
-     * @return IdentityProfile
-     */
     public Object getIdentityProfile() {
         return identityProfile;
+    }
+
+    public Object getAdvancedIdentityProfile() {
+        return advancedIdentityProfile;
     }
 
     public static class Builder {
@@ -104,6 +80,7 @@ public class DynamicPolicy {
         private boolean wantedRememberMe;
         private boolean wantedRememberMeOptional;
         private Object identityProfile;
+        private Object advancedIdentityProfile;
 
         private Builder() { }
 
@@ -114,7 +91,7 @@ public class DynamicPolicy {
                 key += "-" + wantedAttribute.getConstraints().hashCode();
             }
 
-            this.wantedAttributes.put(key, wantedAttribute);
+            wantedAttributes.put(key, wantedAttribute);
             return this;
         }
 
@@ -245,11 +222,11 @@ public class DynamicPolicy {
         }
 
         public Builder withSelfieAuthentication(boolean enabled) {
-            return this.withWantedAuthType(SELFIE_AUTH_TYPE, enabled);
+            return withWantedAuthType(SELFIE_AUTH_TYPE, enabled);
         }
 
         public Builder withPinAuthentication(boolean enabled) {
-            return this.withWantedAuthType(PIN_AUTH_TYPE, enabled);
+            return withWantedAuthType(PIN_AUTH_TYPE, enabled);
         }
 
         public Builder withWantedAuthType(int wantedAuthType) {
@@ -259,7 +236,7 @@ public class DynamicPolicy {
 
         public Builder withWantedAuthType(int wantedAuthType, boolean enabled) {
             if (enabled) {
-                return this.withWantedAuthType(wantedAuthType);
+                return withWantedAuthType(wantedAuthType);
             } else {
                 this.wantedAuthTypes.remove(wantedAuthType);
                 return this;
@@ -280,15 +257,14 @@ public class DynamicPolicy {
             this.identityProfile = identityProfile;
             return this;
         }
+
+        public Builder withAdvancedIdentityProfile(Object advancedIdentityProfile) {
+            this.advancedIdentityProfile = advancedIdentityProfile;
+            return this;
+        }
         
         public DynamicPolicy build() {
-            return new DynamicPolicy(
-                    wantedAttributes.values(),
-                    wantedAuthTypes,
-                    wantedRememberMe,
-                    wantedRememberMeOptional,
-                    identityProfile
-            );
+            return new DynamicPolicy(this);
         }
 
     }
@@ -300,6 +276,7 @@ public class DynamicPolicy {
         private static final String WANTED_REMEMBER_ME = "wanted_remember_me";
         private static final String WANTED_REMEMBER_ME_OPTIONAL = "wanted_remember_me_optional";
         private static final String IDENTITY_PROFILE_REQUIREMENTS = "identity_profile_requirements";
+        private static final String ADVANCED_IDENTITY_PROFILE_REQUIREMENTS = "advanced_identity_profile_requirements";
 
         private Property() { }
 

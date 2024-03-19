@@ -1,7 +1,10 @@
 package com.yoti.api.examples.springboot;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.yoti.api.client.DigitalIdentityClient;
@@ -12,6 +15,8 @@ import com.yoti.api.client.identity.extension.LocationConstraintContent;
 import com.yoti.api.client.identity.extension.LocationConstraintExtensionBuilder;
 import com.yoti.api.client.identity.policy.Policy;
 import com.yoti.api.client.identity.policy.WantedAttribute;
+import com.yoti.api.client.shareurl.policy.DynamicPolicy;
+import com.yoti.api.examples.springboot.data.Share;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,9 +41,10 @@ public class IdentitySessionController {
     @GetMapping("/digital-identity-session")
     public String identityShareSession() {
         ShareSession session = client.createShareSession(
-                // forMinimalShare()
+                forMinimalShare()
                 // forDynamicScenarioShare()
-                forIdentityProfileShare()
+                // forIdentityProfileShare()
+                // forAdvancedIdentityProfileShare()
                 // forLocationExtensionShare()
         );
 
@@ -105,6 +111,69 @@ public class IdentitySessionController {
                 .withPolicy(policy)
                 .withRedirectUri(REDIRECT_URI)
                 .build();
+    }
+
+    private static ShareSessionRequest forAdvancedIdentityProfileShare() {
+        // UK_TFIDA
+        Map<String, Object> dbsScheme = new HashMap<>();
+        dbsScheme.put(Share.Policy.Profile.TYPE, "DBS");
+        dbsScheme.put(Share.Policy.Profile.LABEL, "LB000");
+        dbsScheme.put(Share.Policy.Profile.OBJECTIVE, "BASIC");
+
+        Map<String, Object> rtwScheme = new HashMap<>();
+        rtwScheme.put(Share.Policy.Profile.TYPE, "RTW");
+        rtwScheme.put(Share.Policy.Profile.LABEL, "LB001");
+
+        Map<String, Object> ukTfidaProfile = new HashMap<>();
+        ukTfidaProfile.put(Share.Policy.Profile.TRUST_FRAMEWORK, "UK_TFIDA");
+        ukTfidaProfile.put(Share.Policy.Profile.SCHEMES, toArray(dbsScheme, rtwScheme));
+
+        // YOTI_GLOBAL
+        Map<String, Object> documents = new HashMap<>();
+        documents.put(Share.Policy.Profile.COUNTRY_CODES, toArray("GBR"));
+        documents.put(Share.Policy.Profile.DOCUMENT_TYPES, toArray("PASSPORT", "DRIVING_LICENCE"));
+
+        Map<String, Object> filter = new HashMap<>();
+        filter.put(Share.Policy.Profile.TYPE, "DOCUMENT_RESTRICTIONS");
+        filter.put(Share.Policy.Profile.INCLUSION, "INCLUDE");
+        filter.put(Share.Policy.Profile.DOCUMENTS, toArray(documents));
+
+        Map<String, Object> config = new HashMap<>();
+        config.put(Share.Policy.Profile.FILTER, filter);
+
+        Map<String, Object> identityScheme = new HashMap<>();
+        identityScheme.put(Share.Policy.Profile.TYPE, "IDENTITY");
+        identityScheme.put(Share.Policy.Profile.LABEL, "LB002");
+        identityScheme.put(Share.Policy.Profile.OBJECTIVE, "AL_L1");
+        identityScheme.put(Share.Policy.Profile.CONFIG, config);
+
+        Map<String, Object> yotiGlobalProfile = new HashMap<>();
+        yotiGlobalProfile.put(Share.Policy.Profile.TRUST_FRAMEWORK, "YOTI_GLOBAL");
+        yotiGlobalProfile.put(Share.Policy.Profile.SCHEMES, toArray(identityScheme));
+
+        Map<String, Object> advancedIdentityProfile = new HashMap<>();
+        advancedIdentityProfile.put(Share.Policy.Profile.PROFILES, toArray(ukTfidaProfile, yotiGlobalProfile));
+
+        Map<String, Object> subject = new HashMap<>();
+        subject.put(Share.Subject.SUBJECT_ID, "00000000-1111-2222-3333-444444444444");
+
+        Policy policy = Policy.builder()
+                .withAdvancedIdentityProfile(advancedIdentityProfile)
+                .build();
+
+        return ShareSessionRequest.builder()
+                .withPolicy(policy)
+                .withSubject(subject)
+                .withRedirectUri(REDIRECT_URI)
+                .build();
+    }
+
+    private static List<Map<String, Object>> toArray(Map<String, Object>... items) {
+        return new ArrayList<>(Arrays.asList(items));
+    }
+
+    private static List<String> toArray(String... items) {
+        return new ArrayList<>(Arrays.asList(items));
     }
 
     private static ShareSessionRequest forLocationExtensionShare() {

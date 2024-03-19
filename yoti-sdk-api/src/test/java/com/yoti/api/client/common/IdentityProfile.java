@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public final class IdentityProfile {
 
-    @JsonProperty("trust_framework")
+    @JsonProperty(Share.Policy.Profile.TRUST_FRAMEWORK)
     private final String framework;
 
-    @JsonProperty("scheme")
+    @JsonProperty(Share.Policy.Profile.SCHEME)
     private final IdentityProfileScheme scheme;
 
     public IdentityProfile(String framework, IdentityProfileScheme scheme) {
