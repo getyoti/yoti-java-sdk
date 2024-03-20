@@ -60,7 +60,7 @@ public class DocScanService {
 
         SessionSpec sessionSpec = SessionSpec.builder()
                 .withClientSessionTokenTtl(600)
-                .withResourcesTtl(90000)
+                .withResourcesTtl(604800)
                 .withUserTrackingId("some-user-tracking-id")
                 .withSdkConfig(sdkConfig)
                 .withRequestedCheck(
@@ -69,13 +69,13 @@ public class DocScanService {
                 )
                 .withRequestedCheck(
                         RequestedFaceMatchCheck.builder()
-                                .withManualCheckAlways()
+                                .withManualCheckFallback()
                                 .build()
                 )
                 .withRequestedCheck(
                         RequestedLivenessCheck.builder()
-                                .forZoomLiveness()
-                                .withMaxRetries(1)
+                                .forStaticLiveness()
+                                .withMaxRetries(3)
                                 .build()
                 )
                 .withRequestedCheck(
@@ -97,12 +97,12 @@ public class DocScanService {
                 )
                 .withRequestedTask(
                         RequestedIdDocTextExtractionTask.builder()
-                                .withManualCheckAlways()
+                                .withManualCheckFallback()
                                 .build()
                 )
                 .withRequestedTask(
                         RequestedSupplementaryDocTextExtractionTask.builder()
-                                .withManualCheckAlways()
+                                .withManualCheckFallback()
                                 .build()
                 )
                 .withRequiredDocument(
