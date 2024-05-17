@@ -3,6 +3,8 @@ package com.yoti.api.client.docs.session.retrieve;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.yoti.api.client.docs.session.retrieve.identityprofile.advanced.AdvancedIdentityProfileResponse;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GetSessionResult {
@@ -34,8 +36,14 @@ public class GetSessionResult {
     @JsonProperty(Property.IDENTITY_PROFILE)
     private IdentityProfileResponse identityProfile;
 
+    @JsonProperty(Property.ADVANCED_IDENTITY_PROFILE)
+    private AdvancedIdentityProfileResponse advancedIdentityProfile;
+
     @JsonProperty(Property.IDENTITY_PROFILE_PREVIEW)
     private IdentityProfilePreviewResponse identityProfilePreview;
+
+    @JsonProperty(Property.ADVANCED_IDENTITY_PROFILE_PREVIEW)
+    private IdentityProfilePreviewResponse advancedIdentityProfilePreview;
 
     @JsonProperty(Property.IMPORT_TOKEN)
     private ImportTokenResponse importToken;
@@ -76,8 +84,16 @@ public class GetSessionResult {
         return identityProfile;
     }
 
+    public AdvancedIdentityProfileResponse getAdvancedIdentityProfile() {
+        return advancedIdentityProfile;
+    }
+
     public IdentityProfilePreviewResponse getIdentityProfilePreview() {
         return identityProfilePreview;
+    }
+
+    public IdentityProfilePreviewResponse getAdvancedIdentityProfilePreview() {
+        return advancedIdentityProfilePreview;
     }
 
     public ImportTokenResponse getImportToken() {
@@ -162,7 +178,9 @@ public class GetSessionResult {
         private static final String CHECKS = "checks";
         private static final String RESOURCES = "resources";
         private static final String IDENTITY_PROFILE = "identity_profile";
+        private static final String ADVANCED_IDENTITY_PROFILE = "advanced_identity_profile";
         private static final String IDENTITY_PROFILE_PREVIEW = "identity_profile_preview";
+        private static final String ADVANCED_IDENTITY_PROFILE_PREVIEW = "advanced_identity_profile_preview";
         private static final String IMPORT_TOKEN = "import_token";
 
         private Property() { }
