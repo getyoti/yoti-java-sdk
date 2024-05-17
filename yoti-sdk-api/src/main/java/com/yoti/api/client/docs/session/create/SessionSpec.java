@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.yoti.api.client.docs.session.create.check.RequestedCheck;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
+import com.yoti.api.client.docs.session.create.identityprofile.advanced.AdvancedIdentityProfileRequirementsPayload;
 import com.yoti.api.client.docs.session.create.resources.ResourceCreationContainer;
 import com.yoti.api.client.docs.session.create.task.RequestedTask;
 
@@ -56,6 +57,9 @@ public class SessionSpec {
     @JsonProperty(Property.IDENTITY_PROFILE_REQUIREMENTS)
     private final Map<String, Object> identityProfile;
 
+    @JsonProperty(Property.ADVANCED_IDENTITY_PROFILE_REQUIREMENTS)
+    private final AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirements;
+
     @JsonProperty(Property.SUBJECT)
     private final Map<String, Object> subject;
 
@@ -80,7 +84,8 @@ public class SessionSpec {
             Map<String, Object> identityProfile,
             Map<String, Object> subject,
             ResourceCreationContainer resources,
-            Boolean createIdentityProfilePreview) {
+            Boolean createIdentityProfilePreview,
+            AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirements) {
         this.clientSessionTokenTtl = clientSessionTokenTtl;
         this.resourcesTtl = resourcesTtl;
         this.importToken = importToken;
@@ -97,6 +102,7 @@ public class SessionSpec {
         this.subject = subject;
         this.resources = resources;
         this.createIdentityProfilePreview = createIdentityProfilePreview;
+        this.advancedIdentityProfileRequirements = advancedIdentityProfileRequirements;
     }
 
     public static Builder builder() {
@@ -248,6 +254,15 @@ public class SessionSpec {
         return createIdentityProfilePreview;
     }
 
+    /**
+     * The Advanced Identity Profile that is being requested.
+     *
+     * @return the advanced identity profile payload
+     */
+    public AdvancedIdentityProfileRequirementsPayload getAdvancedIdentityProfileRequirements() {
+        return advancedIdentityProfileRequirements;
+    }
+
     public static class Builder {
 
         private final List<RequestedCheck<?>> requestedChecks;
@@ -263,6 +278,7 @@ public class SessionSpec {
         private IbvOptions ibvOptions;
         private ZonedDateTime sessionDeadline;
         private Map<String, Object> identityProfile;
+        private AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirementsPayload;
         private Map<String, Object> subject;
         private ResourceCreationContainer resources;
         private Boolean createIdentityProfilePreview;
@@ -451,6 +467,17 @@ public class SessionSpec {
         }
 
         /**
+         * Sets the advanced identity profile requirements to be requested
+         *
+         * @param advancedIdentityProfileRequirements the advanced identity profile requirements
+         * @return the builder
+         */
+        public Builder withAdvancedIdentityProfileRequirements(AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirements) {
+            this.advancedIdentityProfileRequirementsPayload = advancedIdentityProfileRequirements;
+            return this;
+        }
+
+        /**
          * Builds the {@link SessionSpec} based on the values supplied to the builder
          *
          * @return the built {@link SessionSpec}
@@ -472,7 +499,8 @@ public class SessionSpec {
                     identityProfile,
                     subject,
                     resources,
-                    createIdentityProfilePreview);
+                    createIdentityProfilePreview,
+                    advancedIdentityProfileRequirementsPayload);
         }
     }
 
@@ -490,6 +518,7 @@ public class SessionSpec {
         private static final String BLOCK_BIOMETRIC_CONSENT = "block_biometric_consent";
         private static final String IBV_OPTIONS = "ibv_options";
         private static final String IDENTITY_PROFILE_REQUIREMENTS = "identity_profile_requirements";
+        private static final String ADVANCED_IDENTITY_PROFILE_REQUIREMENTS = "advanced_identity_profile_requirements";
         private static final String SUBJECT = "subject";
         private static final String RESOURCES = "resources";
         private static final String CREATE_IDENTITY_PROFILE_PREVIEW = "create_identity_profile_preview";

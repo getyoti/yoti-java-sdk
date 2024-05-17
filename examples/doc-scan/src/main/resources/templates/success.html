@@ -955,6 +955,61 @@
 
     </th:block>
 
+    <th:block th:if="${sessionResult.getAdvancedIdentityProfile() != null}">
+        <div class="row pt-4">
+            <div class="col">
+                <h2>
+                    <span th:remove="tag">Advanced Identity Profile</span>
+                    <span class="badge badge-primary" th:text="${sessionResult.getAdvancedIdentityProfile().getResult()}"></span>
+                    <span class="badge badge-warning" th:if="${sessionResult.getAdvancedIdentityProfile().getFailureReason() != null}" th:text="${sessionResult.getAdvancedIdentityProfile().getFailureReason().getReasonCode()}"></span>
+                </h2>
+            </div>
+        </div>
+
+        <div class="row pt-4">
+            <div class="col">
+                <th:block th:if="${sessionResult.getAdvancedIdentityProfile().getSubjectId() != null}">
+                    <span>Subject ID: <span th:text="${sessionResult.getAdvancedIdentityProfile().getSubjectId()}"/></span>
+                </th:block>
+            </div>
+        </div>
+
+        <th:block th:if="${sessionResult.getAdvancedIdentityProfile().getIdentityProfileReport() != null}">
+            <div th:if="${sessionResult.getAdvancedIdentityProfile().getIdentityProfileReport().getMedia() != null}">
+                Generated Profile Media: <a th:href="${'/media?mediaId=' + sessionResult.getAdvancedIdentityProfile().getIdentityProfileReport().getMedia().getId()}"
+                   th:text="${sessionResult.getAdvancedIdentityProfile().getIdentityProfileReport().getMedia().getId()}">
+                </a>
+            </div>
+
+            <div class="accordion mt-3">
+                <th:block th:each="compliance, iter : ${sessionResult.getAdvancedIdentityProfile().getIdentityProfileReport().getCompliance()}">
+                    <div class="card-header" th:id="${'advanced-identity-profile-compliance-' + iter.index}">
+                        <h4 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    th:attr="data-target='#collapse-advanced-identity-profile-compliance-' + ${iter.index}"
+                                    th:attrappend="aria-controls='collapse-advanced-identity-profile-compliance-' + ${iter.index}"
+                                    th:text="${compliance.getTrustFramework()}"
+                                    aria-expanded="true">
+                            </button>
+                        </h4>
+                    </div>
+                    <div th:id="${'collapse-advanced-identity-profile-compliance-' + iter.index}" class="collapse"
+                         th:aria-labelledby="${'advanced-identity-profile-compliance-' + iter.index}">
+                        <div class="card-body"></div>
+                        <div class="card-body" th:each="scheme : ${compliance.getSchemesCompliance()}">
+
+                            <span><b>Type: </b></span><span th:text="${scheme.getScheme().getType()}"></span><br/>
+                            <span><b>Objective: </b></span><span th:text="${scheme.getScheme().getObjective()}"></span><br/>
+                            <span><b>Label: </b></span><span th:text="${scheme.getScheme().getLabel()}"></span><br/>
+                            <span><b>Requirements Met: </b></span><span th:text="${scheme.getRequirementsMet()}"></span><br/>
+                            <span><b>Requirements Not Met Info: </b></span><span th:text="${scheme.getRequirementsNotMetInfo()}"></span><br/>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </th:block>
+    </th:block>
+
 </div>
 
 <div th:replace="fragments/components :: footer"></div>
