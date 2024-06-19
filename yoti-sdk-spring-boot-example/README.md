@@ -17,7 +17,7 @@ Note that:
     <dependency>
       <groupId>com.yoti</groupId>
       <artifactId>yoti-sdk-api</artifactId>
-      <version>3.9.0-SNAPSHOT</version>
+      <version>3.9.0</version>
     </dependency>
 ```
 
