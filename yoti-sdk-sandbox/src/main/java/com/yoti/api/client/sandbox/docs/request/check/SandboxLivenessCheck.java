@@ -16,6 +16,8 @@ public class SandboxLivenessCheck extends SandboxCheck {
         return new SandboxZoomLivenessCheckBuilder();
     }
 
+    public static SandboxStaticLivenessCheckBuilder forStaticLiveness() { return new SandboxStaticLivenessCheckBuilder(); }
+
     public String getLivenessType() {
         return livenessType;
     }
