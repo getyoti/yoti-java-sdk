@@ -45,13 +45,23 @@ public class SandboxZoomLivenessCheckTest {
     }
 
     @Test
-    public void builder_shouldSetCorrectLivenessType() {
+    public void builder_shouldSetCorrectLivenessTypeForZoom() {
         SandboxLivenessCheck result = new SandboxZoomLivenessCheckBuilder()
                 .withRecommendation(sandboxRecommendationMock)
                 .withBreakdown(sandboxBreakdownMock)
                 .build();
 
         assertThat(result.getLivenessType(), is("ZOOM"));
+    }
+
+    @Test
+    public void builder_shouldSetCorrectLivenessTypeForStatic() {
+        SandboxLivenessCheck result = new SandboxStaticLivenessCheckBuilder()
+                .withRecommendation(sandboxRecommendationMock)
+                .withBreakdown(sandboxBreakdownMock)
+                .build();
+
+        assertThat(result.getLivenessType(), is("STATIC"));
     }
 
 }
