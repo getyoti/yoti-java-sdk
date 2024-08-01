@@ -113,7 +113,7 @@
     <junit.version>4.13.2</junit.version>
     <mockito.version>4.11.0</mockito.version>
     <hamcrest.version>2.2</hamcrest.version>
-    <commons.lang3.version>3.13.0</commons.lang3.version>
+    <commons.lang3.version>3.15.0</commons.lang3.version>
     
     <!-- maven + plugin versions -->
     <maven.min.version>3.8.5</maven.min.version>
