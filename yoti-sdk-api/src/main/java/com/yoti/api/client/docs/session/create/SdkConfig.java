@@ -42,6 +42,9 @@ public class SdkConfig {
     @JsonProperty(Property.ATTEMPTS_CONFIGURATION)
     private final AttemptsConfiguration attemptsConfiguration;
 
+    @JsonProperty(Property.BRAND_ID)
+    private final String brandId;
+
     SdkConfig(String allowedCaptureMethods,
             String primaryColour,
             String secondaryColour,
@@ -52,7 +55,7 @@ public class SdkConfig {
             String errorUrl,
             String privacyPolicyUrl,
             Boolean allowHandoff,
-            AttemptsConfiguration attemptsConfiguration) {
+            AttemptsConfiguration attemptsConfiguration, String brandId) {
         this.allowedCaptureMethods = allowedCaptureMethods;
         this.primaryColour = primaryColour;
         this.secondaryColour = secondaryColour;
@@ -64,6 +67,7 @@ public class SdkConfig {
         this.privacyPolicyUrl = privacyPolicyUrl;
         this.allowHandoff = allowHandoff;
         this.attemptsConfiguration = attemptsConfiguration;
+        this.brandId = brandId;
     }
 
     public static SdkConfig.Builder builder() {
@@ -170,6 +174,15 @@ public class SdkConfig {
     }
 
     /**
+     * The Brand ID to use for the session
+     *
+     * @return the configured brand ID
+     */
+    public String getBrandId() {
+        return brandId;
+    }
+
+    /**
      * Builder to assist in the creation of {@link SdkConfig}.
      */
     public static class Builder {
@@ -185,6 +198,7 @@ public class SdkConfig {
         private String privacyPolicyUrl;
         private Boolean allowHandoff;
         private AttemptsConfiguration attemptsConfiguration;
+        private String brandId;
 
         private Builder() {}
 
@@ -328,6 +342,17 @@ public class SdkConfig {
         }
 
         /**
+         * Sets the brand ID to be used for the session
+         *
+         * @param brandId the brand ID
+         * @return the builder
+         */
+        public Builder withBrandId(String brandId) {
+            this.brandId = brandId;
+            return this;
+        }
+
+        /**
          * Builds the {@link SdkConfig} using the values supplied to the builder
          *
          * @return the {@link SdkConfig}
@@ -344,7 +369,8 @@ public class SdkConfig {
                     errorUrl,
                     privacyPolicyUrl,
                     allowHandoff,
-                    attemptsConfiguration
+                    attemptsConfiguration,
+                    brandId
             );
         }
     }
@@ -362,6 +388,7 @@ public class SdkConfig {
         private static final String PRIVACY_POLICY_URL = "privacy_policy_url";
         private static final String ALLOW_HANDOFF = "allow_handoff";
         private static final String ATTEMPTS_CONFIGURATION = "attempts_configuration";
+        private static final String BRAND_ID = "brand_id";
 
         private Property() {}
 
