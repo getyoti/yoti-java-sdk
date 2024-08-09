@@ -17,6 +17,7 @@ public class SdkConfigTest {
     private static final String SOME_FONT_COLOUR = "#b40c12";
     private static final String SOME_LOCALE = "en";
     private static final String SOME_PRESET_ISSUING_COUNTRY = "USA";
+    private static final String SOME_BRAND_ID = "someBrandId";
 
     private static final String SOME_SUCCESS_URL = "https://yourdomain.com/some/success/endpoint";
     private static final String SOME_ERROR_URL = "https://yourdomain.com/some/error/endpoint";
@@ -38,6 +39,7 @@ public class SdkConfigTest {
                 .withPrivacyPolicyUrl(SOME_PRIVACY_POLICY_URL)
                 .withAllowHandoff(true)
                 .withAttemptsConfiguration(attemptsConfigurationMock)
+                .withBrandId(SOME_BRAND_ID)
                 .build();
 
         assertThat(result, is(instanceOf(SdkConfig.class)));
@@ -53,6 +55,7 @@ public class SdkConfigTest {
         assertThat(result.getPrivacyPolicyUrl(), is(SOME_PRIVACY_POLICY_URL));
         assertThat(result.getAllowHandoff(), is(true));
         assertThat(result.getAttemptsConfiguration(), is(attemptsConfigurationMock));
+        assertThat(result.getBrandId(), is(SOME_BRAND_ID));
     }
 
     @Test
