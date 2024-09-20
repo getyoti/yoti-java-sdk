@@ -36,6 +36,9 @@ public class SdkConfig {
     @JsonProperty(Property.PRIVACY_POLICY_URL)
     private final String privacyPolicyUrl;
 
+    @JsonProperty(Property.BRAND_ID)
+    private final String brandId;
+
     @JsonProperty(Property.ALLOW_HANDOFF)
     private final Boolean allowHandoff;
 
@@ -54,6 +57,7 @@ public class SdkConfig {
             String successUrl,
             String errorUrl,
             String privacyPolicyUrl,
+            String brandId,
             Boolean allowHandoff,
             AttemptsConfiguration attemptsConfiguration, String brandId) {
         this.allowedCaptureMethods = allowedCaptureMethods;
@@ -65,6 +69,7 @@ public class SdkConfig {
         this.successUrl = successUrl;
         this.errorUrl = errorUrl;
         this.privacyPolicyUrl = privacyPolicyUrl;
+        this.brandId = brandId;
         this.allowHandoff = allowHandoff;
         this.attemptsConfiguration = attemptsConfiguration;
         this.brandId = brandId;
@@ -156,6 +161,15 @@ public class SdkConfig {
     }
 
     /**
+     * The brand ID
+     *
+     * @return the brand ID
+     */
+    public String getBrandId() {
+        return brandId;
+    }
+
+    /**
      * If mobile handoff is allowed in the session
      *
      * @return if mobile handoff is allowed
@@ -196,6 +210,7 @@ public class SdkConfig {
         private String successUrl;
         private String errorUrl;
         private String privacyPolicyUrl;
+        private String brandId;
         private Boolean allowHandoff;
         private AttemptsConfiguration attemptsConfiguration;
         private String brandId;
@@ -320,6 +335,17 @@ public class SdkConfig {
         }
 
         /**
+         * Sets the brand ID
+         *
+         * @param brandId the brand ID
+         * @return the builder
+         */
+        public Builder withBrandId(String brandId) {
+            this.brandId = brandId;
+            return this;
+        }
+
+        /**
          * Sets if the user is allowed to perform mobile handoff
          *
          * @param allowHandoff if mobile handoff is allowed
@@ -368,6 +394,7 @@ public class SdkConfig {
                     successUrl,
                     errorUrl,
                     privacyPolicyUrl,
+                    brandId,
                     allowHandoff,
                     attemptsConfiguration,
                     brandId
@@ -386,6 +413,7 @@ public class SdkConfig {
         private static final String SUCCESS_URL = "success_url";
         private static final String ERROR_URL = "error_url";
         private static final String PRIVACY_POLICY_URL = "privacy_policy_url";
+        private static final String BRAND_ID = "brand_id";
         private static final String ALLOW_HANDOFF = "allow_handoff";
         private static final String ATTEMPTS_CONFIGURATION = "attempts_configuration";
         private static final String BRAND_ID = "brand_id";

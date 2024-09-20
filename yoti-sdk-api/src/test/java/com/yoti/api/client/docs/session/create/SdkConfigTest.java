@@ -37,6 +37,7 @@ public class SdkConfigTest {
                 .withSuccessUrl(SOME_SUCCESS_URL)
                 .withErrorUrl(SOME_ERROR_URL)
                 .withPrivacyPolicyUrl(SOME_PRIVACY_POLICY_URL)
+                .withBrandId(SOME_BRAND_ID)
                 .withAllowHandoff(true)
                 .withAttemptsConfiguration(attemptsConfigurationMock)
                 .withBrandId(SOME_BRAND_ID)
@@ -53,6 +54,7 @@ public class SdkConfigTest {
         assertThat(result.getSuccessUrl(), is(SOME_SUCCESS_URL));
         assertThat(result.getErrorUrl(), is(SOME_ERROR_URL));
         assertThat(result.getPrivacyPolicyUrl(), is(SOME_PRIVACY_POLICY_URL));
+        assertThat(result.getBrandId(), is(SOME_BRAND_ID));
         assertThat(result.getAllowHandoff(), is(true));
         assertThat(result.getAttemptsConfiguration(), is(attemptsConfigurationMock));
         assertThat(result.getBrandId(), is(SOME_BRAND_ID));
