@@ -24,6 +24,9 @@ public class SdkConfig {
     @JsonProperty(Property.FONT_COLOUR)
     private final String fontColour;
 
+    @JsonProperty(Property.DARK_MODE)
+    private final String darkMode;
+
     @JsonProperty(Property.LOCALE)
     private final String locale;
 
@@ -57,6 +60,7 @@ public class SdkConfig {
             String secondaryColour,
             String fontColour,
             String locale,
+            String darkMode,
             String presetIssuingCountry,
             String successUrl,
             String errorUrl,
@@ -71,6 +75,7 @@ public class SdkConfig {
         this.secondaryColour = secondaryColour;
         this.fontColour = fontColour;
         this.locale = locale;
+        this.darkMode = darkMode;
         this.presetIssuingCountry = presetIssuingCountry;
         this.successUrl = successUrl;
         this.errorUrl = errorUrl;
@@ -104,7 +109,7 @@ public class SdkConfig {
     }
 
     /**
-     * The primary colour for the dark mode
+     * The primary colour for dark mode, configured for the session
      *
      * @return the primary colour
      */
@@ -137,6 +142,15 @@ public class SdkConfig {
      */
     public String getLocale() {
         return locale;
+    }
+
+    /**
+     * The dark mode option configured for the session
+     *
+     * @return the dark mode
+     */
+    public String getDarkMode() {
+        return darkMode;
     }
 
     /**
@@ -222,6 +236,7 @@ public class SdkConfig {
         private String secondaryColour;
         private String fontColour;
         private String locale;
+        private String darkMode;
         private String presetIssuingCountry;
         private String successUrl;
         private String errorUrl;
@@ -314,6 +329,47 @@ public class SdkConfig {
          */
         public Builder withLocale(String locale) {
             this.locale = locale;
+            return this;
+        }
+
+        /**
+         * Sets the dark mode to be used by the web/native client
+         *
+         * @param darkMode the dark mode, e.g. "ON"
+         * @return the builder
+         */
+        public Builder withDarkMode(String darkMode) {
+            this.darkMode = darkMode;
+            return this;
+        }
+
+        /**
+         * Sets the dark mode to 'ON' to be used by the web/native client
+         *
+         * @return the builder
+         */
+        public Builder withDarkModeOn() {
+            this.darkMode = DocScanConstants.ON;
+            return this;
+        }
+
+        /**
+         * Sets the dark mode to 'OFF' to be used by the web/native client
+         *
+         * @return the builder
+         */
+        public Builder withDarkModeOff() {
+            this.darkMode = DocScanConstants.OFF;
+            return this;
+        }
+
+        /**
+         * Sets the dark mode to 'AUTO' to be used by the web/native client
+         *
+         * @return the builder
+         */
+        public Builder withDarkModeAuto() {
+            this.darkMode = DocScanConstants.AUTO;
             return this;
         }
 
@@ -436,6 +492,7 @@ public class SdkConfig {
                     secondaryColour,
                     fontColour,
                     locale,
+                    darkMode,
                     presetIssuingCountry,
                     successUrl,
                     errorUrl,
@@ -455,6 +512,7 @@ public class SdkConfig {
         private static final String PRIMARY_COLOUR_DARK_MODE = "primary_colour_dark_mode";
         private static final String SECONDARY_COLOUR = "secondary_colour";
         private static final String FONT_COLOUR = "font_colour";
+        private static final String DARK_MODE = "dark_mode";
         private static final String LOCALE = "locale";
         private static final String PRESET_ISSUING_COUNTRY = "preset_issuing_country";
         private static final String SUCCESS_URL = "success_url";

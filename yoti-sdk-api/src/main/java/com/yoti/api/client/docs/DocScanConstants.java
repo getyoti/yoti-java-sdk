@@ -86,4 +86,8 @@ public class DocScanConstants {
     public static final String EAGER = "EAGER";
     public static final String JUST_IN_TIME = "JUST_IN_TIME";
 
+    public static final String ON = "ON";
+    public static final String OFF = "OFF";
+    public static final String AUTO = "AUTO";
+
 }

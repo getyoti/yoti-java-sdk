@@ -17,6 +17,7 @@ public class SdkConfigTest {
     private static final String SOME_SECONDARY_COLOUR = "#679bdd";
     private static final String SOME_FONT_COLOUR = "#b40c12";
     private static final String SOME_LOCALE = "en";
+    private static final String SOME_DARK_MODE = "ON";
     private static final String SOME_PRESET_ISSUING_COUNTRY = "USA";
     private static final String SOME_BRAND_ID = "someBrandId";
 
@@ -35,6 +36,7 @@ public class SdkConfigTest {
                 .withSecondaryColour(SOME_SECONDARY_COLOUR)
                 .withFontColour(SOME_FONT_COLOUR)
                 .withLocale(SOME_LOCALE)
+                .withDarkMode(SOME_DARK_MODE)
                 .withPresetIssuingCountry(SOME_PRESET_ISSUING_COUNTRY)
                 .withSuccessUrl(SOME_SUCCESS_URL)
                 .withErrorUrl(SOME_ERROR_URL)
@@ -52,6 +54,7 @@ public class SdkConfigTest {
         assertThat(result.getSecondaryColour(), is(SOME_SECONDARY_COLOUR));
         assertThat(result.getFontColour(), is(SOME_FONT_COLOUR));
         assertThat(result.getLocale(), is(SOME_LOCALE));
+        assertThat(result.getDarkMode(), is(SOME_DARK_MODE));
         assertThat(result.getPresetIssuingCountry(), is(SOME_PRESET_ISSUING_COUNTRY));
         assertThat(result.getSuccessUrl(), is(SOME_SUCCESS_URL));
         assertThat(result.getErrorUrl(), is(SOME_ERROR_URL));
@@ -115,5 +118,31 @@ public class SdkConfigTest {
         assertThat(result.getAllowedCaptureMethods(), is("CAMERA"));
     }
 
+    @Test
+    public void shouldSetDarkModeToOn() {
+        SdkConfig result = SdkConfig.builder()
+                .withDarkModeOn()
+                .build();
+
+        assertThat(result.getDarkMode(), is("ON"));
+    }
+
+    @Test
+    public void shouldSetDarkModeToOff() {
+        SdkConfig result = SdkConfig.builder()
+                .withDarkModeOff()
+                .build();
+
+        assertThat(result.getDarkMode(), is("OFF"));
+    }
+
+    @Test
+    public void shouldSetDarkModeToAuto() {
+        SdkConfig result = SdkConfig.builder()
+                .withDarkModeAuto()
+                .build();
+
+        assertThat(result.getDarkMode(), is("AUTO"));
+    }
 
 }
