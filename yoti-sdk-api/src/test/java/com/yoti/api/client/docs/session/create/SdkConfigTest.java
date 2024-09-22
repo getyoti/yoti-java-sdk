@@ -13,6 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class SdkConfigTest {
 
     private static final String SOME_PRIMARY_COLOUR = "#FFFFFF";
+    private static final String SOME_PRIMARY_COLOUR_DARK_MODE = "#3b706f";
     private static final String SOME_SECONDARY_COLOUR = "#679bdd";
     private static final String SOME_FONT_COLOUR = "#b40c12";
     private static final String SOME_LOCALE = "en";
@@ -30,6 +31,7 @@ public class SdkConfigTest {
         SdkConfig result = SdkConfig.builder()
                 .withAllowsCamera()
                 .withPrimaryColour(SOME_PRIMARY_COLOUR)
+                .withPrimaryColourDarkMode(SOME_PRIMARY_COLOUR_DARK_MODE)
                 .withSecondaryColour(SOME_SECONDARY_COLOUR)
                 .withFontColour(SOME_FONT_COLOUR)
                 .withLocale(SOME_LOCALE)
@@ -46,6 +48,7 @@ public class SdkConfigTest {
 
         assertThat(result.getAllowedCaptureMethods(), is("CAMERA"));
         assertThat(result.getPrimaryColour(), is(SOME_PRIMARY_COLOUR));
+        assertThat(result.getPrimaryColourDarkMode(), is(SOME_PRIMARY_COLOUR_DARK_MODE));
         assertThat(result.getSecondaryColour(), is(SOME_SECONDARY_COLOUR));
         assertThat(result.getFontColour(), is(SOME_FONT_COLOUR));
         assertThat(result.getLocale(), is(SOME_LOCALE));
