@@ -15,6 +15,9 @@ public class SdkConfig {
     @JsonProperty(Property.PRIMARY_COLOUR)
     private final String primaryColour;
 
+    @JsonProperty(Property.PRIMARY_COLOUR_DARK_MODE)
+    private final String primaryColourDarkMode;
+
     @JsonProperty(Property.SECONDARY_COLOUR)
     private final String secondaryColour;
 
@@ -50,6 +53,7 @@ public class SdkConfig {
 
     SdkConfig(String allowedCaptureMethods,
             String primaryColour,
+            String primaryColourDarkMode,
             String secondaryColour,
             String fontColour,
             String locale,
@@ -63,6 +67,7 @@ public class SdkConfig {
             String biometricConsentFlow) {
         this.allowedCaptureMethods = allowedCaptureMethods;
         this.primaryColour = primaryColour;
+        this.primaryColourDarkMode = primaryColourDarkMode;
         this.secondaryColour = secondaryColour;
         this.fontColour = fontColour;
         this.locale = locale;
@@ -96,6 +101,15 @@ public class SdkConfig {
      */
     public String getPrimaryColour() {
         return primaryColour;
+    }
+
+    /**
+     * The primary colour for the dark mode
+     *
+     * @return the primary colour
+     */
+    public String getPrimaryColourDarkMode() {
+        return primaryColourDarkMode;
     }
 
     /**
@@ -204,6 +218,7 @@ public class SdkConfig {
 
         private String allowedCaptureMethods;
         private String primaryColour;
+        private String primaryColourDarkMode;
         private String secondaryColour;
         private String fontColour;
         private String locale;
@@ -255,6 +270,17 @@ public class SdkConfig {
          */
         public Builder withPrimaryColour(String primaryColour) {
             this.primaryColour = primaryColour;
+            return this;
+        }
+
+        /**
+         * Sets the primary colour for the dark mode to be used by the web/native client
+         *
+         * @param primaryColourDarkMode the primary colour for the dark mode, hexadecimal value e.g. #ff0000
+         * @return the builder
+         */
+        public Builder withPrimaryColourDarkMode(String primaryColourDarkMode) {
+            this.primaryColourDarkMode = primaryColourDarkMode;
             return this;
         }
 
@@ -406,6 +432,7 @@ public class SdkConfig {
             return new SdkConfig(
                     allowedCaptureMethods,
                     primaryColour,
+                    primaryColourDarkMode,
                     secondaryColour,
                     fontColour,
                     locale,
@@ -425,6 +452,7 @@ public class SdkConfig {
 
         private static final String ALLOWED_CAPTURE_METHODS = "allowed_capture_methods";
         private static final String PRIMARY_COLOUR = "primary_colour";
+        private static final String PRIMARY_COLOUR_DARK_MODE = "primary_colour_dark_mode";
         private static final String SECONDARY_COLOUR = "secondary_colour";
         private static final String FONT_COLOUR = "font_colour";
         private static final String LOCALE = "locale";
