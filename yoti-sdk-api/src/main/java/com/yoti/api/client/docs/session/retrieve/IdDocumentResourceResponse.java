@@ -21,6 +21,9 @@ public class IdDocumentResourceResponse extends ResourceResponse {
     @JsonProperty("document_id_photo")
     private DocumentIdPhotoResponse documentIdPhoto;
 
+    @JsonProperty("expanded_document_fields")
+    private ExpandedDocumentFieldsResponse expandedDocumentFields;
+
     public String getDocumentType() {
         return documentType;
     }
@@ -43,6 +46,10 @@ public class IdDocumentResourceResponse extends ResourceResponse {
 
     public DocumentIdPhotoResponse getDocumentIdPhoto() {
         return documentIdPhoto;
+    }
+
+    public ExpandedDocumentFieldsResponse getExpandedDocumentFields() {
+        return expandedDocumentFields;
     }
 
 }
