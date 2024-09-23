@@ -3,7 +3,14 @@ package com.yoti.api.client.docs.session.create;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
@@ -19,10 +26,10 @@ import com.yoti.api.client.docs.session.create.task.RequestedIdDocTextExtraction
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
-import org.junit.*;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
-import org.mockito.junit.*;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SessionSpecTest {
@@ -53,6 +60,29 @@ public class SessionSpecTest {
 
     @Test
     public void shouldBuildWithMinimalConfiguration() {
+        SessionSpec result = SessionSpec.builder().build();
+
+        assertThat(result.getClientSessionTokenTtl(), is(nullValue()));
+        assertThat(result.getSessionDeadline(), is(nullValue()));
+        assertThat(result.getResourcesTtl(), is(nullValue()));
+        assertThat(result.getImportToken(), is(nullValue()));
+        assertThat(result.getUserTrackingId(), is(nullValue()));
+        assertThat(result.getNotifications(), is(nullValue()));
+        assertThat(result.getRequestedChecks(), hasSize(0));
+        assertThat(result.getRequestedTasks(), hasSize(0));
+        assertThat(result.getSdkConfig(), is(nullValue()));
+        assertThat(result.getRequiredDocuments(), hasSize(0));
+        assertThat(result.getBlockBiometricConsent(), is(nullValue()));
+        assertThat(result.getIbvOptions(), is(nullValue()));
+        assertThat(result.getIdentityProfile(), is(nullValue()));
+        assertThat(result.getAdvancedIdentityProfileRequirements(), is(nullValue()));
+        assertThat(result.getSubject(), is(nullValue()));
+        assertThat(result.getResources(), is(nullValue()));
+        assertThat(result.getCreateIdentityProfilePreview(), is(nullValue()));
+    }
+
+    @Test
+    public void shouldBuildWithSimpleValues() {
         SessionSpec result = SessionSpec.builder()
                 .withClientSessionTokenTtl(SOME_CLIENT_SESSION_TOKEN_TTL)
                 .withResourcesTtl(SOME_RESOURCES_TTL)
@@ -60,44 +90,10 @@ public class SessionSpecTest {
                 .withBlockBiometricConsent(true)
                 .build();
 
-        assertThat(result, is(instanceOf(SessionSpec.class)));
         assertThat(result.getClientSessionTokenTtl(), is(SOME_CLIENT_SESSION_TOKEN_TTL));
         assertThat(result.getResourcesTtl(), is(SOME_RESOURCES_TTL));
         assertThat(result.getUserTrackingId(), is(SOME_USER_TRACKING_ID));
         assertThat(result.getBlockBiometricConsent(), is(true));
-        assertThat(result.getRequiredDocuments(), hasSize(0));
-    }
-
-    @Test
-    public void shouldRaiseForMissingClientSessionTokenTtl() {
-        try {
-            SessionSpec.builder().build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("clientSessionTokenTtl"));
-        }
-    }
-
-    @Test
-    public void shouldRaiseForMissingResourcesTtl() {
-        try {
-            SessionSpec.builder()
-                    .withClientSessionTokenTtl(SOME_CLIENT_SESSION_TOKEN_TTL)
-                    .build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("resourcesTtl"));
-        }
-    }
-
-    @Test
-    public void shouldRaiseForMissingUserTrackingId() {
-        try {
-            SessionSpec.builder()
-                    .withClientSessionTokenTtl(SOME_CLIENT_SESSION_TOKEN_TTL)
-                    .withResourcesTtl(SOME_RESOURCES_TTL)
-                    .build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("userTrackingId"));
-        }
     }
 
     @Test
@@ -124,8 +120,7 @@ public class SessionSpecTest {
 
     @Test
     public void shouldBuildWithValidRequestedChecks() {
-        RequestedDocumentAuthenticityCheck authenticityCheck = RequestedDocumentAuthenticityCheck.builder()
-                .build();
+        RequestedDocumentAuthenticityCheck authenticityCheck = RequestedDocumentAuthenticityCheck.builder().build();
 
         RequestedLivenessCheck livenessCheck = RequestedLivenessCheck.builder()
                 .forZoomLiveness()
@@ -133,9 +128,6 @@ public class SessionSpecTest {
                 .build();
 
         SessionSpec result = SessionSpec.builder()
-                .withClientSessionTokenTtl(SOME_CLIENT_SESSION_TOKEN_TTL)
-                .withResourcesTtl(SOME_RESOURCES_TTL)
-                .withUserTrackingId(SOME_USER_TRACKING_ID)
                 .withRequestedCheck(authenticityCheck)
                 .withRequestedCheck(livenessCheck)
                 .build();
@@ -152,9 +144,6 @@ public class SessionSpecTest {
                 .build();
 
         SessionSpec result = SessionSpec.builder()
-                .withClientSessionTokenTtl(SOME_CLIENT_SESSION_TOKEN_TTL)
-                .withResourcesTtl(SOME_RESOURCES_TTL)
-                .withUserTrackingId(SOME_USER_TRACKING_ID)
                 .withRequestedTask(textExtractionTask)
                 .build();
 
@@ -176,13 +165,9 @@ public class SessionSpecTest {
                 .build();
 
         SessionSpec result = SessionSpec.builder()
-                .withClientSessionTokenTtl(SOME_CLIENT_SESSION_TOKEN_TTL)
-                .withResourcesTtl(SOME_RESOURCES_TTL)
-                .withUserTrackingId(SOME_USER_TRACKING_ID)
                 .withSdkConfig(sdkConfig)
                 .build();
 
-        assertThat(result.getSdkConfig(), is(notNullValue()));
         assertThat(result.getSdkConfig().getAllowedCaptureMethods(), is("CAMERA_AND_UPLOAD"));
         assertThat(result.getSdkConfig().getPrimaryColour(), is(SOME_SDK_CONFIG_PRIMARY_COLOUR));
         assertThat(result.getSdkConfig().getSecondaryColour(), is(SOME_SDK_CONFIG_SECONDARY_COLOUR));
@@ -230,7 +215,7 @@ public class SessionSpecTest {
     }
 
     @Test
-    public void buildWithIdentityProfile() throws IOException {
+    public void shouldBuildWithIdentityProfileRequirements() throws IOException {
         Map<String, Object> scheme = new HashMap<>();
         scheme.put(IdentityProperty.TYPE, "A_TYPE");
         scheme.put(IdentityProperty.OBJECTIVE, "AN_OBJECTIVE");
@@ -260,7 +245,7 @@ public class SessionSpecTest {
     }
 
     @Test
-    public void buildWithSubject() throws IOException {
+    public void shouldBuildWithSubject() throws IOException {
         Map<String, Object> subject = new HashMap<>();
         subject.put(SubjectProperty.SUBJECT_ID, "A_SUBJECT_ID");
 
@@ -293,14 +278,6 @@ public class SessionSpecTest {
                 .build();
 
         assertThat(sessionSpec.getCreateIdentityProfilePreview(), is(true));
-    }
-
-    @Test
-    public void shouldSetNullForCreateIdentityProfilePreviewWhenNotProvidedExplicitly() {
-        SessionSpec sessionSpec = SessionSpec.builder()
-                .build();
-
-        assertThat(sessionSpec.getCreateIdentityProfilePreview(), nullValue());
     }
 
     @Test
