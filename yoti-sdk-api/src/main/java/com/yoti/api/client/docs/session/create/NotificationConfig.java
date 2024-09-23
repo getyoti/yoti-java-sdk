@@ -176,6 +176,42 @@ public class NotificationConfig {
         }
 
         /**
+         * Adds NEW_PDF_SUPPLIED to the list of topics that trigger notification messages
+         *
+         * @return the builder
+         */
+        public Builder forNewPdfSupplied() {
+            return withTopic(DocScanConstants.NEW_PDF_SUPPLIED);
+        }
+
+        /**
+         * Adds INSTRUCTIONS_EMAIL_REQUESTED to the list of topics that trigger notification messages
+         *
+         * @return the builder
+         */
+        public Builder forInstructionsEmailRequested() {
+            return withTopic(DocScanConstants.INSTRUCTIONS_EMAIL_REQUESTED);
+        }
+
+        /**
+         * Adds THANK_YOU_EMAIL_REQUESTED to the list of topics that trigger notification messages
+         *
+         * @return the builder
+         */
+        public Builder forThankYouEmailRequested() {
+            return withTopic(DocScanConstants.THANK_YOU_EMAIL_REQUESTED);
+        }
+
+        /**
+         * Adds FIRST_BRANCH_VISIT to the list of topics that trigger notification messages
+         *
+         * @return the builder
+         */
+        public Builder forFirstBranchVisit() {
+            return withTopic(DocScanConstants.FIRST_BRANCH_VISIT);
+        }
+
+        /**
          * Adds a topic to the list of topics that trigger notification messages
          *
          * @param topicName the topic name
