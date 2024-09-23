@@ -2,8 +2,10 @@ package com.yoti.api.client.sandbox.docs.request.task;
 
 import com.yoti.api.client.sandbox.docs.SandboxDocScanConstants;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SandboxTextExtractionTaskReason {
 
     @JsonProperty("value")
