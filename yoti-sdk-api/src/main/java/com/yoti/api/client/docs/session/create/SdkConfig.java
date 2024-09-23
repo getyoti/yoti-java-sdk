@@ -15,11 +15,17 @@ public class SdkConfig {
     @JsonProperty(Property.PRIMARY_COLOUR)
     private final String primaryColour;
 
+    @JsonProperty(Property.PRIMARY_COLOUR_DARK_MODE)
+    private final String primaryColourDarkMode;
+
     @JsonProperty(Property.SECONDARY_COLOUR)
     private final String secondaryColour;
 
     @JsonProperty(Property.FONT_COLOUR)
     private final String fontColour;
+
+    @JsonProperty(Property.DARK_MODE)
+    private final String darkMode;
 
     @JsonProperty(Property.LOCALE)
     private final String locale;
@@ -50,9 +56,11 @@ public class SdkConfig {
 
     SdkConfig(String allowedCaptureMethods,
             String primaryColour,
+            String primaryColourDarkMode,
             String secondaryColour,
             String fontColour,
             String locale,
+            String darkMode,
             String presetIssuingCountry,
             String successUrl,
             String errorUrl,
@@ -63,9 +71,11 @@ public class SdkConfig {
             String biometricConsentFlow) {
         this.allowedCaptureMethods = allowedCaptureMethods;
         this.primaryColour = primaryColour;
+        this.primaryColourDarkMode = primaryColourDarkMode;
         this.secondaryColour = secondaryColour;
         this.fontColour = fontColour;
         this.locale = locale;
+        this.darkMode = darkMode;
         this.presetIssuingCountry = presetIssuingCountry;
         this.successUrl = successUrl;
         this.errorUrl = errorUrl;
@@ -99,6 +109,15 @@ public class SdkConfig {
     }
 
     /**
+     * The primary colour to use when in dark mode
+     *
+     * @return the primary colour
+     */
+    public String getPrimaryColourDarkMode() {
+        return primaryColourDarkMode;
+    }
+
+    /**
      * The secondary colour
      *
      * @return the secondary colour
@@ -123,6 +142,15 @@ public class SdkConfig {
      */
     public String getLocale() {
         return locale;
+    }
+
+    /**
+     * Whether to use dark mode - may be 'ON', 'OFF', or 'AUTO'
+     *
+     * @return the dark mode
+     */
+    public String getDarkMode() {
+        return darkMode;
     }
 
     /**
@@ -204,9 +232,11 @@ public class SdkConfig {
 
         private String allowedCaptureMethods;
         private String primaryColour;
+        private String primaryColourDarkMode;
         private String secondaryColour;
         private String fontColour;
         private String locale;
+        private String darkMode;
         private String presetIssuingCountry;
         private String successUrl;
         private String errorUrl;
@@ -259,6 +289,17 @@ public class SdkConfig {
         }
 
         /**
+         * Sets the primary colour to be used by the web/native client when in dark mode
+         *
+         * @param primaryColourDarkMode the primary colour for the dark mode, hexadecimal value e.g. #ff0000
+         * @return the builder
+         */
+        public Builder withPrimaryColourDarkMode(String primaryColourDarkMode) {
+            this.primaryColourDarkMode = primaryColourDarkMode;
+            return this;
+        }
+
+        /**
          * Sets the secondary colour to be used by the web/native client (used on the button)
          *
          * @param secondaryColour the secondary colour, hexadecimal value e.g. #ff0000
@@ -289,6 +330,44 @@ public class SdkConfig {
         public Builder withLocale(String locale) {
             this.locale = locale;
             return this;
+        }
+
+        /**
+         * Whether to use dark mode on the web/native client - may be 'ON', 'OFF', or 'AUTO'
+         *
+         * @param darkMode the dark mode, e.g. "ON"
+         * @return the builder
+         */
+        public Builder withDarkMode(String darkMode) {
+            this.darkMode = darkMode;
+            return this;
+        }
+
+        /**
+         * Sets the dark mode to 'ON' to be used by the web/native client
+         *
+         * @return the builder
+         */
+        public Builder withDarkModeOn() {
+            return withDarkMode(DocScanConstants.ON);
+        }
+
+        /**
+         * Sets the dark mode to 'OFF' to be used by the web/native client
+         *
+         * @return the builder
+         */
+        public Builder withDarkModeOff() {
+            return withDarkMode(DocScanConstants.OFF);
+        }
+
+        /**
+         * Sets the dark mode to 'AUTO' to be used by the web/native client
+         *
+         * @return the builder
+         */
+        public Builder withDarkModeAuto() {
+            return withDarkMode(DocScanConstants.AUTO);
         }
 
         /**
@@ -406,9 +485,11 @@ public class SdkConfig {
             return new SdkConfig(
                     allowedCaptureMethods,
                     primaryColour,
+                    primaryColourDarkMode,
                     secondaryColour,
                     fontColour,
                     locale,
+                    darkMode,
                     presetIssuingCountry,
                     successUrl,
                     errorUrl,
@@ -425,8 +506,10 @@ public class SdkConfig {
 
         private static final String ALLOWED_CAPTURE_METHODS = "allowed_capture_methods";
         private static final String PRIMARY_COLOUR = "primary_colour";
+        private static final String PRIMARY_COLOUR_DARK_MODE = "primary_colour_dark_mode";
         private static final String SECONDARY_COLOUR = "secondary_colour";
         private static final String FONT_COLOUR = "font_colour";
+        private static final String DARK_MODE = "dark_mode";
         private static final String LOCALE = "locale";
         private static final String PRESET_ISSUING_COUNTRY = "preset_issuing_country";
         private static final String SUCCESS_URL = "success_url";
