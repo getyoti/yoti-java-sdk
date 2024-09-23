@@ -70,6 +70,46 @@ public class NotificationConfigTest {
     }
 
     @Test
+    public void shouldCreateSimpleNotificationConfigWithNewPdfSupplied() {
+        NotificationConfig result = NotificationConfig.builder()
+                .withEndpoint(SOME_ENDPOINT)
+                .forNewPdfSupplied()
+                .build();
+
+        assertThat(result.getTopics(), hasItem("NEW_PDF_SUPPLIED"));
+    }
+
+    @Test
+    public void shouldCreateSimpleNotificationConfigWithInstructionsEmailRequested() {
+        NotificationConfig result = NotificationConfig.builder()
+                .withEndpoint(SOME_ENDPOINT)
+                .forInstructionsEmailRequested()
+                .build();
+
+        assertThat(result.getTopics(), hasItem("INSTRUCTIONS_EMAIL_REQUESTED"));
+    }
+
+    @Test
+    public void shouldCreateSimpleNotificationConfigWithThankYouEmailRequested() {
+        NotificationConfig result = NotificationConfig.builder()
+                .withEndpoint(SOME_ENDPOINT)
+                .forThankYouEmailRequested()
+                .build();
+
+        assertThat(result.getTopics(), hasItem("THANK_YOU_EMAIL_REQUESTED"));
+    }
+
+    @Test
+    public void shouldCreateSimpleNotificationConfigWithFirstBranchVisit() {
+        NotificationConfig result = NotificationConfig.builder()
+                .withEndpoint(SOME_ENDPOINT)
+                .forFirstBranchVisit()
+                .build();
+
+        assertThat(result.getTopics(), hasItem("FIRST_BRANCH_VISIT"));
+    }
+
+    @Test
     public void shouldCreateSimpleNotificationConfigWithAllNotificationOptions() {
         NotificationConfig result = NotificationConfig.builder()
                 .forResourceUpdate()

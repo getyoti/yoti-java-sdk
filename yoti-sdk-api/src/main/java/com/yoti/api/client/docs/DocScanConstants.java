@@ -53,6 +53,10 @@ public class DocScanConstants {
     public static final String CHECK_COMPLETION = "CHECK_COMPLETION";
     public static final String SESSION_COMPLETION = "SESSION_COMPLETION";
     public static final String CLIENT_SESSION_TOKEN_DELETED = "CLIENT_SESSION_TOKEN_DELETED";
+    public static final String NEW_PDF_SUPPLIED = "NEW_PDF_SUPPLIED";
+    public static final String INSTRUCTIONS_EMAIL_REQUESTED = "INSTRUCTIONS_EMAIL_REQUESTED";
+    public static final String THANK_YOU_EMAIL_REQUESTED = "THANK_YOU_EMAIL_REQUESTED";
+    public static final String FIRST_BRANCH_VISIT = "FIRST_BRANCH_VISIT";
 
     public static final String ALWAYS = "ALWAYS";
     public static final String FALLBACK = "FALLBACK";
