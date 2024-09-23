@@ -85,6 +85,24 @@ public class SdkConfigTest {
     }
 
     @Test
+    public void shouldBuildSimpleSdkConfigWithBiometricConsentFlowEager() {
+        SdkConfig result = SdkConfig.builder()
+                .withBiometricConsentFlowEager()
+                .build();
+
+        assertThat(result.getBiometricConsentFlow(), is("EAGER"));
+    }
+
+    @Test
+    public void shouldBuildSimpleSdkConfigWithBiometricConsentFlowJustInTime() {
+        SdkConfig result = SdkConfig.builder()
+                .withBiometricConsentFlowJustInTime()
+                .build();
+
+        assertThat(result.getBiometricConsentFlow(), is("JUST_IN_TIME"));
+    }
+
+    @Test
     public void shouldOverridePreviousAllowedCaptureMethods() {
         SdkConfig result = SdkConfig.builder()
                 .withAllowsCameraAndUpload()

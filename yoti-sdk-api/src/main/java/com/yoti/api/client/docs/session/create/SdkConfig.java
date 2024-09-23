@@ -45,6 +45,9 @@ public class SdkConfig {
     @JsonProperty(Property.BRAND_ID)
     private final String brandId;
 
+    @JsonProperty(Property.BIOMETRIC_CONSENT_FLOW)
+    private final String biometricConsentFlow;
+
     SdkConfig(String allowedCaptureMethods,
             String primaryColour,
             String secondaryColour,
@@ -55,7 +58,9 @@ public class SdkConfig {
             String errorUrl,
             String privacyPolicyUrl,
             Boolean allowHandoff,
-            AttemptsConfiguration attemptsConfiguration, String brandId) {
+            AttemptsConfiguration attemptsConfiguration,
+            String brandId,
+            String biometricConsentFlow) {
         this.allowedCaptureMethods = allowedCaptureMethods;
         this.primaryColour = primaryColour;
         this.secondaryColour = secondaryColour;
@@ -68,6 +73,7 @@ public class SdkConfig {
         this.allowHandoff = allowHandoff;
         this.attemptsConfiguration = attemptsConfiguration;
         this.brandId = brandId;
+        this.biometricConsentFlow = biometricConsentFlow;
     }
 
     public static SdkConfig.Builder builder() {
@@ -183,6 +189,15 @@ public class SdkConfig {
     }
 
     /**
+     * The configured biometric consent flow for the session
+     *
+     * @return the configured biometric consent flow
+     */
+    public String getBiometricConsentFlow() {
+        return biometricConsentFlow;
+    }
+
+    /**
      * Builder to assist in the creation of {@link SdkConfig}.
      */
     public static class Builder {
@@ -199,6 +214,7 @@ public class SdkConfig {
         private Boolean allowHandoff;
         private AttemptsConfiguration attemptsConfiguration;
         private String brandId;
+        private String biometricConsentFlow;
 
         private Builder() {}
 
@@ -353,6 +369,35 @@ public class SdkConfig {
         }
 
         /**
+         * Sets the Biometric Consent Flow for the session
+         *
+         * @param biometricConsentFlow the biometric consent flow
+         * @return the builder
+         */
+        public Builder withBiometricConsentFlow(String biometricConsentFlow) {
+            this.biometricConsentFlow = biometricConsentFlow;
+            return this;
+        }
+
+        /**
+         * Sets the biometric consent flow to EAGER for the session
+         *
+         * @return the builder
+         */
+        public Builder withBiometricConsentFlowEager() {
+            return withBiometricConsentFlow(DocScanConstants.EAGER);
+        }
+
+        /**
+         * Sets the biometric consent flow to JUST_IN_TIME for the session
+         *
+         * @return the builder
+         */
+        public Builder withBiometricConsentFlowJustInTime() {
+            return withBiometricConsentFlow(DocScanConstants.JUST_IN_TIME);
+        }
+
+        /**
          * Builds the {@link SdkConfig} using the values supplied to the builder
          *
          * @return the {@link SdkConfig}
@@ -370,7 +415,8 @@ public class SdkConfig {
                     privacyPolicyUrl,
                     allowHandoff,
                     attemptsConfiguration,
-                    brandId
+                    brandId,
+                    biometricConsentFlow
             );
         }
     }
@@ -389,6 +435,7 @@ public class SdkConfig {
         private static final String ALLOW_HANDOFF = "allow_handoff";
         private static final String ATTEMPTS_CONFIGURATION = "attempts_configuration";
         private static final String BRAND_ID = "brand_id";
+        private static final String BIOMETRIC_CONSENT_FLOW = "biometric_consent_flow";
 
         private Property() {}
 
