@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 
 import com.yoti.api.client.KeyPairSource;
@@ -26,40 +27,25 @@ public class DocScanClientBuilderTest {
 
     @Test
     public void build_shouldThrowExceptionWhenSdkIdIsNull() {
-        try {
-            DocScanClient.builder()
-                    .build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("SDK ID"));
-            return;
-        }
-        fail("Expected an exception");
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> DocScanClient.builder().build());
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void build_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        try {
-            DocScanClient.builder()
-                    .withClientSdkId("")
-                    .build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("SDK ID"));
-            return;
-        }
-        fail("Expected an exception");
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> DocScanClient.builder().withClientSdkId("").build());
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void build_shouldThrowExceptionWhenKeyPairSourceIsNull() {
-        try {
-            DocScanClient.builder()
-                    .withClientSdkId(SOME_APPLICATION_ID)
-                    .build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application key Pair"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanClient.Builder builder = DocScanClient.builder().withClientSdkId(SOME_APPLICATION_ID);
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> builder.build());
+
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test

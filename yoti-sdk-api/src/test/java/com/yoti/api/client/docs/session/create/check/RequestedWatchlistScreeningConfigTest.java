@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertThrows;
 
 import org.junit.Test;
 
@@ -73,17 +73,11 @@ public class RequestedWatchlistScreeningConfigTest {
     public void builder_shouldNotAllowNullCategory() {
         RequestedWatchlistScreeningConfig.Builder builder = RequestedWatchlistScreeningConfig.builder();
 
-        try {
-            builder.withCategory(null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("category"));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> builder.withCategory(null));
 
-            RequestedWatchlistScreeningConfig result = builder.build();
-            assertThat(result.getCategories(), is(nullValue()));
-            return;
-        }
-
-        fail("Expected an IllegalArgumentException");
+        assertThat(ex.getMessage(), containsString("category"));
+        RequestedWatchlistScreeningConfig result = builder.build();
+        assertThat(result.getCategories(), is(nullValue()));
     }
 
     @Test
