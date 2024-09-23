@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertThrows;
 
 import java.util.Arrays;
 
@@ -33,38 +33,23 @@ public class RequiredSupplementaryDocumentTest {
 
     @Test
     public void shouldThrowExceptionWhenDocumentTypesIsNull() {
-        try {
-            RequiredSupplementaryDocument.builder()
-                .withDocumentTypes(null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("documentTypes"));
-            return;
-        }
-        fail("Expected an exception");
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> RequiredSupplementaryDocument.builder().withDocumentTypes(null));
+
+        assertThat(ex.getMessage(), containsString("documentTypes"));
     }
 
     @Test
     public void shouldThrowExceptionWhenCountryCodesIsNull() {
-        try {
-            RequiredSupplementaryDocument.builder()
-                .withCountryCodes(null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("countryCodes"));
-            return;
-        }
-        fail("Expected an exception");
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> RequiredSupplementaryDocument.builder().withCountryCodes(null));
+
+        assertThat(ex.getMessage(), containsString("countryCodes"));
     }
 
     @Test
     public void shouldRequireObjectiveBeforeBuilding() {
-        try {
-            RequiredSupplementaryDocument.builder()
-                    .build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("objective"));
-            return;
-        }
-        fail("Expected an exception");
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> RequiredSupplementaryDocument.builder().build());
+
+        assertThat(ex.getMessage(), containsString("objective"));
     }
 
     @Test

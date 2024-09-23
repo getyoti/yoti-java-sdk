@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertThrows;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,14 +30,9 @@ public class DocumentRestrictionsFilterTest {
 
     @Test
     public void shouldThrowExceptionForMissingInclusion() {
-        try {
-            DocumentRestrictionsFilter.builder()
-                    .build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("inclusion"));
-            return;
-        }
-        fail("Expected an exception");
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> DocumentRestrictionsFilter.builder().build());
+
+        assertThat(ex.getMessage(), containsString("inclusion"));
     }
 
     @Test

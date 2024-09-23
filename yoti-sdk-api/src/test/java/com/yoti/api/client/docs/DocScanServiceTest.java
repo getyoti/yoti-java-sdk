@@ -10,7 +10,6 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.KEY_PAIR_PEM;
 import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
 
 import static junit.framework.TestCase.assertSame;
-import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
@@ -79,7 +78,7 @@ public class DocScanServiceTest {
     private static final String SOME_API_URL = System.getProperty(PROPERTY_YOTI_DOCS_URL, DEFAULT_YOTI_DOCS_URL);
     private static final String SOME_RESOURCE_ID = "someResourceId";
     private static final String SOME_IMAGE_CONTENT_TYPE = "someImageContentType";
-    private static final byte[] SOME_SESSION_SPEC_BYTES = new byte[]{ 1, 2, 3, 4 };
+    private static final byte[] SOME_SESSION_SPEC_BYTES = new byte[] { 1, 2, 3, 4 };
     private static final byte[] IMAGE_BODY = "some-image-body".getBytes();
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -98,7 +97,6 @@ public class DocScanServiceTest {
     @Mock CreateFaceCaptureResourcePayload createFaceCaptureResourcePayloadMock;
     @Mock UploadFaceCaptureImagePayload uploadFaceCaptureImagePayloadMock;
 
-
     @BeforeClass
     public static void setUpClass() throws Exception {
         KEY_PAIR = generateKeyPairFrom(KEY_PAIR_PEM);
@@ -110,132 +108,93 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void createSession_shouldThrowExceptionWhenMissingAppId() throws Exception {
-        try {
-            docScanService.createSession(null, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("SDK ID"));
-            return;
-        }
-        fail("Expected an exception");
+    public void createSession_shouldThrowExceptionWhenMissingAppId() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createSession(null, null, null));
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void createSession_shouldThrowExceptionWhenMissingKeyPair() throws Exception {
-        try {
-            docScanService.createSession(SOME_APP_ID, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application key Pair"));
-            return;
-        }
-        fail("Expected an exception");
+    public void createSession_shouldThrowExceptionWhenMissingKeyPair() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createSession(SOME_APP_ID, null, null));
+
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
-    public void createSession_shouldThrowExceptionWhenMissingSessionSpec() throws Exception {
-        try {
-            docScanService.createSession(SOME_APP_ID, KEY_PAIR, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("sessionSpec"));
-            return;
-        }
-        fail("Expected an exception");
+    public void createSession_shouldThrowExceptionWhenMissingSessionSpec() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, null));
+
+        assertThat(ex.getMessage(), containsString("sessionSpec"));
     }
 
     @Test
     public void createSession_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        try {
-            docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), gse);
-            assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
+
+        assertSame(ex.getCause(), gse);
+        assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
 
     @Test
     public void createSession_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(CreateSessionResult.class)).thenThrow(resourceException);
 
-        try {
-            docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), resourceException);
-            assertThat(ex.getMessage(), containsString("Error posting the request: Failed Request"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
+
+        assertSame(ex.getCause(), resourceException);
+        assertThat(ex.getMessage(), containsString("Error posting the request: Failed Request"));
     }
 
     @Test
     public void createSession_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(CreateSessionResult.class)).thenThrow(ioException);
 
-        try {
-            docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), ioException);
-            assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
+
+        assertSame(ex.getCause(), ioException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
 
     @Test
     public void createSession_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        try {
-            docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), uriSyntaxException);
-            assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
+
+        assertSame(ex.getCause(), uriSyntaxException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+
     }
 
     @Test
     public void createSession_shouldWrapGeneralException() {
-        final Exception someException = new Exception("Some exception we weren't expecting");
-
+        Exception someException = new Exception("Some exception we weren't expecting");
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
-        doAnswer(i -> {
-            throw someException;
-        }).when(signedRequestBuilderFactoryMock).create();
+        doAnswer(i -> {throw someException;}).when(signedRequestBuilderFactoryMock).create();
 
-        try {
-            docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), someException);
-            assertThat(ex.getMessage(), containsString("Error creating the session: Some exception we weren't expecting"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
+
+        assertSame(ex.getCause(), someException);
+        assertThat(ex.getMessage(), containsString("Error creating the session: Some exception we weren't expecting"));
     }
 
     @Test
     public void createSession_shouldCallSignedRequestBuilderWithCorrectMethods() throws Exception {
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
         CreateSessionResult createSessionResultMock = mock(CreateSessionResult.class);
-
         when(objectMapperMock.writeValueAsBytes(sessionSpecMock)).thenReturn(SOME_SESSION_SPEC_BYTES);
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(CreateSessionResult.class)).thenReturn(createSessionResultMock);
@@ -244,7 +203,6 @@ public class DocScanServiceTest {
         CreateSessionResult result = docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock);
 
         assertThat(result, is(createSessionResultMock));
-
         verify(signedRequestBuilderMock).withKeyPair(KEY_PAIR);
         verify(signedRequestBuilderMock).withEndpoint(SOME_PATH);
         verify(signedRequestBuilderMock).withBaseUrl(SOME_API_URL);
@@ -254,132 +212,89 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void retrieveSession_shouldThrowExceptionWhenAppIdIsNull() throws Exception {
-        try {
-            docScanService.retrieveSession(null, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("SDK ID"));
-            return;
-        }
-        fail("Expected an exception");
+    public void retrieveSession_shouldThrowExceptionWhenAppIdIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.retrieveSession(null, null, null));
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void retrieveSession_shouldThrowExceptionWhenAppIdIsEmpty() throws Exception {
-        try {
-            docScanService.retrieveSession("", null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("SDK ID"));
-            return;
-        }
-        fail("Expected an exception");
+    public void retrieveSession_shouldThrowExceptionWhenAppIdIsEmpty() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.retrieveSession("", null, null));
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void retrieveSession_shouldThrowExceptionWhenMissingKeyPair() throws Exception {
-        try {
-            docScanService.retrieveSession(SOME_APP_ID, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application key Pair"));
-            return;
-        }
-        fail("Expected an exception");
+    public void retrieveSession_shouldThrowExceptionWhenMissingKeyPair() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.retrieveSession(SOME_APP_ID, null, null));
+
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
-    public void retrieveSession_shouldThrowExceptionWhenSessionIdIsNull() throws Exception {
-        try {
-            docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("sessionId"));
-            return;
-        }
-        fail("Expected an exception");
+    public void retrieveSession_shouldThrowExceptionWhenSessionIdIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, null));
+
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
-    public void retrieveSession_shouldThrowExceptionWhenSessionIdIsEmpty() throws Exception {
-        try {
-            docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, "");
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("sessionId"));
-            return;
-        }
-        fail("Expected an exception");
+    public void retrieveSession_shouldThrowExceptionWhenSessionIdIsEmpty() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, ""));
+
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void retrieveSession_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        try {
-            docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), gse);
-            assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), gse);
+        assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
 
     @Test
     public void retrieveSession_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(GetSessionResult.class)).thenThrow(resourceException);
 
-        try {
-            docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), resourceException);
-            assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), resourceException);
+        assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
     }
 
     @Test
     public void retrieveSession_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(GetSessionResult.class)).thenThrow(ioException);
 
-        try {
-            docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), ioException);
-            assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), ioException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
 
     @Test
     public void retrieveSession_shouldWrapGeneralException() {
-        final Exception someException = new Exception("Some exception we weren't expecting");
+        Exception someException = new Exception("Some exception we weren't expecting");
+        doAnswer(i -> {throw someException;}).when(signedRequestBuilderFactoryMock).create();
 
-        doAnswer(i -> {
-            throw someException;
-        }).when(signedRequestBuilderFactoryMock).create();
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        try {
-            docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), someException);
-            assertThat(ex.getMessage(), containsString("Error retrieving the session: Some exception we weren't expecting"));
-            return;
-        }
-        fail("Expected an exception");
+        assertSame(ex.getCause(), someException);
+        assertThat(ex.getMessage(), containsString("Error retrieving the session: Some exception we weren't expecting"));
     }
 
     @Test
     public void retrieveSession_shouldCallSignedRequestBuilderWithCorrectMethods() throws Exception {
         GetSessionResult docScanSessionResponseMock = mock(GetSessionResult.class);
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(GetSessionResult.class)).thenReturn(docScanSessionResponseMock);
         when(unsignedPathFactoryMock.createYotiDocsSessionPath(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
@@ -387,7 +302,6 @@ public class DocScanServiceTest {
         GetSessionResult result = docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
 
         assertThat(result, is(docScanSessionResponseMock));
-
         verify(signedRequestBuilderMock).withKeyPair(KEY_PAIR);
         verify(signedRequestBuilderMock).withEndpoint(SOME_PATH);
         verify(signedRequestBuilderMock).withBaseUrl(SOME_API_URL);
@@ -395,126 +309,84 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void deleteSession_shouldThrowExceptionWhenAppIdIsNull() throws Exception {
-        try {
-            docScanService.deleteSession(null, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("SDK ID"));
-            return;
-        }
-        fail("Expected an exception");
+    public void deleteSession_shouldThrowExceptionWhenAppIdIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteSession(null, null, null));
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void deleteSession_shouldThrowExceptionWhenAppIdIsEmpty() throws Exception {
-        try {
-            docScanService.deleteSession("", null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("SDK ID"));
-            return;
-        }
-        fail("Expected an exception");
+    public void deleteSession_shouldThrowExceptionWhenAppIdIsEmpty() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteSession("", null, null));
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void deleteSession_shouldThrowExceptionWhenKeyPairIsNull() throws Exception {
-        try {
-            docScanService.deleteSession(SOME_APP_ID, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application key Pair"));
-            return;
-        }
-        fail("Expected an exception");
+    public void deleteSession_shouldThrowExceptionWhenKeyPairIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteSession(SOME_APP_ID, null, null));
+
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
-    public void deleteSession_shouldThrowExceptionWhenSessionIdIsNull() throws Exception {
-        try {
-            docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("sessionId"));
-            return;
-        }
-        fail("Expected an exception");
+    public void deleteSession_shouldThrowExceptionWhenSessionIdIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, null));
+
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
-    public void deleteSession_shouldThrowExceptionWhenSessionIdIsEmpty() throws Exception {
-        try {
-            docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, "");
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("sessionId"));
-            return;
-        }
-        fail("Expected an exception");
+    public void deleteSession_shouldThrowExceptionWhenSessionIdIsEmpty() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, ""));
+
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void deleteSession_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        try {
-            docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), gse);
-            assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), gse);
+        assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
 
     @Test
     public void deleteSession_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(resourceException);
 
-        try {
-            docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), resourceException);
-            assertThat(ex.getMessage(), containsString("Error executing the DELETE: Failed Request"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), resourceException);
+        assertThat(ex.getMessage(), containsString("Error executing the DELETE: Failed Request"));
     }
 
     @Test
     public void deleteSession_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(ioException);
 
-        try {
-            docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), ioException);
-            assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), ioException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
 
     @Test
     public void deleteSession_shouldWrapGeneralException() {
-        final Exception someException = new Exception("Some exception we weren't expecting");
+        Exception someException = new Exception("Some exception we weren't expecting");
+        doAnswer(i -> {throw someException;}).when(signedRequestBuilderFactoryMock).create();
 
-        doAnswer(i -> {
-            throw someException;
-        }).when(signedRequestBuilderFactoryMock).create();
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        try {
-            docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), someException);
-            assertThat(ex.getMessage(), containsString("Error deleting the session: Some exception we weren't expecting"));
-            return;
-        }
-        fail("Expected an exception");
+        assertSame(ex.getCause(), someException);
+        assertThat(ex.getMessage(), containsString("Error deleting the session: Some exception we weren't expecting"));
     }
 
     @Test
@@ -531,146 +403,98 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void getMediaContent_shouldThrowExceptionWhenApplicationIdIsNull() throws Exception {
-        try {
-            docScanService.getMediaContent(null, null, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("SDK ID"));
-            return;
-        }
-        fail("Expected an exception");
+    public void getMediaContent_shouldThrowExceptionWhenApplicationIdIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(null, null, null, null));
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void getMediaContent_shouldThrowExceptionWhenApplicationIdIsEmpty() throws Exception {
-        try {
-            docScanService.getMediaContent("", null, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("SDK ID"));
-            return;
-        }
-        fail("Expected an exception");
+    public void getMediaContent_shouldThrowExceptionWhenApplicationIdIsEmpty() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent("", null, null, null));
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void getMediaContent_shouldThrowExceptionWhenKeyPairIsNull() throws Exception {
-        try {
-            docScanService.getMediaContent(SOME_APP_ID, null, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application key Pair"));
-            return;
-        }
-        fail("Expected an exception");
+    public void getMediaContent_shouldThrowExceptionWhenKeyPairIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, null, null, null));
+
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
-    public void getMediaContent_shouldThrowExceptionWhenSessionIdIsNull() throws Exception {
-        try {
-            docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("sessionId"));
-            return;
-        }
-        fail("Expected an exception");
+    public void getMediaContent_shouldThrowExceptionWhenSessionIdIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, null, null));
+
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
-    public void getMediaContent_shouldThrowExceptionWhenSessionIdIsEmpty() throws Exception {
-        try {
-            docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, "", null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("sessionId"));
-            return;
-        }
-        fail("Expected an exception");
+    public void getMediaContent_shouldThrowExceptionWhenSessionIdIsEmpty() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, "", null));
+
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
-    public void getMediaContent_shouldThrowExceptionWhenMediaIdIsNull() throws Exception {
-        try {
-            docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("mediaId"));
-            return;
-        }
-        fail("Expected an exception");
+    public void getMediaContent_shouldThrowExceptionWhenMediaIdIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null));
+
+        assertThat(ex.getMessage(), containsString("mediaId"));
     }
 
     @Test
-    public void getMediaContent_shouldThrowExceptionWhenMediaIdIsEmpty() throws Exception {
-        try {
-            docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, "");
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("mediaId"));
-            return;
-        }
-        fail("Expected an exception");
+    public void getMediaContent_shouldThrowExceptionWhenMediaIdIsEmpty() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, ""));
+
+        assertThat(ex.getMessage(), containsString("mediaId"));
     }
 
     @Test
     public void getMediaContent_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        try {
-            docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), gse);
-            assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+
+        assertSame(ex.getCause(), gse);
+        assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
 
     @Test
     public void getMediaContent_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(resourceException);
 
-        try {
-            docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), resourceException);
-            assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+
+        assertSame(ex.getCause(), resourceException);
+        assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
     }
 
     @Test
     public void getMediaContent_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(ioException);
 
-        try {
-            docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), ioException);
-            assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+
+        assertSame(ex.getCause(), ioException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
 
     @Test
     public void getMediaContent_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        try {
-            docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), uriSyntaxException);
-            assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+
+        assertSame(ex.getCause(), uriSyntaxException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
@@ -735,152 +559,103 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void deleteMediaContent_shouldThrowExceptionWhenApplicationIdIsNull() throws Exception {
-        try {
-            docScanService.deleteMediaContent(null, null, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("SDK ID"));
-            return;
-        }
-        fail("Expected an exception");
+    public void deleteMediaContent_shouldThrowExceptionWhenApplicationIdIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(null, null, null, null));
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void deleteMediaContent_shouldThrowExceptionWhenApplicationIdIsEmpty() throws Exception {
-        try {
-            docScanService.deleteMediaContent("", null, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("SDK ID"));
-            return;
-        }
-        fail("Expected an exception");
+    public void deleteMediaContent_shouldThrowExceptionWhenApplicationIdIsEmpty() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent("", null, null, null));
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void deleteMediaContent_shouldThrowExceptionWhenKeyPairIsNull() throws Exception {
-        try {
-            docScanService.deleteMediaContent(SOME_APP_ID, null, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application key Pair"));
-            return;
-        }
-        fail("Expected an exception");
+    public void deleteMediaContent_shouldThrowExceptionWhenKeyPairIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, null, null, null));
+
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
-    public void deleteMediaContent_shouldThrowExceptionWhenSessionIdIsNull() throws Exception {
-        try {
-            docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, null, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("sessionId"));
-            return;
-        }
-        fail("Expected an exception");
+    public void deleteMediaContent_shouldThrowExceptionWhenSessionIdIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, null, null));
+
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
-    public void deleteMediaContent_shouldThrowExceptionWhenSessionIdIsEmpty() throws Exception {
-        try {
-            docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, "", null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("sessionId"));
-            return;
-        }
-        fail("Expected an exception");
+    public void deleteMediaContent_shouldThrowExceptionWhenSessionIdIsEmpty() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, "", null));
+
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
-    public void deleteMediaContent_shouldThrowExceptionWhenMediaIdIsNull() throws Exception {
-        try {
-            docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("mediaId"));
-            return;
-        }
-        fail("Expected an exception");
+    public void deleteMediaContent_shouldThrowExceptionWhenMediaIdIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null));
+
+        assertThat(ex.getMessage(), containsString("mediaId"));
     }
 
     @Test
-    public void deleteMediaContent_shouldThrowExceptionWhenMediaIdIsEmpty() throws Exception {
-        try {
-            docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, "");
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("mediaId"));
-            return;
-        }
-        fail("Expected an exception");
+    public void deleteMediaContent_shouldThrowExceptionWhenMediaIdIsEmpty() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, ""));
+
+        assertThat(ex.getMessage(), containsString("mediaId"));
     }
 
     @Test
     public void deleteMediaContent_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        try {
-            docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), gse);
-            assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+
+        assertSame(ex.getCause(), gse);
+        assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
 
     @Test
     public void deleteMediaContent_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(resourceException);
 
-        try {
-            docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), resourceException);
-            assertThat(ex.getMessage(), containsString("Error executing the DELETE: Failed Request"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+
+        assertSame(ex.getCause(), resourceException);
+        assertThat(ex.getMessage(), containsString("Error executing the DELETE: Failed Request"));
     }
 
     @Test
     public void deleteMediaContent_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(ioException);
 
-        try {
-            docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), ioException);
-            assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+
+        assertSame(ex.getCause(), ioException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
 
     @Test
     public void deleteMediaContent_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        try {
-            docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), uriSyntaxException);
-            assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+
+        assertSame(ex.getCause(), uriSyntaxException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
     public void deleteMediaContent_shouldBuildSignedRequest() throws Exception {
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-
         when(unsignedPathFactoryMock.createMediaContentPath(SOME_APP_ID, SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
 
         docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
@@ -1549,7 +1324,7 @@ public class DocScanServiceTest {
         assertSame(docScanException.getCause(), resourceException);
         assertThat(docScanException.getMessage(), containsString("Error executing the PUT: Failed Request"));
     }
-    
+
     @Test
     public void triggerIbvEmailNotification_shouldThrowExceptionWhenSdkIdIsNull() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(null, KEY_PAIR, SOME_SESSION_ID));
@@ -1632,64 +1407,45 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void getSupportedDocuments_shouldThrowExceptionWhenKeyPairIsNull() throws Exception {
-        try {
-            docScanService.getSupportedDocuments(null, false);
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("Application key Pair"));
-            return;
-        }
-        fail("Expected an exception");
+    public void getSupportedDocuments_shouldThrowExceptionWhenKeyPairIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getSupportedDocuments(null, false));
+
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
     public void getSupportedDocuments_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        try {
-            docScanService.getSupportedDocuments(KEY_PAIR, false);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), gse);
-            assertThat(ex.getMessage(), containsString("Error executing the GET: some gse"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(KEY_PAIR, false));
+
+        assertSame(ex.getCause(), gse);
+        assertThat(ex.getMessage(), containsString("Error executing the GET: some gse"));
     }
 
     @Test
     public void getSupportedDocuments_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(resourceException);
 
-        try {
-            docScanService.getSupportedDocuments(KEY_PAIR, false);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), resourceException);
-            assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(KEY_PAIR, false));
+
+        assertSame(ex.getCause(), resourceException);
+        assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
     }
 
     @Test
     public void getSupportedDocuments_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(ioException);
 
-        try {
-            docScanService.getSupportedDocuments(KEY_PAIR, false);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), ioException);
-            assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(KEY_PAIR, false));
+
+        assertSame(ex.getCause(), ioException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
 
     @Test
@@ -1698,14 +1454,10 @@ public class DocScanServiceTest {
 
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        try {
-            docScanService.getSupportedDocuments(KEY_PAIR, false);
-        } catch (DocScanException ex) {
-            assertSame(ex.getCause(), uriSyntaxException);
-            assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
-            return;
-        }
-        fail("Expected an exception");
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(KEY_PAIR, false));
+
+        assertSame(ex.getCause(), uriSyntaxException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
