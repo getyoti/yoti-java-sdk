@@ -31,6 +31,7 @@ public class RequestedIdDocTextExtractionTask extends RequestedTask<RequestedIdD
 
         private String manualCheck;
         private String chipData;
+        private Boolean createExpandedDocumentFields;
 
         public Builder withManualCheckAlways() {
             this.manualCheck = DocScanConstants.ALWAYS;
@@ -57,8 +58,13 @@ public class RequestedIdDocTextExtractionTask extends RequestedTask<RequestedIdD
             return this;
         }
 
+        public Builder withCreateExpandedDocumentFields(boolean value) {
+            this.createExpandedDocumentFields = value;
+            return this;
+        }
+
         public RequestedIdDocTextExtractionTask build() {
-            RequestedIdDocTextExtractionTaskConfig config = new RequestedIdDocTextExtractionTaskConfig(manualCheck, chipData);
+            RequestedIdDocTextExtractionTaskConfig config = new RequestedIdDocTextExtractionTaskConfig(manualCheck, chipData, createExpandedDocumentFields);
             return new RequestedIdDocTextExtractionTask(config);
         }
         

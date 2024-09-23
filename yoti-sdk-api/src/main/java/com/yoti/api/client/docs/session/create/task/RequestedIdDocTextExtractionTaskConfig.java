@@ -13,9 +13,13 @@ public class RequestedIdDocTextExtractionTaskConfig implements RequestedTaskConf
     @JsonProperty("chip_data")
     private final String chipData;
 
-    RequestedIdDocTextExtractionTaskConfig(String manualCheck, String chipData) {
+    @JsonProperty("create_expanded_document_fields")
+    private final Boolean createExpandedDocumentFields;
+
+    RequestedIdDocTextExtractionTaskConfig(String manualCheck, String chipData, Boolean createExpandedDocumentFields) {
         this.manualCheck = manualCheck;
         this.chipData = chipData;
+        this.createExpandedDocumentFields = createExpandedDocumentFields;
     }
 
     /**
@@ -35,6 +39,16 @@ public class RequestedIdDocTextExtractionTaskConfig implements RequestedTaskConf
      */
     public String getChipData() {
         return chipData;
+    }
+
+    /**
+     * Describes if expanded document fields should be created for a text-extraction task
+     * in the session.
+     *
+     * @return if expanded document fields should be created
+     */
+    public Boolean getCreateExpandedDocumentFields() {
+        return createExpandedDocumentFields;
     }
 
 }
