@@ -63,4 +63,14 @@ public class RequestedIdDocTextExtractionTaskTest {
         assertThat(configResult.getChipData(), is("IGNORE"));
     }
 
+    @Test
+    public void shouldBuildSimpleRequestedTextExtractionTaskWithCreateExpandedDocumentFields() {
+        RequestedIdDocTextExtractionTask result = RequestedIdDocTextExtractionTask.builder()
+                .withCreateExpandedDocumentFields(true)
+                .build();
+
+        RequestedIdDocTextExtractionTaskConfig configResult = result.getConfig();
+        assertThat(configResult.getCreateExpandedDocumentFields(), is(true));
+    }
+
 }
