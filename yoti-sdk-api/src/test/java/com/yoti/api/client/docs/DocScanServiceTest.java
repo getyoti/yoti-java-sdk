@@ -690,252 +690,240 @@ public class DocScanServiceTest {
 
     @Test
     public void putIbvInstructions_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(null, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(null, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void putIbvInstructions_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions("", KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions("", KEY_PAIR, SOME_SESSION_ID, instructionsMock));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void putIbvInstructions_shouldThrowExceptionWhenKeyPairIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, null, SOME_SESSION_ID, instructionsMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, null, SOME_SESSION_ID, instructionsMock));
 
-        assertThat(exception.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
     public void putIbvInstructions_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, null, instructionsMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, null, instructionsMock));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void putIbvInstructions_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, "", instructionsMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, "", instructionsMock));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void putIbvInstructions_shouldThrowExceptionWhenInstructionsIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null));
 
-        assertThat(exception.getMessage(), containsString("instructions"));
+        assertThat(ex.getMessage(), containsString("instructions"));
     }
 
     @Test
     public void putIbvInstructions_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
 
-        assertThat(docScanException.getMessage(), containsString("Error signing the request: some gse"));
+        assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
 
     @Test
     public void putIbvInstructions_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(resourceException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
 
-        assertThat(docScanException.getMessage(), containsString("Error executing the PUT: Failed Request"));
+        assertThat(ex.getMessage(), containsString("Error executing the PUT: Failed Request"));
     }
 
     @Test
     public void putIbvInstructions_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(ioException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Some io exception"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
 
     @Test
     public void putIbvInstructions_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
     public void getIbvInstructions_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(null, KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(null, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void getIbvInstructions_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions("", KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions("", KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void getIbvInstructions_shouldThrowExceptionWhenKeyPairIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, null, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, null, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
     public void getIbvInstructions_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, null));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void getIbvInstructions_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, ""));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void getIbvInstructions_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error signing the request: some gse"));
+        assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
 
     @Test
     public void getIbvInstructions_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(InstructionsResponse.class)).thenThrow(resourceException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error executing the GET: Failed Request"));
+        assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
     }
 
     @Test
     public void getIbvInstructions_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(InstructionsResponse.class)).thenThrow(ioException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Some io exception"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
 
     @Test
     public void getIbvInstructions_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
     public void getIbvInstructionsPdf_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(null, KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(null, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void getIbvInstructionsPdf_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf("", KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf("", KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void getIbvInstructionsPdf_shouldThrowExceptionWhenKeyPairIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, null, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, null, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
     public void getIbvInstructionsPdf_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, null));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void getIbvInstructionsPdf_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, ""));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void getIbvInstructionsPdf_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error signing the request: some gse"));
+        assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
 
     @Test
     public void getIbvInstructionsPdf_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(resourceException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error executing the GET: Failed Request"));
+        assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
     }
 
     @Test
     public void getIbvInstructionsPdf_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(ioException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Some io exception"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
 
     @Test
     public void getIbvInstructionsPdf_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
@@ -966,217 +954,208 @@ public class DocScanServiceTest {
 
     @Test
     public void fetchInstructionsContactProfile_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(null, KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(null, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void fetchInstructionsContactProfile_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile("", KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile("", KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void fetchInstructionsContactProfile_shouldThrowExceptionWhenKeyPairIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, null, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, null, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
     public void fetchInstructionsContactProfile_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, null));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void fetchInstructionsContactProfile_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, ""));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void fetchInstructionsContactProfile_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error signing the request: some gse"));
+        assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
 
     @Test
     public void fetchInstructionsContactProfile_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(ContactProfileResponse.class)).thenThrow(resourceException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error executing the GET: Failed Request"));
+        assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
     }
 
     @Test
     public void fetchInstructionsContactProfile_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(ContactProfileResponse.class)).thenThrow(ioException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Some io exception"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
 
     @Test
     public void fetchInstructionsContactProfile_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
     public void fetchSessionConfiguration_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(null, KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(null, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void fetchSessionConfiguration_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration("", KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration("", KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void fetchSessionConfiguration_shouldThrowExceptionWhenKeyPairIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, null, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, null, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
     public void fetchSessionConfiguration_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, null));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void fetchSessionConfiguration_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, ""));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void fetchSessionConfiguration_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error signing the request: some gse"));
+        assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
 
     @Test
     public void fetchSessionConfiguration_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(SessionConfigurationResponse.class)).thenThrow(resourceException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error executing the GET: Failed Request"));
+        assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
     }
 
     @Test
     public void fetchSessionConfiguration_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(SessionConfigurationResponse.class)).thenThrow(ioException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Some io exception"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
 
     @Test
     public void fetchSessionConfiguration_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
     public void createFaceCaptureResource_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(null, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(null, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void createFaceCaptureResource_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource("", KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource("", KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void createFaceCaptureResource_shouldThrowExceptionWhenKeyPairIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, null, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, null, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
-        assertThat(exception.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
     public void createFaceCaptureResource_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, null, createFaceCaptureResourcePayloadMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, null, createFaceCaptureResourcePayloadMock));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void createFaceCaptureResource_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, "", createFaceCaptureResourcePayloadMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, "", createFaceCaptureResourcePayloadMock));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void createFaceCaptureResource_shouldThrowExceptionWhenPayloadIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null));
 
-        assertThat(exception.getMessage(), containsString("createFaceCaptureResourcePayload"));
+        assertThat(ex.getMessage(), containsString("createFaceCaptureResourcePayload"));
     }
 
     @Test
     public void createFaceCaptureResource_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
-        assertThat(docScanException.getMessage(), containsString("Error signing the request: some gse"));
+        assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
 
     @Test
@@ -1185,9 +1164,9 @@ public class DocScanServiceTest {
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(CreateFaceCaptureResourceResponse.class)).thenThrow(resourceException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
-        assertThat(docScanException.getMessage(), containsString("Error executing the POST: Failed Request"));
+        assertThat(ex.getMessage(), containsString("Error executing the POST: Failed Request"));
     }
 
     @Test
@@ -1196,9 +1175,9 @@ public class DocScanServiceTest {
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute(CreateFaceCaptureResourceResponse.class)).thenThrow(ioException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Some io exception"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
 
     @Test
@@ -1206,65 +1185,65 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
     public void uploadFaceCaptureImage_shouldFailForNullSdkId() {
-        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(null, null, null, null, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(null, null, null, null, null));
 
-        assertThat(docScanException.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void uploadFaceCaptureImage_shouldFailForEmptySdkId() {
-        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage("", null, null, null, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage("", null, null, null, null));
 
-        assertThat(docScanException.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void uploadFaceCaptureImage_shouldFailForNullKeyPair() {
-        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, null, null, null, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, null, null, null, null));
 
-        assertThat(docScanException.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
     public void uploadFaceCaptureImage_shouldFailForNullSessionId() {
-        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, null, null,null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, null, null,null));
 
-        assertThat(docScanException.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void uploadFaceCaptureImage_shouldFailForEmptySessionId() {
-        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, "", null, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, "", null, null));
 
-        assertThat(docScanException.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void uploadFaceCaptureImage_shouldFailForNullResourceId() {
-        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null,null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null,null));
 
-        assertThat(docScanException.getMessage(), containsString("resourceId"));
+        assertThat(ex.getMessage(), containsString("resourceId"));
     }
 
     @Test
     public void uploadFaceCaptureImage_shouldFailForEmptyResourceId() {
-        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, "", null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, "", null));
 
-        assertThat(docScanException.getMessage(), containsString("resourceId"));
+        assertThat(ex.getMessage(), containsString("resourceId"));
     }
 
     @Test
     public void uploadFaceCaptureImage_shouldFailForNullPayload() {
-        IllegalArgumentException docScanException = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, null));
 
-        assertThat(docScanException.getMessage(), containsString("faceCaptureImagePayload"));
+        assertThat(ex.getMessage(), containsString("faceCaptureImagePayload"));
     }
 
     @Test
@@ -1275,10 +1254,10 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
 
-        assertSame(docScanException.getCause(), gse);
-        assertThat(docScanException.getMessage(), containsString("Error executing the PUT: some gse"));
+        assertSame(ex.getCause(), gse);
+        assertThat(ex.getMessage(), containsString("Error executing the PUT: some gse"));
     }
 
     @Test
@@ -1289,10 +1268,10 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
 
-        assertSame(docScanException.getCause(), uriSyntaxException);
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+        assertSame(ex.getCause(), uriSyntaxException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
@@ -1304,10 +1283,10 @@ public class DocScanServiceTest {
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(ioException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
 
-        assertSame(docScanException.getCause(), ioException);
-        assertThat(docScanException.getMessage(), containsString("Error building the request: some IO exception"));
+        assertSame(ex.getCause(), ioException);
+        assertThat(ex.getMessage(), containsString("Error building the request: some IO exception"));
     }
 
     @Test
@@ -1319,91 +1298,87 @@ public class DocScanServiceTest {
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(resourceException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
 
-        assertSame(docScanException.getCause(), resourceException);
-        assertThat(docScanException.getMessage(), containsString("Error executing the PUT: Failed Request"));
+        assertSame(ex.getCause(), resourceException);
+        assertThat(ex.getMessage(), containsString("Error executing the PUT: Failed Request"));
     }
 
     @Test
     public void triggerIbvEmailNotification_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(null, KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(null, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void triggerIbvEmailNotification_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification("", KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification("", KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("SDK ID"));
+        assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void triggerIbvEmailNotification_shouldThrowExceptionWhenKeyPairIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, null, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, null, SOME_SESSION_ID));
 
-        assertThat(exception.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("Application key Pair"));
     }
 
     @Test
     public void triggerIbvEmailNotification_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, null));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void triggerIbvEmailNotification_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, ""));
 
-        assertThat(exception.getMessage(), containsString("sessionId"));
+        assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void triggerIbvEmailNotification_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-
         when(signedRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error executing the POST: some gse"));
+        assertThat(ex.getMessage(), containsString("Error executing the POST: some gse"));
     }
 
     @Test
     public void triggerIbvEmailNotification_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(resourceException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error executing the POST: Failed Request"));
+        assertThat(ex.getMessage(), containsString("Error executing the POST: Failed Request"));
     }
 
     @Test
     public void triggerIbvEmailNotification_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-
         when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
         when(signedRequestMock.execute()).thenThrow(ioException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Some io exception"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
 
     @Test
     public void triggerIbvEmailNotification_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException docScanException = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
-        assertThat(docScanException.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
@@ -1451,7 +1426,6 @@ public class DocScanServiceTest {
     @Test
     public void getSupportedDocuments_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-
         when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(KEY_PAIR, false));
