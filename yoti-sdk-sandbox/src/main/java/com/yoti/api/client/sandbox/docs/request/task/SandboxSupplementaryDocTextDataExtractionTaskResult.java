@@ -2,8 +2,10 @@ package com.yoti.api.client.sandbox.docs.request.task;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SandboxSupplementaryDocTextDataExtractionTaskResult {
 
     @JsonProperty("document_fields")
