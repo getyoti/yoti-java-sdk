@@ -42,10 +42,9 @@ public class RequestedIdDocTextExtractionTaskConfig implements RequestedTaskConf
     }
 
     /**
-     * Describes if expanded document fields should be created for a text-extraction task
-     * in the session.
+     * Describes whether or not expanded document fields should be created as part of text extraction
      *
-     * @return if expanded document fields should be created
+     * @return whether to create expanded document fields
      */
     public Boolean getCreateExpandedDocumentFields() {
         return createExpandedDocumentFields;
