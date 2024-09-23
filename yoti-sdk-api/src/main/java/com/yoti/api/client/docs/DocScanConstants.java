@@ -83,4 +83,7 @@ public class DocScanConstants {
 
     public static final String GBP = "GBP";
 
+    public static final String EAGER = "EAGER";
+    public static final String JUST_IN_TIME = "JUST_IN_TIME";
+
 }
