@@ -109,7 +109,7 @@ public class SdkConfig {
     }
 
     /**
-     * The primary colour for dark mode, configured for the session
+     * The primary colour to use when in dark mode
      *
      * @return the primary colour
      */
@@ -145,7 +145,7 @@ public class SdkConfig {
     }
 
     /**
-     * The dark mode option configured for the session
+     * Whether to use dark mode - may be 'ON', 'OFF', or 'AUTO'
      *
      * @return the dark mode
      */
@@ -289,7 +289,7 @@ public class SdkConfig {
         }
 
         /**
-         * Sets the primary colour for the dark mode to be used by the web/native client
+         * Sets the primary colour to be used by the web/native client when in dark mode
          *
          * @param primaryColourDarkMode the primary colour for the dark mode, hexadecimal value e.g. #ff0000
          * @return the builder
@@ -333,7 +333,7 @@ public class SdkConfig {
         }
 
         /**
-         * Sets the dark mode to be used by the web/native client
+         * Whether to use dark mode on the web/native client - may be 'ON', 'OFF', or 'AUTO'
          *
          * @param darkMode the dark mode, e.g. "ON"
          * @return the builder
@@ -349,8 +349,7 @@ public class SdkConfig {
          * @return the builder
          */
         public Builder withDarkModeOn() {
-            this.darkMode = DocScanConstants.ON;
-            return this;
+            return withDarkMode(DocScanConstants.ON);
         }
 
         /**
@@ -359,8 +358,7 @@ public class SdkConfig {
          * @return the builder
          */
         public Builder withDarkModeOff() {
-            this.darkMode = DocScanConstants.OFF;
-            return this;
+            return withDarkMode(DocScanConstants.OFF);
         }
 
         /**
@@ -369,8 +367,7 @@ public class SdkConfig {
          * @return the builder
          */
         public Builder withDarkModeAuto() {
-            this.darkMode = DocScanConstants.AUTO;
-            return this;
+            return withDarkMode(DocScanConstants.AUTO);
         }
 
         /**
