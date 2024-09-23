@@ -1,13 +1,22 @@
 package com.yoti.api.client.docs.session.create.task;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import org.junit.Test;
 
 public class RequestedIdDocTextExtractionTaskTest {
+
+    @Test
+    public void shouldDefaultConfigValuesToNull() {
+        RequestedIdDocTextExtractionTask result = RequestedIdDocTextExtractionTask.builder().build();
+
+        assertThat(result.getType(), is("ID_DOCUMENT_TEXT_DATA_EXTRACTION"));
+        assertThat(result.getConfig().getChipData(), is(nullValue()));
+        assertThat(result.getConfig().getManualCheck(), is(nullValue()));
+        assertThat(result.getConfig().getCreateExpandedDocumentFields(), is(nullValue()));
+    }
 
     @Test
     public void shouldBuildSimpleRequestedTextExtractionTaskWithManualFallbackAlways() {
@@ -15,10 +24,7 @@ public class RequestedIdDocTextExtractionTaskTest {
                 .withManualCheckAlways()
                 .build();
 
-        assertThat(result, is(instanceOf(RequestedIdDocTextExtractionTask.class)));
-        assertThat(result.getConfig(), instanceOf(RequestedIdDocTextExtractionTaskConfig.class));
         assertThat(result.getType(), is("ID_DOCUMENT_TEXT_DATA_EXTRACTION"));
-
         RequestedIdDocTextExtractionTaskConfig configResult = result.getConfig();
         assertThat(configResult.getManualCheck(), is("ALWAYS"));
     }
@@ -29,8 +35,7 @@ public class RequestedIdDocTextExtractionTaskTest {
                 .withManualCheckFallback()
                 .build();
 
-        RequestedIdDocTextExtractionTaskConfig configResult = result.getConfig();
-        assertThat(configResult.getManualCheck(), is("FALLBACK"));
+        assertThat(result.getConfig().getManualCheck(), is("FALLBACK"));
     }
 
     @Test
@@ -39,8 +44,7 @@ public class RequestedIdDocTextExtractionTaskTest {
                 .withManualCheckNever()
                 .build();
 
-        RequestedIdDocTextExtractionTaskConfig configResult = result.getConfig();
-        assertThat(configResult.getManualCheck(), is("NEVER"));
+        assertThat(result.getConfig().getManualCheck(), is("NEVER"));
     }
 
     @Test
@@ -49,8 +53,7 @@ public class RequestedIdDocTextExtractionTaskTest {
                 .withChipDataDesired()
                 .build();
 
-        RequestedIdDocTextExtractionTaskConfig configResult = result.getConfig();
-        assertThat(configResult.getChipData(), is("DESIRED"));
+        assertThat(result.getConfig().getChipData(), is("DESIRED"));
     }
 
     @Test
@@ -59,8 +62,7 @@ public class RequestedIdDocTextExtractionTaskTest {
                 .withChipDataIgnore()
                 .build();
 
-        RequestedIdDocTextExtractionTaskConfig configResult = result.getConfig();
-        assertThat(configResult.getChipData(), is("IGNORE"));
+        assertThat(result.getConfig().getChipData(), is("IGNORE"));
     }
 
     @Test
@@ -69,8 +71,7 @@ public class RequestedIdDocTextExtractionTaskTest {
                 .withCreateExpandedDocumentFields(true)
                 .build();
 
-        RequestedIdDocTextExtractionTaskConfig configResult = result.getConfig();
-        assertThat(configResult.getCreateExpandedDocumentFields(), is(true));
+        assertThat(result.getConfig().getCreateExpandedDocumentFields(), is(true));
     }
 
 }
