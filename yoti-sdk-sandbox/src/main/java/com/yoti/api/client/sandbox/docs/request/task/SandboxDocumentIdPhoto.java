@@ -1,7 +1,9 @@
 package com.yoti.api.client.sandbox.docs.request.task;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SandboxDocumentIdPhoto {
 
     @JsonProperty("content_type")

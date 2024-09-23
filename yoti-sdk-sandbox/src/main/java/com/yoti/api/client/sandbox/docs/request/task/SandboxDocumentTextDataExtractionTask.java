@@ -46,6 +46,7 @@ public class SandboxDocumentTextDataExtractionTask {
         private SandboxDocumentFilter documentFilter;
         private SandboxDocumentIdPhoto documentIdPhoto;
         private String detectedCountry;
+        private String detectedDocumentType;
         private SandboxTextExtractionTaskRecommendation recommendation;
 
         private Builder() {
@@ -82,14 +83,22 @@ public class SandboxDocumentTextDataExtractionTask {
             return this;
         }
 
+        public Builder withDetectedDocumentType(String detectedDocumentType) {
+            this.detectedDocumentType = detectedDocumentType;
+            return this;
+        }
+
         public Builder withRecommendation(SandboxTextExtractionTaskRecommendation recommendation) {
             this.recommendation = recommendation;
             return this;
         }
 
         public SandboxDocumentTextDataExtractionTask build() {
-            SandboxDocumentTextDataExtractionTaskResult result = new SandboxDocumentTextDataExtractionTaskResult(documentFields, this.documentIdPhoto,
-                    detectedCountry, recommendation);
+            SandboxDocumentTextDataExtractionTaskResult result = new SandboxDocumentTextDataExtractionTaskResult(documentFields,
+                    documentIdPhoto,
+                    detectedCountry,
+                    detectedDocumentType,
+                    recommendation);
             return new SandboxDocumentTextDataExtractionTask(result, documentFilter);
         }
     }
