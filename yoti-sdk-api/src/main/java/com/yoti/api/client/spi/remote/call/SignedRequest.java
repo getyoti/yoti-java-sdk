@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.yoti.api.client.Image;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 public class SignedRequest {
 
     private final URI uri;
@@ -54,6 +56,10 @@ public class SignedRequest {
             return clazz.cast(imageResourceFetcher.doRequest(this));
         }
         return jsonResourceFetcher.doRequest(this, clazz);
+    }
+
+    public <T> T execute(TypeReference<T> typeReference) throws ResourceException, IOException {
+        return jsonResourceFetcher.doRequest(this, typeReference);
     }
 
     public SignedRequestResponse execute() throws ResourceException, IOException {

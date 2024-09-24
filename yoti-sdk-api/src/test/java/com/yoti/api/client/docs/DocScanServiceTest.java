@@ -11,6 +11,7 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom
 
 import static junit.framework.TestCase.assertSame;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
@@ -29,6 +30,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +40,7 @@ import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.create.facecapture.CreateFaceCaptureResourcePayload;
 import com.yoti.api.client.docs.session.create.facecapture.UploadFaceCaptureImagePayload;
+import com.yoti.api.client.docs.session.devicemetadata.MetadataResponse;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.AuthenticityCheckResponse;
 import com.yoti.api.client.docs.session.retrieve.CheckResponse;
@@ -57,12 +60,14 @@ import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.SignedRequestResponse;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -1443,6 +1448,94 @@ public class DocScanServiceTest {
         SupportedDocumentsResponse result = docScanService.getSupportedDocuments(KEY_PAIR, false);
 
         assertThat(result, is(instanceOf(SupportedDocumentsResponse.class)));
+    }
+
+    @Test
+    public void getTrackedDevices_shouldThrowExceptionWhenSdkIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices(null, KEY_PAIR, SOME_SESSION_ID));
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void getTrackedDevices_shouldThrowExceptionWhenSdkIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices("", KEY_PAIR, SOME_SESSION_ID));
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void getTrackedDevices_shouldThrowExceptionWhenKeyPairIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, null, SOME_SESSION_ID));
+        assertThat(exception.getMessage(), containsString("Application key Pair"));
+    }
+
+    @Test
+    public void getTrackedDevices_shouldThrowExceptionWhenSessionIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, null));
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void getTrackedDevices_shouldThrowExceptionWhenSessionIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, ""));
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void getTrackedDevices_shouldWrapGeneralSecurityException() throws Exception {
+        GeneralSecurityException gse = new GeneralSecurityException("some gse");
+        when(signedRequestBuilderMock.build()).thenThrow(gse);
+
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), gse);
+        assertThat(ex.getMessage(), containsString("Error executing the GET: some gse"));
+    }
+
+    @Test
+    public void getTrackedDevices_shouldWrapResourceException() throws Exception {
+        ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(ArgumentMatchers.any(TypeReference.class))).thenThrow(resourceException);
+
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), resourceException);
+        assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
+    }
+
+    @Test
+    public void getTrackedDevices_shouldWrapIOException() throws Exception {
+        IOException ioException = new IOException("Some io exception");
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute(ArgumentMatchers.any(TypeReference.class))).thenThrow(ioException);
+
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), ioException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
+    }
+
+    @Test
+    public void getTrackedDevices_shouldWrapURISyntaxException() throws Exception {
+        URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
+        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), uriSyntaxException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+    }
+
+    @Test
+    public void getTrackedDevices_shouldReturnTrackedDevices() throws Exception {
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        MetadataResponse metadataResponseMock = mock(MetadataResponse.class);
+        when(signedRequestMock.execute(ArgumentMatchers.any(TypeReference.class))).thenReturn(Collections.singletonList(metadataResponseMock));
+        when(unsignedPathFactoryMock.createFetchTrackedDevices(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
+
+        List<MetadataResponse> result = docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
+
+        assertThat(result.get(0), is(metadataResponseMock));
     }
 
 }
