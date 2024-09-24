@@ -32,7 +32,7 @@ public class UnsignedPathFactory {
     private static final String DOCS_NEW_FACE_CAPTURE_RESOURCE = "/sessions/%s/resources/face-capture?sdkId=%s";
     private static final String DOCS_UPLOAD_FACE_CAPTURE_IMAGE = "/sessions/%s/resources/face-capture/%s/image?sdkId=%s";
     private static final String DOCS_TRIGGER_IBV_NOTIFICATION = "/sessions/%s/instructions/email?sdkId=%s";
-    private static final String DOCS_FETCH_TRACKED_DEVICES = "/sessions/%s/tracked-devices?sdkId=%s";
+    private static final String DOCS_TRACKED_DEVICES = "/sessions/%s/tracked-devices?sdkId=%s";
 
     public String createAmlPath(String appId) {
         return format(AML, appId);
@@ -123,7 +123,11 @@ public class UnsignedPathFactory {
     }
 
     public String createFetchTrackedDevices(String sdkId, String sessionId) {
-        return format(DOCS_FETCH_TRACKED_DEVICES, sessionId, sdkId);
+        return format(DOCS_TRACKED_DEVICES, sessionId, sdkId);
+    }
+
+    public String createDeleteTrackedDevices(String sdkId, String sessionId) {
+        return format(DOCS_TRACKED_DEVICES, sessionId, sdkId);
     }
 
 }

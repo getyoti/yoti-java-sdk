@@ -245,16 +245,28 @@ public class DocScanClient {
     }
 
     /**
-     * Fetches the tracked devices used by the end user, to interact with the given sessionID.
+     * Fetches details of the devices tracked at key points in completing the session.
      *
      * @param sessionId the session ID
      *
-     * @return the session configuration
+     * @return the list of tracked devices information
      * @throws DocScanException if an error has occurred
      */
     public List<MetadataResponse> getTrackedDevices(String sessionId) throws DocScanException {
         LOG.debug("Fetching tracked devices for session '{}'", sessionId);
         return docScanService.getTrackedDevices(sdkId, keyPair, sessionId);
+    }
+
+    /**
+     * Deletes the tracked devices metadata for the given sessionID.
+     *
+     * @param sessionId the session ID
+     *
+     * @throws DocScanException if an error has occurred
+     */
+    public void deleteTrackedDevices(String sessionId) throws DocScanException {
+        LOG.debug("Deleting tracked devices for session '{}'", sessionId);
+        docScanService.deleteTrackedDevices(sdkId, keyPair, sessionId);
     }
 
     private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {
