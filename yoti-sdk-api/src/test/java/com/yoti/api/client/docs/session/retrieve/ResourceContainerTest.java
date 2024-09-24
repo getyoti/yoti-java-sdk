@@ -1,6 +1,7 @@
 package com.yoti.api.client.docs.session.retrieve;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 
 import java.util.ArrayList;
@@ -17,62 +18,36 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class ResourceContainerTest {
 
-    @Mock ZoomLivenessResourceResponse zoomLivenessResourceResponseMock;
-    @Mock StaticLivenessResourceResponse staticLivenessResourceResponseMock;
-    @Mock LivenessResourceResponse livenessResourceResponse;
+    ResourceContainer testObj = new ResourceContainer();
 
-    ResourceContainer simpleResourceContainer;
+    @Mock ZoomLivenessResourceResponse zoomLivenessResourceMock;
+    @Mock StaticLivenessResourceResponse staticLivenessResourceMock;
+    @Mock LivenessResourceResponse livenessResource;
 
     @Test
     public void shouldFilterZoomLivenessResources() {
-        simpleResourceContainer = new ResourceContainer();
+        FieldSetter.setField(testObj, "livenessCapture", Arrays.asList(zoomLivenessResourceMock, staticLivenessResourceMock, livenessResource));
 
-        FieldSetter.setField(
-                simpleResourceContainer,
-                "livenessCapture",
-                Arrays.asList(
-                        zoomLivenessResourceResponseMock,
-                        livenessResourceResponse,
-                        livenessResourceResponse
-                )
-        );
+        List<ZoomLivenessResourceResponse> result = testObj.getZoomLivenessResources();
 
-        List<ZoomLivenessResourceResponse> result = simpleResourceContainer.getZoomLivenessResources();
-        assertThat(simpleResourceContainer.getLivenessCapture(), hasSize(3));
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(zoomLivenessResourceMock));
     }
 
     @Test
     public void shouldFilterStaticLivenessResources() {
-        simpleResourceContainer = new ResourceContainer();
+        FieldSetter.setField(testObj, "livenessCapture", Arrays.asList(zoomLivenessResourceMock, staticLivenessResourceMock, livenessResource));
 
-        FieldSetter.setField(
-                simpleResourceContainer,
-                "livenessCapture",
-                Arrays.asList(
-                        staticLivenessResourceResponseMock,
-                        livenessResourceResponse,
-                        livenessResourceResponse
-                )
-        );
+        List<StaticLivenessResourceResponse> result = testObj.getStaticLivenessResources();
 
-        List<StaticLivenessResourceResponse> result = simpleResourceContainer.getStaticLivenessResources();
-        assertThat(simpleResourceContainer.getLivenessCapture(), hasSize(3));
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(staticLivenessResourceMock));
     }
 
     @Test
     public void shouldReturnEmptyList() {
-        simpleResourceContainer = new ResourceContainer();
+        FieldSetter.setField(testObj, "livenessCapture", new ArrayList<>());
 
-        FieldSetter.setField(
-                simpleResourceContainer,
-                "livenessCapture",
-                new ArrayList<>()
-        );
+        List<ZoomLivenessResourceResponse> result = testObj.getZoomLivenessResources();
 
-        List<ZoomLivenessResourceResponse> result = simpleResourceContainer.getZoomLivenessResources();
-        assertThat(simpleResourceContainer.getLivenessCapture(), hasSize(0));
         assertThat(result, hasSize(0));
     }
 
