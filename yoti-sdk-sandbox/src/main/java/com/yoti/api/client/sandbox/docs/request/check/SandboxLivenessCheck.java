@@ -7,9 +7,13 @@ public class SandboxLivenessCheck extends SandboxCheck {
     @JsonProperty("liveness_type")
     private final String livenessType;
 
-    SandboxLivenessCheck(SandboxCheckResult result, String livenessType) {
+    @JsonProperty("response_delay")
+    private final Integer responseDelay;
+
+    SandboxLivenessCheck(SandboxCheckResult result, String livenessType, Integer responseDelay) {
         super(result);
         this.livenessType = livenessType;
+        this.responseDelay = responseDelay;
     }
 
     public static SandboxZoomLivenessCheckBuilder forZoomLiveness() {
