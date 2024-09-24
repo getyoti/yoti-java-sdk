@@ -6,6 +6,7 @@ import static com.yoti.api.client.spi.remote.util.Validation.notNullOrEmpty;
 import java.io.IOException;
 import java.security.KeyPair;
 import java.security.Security;
+import java.util.List;
 
 import com.yoti.api.client.InitialisationException;
 import com.yoti.api.client.KeyPairSource;
@@ -14,6 +15,7 @@ import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.create.facecapture.CreateFaceCaptureResourcePayload;
 import com.yoti.api.client.docs.session.create.facecapture.UploadFaceCaptureImagePayload;
+import com.yoti.api.client.docs.session.devicemetadata.MetadataResponse;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.CreateFaceCaptureResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
@@ -240,6 +242,19 @@ public class DocScanClient {
     public SessionConfigurationResponse getSessionConfiguration(String sessionId) throws DocScanException {
         LOG.debug("Fetching configuration for session '{}'", sessionId);
         return docScanService.fetchSessionConfiguration(sdkId, keyPair, sessionId);
+    }
+
+    /**
+     * Fetches the tracked devices used by the end user, to interact with the given sessionID.
+     *
+     * @param sessionId the session ID
+     *
+     * @return the session configuration
+     * @throws DocScanException if an error has occurred
+     */
+    public List<MetadataResponse> getTrackedDevices(String sessionId) throws DocScanException {
+        LOG.debug("Fetching tracked devices for session '{}'", sessionId);
+        return docScanService.getTrackedDevices(sdkId, keyPair, sessionId);
     }
 
     private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {

@@ -24,6 +24,7 @@ import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.create.facecapture.CreateFaceCaptureResourcePayload;
 import com.yoti.api.client.docs.session.create.facecapture.UploadFaceCaptureImagePayload;
+import com.yoti.api.client.docs.session.devicemetadata.MetadataResponse;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.CreateFaceCaptureResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
@@ -39,6 +40,7 @@ import com.yoti.api.client.spi.remote.call.SignedRequestResponse;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -52,6 +54,9 @@ import org.slf4j.LoggerFactory;
 final class DocScanService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DocScanService.class);
+
+    private static final TypeReference<List<MetadataResponse>> METADATA_RESPONSE_TYPE_REF = new TypeReference<List<MetadataResponse>>() {};
+
     private static final int HTTP_STATUS_NO_CONTENT = 204;
     private static final String YOTI_MULTIPART_BOUNDARY = "yoti-doc-scan-boundary";
 
@@ -522,6 +527,30 @@ final class DocScanService {
                     .execute();
         } catch (GeneralSecurityException | ResourceException ex) {
             throw new DocScanException("Error executing the POST: " + ex.getMessage(), ex);
+        } catch (IOException | URISyntaxException ex) {
+            throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
+        }
+    }
+
+    public List<MetadataResponse> getTrackedDevices(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
+        notNull(keyPair, "Application key Pair");
+        notNullOrEmpty(sessionId, "sessionId");
+
+        String path = unsignedPathFactory.createFetchTrackedDevices(sdkId, sessionId);
+        LOG.info("Fetching tracked devices at '{}'", path);
+
+        try {
+            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+                    .withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withHttpMethod(HTTP_GET)
+                    .build();
+
+            return signedRequest.execute(METADATA_RESPONSE_TYPE_REF);
+        } catch (GeneralSecurityException | ResourceException ex) {
+            throw new DocScanException("Error executing the GET: " + ex.getMessage(), ex);
         } catch (IOException | URISyntaxException ex) {
             throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
         }
