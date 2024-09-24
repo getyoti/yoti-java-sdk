@@ -1,7 +1,8 @@
 package com.yoti.api.client.docs.session.retrieve;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -72,7 +73,20 @@ public class ResourceContainer {
      *
      * @return the list of static liveness resources
      */
-    public List<StaticLivenessResourceResponse> getStaticLivenessResources() { return filterLivenessResourcesByType(StaticLivenessResourceResponse.class); }
+    public List<StaticLivenessResourceResponse> getStaticLivenessResources() {
+        return filterLivenessResourcesByType(StaticLivenessResourceResponse.class);
+    }
+
+    private <T extends LivenessResourceResponse> List<T> filterLivenessResourcesByType(Class<T> clazz) {
+        if (livenessCapture == null) {
+            return Collections.emptyList();
+        } else {
+            return livenessCapture.stream()
+                    .filter(clazz::isInstance)
+                    .map(clazz::cast)
+                    .collect(Collectors.toList());
+        }
+    }
 
     /**
      * Returns ApplicantProfile resources uploaded by the user/relying business
@@ -83,14 +97,23 @@ public class ResourceContainer {
         return applicantProfiles;
     }
 
-    private <T extends LivenessResourceResponse> List<T> filterLivenessResourcesByType(Class<T> clazz) {
-        List<T> filteredList = new ArrayList<>();
-        for (LivenessResourceResponse livenessResourceResponse : livenessCapture) {
-            if (clazz.isInstance(livenessResourceResponse)) {
-                filteredList.add(clazz.cast(livenessResourceResponse));
-            }
+    ResourceContainer filterForCheck(CheckResponse checkResponse) {
+        ResourceContainer newResourceContainer = new ResourceContainer();
+        newResourceContainer.idDocuments = filterResources(this.idDocuments, checkResponse.getResourcesUsed());
+        newResourceContainer.supplementaryDocuments = filterResources(this.supplementaryDocuments, checkResponse.getResourcesUsed());
+        newResourceContainer.livenessCapture = filterResources(this.livenessCapture, checkResponse.getResourcesUsed());
+        newResourceContainer.faceCapture = filterResources(this.faceCapture, checkResponse.getResourcesUsed());
+        newResourceContainer.applicantProfiles = filterResources(this.applicantProfiles, checkResponse.getResourcesUsed());
+        return newResourceContainer;
+    }
+
+    private <T extends ResourceResponse> List<T> filterResources(List<T> resources, List<String> resourceIds) {
+        if (resources == null) {
+            return Collections.emptyList();
         }
-        return filteredList;
+        return resources.stream()
+                .filter(resource -> resourceIds.contains(resource.getId()))
+                .collect(Collectors.toList());
     }
 
 }
