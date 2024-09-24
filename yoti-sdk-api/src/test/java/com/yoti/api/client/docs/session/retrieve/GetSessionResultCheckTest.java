@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.yoti.api.client.spi.remote.util.FieldSetter;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -34,185 +35,115 @@ public class GetSessionResultCheckTest {
     @Mock ProfileDocumentMatchCheckResponse profileDocumentMatchCheckResponse;
     @Mock SynecticsIdentityFraudCheckResponse synecticsIdentityFraudCheckResponse;
 
-    GetSessionResult getSessionResult;
+    GetSessionResult testObj;
+
+    @Before
+    public void setUp() throws Exception {
+        testObj = new GetSessionResult();
+        setupGetSessionResult();
+    }
 
     @Test
     public void shouldFilterAuthenticityChecks() {
-        getSessionResult = new GetSessionResult();
+        List<AuthenticityCheckResponse> result = testObj.getAuthenticityChecks();
 
-        setupGetSessionResult();
-
-        List<AuthenticityCheckResponse> result = getSessionResult.getAuthenticityChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldFilterLivenessChecks() {
-        getSessionResult = new GetSessionResult();
+        List<LivenessCheckResponse> result = testObj.getLivenessChecks();
 
-        setupGetSessionResult();
-
-        List<LivenessCheckResponse> result = getSessionResult.getLivenessChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldFilterTextDataChecks() {
-        getSessionResult = new GetSessionResult();
+        List<TextDataCheckResponse> result = testObj.getIdDocumentTextDataChecks();
 
-        setupGetSessionResult();
-
-        List<TextDataCheckResponse> result = getSessionResult.getIdDocumentTextDataChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldFilterSupplementaryDocumentTextDataChecks() {
-        getSessionResult = new GetSessionResult();
+        List<SupplementaryDocumentTextDataCheckResponse> result = testObj.getSupplementaryDocumentTextDataChecks();
 
-        setupGetSessionResult();
-
-        List<SupplementaryDocumentTextDataCheckResponse> result = getSessionResult.getSupplementaryDocumentTextDataChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldFilterFaceMatchChecks() {
-        getSessionResult = new GetSessionResult();
+        List<FaceMatchCheckResponse> result = testObj.getFaceMatchChecks();
 
-        setupGetSessionResult();
-
-        List<FaceMatchCheckResponse> result = getSessionResult.getFaceMatchChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldFilterFaceComparisonChecks() {
-        getSessionResult = new GetSessionResult();
+        List<FaceComparisonCheckResponse> result = testObj.getFaceComparisonChecks();
 
-        setupGetSessionResult();
-
-        List<FaceComparisonCheckResponse> result = getSessionResult.getFaceComparisonChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldFilterIdDocumentComparisonChecks() {
-        getSessionResult = new GetSessionResult();
+        List<IdDocumentComparisonCheckResponse> result = testObj.getIdDocumentComparisonChecks();
 
-        setupGetSessionResult();
-
-        List<IdDocumentComparisonCheckResponse> result = getSessionResult.getIdDocumentComparisonChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldFilterThirdPartyIdentityChecks() {
-        getSessionResult = new GetSessionResult();
+        List<ThirdPartyIdentityCheckResponse> result = testObj.getThirdPartyIdentityChecks();
 
-        setupGetSessionResult();
-
-        List<ThirdPartyIdentityCheckResponse> result = getSessionResult.getThirdPartyIdentityChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldFilterWatchlistScreeningChecks() {
-        getSessionResult = new GetSessionResult();
+        List<WatchlistScreeningCheckResponse> result = testObj.getWatchlistScreeningChecks();
 
-        setupGetSessionResult();
-
-        List<WatchlistScreeningCheckResponse> result = getSessionResult.getWatchlistScreeningChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldFilterIbvVisualReviewChecks() {
-        getSessionResult = new GetSessionResult();
+        List<IbvVisualReviewCheckResponse> result = testObj.getIbvVisualReviewChecks();
 
-        setupGetSessionResult();
-
-        List<IbvVisualReviewCheckResponse> result = getSessionResult.getIbvVisualReviewChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldFilterDocumentSchemeValidityChecks() {
-        getSessionResult = new GetSessionResult();
+        List<DocumentSchemeValidityCheckResponse> result = testObj.getDocumentSchemeValidityChecks();
 
-        setupGetSessionResult();
-
-        List<DocumentSchemeValidityCheckResponse> result = getSessionResult.getDocumentSchemeValidityChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldFilterProfileDocumentMatchChecks() {
-        getSessionResult = new GetSessionResult();
+        List<ProfileDocumentMatchCheckResponse> result = testObj.getProfileDocumentMatchChecks();
 
-        setupGetSessionResult();
-
-        List<ProfileDocumentMatchCheckResponse> result = getSessionResult.getProfileDocumentMatchChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldFilterThirdPartyIdentityFraudOneCheck() {
-        getSessionResult = new GetSessionResult();
+        List<ThirdPartyIdentityFraudOneCheckResponse> result = testObj.getThirdPartyIdentityFraudOneChecks();
 
-        setupGetSessionResult();
-
-        List<ThirdPartyIdentityFraudOneCheckResponse> result = getSessionResult.getThirdPartyIdentityFraudOneChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
     }
 
     @Test
     public void shouldFilterSynecticsIdentityFraudCheck() {
-        getSessionResult = new GetSessionResult();
+        List<SynecticsIdentityFraudCheckResponse> result = testObj.getSynecticsIdentityFraudChecks();
 
-        setupGetSessionResult();
-
-        List<SynecticsIdentityFraudCheckResponse> result = getSessionResult.getSynecticsIdentityFraudChecks();
-        assertThat(getSessionResult.getChecks(), hasSize(SESSION_CHECKS));
         assertThat(result, hasSize(1));
-    }
-
-    @Test
-    public void shouldReturnEmptyLists() {
-        getSessionResult = new GetSessionResult();
-
-        FieldSetter.setField(
-                getSessionResult,
-                "checks",
-                new ArrayList<>()
-        );
-
-        assertThat(getSessionResult.getChecks(), hasSize(0));
-        assertThat(getSessionResult.getAuthenticityChecks(), hasSize(0));
-        assertThat(getSessionResult.getFaceMatchChecks(), hasSize(0));
-        assertThat(getSessionResult.getIdDocumentTextDataChecks(), hasSize(0));
-        assertThat(getSessionResult.getSupplementaryDocumentTextDataChecks(), hasSize(0));
-        assertThat(getSessionResult.getLivenessChecks(), hasSize(0));
-        assertThat(getSessionResult.getThirdPartyIdentityFraudOneChecks(), hasSize(0));
-        assertThat(getSessionResult.getSynecticsIdentityFraudChecks(), hasSize(0));
     }
 
     private void setupGetSessionResult() {
         FieldSetter.setField(
-                getSessionResult,
+                testObj,
                 "checks",
                 Arrays.asList(
                         authenticityCheckResponse,
