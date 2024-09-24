@@ -186,4 +186,15 @@ public class DocScanClientTest {
         assertThat(thrown, is(original));
     }
 
+    @Test
+    public void getTrackedDevices_shouldFailWithExceptionFromYotiDocsService() throws Exception {
+        DocScanException original = new DocScanException("Test exception");
+        doThrow(original).when(docScanServiceMock).getTrackedDevices(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID));
+        DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
+
+        DocScanException thrown = assertThrows(DocScanException.class, () -> testObj.getTrackedDevices(SOME_SESSION_ID));
+
+        assertThat(thrown, is(original));
+    }
+
 }

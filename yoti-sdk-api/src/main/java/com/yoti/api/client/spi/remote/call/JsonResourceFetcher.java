@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.yoti.api.client.docs.session.retrieve.configuration.capture.liveness.RequiredLivenessResourceResponse;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -36,6 +37,11 @@ public final class JsonResourceFetcher implements ResourceFetcher {
 
     @Override
     public <T> T doRequest(SignedRequest signedRequest, Class<T> resourceClass) throws ResourceException, IOException {
+        SignedRequestResponse signedRequestResponse = rawResourceFetcher.doRequest(signedRequest);
+        return objectMapper.readValue(signedRequestResponse.getResponseBody(), resourceClass);
+    }
+
+    public <T> T doRequest(SignedRequest signedRequest, TypeReference<T> resourceClass) throws ResourceException, IOException {
         SignedRequestResponse signedRequestResponse = rawResourceFetcher.doRequest(signedRequest);
         return objectMapper.readValue(signedRequestResponse.getResponseBody(), resourceClass);
     }
