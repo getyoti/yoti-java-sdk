@@ -1,13 +1,19 @@
 package com.yoti.api.client.sandbox.docs.request.check;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
+import static com.yoti.validation.Validation.notNull;
 
 import com.yoti.api.client.docs.DocScanConstants;
 import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxStaticLivenessCheckBuilder extends SandboxCheck.Builder<SandboxStaticLivenessCheckBuilder> {
 
-    SandboxStaticLivenessCheckBuilder() {
+    private Integer responseDelay;
+
+    SandboxStaticLivenessCheckBuilder() {}
+
+    public SandboxStaticLivenessCheckBuilder withResponseDelay(Integer responseDelay) {
+        this.responseDelay = responseDelay;
+        return this;
     }
 
     @Override
@@ -22,7 +28,7 @@ public class SandboxStaticLivenessCheckBuilder extends SandboxCheck.Builder<Sand
         SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
         SandboxCheckResult result = new SandboxCheckResult(report);
 
-        return new SandboxLivenessCheck(result, DocScanConstants.STATIC);
+        return new SandboxLivenessCheck(result, DocScanConstants.STATIC, responseDelay);
     }
 
 }

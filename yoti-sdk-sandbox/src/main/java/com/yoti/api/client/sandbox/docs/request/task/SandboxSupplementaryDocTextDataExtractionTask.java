@@ -1,6 +1,6 @@
 package com.yoti.api.client.sandbox.docs.request.task;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
+import static com.yoti.validation.Validation.notNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,9 +19,15 @@ public class SandboxSupplementaryDocTextDataExtractionTask {
     @JsonProperty("document_filter")
     private final SandboxDocumentFilter documentFilter;
 
-    SandboxSupplementaryDocTextDataExtractionTask(SandboxSupplementaryDocTextDataExtractionTaskResult result, SandboxDocumentFilter documentFilter) {
+    @JsonProperty("response_delay")
+    private final Integer responseDelay;
+
+    SandboxSupplementaryDocTextDataExtractionTask(SandboxSupplementaryDocTextDataExtractionTaskResult result,
+            SandboxDocumentFilter documentFilter,
+            Integer responseDelay) {
         this.result = result;
         this.documentFilter = documentFilter;
+        this.responseDelay = responseDelay;
     }
 
     public static Builder builder() {
@@ -36,6 +42,10 @@ public class SandboxSupplementaryDocTextDataExtractionTask {
         return documentFilter;
     }
 
+    public Integer getResponseDelay() {
+        return responseDelay;
+    }
+
     /**
      * Builder for {@link SandboxSupplementaryDocTextDataExtractionTask}
      */
@@ -45,6 +55,7 @@ public class SandboxSupplementaryDocTextDataExtractionTask {
         private SandboxDocumentFilter documentFilter;
         private String detectedCountry;
         private SandboxTextExtractionTaskRecommendation recommendation;
+        private Integer responseDelay;
 
         private Builder() {}
 
@@ -78,10 +89,15 @@ public class SandboxSupplementaryDocTextDataExtractionTask {
             return this;
         }
 
+        public Builder withResponseDelay(Integer responseDelay) {
+            this.responseDelay = responseDelay;
+            return this;
+        }
+
         public SandboxSupplementaryDocTextDataExtractionTask build() {
             SandboxSupplementaryDocTextDataExtractionTaskResult result = new SandboxSupplementaryDocTextDataExtractionTaskResult(documentFields,
                     detectedCountry, recommendation);
-            return new SandboxSupplementaryDocTextDataExtractionTask(result, documentFilter);
+            return new SandboxSupplementaryDocTextDataExtractionTask(result, documentFilter, responseDelay);
         }
     }
 }
