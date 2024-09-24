@@ -96,4 +96,13 @@ public class SandboxDocumentTextDataExtractionTaskTest {
         assertThat(result.getResult().getRecommendation(), is(recommendationMock));
     }
 
+    @Test
+    public void builder_shouldSetResponseDelay() {
+        SandboxDocumentTextDataExtractionTask result = SandboxDocumentTextDataExtractionTask.builder()
+                .withResponseDelay(10)
+                .build();
+
+        assertThat(result.getResponseDelay(), is(10));
+    }
+
 }

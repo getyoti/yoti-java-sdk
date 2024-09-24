@@ -81,4 +81,13 @@ public class SandboxSupplementaryDocTextDataExtractionTaskTest {
         assertThat(result.getResult().getRecommendation(), is(recommendationMock));
     }
 
+    @Test
+    public void builder_shouldSetResponseDelay() {
+        SandboxSupplementaryDocTextDataExtractionTask result = SandboxSupplementaryDocTextDataExtractionTask.builder()
+                .withResponseDelay(10)
+                .build();
+
+        assertThat(result.getResponseDelay(), is(10));
+    }
+
 }

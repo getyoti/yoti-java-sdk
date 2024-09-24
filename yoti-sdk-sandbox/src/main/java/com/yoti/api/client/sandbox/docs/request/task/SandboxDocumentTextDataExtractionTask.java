@@ -1,6 +1,6 @@
 package com.yoti.api.client.sandbox.docs.request.task;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
+import static com.yoti.validation.Validation.notNull;
 
 import java.util.Base64;
 import java.util.HashMap;
@@ -20,9 +20,13 @@ public class SandboxDocumentTextDataExtractionTask {
     @JsonProperty("document_filter")
     private final SandboxDocumentFilter documentFilter;
 
-    SandboxDocumentTextDataExtractionTask(SandboxDocumentTextDataExtractionTaskResult result, SandboxDocumentFilter documentFilter) {
+    @JsonProperty("response_delay")
+    private final Integer responseDelay;
+
+    SandboxDocumentTextDataExtractionTask(SandboxDocumentTextDataExtractionTaskResult result, SandboxDocumentFilter documentFilter, Integer responseDelay) {
         this.result = result;
         this.documentFilter = documentFilter;
+        this.responseDelay = responseDelay;
     }
 
     public static Builder builder() {
@@ -37,6 +41,10 @@ public class SandboxDocumentTextDataExtractionTask {
         return documentFilter;
     }
 
+    public Integer getResponseDelay() {
+        return responseDelay;
+    }
+
     /**
      * Builder for {@link SandboxDocumentTextDataExtractionTask}
      */
@@ -48,9 +56,9 @@ public class SandboxDocumentTextDataExtractionTask {
         private String detectedCountry;
         private String detectedDocumentType;
         private SandboxTextExtractionTaskRecommendation recommendation;
+        private Integer responseDelay;
 
-        private Builder() {
-        }
+        private Builder() {}
 
         public Builder withDocumentField(String key, Object value) {
             if (documentFields == null) {
@@ -93,13 +101,18 @@ public class SandboxDocumentTextDataExtractionTask {
             return this;
         }
 
+        public Builder withResponseDelay(Integer responseDelay) {
+            this.responseDelay = responseDelay;
+            return this;
+        }
+
         public SandboxDocumentTextDataExtractionTask build() {
             SandboxDocumentTextDataExtractionTaskResult result = new SandboxDocumentTextDataExtractionTaskResult(documentFields,
                     documentIdPhoto,
                     detectedCountry,
                     detectedDocumentType,
                     recommendation);
-            return new SandboxDocumentTextDataExtractionTask(result, documentFilter);
+            return new SandboxDocumentTextDataExtractionTask(result, documentFilter, responseDelay);
         }
     }
 }
