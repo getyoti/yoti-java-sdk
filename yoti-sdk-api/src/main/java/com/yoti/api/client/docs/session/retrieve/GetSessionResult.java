@@ -100,6 +100,14 @@ public class GetSessionResult {
         return importToken;
     }
 
+    public ResourceContainer getResourcesForCheck(String checkId) {
+        CheckResponse checkResponse = this.checks.stream()
+                .filter(check -> check.getId().equals(checkId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Check not found"));
+        return resources.filterForCheck(checkResponse);
+    }
+
     public List<AuthenticityCheckResponse> getAuthenticityChecks() {
         return filterChecksByType(AuthenticityCheckResponse.class);
     }
