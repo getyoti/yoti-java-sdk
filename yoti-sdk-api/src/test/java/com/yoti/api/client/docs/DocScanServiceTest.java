@@ -1538,4 +1538,80 @@ public class DocScanServiceTest {
         assertThat(result.get(0), is(metadataResponseMock));
     }
 
+    @Test
+    public void deleteTrackedDevices_shouldThrowExceptionWhenSdkIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices(null, KEY_PAIR, SOME_SESSION_ID));
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void deleteTrackedDevices_shouldThrowExceptionWhenSdkIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices("", KEY_PAIR, SOME_SESSION_ID));
+        assertThat(exception.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void deleteTrackedDevices_shouldThrowExceptionWhenKeyPairIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, null, SOME_SESSION_ID));
+        assertThat(exception.getMessage(), containsString("Application key Pair"));
+    }
+
+    @Test
+    public void deleteTrackedDevices_shouldThrowExceptionWhenSessionIdIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, null));
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void deleteTrackedDevices_shouldThrowExceptionWhenSessionIdIsEmpty() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, ""));
+        assertThat(exception.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void deleteTrackedDevices_shouldWrapGeneralSecurityException() throws Exception {
+        GeneralSecurityException gse = new GeneralSecurityException("some gse");
+        when(signedRequestBuilderMock.build()).thenThrow(gse);
+
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), gse);
+        assertThat(ex.getMessage(), containsString("Error executing the GET: some gse"));
+    }
+
+    @Test
+    public void deleteTrackedDevices_shouldWrapResourceException() throws Exception {
+        ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute()).thenThrow(resourceException);
+
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), resourceException);
+        assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
+    }
+
+    @Test
+    public void deleteTrackedDevices_shouldWrapIOException() throws Exception {
+        IOException ioException = new IOException("Some io exception");
+        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(signedRequestMock.execute()).thenThrow(ioException);
+
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), ioException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
+    }
+
+    @Test
+    public void deleteTrackedDevices_shouldWrapURISyntaxException() throws Exception {
+        URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
+        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+
+        assertSame(ex.getCause(), uriSyntaxException);
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+    }
+
 }

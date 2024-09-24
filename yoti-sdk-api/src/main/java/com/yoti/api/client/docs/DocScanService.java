@@ -556,6 +556,29 @@ final class DocScanService {
         }
     }
 
+    public void deleteTrackedDevices(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
+        notNullOrEmpty(sdkId, "SDK ID");
+        notNull(keyPair, "Application key Pair");
+        notNullOrEmpty(sessionId, "sessionId");
+
+        String path = unsignedPathFactory.createDeleteTrackedDevices(sdkId, sessionId);
+        LOG.info("Deleting tracked devices at '{}'", path);
+
+        try {
+            signedRequestBuilderFactory.create()
+                    .withKeyPair(keyPair)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withHttpMethod(HTTP_DELETE)
+                    .build()
+                    .execute();
+        } catch (GeneralSecurityException | ResourceException ex) {
+            throw new DocScanException("Error executing the GET: " + ex.getMessage(), ex);
+        } catch (IOException | URISyntaxException ex) {
+            throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
+        }
+    }
+
     private String findContentType(SignedRequestResponse response) {
         List<String> contentTypeValues = null;
         for (Map.Entry<String, List<String>> entry : response.getResponseHeaders().entrySet()) {

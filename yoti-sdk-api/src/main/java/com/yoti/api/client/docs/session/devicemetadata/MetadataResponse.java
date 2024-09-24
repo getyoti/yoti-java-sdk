@@ -7,6 +7,9 @@ public class MetadataResponse {
     @JsonProperty("event")
     private String event;
 
+    @JsonProperty("resource_id")
+    private String resourceId;
+
     @JsonProperty("created")
     private String created;
 
@@ -15,6 +18,10 @@ public class MetadataResponse {
 
     public String getEvent() {
         return event;
+    }
+
+    public String getResourceId() {
+        return resourceId;
     }
 
     public String getCreated() {
