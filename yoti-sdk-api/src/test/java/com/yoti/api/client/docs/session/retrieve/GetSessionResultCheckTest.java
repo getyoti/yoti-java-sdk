@@ -1,9 +1,8 @@
 package com.yoti.api.client.docs.session.retrieve;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.contains;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,8 +16,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GetSessionResultCheckTest {
-
-    private static final int SESSION_CHECKS = 14;
 
     @Mock AuthenticityCheckResponse authenticityCheckResponse;
     @Mock FaceMatchCheckResponse faceMatchCheckResponse;
@@ -47,98 +44,98 @@ public class GetSessionResultCheckTest {
     public void shouldFilterAuthenticityChecks() {
         List<AuthenticityCheckResponse> result = testObj.getAuthenticityChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(authenticityCheckResponse));
     }
 
     @Test
     public void shouldFilterLivenessChecks() {
         List<LivenessCheckResponse> result = testObj.getLivenessChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(livenessCheckResponse));
     }
 
     @Test
     public void shouldFilterTextDataChecks() {
         List<TextDataCheckResponse> result = testObj.getIdDocumentTextDataChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(textDataCheckResponse));
     }
 
     @Test
     public void shouldFilterSupplementaryDocumentTextDataChecks() {
         List<SupplementaryDocumentTextDataCheckResponse> result = testObj.getSupplementaryDocumentTextDataChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(supplementaryDocumentTextDataCheckResponse));
     }
 
     @Test
     public void shouldFilterFaceMatchChecks() {
         List<FaceMatchCheckResponse> result = testObj.getFaceMatchChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(faceMatchCheckResponse));
     }
 
     @Test
     public void shouldFilterFaceComparisonChecks() {
         List<FaceComparisonCheckResponse> result = testObj.getFaceComparisonChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(faceComparisonCheckResponse));
     }
 
     @Test
     public void shouldFilterIdDocumentComparisonChecks() {
         List<IdDocumentComparisonCheckResponse> result = testObj.getIdDocumentComparisonChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(idDocumentComparisonCheckResponse));
     }
 
     @Test
     public void shouldFilterThirdPartyIdentityChecks() {
         List<ThirdPartyIdentityCheckResponse> result = testObj.getThirdPartyIdentityChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(thirdPartyIdentityCheckResponse));
     }
 
     @Test
     public void shouldFilterWatchlistScreeningChecks() {
         List<WatchlistScreeningCheckResponse> result = testObj.getWatchlistScreeningChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(watchlistScreeningCheckResponse));
     }
 
     @Test
     public void shouldFilterIbvVisualReviewChecks() {
         List<IbvVisualReviewCheckResponse> result = testObj.getIbvVisualReviewChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(ibvVisualReviewCheckResponse));
     }
 
     @Test
     public void shouldFilterDocumentSchemeValidityChecks() {
         List<DocumentSchemeValidityCheckResponse> result = testObj.getDocumentSchemeValidityChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(documentSchemeValidityCheckResponse));
     }
 
     @Test
     public void shouldFilterProfileDocumentMatchChecks() {
         List<ProfileDocumentMatchCheckResponse> result = testObj.getProfileDocumentMatchChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(profileDocumentMatchCheckResponse));
     }
 
     @Test
     public void shouldFilterThirdPartyIdentityFraudOneCheck() {
         List<ThirdPartyIdentityFraudOneCheckResponse> result = testObj.getThirdPartyIdentityFraudOneChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(thirdPartyIdentityFraudOneCheckResponse));
     }
 
     @Test
     public void shouldFilterSynecticsIdentityFraudCheck() {
         List<SynecticsIdentityFraudCheckResponse> result = testObj.getSynecticsIdentityFraudChecks();
 
-        assertThat(result, hasSize(1));
+        assertThat(result, contains(synecticsIdentityFraudCheckResponse));
     }
 
     private void setupGetSessionResult() {
