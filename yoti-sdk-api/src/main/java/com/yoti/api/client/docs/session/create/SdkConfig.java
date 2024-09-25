@@ -426,7 +426,7 @@ public class SdkConfig {
         }
 
         /**
-         * Sets the {@link AttemptsConfiguration} for the session
+         * Sets the {@link AttemptsConfiguration} for any Text Extractions Tasks
          *
          * @param attemptsConfiguration the configuration for retries
          * @return the builder
@@ -437,7 +437,7 @@ public class SdkConfig {
         }
 
         /**
-         * Sets the brand ID to be used for the session
+         * Sets the brand ID used for customising the UI
          *
          * @param brandId the brand ID
          * @return the builder
@@ -448,7 +448,7 @@ public class SdkConfig {
         }
 
         /**
-         * Sets the Biometric Consent Flow for the session
+         * Sets the Biometric Consent Flow to be applied in the UI
          *
          * @param biometricConsentFlow the biometric consent flow
          * @return the builder
@@ -459,16 +459,16 @@ public class SdkConfig {
         }
 
         /**
-         * Sets the biometric consent flow to EAGER for the session
+         * Sets the biometric consent flow to EARLY
          *
          * @return the builder
          */
-        public Builder withBiometricConsentFlowEager() {
-            return withBiometricConsentFlow(DocScanConstants.EAGER);
+        public Builder withBiometricConsentFlowEarly() {
+            return withBiometricConsentFlow(DocScanConstants.EARLY);
         }
 
         /**
-         * Sets the biometric consent flow to JUST_IN_TIME for the session
+         * Sets the biometric consent flow to JUST_IN_TIME
          *
          * @return the builder
          */
