@@ -91,12 +91,12 @@ public class SdkConfigTest {
     }
 
     @Test
-    public void shouldBuildSimpleSdkConfigWithBiometricConsentFlowEager() {
+    public void shouldBuildSimpleSdkConfigWithBiometricConsentFlowEarly() {
         SdkConfig result = SdkConfig.builder()
-                .withBiometricConsentFlowEager()
+                .withBiometricConsentFlowEarly()
                 .build();
 
-        assertThat(result.getBiometricConsentFlow(), is("EAGER"));
+        assertThat(result.getBiometricConsentFlow(), is("EARLY"));
     }
 
     @Test
