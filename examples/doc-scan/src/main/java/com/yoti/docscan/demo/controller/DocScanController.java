@@ -1,11 +1,14 @@
 package com.yoti.docscan.demo.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.DocScanClient;
 import com.yoti.api.client.docs.DocScanException;
 import com.yoti.api.client.docs.session.create.CreateSessionResult;
+import com.yoti.api.client.docs.session.devicemetadata.MetadataResponse;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
 import com.yoti.docscan.demo.service.DocScanService;
 
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -68,8 +72,13 @@ public class DocScanController implements WebMvcConfigurer {
     }
 
     @RequestMapping(value = "/success", method = RequestMethod.GET)
-    public String getUserSession(final Model model, HttpSession httpSession) {
-        String sessionId = (String) httpSession.getAttribute(DOC_SCAN_SESSION_ID);
+    public String getUserSession(@RequestParam(value = "sessionId") String sessionIdQueryParam, final Model model, HttpSession httpSession) {
+        String sessionId;
+        if (sessionIdQueryParam != null) {
+            sessionId = sessionIdQueryParam;
+        } else {
+            sessionId = (String) httpSession.getAttribute(DOC_SCAN_SESSION_ID);
+        }
 
         if (sessionId == null || sessionId.equals("")) {
             return "redirect:/";
@@ -115,6 +124,11 @@ public class DocScanController implements WebMvcConfigurer {
         headers.setContentType(MediaType.parseMediaType(media.getMimeType()));
 
         return new ResponseEntity<>(media.getContent(), headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/tracked-devices", method = RequestMethod.GET)
+    public @ResponseBody List<MetadataResponse> getTrackedDevices(@RequestParam(value = "sessionId") String sessionId) throws DocScanException {
+        return docScanService.getTrackedDevices(sessionId);
     }
 
     @RequestMapping(value = "/privacy-policy", method = RequestMethod.GET)
