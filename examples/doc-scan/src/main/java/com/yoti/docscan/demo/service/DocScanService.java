@@ -1,6 +1,7 @@
 package com.yoti.docscan.demo.service;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.DocScanClient;
@@ -22,6 +23,7 @@ import com.yoti.api.client.docs.session.create.filters.RequiredSupplementaryDocu
 import com.yoti.api.client.docs.session.create.objective.ProofOfAddressObjective;
 import com.yoti.api.client.docs.session.create.task.RequestedIdDocTextExtractionTask;
 import com.yoti.api.client.docs.session.create.task.RequestedSupplementaryDocTextExtractionTask;
+import com.yoti.api.client.docs.session.devicemetadata.MetadataResponse;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
 import com.yoti.api.client.spi.remote.call.YotiConstants;
 
@@ -147,5 +149,9 @@ public class DocScanService {
 
     public Media getMedia(String sessionId, String mediaId) throws DocScanException {
         return docScanClient.getMediaContent(sessionId, mediaId);
+    }
+
+    public List<MetadataResponse> getTrackedDevices(String sessionId) throws DocScanException {
+        return docScanClient.getTrackedDevices(sessionId);
     }
 }
