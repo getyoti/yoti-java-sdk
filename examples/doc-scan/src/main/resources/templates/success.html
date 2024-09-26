@@ -446,6 +446,40 @@
                         </div>
                     </div>
 
+                    <!-- Expanded Document Fields -->
+                    <div class="card" th:if="${document.getExpandedDocumentFields() != null}">
+                        <div class="card-header" th:id="${'expanded-document-fields-' + iter.index}">
+                            <h4 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        th:attr="data-target='#collapse-expanded-document-fields-' + ${iter.index}"
+                                        th:attrappend="aria-controls='collapse-expanded-document-fields-' + ${iter.index}"
+                                        aria-expanded="true">
+                                    Expanded Document Fields
+                                </button>
+                            </h4>
+                        </div>
+                        <div th:id="${'collapse-expanded-document-fields-' + iter.index}" class="collapse"
+                             th:aria-labelledby="${'expanded-document-fields-' + iter.index}">
+                            <div class="card-body">
+                                <th:block th:if="${document.getExpandedDocumentFields().getMedia() != null}">
+                                    <h5>Media</h5>
+                                    <table class="table table-striped table-light">
+                                        <tbody>
+                                        <tr>
+                                            <td>ID</td>
+                                            <td>
+                                                <a th:href="${'/media?mediaId=' + document.getDocumentFields().getMedia().getId()}"
+                                                   th:text="${document.getDocumentFields().getMedia().getId()}">
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Document ID Photo -->
                     <div class="card" th:if="${document.getDocumentIdPhoto() != null}">
                         <div class="card-header" th:id="${'document-id-photo-' + iter.index}">
@@ -1010,6 +1044,17 @@
         </th:block>
     </th:block>
 
+    <div class="row pt-4">
+        <div class="col">
+            <h2>
+                Tracked Devices
+                <a th:href="${'/tracked-devices?sessionId=' + sessionResult.getSessionId()}">
+                    <span class="badge badge-success" th:href="${'/tracked-devices?sessionId=' + sessionResult.getSessionId()}" th:text="GET">
+                    </span>
+                </a>
+            </h2>
+        </div>
+    </div>
 </div>
 
 <div th:replace="fragments/components :: footer"></div>
