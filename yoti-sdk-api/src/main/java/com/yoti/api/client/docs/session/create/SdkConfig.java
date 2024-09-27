@@ -12,52 +12,52 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SdkConfig {
 
-    @JsonProperty(Property.ALLOWED_CAPTURE_METHODS)
+    @JsonProperty("allowed_capture_methods")
     private final String allowedCaptureMethods;
 
-    @JsonProperty(Property.PRIMARY_COLOUR)
+    @JsonProperty("primary_colour")
     private final String primaryColour;
 
-    @JsonProperty(Property.PRIMARY_COLOUR_DARK_MODE)
+    @JsonProperty("primary_colour_dark_mode")
     private final String primaryColourDarkMode;
 
-    @JsonProperty(Property.SECONDARY_COLOUR)
+    @JsonProperty("secondary_colour")
     private final String secondaryColour;
 
-    @JsonProperty(Property.FONT_COLOUR)
+    @JsonProperty("font_colour")
     private final String fontColour;
 
-    @JsonProperty(Property.DARK_MODE)
+    @JsonProperty("dark_mode")
     private final String darkMode;
 
-    @JsonProperty(Property.LOCALE)
+    @JsonProperty("locale")
     private final String locale;
 
-    @JsonProperty(Property.PRESET_ISSUING_COUNTRY)
+    @JsonProperty("preset_issuing_country")
     private final String presetIssuingCountry;
 
-    @JsonProperty(Property.SUCCESS_URL)
+    @JsonProperty("success_url")
     private final String successUrl;
 
-    @JsonProperty(Property.ERROR_URL)
+    @JsonProperty("error_url")
     private final String errorUrl;
 
-    @JsonProperty(Property.PRIVACY_POLICY_URL)
+    @JsonProperty("privacy_policy_url")
     private final String privacyPolicyUrl;
 
-    @JsonProperty(Property.ALLOW_HANDOFF)
+    @JsonProperty("allow_handoff")
     private final Boolean allowHandoff;
 
-    @JsonProperty(Property.ATTEMPTS_CONFIGURATION)
+    @JsonProperty("attempts_configuration")
     private final AttemptsConfiguration attemptsConfiguration;
 
-    @JsonProperty(Property.BRAND_ID)
+    @JsonProperty("brand_id")
     private final String brandId;
 
-    @JsonProperty(Property.BIOMETRIC_CONSENT_FLOW)
+    @JsonProperty("biometric_consent_flow")
     private final String biometricConsentFlow;
 
-    @JsonProperty(Property.SUPPRESSED_SCREENS)
+    @JsonProperty("suppressed_screens")
     private final List<String> suppressedScreens;
 
     SdkConfig(String allowedCaptureMethods,
@@ -534,29 +534,6 @@ public class SdkConfig {
                     suppressedScreens
             );
         }
-    }
-
-    private static final class Property {
-
-        private static final String ALLOWED_CAPTURE_METHODS = "allowed_capture_methods";
-        private static final String PRIMARY_COLOUR = "primary_colour";
-        private static final String PRIMARY_COLOUR_DARK_MODE = "primary_colour_dark_mode";
-        private static final String SECONDARY_COLOUR = "secondary_colour";
-        private static final String FONT_COLOUR = "font_colour";
-        private static final String DARK_MODE = "dark_mode";
-        private static final String LOCALE = "locale";
-        private static final String PRESET_ISSUING_COUNTRY = "preset_issuing_country";
-        private static final String SUCCESS_URL = "success_url";
-        private static final String ERROR_URL = "error_url";
-        private static final String PRIVACY_POLICY_URL = "privacy_policy_url";
-        private static final String ALLOW_HANDOFF = "allow_handoff";
-        private static final String ATTEMPTS_CONFIGURATION = "attempts_configuration";
-        private static final String BRAND_ID = "brand_id";
-        private static final String BIOMETRIC_CONSENT_FLOW = "biometric_consent_flow";
-        private static final String SUPPRESSED_SCREENS = "suppressed_screens";
-
-        private Property() {}
-
     }
 
 }
