@@ -18,55 +18,55 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SessionSpec {
 
-    @JsonProperty(Property.CLIENT_SESSION_TOKEN_TTL)
+    @JsonProperty("client_session_token_ttl")
     private final Integer clientSessionTokenTtl;
 
-    @JsonProperty(Property.SESSION_DEADLINE)
+    @JsonProperty("session_deadline")
     private final ZonedDateTime sessionDeadline;
 
-    @JsonProperty(Property.RESOURCES_TTL)
+    @JsonProperty("resources_ttl")
     private final Integer resourcesTtl;
 
-    @JsonProperty(Property.IMPORT_TOKEN)
+    @JsonProperty("import_token")
     private final ImportTokenPayload importToken;
 
-    @JsonProperty(Property.USER_TRACKING_ID)
+    @JsonProperty("user_tracking_id")
     private final String userTrackingId;
 
-    @JsonProperty(Property.NOTIFICATIONS)
+    @JsonProperty("notifications")
     private final NotificationConfig notifications;
 
-    @JsonProperty(Property.REQUESTED_CHECKS)
+    @JsonProperty("requested_checks")
     private final List<RequestedCheck<?>> requestedChecks;
 
-    @JsonProperty(Property.REQUESTED_TASKS)
+    @JsonProperty("requested_tasks")
     private final List<RequestedTask<?>> requestedTasks;
 
-    @JsonProperty(Property.SDK_CONFIG)
+    @JsonProperty("sdk_config")
     private final SdkConfig sdkConfig;
 
-    @JsonProperty(Property.REQUIRED_DOCUMENTS)
+    @JsonProperty("required_documents")
     private final List<RequiredDocument> requiredDocuments;
 
-    @JsonProperty(Property.BLOCK_BIOMETRIC_CONSENT)
+    @JsonProperty("block_biometric_consent")
     private final Boolean blockBiometricConsent;
 
-    @JsonProperty(Property.IBV_OPTIONS)
+    @JsonProperty("ibv_options")
     private final IbvOptions ibvOptions;
 
-    @JsonProperty(Property.IDENTITY_PROFILE_REQUIREMENTS)
+    @JsonProperty("identity_profile_requirements")
     private final IdentityProfileRequirementsPayload identityProfile;
 
-    @JsonProperty(Property.ADVANCED_IDENTITY_PROFILE_REQUIREMENTS)
+    @JsonProperty("advanced_identity_profile_requirements")
     private final AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirements;
 
-    @JsonProperty(Property.SUBJECT)
+    @JsonProperty("subject")
     private final SubjectPayload subject;
 
-    @JsonProperty(Property.RESOURCES)
+    @JsonProperty("resources")
     private final ResourceCreationContainer resources;
 
-    @JsonProperty(Property.CREATE_IDENTITY_PROFILE_PREVIEW)
+    @JsonProperty("create_identity_profile_preview")
     private final Boolean createIdentityProfilePreview;
 
     SessionSpec(Integer clientSessionTokenTtl,
@@ -502,30 +502,6 @@ public class SessionSpec {
                     createIdentityProfilePreview,
                     advancedIdentityProfileRequirementsPayload);
         }
-    }
-
-    private static final class Property {
-
-        private static final String CLIENT_SESSION_TOKEN_TTL = "client_session_token_ttl";
-        private static final String SESSION_DEADLINE = "session_deadline";
-        private static final String RESOURCES_TTL = "resources_ttl";
-        private static final String USER_TRACKING_ID = "user_tracking_id";
-        private static final String NOTIFICATIONS = "notifications";
-        private static final String REQUESTED_CHECKS = "requested_checks";
-        private static final String REQUESTED_TASKS = "requested_tasks";
-        private static final String SDK_CONFIG = "sdk_config";
-        private static final String REQUIRED_DOCUMENTS = "required_documents";
-        private static final String BLOCK_BIOMETRIC_CONSENT = "block_biometric_consent";
-        private static final String IBV_OPTIONS = "ibv_options";
-        private static final String IDENTITY_PROFILE_REQUIREMENTS = "identity_profile_requirements";
-        private static final String ADVANCED_IDENTITY_PROFILE_REQUIREMENTS = "advanced_identity_profile_requirements";
-        private static final String SUBJECT = "subject";
-        private static final String RESOURCES = "resources";
-        private static final String CREATE_IDENTITY_PROFILE_PREVIEW = "create_identity_profile_preview";
-        private static final String IMPORT_TOKEN = "import_token";
-
-        private Property() { }
-
     }
 
 }

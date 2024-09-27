@@ -9,43 +9,43 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GetSessionResult {
 
-    @JsonProperty(Property.CLIENT_SESSION_TOKEN_TTL)
+    @JsonProperty("client_session_token_ttl")
     private long clientSessionTokenTtl;
 
-    @JsonProperty(Property.SESSION_ID)
+    @JsonProperty("session_id")
     private String sessionId;
 
-    @JsonProperty(Property.USER_TRACKING_ID)
+    @JsonProperty("user_tracking_id")
     private String userTrackingId;
 
-    @JsonProperty(Property.STATE)
+    @JsonProperty("state")
     private String state;
 
-    @JsonProperty(Property.CLIENT_SESSION_TOKEN)
+    @JsonProperty("client_session_token")
     private String clientSessionToken;
 
-    @JsonProperty(Property.BIOMETRIC_CONSENT)
+    @JsonProperty("biometric_consent")
     private String biometricConsent;
 
-    @JsonProperty(Property.CHECKS)
+    @JsonProperty("checks")
     private List<? extends CheckResponse> checks;
 
-    @JsonProperty(Property.RESOURCES)
+    @JsonProperty("resources")
     private ResourceContainer resources;
 
-    @JsonProperty(Property.IDENTITY_PROFILE)
+    @JsonProperty("identity_profile")
     private IdentityProfileResponse identityProfile;
 
-    @JsonProperty(Property.ADVANCED_IDENTITY_PROFILE)
+    @JsonProperty("advanced_identity_profile")
     private AdvancedIdentityProfileResponse advancedIdentityProfile;
 
-    @JsonProperty(Property.IDENTITY_PROFILE_PREVIEW)
+    @JsonProperty("identity_profile_preview")
     private IdentityProfilePreviewResponse identityProfilePreview;
 
-    @JsonProperty(Property.ADVANCED_IDENTITY_PROFILE_PREVIEW)
+    @JsonProperty("advanced_identity_profile_preview")
     private IdentityProfilePreviewResponse advancedIdentityProfilePreview;
 
-    @JsonProperty(Property.IMPORT_TOKEN)
+    @JsonProperty("import_token")
     private ImportTokenResponse importToken;
 
     public long getClientSessionTokenTtl() {
@@ -173,26 +173,6 @@ public class GetSessionResult {
                 .filter(clazz::isInstance)
                 .map(clazz::cast)
                 .collect(Collectors.toList());
-    }
-
-    private static final class Property {
-
-        private static final String CLIENT_SESSION_TOKEN_TTL = "client_session_token_ttl";
-        private static final String SESSION_ID = "session_id";
-        private static final String USER_TRACKING_ID = "user_tracking_id";
-        private static final String STATE = "state";
-        private static final String CLIENT_SESSION_TOKEN = "client_session_token";
-        private static final String BIOMETRIC_CONSENT = "biometric_consent";
-        private static final String CHECKS = "checks";
-        private static final String RESOURCES = "resources";
-        private static final String IDENTITY_PROFILE = "identity_profile";
-        private static final String ADVANCED_IDENTITY_PROFILE = "advanced_identity_profile";
-        private static final String IDENTITY_PROFILE_PREVIEW = "identity_profile_preview";
-        private static final String ADVANCED_IDENTITY_PROFILE_PREVIEW = "advanced_identity_profile_preview";
-        private static final String IMPORT_TOKEN = "import_token";
-
-        private Property() { }
-
     }
 
 }

@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class IbvOptions {
 
-    @JsonProperty(Property.SUPPORT)
+    @JsonProperty("support")
     private final String support;
 
-    @JsonProperty(Property.GUIDANCE_URL)
+    @JsonProperty("guidance_url")
     private final String guidanceUrl;
 
-    @JsonProperty(Property.USER_PRICE)
+    @JsonProperty("user_price")
     private final UserPrice userPrice;
 
     private IbvOptions(String support, String guidanceUrl, UserPrice userPrice) {
@@ -99,16 +99,6 @@ public class IbvOptions {
         public IbvOptions build() {
             return new IbvOptions(support, guidanceUrl, userPrice);
         }
-
-    }
-
-    private static final class Property {
-
-        private static final String SUPPORT = "support";
-        private static final String GUIDANCE_URL = "guidance_url";
-        private static final String USER_PRICE = "user_price";
-
-        private Property() { }
 
     }
 

@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ImportTokenResponse {
 
-    @JsonProperty(Property.MEDIA)
+    @JsonProperty("media")
     private MediaResponse media;
 
-    @JsonProperty(Property.FAILURE_REASON)
+    @JsonProperty("failure_reason")
     private String failureReason;
 
     public MediaResponse getMedia() {
@@ -16,15 +16,6 @@ public class ImportTokenResponse {
 
     public String getFailureReason() {
         return failureReason;
-    }
-
-    private static final class Property {
-
-        private static final String MEDIA = "media";
-        private static final String FAILURE_REASON = "failure_reason";
-
-        private Property() { }
-
     }
 
 }

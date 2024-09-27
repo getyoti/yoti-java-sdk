@@ -6,10 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserPrice {
 
-    @JsonProperty(Property.AMOUNT)
+    @JsonProperty("amount")
     private final String amount;
 
-    @JsonProperty(Property.CURRENCY)
+    @JsonProperty("currency")
     private final String currency;
 
     private UserPrice(String amount, String currency) {
@@ -75,15 +75,6 @@ public class UserPrice {
         public UserPrice build() {
             return new UserPrice(amount, currency);
         }
-
-    }
-
-    private static final class Property {
-
-        private static final String AMOUNT = "amount";
-        private static final String CURRENCY = "currency";
-
-        private Property() { }
 
     }
 
