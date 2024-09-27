@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ProfileResponse {
 
-    @JsonProperty(Property.SESSION_DATA)
+    @JsonProperty("session_data")
     private String sessionData;
 
-    @JsonProperty(Property.RECEIPT)
+    @JsonProperty("receipt")
     private Receipt receipt;
 
-    @JsonProperty(Property.ERROR_DETAILS)
+    @JsonProperty("error_details")
     private ErrorDetails error;
 
     public ProfileResponse() { }
@@ -102,16 +102,6 @@ public class ProfileResponse {
         public ProfileResponse build() {
             return new ProfileResponse(sessionData, receipt, error);
         }
-
-    }
-
-    private static final class Property {
-
-        private static final String SESSION_DATA = "session_data";
-        private static final String RECEIPT = "receipt";
-        private static final String ERROR_DETAILS = "error_details";
-
-        private Property() { }
 
     }
 
