@@ -48,7 +48,7 @@ public class SessionSpecTest {
     @Mock ResourceCreationContainer resourceCreationContainerMock;
     @Mock ImportTokenPayload importTokenMock;
     @Mock IdentityProfileRequirementsPayload identityProfileRequirementsPayloadMock;
-    @Mock IdentityProfileSubjectPayload identityProfileSubjectPayloadMock;
+    @Mock SubjectPayload subjectPayloadMock;
 
     @Test
     public void shouldBuildWithMinimalConfiguration() {
@@ -218,10 +218,10 @@ public class SessionSpecTest {
     @Test
     public void withSubject_shouldSetTheSubject() {
         SessionSpec result = SessionSpec.builder()
-                .withSubject(identityProfileSubjectPayloadMock)
+                .withSubject(subjectPayloadMock)
                 .build();
 
-        assertThat(result.getSubject(), is(identityProfileSubjectPayloadMock));
+        assertThat(result.getSubject(), is(subjectPayloadMock));
     }
 
     @Test

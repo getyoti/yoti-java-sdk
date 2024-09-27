@@ -3,7 +3,6 @@ package com.yoti.api.client.docs.session.create;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.yoti.api.client.docs.session.create.check.RequestedCheck;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
@@ -62,7 +61,7 @@ public class SessionSpec {
     private final AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirements;
 
     @JsonProperty(Property.SUBJECT)
-    private final IdentityProfileSubjectPayload subject;
+    private final SubjectPayload subject;
 
     @JsonProperty(Property.RESOURCES)
     private final ResourceCreationContainer resources;
@@ -83,7 +82,7 @@ public class SessionSpec {
             IbvOptions ibvOptions,
             ZonedDateTime sessionDeadline,
             IdentityProfileRequirementsPayload identityProfile,
-            IdentityProfileSubjectPayload subject,
+            SubjectPayload subject,
             ResourceCreationContainer resources,
             Boolean createIdentityProfilePreview,
             AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirements) {
@@ -233,7 +232,7 @@ public class SessionSpec {
      *
      * @return subject
      */
-    public IdentityProfileSubjectPayload getSubject() {
+    public SubjectPayload getSubject() {
         return subject;
     }
 
@@ -280,7 +279,7 @@ public class SessionSpec {
         private ZonedDateTime sessionDeadline;
         private IdentityProfileRequirementsPayload identityProfile;
         private AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirementsPayload;
-        private IdentityProfileSubjectPayload subject;
+        private SubjectPayload subject;
         private ResourceCreationContainer resources;
         private Boolean createIdentityProfilePreview;
 
@@ -440,7 +439,7 @@ public class SessionSpec {
          * @param subject the subject
          * @return the Builder
          */
-        public Builder withSubject(IdentityProfileSubjectPayload subject) {
+        public Builder withSubject(SubjectPayload subject) {
             this.subject = subject;
             return this;
         }

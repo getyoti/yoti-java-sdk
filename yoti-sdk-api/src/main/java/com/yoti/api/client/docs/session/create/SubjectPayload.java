@@ -2,12 +2,12 @@ package com.yoti.api.client.docs.session.create;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class IdentityProfileSubjectPayload {
+public class SubjectPayload {
 
     @JsonProperty("subject_id")
     private final String subjectId;
 
-    IdentityProfileSubjectPayload(String subjectId) {
+    SubjectPayload(String subjectId) {
         this.subjectId = subjectId;
     }
 
@@ -36,8 +36,8 @@ public class IdentityProfileSubjectPayload {
             return this;
         }
 
-        public IdentityProfileSubjectPayload build() {
-            return new IdentityProfileSubjectPayload(subjectId);
+        public SubjectPayload build() {
+            return new SubjectPayload(subjectId);
         }
 
     }
