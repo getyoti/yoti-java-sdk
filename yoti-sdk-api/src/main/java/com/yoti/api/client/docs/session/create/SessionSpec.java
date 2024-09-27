@@ -62,7 +62,7 @@ public class SessionSpec {
     private final AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirements;
 
     @JsonProperty(Property.SUBJECT)
-    private final Map<String, Object> subject;
+    private final IdentityProfileSubjectPayload subject;
 
     @JsonProperty(Property.RESOURCES)
     private final ResourceCreationContainer resources;
@@ -83,7 +83,7 @@ public class SessionSpec {
             IbvOptions ibvOptions,
             ZonedDateTime sessionDeadline,
             IdentityProfileRequirementsPayload identityProfile,
-            Map<String, Object> subject,
+            IdentityProfileSubjectPayload subject,
             ResourceCreationContainer resources,
             Boolean createIdentityProfilePreview,
             AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirements) {
@@ -233,7 +233,7 @@ public class SessionSpec {
      *
      * @return subject
      */
-    public Map<String, Object> getSubject() {
+    public IdentityProfileSubjectPayload getSubject() {
         return subject;
     }
 
@@ -280,7 +280,7 @@ public class SessionSpec {
         private ZonedDateTime sessionDeadline;
         private IdentityProfileRequirementsPayload identityProfile;
         private AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirementsPayload;
-        private Map<String, Object> subject;
+        private IdentityProfileSubjectPayload subject;
         private ResourceCreationContainer resources;
         private Boolean createIdentityProfilePreview;
 
@@ -440,7 +440,7 @@ public class SessionSpec {
          * @param subject the subject
          * @return the Builder
          */
-        public Builder withSubject(Map<String, Object> subject) {
+        public Builder withSubject(IdentityProfileSubjectPayload subject) {
             this.subject = subject;
             return this;
         }
