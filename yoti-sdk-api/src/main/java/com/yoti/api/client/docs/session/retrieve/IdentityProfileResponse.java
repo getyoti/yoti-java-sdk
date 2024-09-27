@@ -4,16 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class IdentityProfileResponse {
 
-    @JsonProperty(Property.SUBJECT_ID)
+    @JsonProperty("subject_id")
     private String subjectId;
 
-    @JsonProperty(Property.RESULT)
+    @JsonProperty("result")
     private String result;
 
-    @JsonProperty(Property.FAILURE_REASON)
+    @JsonProperty("failure_reason")
     private IdentityProfileFailureResponse failureReason;
 
-    @JsonProperty(Property.IDENTITY_PROFILE_REPORT)
+    @JsonProperty("identity_profile_report")
     private IdentityProfileReportResponse identityProfileReport;
 
     public String getSubjectId() {
@@ -30,17 +30,6 @@ public class IdentityProfileResponse {
 
     public IdentityProfileReportResponse getIdentityProfileReport() {
         return identityProfileReport;
-    }
-
-    private static final class Property {
-
-        private static final String SUBJECT_ID = "subject_id";
-        private static final String RESULT = "result";
-        private static final String FAILURE_REASON = "failure_reason";
-        private static final String IDENTITY_PROFILE_REPORT = "identity_profile_report";
-
-        private Property() { }
-
     }
 
 }
