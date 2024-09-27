@@ -965,6 +965,14 @@
             </div>
         </div>
 
+        <th:block th:if="${sessionResult.getIdentityProfile().getIdentityProfileReport()() != null}">
+            <div th:if="${sessionResult.getIdentityProfile().getIdentityProfileReport().getMedia() != null}">
+                Generated Profile Media: <a th:href="${'/media?mediaId=' + sessionResult.getIdentityProfile().getIdentityProfileReport().getMedia().getId()}"
+                                            th:text="${sessionResult.getIdentityProfile().getIdentityProfileReport().getMedia().getId()}">
+                </a>
+            </div>
+        </th:block>
+
         <!-- Identity Profile Failure Reason -->
         <th:block th:if="${sessionResult.getIdentityProfile().getFailureReason() != null}">
             <div class="row pt-4">
