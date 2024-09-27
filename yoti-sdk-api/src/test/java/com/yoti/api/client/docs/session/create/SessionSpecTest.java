@@ -1,10 +1,7 @@
 package com.yoti.api.client.docs.session.create;
 
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_CHARSET;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
@@ -12,10 +9,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
-import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.yoti.api.client.docs.session.create.check.RequestedDocumentAuthenticityCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedLivenessCheck;
@@ -24,9 +18,6 @@ import com.yoti.api.client.docs.session.create.identityprofile.simple.IdentityPr
 import com.yoti.api.client.docs.session.create.resources.ResourceCreationContainer;
 import com.yoti.api.client.docs.session.create.task.RequestedIdDocTextExtractionTask;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -51,14 +42,13 @@ public class SessionSpecTest {
     private static final String SOME_SDK_CONFIG_SUCCESS_URL = "https://yourdomain.com/some/success/endpoint";
     private static final String SOME_SDK_CONFIG_ERROR_URL = "https://yourdomain.com/some/error/endpoint";
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
     @Mock RequiredDocument requiredDocumentMock;
     @Mock IbvOptions ibvOptionsMock;
     @Mock ZonedDateTime sessionDeadlineMock;
     @Mock ResourceCreationContainer resourceCreationContainerMock;
     @Mock ImportTokenPayload importTokenMock;
     @Mock IdentityProfileRequirementsPayload identityProfileRequirementsPayloadMock;
+    @Mock IdentityProfileSubjectPayload identityProfileSubjectPayloadMock;
 
     @Test
     public void shouldBuildWithMinimalConfiguration() {
@@ -226,21 +216,12 @@ public class SessionSpecTest {
     }
 
     @Test
-    public void shouldBuildWithSubject() throws IOException {
-        Map<String, Object> subject = new HashMap<>();
-        subject.put(SubjectProperty.SUBJECT_ID, "A_SUBJECT_ID");
-
-        SessionSpec session = SessionSpec.builder()
-                .withSubject(subject)
+    public void withSubject_shouldSetTheSubject() {
+        SessionSpec result = SessionSpec.builder()
+                .withSubject(identityProfileSubjectPayloadMock)
                 .build();
 
-        ObjectMapper mapper = new ObjectMapper();
-
-        JsonNode json = mapper.readTree(
-                mapper.writeValueAsString(session.getSubject()).getBytes(DEFAULT_CHARSET)
-        );
-
-        assertThat(json.get("subject_id").asText(), is(Matchers.equalTo(subject.get(SubjectProperty.SUBJECT_ID))));
+        assertThat(result.getSubject(), is(identityProfileSubjectPayloadMock));
     }
 
     @Test
@@ -268,25 +249,6 @@ public class SessionSpecTest {
                 .build();
 
         assertThat(sessionSpec.getImportToken(), is(importTokenMock));
-    }
-
-    private static final class IdentityProperty {
-
-        private static final String TYPE = "type";
-        private static final String SCHEME = "scheme";
-        private static final String OBJECTIVE = "objective";
-        private static final String TRUST_FRAMEWORK = "trust_framework";
-
-        private IdentityProperty() { }
-
-    }
-
-    private static final class SubjectProperty {
-
-        private static final String SUBJECT_ID = "subject_id";
-
-        private SubjectProperty() {}
-
     }
 
 }
