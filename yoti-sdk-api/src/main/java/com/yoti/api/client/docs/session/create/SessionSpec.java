@@ -8,6 +8,7 @@ import java.util.Map;
 import com.yoti.api.client.docs.session.create.check.RequestedCheck;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
 import com.yoti.api.client.docs.session.create.identityprofile.advanced.AdvancedIdentityProfileRequirementsPayload;
+import com.yoti.api.client.docs.session.create.identityprofile.simple.IdentityProfileRequirementsPayload;
 import com.yoti.api.client.docs.session.create.resources.ResourceCreationContainer;
 import com.yoti.api.client.docs.session.create.task.RequestedTask;
 
@@ -55,7 +56,7 @@ public class SessionSpec {
     private final IbvOptions ibvOptions;
 
     @JsonProperty(Property.IDENTITY_PROFILE_REQUIREMENTS)
-    private final Map<String, Object> identityProfile;
+    private final IdentityProfileRequirementsPayload identityProfile;
 
     @JsonProperty(Property.ADVANCED_IDENTITY_PROFILE_REQUIREMENTS)
     private final AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirements;
@@ -81,7 +82,7 @@ public class SessionSpec {
             Boolean blockBiometricConsent,
             IbvOptions ibvOptions,
             ZonedDateTime sessionDeadline,
-            Map<String, Object> identityProfile,
+            IdentityProfileRequirementsPayload identityProfile,
             Map<String, Object> subject,
             ResourceCreationContainer resources,
             Boolean createIdentityProfilePreview,
@@ -223,7 +224,7 @@ public class SessionSpec {
      *
      * @return Identity Profile
      */
-    public Object getIdentityProfile() {
+    public IdentityProfileRequirementsPayload getIdentityProfile() {
         return identityProfile;
     }
 
@@ -277,7 +278,7 @@ public class SessionSpec {
         private Boolean blockBiometricConsent;
         private IbvOptions ibvOptions;
         private ZonedDateTime sessionDeadline;
-        private Map<String, Object> identityProfile;
+        private IdentityProfileRequirementsPayload identityProfile;
         private AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirementsPayload;
         private Map<String, Object> subject;
         private ResourceCreationContainer resources;
@@ -428,7 +429,7 @@ public class SessionSpec {
          * @param identityProfile the Identity Profile
          * @return the Builder
          */
-        public Builder withIdentityProfile(Map<String, Object> identityProfile) {
+        public Builder withIdentityProfile(IdentityProfileRequirementsPayload identityProfile) {
             this.identityProfile = identityProfile;
             return this;
         }
