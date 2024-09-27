@@ -20,6 +20,7 @@ import java.util.Map;
 import com.yoti.api.client.docs.session.create.check.RequestedDocumentAuthenticityCheck;
 import com.yoti.api.client.docs.session.create.check.RequestedLivenessCheck;
 import com.yoti.api.client.docs.session.create.filters.RequiredDocument;
+import com.yoti.api.client.docs.session.create.identityprofile.simple.IdentityProfileRequirementsPayload;
 import com.yoti.api.client.docs.session.create.resources.ResourceCreationContainer;
 import com.yoti.api.client.docs.session.create.task.RequestedIdDocTextExtractionTask;
 
@@ -57,6 +58,7 @@ public class SessionSpecTest {
     @Mock ZonedDateTime sessionDeadlineMock;
     @Mock ResourceCreationContainer resourceCreationContainerMock;
     @Mock ImportTokenPayload importTokenMock;
+    @Mock IdentityProfileRequirementsPayload identityProfileRequirementsPayloadMock;
 
     @Test
     public void shouldBuildWithMinimalConfiguration() {
@@ -215,33 +217,12 @@ public class SessionSpecTest {
     }
 
     @Test
-    public void shouldBuildWithIdentityProfileRequirements() throws IOException {
-        Map<String, Object> scheme = new HashMap<>();
-        scheme.put(IdentityProperty.TYPE, "A_TYPE");
-        scheme.put(IdentityProperty.OBJECTIVE, "AN_OBJECTIVE");
-
-        Map<String, Object> identityProfile = new HashMap<>();
-        identityProfile.put(IdentityProperty.TRUST_FRAMEWORK, "A_FRAMEWORK");
-        identityProfile.put(IdentityProperty.SCHEME, scheme);
-
-        JsonNode json = toSessionSpecJson(identityProfile);
-
-        assertThat(
-                json.get(IdentityProperty.TRUST_FRAMEWORK).asText(),
-                is(equalTo(identityProfile.get(IdentityProperty.TRUST_FRAMEWORK)))
-        );
-
-        JsonNode schemeJsonNode = json.get(IdentityProperty.SCHEME);
-        assertThat(schemeJsonNode.get(IdentityProperty.TYPE).asText(), is(equalTo(scheme.get(IdentityProperty.TYPE))));
-        assertThat(schemeJsonNode.get(IdentityProperty.OBJECTIVE).asText(), is(equalTo(scheme.get(IdentityProperty.OBJECTIVE))));
-    }
-
-    private static JsonNode toSessionSpecJson(Map<String, Object> obj) throws IOException {
-        SessionSpec session = SessionSpec.builder()
-                .withIdentityProfile(obj)
+    public void withIdentityProfile_shouldSetTheIdentityProfile() {
+        SessionSpec result = SessionSpec.builder()
+                .withIdentityProfile(identityProfileRequirementsPayloadMock)
                 .build();
 
-        return MAPPER.readTree(MAPPER.writeValueAsString(session.getIdentityProfile()).getBytes(DEFAULT_CHARSET));
+        assertThat(result.getIdentityProfile(), is(identityProfileRequirementsPayloadMock));
     }
 
     @Test
