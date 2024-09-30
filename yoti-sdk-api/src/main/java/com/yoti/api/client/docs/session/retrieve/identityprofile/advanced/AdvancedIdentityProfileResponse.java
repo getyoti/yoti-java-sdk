@@ -1,6 +1,6 @@
 package com.yoti.api.client.docs.session.retrieve.identityprofile.advanced;
 
-import com.yoti.api.client.docs.session.retrieve.IdentityProfileFailureResponse;
+import com.yoti.api.client.docs.session.retrieve.identityprofile.IdentityProfileFailureResponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
