@@ -294,6 +294,10 @@ Instructions on how to run the Spring example projects can be found at the follo
 This major update does not have any major updates to the API, but instead builds upon and
 standardizes our implementation.
 
+## Breaking changes and enhancements made in v4.0.0
+
+- Creating an Identity Profile session now uses strongly typed classes, instead of a Map
+
 ### Dropped support for Java 7
 Minimum supported Java version is now 8.
 
