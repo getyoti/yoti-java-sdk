@@ -1,4 +1,4 @@
-package com.yoti.api.client.docs.session.retrieve;
+package com.yoti.api.client.docs.session.retrieve.identityprofile;
 
 import java.util.List;
 

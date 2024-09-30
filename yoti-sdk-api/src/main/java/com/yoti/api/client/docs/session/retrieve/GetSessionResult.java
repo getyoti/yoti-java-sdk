@@ -3,6 +3,8 @@ package com.yoti.api.client.docs.session.retrieve;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.yoti.api.client.docs.session.retrieve.identityprofile.IdentityProfilePreviewResponse;
+import com.yoti.api.client.docs.session.retrieve.identityprofile.IdentityProfileResponse;
 import com.yoti.api.client.docs.session.retrieve.identityprofile.advanced.AdvancedIdentityProfileResponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
