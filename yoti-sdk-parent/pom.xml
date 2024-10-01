@@ -112,7 +112,7 @@
     <!-- test libraries -->
     <junit.version>4.13.2</junit.version>
     <mockito.version>4.11.0</mockito.version>
-    <hamcrest.version>2.2</hamcrest.version>
+    <hamcrest.version>3.0</hamcrest.version>
     <commons.lang3.version>3.17.0</commons.lang3.version>
     
     <!-- maven + plugin versions -->
