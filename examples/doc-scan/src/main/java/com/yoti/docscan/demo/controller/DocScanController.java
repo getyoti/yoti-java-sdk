@@ -72,7 +72,7 @@ public class DocScanController implements WebMvcConfigurer {
     }
 
     @RequestMapping(value = "/success", method = RequestMethod.GET)
-    public String getUserSession(@RequestParam(value = "sessionId") String sessionIdQueryParam, final Model model, HttpSession httpSession) {
+    public String getUserSession(@RequestParam(value = "sessionId", required = false) String sessionIdQueryParam, final Model model, HttpSession httpSession) {
         String sessionId;
         if (sessionIdQueryParam != null) {
             sessionId = sessionIdQueryParam;
