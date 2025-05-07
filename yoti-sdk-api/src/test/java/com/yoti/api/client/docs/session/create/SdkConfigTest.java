@@ -20,6 +20,8 @@ public class SdkConfigTest {
     private static final String SOME_DARK_MODE = "ON";
     private static final String SOME_PRESET_ISSUING_COUNTRY = "USA";
     private static final String SOME_BRAND_ID = "someBrandId";
+    private static final String SOME_SUPPRESSED_SCREEN = "someSuppressedScreen";
+    private static final String SOME_OTHER_SUPPRESSED_SCREEN = "someOtherSuppressedScreen";
 
     private static final String SOME_SUCCESS_URL = "https://yourdomain.com/some/success/endpoint";
     private static final String SOME_ERROR_URL = "https://yourdomain.com/some/error/endpoint";
@@ -44,6 +46,8 @@ public class SdkConfigTest {
                 .withAllowHandoff(true)
                 .withAttemptsConfiguration(attemptsConfigurationMock)
                 .withBrandId(SOME_BRAND_ID)
+                .withSuppressedScreen(SOME_SUPPRESSED_SCREEN)
+                .withSuppressedScreen(SOME_OTHER_SUPPRESSED_SCREEN)
                 .build();
 
         assertThat(result, is(instanceOf(SdkConfig.class)));
@@ -62,6 +66,8 @@ public class SdkConfigTest {
         assertThat(result.getAllowHandoff(), is(true));
         assertThat(result.getAttemptsConfiguration(), is(attemptsConfigurationMock));
         assertThat(result.getBrandId(), is(SOME_BRAND_ID));
+        assertThat(result.getSuppressedScreens(), hasSize(2));
+        assertThat(result.getSuppressedScreens(), hasItems(SOME_SUPPRESSED_SCREEN, SOME_OTHER_SUPPRESSED_SCREEN));
     }
 
     @Test
@@ -143,6 +149,14 @@ public class SdkConfigTest {
                 .build();
 
         assertThat(result.getDarkMode(), is("AUTO"));
+    }
+
+    @Test
+    public void suppressedScreens_shouldBeNullIfNotSet() {
+        SdkConfig result = SdkConfig.builder()
+                .build();
+
+        assertThat(result.getSuppressedScreens(), is(nullValue()));
     }
 
 }
