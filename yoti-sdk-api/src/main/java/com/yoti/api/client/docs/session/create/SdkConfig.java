@@ -1,5 +1,8 @@
 package com.yoti.api.client.docs.session.create;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.yoti.api.client.docs.DocScanConstants;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -54,6 +57,9 @@ public class SdkConfig {
     @JsonProperty(Property.BIOMETRIC_CONSENT_FLOW)
     private final String biometricConsentFlow;
 
+    @JsonProperty(Property.SUPPRESSED_SCREENS)
+    private final List<String> suppressedScreens;
+
     SdkConfig(String allowedCaptureMethods,
             String primaryColour,
             String primaryColourDarkMode,
@@ -68,7 +74,8 @@ public class SdkConfig {
             Boolean allowHandoff,
             AttemptsConfiguration attemptsConfiguration,
             String brandId,
-            String biometricConsentFlow) {
+            String biometricConsentFlow,
+            List<String> suppressedScreens) {
         this.allowedCaptureMethods = allowedCaptureMethods;
         this.primaryColour = primaryColour;
         this.primaryColourDarkMode = primaryColourDarkMode;
@@ -84,6 +91,7 @@ public class SdkConfig {
         this.attemptsConfiguration = attemptsConfiguration;
         this.brandId = brandId;
         this.biometricConsentFlow = biometricConsentFlow;
+        this.suppressedScreens = suppressedScreens;
     }
 
     public static SdkConfig.Builder builder() {
@@ -226,6 +234,15 @@ public class SdkConfig {
     }
 
     /**
+     * The list of screens to suppress in the end-user flow
+     *
+     * @return the list of suppressed screens
+     */
+    public List<String> getSuppressedScreens() {
+        return suppressedScreens;
+    }
+
+    /**
      * Builder to assist in the creation of {@link SdkConfig}.
      */
     public static class Builder {
@@ -245,8 +262,10 @@ public class SdkConfig {
         private AttemptsConfiguration attemptsConfiguration;
         private String brandId;
         private String biometricConsentFlow;
+        private List<String> suppressedScreens;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         /**
          * Sets the allowed capture method to "CAMERA"
@@ -477,6 +496,20 @@ public class SdkConfig {
         }
 
         /**
+         * Add a named screen to the list of suppressed screen in the end-user flow
+         *
+         * @param suppressedScreen the name of the screen to suppress
+         * @return the builder
+         */
+        public Builder withSuppressedScreen(String suppressedScreen) {
+            if (suppressedScreens == null) {
+                suppressedScreens = new ArrayList<>();
+            }
+            suppressedScreens.add(suppressedScreen);
+            return this;
+        }
+
+        /**
          * Builds the {@link SdkConfig} using the values supplied to the builder
          *
          * @return the {@link SdkConfig}
@@ -497,7 +530,8 @@ public class SdkConfig {
                     allowHandoff,
                     attemptsConfiguration,
                     brandId,
-                    biometricConsentFlow
+                    biometricConsentFlow,
+                    suppressedScreens
             );
         }
     }
@@ -519,6 +553,7 @@ public class SdkConfig {
         private static final String ATTEMPTS_CONFIGURATION = "attempts_configuration";
         private static final String BRAND_ID = "brand_id";
         private static final String BIOMETRIC_CONSENT_FLOW = "biometric_consent_flow";
+        private static final String SUPPRESSED_SCREENS = "suppressed_screens";
 
         private Property() {}
 
