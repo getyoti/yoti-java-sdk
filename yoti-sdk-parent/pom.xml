@@ -138,7 +138,7 @@
 
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
 
-    <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
+    <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
   </properties>
   
   <dependencyManagement>
