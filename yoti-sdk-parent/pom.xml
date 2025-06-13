@@ -115,7 +115,8 @@
     <spotbugs-maven-plugin.version>4.8.6.6</spotbugs-maven-plugin.version>
     <findsecbugs-plugin.version>1.14.0</findsecbugs-plugin.version>
 
-    <dependency-check-maven.version>8.4.3</dependency-check-maven.version>
+    <!-- Owasp dependency-check-maven 11.0.x requires JDK 11+   -->
+    <dependency-check-maven.version>10.0.4</dependency-check-maven.version>
     <dependency-check-maven.cve.update.limit>12</dependency-check-maven.cve.update.limit>
 
     <animal-sniffer-maven-plugin.version>1.24</animal-sniffer-maven-plugin.version>
