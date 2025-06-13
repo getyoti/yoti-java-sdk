@@ -91,7 +91,7 @@
     <slf4j.version>2.0.9</slf4j.version>
     <bouncy.castle.version>1.70</bouncy.castle.version>
     <jackson.version>2.19.0</jackson.version>
-    <protobuf-java.version>3.25.3</protobuf-java.version>
+    <protobuf-java.version>3.25.8</protobuf-java.version>
     <httpmime.version>4.5.14</httpmime.version>
     
     <!-- spring versions -->
