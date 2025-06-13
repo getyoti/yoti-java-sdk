@@ -49,8 +49,8 @@
 
     <!-- Spotbugs spotbugs-maven-plugin 4.9.x requires JDK 11+   -->
     <spotbugs-maven-plugin.version>4.8.6.6</spotbugs-maven-plugin.version>
-    <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
-    <extra-enforcer-rules.version>1.7.0</extra-enforcer-rules.version>
+    <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
+    <extra-enforcer-rules.version>1.10.0</extra-enforcer-rules.version>
     <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
   </properties>
 

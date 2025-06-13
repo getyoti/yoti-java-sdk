@@ -122,8 +122,8 @@
     <mojo.signature.artefact>java18</mojo.signature.artefact>
     <mojo.signature.version>1.0</mojo.signature.version>
 
-    <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
-    <extra-enforcer-rules.version>1.7.0</extra-enforcer-rules.version>
+    <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
+    <extra-enforcer-rules.version>1.10.0</extra-enforcer-rules.version>
 
     <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
 
