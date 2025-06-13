@@ -89,7 +89,7 @@
 
     <!-- sdk dependency versions -->
     <slf4j.version>2.0.9</slf4j.version>
-    <bouncy.castle.version>1.70</bouncy.castle.version>
+    <bouncycastle.version>1.81</bouncycastle.version>
     <jackson.version>2.19.0</jackson.version>
     <protobuf-java.version>3.25.8</protobuf-java.version>
     <httpmime.version>4.5.14</httpmime.version>
@@ -148,8 +148,8 @@
       <!-- sdk dependencies -->
       <dependency>
         <groupId>org.bouncycastle</groupId>
-        <artifactId>bcpkix-jdk15on</artifactId>
-        <version>${bouncy.castle.version}</version>
+        <artifactId>bcpkix-jdk18on</artifactId>
+        <version>${bouncycastle.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson</groupId>
