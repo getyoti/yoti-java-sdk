@@ -45,7 +45,7 @@
 
     <maven.min.version>3.8.5</maven.min.version>
 
-    <guava.version>33.0.0-jre</guava.version>
+    <guava.version>33.2.1-jre</guava.version>
 
     <!-- Spotbugs spotbugs-maven-plugin 4.9.x requires JDK 11+   -->
     <spotbugs-maven-plugin.version>4.8.6.6</spotbugs-maven-plugin.version>
