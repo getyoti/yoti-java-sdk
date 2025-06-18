@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyPair;
 
+import com.yoti.api.client.identity.MatchRequest;
 import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityException;
@@ -37,6 +38,7 @@ public class DigitalIdentityClientTest {
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPair;
     @Mock DigitalIdentityService identityService;
     @Mock ShareSessionRequest shareSessionRequest;
+    @Mock MatchRequest matchRequest;
 
     private KeyPairSource validKeyPairSource;
 
@@ -219,6 +221,28 @@ public class DigitalIdentityClientTest {
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
                 () -> identityClient.fetchShareReceipt(A_RECEIPT_ID)
+        );
+
+        assertThat(ex.getMessage(), equalTo(exMessage));
+    }
+
+    @Test
+    public void client_FetchDigitalIdMatchException_DigitalIdentityException() throws IOException {
+        when(keyPairSource.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPair);
+
+        DigitalIdentityClient identityClient = new DigitalIdentityClient(
+                AN_SDK_ID,
+                keyPairSource,
+                identityService
+        );
+
+        String exMessage = "Fetch digital identity match error";
+        when(identityService.fetchMatch(AN_SDK_ID, keyPair, matchRequest))
+                .thenThrow(new DigitalIdentityException(exMessage));
+
+        DigitalIdentityException ex = assertThrows(
+                DigitalIdentityException.class,
+                () -> identityClient.fetchMatch(matchRequest)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));

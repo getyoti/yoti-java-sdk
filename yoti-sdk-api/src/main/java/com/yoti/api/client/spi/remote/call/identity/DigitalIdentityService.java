@@ -16,6 +16,8 @@ import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.util.Optional;
 
+import com.yoti.api.client.identity.MatchRequest;
+import com.yoti.api.client.identity.MatchResult;
 import com.yoti.api.client.identity.ShareSession;
 import com.yoti.api.client.identity.ShareSessionQrCode;
 import com.yoti.api.client.identity.ShareSessionRequest;
@@ -186,6 +188,30 @@ public class DigitalIdentityService {
                     String.format("Error while fetching the share session receipt key '{%s}' ", wrappedItemKeyId),
                     ex
             );
+        }
+    }
+
+    public MatchResult fetchMatch(String sdkId, KeyPair keyPair, MatchRequest matchRequest)
+            throws DigitalIdentityException {
+        Validation.notNullOrEmpty(sdkId, "SDK ID");
+        Validation.notNull(keyPair, "Application Key Pair");
+        Validation.notNull(matchRequest, "DID Match request");
+
+        String path = pathFactory.createIdentityMatchPath();
+
+        LOG.debug("Requesting digital ID Match for SDK ID '{}' at '{}'", sdkId, path);
+
+        try {
+            byte[] payload = ResourceMapper.writeValueAsString(matchRequest);
+            return createSignedRequest(sdkId, keyPair, path, HTTP_POST, payload).execute(MatchResult.class);
+        } catch (IOException ex) {
+            throw new DigitalIdentityException("Error while parsing the DID Match request", ex);
+        } catch (URISyntaxException ex) {
+            throw new DigitalIdentityException("Error while building the DID Match request", ex);
+        } catch (GeneralSecurityException ex) {
+            throw new DigitalIdentityException("Error while signing the DID Match request", ex);
+        } catch (ResourceException ex) {
+            throw new DigitalIdentityException("Error while executing the DID Match request", ex);
         }
     }
 
