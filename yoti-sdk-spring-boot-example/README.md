@@ -45,6 +45,11 @@ The logic for all the v1 share examples can be found in the `YotiLoginController
 * Navigate to:
   * [https://localhost:8443/v2/digital-identity-share](https://localhost:8443/v2/digital-identity-share) to initiate a login using the Yoti share v2
 
+### Digital Identity Match
+* You can run your server-app by executing `java -jar -Dyoti.api.url="https://api.yoti.com/did" target/yoti-sdk-spring-boot-example.jar`. The JVM argument is required to override the default `https://api.yoti.com/api/v1`
+* Navigate to:
+  * [https://localhost:8443/did/](https://localhost:8443/did/) to display the form to initiate a digital ID match
+
 The logic for the v2 share example session creation and receipt can be found respectively in the `IdentitySessionController` and `IdentityLoginController`
 
 ## Requirements for running the application
