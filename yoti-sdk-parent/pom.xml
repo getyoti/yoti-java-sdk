@@ -24,9 +24,9 @@
   </licenses>
   
   <scm>
-    <connection>scm:http://github.com/getyoti/yoti-java-sdk.git</connection>
-    <developerConnection>scm:http://github.com/getyoti/yoti-java-sdk.git</developerConnection>
-    <url>http://github.com/getyoti/yoti-java-sdk.git</url>
+    <connection>scm:https://github.com/getyoti/yoti-java-sdk.git</connection>
+    <developerConnection>scm:https://github.com/getyoti/yoti-java-sdk.git</developerConnection>
+    <url>https://github.com/getyoti/yoti-java-sdk.git</url>
   </scm>
   
   <profiles>
