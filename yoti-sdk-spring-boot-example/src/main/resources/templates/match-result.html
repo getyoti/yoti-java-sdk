@@ -1,0 +1,37 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>Match Result</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/index.css}"/>
+    <link rel="shortcut icon" type="image/x-icon" href="https://www.yoti.com/wp-content/uploads/yoti-favicon.png"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet"/>
+    <style>
+        .match-id {
+            word-break: break-all;
+        }
+    </style>
+</head>
+
+<body class="yoti-body">
+<main>
+    <section class="yoti-top-section">
+        <div class="yoti-logo-section">
+            <img class="yoti-logo-image" th:src="@{/static/assets/logo.png}"
+                 th:srcset="@{/static/assets/logo@2x.png 2x}" alt="Yoti"/>
+        </div>
+        <h1 class="yoti-top-header">Match Result</h1>
+        <div class="yoti-login-dialog" style="text-align: center;">
+            <p>Match ID: <strong class="match-id" th:text="${matchId}">ID_HERE</strong></p>
+            <p>Match Result: <strong th:text="${matchResult}">RESULT_HERE</strong></p>
+            <div class="yoti-login-actions" style="justify-content: center; margin-top: 20px;">
+                <a th:href="@{/did/}" class="yoti-login-button"
+                   style="text-decoration: none; text-align: center; line-height: 50px; display: inline-block; padding-left: 10px; padding-right: 10px;">Run
+                    Another Match</a>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+
+</html>

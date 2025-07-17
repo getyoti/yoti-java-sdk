@@ -14,6 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 
+import com.yoti.api.client.identity.MatchRequest;
+import com.yoti.api.client.identity.MatchResult;
 import com.yoti.api.client.identity.ShareSession;
 import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.call.SignedRequest;
@@ -35,6 +37,7 @@ public class DigitalIdentityServiceTest {
     private static final String SESSION_ID = "aSessionId";
     private static final String QR_CODE_ID = "aQrCodeId";
     private static final String SESSION_CREATION_PATH = "aSessionCreationPath";
+    private static final String DIGITAL_ID_MATCH_PATH = "aDigitalIdMatchPath";
     private static final String POST = "POST";
     private static final byte[] A_BODY_BYTES = "aBody".getBytes(StandardCharsets.UTF_8);
 
@@ -44,14 +47,19 @@ public class DigitalIdentityServiceTest {
     @Mock(answer = RETURNS_DEEP_STUBS) SignedRequestBuilder signedRequestBuilder;
     @Mock SignedRequestBuilderFactory requestBuilderFactory;
 
-    @Mock ShareSessionRequest shareSessionRequest;
-    @Mock SignedRequest signedRequest;
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPair;
+    @Mock SignedRequest signedRequest;
+
+    @Mock ShareSessionRequest shareSessionRequest;
     @Mock ShareSession shareSession;
+
+    @Mock MatchRequest matchRequest;
+    @Mock MatchResult matchResult;
 
     @Before
     public void setUp() {
         when(unsignedPathFactory.createIdentitySessionPath()).thenReturn(SESSION_CREATION_PATH);
+        when(unsignedPathFactory.createIdentityMatchPath()).thenReturn(DIGITAL_ID_MATCH_PATH);
     }
 
     @Test
@@ -275,6 +283,149 @@ public class DigitalIdentityServiceTest {
         );
 
         assertThat(ex.getMessage(), containsString("QR Code ID"));
+    }
+
+    @Test
+    public void fetchMatch_NullSdkId_Exception() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> identityService.fetchMatch(null, keyPair, matchRequest)
+        );
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void fetchMatch_EmptySdkId_Exception() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> identityService.fetchMatch("", keyPair, matchRequest)
+        );
+
+        assertThat(ex.getMessage(), containsString("SDK ID"));
+    }
+
+    @Test
+    public void fetchMatch_NullKeyPair_Exception() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> identityService.fetchMatch(SDK_ID, null, matchRequest)
+        );
+
+        assertThat(ex.getMessage(), containsString("Application Key Pair"));
+    }
+
+    @Test
+    public void fetchMatch_NullMatchRequest_Exception() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> identityService.fetchMatch(SDK_ID, keyPair, null)
+        );
+
+        assertThat(ex.getMessage(), notNullValue());
+    }
+
+    @Test
+    public void fetchMatch_SerializingWrongPayload_Exception() {
+        JsonProcessingException causeEx = new JsonProcessingException("serialization error") {};
+
+        try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
+            mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenThrow(causeEx);
+
+            DigitalIdentityException ex = assertThrows(
+                    DigitalIdentityException.class,
+                    () -> identityService.fetchMatch(SDK_ID, keyPair, matchRequest)
+            );
+
+            Throwable cause = ex.getCause();
+            assertTrue(cause instanceof JsonProcessingException);
+            assertThat(cause.getMessage(), containsString("serialization error"));
+        }
+    }
+
+    @Test
+    public void fetchMatch_BuildingRequestWithWrongEndpoint_Exception() throws Exception {
+        try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
+            mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
+            when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
+
+            String exMessage = "URI wrong format";
+            URISyntaxException causeEx = new URISyntaxException("", exMessage);
+            when(identityService.createSignedRequest(SDK_ID, keyPair, DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
+                    .thenThrow(causeEx);
+
+            DigitalIdentityException ex = assertThrows(
+                    DigitalIdentityException.class,
+                    () -> identityService.fetchMatch(SDK_ID, keyPair, matchRequest)
+            );
+
+            Throwable cause = ex.getCause();
+            assertTrue(cause instanceof URISyntaxException);
+            assertThat(cause.getMessage(), containsString(exMessage));
+        }
+    }
+
+    @Test
+    public void fetchMatch_BuildingRequestWithWrongQueryParams_Exception() throws Exception {
+        try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
+            mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
+
+            when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
+
+            String exMessage = "Wrong query params format";
+            UnsupportedEncodingException causeEx = new UnsupportedEncodingException(exMessage);
+            when(identityService.createSignedRequest(SDK_ID, keyPair, DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
+                    .thenThrow(causeEx);
+
+            DigitalIdentityException ex = assertThrows(
+                    DigitalIdentityException.class,
+                    () -> identityService.fetchMatch(SDK_ID, keyPair, matchRequest)
+            );
+
+            Throwable cause = ex.getCause();
+            assertTrue(cause instanceof UnsupportedEncodingException);
+            assertThat(cause.getMessage(), containsString(exMessage));
+        }
+    }
+
+    @Test
+    public void fetchMatch_BuildingRequestWithWrongDigest_Exception() throws Exception {
+        try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
+            mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
+
+            when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
+
+            String exMessage = "Wrong digest";
+            GeneralSecurityException causeEx = new GeneralSecurityException(exMessage);
+            when(identityService.createSignedRequest(SDK_ID, keyPair, DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
+                    .thenThrow(causeEx);
+
+            DigitalIdentityException ex = assertThrows(
+                    DigitalIdentityException.class,
+                    () -> identityService.fetchMatch(SDK_ID, keyPair, matchRequest)
+            );
+
+            Throwable cause = ex.getCause();
+            assertTrue(cause instanceof GeneralSecurityException);
+            assertThat(cause.getMessage(), containsString(exMessage));
+        }
+    }
+
+    @Test
+    public void fetchMatch_SessionRequest_exception() throws Exception {
+        try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
+            mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
+
+            when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
+
+            when(identityService.createSignedRequest(SDK_ID, keyPair, DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
+                    .thenReturn(signedRequest);
+
+            when(signedRequest.execute(MatchResult.class)).thenReturn(matchResult);
+
+            MatchResult result = identityService.fetchMatch(SDK_ID, keyPair, matchRequest);
+            assertSame(matchResult, result);
+        }
     }
 
 }

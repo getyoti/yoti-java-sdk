@@ -15,6 +15,9 @@ public class UnsignedPathFactory {
     private static final String IDENTITY_SESSION_RECEIPT_RETRIEVAL = "/v2/receipts/%s";
     private static final String IDENTITY_SESSION_RECEIPT_KEY_RETRIEVAL = "/v2/wrapped-item-keys/%s";
 
+    // Match
+    private static final String DIGITAL_ID_MATCH = "/v1/matches";
+
     // Share V1
     private static final String PROFILE = "/profile/%s?appId=%s";
     private static final String QR_CODE = "/qrcodes/apps/%s";
@@ -64,6 +67,10 @@ public class UnsignedPathFactory {
 
     private static String base64ToBase64url(String value) {
         return value.replace('+', '-').replace('/', '_');
+    }
+
+    public String createIdentityMatchPath() {
+        return DIGITAL_ID_MATCH;
     }
 
     public String createProfilePath(String appId, String connectToken) {

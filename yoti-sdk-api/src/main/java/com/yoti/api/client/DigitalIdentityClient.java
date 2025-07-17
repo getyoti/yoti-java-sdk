@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.security.KeyPair;
 import java.security.Security;
 
+import com.yoti.api.client.identity.MatchRequest;
+import com.yoti.api.client.identity.MatchResult;
 import com.yoti.api.client.identity.ShareSession;
 import com.yoti.api.client.identity.ShareSessionQrCode;
 import com.yoti.api.client.identity.ShareSessionRequest;
@@ -52,6 +54,10 @@ public class DigitalIdentityClient {
 
     public Receipt fetchShareReceipt(String receiptId) throws DigitalIdentityException {
         return identityService.fetchShareReceipt(sdkId, keyPair, receiptId);
+    }
+
+    public MatchResult fetchMatch(MatchRequest request) throws DigitalIdentityException {
+        return identityService.fetchMatch(sdkId, keyPair, request);
     }
 
     private KeyPair loadKeyPair(KeyPairSource keyPairSource) throws InitialisationException {
