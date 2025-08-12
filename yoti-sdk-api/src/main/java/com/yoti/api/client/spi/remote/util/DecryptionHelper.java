@@ -17,7 +17,7 @@ public class DecryptionHelper {
 
     public static byte[] decryptAsymmetric(byte[] source, PrivateKey key) throws ProfileException {
         try {
-            Cipher cipher = Cipher.getInstance(ASYMMETRIC_CIPHER, BouncyCastleProvider.PROVIDER_NAME);
+            Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding", BouncyCastleProvider.PROVIDER_NAME);
             cipher.init(DECRYPT_MODE, key);
             return cipher.doFinal(source);
         } catch (GeneralSecurityException gse) {
