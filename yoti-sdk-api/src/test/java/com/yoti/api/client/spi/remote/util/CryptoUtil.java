@@ -82,7 +82,7 @@ public class CryptoUtil {
     }
 
     public static byte[] encryptAsymmetric(byte[] data, Key key) throws GeneralSecurityException {
-        Cipher cipher = Cipher.getInstance(ASYMMETRIC_CIPHER, BouncyCastleProvider.PROVIDER_NAME);
+        Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding", BouncyCastleProvider.PROVIDER_NAME);
         cipher.init(Cipher.ENCRYPT_MODE, key);
 
         return cipher.doFinal(data);
