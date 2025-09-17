@@ -57,10 +57,8 @@ public class SandboxDocumentTextDataCheck extends SandboxDocumentCheck {
 
         @Override
         public SandboxDocumentTextDataCheck build() {
-            notNull(recommendation, "recommendation");
-
             SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
-            SandboxDocumentTextDataCheckResult result = new SandboxDocumentTextDataCheckResult(report, documentFields);
+            SandboxDocumentTextDataCheckResult result = new SandboxDocumentTextDataCheckResult(report, reportTemplate, documentFields);
 
             return new SandboxDocumentTextDataCheck(result, documentFilter);
         }

@@ -28,17 +28,6 @@ public class SandboxDocumentAuthenticityCheckTest {
     @Mock SandboxDocumentFilter sandboxDocumentFilterMock;
 
     @Test
-    public void builder_shouldThrowExceptionWhenMissingRecommendation() {
-        try {
-            SandboxDocumentAuthenticityCheck.builder().build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("recommendation"));
-            return;
-        }
-        fail("Expected an exception");
-    }
-
-    @Test
     public void builder_shouldBuildWithoutDocumentFilter() {
         SandboxDocumentAuthenticityCheck result = SandboxDocumentAuthenticityCheck.builder()
                 .withRecommendation(sandboxRecommendationMock)

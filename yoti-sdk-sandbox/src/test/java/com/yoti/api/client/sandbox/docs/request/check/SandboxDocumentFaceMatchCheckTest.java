@@ -22,17 +22,6 @@ public class SandboxDocumentFaceMatchCheckTest {
     @Mock SandboxBreakdown sandboxBreakdownMock;
 
     @Test
-    public void builder_shouldThrowExceptionWhenMissingRecommendation() {
-        try {
-            SandboxDocumentFaceMatchCheck.builder().build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("recommendation"));
-            return;
-        }
-        fail("Expected an exception");
-    }
-
-    @Test
     public void builder_shouldBuildCorrectly() {
         SandboxDocumentFaceMatchCheck result = SandboxDocumentFaceMatchCheck.builder()
                 .withRecommendation(sandboxRecommendationMock)

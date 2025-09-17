@@ -23,10 +23,8 @@ public class SandboxStaticLivenessCheckBuilder extends SandboxCheck.Builder<Sand
 
     @Override
     public SandboxLivenessCheck build() {
-        notNull(recommendation, "recommendation");
-
         SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
-        SandboxCheckResult result = new SandboxCheckResult(report);
+        SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
         return new SandboxLivenessCheck(result, DocScanConstants.STATIC, responseDelay);
     }

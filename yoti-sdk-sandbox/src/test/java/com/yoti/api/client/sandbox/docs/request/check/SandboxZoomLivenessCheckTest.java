@@ -22,17 +22,6 @@ public class SandboxZoomLivenessCheckTest {
     @Mock SandboxBreakdown sandboxBreakdownMock;
 
     @Test
-    public void builder_shouldThrowExceptionForMissingRecommendation() {
-        try {
-            SandboxLivenessCheck.forZoomLiveness().build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("recommendation"));
-            return;
-        }
-        fail("Expected an exception");
-    }
-
-    @Test
     public void builder_shouldBuildWithCorrectValues() {
         SandboxLivenessCheck result = new SandboxZoomLivenessCheckBuilder()
                 .withRecommendation(sandboxRecommendationMock)
