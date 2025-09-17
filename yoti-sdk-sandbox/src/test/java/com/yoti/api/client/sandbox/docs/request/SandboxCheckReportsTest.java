@@ -11,6 +11,7 @@ import com.yoti.api.client.sandbox.docs.request.check.SandboxIdDocumentCompariso
 import com.yoti.api.client.sandbox.docs.request.check.SandboxLivenessCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentTextDataCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxSupplementaryDocumentTextDataCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxSynecticsIdentityFraudCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxThirdPartyIdentityCheck;
 
 import org.junit.Test;
@@ -29,6 +30,7 @@ public class SandboxCheckReportsTest {
     @Mock SandboxSupplementaryDocumentTextDataCheck supplementaryDocumentTextDataCheckMock;
     @Mock SandboxThirdPartyIdentityCheck thirdPartyIdentityCheckMock;
     @Mock SandboxFaceComparisonCheck faceComparisonCheckMock;
+    @Mock SandboxSynecticsIdentityFraudCheck synecticsIdentityFraudCheckMock;
 
     @Test
     public void builder_shouldAllowDocumentAuthenticityChecks() {
@@ -106,6 +108,16 @@ public class SandboxCheckReportsTest {
                 .build();
 
         assertThat(result.getFaceComparisonCheck(), is(faceComparisonCheckMock));
+    }
+
+    @Test
+    public void builder_shouldAllowSynecticsIdentityFraudChecks() {
+        SandboxCheckReports result = SandboxCheckReports.builder()
+                .withSynecticsIdentityFraudCheck(synecticsIdentityFraudCheckMock)
+                .build();
+
+        assertThat(result.getSynecticsIdentityFraudChecks(), hasSize(1));
+        assertThat(result.getSynecticsIdentityFraudChecks().get(0), is(synecticsIdentityFraudCheckMock));
     }
 
     @Test
