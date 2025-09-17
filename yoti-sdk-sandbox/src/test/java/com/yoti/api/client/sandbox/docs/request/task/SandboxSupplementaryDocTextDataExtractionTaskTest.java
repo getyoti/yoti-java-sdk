@@ -90,4 +90,13 @@ public class SandboxSupplementaryDocTextDataExtractionTaskTest {
         assertThat(result.getResponseDelay(), is(10));
     }
 
+    @Test
+    public void builder_shouldSetResultTemplate() {
+        SandboxSupplementaryDocTextDataExtractionTask result = SandboxSupplementaryDocTextDataExtractionTask.builder()
+                .withResultTemplate("someResultTemplate")
+                .build();
+
+        assertThat(result.getResultTemplate(), is("someResultTemplate"));
+    }
+
 }
