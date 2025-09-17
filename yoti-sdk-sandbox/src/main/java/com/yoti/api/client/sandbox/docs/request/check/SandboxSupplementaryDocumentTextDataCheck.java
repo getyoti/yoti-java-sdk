@@ -57,7 +57,7 @@ public class SandboxSupplementaryDocumentTextDataCheck extends SandboxDocumentCh
             notNull(recommendation, "recommendation");
 
             SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
-            SandboxSupplementaryDocumentTextDataCheckResult result = new SandboxSupplementaryDocumentTextDataCheckResult(report, documentFields);
+            SandboxSupplementaryDocumentTextDataCheckResult result = new SandboxSupplementaryDocumentTextDataCheckResult(report, reportTemplate, documentFields);
 
             return new SandboxSupplementaryDocumentTextDataCheck(result, documentFilter);
         }

@@ -33,7 +33,7 @@ public class SandboxDocumentFaceMatchCheck extends SandboxDocumentCheck {
             notNull(recommendation, "recommendation");
 
             SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
-            SandboxCheckResult result = new SandboxCheckResult(report);
+            SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
             return new SandboxDocumentFaceMatchCheck(result, documentFilter);
         }
