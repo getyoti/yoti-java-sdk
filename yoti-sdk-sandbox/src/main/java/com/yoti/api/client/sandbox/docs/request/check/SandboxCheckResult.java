@@ -9,12 +9,20 @@ class SandboxCheckResult {
     @JsonProperty("report")
     private final SandboxCheckReport report;
 
-    SandboxCheckResult(SandboxCheckReport report) {
+    @JsonProperty("report_template")
+    private final String reportTemplate;
+
+    SandboxCheckResult(SandboxCheckReport report, String reportTemplate) {
         this.report = report;
+        this.reportTemplate = reportTemplate;
     }
 
     public SandboxCheckReport getReport() {
         return report;
     }
 
+    public String getReportTemplate() {
+        return reportTemplate;
+    }
+    
 }

@@ -29,6 +29,7 @@ public abstract class SandboxCheck {
 
         protected SandboxRecommendation recommendation;
         protected List<SandboxBreakdown> breakdown = new ArrayList<>();
+        protected String reportTemplate;
 
         public T withRecommendation(SandboxRecommendation recommendation) {
             this.recommendation = recommendation;
@@ -43,6 +44,11 @@ public abstract class SandboxCheck {
         public T withBreakdowns(List<SandboxBreakdown> breakdowns) {
             notNull(breakdowns, "breakdowns");
             this.breakdown = breakdowns;
+            return self();
+        }
+
+        public T withReportTemplate(String reportTemplate) {
+            this.reportTemplate = reportTemplate;
             return self();
         }
 

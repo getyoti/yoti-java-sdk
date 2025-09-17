@@ -32,7 +32,7 @@ public class SandboxThirdPartyIdentityCheck extends SandboxCheck {
             notNull(recommendation, "recommendation");
 
             SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
-            SandboxCheckResult result = new SandboxCheckResult(report);
+            SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
             return new SandboxThirdPartyIdentityCheck(result);
         }
