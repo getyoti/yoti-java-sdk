@@ -34,17 +34,6 @@ public class SandboxSupplementaryDocumentTextDataCheckTest {
     @Mock SandboxBreakdown sandboxBreakdownMock;
 
     @Test
-    public void builder_shouldThrowExceptionForMissingRecommendation() {
-        try {
-            SandboxSupplementaryDocumentTextDataCheck.builder().build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("recommendation"));
-            return;
-        }
-        fail("Expected an exception");
-    }
-
-    @Test
     public void builder_shouldInitialiseDocumentFieldsMap() {
         SandboxSupplementaryDocumentTextDataCheck result = SandboxSupplementaryDocumentTextDataCheck.builder()
                 .withRecommendation(sandboxRecommendationMock)

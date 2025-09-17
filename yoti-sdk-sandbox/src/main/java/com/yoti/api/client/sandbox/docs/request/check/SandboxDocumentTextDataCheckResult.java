@@ -11,8 +11,8 @@ public class SandboxDocumentTextDataCheckResult extends SandboxCheckResult {
     @JsonProperty("document_fields")
     private Map<String, Object> documentFields;
 
-    SandboxDocumentTextDataCheckResult(SandboxCheckReport report, Map<String, Object> documentFields) {
-        super(report);
+    SandboxDocumentTextDataCheckResult(SandboxCheckReport report, String reportTemplate, Map<String, Object> documentFields) {
+        super(report, reportTemplate);
         this.documentFields = documentFields;
     }
 

@@ -23,17 +23,6 @@ public class SandboxIdDocumentComparisonCheckTest {
     @Mock SandboxDocumentFilter secondaryDocumentFilterMock;
 
     @Test
-    public void builder_shouldThrowExceptionForMissingRecommendation() {
-        try {
-            SandboxIdDocumentComparisonCheck.builder().build();
-        } catch (IllegalArgumentException ex) {
-            assertThat(ex.getMessage(), containsString("recommendation"));
-            return;
-        }
-        fail("Expected an exception");
-    }
-
-    @Test
     public void builder_shouldBuildCorrectly() {
         SandboxIdDocumentComparisonCheck result = SandboxIdDocumentComparisonCheck.builder()
                 .withRecommendation(sandboxRecommendationMock)
