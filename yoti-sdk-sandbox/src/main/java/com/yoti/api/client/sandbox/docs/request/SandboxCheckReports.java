@@ -9,6 +9,7 @@ import static com.yoti.api.client.docs.DocScanConstants.LIVENESS;
 import static com.yoti.api.client.docs.DocScanConstants.SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK;
 import static com.yoti.api.client.docs.DocScanConstants.SYNECTICS_IDENTITY_FRAUD;
 import static com.yoti.api.client.docs.DocScanConstants.THIRD_PARTY_IDENTITY;
+import static com.yoti.api.client.docs.DocScanConstants.THIRD_PARTY_IDENTITY_FRAUD_ONE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import com.yoti.api.client.sandbox.docs.request.check.SandboxLivenessCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxSupplementaryDocumentTextDataCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxSynecticsIdentityFraudCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxThirdPartyIdentityCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxThirdPartyIdentityFraudOneCheck;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -56,6 +58,9 @@ public class SandboxCheckReports {
     @JsonProperty(SYNECTICS_IDENTITY_FRAUD)
     private final List<SandboxSynecticsIdentityFraudCheck> synecticsIdentityFraudChecks;
 
+    @JsonProperty(THIRD_PARTY_IDENTITY_FRAUD_ONE)
+    private final SandboxThirdPartyIdentityFraudOneCheck thirdPartyIdentityFraudOneCheck;
+
     @JsonProperty("async_report_delay")
     private final Integer asyncReportDelay;
 
@@ -68,6 +73,7 @@ public class SandboxCheckReports {
             SandboxThirdPartyIdentityCheck thirdPartyIdentityCheck,
             SandboxFaceComparisonCheck faceComparisonCheck,
             List<SandboxSynecticsIdentityFraudCheck> synecticsIdentityFraudChecks,
+            SandboxThirdPartyIdentityFraudOneCheck thirdPartyIdentityFraudOneCheck,
             Integer asyncReportsDelay) {
         this.documentTextDataChecks = documentTextDataChecks;
         this.documentAuthenticityChecks = documentAuthenticityChecks;
@@ -78,6 +84,7 @@ public class SandboxCheckReports {
         this.thirdPartyIdentityCheck = thirdPartyIdentityCheck;
         this.faceComparisonCheck = faceComparisonCheck;
         this.synecticsIdentityFraudChecks = synecticsIdentityFraudChecks;
+        this.thirdPartyIdentityFraudOneCheck = thirdPartyIdentityFraudOneCheck;
         this.asyncReportDelay = asyncReportsDelay;
     }
 
@@ -119,6 +126,10 @@ public class SandboxCheckReports {
         return synecticsIdentityFraudChecks;
     }
 
+    public SandboxThirdPartyIdentityFraudOneCheck getThirdPartyIdentityFraudOneCheck() {
+        return thirdPartyIdentityFraudOneCheck;
+    }
+
     public Integer getAsyncReportDelay() {
         return asyncReportDelay;
     }
@@ -145,6 +156,8 @@ public class SandboxCheckReports {
         private SandboxFaceComparisonCheck faceComparisonCheck;
 
         private List<SandboxSynecticsIdentityFraudCheck> synecticsIdentityFraudChecks = new ArrayList<>();
+
+        private SandboxThirdPartyIdentityFraudOneCheck thirdPartyIdentityFraudOneCheck;
 
         private Integer asyncReportDelay;
 
@@ -195,6 +208,11 @@ public class SandboxCheckReports {
             return this;
         }
 
+        public Builder withThirdPartyIdentityFraudOneCheck(SandboxThirdPartyIdentityFraudOneCheck thirdPartyIdentityFraudOneCheck) {
+            this.thirdPartyIdentityFraudOneCheck = thirdPartyIdentityFraudOneCheck;
+            return this;
+        }
+
         public Builder withAsyncReportDelay(int asyncReportDelay) {
             this.asyncReportDelay = asyncReportDelay;
             return this;
@@ -202,7 +220,8 @@ public class SandboxCheckReports {
 
         public SandboxCheckReports build() {
             return new SandboxCheckReports(textDataCheck, documentAuthenticityCheck, livenessCheck, documentFaceMatchCheck, idDocumentComparisonCheck,
-                    supplementaryDocumentTextDataCheck, thirdPartyIdentityCheck, faceComparisonCheck, synecticsIdentityFraudChecks, asyncReportDelay);
+                    supplementaryDocumentTextDataCheck, thirdPartyIdentityCheck, faceComparisonCheck, synecticsIdentityFraudChecks,
+                    thirdPartyIdentityFraudOneCheck, asyncReportDelay);
         }
 
     }
