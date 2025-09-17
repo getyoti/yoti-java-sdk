@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentAuthenticityCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentFaceMatchCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxFaceComparisonCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxIdDocumentComparisonCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxLivenessCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentTextDataCheck;
@@ -27,6 +28,7 @@ public class SandboxCheckReportsTest {
     @Mock SandboxIdDocumentComparisonCheck idDocumentComparisonCheckMock;
     @Mock SandboxSupplementaryDocumentTextDataCheck supplementaryDocumentTextDataCheckMock;
     @Mock SandboxThirdPartyIdentityCheck thirdPartyIdentityCheckMock;
+    @Mock SandboxFaceComparisonCheck faceComparisonCheckMock;
 
     @Test
     public void builder_shouldAllowDocumentAuthenticityChecks() {
@@ -95,6 +97,15 @@ public class SandboxCheckReportsTest {
                 .build();
 
         assertThat(result.getThirdPartyIdentityCheck(), is(thirdPartyIdentityCheckMock));
+    }
+
+    @Test
+    public void builder_shouldAllowFaceComparisonCheck() {
+        SandboxCheckReports result = SandboxCheckReports.builder()
+                .withFaceComparisonCheck(faceComparisonCheckMock)
+                .build();
+
+        assertThat(result.getFaceComparisonCheck(), is(faceComparisonCheckMock));
     }
 
     @Test
