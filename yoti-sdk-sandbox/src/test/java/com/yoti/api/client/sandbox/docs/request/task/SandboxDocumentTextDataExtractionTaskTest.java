@@ -105,4 +105,13 @@ public class SandboxDocumentTextDataExtractionTaskTest {
         assertThat(result.getResponseDelay(), is(10));
     }
 
+    @Test
+    public void builder_shouldSetResultTemplate() {
+        SandboxDocumentTextDataExtractionTask result = SandboxDocumentTextDataExtractionTask.builder()
+                .withResultTemplate("someResultTemplate")
+                .build();
+
+        assertThat(result.getResultTemplate(), is("someResultTemplate"));
+    }
+
 }
