@@ -1,5 +1,6 @@
 package com.yoti.api.client.sandbox.docs.request;
 
+import static com.yoti.api.client.docs.DocScanConstants.FACE_COMPARISON;
 import static com.yoti.api.client.docs.DocScanConstants.ID_DOCUMENT_AUTHENTICITY;
 import static com.yoti.api.client.docs.DocScanConstants.ID_DOCUMENT_COMPARISON;
 import static com.yoti.api.client.docs.DocScanConstants.ID_DOCUMENT_FACE_MATCH;
@@ -14,6 +15,7 @@ import java.util.List;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentAuthenticityCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentTextDataCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentFaceMatchCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxFaceComparisonCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxIdDocumentComparisonCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxLivenessCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxSupplementaryDocumentTextDataCheck;
@@ -46,6 +48,9 @@ public class SandboxCheckReports {
     @JsonProperty(THIRD_PARTY_IDENTITY)
     private final SandboxThirdPartyIdentityCheck thirdPartyIdentityCheck;
 
+    @JsonProperty(FACE_COMPARISON)
+    private final SandboxFaceComparisonCheck faceComparisonCheck;
+
     @JsonProperty("async_report_delay")
     private final Integer asyncReportDelay;
 
@@ -56,6 +61,7 @@ public class SandboxCheckReports {
             List<SandboxIdDocumentComparisonCheck> idDocumentComparisonChecks,
             List<SandboxSupplementaryDocumentTextDataCheck> supplementaryDocumentTextDataChecks,
             SandboxThirdPartyIdentityCheck thirdPartyIdentityCheck,
+            SandboxFaceComparisonCheck faceComparisonCheck,
             Integer asyncReportsDelay) {
         this.documentTextDataChecks = documentTextDataChecks;
         this.documentAuthenticityChecks = documentAuthenticityChecks;
@@ -64,6 +70,7 @@ public class SandboxCheckReports {
         this.idDocumentComparisonChecks = idDocumentComparisonChecks;
         this.supplementaryDocumentTextDataChecks = supplementaryDocumentTextDataChecks;
         this.thirdPartyIdentityCheck = thirdPartyIdentityCheck;
+        this.faceComparisonCheck = faceComparisonCheck;
         this.asyncReportDelay = asyncReportsDelay;
     }
 
@@ -97,6 +104,10 @@ public class SandboxCheckReports {
         return thirdPartyIdentityCheck;
     }
 
+    public SandboxFaceComparisonCheck getFaceComparisonCheck() {
+        return faceComparisonCheck;
+    }
+
     public Integer getAsyncReportDelay() {
         return asyncReportDelay;
     }
@@ -119,6 +130,8 @@ public class SandboxCheckReports {
         private List<SandboxSupplementaryDocumentTextDataCheck> supplementaryDocumentTextDataCheck = new ArrayList<>();
 
         private SandboxThirdPartyIdentityCheck thirdPartyIdentityCheck;
+
+        private SandboxFaceComparisonCheck faceComparisonCheck;
 
         private Integer asyncReportDelay;
 
@@ -159,6 +172,11 @@ public class SandboxCheckReports {
             return this;
         }
 
+        public Builder withFaceComparisonCheck(SandboxFaceComparisonCheck faceComparisonCheck) {
+            this.faceComparisonCheck = faceComparisonCheck;
+            return this;
+        }
+
         public Builder withAsyncReportDelay(int asyncReportDelay) {
             this.asyncReportDelay = asyncReportDelay;
             return this;
@@ -166,7 +184,7 @@ public class SandboxCheckReports {
 
         public SandboxCheckReports build() {
             return new SandboxCheckReports(textDataCheck, documentAuthenticityCheck, livenessCheck, documentFaceMatchCheck, idDocumentComparisonCheck,
-                    supplementaryDocumentTextDataCheck, thirdPartyIdentityCheck, asyncReportDelay);
+                    supplementaryDocumentTextDataCheck, thirdPartyIdentityCheck, faceComparisonCheck, asyncReportDelay);
         }
 
     }
