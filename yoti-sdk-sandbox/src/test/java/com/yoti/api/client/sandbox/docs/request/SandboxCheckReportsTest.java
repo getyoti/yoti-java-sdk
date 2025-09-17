@@ -14,6 +14,7 @@ import com.yoti.api.client.sandbox.docs.request.check.SandboxSupplementaryDocume
 import com.yoti.api.client.sandbox.docs.request.check.SandboxSynecticsIdentityFraudCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxThirdPartyIdentityCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxThirdPartyIdentityFraudOneCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxWatchlistScreeningCheck;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +34,7 @@ public class SandboxCheckReportsTest {
     @Mock SandboxFaceComparisonCheck faceComparisonCheckMock;
     @Mock SandboxSynecticsIdentityFraudCheck synecticsIdentityFraudCheckMock;
     @Mock SandboxThirdPartyIdentityFraudOneCheck thirdPartyIdentityFraudOneCheckMock;
+    @Mock SandboxWatchlistScreeningCheck watchlistScreeningCheckMock;
 
     @Test
     public void builder_shouldAllowDocumentAuthenticityChecks() {
@@ -129,6 +131,15 @@ public class SandboxCheckReportsTest {
                 .build();
 
         assertThat(result.getThirdPartyIdentityFraudOneCheck(), is(thirdPartyIdentityFraudOneCheckMock));
+    }
+
+    @Test
+    public void builder_shouldAllowWatchlistScreeningCheck() {
+        SandboxCheckReports result = SandboxCheckReports.builder()
+                .withWatchlistScreeningCheck(watchlistScreeningCheckMock)
+                .build();
+
+        assertThat(result.getWatchlistScreeningCheck(), is(watchlistScreeningCheckMock));
     }
 
     @Test
