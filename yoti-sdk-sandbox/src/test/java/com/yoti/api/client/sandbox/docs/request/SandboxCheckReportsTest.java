@@ -14,6 +14,7 @@ import com.yoti.api.client.sandbox.docs.request.check.SandboxSupplementaryDocume
 import com.yoti.api.client.sandbox.docs.request.check.SandboxSynecticsIdentityFraudCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxThirdPartyIdentityCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxThirdPartyIdentityFraudOneCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxWatchlistAdvancedCaCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxWatchlistScreeningCheck;
 
 import org.junit.Test;
@@ -35,6 +36,7 @@ public class SandboxCheckReportsTest {
     @Mock SandboxSynecticsIdentityFraudCheck synecticsIdentityFraudCheckMock;
     @Mock SandboxThirdPartyIdentityFraudOneCheck thirdPartyIdentityFraudOneCheckMock;
     @Mock SandboxWatchlistScreeningCheck watchlistScreeningCheckMock;
+    @Mock SandboxWatchlistAdvancedCaCheck watchlistAdvancedCaCheckMock;
 
     @Test
     public void builder_shouldAllowDocumentAuthenticityChecks() {
@@ -140,6 +142,16 @@ public class SandboxCheckReportsTest {
                 .build();
 
         assertThat(result.getWatchlistScreeningCheck(), is(watchlistScreeningCheckMock));
+    }
+
+    @Test
+    public void builder_shouldAllowWatchlistAdvancedCaChecks() {
+        SandboxCheckReports result = SandboxCheckReports.builder()
+                .withWatchlistAdvancedCaCheck(watchlistAdvancedCaCheckMock)
+                .build();
+
+        assertThat(result.getWatchlistAdvancedCaChecks(), hasSize(1));
+        assertThat(result.getWatchlistAdvancedCaChecks().get(0), is(watchlistAdvancedCaCheckMock));
     }
 
     @Test
