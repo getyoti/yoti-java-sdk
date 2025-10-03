@@ -28,8 +28,6 @@ public class SandboxThirdPartyIdentityFraudOneCheck extends SandboxCheck {
 
         @Override
         public SandboxThirdPartyIdentityFraudOneCheck build() {
-            notNull(recommendation, "recommendation");
-
             SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
