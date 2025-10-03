@@ -28,7 +28,7 @@ public abstract class SandboxCheck {
     static abstract class Builder<T extends Builder<T>> {
 
         protected SandboxRecommendation recommendation;
-        protected List<SandboxBreakdown> breakdown = new ArrayList<>();
+        protected List<SandboxBreakdown> breakdown;
         protected String reportTemplate;
 
         public T withRecommendation(SandboxRecommendation recommendation) {
@@ -37,12 +37,14 @@ public abstract class SandboxCheck {
         }
 
         public T withBreakdown(SandboxBreakdown breakdown) {
+            if (this.breakdown == null) {
+                this.breakdown = new ArrayList<>();
+            }
             this.breakdown.add(breakdown);
             return self();
         }
 
         public T withBreakdowns(List<SandboxBreakdown> breakdowns) {
-            notNull(breakdowns, "breakdowns");
             this.breakdown = breakdowns;
             return self();
         }
