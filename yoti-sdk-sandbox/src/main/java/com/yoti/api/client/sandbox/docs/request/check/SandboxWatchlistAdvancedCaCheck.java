@@ -50,7 +50,9 @@ public class SandboxWatchlistAdvancedCaCheck extends SandboxCheck {
 
         @Override
         public SandboxWatchlistAdvancedCaCheck build() {
-            SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
+            SandboxCheckReport report = recommendation == null && breakdown == null
+                    ? null
+                    : new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
             return new SandboxWatchlistAdvancedCaCheck(result, sourcesFilter);

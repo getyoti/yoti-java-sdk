@@ -1,7 +1,5 @@
 package com.yoti.api.client.sandbox.docs.request.check;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +55,9 @@ public class SandboxDocumentTextDataCheck extends SandboxDocumentCheck {
 
         @Override
         public SandboxDocumentTextDataCheck build() {
-            SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
+            SandboxCheckReport report = recommendation == null && breakdown == null
+                    ? null
+                    : new SandboxCheckReport(recommendation, breakdown);
             SandboxDocumentTextDataCheckResult result = new SandboxDocumentTextDataCheckResult(report, reportTemplate, documentFields);
 
             return new SandboxDocumentTextDataCheck(result, documentFilter);

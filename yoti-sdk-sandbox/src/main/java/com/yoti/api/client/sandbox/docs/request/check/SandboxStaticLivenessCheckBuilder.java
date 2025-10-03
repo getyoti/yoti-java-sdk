@@ -1,7 +1,5 @@
 package com.yoti.api.client.sandbox.docs.request.check;
 
-import static com.yoti.validation.Validation.notNull;
-
 import com.yoti.api.client.docs.DocScanConstants;
 import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
@@ -23,7 +21,9 @@ public class SandboxStaticLivenessCheckBuilder extends SandboxCheck.Builder<Sand
 
     @Override
     public SandboxLivenessCheck build() {
-        SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
+        SandboxCheckReport report = recommendation == null && breakdown == null
+                ? null
+                : new SandboxCheckReport(recommendation, breakdown);
         SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
         return new SandboxLivenessCheck(result, DocScanConstants.STATIC, responseDelay);
