@@ -110,8 +110,14 @@ public class SandboxSupplementaryDocTextDataExtractionTask {
         }
 
         public SandboxSupplementaryDocTextDataExtractionTask build() {
-            SandboxSupplementaryDocTextDataExtractionTaskResult result = new SandboxSupplementaryDocTextDataExtractionTaskResult(documentFields,
-                    detectedCountry, recommendation);
+            SandboxSupplementaryDocTextDataExtractionTaskResult result;
+            if (documentFields == null && detectedCountry == null && recommendation == null) {
+                result = null;
+            } else {
+                result = new SandboxSupplementaryDocTextDataExtractionTaskResult(documentFields,
+                        detectedCountry,
+                        recommendation);
+            }
             return new SandboxSupplementaryDocTextDataExtractionTask(result, documentFilter, responseDelay, resultTemplate);
         }
     }

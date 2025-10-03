@@ -124,11 +124,17 @@ public class SandboxDocumentTextDataExtractionTask {
         }
 
         public SandboxDocumentTextDataExtractionTask build() {
-            SandboxDocumentTextDataExtractionTaskResult result = new SandboxDocumentTextDataExtractionTaskResult(documentFields,
-                    documentIdPhoto,
-                    detectedCountry,
-                    detectedDocumentType,
-                    recommendation);
+            SandboxDocumentTextDataExtractionTaskResult result;
+            if (documentFields == null && documentIdPhoto == null && detectedCountry == null && detectedDocumentType == null && recommendation == null) {
+                result = null;
+            } else {
+                result = new SandboxDocumentTextDataExtractionTaskResult(documentFields,
+                        documentIdPhoto,
+                        detectedCountry,
+                        detectedDocumentType,
+                        recommendation);
+            }
+            
             return new SandboxDocumentTextDataExtractionTask(result, documentFilter, responseDelay, resultTemplate);
         }
     }

@@ -3,6 +3,7 @@ package com.yoti.api.client.sandbox.docs.request.task;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -97,6 +98,7 @@ public class SandboxSupplementaryDocTextDataExtractionTaskTest {
                 .build();
 
         assertThat(result.getResultTemplate(), is("someResultTemplate"));
+        assertThat(result.getResult(), is(nullValue()));
     }
 
 }
