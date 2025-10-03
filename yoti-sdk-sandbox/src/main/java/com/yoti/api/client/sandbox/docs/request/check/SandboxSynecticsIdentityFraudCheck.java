@@ -28,8 +28,6 @@ public class SandboxSynecticsIdentityFraudCheck extends SandboxCheck {
 
         @Override
         public SandboxSynecticsIdentityFraudCheck build() {
-            notNull(recommendation, "recommendation");
-
             SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
