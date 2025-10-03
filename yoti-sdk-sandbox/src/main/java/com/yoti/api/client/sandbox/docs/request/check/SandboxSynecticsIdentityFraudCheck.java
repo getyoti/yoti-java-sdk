@@ -1,7 +1,5 @@
 package com.yoti.api.client.sandbox.docs.request.check;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
-
 import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxSynecticsIdentityFraudCheck extends SandboxCheck {
@@ -28,7 +26,9 @@ public class SandboxSynecticsIdentityFraudCheck extends SandboxCheck {
 
         @Override
         public SandboxSynecticsIdentityFraudCheck build() {
-            SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
+            SandboxCheckReport report = recommendation == null && breakdown == null
+                    ? null
+                    : new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
             return new SandboxSynecticsIdentityFraudCheck(result);

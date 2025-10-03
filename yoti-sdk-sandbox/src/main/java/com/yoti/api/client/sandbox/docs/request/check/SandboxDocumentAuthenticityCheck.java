@@ -1,7 +1,5 @@
 package com.yoti.api.client.sandbox.docs.request.check;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
-
 import com.yoti.api.client.sandbox.docs.request.SandboxDocumentFilter;
 import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
@@ -30,7 +28,9 @@ public class SandboxDocumentAuthenticityCheck extends SandboxDocumentCheck {
 
         @Override
         public SandboxDocumentAuthenticityCheck build() {
-            SandboxCheckReport report = new SandboxCheckReport(recommendation, breakdown);
+            SandboxCheckReport report = recommendation == null && breakdown == null
+                    ? null
+                    : new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
             return new SandboxDocumentAuthenticityCheck(result, documentFilter);
