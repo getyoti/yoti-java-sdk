@@ -25,7 +25,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 
-public class SignedRequestBuilder {
+public class YotiHttpRequestBuilder {
 
     private KeyPair keyPair;
     private String baseUrl;
@@ -43,7 +43,7 @@ public class SignedRequestBuilder {
     private final ImageResourceFetcher imageResourceFetcher;
     private MultipartEntityBuilder multipartEntityBuilder;
 
-    SignedRequestBuilder(PathFactory pathFactory,
+    YotiHttpRequestBuilder(PathFactory pathFactory,
             SignedMessageFactory signedMessageFactory,
             HeadersFactory headersFactory,
             JsonResourceFetcher jsonResourceFetcher,
@@ -63,7 +63,7 @@ public class SignedRequestBuilder {
      * @param keyPair the key pair
      * @return the updated builder
      */
-    public SignedRequestBuilder withKeyPair(KeyPair keyPair) {
+    public YotiHttpRequestBuilder withKeyPair(KeyPair keyPair) {
         this.keyPair = keyPair;
         return this;
     }
@@ -74,7 +74,7 @@ public class SignedRequestBuilder {
      * @param baseUrl the base url
      * @return the updated builder
      */
-    public SignedRequestBuilder withBaseUrl(String baseUrl) {
+    public YotiHttpRequestBuilder withBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl.replaceAll("([/]+)$", "");
         return this;
     }
@@ -85,7 +85,7 @@ public class SignedRequestBuilder {
      * @param endpoint the endpoint
      * @return the updated builder
      */
-    public SignedRequestBuilder withEndpoint(String endpoint) {
+    public YotiHttpRequestBuilder withEndpoint(String endpoint) {
         this.endpoint = endpoint;
         return this;
     }
@@ -96,7 +96,7 @@ public class SignedRequestBuilder {
      * @param payload the payload
      * @return the update builder
      */
-    public SignedRequestBuilder withPayload(byte[] payload) {
+    public YotiHttpRequestBuilder withPayload(byte[] payload) {
         this.multipartEntityBuilder = null;
         this.payload = payload;
         return this;
@@ -109,7 +109,7 @@ public class SignedRequestBuilder {
      * @param value the value of the query parameter
      * @return the updated builder
      */
-    public SignedRequestBuilder withQueryParameter(String name, String value) {
+    public YotiHttpRequestBuilder withQueryParameter(String name, String value) {
         this.queryParameters.put(name, value);
         return this;
     }
@@ -121,7 +121,7 @@ public class SignedRequestBuilder {
      * @param value the value of the header
      * @return the updated builder
      */
-    public SignedRequestBuilder withHeader(String name, String value) {
+    public YotiHttpRequestBuilder withHeader(String name, String value) {
         this.headers.put(name, value);
         return this;
     }
@@ -132,13 +132,13 @@ public class SignedRequestBuilder {
      * @param httpMethod the HTTP method
      * @return the updated builder
      */
-    public SignedRequestBuilder withHttpMethod(String httpMethod) throws IllegalArgumentException {
+    public YotiHttpRequestBuilder withHttpMethod(String httpMethod) throws IllegalArgumentException {
         Validation.withinList(httpMethod, SUPPORTED_HTTP_METHODS);
         this.httpMethod = httpMethod;
         return this;
     }
 
-    private SignedRequestBuilder forMultipartRequest() {
+    private YotiHttpRequestBuilder forMultipartRequest() {
         if (this.multipartEntityBuilder == null) {
             this.multipartEntityBuilder = MultipartEntityBuilder.create();
         }
@@ -152,7 +152,7 @@ public class SignedRequestBuilder {
      * @param multipartBoundary the multipart boundary
      * @return the updated builder
      */
-    public SignedRequestBuilder withMultipartBoundary(String multipartBoundary) {
+    public YotiHttpRequestBuilder withMultipartBoundary(String multipartBoundary) {
         Validation.notNullOrEmpty(multipartBoundary, "multipartBoundary");
         forMultipartRequest();
         multipartEntityBuilder.setBoundary(multipartBoundary);
@@ -171,7 +171,7 @@ public class SignedRequestBuilder {
      * @param fileName    the filename of the binary body
      * @return the updated builder
      */
-    public SignedRequestBuilder withMultipartBinaryBody(String name, byte[] payload, ContentType contentType, String fileName) {
+    public YotiHttpRequestBuilder withMultipartBinaryBody(String name, byte[] payload, ContentType contentType, String fileName) {
         Validation.notNullOrEmpty(name, "name");
         Validation.notNull(payload, "payload");
         Validation.notNull(contentType, "contentType");
@@ -186,7 +186,7 @@ public class SignedRequestBuilder {
      *
      * @return the signed request
      */
-    public SignedRequest build() throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
+    public YotiHttpRequest build() throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
         validateRequest();
 
         if (endpoint.contains("?")) {
@@ -216,7 +216,7 @@ public class SignedRequestBuilder {
         String digest = createDigest(builtEndpoint, finalPayload);
         headers.putAll(headersFactory.create(digest));
 
-        return new SignedRequest(
+        return new YotiHttpRequest(
                 new URI(baseUrl + builtEndpoint),
                 httpMethod,
                 finalPayload,

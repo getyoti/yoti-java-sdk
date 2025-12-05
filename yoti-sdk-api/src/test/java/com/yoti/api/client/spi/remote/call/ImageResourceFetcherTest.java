@@ -29,7 +29,7 @@ public class ImageResourceFetcherTest {
     @InjectMocks ImageResourceFetcher testObj;
 
     @Mock RawResourceFetcher rawResourceFetcherMock;
-    @Mock SignedRequest signedRequestMock;
+    @Mock YotiHttpRequest yotiHttpRequestMock;
 
     private Map<String, List<String>> createResponseHeaderMap(String name, List<String> values) {
         HashMap<String, List<String>> result = new HashMap<>();
@@ -40,10 +40,10 @@ public class ImageResourceFetcherTest {
     @Test
     public void doRequest_shouldReturnPngImage() throws Exception {
         Map<String, List<String>> headersMap = createResponseHeaderMap("Content-Type", asList(YotiConstants.CONTENT_TYPE_PNG));
-        SignedRequestResponse signedRequestResponse = new SignedRequestResponse(SOME_OK_STATUS_CODE, SOME_RESPONSE_BODY, headersMap);
-        when(rawResourceFetcherMock.doRequest(signedRequestMock)).thenReturn(signedRequestResponse);
+        YotiHttpResponse yotiHttpResponse = new YotiHttpResponse(SOME_OK_STATUS_CODE, SOME_RESPONSE_BODY, headersMap);
+        when(rawResourceFetcherMock.doRequest(yotiHttpRequestMock)).thenReturn(yotiHttpResponse);
 
-        Image result = testObj.doRequest(signedRequestMock);
+        Image result = testObj.doRequest(yotiHttpRequestMock);
 
         assertThat(result.getMimeType(), is(YotiConstants.CONTENT_TYPE_PNG));
         assertTrue(Arrays.equals(result.getContent(), SOME_RESPONSE_BODY));
@@ -52,10 +52,10 @@ public class ImageResourceFetcherTest {
     @Test
     public void doRequest_shouldReturnJpegImage() throws Exception {
         Map<String, List<String>> headersMap = createResponseHeaderMap("Content-Type", asList(YotiConstants.CONTENT_TYPE_JPEG));
-        SignedRequestResponse signedRequestResponse = new SignedRequestResponse(SOME_OK_STATUS_CODE, SOME_RESPONSE_BODY, headersMap);
-        when(rawResourceFetcherMock.doRequest(signedRequestMock)).thenReturn(signedRequestResponse);
+        YotiHttpResponse yotiHttpResponse = new YotiHttpResponse(SOME_OK_STATUS_CODE, SOME_RESPONSE_BODY, headersMap);
+        when(rawResourceFetcherMock.doRequest(yotiHttpRequestMock)).thenReturn(yotiHttpResponse);
 
-        Image result = testObj.doRequest(signedRequestMock);
+        Image result = testObj.doRequest(yotiHttpRequestMock);
 
         String mimeType = result.getMimeType();
         byte[] content = result.getContent();
@@ -67,10 +67,10 @@ public class ImageResourceFetcherTest {
     @Test(expected = ResourceException.class)
     public void doRequest_shouldThrowResourceExceptionForUnsupportedImageType() throws Exception {
         Map<String, List<String>> headersMap = createResponseHeaderMap("Content-Type", asList("image/webp"));
-        SignedRequestResponse signedRequestResponse = new SignedRequestResponse(SOME_OK_STATUS_CODE, SOME_RESPONSE_BODY, headersMap);
-        when(rawResourceFetcherMock.doRequest(signedRequestMock)).thenReturn(signedRequestResponse);
+        YotiHttpResponse yotiHttpResponse = new YotiHttpResponse(SOME_OK_STATUS_CODE, SOME_RESPONSE_BODY, headersMap);
+        when(rawResourceFetcherMock.doRequest(yotiHttpRequestMock)).thenReturn(yotiHttpResponse);
 
-        testObj.doRequest(signedRequestMock);
+        testObj.doRequest(yotiHttpRequestMock);
     }
 
 }

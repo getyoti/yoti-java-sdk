@@ -17,8 +17,8 @@ import com.yoti.api.client.sandbox.docs.request.ResponseConfig;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 import com.yoti.api.client.spi.remote.call.HttpMethod;
 import com.yoti.api.client.spi.remote.call.ResourceException;
-import com.yoti.api.client.spi.remote.call.SignedRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -31,18 +31,18 @@ public class DocScanSandboxClient {
 
     private final String docScanBaseUrl;
     private final ObjectMapper mapper;
-    private final SignedRequestBuilderFactory signedRequestBuilderFactory;
+    private final YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory;
     private final String sdkId;
     private final KeyPair keyPair;
 
     DocScanSandboxClient(String sdkId,
             KeyPair keyPair,
             ObjectMapper mapper,
-            SignedRequestBuilderFactory signedRequestBuilderFactory) {
+            YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory) {
         this.sdkId = sdkId;
         this.keyPair = keyPair;
         this.mapper = mapper;
-        this.signedRequestBuilderFactory = signedRequestBuilderFactory;
+        this.yotiHttpRequestBuilderFactory = yotiHttpRequestBuilderFactory;
         this.docScanBaseUrl = System.getProperty(PROPERTY_YOTI_DOCS_URL, DEFAULT_DOC_SCAN_SANDBOX_API_URL);
     }
 
@@ -63,7 +63,7 @@ public class DocScanSandboxClient {
         try {
             byte[] body = mapper.writeValueAsBytes(responseConfig);
 
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withBaseUrl(docScanBaseUrl)
                     .withEndpoint(path)
                     .withKeyPair(keyPair)
@@ -72,7 +72,7 @@ public class DocScanSandboxClient {
                     .withQueryParameter("sdkId", sdkId)
                     .build();
 
-            signedRequest.execute();
+            yotiHttpRequest.execute();
         } catch (URISyntaxException | GeneralSecurityException | ResourceException | IOException e) {
             throw new SandboxException(e);
         }
@@ -89,7 +89,7 @@ public class DocScanSandboxClient {
         try {
             byte[] body = mapper.writeValueAsBytes(sandboxExpectation);
 
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withBaseUrl(docScanBaseUrl)
                     .withEndpoint(path)
                     .withKeyPair(keyPair)
@@ -97,7 +97,7 @@ public class DocScanSandboxClient {
                     .withPayload(body)
                     .build();
 
-            signedRequest.execute();
+            yotiHttpRequest.execute();
         } catch (URISyntaxException | GeneralSecurityException | ResourceException | IOException e) {
             throw new SandboxException(e);
         }
@@ -132,7 +132,7 @@ public class DocScanSandboxClient {
             notNullOrEmpty(sdkId, "sdkId");
             notNull(keyPair, "keyPair");
 
-            return new DocScanSandboxClient(sdkId, keyPair, new ObjectMapper(), new SignedRequestBuilderFactory());
+            return new DocScanSandboxClient(sdkId, keyPair, new ObjectMapper(), new YotiHttpRequestBuilderFactory());
         }
     }
 }

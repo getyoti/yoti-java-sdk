@@ -29,10 +29,10 @@ class ImageResourceFetcher {
         this.rawResourceFetcher = rawResourceFetcher;
     }
 
-    Image doRequest(SignedRequest signedRequest) throws IOException, ResourceException {
-        SignedRequestResponse signedRequestResponse = rawResourceFetcher.doRequest(signedRequest);
-        String contentType = getContentType(signedRequestResponse.getResponseHeaders());
-        byte[] responseBody = signedRequestResponse.getResponseBody();
+    Image doRequest(YotiHttpRequest yotiHttpRequest) throws IOException, ResourceException {
+        YotiHttpResponse yotiHttpResponse = rawResourceFetcher.doRequest(yotiHttpRequest);
+        String contentType = getContentType(yotiHttpResponse.getResponseHeaders());
+        byte[] responseBody = yotiHttpResponse.getResponseBody();
         switch (contentType) {
             case CONTENT_TYPE_PNG:
                 return new PngAttributeValue(responseBody);
@@ -40,7 +40,7 @@ class ImageResourceFetcher {
                 return new JpegAttributeValue(responseBody);
             default:
                 LOG.error("Failed to convert image of type: (" + contentType + ")");
-                throw new ResourceException(signedRequestResponse.getResponseCode(), "Failed to convert image of type: (" + contentType + ")", null);
+                throw new ResourceException(yotiHttpResponse.getResponseCode(), "Failed to convert image of type: (" + contentType + ")", null);
         }
     }
 

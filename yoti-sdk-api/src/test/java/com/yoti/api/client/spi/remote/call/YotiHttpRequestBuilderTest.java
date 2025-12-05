@@ -15,8 +15,13 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -36,14 +41,21 @@ import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.junit.*;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
-import org.mockito.junit.*;
+import org.mockito.Answers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SignedRequestBuilderTest {
+public class YotiHttpRequestBuilderTest {
 
     private static final String SOME_ENDPOINT = "/someEndpoint";
     private static final String SOME_SIGNATURE = "someSignature";
@@ -71,7 +83,7 @@ public class SignedRequestBuilderTest {
         KEY_PAIR = generateKeyPairFrom(KEY_PAIR_PEM);
     }
 
-    @InjectMocks SignedRequestBuilder signedRequestBuilder;
+    @InjectMocks YotiHttpRequestBuilder yotiHttpRequestBuilder;
 
     @Mock PathFactory pathFactoryMock;
     @Mock SignedMessageFactory signedMessageFactoryMock;
@@ -86,7 +98,7 @@ public class SignedRequestBuilderTest {
     @Test
     public void withHttpMethod_shouldThrowExceptionWhenSuppliedWithUnsupportedHttpMethod() {
         try {
-            signedRequestBuilder.withHttpMethod("someNonsenseHere");
+            yotiHttpRequestBuilder.withHttpMethod("someNonsenseHere");
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("someNonsenseHere"));
             return;
@@ -98,7 +110,7 @@ public class SignedRequestBuilderTest {
     @Test
     public void build_shouldThrowExceptionWhenMissingKeyPair() throws Exception {
         try {
-            signedRequestBuilder.build();
+            yotiHttpRequestBuilder.build();
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("keyPair"));
             return;
@@ -109,7 +121,7 @@ public class SignedRequestBuilderTest {
     @Test
     public void build_shouldThrowExceptionWhenMissingBaseUrl() throws Exception {
         try {
-            signedRequestBuilder.withKeyPair(KEY_PAIR)
+            yotiHttpRequestBuilder.withKeyPair(KEY_PAIR)
                     .build();
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), containsString("baseUrl"));
@@ -121,7 +133,7 @@ public class SignedRequestBuilderTest {
     @Test
     public void build_shouldThrowExceptionWhenMissingEndpoint() throws Exception {
         try {
-            signedRequestBuilder.withKeyPair(KEY_PAIR)
+            yotiHttpRequestBuilder.withKeyPair(KEY_PAIR)
                     .withBaseUrl(SOME_BASE_URL)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -134,7 +146,7 @@ public class SignedRequestBuilderTest {
     @Test
     public void build_shouldThrowExceptionWhenMissingHttpMethod() throws Exception {
         try {
-            signedRequestBuilder.withKeyPair(KEY_PAIR)
+            yotiHttpRequestBuilder.withKeyPair(KEY_PAIR)
                     .withBaseUrl(SOME_BASE_URL)
                     .withEndpoint(SOME_ENDPOINT)
                     .build();
@@ -149,7 +161,7 @@ public class SignedRequestBuilderTest {
     public void build_shouldCreateSignedRequestWithCustomQueryParameter() throws Exception {
         when(pathFactoryMock.createSignatureParams()).thenReturn(SIGNATURE_PARAMS_STRING);
 
-        SignedRequest result = signedRequestBuilder.withKeyPair(KEY_PAIR)
+        YotiHttpRequest result = yotiHttpRequestBuilder.withKeyPair(KEY_PAIR)
                 .withBaseUrl(SOME_BASE_URL)
                 .withEndpoint(SOME_ENDPOINT)
                 .withHttpMethod(HTTP_GET)
@@ -161,7 +173,7 @@ public class SignedRequestBuilderTest {
 
     @Test
     public void build_shouldCreateSignedRequestWithProvidedHttpHeader() throws Exception {
-        SignedRequest result = signedRequestBuilder.withKeyPair(KEY_PAIR)
+        YotiHttpRequest result = yotiHttpRequestBuilder.withKeyPair(KEY_PAIR)
                 .withBaseUrl(DEFAULT_YOTI_API_URL)
                 .withEndpoint(SOME_ENDPOINT)
                 .withHttpMethod(HTTP_GET)
@@ -177,7 +189,7 @@ public class SignedRequestBuilderTest {
         when(signedMessageFactoryMock.create(any(PrivateKey.class), anyString(), anyString())).thenReturn(SOME_SIGNATURE);
         when(headersFactoryMock.create(SOME_SIGNATURE)).thenReturn(SIGNED_REQUEST_HEADERS);
 
-        SignedRequest result = signedRequestBuilder.withKeyPair(KEY_PAIR)
+        YotiHttpRequest result = yotiHttpRequestBuilder.withKeyPair(KEY_PAIR)
                 .withBaseUrl(DEFAULT_YOTI_API_URL)
                 .withEndpoint(SOME_ENDPOINT)
                 .withHttpMethod(HTTP_GET)
@@ -189,69 +201,69 @@ public class SignedRequestBuilderTest {
 
     @Test
     public void withBoundary_shouldThrowWhenBoundaryIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> signedRequestBuilder.withMultipartBoundary(null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> yotiHttpRequestBuilder.withMultipartBoundary(null));
 
         assertThat(ex.getMessage(), containsString("multipartBoundary"));
     }
 
     @Test
     public void withBoundary_shouldThrowWhenBoundaryIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> signedRequestBuilder.withMultipartBoundary(""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> yotiHttpRequestBuilder.withMultipartBoundary(""));
 
         assertThat(ex.getMessage(), containsString("multipartBoundary"));
     }
 
     @Test
     public void withMultipartBinaryBody_shouldThrowWhenNameIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> signedRequestBuilder.withMultipartBinaryBody(null, null, null, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> yotiHttpRequestBuilder.withMultipartBinaryBody(null, null, null, null));
 
         assertThat(ex.getMessage(), containsString("name"));
     }
 
     @Test
     public void withMultipartBinaryBody_shouldThrowWhenNameIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> signedRequestBuilder.withMultipartBinaryBody("", null, null, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> yotiHttpRequestBuilder.withMultipartBinaryBody("", null, null, null));
 
         assertThat(ex.getMessage(), containsString("name"));
     }
 
     @Test
     public void withMultipartBinaryBody_shouldThrowWhenPayloadIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> signedRequestBuilder.withMultipartBinaryBody(SOME_MULTIPART_BODY_NAME, null, null, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> yotiHttpRequestBuilder.withMultipartBinaryBody(SOME_MULTIPART_BODY_NAME, null, null, null));
 
         assertThat(ex.getMessage(), containsString("payload"));
     }
 
     @Test
     public void withMultipartBinaryBody_shouldThrowWhenContentTypeIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> signedRequestBuilder.withMultipartBinaryBody(SOME_MULTIPART_BODY_NAME, SOME_MULTIPART_BODY, null, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> yotiHttpRequestBuilder.withMultipartBinaryBody(SOME_MULTIPART_BODY_NAME, SOME_MULTIPART_BODY, null, null));
 
         assertThat(ex.getMessage(), containsString("contentType"));
     }
 
     @Test
     public void withMultipartBinaryBody_shouldThrowWhenFileNameIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> signedRequestBuilder.withMultipartBinaryBody(SOME_MULTIPART_BODY_NAME, SOME_MULTIPART_BODY, SOME_MULTIPART_CONTENT_TYPE, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> yotiHttpRequestBuilder.withMultipartBinaryBody(SOME_MULTIPART_BODY_NAME, SOME_MULTIPART_BODY, SOME_MULTIPART_CONTENT_TYPE, null));
 
         assertThat(ex.getMessage(), containsString("fileName"));
     }
 
     @Test
     public void withMultipartBinaryBody_shouldThrowWhenFileNameIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> signedRequestBuilder.withMultipartBinaryBody(SOME_MULTIPART_BODY_NAME, SOME_MULTIPART_BODY, SOME_MULTIPART_CONTENT_TYPE, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> yotiHttpRequestBuilder.withMultipartBinaryBody(SOME_MULTIPART_BODY_NAME, SOME_MULTIPART_BODY, SOME_MULTIPART_CONTENT_TYPE, ""));
 
         assertThat(ex.getMessage(), containsString("fileName"));
     }
 
     @Test
     public void shouldRemoveTrailingSlashesFromBaseUrl() throws Exception {
-        SignedRequest simpleSignedRequest = signedRequestBuilder.withKeyPair(KEY_PAIR)
+        YotiHttpRequest simpleYotiHttpRequest = yotiHttpRequestBuilder.withKeyPair(KEY_PAIR)
                 .withBaseUrl(SOME_BASE_URL + "////////////")
                 .withEndpoint(SOME_ENDPOINT)
                 .withHttpMethod(HTTP_GET)
                 .build();
 
-        assertThat(simpleSignedRequest.getUri().toString(), containsString(SOME_BASE_URL + SOME_ENDPOINT));
+        assertThat(simpleYotiHttpRequest.getUri().toString(), containsString(SOME_BASE_URL + SOME_ENDPOINT));
     }
 
     @Test
@@ -260,7 +272,7 @@ public class SignedRequestBuilderTest {
         when(signedMessageFactoryMock.create(any(PrivateKey.class), anyString(), anyString())).thenReturn(SOME_SIGNATURE);
         when(headersFactoryMock.create(SOME_SIGNATURE)).thenReturn(SIGNED_REQUEST_HEADERS);
 
-        SignedRequest result = signedRequestBuilder.withKeyPair(KEY_PAIR)
+        YotiHttpRequest result = yotiHttpRequestBuilder.withKeyPair(KEY_PAIR)
                 .withBaseUrl(SOME_BASE_URL)
                 .withEndpoint(SOME_ENDPOINT)
                 .withHttpMethod(HTTP_GET)
@@ -281,7 +293,7 @@ public class SignedRequestBuilderTest {
         when(signedMessageFactoryMock.create(any(PrivateKey.class), anyString(), anyString(), any(byte[].class))).thenReturn(SOME_SIGNATURE);
         when(headersFactoryMock.create(SOME_SIGNATURE)).thenReturn(SIGNED_REQUEST_HEADERS);
 
-        SignedRequest result = signedRequestBuilder.withKeyPair(KEY_PAIR)
+        YotiHttpRequest result = yotiHttpRequestBuilder.withKeyPair(KEY_PAIR)
                 .withBaseUrl(SOME_BASE_URL)
                 .withEndpoint(SOME_ENDPOINT)
                 .withHttpMethod(HTTP_GET)
@@ -323,7 +335,7 @@ public class SignedRequestBuilderTest {
         try (MockedStatic<MultipartEntityBuilder> ms = Mockito.mockStatic(MultipartEntityBuilder.class)) {
             ms.when(MultipartEntityBuilder::create).thenReturn(multipartEntityBuilderMock);
 
-            SignedRequest result = signedRequestBuilder.withKeyPair(KEY_PAIR)
+            YotiHttpRequest result = yotiHttpRequestBuilder.withKeyPair(KEY_PAIR)
                     .withMultipartBoundary(SOME_MULTIPART_BOUNDARY)
                     .withMultipartBinaryBody(SOME_MULTIPART_BODY_NAME, SOME_MULTIPART_BODY, SOME_MULTIPART_CONTENT_TYPE, SOME_MULTIPART_FILE_NAME)
                     .withBaseUrl(SOME_BASE_URL)
@@ -352,7 +364,7 @@ public class SignedRequestBuilderTest {
             ms.when(MultipartEntityBuilder::create).thenReturn(multipartEntityBuilderMock);
 
             IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-                signedRequestBuilder.withKeyPair(KEY_PAIR)
+                yotiHttpRequestBuilder.withKeyPair(KEY_PAIR)
                                 .withMultipartBoundary(SOME_MULTIPART_BOUNDARY)
                                 .withMultipartBinaryBody(SOME_MULTIPART_BODY_NAME, SOME_MULTIPART_BODY, SOME_MULTIPART_CONTENT_TYPE, SOME_MULTIPART_FILE_NAME)
                                 .withBaseUrl(SOME_BASE_URL)

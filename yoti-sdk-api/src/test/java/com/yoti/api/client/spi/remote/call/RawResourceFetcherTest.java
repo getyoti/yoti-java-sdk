@@ -66,7 +66,7 @@ public class RawResourceFetcherTest {
         when(httpURLConnectionMock.getInputStream()).thenReturn(inputStreamSpy);
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
 
-        SignedRequestResponse result = testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_GET, null, TEST_HEADERS);
+        YotiHttpResponse result = testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_GET, null, TEST_HEADERS);
 
         verify(httpURLConnectionMock).setRequestMethod("GET");
         verify(httpURLConnectionMock).setRequestProperty(TEST_HEADER_KEY, TEST_HEADER_VALUE);
@@ -82,7 +82,7 @@ public class RawResourceFetcherTest {
         when(httpURLConnectionMock.getInputStream()).thenReturn(smallerSizeByteArray);
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
 
-        SignedRequestResponse result = testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_GET, null, TEST_HEADERS);
+        YotiHttpResponse result = testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_GET, null, TEST_HEADERS);
 
         verify(httpURLConnectionMock).setRequestMethod("GET");
         verify(httpURLConnectionMock).setRequestProperty(TEST_HEADER_KEY, TEST_HEADER_VALUE);
@@ -98,7 +98,7 @@ public class RawResourceFetcherTest {
         when(httpURLConnectionMock.getInputStream()).thenReturn(largerSizeByteArray);
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
 
-        SignedRequestResponse result = testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_GET, null, TEST_HEADERS);
+        YotiHttpResponse result = testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_GET, null, TEST_HEADERS);
 
         verify(httpURLConnectionMock).setRequestMethod("GET");
         verify(httpURLConnectionMock).setRequestProperty(TEST_HEADER_KEY, TEST_HEADER_VALUE);
@@ -165,7 +165,7 @@ public class RawResourceFetcherTest {
         when(httpURLConnectionMock.getResponseCode()).thenReturn(HTTP_OK);
         when(httpURLConnectionMock.getInputStream()).thenReturn(inputStreamSpy);
 
-        SignedRequestResponse result = testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_POST, requestBody, TEST_HEADERS);
+        YotiHttpResponse result = testObj.doRequest(urlConnectorMock, HttpMethod.HTTP_POST, requestBody, TEST_HEADERS);
 
         verify(httpURLConnectionMock).setRequestMethod("POST");
         verify(httpURLConnectionMock).setRequestProperty(TEST_HEADER_KEY, TEST_HEADER_VALUE);
