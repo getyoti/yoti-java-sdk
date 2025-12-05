@@ -11,7 +11,6 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom
 
 import static junit.framework.TestCase.assertSame;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
@@ -54,10 +53,10 @@ import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsRespon
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.call.HttpMethod;
 import com.yoti.api.client.spi.remote.call.ResourceException;
-import com.yoti.api.client.spi.remote.call.SignedRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
-import com.yoti.api.client.spi.remote.call.SignedRequestResponse;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilder;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
+import com.yoti.api.client.spi.remote.call.YotiHttpResponse;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -93,10 +92,10 @@ public class DocScanServiceTest {
 
     @Mock UnsignedPathFactory unsignedPathFactoryMock;
     @Mock ObjectMapper objectMapperMock;
-    @Mock SignedRequest signedRequestMock;
-    @Mock(answer = Answers.RETURNS_SELF) SignedRequestBuilder signedRequestBuilderMock;
-    @Mock SignedRequestResponse signedRequestResponseMock;
-    @Mock SignedRequestBuilderFactory signedRequestBuilderFactoryMock;
+    @Mock YotiHttpRequest yotiHttpRequestMock;
+    @Mock(answer = Answers.RETURNS_SELF) YotiHttpRequestBuilder yotiHttpRequestBuilderMock;
+    @Mock YotiHttpResponse yotiHttpResponseMock;
+    @Mock YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactoryMock;
     @Mock SupportedDocumentsResponse supportedDocumentsResponseMock;
     @Mock Instructions instructionsMock;
     @Mock CreateFaceCaptureResourcePayload createFaceCaptureResourcePayloadMock;
@@ -109,7 +108,7 @@ public class DocScanServiceTest {
 
     @Before
     public void setUp() {
-        when(signedRequestBuilderFactoryMock.create()).thenReturn(signedRequestBuilderMock);
+        when(yotiHttpRequestBuilderFactoryMock.create()).thenReturn(yotiHttpRequestBuilderMock);
     }
 
     @Test
@@ -137,7 +136,7 @@ public class DocScanServiceTest {
     public void createSession_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
 
@@ -149,8 +148,8 @@ public class DocScanServiceTest {
     public void createSession_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(CreateSessionResult.class)).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(CreateSessionResult.class)).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
 
@@ -162,8 +161,8 @@ public class DocScanServiceTest {
     public void createSession_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(CreateSessionResult.class)).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(CreateSessionResult.class)).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
 
@@ -175,7 +174,7 @@ public class DocScanServiceTest {
     public void createSession_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
 
@@ -188,7 +187,7 @@ public class DocScanServiceTest {
     public void createSession_shouldWrapGeneralException() {
         Exception someException = new Exception("Some exception we weren't expecting");
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
-        doAnswer(i -> {throw someException;}).when(signedRequestBuilderFactoryMock).create();
+        doAnswer(i -> {throw someException;}).when(yotiHttpRequestBuilderFactoryMock).create();
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
 
@@ -201,19 +200,19 @@ public class DocScanServiceTest {
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
         CreateSessionResult createSessionResultMock = mock(CreateSessionResult.class);
         when(objectMapperMock.writeValueAsBytes(sessionSpecMock)).thenReturn(SOME_SESSION_SPEC_BYTES);
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(CreateSessionResult.class)).thenReturn(createSessionResultMock);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(CreateSessionResult.class)).thenReturn(createSessionResultMock);
         when(unsignedPathFactoryMock.createNewYotiDocsSessionPath(SOME_APP_ID)).thenReturn(SOME_PATH);
 
         CreateSessionResult result = docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock);
 
         assertThat(result, is(createSessionResultMock));
-        verify(signedRequestBuilderMock).withKeyPair(KEY_PAIR);
-        verify(signedRequestBuilderMock).withEndpoint(SOME_PATH);
-        verify(signedRequestBuilderMock).withBaseUrl(SOME_API_URL);
-        verify(signedRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_POST);
-        verify(signedRequestBuilderMock).withPayload(SOME_SESSION_SPEC_BYTES);
-        verify(signedRequestBuilderMock).withHeader(CONTENT_TYPE, CONTENT_TYPE_JSON);
+        verify(yotiHttpRequestBuilderMock).withKeyPair(KEY_PAIR);
+        verify(yotiHttpRequestBuilderMock).withEndpoint(SOME_PATH);
+        verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
+        verify(yotiHttpRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_POST);
+        verify(yotiHttpRequestBuilderMock).withPayload(SOME_SESSION_SPEC_BYTES);
+        verify(yotiHttpRequestBuilderMock).withHeader(CONTENT_TYPE, CONTENT_TYPE_JSON);
     }
 
     @Test
@@ -254,7 +253,7 @@ public class DocScanServiceTest {
     @Test
     public void retrieveSession_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -265,8 +264,8 @@ public class DocScanServiceTest {
     @Test
     public void retrieveSession_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(GetSessionResult.class)).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(GetSessionResult.class)).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -277,8 +276,8 @@ public class DocScanServiceTest {
     @Test
     public void retrieveSession_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(GetSessionResult.class)).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(GetSessionResult.class)).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -289,7 +288,7 @@ public class DocScanServiceTest {
     @Test
     public void retrieveSession_shouldWrapGeneralException() {
         Exception someException = new Exception("Some exception we weren't expecting");
-        doAnswer(i -> {throw someException;}).when(signedRequestBuilderFactoryMock).create();
+        doAnswer(i -> {throw someException;}).when(yotiHttpRequestBuilderFactoryMock).create();
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -300,17 +299,17 @@ public class DocScanServiceTest {
     @Test
     public void retrieveSession_shouldCallSignedRequestBuilderWithCorrectMethods() throws Exception {
         GetSessionResult docScanSessionResponseMock = mock(GetSessionResult.class);
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(GetSessionResult.class)).thenReturn(docScanSessionResponseMock);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(GetSessionResult.class)).thenReturn(docScanSessionResponseMock);
         when(unsignedPathFactoryMock.createYotiDocsSessionPath(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
 
         GetSessionResult result = docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
 
         assertThat(result, is(docScanSessionResponseMock));
-        verify(signedRequestBuilderMock).withKeyPair(KEY_PAIR);
-        verify(signedRequestBuilderMock).withEndpoint(SOME_PATH);
-        verify(signedRequestBuilderMock).withBaseUrl(SOME_API_URL);
-        verify(signedRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_GET);
+        verify(yotiHttpRequestBuilderMock).withKeyPair(KEY_PAIR);
+        verify(yotiHttpRequestBuilderMock).withEndpoint(SOME_PATH);
+        verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
+        verify(yotiHttpRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_GET);
     }
 
     @Test
@@ -351,7 +350,7 @@ public class DocScanServiceTest {
     @Test
     public void deleteSession_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -362,8 +361,8 @@ public class DocScanServiceTest {
     @Test
     public void deleteSession_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -374,8 +373,8 @@ public class DocScanServiceTest {
     @Test
     public void deleteSession_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -386,7 +385,7 @@ public class DocScanServiceTest {
     @Test
     public void deleteSession_shouldWrapGeneralException() {
         Exception someException = new Exception("Some exception we weren't expecting");
-        doAnswer(i -> {throw someException;}).when(signedRequestBuilderFactoryMock).create();
+        doAnswer(i -> {throw someException;}).when(yotiHttpRequestBuilderFactoryMock).create();
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -396,15 +395,15 @@ public class DocScanServiceTest {
 
     @Test
     public void deleteSession_shouldBuildSignedRequest() throws Exception {
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(unsignedPathFactoryMock.createYotiDocsSessionPath(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
 
         docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
 
-        verify(signedRequestBuilderMock).withKeyPair(KEY_PAIR);
-        verify(signedRequestBuilderMock).withEndpoint(SOME_PATH);
-        verify(signedRequestBuilderMock).withBaseUrl(SOME_API_URL);
-        verify(signedRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_DELETE);
+        verify(yotiHttpRequestBuilderMock).withKeyPair(KEY_PAIR);
+        verify(yotiHttpRequestBuilderMock).withEndpoint(SOME_PATH);
+        verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
+        verify(yotiHttpRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_DELETE);
     }
 
     @Test
@@ -459,7 +458,7 @@ public class DocScanServiceTest {
     @Test
     public void getMediaContent_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
 
@@ -470,8 +469,8 @@ public class DocScanServiceTest {
     @Test
     public void getMediaContent_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
 
@@ -482,8 +481,8 @@ public class DocScanServiceTest {
     @Test
     public void getMediaContent_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
 
@@ -494,7 +493,7 @@ public class DocScanServiceTest {
     @Test
     public void getMediaContent_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
 
@@ -504,25 +503,25 @@ public class DocScanServiceTest {
 
     @Test
     public void getMediaContent_shouldBuildSignedRequest() throws Exception {
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        SignedRequestResponse signedRequestResponseMock = mock(SignedRequestResponse.class, RETURNS_DEEP_STUBS);
-        when(signedRequestMock.execute()).thenReturn(signedRequestResponseMock);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        YotiHttpResponse yotiHttpResponseMock = mock(YotiHttpResponse.class, RETURNS_DEEP_STUBS);
+        when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
         when(unsignedPathFactoryMock.createMediaContentPath(SOME_APP_ID, SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
 
         docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
 
-        verify(signedRequestBuilderMock).withKeyPair(KEY_PAIR);
-        verify(signedRequestBuilderMock).withEndpoint(SOME_PATH);
-        verify(signedRequestBuilderMock).withBaseUrl(SOME_API_URL);
-        verify(signedRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_GET);
+        verify(yotiHttpRequestBuilderMock).withKeyPair(KEY_PAIR);
+        verify(yotiHttpRequestBuilderMock).withEndpoint(SOME_PATH);
+        verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
+        verify(yotiHttpRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_GET);
     }
 
     @Test
     public void getMediaContent_shouldReturnMedia() throws Exception {
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenReturn(signedRequestResponseMock);
-        when(signedRequestResponseMock.getResponseHeaders()).thenReturn(createHeadersMap(CONTENT_TYPE, CONTENT_TYPE_JSON));
-        when(signedRequestResponseMock.getResponseBody()).thenReturn(IMAGE_BODY);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
+        when(yotiHttpResponseMock.getResponseHeaders()).thenReturn(createHeadersMap(CONTENT_TYPE, CONTENT_TYPE_JSON));
+        when(yotiHttpResponseMock.getResponseBody()).thenReturn(IMAGE_BODY);
         when(unsignedPathFactoryMock.createMediaContentPath(SOME_APP_ID, SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
 
         Media result = docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
@@ -533,9 +532,9 @@ public class DocScanServiceTest {
 
     @Test
     public void getMediaContent_shouldReturnNullForNoContent() throws Exception {
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenReturn(signedRequestResponseMock);
-        when(signedRequestResponseMock.getResponseCode()).thenReturn(204);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
+        when(yotiHttpResponseMock.getResponseCode()).thenReturn(204);
         when(unsignedPathFactoryMock.createMediaContentPath(SOME_APP_ID, SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
 
         Media result = docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
@@ -545,10 +544,10 @@ public class DocScanServiceTest {
 
     @Test
     public void getMediaContent_shouldNotBeCaseSensitive() throws Exception {
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenReturn(signedRequestResponseMock);
-        when(signedRequestResponseMock.getResponseHeaders()).thenReturn(createHeadersMap("content-type", "image/png"));
-        when(signedRequestResponseMock.getResponseBody()).thenReturn(IMAGE_BODY);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
+        when(yotiHttpResponseMock.getResponseHeaders()).thenReturn(createHeadersMap("content-type", "image/png"));
+        when(yotiHttpResponseMock.getResponseBody()).thenReturn(IMAGE_BODY);
         when(unsignedPathFactoryMock.createMediaContentPath(SOME_APP_ID, SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
 
         Media result = docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
@@ -615,7 +614,7 @@ public class DocScanServiceTest {
     @Test
     public void deleteMediaContent_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
 
@@ -626,8 +625,8 @@ public class DocScanServiceTest {
     @Test
     public void deleteMediaContent_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
 
@@ -638,8 +637,8 @@ public class DocScanServiceTest {
     @Test
     public void deleteMediaContent_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
 
@@ -650,7 +649,7 @@ public class DocScanServiceTest {
     @Test
     public void deleteMediaContent_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
 
@@ -660,15 +659,15 @@ public class DocScanServiceTest {
 
     @Test
     public void deleteMediaContent_shouldBuildSignedRequest() throws Exception {
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(unsignedPathFactoryMock.createMediaContentPath(SOME_APP_ID, SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
 
         docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
 
-        verify(signedRequestBuilderMock).withKeyPair(KEY_PAIR);
-        verify(signedRequestBuilderMock).withEndpoint(SOME_PATH);
-        verify(signedRequestBuilderMock).withBaseUrl(SOME_API_URL);
-        verify(signedRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_DELETE);
+        verify(yotiHttpRequestBuilderMock).withKeyPair(KEY_PAIR);
+        verify(yotiHttpRequestBuilderMock).withEndpoint(SOME_PATH);
+        verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
+        verify(yotiHttpRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_DELETE);
     }
 
     @Test
@@ -738,7 +737,7 @@ public class DocScanServiceTest {
     @Test
     public void putIbvInstructions_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
 
@@ -748,8 +747,8 @@ public class DocScanServiceTest {
     @Test
     public void putIbvInstructions_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
 
@@ -759,8 +758,8 @@ public class DocScanServiceTest {
     @Test
     public void putIbvInstructions_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
 
@@ -770,7 +769,7 @@ public class DocScanServiceTest {
     @Test
     public void putIbvInstructions_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
 
@@ -815,7 +814,7 @@ public class DocScanServiceTest {
     @Test
     public void getIbvInstructions_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -825,8 +824,8 @@ public class DocScanServiceTest {
     @Test
     public void getIbvInstructions_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(InstructionsResponse.class)).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(InstructionsResponse.class)).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -836,8 +835,8 @@ public class DocScanServiceTest {
     @Test
     public void getIbvInstructions_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(InstructionsResponse.class)).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(InstructionsResponse.class)).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -847,7 +846,7 @@ public class DocScanServiceTest {
     @Test
     public void getIbvInstructions_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -892,7 +891,7 @@ public class DocScanServiceTest {
     @Test
     public void getIbvInstructionsPdf_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -902,8 +901,8 @@ public class DocScanServiceTest {
     @Test
     public void getIbvInstructionsPdf_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -913,8 +912,8 @@ public class DocScanServiceTest {
     @Test
     public void getIbvInstructionsPdf_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -924,7 +923,7 @@ public class DocScanServiceTest {
     @Test
     public void getIbvInstructionsPdf_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -933,10 +932,10 @@ public class DocScanServiceTest {
 
     @Test
     public void getIbvInstructionsPdf_shouldReturnMedia() throws Exception {
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenReturn(signedRequestResponseMock);
-        when(signedRequestResponseMock.getResponseHeaders()).thenReturn(createHeadersMap(CONTENT_TYPE, CONTENT_TYPE_JSON));
-        when(signedRequestResponseMock.getResponseBody()).thenReturn(IMAGE_BODY);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
+        when(yotiHttpResponseMock.getResponseHeaders()).thenReturn(createHeadersMap(CONTENT_TYPE, CONTENT_TYPE_JSON));
+        when(yotiHttpResponseMock.getResponseBody()).thenReturn(IMAGE_BODY);
         when(unsignedPathFactoryMock.createFetchIbvInstructionsPdfPath(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
 
         Media result = docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
@@ -947,9 +946,9 @@ public class DocScanServiceTest {
 
     @Test
     public void getIbvInstructionsPdf_shouldReturnNullForNoContent() throws Exception {
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenReturn(signedRequestResponseMock);
-        when(signedRequestResponseMock.getResponseCode()).thenReturn(204);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
+        when(yotiHttpResponseMock.getResponseCode()).thenReturn(204);
         when(unsignedPathFactoryMock.createFetchIbvInstructionsPdfPath(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
 
         Media result = docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
@@ -995,7 +994,7 @@ public class DocScanServiceTest {
     @Test
     public void fetchInstructionsContactProfile_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1005,8 +1004,8 @@ public class DocScanServiceTest {
     @Test
     public void fetchInstructionsContactProfile_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(ContactProfileResponse.class)).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(ContactProfileResponse.class)).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1016,8 +1015,8 @@ public class DocScanServiceTest {
     @Test
     public void fetchInstructionsContactProfile_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(ContactProfileResponse.class)).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(ContactProfileResponse.class)).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1027,7 +1026,7 @@ public class DocScanServiceTest {
     @Test
     public void fetchInstructionsContactProfile_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1072,7 +1071,7 @@ public class DocScanServiceTest {
     @Test
     public void fetchSessionConfiguration_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1082,8 +1081,8 @@ public class DocScanServiceTest {
     @Test
     public void fetchSessionConfiguration_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SessionConfigurationResponse.class)).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(SessionConfigurationResponse.class)).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1093,8 +1092,8 @@ public class DocScanServiceTest {
     @Test
     public void fetchSessionConfiguration_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SessionConfigurationResponse.class)).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(SessionConfigurationResponse.class)).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1104,7 +1103,7 @@ public class DocScanServiceTest {
     @Test
     public void fetchSessionConfiguration_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1156,7 +1155,7 @@ public class DocScanServiceTest {
     @Test
     public void createFaceCaptureResource_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
@@ -1166,8 +1165,8 @@ public class DocScanServiceTest {
     @Test
     public void createFaceCaptureResource_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(CreateFaceCaptureResourceResponse.class)).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(CreateFaceCaptureResourceResponse.class)).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
@@ -1177,8 +1176,8 @@ public class DocScanServiceTest {
     @Test
     public void createFaceCaptureResource_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(CreateFaceCaptureResourceResponse.class)).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(CreateFaceCaptureResourceResponse.class)).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
@@ -1188,7 +1187,7 @@ public class DocScanServiceTest {
     @Test
     public void createFaceCaptureResource_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
@@ -1257,7 +1256,7 @@ public class DocScanServiceTest {
         when(uploadFaceCaptureImagePayloadMock.getImageContentType()).thenReturn(SOME_IMAGE_CONTENT_TYPE);
         when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_APP_ID, SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
 
@@ -1271,7 +1270,7 @@ public class DocScanServiceTest {
         when(uploadFaceCaptureImagePayloadMock.getImageContentType()).thenReturn(SOME_IMAGE_CONTENT_TYPE);
         when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_APP_ID, SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
 
@@ -1285,8 +1284,8 @@ public class DocScanServiceTest {
         when(uploadFaceCaptureImagePayloadMock.getImageContentType()).thenReturn(SOME_IMAGE_CONTENT_TYPE);
         when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_APP_ID, SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
         IOException ioException = new IOException("some IO exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
 
@@ -1300,8 +1299,8 @@ public class DocScanServiceTest {
         when(uploadFaceCaptureImagePayloadMock.getImageContentType()).thenReturn(SOME_IMAGE_CONTENT_TYPE);
         when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_APP_ID, SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
 
@@ -1347,7 +1346,7 @@ public class DocScanServiceTest {
     @Test
     public void triggerIbvEmailNotification_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1357,8 +1356,8 @@ public class DocScanServiceTest {
     @Test
     public void triggerIbvEmailNotification_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1368,8 +1367,8 @@ public class DocScanServiceTest {
     @Test
     public void triggerIbvEmailNotification_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1379,7 +1378,7 @@ public class DocScanServiceTest {
     @Test
     public void triggerIbvEmailNotification_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1396,7 +1395,7 @@ public class DocScanServiceTest {
     @Test
     public void getSupportedDocuments_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(KEY_PAIR, false));
 
@@ -1407,8 +1406,8 @@ public class DocScanServiceTest {
     @Test
     public void getSupportedDocuments_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(KEY_PAIR, false));
 
@@ -1419,8 +1418,8 @@ public class DocScanServiceTest {
     @Test
     public void getSupportedDocuments_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(KEY_PAIR, false));
 
@@ -1431,7 +1430,7 @@ public class DocScanServiceTest {
     @Test
     public void getSupportedDocuments_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(KEY_PAIR, false));
 
@@ -1441,8 +1440,8 @@ public class DocScanServiceTest {
 
     @Test
     public void getSupportedDocuments_shouldReturnSupportedDocuments() throws Exception {
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(SupportedDocumentsResponse.class)).thenReturn(supportedDocumentsResponseMock);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(SupportedDocumentsResponse.class)).thenReturn(supportedDocumentsResponseMock);
         when(unsignedPathFactoryMock.createGetSupportedDocumentsPath(false)).thenReturn(SOME_PATH);
 
         SupportedDocumentsResponse result = docScanService.getSupportedDocuments(KEY_PAIR, false);
@@ -1483,7 +1482,7 @@ public class DocScanServiceTest {
     @Test
     public void getTrackedDevices_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1494,8 +1493,8 @@ public class DocScanServiceTest {
     @Test
     public void getTrackedDevices_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(ArgumentMatchers.any(TypeReference.class))).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(ArgumentMatchers.any(TypeReference.class))).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1506,8 +1505,8 @@ public class DocScanServiceTest {
     @Test
     public void getTrackedDevices_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute(ArgumentMatchers.any(TypeReference.class))).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute(ArgumentMatchers.any(TypeReference.class))).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1518,7 +1517,7 @@ public class DocScanServiceTest {
     @Test
     public void getTrackedDevices_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1528,9 +1527,9 @@ public class DocScanServiceTest {
 
     @Test
     public void getTrackedDevices_shouldReturnTrackedDevices() throws Exception {
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         MetadataResponse metadataResponseMock = mock(MetadataResponse.class);
-        when(signedRequestMock.execute(ArgumentMatchers.any(TypeReference.class))).thenReturn(Collections.singletonList(metadataResponseMock));
+        when(yotiHttpRequestMock.execute(ArgumentMatchers.any(TypeReference.class))).thenReturn(Collections.singletonList(metadataResponseMock));
         when(unsignedPathFactoryMock.createFetchTrackedDevices(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
 
         List<MetadataResponse> result = docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
@@ -1571,7 +1570,7 @@ public class DocScanServiceTest {
     @Test
     public void deleteTrackedDevices_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
-        when(signedRequestBuilderMock.build()).thenThrow(gse);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1582,8 +1581,8 @@ public class DocScanServiceTest {
     @Test
     public void deleteTrackedDevices_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(resourceException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1594,8 +1593,8 @@ public class DocScanServiceTest {
     @Test
     public void deleteTrackedDevices_shouldWrapIOException() throws Exception {
         IOException ioException = new IOException("Some io exception");
-        when(signedRequestBuilderMock.build()).thenReturn(signedRequestMock);
-        when(signedRequestMock.execute()).thenThrow(ioException);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 
@@ -1606,7 +1605,7 @@ public class DocScanServiceTest {
     @Test
     public void deleteTrackedDevices_shouldWrapURISyntaxException() throws Exception {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
-        when(signedRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
         DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
 

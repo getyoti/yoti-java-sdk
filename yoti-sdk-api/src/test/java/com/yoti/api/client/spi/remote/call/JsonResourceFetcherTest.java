@@ -21,46 +21,46 @@ public class JsonResourceFetcherTest {
     @Mock ObjectMapper objectMapperMock;
     @Mock RawResourceFetcher rawResourceFetcherMock;
 
-    @Mock SignedRequest signedRequestMock;
-    @Mock SignedRequestResponse signedRequestResponseMock;
+    @Mock YotiHttpRequest yotiHttpRequestMock;
+    @Mock YotiHttpResponse yotiHttpResponseMock;
 
     Object parsedResponse = new Object();
 
     @Before
     public void setUp() throws Exception {
-        when(rawResourceFetcherMock.doRequest(signedRequestMock)).thenReturn(signedRequestResponseMock);
+        when(rawResourceFetcherMock.doRequest(yotiHttpRequestMock)).thenReturn(yotiHttpResponseMock);
     }
 
     @Test
     public void fetchResource_shouldReturnResource() throws Exception {
-        when(objectMapperMock.readValue(signedRequestResponseMock.getResponseBody(), Object.class)).thenReturn(parsedResponse);
+        when(objectMapperMock.readValue(yotiHttpResponseMock.getResponseBody(), Object.class)).thenReturn(parsedResponse);
 
-        Object result = testObj.doRequest(signedRequestMock, Object.class);
+        Object result = testObj.doRequest(yotiHttpRequestMock, Object.class);
 
         assertSame(parsedResponse, result);
     }
 
     @Test(expected = IOException.class)
     public void fetchResource_shouldThrowIOExceptionForInvalidResponse() throws Exception {
-        when(objectMapperMock.readValue(signedRequestResponseMock.getResponseBody(), Object.class)).thenThrow(new IOException());
+        when(objectMapperMock.readValue(yotiHttpResponseMock.getResponseBody(), Object.class)).thenThrow(new IOException());
 
-        testObj.doRequest(signedRequestMock, Object.class);
+        testObj.doRequest(yotiHttpRequestMock, Object.class);
     }
 
     @Test
     public void doRequest_shouldReturnResource() throws Exception {
-        when(objectMapperMock.readValue(signedRequestResponseMock.getResponseBody(), Object.class)).thenReturn(parsedResponse);
+        when(objectMapperMock.readValue(yotiHttpResponseMock.getResponseBody(), Object.class)).thenReturn(parsedResponse);
 
-        Object result = testObj.doRequest(signedRequestMock, Object.class);
+        Object result = testObj.doRequest(yotiHttpRequestMock, Object.class);
 
         assertSame(parsedResponse, result);
     }
 
     @Test(expected = IOException.class)
     public void doRequest_shouldThrowIOExceptionForInvalidResponse() throws Exception {
-        when(objectMapperMock.readValue(signedRequestResponseMock.getResponseBody(), Object.class)).thenThrow(new IOException());
+        when(objectMapperMock.readValue(yotiHttpResponseMock.getResponseBody(), Object.class)).thenThrow(new IOException());
 
-        testObj.doRequest(signedRequestMock, Object.class);
+        testObj.doRequest(yotiHttpRequestMock, Object.class);
     }
 
 }

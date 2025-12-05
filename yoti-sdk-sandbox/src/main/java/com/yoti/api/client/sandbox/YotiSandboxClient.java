@@ -18,11 +18,9 @@ import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 import com.yoti.api.client.spi.remote.call.JsonResourceFetcher;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.ResourceFetcher;
-import com.yoti.api.client.spi.remote.call.SignedRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.YotiConstants;
-import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -39,7 +37,7 @@ public class YotiSandboxClient {
     private final ObjectMapper mapper;
     private final SandboxPathFactory sandboxPathFactory;
     private final ResourceFetcher resourceFetcher;
-    private final SignedRequestBuilderFactory signedRequestBuilderFactory;
+    private final YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory;
 
     public static YotiSandboxClientBuilder builder() {
         return new YotiSandboxClientBuilder();
@@ -49,13 +47,13 @@ public class YotiSandboxClient {
             KeyPair keyPair,
             SandboxPathFactory pathFactory,
             ObjectMapper mapper,
-            ResourceFetcher resourceFetcher, SignedRequestBuilderFactory signedRequestBuilderFactory) {
+            ResourceFetcher resourceFetcher, YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory) {
         this.appId = appId;
         this.keyPair = keyPair;
         this.sandboxPathFactory = pathFactory;
         this.mapper = mapper;
         this.resourceFetcher = resourceFetcher;
-        this.signedRequestBuilderFactory = signedRequestBuilderFactory;
+        this.yotiHttpRequestBuilderFactory = yotiHttpRequestBuilderFactory;
 
         this.sandboxBasePath = System.getProperty(YotiConstants.PROPERTY_YOTI_API_URL, DEFAULT_SANDBOX_API_URL);
         notNullOrEmpty(sandboxBasePath, "Sandbox base path");
@@ -65,14 +63,14 @@ public class YotiSandboxClient {
         String requestPath = sandboxPathFactory.createSandboxPath(appId);
         try {
             byte[] body = mapper.writeValueAsBytes(yotiTokenRequest);
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withBaseUrl(sandboxBasePath)
                     .withEndpoint(requestPath)
                     .withKeyPair(keyPair)
                     .withHttpMethod(HTTP_POST)
                     .withPayload(body)
                     .build();
-            YotiTokenResponse yotiTokenResponse = resourceFetcher.doRequest(signedRequest, YotiTokenResponse.class);
+            YotiTokenResponse yotiTokenResponse = resourceFetcher.doRequest(yotiHttpRequest, YotiTokenResponse.class);
             return yotiTokenResponse.getToken();
         } catch (IOException | GeneralSecurityException | ResourceException | URISyntaxException e) {
             throw new SandboxException(e);
@@ -108,7 +106,7 @@ public class YotiSandboxClient {
             notNullOrEmpty(appId, "appId");
             notNull(keyPair, "keyPair");
             return new YotiSandboxClient(appId, keyPair, new SandboxPathFactory(), new ObjectMapper(), JsonResourceFetcher.newInstance(),
-                    new SignedRequestBuilderFactory());
+                    new YotiHttpRequestBuilderFactory());
         }
 
     }

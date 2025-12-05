@@ -22,12 +22,12 @@ class RawResourceFetcher {
         return new Scanner(inputStream, DEFAULT_CHARSET).useDelimiter("\\A");
     }
 
-    public SignedRequestResponse doRequest(SignedRequest signedRequest) throws IOException, ResourceException {
-        UrlConnector urlConnector = UrlConnector.get(signedRequest.getUri().toString());
-        return doRequest(urlConnector, signedRequest.getMethod(), signedRequest.getData(), signedRequest.getHeaders());
+    public YotiHttpResponse doRequest(YotiHttpRequest yotiHttpRequest) throws IOException, ResourceException {
+        UrlConnector urlConnector = UrlConnector.get(yotiHttpRequest.getUri().toString());
+        return doRequest(urlConnector, yotiHttpRequest.getMethod(), yotiHttpRequest.getData(), yotiHttpRequest.getHeaders());
     }
 
-    public SignedRequestResponse doRequest(UrlConnector urlConnector, String method, byte[] data, Map<String, String> headers)
+    public YotiHttpResponse doRequest(UrlConnector urlConnector, String method, byte[] data, Map<String, String> headers)
             throws IOException, ResourceException {
         HttpURLConnection httpUrlConnection = openConnection(urlConnector, method, headers);
         sendBody(data, httpUrlConnection);
@@ -89,13 +89,13 @@ class RawResourceFetcher {
      * @throws ResourceException
      * @throws IOException
      */
-    private SignedRequestResponse parseResponse(HttpURLConnection httpUrlConnection) throws ResourceException, IOException {
+    private YotiHttpResponse parseResponse(HttpURLConnection httpUrlConnection) throws ResourceException, IOException {
         int responseCode = httpUrlConnection.getResponseCode();
         if (responseCode >= HttpURLConnection.HTTP_BAD_REQUEST) {
             String responseBody = readError(httpUrlConnection);
             throw new ResourceException(responseCode, httpUrlConnection.getResponseMessage(), responseBody);
         }
-        return new SignedRequestResponse(responseCode, readBody(httpUrlConnection), httpUrlConnection.getHeaderFields());
+        return new YotiHttpResponse(responseCode, readBody(httpUrlConnection), httpUrlConnection.getHeaderFields());
     }
 
     /**

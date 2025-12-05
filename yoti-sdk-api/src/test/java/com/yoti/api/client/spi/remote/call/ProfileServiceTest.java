@@ -5,7 +5,8 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom
 
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.security.KeyPair;
@@ -14,10 +15,14 @@ import java.util.Base64;
 import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
-import org.mockito.junit.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProfileServiceTest {
@@ -40,7 +45,7 @@ public class ProfileServiceTest {
 
     @Mock UnsignedPathFactory unsignedPathFactory;
 
-    @Mock SignedRequest signedRequest;
+    @Mock YotiHttpRequest yotiHttpRequest;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -55,8 +60,8 @@ public class ProfileServiceTest {
 
     @Test
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
-        doReturn(signedRequest).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
-        when(signedRequest.execute(ProfileResponse.class)).thenReturn(PROFILE_RESPONSE);
+        doReturn(yotiHttpRequest).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
+        when(yotiHttpRequest.execute(ProfileResponse.class)).thenReturn(PROFILE_RESPONSE);
 
         Receipt result = testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);
         assertSame(RECEIPT, result);
@@ -65,8 +70,8 @@ public class ProfileServiceTest {
     @Test
     public void shouldThrowExceptionForIOError() throws Exception {
         IOException ioException = new IOException("Test exception");
-        doReturn(signedRequest).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
-        when(signedRequest.execute(ProfileResponse.class)).thenThrow(ioException);
+        doReturn(yotiHttpRequest).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
+        when(yotiHttpRequest.execute(ProfileResponse.class)).thenThrow(ioException);
 
         try {
             testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);
@@ -79,8 +84,8 @@ public class ProfileServiceTest {
     @Test
     public void shouldThrowExceptionWithResourceExceptionCause() throws Throwable {
         ResourceException resourceException = new ResourceException(404, "Not Found", "Test exception");
-        doReturn(signedRequest).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
-        when(signedRequest.execute(ProfileResponse.class)).thenThrow(resourceException);
+        doReturn(yotiHttpRequest).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
+        when(yotiHttpRequest.execute(ProfileResponse.class)).thenThrow(resourceException);
 
         try {
             testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);

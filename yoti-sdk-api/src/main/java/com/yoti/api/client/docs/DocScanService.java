@@ -34,9 +34,9 @@ import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsRespon
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.MediaValue;
 import com.yoti.api.client.spi.remote.call.ResourceException;
-import com.yoti.api.client.spi.remote.call.SignedRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
-import com.yoti.api.client.spi.remote.call.SignedRequestResponse;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
+import com.yoti.api.client.spi.remote.call.YotiHttpResponse;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -62,15 +62,15 @@ final class DocScanService {
 
     private final UnsignedPathFactory unsignedPathFactory;
     private final ObjectMapper objectMapper;
-    private final SignedRequestBuilderFactory signedRequestBuilderFactory;
+    private final YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory;
     private final String apiUrl;
 
     private DocScanService(UnsignedPathFactory pathFactory,
             ObjectMapper objectMapper,
-            SignedRequestBuilderFactory signedRequestBuilderFactory) {
+            YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory) {
         this.unsignedPathFactory = pathFactory;
         this.objectMapper = objectMapper;
-        this.signedRequestBuilderFactory = signedRequestBuilderFactory;
+        this.yotiHttpRequestBuilderFactory = yotiHttpRequestBuilderFactory;
 
         apiUrl = System.getProperty(PROPERTY_YOTI_DOCS_URL, DEFAULT_YOTI_DOCS_URL);
     }
@@ -82,7 +82,7 @@ final class DocScanService {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.registerModule(new JavaTimeModule());
 
-        return new DocScanService(new UnsignedPathFactory(), objectMapper, new SignedRequestBuilderFactory());
+        return new DocScanService(new UnsignedPathFactory(), objectMapper, new YotiHttpRequestBuilderFactory());
     }
 
     /**
@@ -105,7 +105,7 @@ final class DocScanService {
         try {
             byte[] payload = objectMapper.writeValueAsBytes(sessionSpec);
 
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
@@ -114,7 +114,7 @@ final class DocScanService {
                     .withHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
                     .build();
 
-            return signedRequest.execute(CreateSessionResult.class);
+            return yotiHttpRequest.execute(CreateSessionResult.class);
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
@@ -144,14 +144,14 @@ final class DocScanService {
         LOG.info("Fetching session from '{}'", path);
 
         try {
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
                     .build();
 
-            return signedRequest.execute(GetSessionResult.class);
+            return yotiHttpRequest.execute(GetSessionResult.class);
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
@@ -180,14 +180,14 @@ final class DocScanService {
         LOG.info("Deleting session from '{}'", path);
 
         try {
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_DELETE)
                     .build();
 
-            signedRequest.execute();
+            yotiHttpRequest.execute();
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
@@ -219,13 +219,13 @@ final class DocScanService {
         LOG.info("Fetching media from '{}'", path);
 
         try {
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
                     .build();
-            SignedRequestResponse response = signedRequest.execute();
+            YotiHttpResponse response = yotiHttpRequest.execute();
 
             if (response.getResponseCode() == HTTP_STATUS_NO_CONTENT) {
                 return null;
@@ -259,14 +259,14 @@ final class DocScanService {
         LOG.info("Deleting media at '{}'", path);
 
         try {
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_DELETE)
                     .build();
 
-            signedRequest.execute();
+            yotiHttpRequest.execute();
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
@@ -288,7 +288,7 @@ final class DocScanService {
         try {
             byte[] payload = objectMapper.writeValueAsBytes(instructions);
 
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
@@ -296,7 +296,7 @@ final class DocScanService {
                     .withPayload(payload)
                     .build();
 
-            signedRequest.execute();
+            yotiHttpRequest.execute();
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
@@ -315,14 +315,14 @@ final class DocScanService {
         LOG.info("Fetching IBV instructions at '{}'", path);
 
         try {
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
                     .build();
 
-            return signedRequest.execute(InstructionsResponse.class);
+            return yotiHttpRequest.execute(InstructionsResponse.class);
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
@@ -350,14 +350,14 @@ final class DocScanService {
         LOG.info("Fetching instruction contact profile from '{}'", path);
 
         try {
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
                     .build();
 
-            return signedRequest.execute(ContactProfileResponse.class);
+            return yotiHttpRequest.execute(ContactProfileResponse.class);
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
@@ -376,13 +376,13 @@ final class DocScanService {
         LOG.info("Fetching instructions PDF at '{}'", path);
 
         try {
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
                     .build();
-            SignedRequestResponse response = signedRequest.execute();
+            YotiHttpResponse response = yotiHttpRequest.execute();
 
             if (response.getResponseCode() == HTTP_STATUS_NO_CONTENT) {
                 return null;
@@ -406,14 +406,14 @@ final class DocScanService {
         LOG.info("Fetching session configuration from '{}'", path);
 
         try {
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
                     .build();
 
-            return signedRequest.execute(SessionConfigurationResponse.class);
+            return yotiHttpRequest.execute(SessionConfigurationResponse.class);
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
@@ -438,7 +438,7 @@ final class DocScanService {
         try {
             byte[] payload = objectMapper.writeValueAsBytes(createFaceCaptureResourcePayload);
 
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
@@ -446,7 +446,7 @@ final class DocScanService {
                     .withHttpMethod(HTTP_POST)
                     .build();
 
-            return signedRequest.execute(CreateFaceCaptureResourceResponse.class);
+            return yotiHttpRequest.execute(CreateFaceCaptureResourceResponse.class);
         } catch (GeneralSecurityException ex) {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
@@ -468,7 +468,7 @@ final class DocScanService {
         LOG.info("Uploading image to Face Capture resource at '{}'", path);
 
         try {
-            signedRequestBuilderFactory.create()
+            yotiHttpRequestBuilderFactory.create()
                     .withMultipartBoundary(YOTI_MULTIPART_BOUNDARY)
                     .withMultipartBinaryBody(
                             "binary-content",
@@ -494,14 +494,14 @@ final class DocScanService {
         String path = unsignedPathFactory.createGetSupportedDocumentsPath(includeNonLatin);
 
         try {
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
                     .build();
 
-            return signedRequest.execute(SupportedDocumentsResponse.class);
+            return yotiHttpRequest.execute(SupportedDocumentsResponse.class);
         } catch (GeneralSecurityException | ResourceException ex) {
             throw new DocScanException("Error executing the GET: " + ex.getMessage(), ex);
         } catch (IOException | URISyntaxException ex) {
@@ -518,7 +518,7 @@ final class DocScanService {
         LOG.info("Triggering IBV email notification at '{}'", path);
 
         try {
-            signedRequestBuilderFactory.create()
+            yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
@@ -541,14 +541,14 @@ final class DocScanService {
         LOG.info("Fetching tracked devices at '{}'", path);
 
         try {
-            SignedRequest signedRequest = signedRequestBuilderFactory.create()
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
                     .build();
 
-            return signedRequest.execute(METADATA_RESPONSE_TYPE_REF);
+            return yotiHttpRequest.execute(METADATA_RESPONSE_TYPE_REF);
         } catch (GeneralSecurityException | ResourceException ex) {
             throw new DocScanException("Error executing the GET: " + ex.getMessage(), ex);
         } catch (IOException | URISyntaxException ex) {
@@ -565,7 +565,7 @@ final class DocScanService {
         LOG.info("Deleting tracked devices at '{}'", path);
 
         try {
-            signedRequestBuilderFactory.create()
+            yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
@@ -579,7 +579,7 @@ final class DocScanService {
         }
     }
 
-    private String findContentType(SignedRequestResponse response) {
+    private String findContentType(YotiHttpResponse response) {
         List<String> contentTypeValues = null;
         for (Map.Entry<String, List<String>> entry : response.getResponseHeaders().entrySet()) {
             if (entry.getKey() != null && entry.getKey().toLowerCase(Locale.ENGLISH).equals(CONTENT_TYPE.toLowerCase(Locale.ENGLISH))) {
