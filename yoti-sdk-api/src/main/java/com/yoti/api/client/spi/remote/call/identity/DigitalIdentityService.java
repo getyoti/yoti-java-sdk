@@ -22,9 +22,9 @@ import com.yoti.api.client.identity.ShareSession;
 import com.yoti.api.client.identity.ShareSessionQrCode;
 import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.call.ResourceException;
-import com.yoti.api.client.spi.remote.call.SignedRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilder;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 import com.yoti.json.ResourceMapper;
 import com.yoti.validation.Validation;
@@ -39,14 +39,14 @@ public class DigitalIdentityService {
     private static final byte[] EMPTY_JSON = "{}".getBytes(StandardCharsets.UTF_8);
 
     private final UnsignedPathFactory pathFactory;
-    private final SignedRequestBuilderFactory requestBuilderFactory;
+    private final YotiHttpRequestBuilderFactory requestBuilderFactory;
     private final ReceiptParser receiptParser;
 
     private final String apiUrl;
 
     public DigitalIdentityService(
             UnsignedPathFactory pathFactory,
-            SignedRequestBuilderFactory requestBuilderFactory,
+            YotiHttpRequestBuilderFactory requestBuilderFactory,
             ReceiptParser receiptParser) {
         this.pathFactory = pathFactory;
         this.requestBuilderFactory = requestBuilderFactory;
@@ -58,7 +58,7 @@ public class DigitalIdentityService {
     public static DigitalIdentityService newInstance() {
         return new DigitalIdentityService(
                 new UnsignedPathFactory(),
-                new SignedRequestBuilderFactory(),
+                new YotiHttpRequestBuilderFactory(),
                 ReceiptParser.newInstance()
         );
     }
@@ -215,14 +215,14 @@ public class DigitalIdentityService {
         }
     }
 
-    SignedRequest createSignedRequest(String sdkId, KeyPair keyPair, String path)
+    YotiHttpRequest createSignedRequest(String sdkId, KeyPair keyPair, String path)
             throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
         return createSignedRequest(sdkId, keyPair, path, HTTP_GET, null);
     }
 
-    SignedRequest createSignedRequest(String sdkId, KeyPair keyPair, String path, String method, byte[] payload)
+    YotiHttpRequest createSignedRequest(String sdkId, KeyPair keyPair, String path, String method, byte[] payload)
             throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
-        SignedRequestBuilder request = requestBuilderFactory.create()
+        YotiHttpRequestBuilder request = requestBuilderFactory.create()
                 .withKeyPair(keyPair)
                 .withBaseUrl(apiUrl)
                 .withEndpoint(path)
