@@ -20,8 +20,8 @@ import com.yoti.api.client.AmlException;
 import com.yoti.api.client.aml.AmlProfile;
 import com.yoti.api.client.aml.AmlResult;
 import com.yoti.api.client.spi.remote.call.ResourceException;
-import com.yoti.api.client.spi.remote.call.SignedRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,23 +30,23 @@ public class RemoteAmlService {
 
     private final UnsignedPathFactory unsignedPathFactory;
     private final ObjectMapper objectMapper;
-    private final SignedRequestBuilderFactory signedRequestBuilderFactory;
+    private final YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory;
     private final String apiUrl;
 
     public static RemoteAmlService newInstance() {
         return new RemoteAmlService(
                 new UnsignedPathFactory(),
                 new ObjectMapper(),
-                new SignedRequestBuilderFactory()
+                new YotiHttpRequestBuilderFactory()
         );
     }
 
     RemoteAmlService(UnsignedPathFactory unsignedPathFactory,
             ObjectMapper objectMapper,
-            SignedRequestBuilderFactory signedRequestBuilderFactory) {
+            YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory) {
         this.unsignedPathFactory = unsignedPathFactory;
         this.objectMapper = objectMapper;
-        this.signedRequestBuilderFactory = signedRequestBuilderFactory;
+        this.yotiHttpRequestBuilderFactory = yotiHttpRequestBuilderFactory;
 
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
@@ -60,8 +60,8 @@ public class RemoteAmlService {
             String resourcePath = unsignedPathFactory.createAmlPath(appId);
             byte[] body = objectMapper.writeValueAsString(amlProfile).getBytes(DEFAULT_CHARSET);
 
-            SignedRequest signedRequest = createSignedRequest(keyPair, resourcePath, body);
-            return signedRequest.execute(AmlResult.class);
+            YotiHttpRequest yotiHttpRequest = createSignedRequest(keyPair, resourcePath, body);
+            return yotiHttpRequest.execute(AmlResult.class);
         } catch (IOException ioException) {
             throw new AmlException("Error communicating with AML endpoint", ioException);
         } catch (ResourceException resourceException) {
@@ -82,9 +82,9 @@ public class RemoteAmlService {
         }
     }
 
-    SignedRequest createSignedRequest(KeyPair keyPair, String resourcePath, byte[] body) throws AmlException {
+    YotiHttpRequest createSignedRequest(KeyPair keyPair, String resourcePath, byte[] body) throws AmlException {
         try {
-            return signedRequestBuilderFactory.create()
+            return yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(resourcePath)

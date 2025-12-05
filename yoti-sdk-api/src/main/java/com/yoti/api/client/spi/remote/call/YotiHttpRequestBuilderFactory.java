@@ -4,7 +4,7 @@ import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
 import com.yoti.api.client.spi.remote.call.factory.PathFactory;
 import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
 
-public class SignedRequestBuilderFactory {
+public class YotiHttpRequestBuilderFactory {
 
     private static final PathFactory pathFactory;
     private static final SignedMessageFactory signedMessageFactory;
@@ -22,8 +22,8 @@ public class SignedRequestBuilderFactory {
         imageResourceFetcher = ImageResourceFetcher.newInstance(rawResourceFetcher);
     }
 
-    public SignedRequestBuilder create() {
-        return new SignedRequestBuilder(pathFactory, signedMessageFactory, headersFactory, jsonResourceFetcher, rawResourceFetcher, imageResourceFetcher);
+    public YotiHttpRequestBuilder create() {
+        return new YotiHttpRequestBuilder(pathFactory, signedMessageFactory, headersFactory, jsonResourceFetcher, rawResourceFetcher, imageResourceFetcher);
     }
 
 }

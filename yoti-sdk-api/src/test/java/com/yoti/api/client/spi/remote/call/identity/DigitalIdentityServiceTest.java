@@ -1,12 +1,13 @@
 package com.yoti.api.client.spi.remote.call.identity;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -18,17 +19,22 @@ import com.yoti.api.client.identity.MatchRequest;
 import com.yoti.api.client.identity.MatchResult;
 import com.yoti.api.client.identity.ShareSession;
 import com.yoti.api.client.identity.ShareSessionRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequest;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilder;
-import com.yoti.api.client.spi.remote.call.SignedRequestBuilderFactory;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilder;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 import com.yoti.json.ResourceMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
-import org.mockito.junit.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DigitalIdentityServiceTest {
@@ -44,11 +50,11 @@ public class DigitalIdentityServiceTest {
     @Spy @InjectMocks DigitalIdentityService identityService;
 
     @Mock UnsignedPathFactory unsignedPathFactory;
-    @Mock(answer = RETURNS_DEEP_STUBS) SignedRequestBuilder signedRequestBuilder;
-    @Mock SignedRequestBuilderFactory requestBuilderFactory;
+    @Mock(answer = RETURNS_DEEP_STUBS) YotiHttpRequestBuilder yotiHttpRequestBuilder;
+    @Mock YotiHttpRequestBuilderFactory requestBuilderFactory;
 
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPair;
-    @Mock SignedRequest signedRequest;
+    @Mock YotiHttpRequest yotiHttpRequest;
 
     @Mock ShareSessionRequest shareSessionRequest;
     @Mock ShareSession shareSession;
@@ -124,7 +130,7 @@ public class DigitalIdentityServiceTest {
     public void createShareSession_BuildingRequestWithWrongUri_Exception() throws Exception {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(shareSessionRequest)).thenReturn(A_BODY_BYTES);
-            when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
+            when(requestBuilderFactory.create()).thenReturn(yotiHttpRequestBuilder);
 
             String exMessage = "URI wrong format";
             URISyntaxException causeEx = new URISyntaxException("", exMessage);
@@ -147,7 +153,7 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(shareSessionRequest)).thenReturn(A_BODY_BYTES);
 
-            when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
+            when(requestBuilderFactory.create()).thenReturn(yotiHttpRequestBuilder);
 
             String exMessage = "Wrong query params format";
             UnsupportedEncodingException causeEx = new UnsupportedEncodingException(exMessage);
@@ -170,7 +176,7 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(shareSessionRequest)).thenReturn(A_BODY_BYTES);
 
-            when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
+            when(requestBuilderFactory.create()).thenReturn(yotiHttpRequestBuilder);
 
             String exMessage = "Wrong digest";
             GeneralSecurityException causeEx = new GeneralSecurityException(exMessage);
@@ -193,12 +199,12 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(shareSessionRequest)).thenReturn(A_BODY_BYTES);
 
-            when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
+            when(requestBuilderFactory.create()).thenReturn(yotiHttpRequestBuilder);
 
             when(identityService.createSignedRequest(SDK_ID, keyPair, SESSION_CREATION_PATH, POST, A_BODY_BYTES))
-                    .thenReturn(signedRequest);
+                    .thenReturn(yotiHttpRequest);
 
-            when(signedRequest.execute(ShareSession.class)).thenReturn(shareSession);
+            when(yotiHttpRequest.execute(ShareSession.class)).thenReturn(shareSession);
 
             ShareSession result = identityService.createShareSession(SDK_ID, keyPair, shareSessionRequest);
             assertSame(shareSession, result);
@@ -347,7 +353,7 @@ public class DigitalIdentityServiceTest {
     public void fetchMatch_BuildingRequestWithWrongEndpoint_Exception() throws Exception {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
-            when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
+            when(requestBuilderFactory.create()).thenReturn(yotiHttpRequestBuilder);
 
             String exMessage = "URI wrong format";
             URISyntaxException causeEx = new URISyntaxException("", exMessage);
@@ -370,7 +376,7 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
 
-            when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
+            when(requestBuilderFactory.create()).thenReturn(yotiHttpRequestBuilder);
 
             String exMessage = "Wrong query params format";
             UnsupportedEncodingException causeEx = new UnsupportedEncodingException(exMessage);
@@ -393,7 +399,7 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
 
-            when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
+            when(requestBuilderFactory.create()).thenReturn(yotiHttpRequestBuilder);
 
             String exMessage = "Wrong digest";
             GeneralSecurityException causeEx = new GeneralSecurityException(exMessage);
@@ -416,12 +422,12 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
 
-            when(requestBuilderFactory.create()).thenReturn(signedRequestBuilder);
+            when(requestBuilderFactory.create()).thenReturn(yotiHttpRequestBuilder);
 
             when(identityService.createSignedRequest(SDK_ID, keyPair, DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
-                    .thenReturn(signedRequest);
+                    .thenReturn(yotiHttpRequest);
 
-            when(signedRequest.execute(MatchResult.class)).thenReturn(matchResult);
+            when(yotiHttpRequest.execute(MatchResult.class)).thenReturn(matchResult);
 
             MatchResult result = identityService.fetchMatch(SDK_ID, keyPair, matchRequest);
             assertSame(matchResult, result);

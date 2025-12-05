@@ -17,7 +17,7 @@ import com.yoti.api.client.AmlException;
 import com.yoti.api.client.aml.AmlProfile;
 import com.yoti.api.client.aml.AmlResult;
 import com.yoti.api.client.spi.remote.call.ResourceException;
-import com.yoti.api.client.spi.remote.call.SignedRequest;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -47,7 +47,7 @@ public class RemoteAmlServiceTest {
 
     @Mock AmlProfile amlProfileMock;
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPairMock;
-    @Mock SignedRequest signedRequestMock;
+    @Mock YotiHttpRequest yotiHttpRequestMock;
     @Mock AmlResult amlResultMock;
 
     @BeforeClass
@@ -63,8 +63,8 @@ public class RemoteAmlServiceTest {
     @Test
     public void shouldPerformAmlCheck() throws Exception {
         when(objectMapperMock.writeValueAsString(amlProfileMock)).thenReturn(SERIALIZED_BODY);
-        doReturn(signedRequestMock).when(testObj).createSignedRequest(keyPairMock, GENERATED_PATH, BODY_BYTES);
-        when(signedRequestMock.execute(AmlResult.class)).thenReturn(amlResultMock);
+        doReturn(yotiHttpRequestMock).when(testObj).createSignedRequest(keyPairMock, GENERATED_PATH, BODY_BYTES);
+        when(yotiHttpRequestMock.execute(AmlResult.class)).thenReturn(amlResultMock);
 
         AmlResult result = testObj.performCheck(keyPairMock, SOME_APP_ID, amlProfileMock);
 
@@ -75,8 +75,8 @@ public class RemoteAmlServiceTest {
     public void shouldWrapIOException() throws Exception {
         IOException ioException = new IOException();
         when(objectMapperMock.writeValueAsString(amlProfileMock)).thenReturn(SERIALIZED_BODY);
-        doReturn(signedRequestMock).when(testObj).createSignedRequest(keyPairMock, GENERATED_PATH, BODY_BYTES);
-        when(signedRequestMock.execute(AmlResult.class)).thenThrow(ioException);
+        doReturn(yotiHttpRequestMock).when(testObj).createSignedRequest(keyPairMock, GENERATED_PATH, BODY_BYTES);
+        when(yotiHttpRequestMock.execute(AmlResult.class)).thenThrow(ioException);
 
         try {
             testObj.performCheck(keyPairMock, SOME_APP_ID, amlProfileMock);
@@ -90,8 +90,8 @@ public class RemoteAmlServiceTest {
     public void shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(HTTP_UNAUTHORIZED, "Unauthorized", "failed verification");
         when(objectMapperMock.writeValueAsString(amlProfileMock)).thenReturn(SERIALIZED_BODY);
-        doReturn(signedRequestMock).when(testObj).createSignedRequest(keyPairMock, GENERATED_PATH, BODY_BYTES);
-        when(signedRequestMock.execute(AmlResult.class)).thenThrow(resourceException);
+        doReturn(yotiHttpRequestMock).when(testObj).createSignedRequest(keyPairMock, GENERATED_PATH, BODY_BYTES);
+        when(yotiHttpRequestMock.execute(AmlResult.class)).thenThrow(resourceException);
 
         try {
             testObj.performCheck(keyPairMock, SOME_APP_ID, amlProfileMock);

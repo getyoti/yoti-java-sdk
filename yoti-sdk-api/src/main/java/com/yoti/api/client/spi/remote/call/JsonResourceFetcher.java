@@ -36,14 +36,14 @@ public final class JsonResourceFetcher implements ResourceFetcher {
     }
 
     @Override
-    public <T> T doRequest(SignedRequest signedRequest, Class<T> resourceClass) throws ResourceException, IOException {
-        SignedRequestResponse signedRequestResponse = rawResourceFetcher.doRequest(signedRequest);
-        return objectMapper.readValue(signedRequestResponse.getResponseBody(), resourceClass);
+    public <T> T doRequest(YotiHttpRequest yotiHttpRequest, Class<T> resourceClass) throws ResourceException, IOException {
+        YotiHttpResponse yotiHttpResponse = rawResourceFetcher.doRequest(yotiHttpRequest);
+        return objectMapper.readValue(yotiHttpResponse.getResponseBody(), resourceClass);
     }
 
-    public <T> T doRequest(SignedRequest signedRequest, TypeReference<T> resourceClass) throws ResourceException, IOException {
-        SignedRequestResponse signedRequestResponse = rawResourceFetcher.doRequest(signedRequest);
-        return objectMapper.readValue(signedRequestResponse.getResponseBody(), resourceClass);
+    public <T> T doRequest(YotiHttpRequest yotiHttpRequest, TypeReference<T> resourceClass) throws ResourceException, IOException {
+        YotiHttpResponse yotiHttpResponse = rawResourceFetcher.doRequest(yotiHttpRequest);
+        return objectMapper.readValue(yotiHttpResponse.getResponseBody(), resourceClass);
     }
 
 }

@@ -29,7 +29,7 @@ public class ProfileService {
     private static final Logger LOG = LoggerFactory.getLogger(ProfileService.class);
 
     private final UnsignedPathFactory unsignedPathFactory;
-    private final SignedRequestBuilderFactory signedRequestBuilderFactory;
+    private final YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory;
     private final String apiUrl;
 
     static {
@@ -39,12 +39,12 @@ public class ProfileService {
     public static ProfileService newInstance() {
         return new ProfileService(
                 new UnsignedPathFactory(),
-                new SignedRequestBuilderFactory());
+                new YotiHttpRequestBuilderFactory());
     }
 
-    ProfileService(UnsignedPathFactory profilePathFactory, SignedRequestBuilderFactory signedRequestBuilderFactory) {
+    ProfileService(UnsignedPathFactory profilePathFactory, YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory) {
         this.unsignedPathFactory = profilePathFactory;
-        this.signedRequestBuilderFactory = signedRequestBuilderFactory;
+        this.yotiHttpRequestBuilderFactory = yotiHttpRequestBuilderFactory;
 
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
@@ -63,18 +63,18 @@ public class ProfileService {
         try {
             String authKey = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
 
-            SignedRequest signedRequest = createSignedRequest(keyPair, path, authKey);
-            return fetchReceipt(signedRequest);
+            YotiHttpRequest yotiHttpRequest = createSignedRequest(keyPair, path, authKey);
+            return fetchReceipt(yotiHttpRequest);
         } catch (IOException ioe) {
             throw new ProfileException("Error calling service to get profile", ioe);
         }
     }
 
-    private ProfileResponse fetchReceipt(SignedRequest signedRequest) throws IOException, ProfileException {
-        LOG.info("Fetching profile from resource at '{}'", signedRequest.getUri());
+    private ProfileResponse fetchReceipt(YotiHttpRequest yotiHttpRequest) throws IOException, ProfileException {
+        LOG.info("Fetching profile from resource at '{}'", yotiHttpRequest.getUri());
 
         try {
-            return signedRequest.execute(ProfileResponse.class);
+            return yotiHttpRequest.execute(ProfileResponse.class);
         } catch (ResourceException ex) {
             int responseCode = ex.getResponseCode();
             switch (responseCode) {
@@ -88,9 +88,9 @@ public class ProfileService {
         }
     }
 
-    SignedRequest createSignedRequest(KeyPair keyPair, String path, String authKey) throws ProfileException {
+    YotiHttpRequest createSignedRequest(KeyPair keyPair, String path, String authKey) throws ProfileException {
         try {
-            return signedRequestBuilderFactory.create()
+            return yotiHttpRequestBuilderFactory.create()
                     .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)

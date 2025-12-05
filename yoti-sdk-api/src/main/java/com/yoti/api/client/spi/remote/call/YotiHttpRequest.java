@@ -8,7 +8,7 @@ import com.yoti.api.client.Image;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-public class SignedRequest {
+public class YotiHttpRequest {
 
     private final URI uri;
     private final String method;
@@ -18,7 +18,7 @@ public class SignedRequest {
     private final RawResourceFetcher rawResourceFetcher;
     private final ImageResourceFetcher imageResourceFetcher;
 
-    SignedRequest(final URI uri,
+    YotiHttpRequest(final URI uri,
             final String method,
             final byte[] data,
             final Map<String, String> headers,
@@ -62,7 +62,7 @@ public class SignedRequest {
         return jsonResourceFetcher.doRequest(this, typeReference);
     }
 
-    public SignedRequestResponse execute() throws ResourceException, IOException {
+    public YotiHttpResponse execute() throws ResourceException, IOException {
         return rawResourceFetcher.doRequest(this);
     }
 
