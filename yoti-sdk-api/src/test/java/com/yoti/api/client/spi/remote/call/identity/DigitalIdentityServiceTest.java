@@ -21,7 +21,7 @@ import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilder;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
-import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
+import com.yoti.api.client.spi.remote.call.factory.DocsSignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 import com.yoti.json.ResourceMapper;
 
@@ -53,7 +53,7 @@ public class DigitalIdentityServiceTest {
     @Mock(answer = RETURNS_DEEP_STUBS) YotiHttpRequestBuilder yotiHttpRequestBuilder;
     @Mock YotiHttpRequestBuilderFactory requestBuilderFactory;
 
-    @Mock SignedRequestStrategy signedRequestThingyMock;
+    @Mock DocsSignedRequestStrategy signedRequestThingyMock;
     @Mock YotiHttpRequest yotiHttpRequest;
 
     @Mock ShareSessionRequest shareSessionRequest;

@@ -88,14 +88,12 @@ final class DocScanService {
     /**
      * Uses the supplied session specification to create a session
      *
-     * @param sdkId       the SDK ID
-     * @param authStrategy     the {@code AuthStrategy}
-     * @param sessionSpec the {@code SessionSpec}
+     * @param authStrategy the {@code AuthStrategy}
+     * @param sessionSpec  the {@code SessionSpec}
      * @return the session creation result
      * @throws DocScanException if there was an error
      */
-    public CreateSessionResult createSession(String sdkId, AuthStrategy authStrategy, SessionSpec sessionSpec) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
+    public CreateSessionResult createSession(AuthStrategy authStrategy, SessionSpec sessionSpec) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNull(sessionSpec, "sessionSpec");
 
@@ -129,14 +127,12 @@ final class DocScanService {
     /**
      * Retrieves the current state of a given session
      *
-     * @param sdkId     the SDK ID
-     * @param authStrategy     the {@code AuthStrategy}
-     * @param sessionId the session ID
+     * @param authStrategy the {@code AuthStrategy}
+     * @param sessionId    the session ID
      * @return the session state
      * @throws DocScanException if there was an error
      */
-    public GetSessionResult retrieveSession(String sdkId, AuthStrategy authStrategy, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
+    public GetSessionResult retrieveSession(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -166,13 +162,11 @@ final class DocScanService {
     /**
      * Deletes a session and all of its associated content
      *
-     * @param sdkId     the SDK ID
-     * @param authStrategy     the {@code AuthStrategy}
-     * @param sessionId the session ID
+     * @param authStrategy the {@code AuthStrategy}
+     * @param sessionId    the session ID
      * @throws DocScanException if there was an error
      */
-    public void deleteSession(String sdkId, AuthStrategy authStrategy, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
+    public void deleteSession(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -202,15 +196,13 @@ final class DocScanService {
     /**
      * Retrieves {@link Media} content for a given session and media ID
      *
-     * @param sdkId     the SDK ID
-     * @param authStrategy     the {@code AuthStrategy}
-     * @param sessionId the session ID
-     * @param mediaId   the media ID
+     * @param authStrategy the {@code AuthStrategy}
+     * @param sessionId    the session ID
+     * @param mediaId      the media ID
      * @return the {@code Media} content, null if 204 No Content
      * @throws DocScanException if there was an error
      */
-    public Media getMediaContent(String sdkId, AuthStrategy authStrategy, String sessionId, String mediaId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
+    public Media getMediaContent(AuthStrategy authStrategy, String sessionId, String mediaId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
         notNullOrEmpty(mediaId, "mediaId");
@@ -243,14 +235,12 @@ final class DocScanService {
     /**
      * Deletes media content for a given session and media ID
      *
-     * @param sdkId     the SDK ID
-     * @param authStrategy     the {@code AuthStrategy}
-     * @param sessionId the session ID
-     * @param mediaId   the media ID
+     * @param authStrategy the {@code AuthStrategy}
+     * @param sessionId    the session ID
+     * @param mediaId      the media ID
      * @throws DocScanException if there was an error
      */
-    public void deleteMediaContent(String sdkId, AuthStrategy authStrategy, String sessionId, String mediaId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
+    public void deleteMediaContent(AuthStrategy authStrategy, String sessionId, String mediaId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
         notNullOrEmpty(mediaId, "mediaId");
@@ -276,8 +266,7 @@ final class DocScanService {
         }
     }
 
-    public void putIbvInstructions(String sdkId, AuthStrategy authStrategy, String sessionId, Instructions instructions) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
+    public void putIbvInstructions(AuthStrategy authStrategy, String sessionId, Instructions instructions) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
         notNull(instructions, "instructions");
@@ -306,8 +295,7 @@ final class DocScanService {
         }
     }
 
-    public InstructionsResponse getIbvInstructions(String sdkId, AuthStrategy authStrategy, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
+    public InstructionsResponse getIbvInstructions(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -335,14 +323,12 @@ final class DocScanService {
     /**
      * Retrieves the current state of a given session
      *
-     * @param sdkId     the SDK ID
-     * @param authStrategy     the {@code AuthStrategy}
-     * @param sessionId the session ID
+     * @param authStrategy the {@code AuthStrategy}
+     * @param sessionId    the session ID
      * @return the session state
      * @throws DocScanException if there was an error
      */
-    public ContactProfileResponse fetchInstructionsContactProfile(String sdkId, AuthStrategy authStrategy, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
+    public ContactProfileResponse fetchInstructionsContactProfile(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -367,8 +353,7 @@ final class DocScanService {
         }
     }
 
-    public Media getIbvInstructionsPdf(String sdkId, AuthStrategy authStrategy, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
+    public Media getIbvInstructionsPdf(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -397,8 +382,7 @@ final class DocScanService {
         }
     }
 
-    public SessionConfigurationResponse fetchSessionConfiguration(String sdkId, AuthStrategy authStrategy, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
+    public SessionConfigurationResponse fetchSessionConfiguration(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -423,11 +407,9 @@ final class DocScanService {
         }
     }
 
-    public CreateFaceCaptureResourceResponse createFaceCaptureResource(String sdkId,
-            AuthStrategy authStrategy,
+    public CreateFaceCaptureResourceResponse createFaceCaptureResource(AuthStrategy authStrategy,
             String sessionId,
             CreateFaceCaptureResourcePayload createFaceCaptureResourcePayload) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
         notNull(createFaceCaptureResourcePayload, "createFaceCaptureResourcePayload");
@@ -456,9 +438,8 @@ final class DocScanService {
         }
     }
 
-    public void uploadFaceCaptureImage(String sdkId, AuthStrategy authStrategy, String sessionId, String resourceId, UploadFaceCaptureImagePayload faceCaptureImagePayload)
+    public void uploadFaceCaptureImage(AuthStrategy authStrategy, String sessionId, String resourceId, UploadFaceCaptureImagePayload faceCaptureImagePayload)
             throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
         notNullOrEmpty(resourceId, "resourceId");
@@ -510,8 +491,7 @@ final class DocScanService {
         }
     }
 
-    public void triggerIbvEmailNotification(String sdkId, AuthStrategy authStrategy, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
+    public void triggerIbvEmailNotification(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -533,8 +513,7 @@ final class DocScanService {
         }
     }
 
-    public List<MetadataResponse> getTrackedDevices(String sdkId, AuthStrategy authStrategy, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
+    public List<MetadataResponse> getTrackedDevices(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -557,8 +536,7 @@ final class DocScanService {
         }
     }
 
-    public void deleteTrackedDevices(String sdkId, AuthStrategy authStrategy, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
+    public void deleteTrackedDevices(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 

@@ -16,7 +16,6 @@ import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 import com.yoti.api.client.spi.remote.ReceiptFetcher;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
-import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.qrcode.DynamicSharingService;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -41,21 +40,19 @@ public class YotiClient {
 
     private final String appId;
     private final KeyPair keyPair;
-    private final SignedRequestStrategy signedRequestThingy;
     private final ReceiptFetcher receiptFetcher;
     private final RemoteAmlService remoteAmlService;
     private final ActivityDetailsFactory activityDetailsFactory;
     private final DynamicSharingService dynamicSharingService;
 
     YotiClient(String applicationId,
-            KeyPairSource kpSource,
+            KeyPair keyPair,
             ReceiptFetcher receiptFetcher,
-            ActivityDetailsFactory activityDetailsFactory,
             RemoteAmlService remoteAmlService,
+            ActivityDetailsFactory activityDetailsFactory,
             DynamicSharingService dynamicSharingService) throws InitialisationException {
         this.appId = notNull(applicationId, "Application id");
-        this.keyPair = loadKeyPair(notNull(kpSource, "Key pair source"));
-        this.signedRequestThingy = new SignedRequestStrategy(keyPair, appId);
+        this.keyPair = keyPair;
         this.receiptFetcher = notNull(receiptFetcher, "receiptFetcher");
         this.remoteAmlService = notNull(remoteAmlService, "amlService");
         this.activityDetailsFactory = notNull(activityDetailsFactory, "activityDetailsFactory");
@@ -83,7 +80,7 @@ public class YotiClient {
      * @throws ProfileException aggregate exception signalling issues during the call
      */
     public ActivityDetails getActivityDetails(String encryptedYotiToken) throws ProfileException {
-        Receipt receipt = receiptFetcher.fetch(encryptedYotiToken, keyPair, signedRequestThingy, appId);
+        Receipt receipt = receiptFetcher.fetch(encryptedYotiToken, keyPair);
         return activityDetailsFactory.create(receipt, keyPair.getPrivate());
     }
 
@@ -99,7 +96,7 @@ public class YotiClient {
      */
     public AmlResult performAmlCheck(AmlProfile amlProfile) throws AmlException {
         LOG.debug("Performing aml check...");
-        return remoteAmlService.performCheck(signedRequestThingy, appId, amlProfile);
+        return remoteAmlService.performCheck(amlProfile);
     }
 
     /**
@@ -116,15 +113,7 @@ public class YotiClient {
      */
     public ShareUrlResult createShareUrl(DynamicScenario dynamicScenario) throws DynamicShareException {
         LOG.debug("Request a share url for a dynamicScenario...");
-        return dynamicSharingService.createShareUrl(appId, signedRequestThingy, dynamicScenario);
-    }
-
-    private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {
-        try {
-            return kpSource.getFromStream(new KeyStreamVisitor());
-        } catch (IOException e) {
-            throw new InitialisationException("Cannot load key pair", e);
-        }
+        return dynamicSharingService.createShareUrl(appId, dynamicScenario);
     }
 
     public static class Builder {
@@ -147,14 +136,15 @@ public class YotiClient {
 
         public YotiClient build() {
             checkBuilderState();
+            KeyPair keyPair = loadKeyPair(notNull(keyPairSource, "Key pair source"));
 
             return new YotiClient(
                     sdkId,
-                    keyPairSource,
-                    ReceiptFetcher.newInstance(),
+                    keyPair,
+                    ReceiptFetcher.newInstance(keyPair, sdkId),
+                    RemoteAmlService.newInstance(keyPair, sdkId),
                     ActivityDetailsFactory.newInstance(),
-                    RemoteAmlService.newInstance(),
-                    DynamicSharingService.newInstance()
+                    DynamicSharingService.newInstance(keyPair)
             );
         }
 
@@ -164,6 +154,14 @@ public class YotiClient {
             }
             if (sdkId == null) {
                 throw new IllegalStateException("No SDK ID supplied");
+            }
+        }
+
+        private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {
+            try {
+                return kpSource.getFromStream(new KeyStreamVisitor());
+            } catch (IOException e) {
+                throw new InitialisationException("Cannot load key pair", e);
             }
         }
 

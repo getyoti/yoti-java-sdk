@@ -18,7 +18,7 @@ import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilder;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
-import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
+import com.yoti.api.client.spi.remote.call.factory.DocsSignedRequestStrategy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -42,7 +42,7 @@ public class DocScanSandboxClientTest {
 
     @Mock YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory;
     @Mock ObjectMapper objectMapperMock;
-    @Captor ArgumentCaptor<SignedRequestStrategy> signedRequestThingyCaptor;
+    @Captor ArgumentCaptor<DocsSignedRequestStrategy> signedRequestThingyCaptor;
 
     @Mock(answer = Answers.RETURNS_SELF) YotiHttpRequestBuilder yotiHttpRequestBuilderMock;
     @Mock YotiHttpRequest yotiHttpRequestMock;

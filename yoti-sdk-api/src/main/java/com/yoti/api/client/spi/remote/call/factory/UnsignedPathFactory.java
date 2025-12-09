@@ -5,7 +5,7 @@ import static java.lang.String.format;
 public class UnsignedPathFactory {
 
     // AML
-    private static final String AML = "/aml-check?appId=%s";
+    private static final String AML = "/aml-check";
 
     // Share V2
     private static final String IDENTITY_SESSION_CREATION = "/v2/sessions";
@@ -19,7 +19,7 @@ public class UnsignedPathFactory {
     private static final String DIGITAL_ID_MATCH = "/v1/matches";
 
     // Share V1
-    private static final String PROFILE = "/profile/%s?appId=%s";
+    private static final String PROFILE = "/profile/%s";
     private static final String QR_CODE = "/qrcodes/apps/%s";
 
     // Docs
@@ -37,8 +37,8 @@ public class UnsignedPathFactory {
     private static final String DOCS_TRIGGER_IBV_NOTIFICATION = "/sessions/%s/instructions/email";
     private static final String DOCS_TRACKED_DEVICES = "/sessions/%s/tracked-devices";
 
-    public String createAmlPath(String appId) {
-        return format(AML, appId);
+    public String createAmlPath() {
+        return format(AML);
     }
 
     public String createIdentitySessionPath() {
@@ -73,8 +73,8 @@ public class UnsignedPathFactory {
         return DIGITAL_ID_MATCH;
     }
 
-    public String createProfilePath(String appId, String connectToken) {
-        return format(PROFILE, connectToken, appId);
+    public String createProfilePath(String connectToken) {
+        return format(PROFILE, connectToken);
     }
 
     public String createDynamicSharingPath(String appId) {

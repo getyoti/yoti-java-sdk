@@ -22,12 +22,12 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.security.Security;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
 import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
-import com.yoti.api.client.spi.remote.call.factory.PathFactory;
 
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
@@ -55,7 +55,7 @@ public class YotiHttpRequestBuilderTest {
     private static final Map<String, String> SIGNED_REQUEST_HEADERS;
     private static final String SOME_BASE_URL = "someBaseUrl";
     private static final byte[] SOME_BYTES = "someBytes".getBytes();
-    private static final String SIGNATURE_PARAMS_STRING = "nonce=someNonce&timestamp=someTimestamp";
+    private static final String SIGNATURE_PARAMS_STRING = "timestamp=someTimestamp";
     private static final String SOME_MULTIPART_BODY_NAME = "someMultipartBodyName";
     private static final byte[] SOME_MULTIPART_BODY = new byte[]{ 1, 2, 3, 4 };
     private static final ContentType SOME_MULTIPART_CONTENT_TYPE = ContentType.IMAGE_JPEG;
@@ -72,7 +72,7 @@ public class YotiHttpRequestBuilderTest {
 
     @InjectMocks YotiHttpRequestBuilder yotiHttpRequestBuilder;
 
-    @Mock PathFactory pathFactoryMock;
+//    @Mock PathFactory pathFactoryMock;
     @Mock HeadersFactory headersFactoryMock;
     @Mock MultipartEntityBuilder multipartEntityBuilderMock;
 
@@ -145,7 +145,7 @@ public class YotiHttpRequestBuilderTest {
 
     @Test
     public void build_shouldCreateSignedRequestWithCustomQueryParameter() throws Exception {
-        when(pathFactoryMock.createSignatureParams()).thenReturn(SIGNATURE_PARAMS_STRING);
+        when(authStrategyMock.createQueryParams()).thenReturn(Arrays.asList(new BasicNameValuePair("timestamp", "someTimestamp")));
 
         YotiHttpRequest result = yotiHttpRequestBuilder.withAuthStrategy(authStrategyMock)
                 .withBaseUrl(SOME_BASE_URL)
@@ -155,6 +155,7 @@ public class YotiHttpRequestBuilderTest {
                 .build();
 
         assertThat(result.getUri().getQuery(), containsString(SIGNATURE_PARAMS_STRING));
+        assertThat(result.getUri().getQuery(), containsString("someQueryParam=someParamValue"));
     }
 
     @Test
@@ -170,9 +171,8 @@ public class YotiHttpRequestBuilderTest {
     }
 
     @Test
-    public void build_shouldIgnoreAnyProvidedSignedRequestHeaders() throws Exception {
-        when(pathFactoryMock.createSignatureParams()).thenReturn(SIGNATURE_PARAMS_STRING);
-        when(authStrategyMock.getQueryParam()).thenReturn(null);
+    public void build_shouldIgnoreAnyProvidedAuthenticationHeaders() throws Exception {
+        when(authStrategyMock.createQueryParams()).thenReturn(Arrays.asList(new BasicNameValuePair("timestamp", "someTimestamp")));
         when(authStrategyMock.createAuthHeader(HTTP_GET, SOME_ENDPOINT + "?" + SIGNATURE_PARAMS_STRING, null)).thenReturn(authHeaderMock);
         when(headersFactoryMock.create(authHeaderMock)).thenReturn(SIGNED_REQUEST_HEADERS);
 
@@ -183,6 +183,7 @@ public class YotiHttpRequestBuilderTest {
                 .withHeader(DIGEST_HEADER, "customHeaderValue")
                 .build();
 
+        verify(authStrategyMock).createAuthHeader(HTTP_GET, SOME_ENDPOINT + "?" + SIGNATURE_PARAMS_STRING, null);
         assertThat(result.getHeaders(), hasEntry(DIGEST_HEADER, SOME_SIGNATURE));
     }
 
@@ -255,7 +256,7 @@ public class YotiHttpRequestBuilderTest {
 
     @Test
     public void shouldCreateSignedRequestSuccessfullyWithRequiredFieldsOnly() throws Exception {
-        when(pathFactoryMock.createSignatureParams()).thenReturn(SIGNATURE_PARAMS_STRING);
+        when(authStrategyMock.createQueryParams()).thenReturn(Arrays.asList(new BasicNameValuePair("timestamp", "someTimestamp")));
         String fullPath = SOME_ENDPOINT + "?" + SIGNATURE_PARAMS_STRING;
         when(authStrategyMock.createAuthHeader(HTTP_GET, fullPath, null)).thenReturn(authHeaderMock);
         when(headersFactoryMock.create(authHeaderMock)).thenReturn(SIGNED_REQUEST_HEADERS);
@@ -275,10 +276,9 @@ public class YotiHttpRequestBuilderTest {
 
     @Test
     public void shouldCreateSignedRequestSuccessfullyWithAllProperties() throws Exception {
-        when(pathFactoryMock.createSignatureParams()).thenReturn(SIGNATURE_PARAMS_STRING);
-        String fullPath = SOME_ENDPOINT + "?someKey=someValue&someQueryParam=someParamValue&" + SIGNATURE_PARAMS_STRING;
+        String fullPath = SOME_ENDPOINT + "?someQueryParam=someParamValue&someKey=someValue";
         when(authStrategyMock.createAuthHeader(HTTP_GET, fullPath, SOME_BYTES)).thenReturn(authHeaderMock);
-        when(authStrategyMock.getQueryParam()).thenReturn(new BasicNameValuePair("someKey","someValue"));
+        when(authStrategyMock.createQueryParams()).thenReturn(Arrays.asList(new BasicNameValuePair("someKey","someValue")));
         when(headersFactoryMock.create(authHeaderMock)).thenReturn(SIGNED_REQUEST_HEADERS);
 
         YotiHttpRequest result = yotiHttpRequestBuilder.withAuthStrategy(authStrategyMock)
@@ -300,9 +300,8 @@ public class YotiHttpRequestBuilderTest {
 
     @Test
     public void shouldSetContentTypeToMultipartWhenUserHasSetRequestTypeToMultipart() throws Exception {
-        when(pathFactoryMock.createSignatureParams()).thenReturn(SIGNATURE_PARAMS_STRING);
-        when(authStrategyMock.createAuthHeader(HTTP_GET, SOME_ENDPOINT + "?" + SIGNATURE_PARAMS_STRING, SOME_BUILT_MULTIPART_BODY)).thenReturn(authHeaderMock);
-        when(headersFactoryMock.create(authHeaderMock)).thenReturn(SIGNED_REQUEST_HEADERS);
+//        when(authStrategyMock.createAuthHeader(HTTP_GET, SOME_ENDPOINT + "?" + SIGNATURE_PARAMS_STRING, SOME_BUILT_MULTIPART_BODY)).thenReturn(authHeaderMock);
+//        when(headersFactoryMock.create(authHeaderMock)).thenReturn(SIGNED_REQUEST_HEADERS);
         when(multipartEntityBuilderMock.build()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContentType()).thenReturn(new BasicHeader("Content-Type", SOME_MULTIPART_CONTENT_TYPE.toString()));
 
@@ -333,7 +332,7 @@ public class YotiHttpRequestBuilderTest {
 
     @Test
     public void shouldThrowIllegalArgumentExceptionWhenThereIsAnErrorBuildingTheMultipartBody() throws Exception {
-        when(pathFactoryMock.createSignatureParams()).thenReturn(SIGNATURE_PARAMS_STRING);
+//        when(pathFactoryMock.createSignatureParams()).thenReturn(SIGNATURE_PARAMS_STRING);
         when(multipartEntityBuilderMock.build()).thenReturn(httpEntityMock);
 
         when(headerElementMock.toString()).thenReturn(SOME_MULTIPART_CONTENT_TYPE.toString());

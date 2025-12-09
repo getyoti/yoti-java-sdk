@@ -21,8 +21,7 @@ import com.yoti.api.client.spi.remote.call.ResourceFetcher;
 import com.yoti.api.client.spi.remote.call.YotiConstants;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
-import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
-import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
+import com.yoti.api.client.spi.remote.call.factory.SimpleSignedRequestStrategy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -34,7 +33,7 @@ public class YotiSandboxClient {
     private static final String DEFAULT_SANDBOX_API_URL = DEFAULT_YOTI_HOST + YOTI_SANDBOX_PATH_PREFIX;
 
     private final String appId;
-    private final AuthStrategy authStrategy;
+    private final SimpleSignedRequestStrategy authStrategy;
     private final String sandboxBasePath;
     private final ObjectMapper mapper;
     private final SandboxPathFactory sandboxPathFactory;
@@ -49,9 +48,10 @@ public class YotiSandboxClient {
             KeyPair keyPair,
             SandboxPathFactory pathFactory,
             ObjectMapper mapper,
-            ResourceFetcher resourceFetcher, YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory) {
+            ResourceFetcher resourceFetcher,
+            YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory) {
         this.appId = appId;
-        this.authStrategy = new SignedRequestStrategy(keyPair, appId);
+        this.authStrategy = new SimpleSignedRequestStrategy(keyPair);
         this.sandboxPathFactory = pathFactory;
         this.mapper = mapper;
         this.resourceFetcher = resourceFetcher;

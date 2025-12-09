@@ -1,5 +1,8 @@
 package com.yoti.api.client.spi.remote.call.factory;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.yoti.api.client.spi.remote.call.YotiConstants;
 
 import org.apache.http.Header;
@@ -20,8 +23,8 @@ public class AuthTokenStrategy implements AuthStrategy {
     }
 
     @Override
-    public NameValuePair getQueryParam() {
-        return null;
+    public List<NameValuePair> createQueryParams() {
+        return Collections.emptyList();
     }
 
 }

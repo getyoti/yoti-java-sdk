@@ -23,7 +23,7 @@ import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
 import com.yoti.api.client.spi.remote.call.factory.AuthTokenStrategy;
-import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
+import com.yoti.api.client.spi.remote.call.factory.DocsSignedRequestStrategy;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
@@ -42,23 +42,16 @@ public class DocScanClient {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    private final String sdkId;
     private final AuthStrategy authStrategy;
     private final DocScanService docScanService;
 
-    DocScanClient(final String sdkId,
-            final KeyPairSource keyPairSource,
-            DocScanService docScanService) {
-        this.sdkId = sdkId;
+    DocScanClient(final String sdkId, final KeyPairSource keyPairSource, DocScanService docScanService) {
         KeyPair keyPair = loadKeyPair(keyPairSource);
-        this.authStrategy = new SignedRequestStrategy(keyPair, sdkId);
+        this.authStrategy = new DocsSignedRequestStrategy(keyPair, sdkId);
         this.docScanService = docScanService;
     }
 
-    DocScanClient(final String sdkId,
-            final String authenticationToken,
-            DocScanService docScanService) {
-        this.sdkId = sdkId;
+    DocScanClient(final String authenticationToken, DocScanService docScanService) {
         this.authStrategy = new AuthTokenStrategy(authenticationToken);
         this.docScanService = docScanService;
     }
@@ -76,7 +69,7 @@ public class DocScanClient {
      */
     public CreateSessionResult createSession(SessionSpec sessionSpec) throws DocScanException {
         LOG.debug("Creating a YotiDocs session...");
-        return docScanService.createSession(sdkId, authStrategy, sessionSpec);
+        return docScanService.createSession(authStrategy, sessionSpec);
     }
 
     /**
@@ -88,7 +81,7 @@ public class DocScanClient {
      */
     public GetSessionResult getSession(String sessionId) throws DocScanException {
         LOG.debug("Retrieving session '{}'", sessionId);
-        return docScanService.retrieveSession(sdkId, authStrategy, sessionId);
+        return docScanService.retrieveSession(authStrategy, sessionId);
     }
 
     /**
@@ -100,7 +93,7 @@ public class DocScanClient {
      */
     public void deleteSession(String sessionId) throws DocScanException {
         LOG.debug("Deleting session '{}'", sessionId);
-        docScanService.deleteSession(sdkId, authStrategy, sessionId);
+        docScanService.deleteSession(authStrategy, sessionId);
     }
 
     /**
@@ -114,7 +107,7 @@ public class DocScanClient {
      */
     public Media getMediaContent(String sessionId, String mediaId) throws DocScanException {
         LOG.debug("Retrieving media content '{}' in session '{}'", mediaId, sessionId);
-        return docScanService.getMediaContent(sdkId, authStrategy, sessionId, mediaId);
+        return docScanService.getMediaContent(authStrategy, sessionId, mediaId);
     }
 
     /**
@@ -127,7 +120,7 @@ public class DocScanClient {
      */
     public void deleteMediaContent(String sessionId, String mediaId) throws DocScanException {
         LOG.debug("Deleting media content '{}' in session '{}'", mediaId, sessionId);
-        docScanService.deleteMediaContent(sdkId, authStrategy, sessionId, mediaId);
+        docScanService.deleteMediaContent(authStrategy, sessionId, mediaId);
     }
 
     /**
@@ -139,7 +132,7 @@ public class DocScanClient {
      */
     public void putIbvInstructions(String sessionId, Instructions instructions) throws DocScanException {
         LOG.debug("Setting IBV instructions for session '{}'", sessionId);
-        docScanService.putIbvInstructions(sdkId, authStrategy, sessionId, instructions);
+        docScanService.putIbvInstructions(authStrategy, sessionId, instructions);
     }
 
     /**
@@ -151,7 +144,7 @@ public class DocScanClient {
      */
     public Media getIbvInstructionsPdf(String sessionId) throws DocScanException {
         LOG.debug("Retrieving IBV instructions PDF in session '{}'", sessionId);
-        return docScanService.getIbvInstructionsPdf(sdkId, authStrategy, sessionId);
+        return docScanService.getIbvInstructionsPdf(authStrategy, sessionId);
     }
 
     /**
@@ -163,7 +156,7 @@ public class DocScanClient {
      */
     public ContactProfileResponse fetchInstructionsContactProfile(String sessionId) throws DocScanException {
         LOG.debug("Fetching instructions contact profile in session '{}'", sessionId);
-        return docScanService.fetchInstructionsContactProfile(sdkId, authStrategy, sessionId);
+        return docScanService.fetchInstructionsContactProfile(authStrategy, sessionId);
     }
 
     /**
@@ -177,7 +170,7 @@ public class DocScanClient {
      */
     public CreateFaceCaptureResourceResponse createFaceCaptureResource(String sessionId, CreateFaceCaptureResourcePayload createFaceCaptureResourcePayload) throws DocScanException {
         LOG.debug("Creating Face Capture resource in session '{}' for requirement '{}'", sessionId, createFaceCaptureResourcePayload.getRequirementId());
-        return docScanService.createFaceCaptureResource(sdkId, authStrategy, sessionId, createFaceCaptureResourcePayload);
+        return docScanService.createFaceCaptureResource(authStrategy, sessionId, createFaceCaptureResourcePayload);
     }
 
     /**
@@ -189,7 +182,7 @@ public class DocScanClient {
      */
     public void uploadFaceCaptureImage(String sessionId, String resourceId, UploadFaceCaptureImagePayload uploadFaceCaptureImagePayload) throws DocScanException {
         LOG.debug("Uploading image to Face Capture resource '{}' for session '{}'", resourceId, sessionId);
-        docScanService.uploadFaceCaptureImage(sdkId, authStrategy, sessionId, resourceId, uploadFaceCaptureImagePayload);
+        docScanService.uploadFaceCaptureImage(authStrategy, sessionId, resourceId, uploadFaceCaptureImagePayload);
     }
 
     /**
@@ -222,7 +215,7 @@ public class DocScanClient {
      */
     public InstructionsResponse getIbvInstructions(String sessionId) throws DocScanException {
         LOG.debug("Fetching instructions for session '{}'", sessionId);
-        return docScanService.getIbvInstructions(sdkId, authStrategy, sessionId);
+        return docScanService.getIbvInstructions(authStrategy, sessionId);
     }
 
     /**
@@ -236,7 +229,7 @@ public class DocScanClient {
      */
     public void triggerIbvEmailNotification(String sessionId) throws DocScanException {
         LOG.debug("Triggering IBV email notification for session '{}'", sessionId);
-        docScanService.triggerIbvEmailNotification(sdkId, authStrategy, sessionId);
+        docScanService.triggerIbvEmailNotification(authStrategy, sessionId);
     }
 
     /**
@@ -249,7 +242,7 @@ public class DocScanClient {
      */
     public SessionConfigurationResponse getSessionConfiguration(String sessionId) throws DocScanException {
         LOG.debug("Fetching configuration for session '{}'", sessionId);
-        return docScanService.fetchSessionConfiguration(sdkId, authStrategy, sessionId);
+        return docScanService.fetchSessionConfiguration(authStrategy, sessionId);
     }
 
     /**
@@ -262,7 +255,7 @@ public class DocScanClient {
      */
     public List<MetadataResponse> getTrackedDevices(String sessionId) throws DocScanException {
         LOG.debug("Fetching tracked devices for session '{}'", sessionId);
-        return docScanService.getTrackedDevices(sdkId, authStrategy, sessionId);
+        return docScanService.getTrackedDevices(authStrategy, sessionId);
     }
 
     /**
@@ -274,7 +267,7 @@ public class DocScanClient {
      */
     public void deleteTrackedDevices(String sessionId) throws DocScanException {
         LOG.debug("Deleting tracked devices for session '{}'", sessionId);
-        docScanService.deleteTrackedDevices(sdkId, authStrategy, sessionId);
+        docScanService.deleteTrackedDevices(authStrategy, sessionId);
     }
 
     private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {
@@ -314,7 +307,7 @@ public class DocScanClient {
             if (authenticationToken == null) {
                 return new DocScanClient(sdkId, keyPairSource, docScanService);
             } else {
-                return new DocScanClient(sdkId, authenticationToken, docScanService);
+                return new DocScanClient(authenticationToken, docScanService);
             }
         }
 

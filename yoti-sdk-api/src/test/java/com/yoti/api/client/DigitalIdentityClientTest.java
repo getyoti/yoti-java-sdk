@@ -16,7 +16,7 @@ import java.security.KeyPair;
 import com.yoti.api.client.identity.MatchRequest;
 import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
-import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
+import com.yoti.api.client.spi.remote.call.factory.DocsSignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityException;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityService;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
@@ -37,7 +37,7 @@ public class DigitalIdentityClientTest {
 
     @Mock KeyPairSource keyPairSourceMock;
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPairMock;
-    @Captor ArgumentCaptor<SignedRequestStrategy> signedRequestThingyCaptor;
+    @Captor ArgumentCaptor<DocsSignedRequestStrategy> signedRequestThingyCaptor;
     @Mock DigitalIdentityService identityServiceMock;
     @Mock ShareSessionRequest shareSessionRequest;
     @Mock MatchRequest matchRequest;

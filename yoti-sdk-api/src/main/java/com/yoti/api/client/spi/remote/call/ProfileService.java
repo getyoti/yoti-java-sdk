@@ -18,7 +18,7 @@ import java.security.Security;
 import java.util.Base64;
 
 import com.yoti.api.client.ProfileException;
-import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
+import com.yoti.api.client.spi.remote.call.factory.ProfileSignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -32,39 +32,41 @@ public class ProfileService {
     private final UnsignedPathFactory unsignedPathFactory;
     private final YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory;
     private final String apiUrl;
+    private final ProfileSignedRequestStrategy profileSignedRequestStrategy;
 
     static {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    public static ProfileService newInstance() {
+    public static ProfileService newInstance(KeyPair keyPair, String appId) {
         return new ProfileService(
                 new UnsignedPathFactory(),
-                new YotiHttpRequestBuilderFactory());
+                new YotiHttpRequestBuilderFactory(),
+                new ProfileSignedRequestStrategy(keyPair, appId));
     }
 
-    ProfileService(UnsignedPathFactory profilePathFactory, YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory) {
-        this.unsignedPathFactory = profilePathFactory;
+    private ProfileService(UnsignedPathFactory unsignedPathFactory,
+            YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory,
+            ProfileSignedRequestStrategy profileSignedRequestStrategy) {
+        this.unsignedPathFactory = unsignedPathFactory;
         this.yotiHttpRequestBuilderFactory = yotiHttpRequestBuilderFactory;
-
+        this.profileSignedRequestStrategy = profileSignedRequestStrategy;
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
 
-    public Receipt getReceipt(SignedRequestStrategy signedRequestThingy, KeyPair keyPair, String appId, String connectToken) throws ProfileException {
-        return getProfile(signedRequestThingy, keyPair, appId, connectToken).getReceipt();
+    public Receipt getReceipt(KeyPair keyPair, String connectToken) throws ProfileException {
+        return getProfile(keyPair, connectToken).getReceipt();
     }
 
-    public ProfileResponse getProfile(SignedRequestStrategy signedRequestThingy, KeyPair keyPair, String appId, String connectToken) throws ProfileException {
+    public ProfileResponse getProfile(KeyPair keyPair, String connectToken) throws ProfileException {
         notNull(keyPair, "Key pair");
-        notNull(appId, "Application id");
         notNull(connectToken, "Connect token");
 
-        String path = unsignedPathFactory.createProfilePath(appId, connectToken);
+        String path = unsignedPathFactory.createProfilePath(connectToken);
 
         try {
             String authKey = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
-
-            YotiHttpRequest yotiHttpRequest = createSignedRequest(signedRequestThingy, path, authKey);
+            YotiHttpRequest yotiHttpRequest = createSignedRequest(path, authKey);
             return fetchReceipt(yotiHttpRequest);
         } catch (IOException ioe) {
             throw new ProfileException("Error calling service to get profile", ioe);
@@ -89,10 +91,10 @@ public class ProfileService {
         }
     }
 
-    YotiHttpRequest createSignedRequest(SignedRequestStrategy signedRequestThingy, String path, String authKey) throws ProfileException {
+    YotiHttpRequest createSignedRequest(String path, String authKey) throws ProfileException {
         try {
             return yotiHttpRequestBuilderFactory.create()
-                    .withAuthStrategy(signedRequestThingy)
+                    .withAuthStrategy(profileSignedRequestStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)

@@ -10,7 +10,7 @@ import com.yoti.api.client.identity.ShareSession;
 import com.yoti.api.client.identity.ShareSessionQrCode;
 import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
-import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
+import com.yoti.api.client.spi.remote.call.factory.DocsSignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityException;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityService;
 import com.yoti.api.client.spi.remote.call.identity.Receipt;
@@ -26,7 +26,7 @@ public class DigitalIdentityClient {
 
     private final String sdkId;
     private final KeyPair keyPair;
-    private final SignedRequestStrategy signedRequestThingy;
+    private final DocsSignedRequestStrategy signedRequestThingy;
     private final DigitalIdentityService identityService;
 
     DigitalIdentityClient(String sdkId, KeyPairSource keyPairSource, DigitalIdentityService identityService) {
@@ -35,7 +35,7 @@ public class DigitalIdentityClient {
 
         this.sdkId = sdkId;
         this.keyPair = loadKeyPair(keyPairSource);
-        this.signedRequestThingy = new SignedRequestStrategy(keyPair, sdkId);
+        this.signedRequestThingy = new DocsSignedRequestStrategy(keyPair, sdkId);
         this.identityService = identityService;
     }
 

@@ -12,7 +12,6 @@ import com.yoti.api.client.ProfileException;
 import com.yoti.api.client.spi.remote.call.ProfileResponse;
 import com.yoti.api.client.spi.remote.call.ProfileService;
 import com.yoti.api.client.spi.remote.call.Receipt;
-import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
 import com.yoti.api.client.spi.remote.util.DecryptionHelper;
 
 import org.slf4j.Logger;
@@ -28,17 +27,17 @@ public class ReceiptFetcher {
         this.profileService = profileService;
     }
 
-    public static ReceiptFetcher newInstance() {
-        return new ReceiptFetcher(ProfileService.newInstance());
+    public static ReceiptFetcher newInstance(KeyPair keyPair, String appId) {
+        return new ReceiptFetcher(ProfileService.newInstance(keyPair, appId));
     }
 
-    public Receipt fetch(String encryptedConnectToken, KeyPair keyPair, SignedRequestStrategy signedRequestThingy, String appId) throws ProfileException {
+    public Receipt fetch(String encryptedConnectToken, KeyPair keyPair) throws ProfileException {
         LOG.debug("Decrypting connect token: '{}'", encryptedConnectToken);
 
         String connectToken = decryptConnectToken(encryptedConnectToken, keyPair.getPrivate());
         LOG.debug("Connect token decrypted: '{}'", connectToken);
 
-        ProfileResponse profile = profileService.getProfile(signedRequestThingy, keyPair, appId, connectToken);
+        ProfileResponse profile = profileService.getProfile(keyPair, connectToken);
         validateReceipt(profile, connectToken);
         return profile.getReceipt();
     }

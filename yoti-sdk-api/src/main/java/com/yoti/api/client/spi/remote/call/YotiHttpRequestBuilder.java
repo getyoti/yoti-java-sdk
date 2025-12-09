@@ -12,12 +12,17 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
+import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.yoti.api.client.spi.remote.call.factory.AmlSignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
+import com.yoti.api.client.spi.remote.call.factory.AuthTokenStrategy;
+import com.yoti.api.client.spi.remote.call.factory.DocsSignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
-import com.yoti.api.client.spi.remote.call.factory.PathFactory;
+import com.yoti.api.client.spi.remote.call.factory.ProfileSignedRequestStrategy;
+import com.yoti.api.client.spi.remote.call.factory.SimpleSignedRequestStrategy;
 import com.yoti.validation.Validation;
 
 import org.apache.http.Header;
@@ -36,19 +41,16 @@ public class YotiHttpRequestBuilder {
     private final Map<String, String> headers = new HashMap<>();
     private String httpMethod;
 
-    private final PathFactory pathFactory;
     private final HeadersFactory headersFactory;
     private final JsonResourceFetcher jsonResourceFetcher;
     private final RawResourceFetcher rawResourceFetcher;
     private final ImageResourceFetcher imageResourceFetcher;
     private MultipartEntityBuilder multipartEntityBuilder;
 
-    YotiHttpRequestBuilder(PathFactory pathFactory,
-            HeadersFactory headersFactory,
+    YotiHttpRequestBuilder(HeadersFactory headersFactory,
             JsonResourceFetcher jsonResourceFetcher,
             RawResourceFetcher rawResourceFetcher,
             ImageResourceFetcher imageResourceFetcher) {
-        this.pathFactory = pathFactory;
         this.headersFactory = headersFactory;
         this.jsonResourceFetcher = jsonResourceFetcher;
         this.rawResourceFetcher = rawResourceFetcher;
@@ -63,6 +65,36 @@ public class YotiHttpRequestBuilder {
      */
     public YotiHttpRequestBuilder withAuthStrategy(AuthStrategy authStrategy) {
         this.authStrategy = authStrategy;
+        return this;
+    }
+
+    // FIXME: Test me?
+    public YotiHttpRequestBuilder forAuthTokenRequest(String authToken) {
+        this.authStrategy = new AuthTokenStrategy(authToken);
+        return this;
+    }
+
+    // FIXME: Test me?
+    public YotiHttpRequestBuilder forDocsSignedRequest(KeyPair keyPair, String sdkId) {
+        this.authStrategy = new DocsSignedRequestStrategy(keyPair, sdkId);
+        return this;
+    }
+
+    // FIXME: Test me?
+    public YotiHttpRequestBuilder forAmlSignedRequest(KeyPair keyPair, String appId) {
+        this.authStrategy = new AmlSignedRequestStrategy(keyPair, appId);
+        return this;
+    }
+
+    // FIXME: Test me?
+    public YotiHttpRequestBuilder forProfileRequest(KeyPair keyPair, String appId) {
+        this.authStrategy = new ProfileSignedRequestStrategy(keyPair, appId);
+        return this;
+    }
+
+    // FIXME: Test me?
+    public YotiHttpRequestBuilder forSignedRequest(KeyPair keyPair) {
+        this.authStrategy = new SimpleSignedRequestStrategy(keyPair);
         return this;
     }
 
@@ -227,18 +259,21 @@ public class YotiHttpRequestBuilder {
     private String createQueryParameterString() throws UnsupportedEncodingException {
         StringBuilder stringBuilder = new StringBuilder();
 
-        NameValuePair authParam = authStrategy.getQueryParam();
-        if (authParam != null) {
-            stringBuilder.append(authParam).append("&");
-        }
-
         for (Map.Entry<String, String> entry : queryParameters.entrySet()) {
+            if (stringBuilder.length() > 0) {
+                stringBuilder.append("&");
+            }
             stringBuilder.append(entry.getKey());
             stringBuilder.append("=");
             stringBuilder.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
-            stringBuilder.append("&");
         }
-        stringBuilder.append(pathFactory.createSignatureParams());
+
+        for (NameValuePair queryParam : authStrategy.createQueryParams()) {
+            if (stringBuilder.length() > 0) {
+                stringBuilder.append("&");
+            }
+            stringBuilder.append(queryParam);
+        }
 
         String built = stringBuilder.toString();
         if (built.isEmpty()) {
