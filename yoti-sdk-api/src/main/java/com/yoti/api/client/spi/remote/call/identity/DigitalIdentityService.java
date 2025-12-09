@@ -25,6 +25,7 @@ import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilder;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
+import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 import com.yoti.json.ResourceMapper;
 import com.yoti.validation.Validation;
@@ -63,10 +64,10 @@ public class DigitalIdentityService {
         );
     }
 
-    public ShareSession createShareSession(String sdkId, KeyPair keyPair, ShareSessionRequest shareSessionRequest)
+    public ShareSession createShareSession(String sdkId, SignedRequestStrategy signedRequestStrategy, ShareSessionRequest shareSessionRequest)
             throws DigitalIdentityException {
         Validation.notNullOrEmpty(sdkId, "SDK ID");
-        Validation.notNull(keyPair, "Application Key Pair");
+        Validation.notNull(signedRequestStrategy, "signedRequestStrategy");
         Validation.notNull(shareSessionRequest, "Share Session request");
 
         String path = pathFactory.createIdentitySessionPath();
@@ -75,7 +76,7 @@ public class DigitalIdentityService {
 
         try {
             byte[] payload = ResourceMapper.writeValueAsString(shareSessionRequest);
-            return createSignedRequest(sdkId, keyPair, path, HTTP_POST, payload).execute(ShareSession.class);
+            return createSignedRequest(sdkId, signedRequestStrategy, path, HTTP_POST, payload).execute(ShareSession.class);
         } catch (IOException ex) {
             throw new DigitalIdentityException("Error while parsing the share session creation request ", ex);
         } catch (URISyntaxException ex) {
@@ -87,10 +88,10 @@ public class DigitalIdentityService {
         }
     }
 
-    public ShareSession fetchShareSession(String sdkId, KeyPair keyPair, String sessionId)
+    public ShareSession fetchShareSession(String sdkId, SignedRequestStrategy signedRequestStrategy, String sessionId)
             throws DigitalIdentityException {
         Validation.notNullOrEmpty(sdkId, "SDK ID");
-        Validation.notNull(keyPair, "Application Key Pair");
+        Validation.notNull(signedRequestStrategy, "signedRequestStrategy");
         Validation.notNull(sessionId, "Session ID");
 
         String path = pathFactory.createIdentitySessionRetrievalPath(sessionId);
@@ -98,7 +99,7 @@ public class DigitalIdentityService {
         LOG.debug("Requesting share session '{}' at '{}'", sessionId, path);
 
         try {
-            return createSignedRequest(sdkId, keyPair, path).execute(ShareSession.class);
+            return createSignedRequest(sdkId, signedRequestStrategy, path).execute(ShareSession.class);
         } catch (Exception ex) {
             throw new DigitalIdentityException(
                     String.format("Error while fetching the share session '{%s}' ", sessionId),
@@ -107,10 +108,10 @@ public class DigitalIdentityService {
         }
     }
 
-    public ShareSessionQrCode createShareQrCode(String sdkId, KeyPair keyPair, String sessionId)
+    public ShareSessionQrCode createShareQrCode(String sdkId, SignedRequestStrategy signedRequestStrategy, String sessionId)
             throws DigitalIdentityException {
         Validation.notNullOrEmpty(sdkId, "SDK ID");
-        Validation.notNull(keyPair, "Application Key Pair");
+        Validation.notNull(signedRequestStrategy, "signedRequestStrategy");
         Validation.notNullOrEmpty(sessionId, "Session ID");
 
         String path = pathFactory.createIdentitySessionQrCodePath(sessionId);
@@ -118,7 +119,7 @@ public class DigitalIdentityService {
         LOG.debug("Requesting share session '{}' QR code creation at '{}'", sessionId, path);
 
         try {
-            return createSignedRequest(sdkId, keyPair, path, HTTP_POST, EMPTY_JSON).execute(ShareSessionQrCode.class);
+            return createSignedRequest(sdkId, signedRequestStrategy, path, HTTP_POST, EMPTY_JSON).execute(ShareSessionQrCode.class);
         } catch (GeneralSecurityException ex) {
             throw new DigitalIdentityException("Error while signing the share QR code creation request ", ex);
         } catch (IOException | URISyntaxException | ResourceException ex) {
@@ -126,10 +127,10 @@ public class DigitalIdentityService {
         }
     }
 
-    public ShareSessionQrCode fetchShareQrCode(String sdkId, KeyPair keyPair, String qrCodeId)
+    public ShareSessionQrCode fetchShareQrCode(String sdkId, SignedRequestStrategy signedRequestStrategy, String qrCodeId)
             throws DigitalIdentityException {
         Validation.notNullOrEmpty(sdkId, "SDK ID");
-        Validation.notNull(keyPair, "Application Key Pair");
+        Validation.notNull(signedRequestStrategy, "signedRequestStrategy");
         Validation.notNullOrEmpty(qrCodeId, "QR Code ID");
 
         String path = pathFactory.createIdentitySessionQrCodeRetrievalPath(qrCodeId);
@@ -137,7 +138,7 @@ public class DigitalIdentityService {
         LOG.debug("Requesting share session QR code '{} at '{}'", qrCodeId, path);
 
         try {
-            return createSignedRequest(sdkId, keyPair, path).execute(ShareSessionQrCode.class);
+            return createSignedRequest(sdkId, signedRequestStrategy, path).execute(ShareSessionQrCode.class);
         } catch (Exception ex) {
             throw new DigitalIdentityException(
                     String.format("Error while fetching the share session QR code '{%s}' ", qrCodeId),
@@ -146,25 +147,25 @@ public class DigitalIdentityService {
         }
     }
 
-    public Receipt fetchShareReceipt(String sdkId, KeyPair keyPair, String receiptId) throws DigitalIdentityException {
-        WrappedReceipt wrappedReceipt = doFetchShareReceipt(sdkId, keyPair, receiptId);
+    public Receipt fetchShareReceipt(String sdkId, SignedRequestStrategy signedRequestThingy, KeyPair keyPair, String receiptId) throws DigitalIdentityException {
+        WrappedReceipt wrappedReceipt = doFetchShareReceipt(sdkId, signedRequestThingy, receiptId);
 
         return Optional.ofNullable(wrappedReceipt.getError())
                 .map(ignored -> receiptParser.create(wrappedReceipt))
                 .orElseGet(() -> {
-                    ReceiptItemKey receiptKey = fetchShareReceiptKey(sdkId, keyPair, wrappedReceipt);
+                    ReceiptItemKey receiptKey = fetchShareReceiptKey(sdkId, signedRequestThingy, wrappedReceipt);
 
                     return receiptParser.create(wrappedReceipt, receiptKey, keyPair.getPrivate());
                 });
     }
 
-    private WrappedReceipt doFetchShareReceipt(String sdkId, KeyPair keyPair, String receiptId) {
+    private WrappedReceipt doFetchShareReceipt(String sdkId, SignedRequestStrategy signedRequestThingy, String receiptId) {
         String path = pathFactory.createIdentitySessionReceiptRetrievalPath(receiptId);
 
         LOG.debug("Requesting share session receipt '{}' at '{}'", receiptId, path);
 
         try {
-            return createSignedRequest(sdkId, keyPair, path).execute(WrappedReceipt.class);
+            return createSignedRequest(sdkId, signedRequestThingy, path).execute(WrappedReceipt.class);
         } catch (Exception ex) {
             throw new DigitalIdentityException(
                     String.format("Error while fetching the share session QR code '{%s}' ", receiptId),
@@ -173,7 +174,7 @@ public class DigitalIdentityService {
         }
     }
 
-    private ReceiptItemKey fetchShareReceiptKey(String sdkId, KeyPair keyPair, WrappedReceipt wrappedReceipt)
+    private ReceiptItemKey fetchShareReceiptKey(String sdkId, SignedRequestStrategy signedRequestThingy, WrappedReceipt wrappedReceipt)
             throws DigitalIdentityException {
         String wrappedItemKeyId = wrappedReceipt.getWrappedItemKeyId();
 
@@ -182,7 +183,7 @@ public class DigitalIdentityService {
         LOG.debug("Requesting share session receipt item key '{}' at '{}'", wrappedItemKeyId, path);
 
         try {
-            return createSignedRequest(sdkId, keyPair, path).execute(ReceiptItemKey.class);
+            return createSignedRequest(sdkId, signedRequestThingy, path).execute(ReceiptItemKey.class);
         } catch (Exception ex) {
             throw new DigitalIdentityException(
                     String.format("Error while fetching the share session receipt key '{%s}' ", wrappedItemKeyId),
@@ -191,10 +192,10 @@ public class DigitalIdentityService {
         }
     }
 
-    public MatchResult fetchMatch(String sdkId, KeyPair keyPair, MatchRequest matchRequest)
+    public MatchResult fetchMatch(String sdkId, SignedRequestStrategy signedRequestThingy, MatchRequest matchRequest)
             throws DigitalIdentityException {
         Validation.notNullOrEmpty(sdkId, "SDK ID");
-        Validation.notNull(keyPair, "Application Key Pair");
+        Validation.notNull(signedRequestThingy, "Application Key Pair");
         Validation.notNull(matchRequest, "DID Match request");
 
         String path = pathFactory.createIdentityMatchPath();
@@ -203,7 +204,7 @@ public class DigitalIdentityService {
 
         try {
             byte[] payload = ResourceMapper.writeValueAsString(matchRequest);
-            return createSignedRequest(sdkId, keyPair, path, HTTP_POST, payload).execute(MatchResult.class);
+            return createSignedRequest(sdkId, signedRequestThingy, path, HTTP_POST, payload).execute(MatchResult.class);
         } catch (IOException ex) {
             throw new DigitalIdentityException("Error while parsing the DID Match request", ex);
         } catch (URISyntaxException ex) {
@@ -215,15 +216,15 @@ public class DigitalIdentityService {
         }
     }
 
-    YotiHttpRequest createSignedRequest(String sdkId, KeyPair keyPair, String path)
+    YotiHttpRequest createSignedRequest(String sdkId, SignedRequestStrategy signedRequestThingy, String path)
             throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
-        return createSignedRequest(sdkId, keyPair, path, HTTP_GET, null);
+        return createSignedRequest(sdkId, signedRequestThingy, path, HTTP_GET, null);
     }
 
-    YotiHttpRequest createSignedRequest(String sdkId, KeyPair keyPair, String path, String method, byte[] payload)
+    YotiHttpRequest createSignedRequest(String sdkId, SignedRequestStrategy signedRequestThingy, String path, String method, byte[] payload)
             throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
         YotiHttpRequestBuilder request = requestBuilderFactory.create()
-                .withKeyPair(keyPair)
+                .withAuthStrategy(signedRequestThingy)
                 .withBaseUrl(apiUrl)
                 .withEndpoint(path)
                 .withHeader(AUTH_ID_HEADER, sdkId)

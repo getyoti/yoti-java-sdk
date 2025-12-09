@@ -19,6 +19,7 @@ import com.yoti.api.client.spi.remote.call.HttpMethod;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
+import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -33,14 +34,14 @@ public class DocScanSandboxClient {
     private final ObjectMapper mapper;
     private final YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory;
     private final String sdkId;
-    private final KeyPair keyPair;
+    private final SignedRequestStrategy authStrategy;
 
     DocScanSandboxClient(String sdkId,
             KeyPair keyPair,
             ObjectMapper mapper,
             YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory) {
         this.sdkId = sdkId;
-        this.keyPair = keyPair;
+        this.authStrategy = new SignedRequestStrategy(keyPair, sdkId);
         this.mapper = mapper;
         this.yotiHttpRequestBuilderFactory = yotiHttpRequestBuilderFactory;
         this.docScanBaseUrl = System.getProperty(PROPERTY_YOTI_DOCS_URL, DEFAULT_DOC_SCAN_SANDBOX_API_URL);
@@ -66,7 +67,7 @@ public class DocScanSandboxClient {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withBaseUrl(docScanBaseUrl)
                     .withEndpoint(path)
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withHttpMethod(HttpMethod.HTTP_PUT)
                     .withPayload(body)
                     .withQueryParameter("sdkId", sdkId)
@@ -92,7 +93,7 @@ public class DocScanSandboxClient {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
                     .withBaseUrl(docScanBaseUrl)
                     .withEndpoint(path)
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withHttpMethod(HttpMethod.HTTP_PUT)
                     .withPayload(body)
                     .build();
@@ -135,4 +136,5 @@ public class DocScanSandboxClient {
             return new DocScanSandboxClient(sdkId, keyPair, new ObjectMapper(), new YotiHttpRequestBuilderFactory());
         }
     }
+
 }

@@ -11,13 +11,13 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.security.KeyPair;
 
 import com.yoti.api.client.InitialisationException;
 import com.yoti.api.client.KeyPairSource;
 import com.yoti.api.client.common.StaticKeyPairSource;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.instructions.Instructions;
+import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 
 import org.junit.Before;
@@ -57,7 +57,7 @@ public class DocScanClientTest {
     @Test
     public void createDocScanSession_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        when(docScanServiceMock.createSession(eq(APP_ID), any(KeyPair.class), eq(sessionSpecMock))).thenThrow(original);
+        when(docScanServiceMock.createSession(eq(APP_ID), any(AuthStrategy.class), eq(sessionSpecMock))).thenThrow(original);
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException thrown = assertThrows(DocScanException.class, () -> testObj.createSession(sessionSpecMock));
@@ -68,7 +68,7 @@ public class DocScanClientTest {
     @Test
     public void getDocScanSession_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        when(docScanServiceMock.retrieveSession(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID))).thenThrow(original);
+        when(docScanServiceMock.retrieveSession(eq(APP_ID), any(AuthStrategy.class), eq(SOME_SESSION_ID))).thenThrow(original);
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException thrown = assertThrows(DocScanException.class, () -> testObj.getSession(SOME_SESSION_ID));
@@ -79,7 +79,7 @@ public class DocScanClientTest {
     @Test
     public void getDocScanMedia_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        when(docScanServiceMock.getMediaContent(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID), eq(SOME_MEDIA_ID))).thenThrow(original);
+        when(docScanServiceMock.getMediaContent(eq(APP_ID), any(AuthStrategy.class), eq(SOME_SESSION_ID), eq(SOME_MEDIA_ID))).thenThrow(original);
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException thrown = assertThrows(DocScanException.class, () -> testObj.getMediaContent(SOME_SESSION_ID, SOME_MEDIA_ID));
@@ -90,7 +90,7 @@ public class DocScanClientTest {
     @Test
     public void deleteDocScanMedia_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        doThrow(original).when(docScanServiceMock).deleteMediaContent(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID), eq(SOME_MEDIA_ID));
+        doThrow(original).when(docScanServiceMock).deleteMediaContent(eq(APP_ID), any(AuthStrategy.class), eq(SOME_SESSION_ID), eq(SOME_MEDIA_ID));
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException thrown = assertThrows(DocScanException.class, () -> testObj.deleteMediaContent(SOME_SESSION_ID, SOME_MEDIA_ID));
@@ -101,7 +101,7 @@ public class DocScanClientTest {
     @Test
     public void deleteDocScanSession_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        doThrow(original).when(docScanServiceMock).deleteSession(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID));
+        doThrow(original).when(docScanServiceMock).deleteSession(eq(APP_ID), any(AuthStrategy.class), eq(SOME_SESSION_ID));
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException thrown = assertThrows(DocScanException.class, () -> testObj.deleteSession(SOME_SESSION_ID));
@@ -112,7 +112,7 @@ public class DocScanClientTest {
     @Test
     public void putIbvInstructions_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        doThrow(original).when(docScanServiceMock).putIbvInstructions(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID), eq(instructionsMock));
+        doThrow(original).when(docScanServiceMock).putIbvInstructions(eq(APP_ID), any(AuthStrategy.class), eq(SOME_SESSION_ID), eq(instructionsMock));
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException exception = assertThrows(DocScanException.class, () -> testObj.putIbvInstructions(SOME_SESSION_ID, instructionsMock));
@@ -123,7 +123,7 @@ public class DocScanClientTest {
     @Test
     public void getIbvInstructions_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        doThrow(original).when(docScanServiceMock).getIbvInstructions(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID));
+        doThrow(original).when(docScanServiceMock).getIbvInstructions(eq(APP_ID), any(AuthStrategy.class), eq(SOME_SESSION_ID));
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException exception = assertThrows(DocScanException.class, () -> testObj.getIbvInstructions(SOME_SESSION_ID));
@@ -134,7 +134,7 @@ public class DocScanClientTest {
     @Test
     public void getIbvInstructionsPdf_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        doThrow(original).when(docScanServiceMock).getIbvInstructionsPdf(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID));
+        doThrow(original).when(docScanServiceMock).getIbvInstructionsPdf(eq(APP_ID), any(AuthStrategy.class), eq(SOME_SESSION_ID));
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException exception = assertThrows(DocScanException.class, () -> testObj.getIbvInstructionsPdf(SOME_SESSION_ID));
@@ -145,7 +145,7 @@ public class DocScanClientTest {
     @Test
     public void fetchInstructionsContactProfile_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        doThrow(original).when(docScanServiceMock).fetchInstructionsContactProfile(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID));
+        doThrow(original).when(docScanServiceMock).fetchInstructionsContactProfile(eq(APP_ID), any(AuthStrategy.class), eq(SOME_SESSION_ID));
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException exception = assertThrows(DocScanException.class, () -> testObj.fetchInstructionsContactProfile(SOME_SESSION_ID));
@@ -156,7 +156,7 @@ public class DocScanClientTest {
     @Test
     public void triggerIbvEmailNotification_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        doThrow(original).when(docScanServiceMock).triggerIbvEmailNotification(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID));
+        doThrow(original).when(docScanServiceMock).triggerIbvEmailNotification(eq(APP_ID), any(AuthStrategy.class), eq(SOME_SESSION_ID));
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException exception = assertThrows(DocScanException.class, () -> testObj.triggerIbvEmailNotification(SOME_SESSION_ID));
@@ -167,7 +167,7 @@ public class DocScanClientTest {
     @Test
     public void getSessionConfiguration_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        doThrow(original).when(docScanServiceMock).fetchSessionConfiguration(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID));
+        doThrow(original).when(docScanServiceMock).fetchSessionConfiguration(eq(APP_ID), any(AuthStrategy.class), eq(SOME_SESSION_ID));
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException exception = assertThrows(DocScanException.class, () -> testObj.getSessionConfiguration(SOME_SESSION_ID));
@@ -178,7 +178,7 @@ public class DocScanClientTest {
     @Test
     public void getSupportedDocuments_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        doThrow(original).when(docScanServiceMock).getSupportedDocuments(any(KeyPair.class), any(Boolean.class));
+        doThrow(original).when(docScanServiceMock).getSupportedDocuments(any(AuthStrategy.class), any(Boolean.class));
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException thrown = assertThrows(DocScanException.class, () -> testObj.getSupportedDocuments());
@@ -189,7 +189,7 @@ public class DocScanClientTest {
     @Test
     public void getTrackedDevices_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        doThrow(original).when(docScanServiceMock).getTrackedDevices(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID));
+        doThrow(original).when(docScanServiceMock).getTrackedDevices(eq(APP_ID), any(AuthStrategy.class), eq(SOME_SESSION_ID));
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException thrown = assertThrows(DocScanException.class, () -> testObj.getTrackedDevices(SOME_SESSION_ID));
@@ -200,7 +200,7 @@ public class DocScanClientTest {
     @Test
     public void deleteTrackedDevices_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        doThrow(original).when(docScanServiceMock).deleteTrackedDevices(eq(APP_ID), any(KeyPair.class), eq(SOME_SESSION_ID));
+        doThrow(original).when(docScanServiceMock).deleteTrackedDevices(eq(APP_ID), any(AuthStrategy.class), eq(SOME_SESSION_ID));
         DocScanClient testObj = new DocScanClient(APP_ID, validKeyPairSource, docScanServiceMock);
 
         DocScanException thrown = assertThrows(DocScanException.class, () -> testObj.deleteTrackedDevices(SOME_SESSION_ID));

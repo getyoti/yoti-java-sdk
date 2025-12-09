@@ -18,12 +18,15 @@ import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilder;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
+import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -38,10 +41,12 @@ public class DocScanSandboxClientTest {
     private static final String SOME_SESSION_ID = "someSessionId";
 
     @Mock YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory;
+    @Mock ObjectMapper objectMapperMock;
+    @Captor ArgumentCaptor<SignedRequestStrategy> signedRequestThingyCaptor;
+
     @Mock(answer = Answers.RETURNS_SELF) YotiHttpRequestBuilder yotiHttpRequestBuilderMock;
     @Mock YotiHttpRequest yotiHttpRequestMock;
     @Mock ResponseConfig responseConfigMock;
-    @Mock ObjectMapper objectMapperMock;
     @Mock KeyPair keyPairMock;
 
     @Spy @InjectMocks DocScanSandboxClient docScanSandboxClient;
@@ -93,7 +98,7 @@ public class DocScanSandboxClientTest {
         docScanSandboxClient.configureSessionResponse(SOME_SESSION_ID, responseConfigMock);
 
         verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
-        verify(yotiHttpRequestBuilderMock).withKeyPair(keyPairMock);
+        verify(yotiHttpRequestBuilderMock).withAuthStrategy(signedRequestThingyCaptor.capture()); // FIXME
         verify(yotiHttpRequestBuilderMock).withEndpoint("/sessions/" + SOME_SESSION_ID + "/response-config");
         verify(yotiHttpRequestBuilderMock).withPayload(SOME_BYTES);
     }
@@ -108,7 +113,7 @@ public class DocScanSandboxClientTest {
         docScanSandboxClient.configureApplicationResponse(responseConfigMock);
 
         verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
-        verify(yotiHttpRequestBuilderMock).withKeyPair(keyPairMock);
+        verify(yotiHttpRequestBuilderMock).withAuthStrategy(signedRequestThingyCaptor.capture()); // FIXME
         verify(yotiHttpRequestBuilderMock).withEndpoint("/apps/" + SOME_SDK_ID + "/response-config");
         verify(yotiHttpRequestBuilderMock).withPayload(SOME_BYTES);
     }

@@ -6,8 +6,6 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE_JSON;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_DOCS_URL;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_DOCS_URL;
-import static com.yoti.api.client.spi.remote.util.CryptoUtil.KEY_PAIR_PEM;
-import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom;
 
 import static junit.framework.TestCase.assertSame;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
-import java.security.KeyPair;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -57,12 +54,12 @@ import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilder;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.YotiHttpResponse;
+import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
@@ -86,25 +83,20 @@ public class DocScanServiceTest {
     private static final byte[] IMAGE_BODY = "some-image-body".getBytes();
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private static KeyPair KEY_PAIR;
-
     @Spy @InjectMocks DocScanService docScanService;
 
     @Mock UnsignedPathFactory unsignedPathFactoryMock;
     @Mock ObjectMapper objectMapperMock;
-    @Mock YotiHttpRequest yotiHttpRequestMock;
     @Mock(answer = Answers.RETURNS_SELF) YotiHttpRequestBuilder yotiHttpRequestBuilderMock;
+
+    @Mock AuthStrategy authStrategyMock;
+    @Mock YotiHttpRequest yotiHttpRequestMock;
     @Mock YotiHttpResponse yotiHttpResponseMock;
     @Mock YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactoryMock;
     @Mock SupportedDocumentsResponse supportedDocumentsResponseMock;
     @Mock Instructions instructionsMock;
     @Mock CreateFaceCaptureResourcePayload createFaceCaptureResourcePayloadMock;
     @Mock UploadFaceCaptureImagePayload uploadFaceCaptureImagePayloadMock;
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-        KEY_PAIR = generateKeyPairFrom(KEY_PAIR_PEM);
-    }
 
     @Before
     public void setUp() {
@@ -119,15 +111,15 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void createSession_shouldThrowExceptionWhenMissingKeyPair() {
+    public void createSession_shouldThrowExceptionWhenMissingAuthStrategy() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createSession(SOME_APP_ID, null, null));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void createSession_shouldThrowExceptionWhenMissingSessionSpec() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createSession(SOME_APP_ID, authStrategyMock, null));
 
         assertThat(ex.getMessage(), containsString("sessionSpec"));
     }
@@ -138,7 +130,7 @@ public class DocScanServiceTest {
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, authStrategyMock, sessionSpecMock));
 
         assertSame(ex.getCause(), gse);
         assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
@@ -151,7 +143,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(CreateSessionResult.class)).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, authStrategyMock, sessionSpecMock));
 
         assertSame(ex.getCause(), resourceException);
         assertThat(ex.getMessage(), containsString("Error posting the request: Failed Request"));
@@ -164,7 +156,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(CreateSessionResult.class)).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, authStrategyMock, sessionSpecMock));
 
         assertSame(ex.getCause(), ioException);
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
@@ -176,7 +168,7 @@ public class DocScanServiceTest {
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, authStrategyMock, sessionSpecMock));
 
         assertSame(ex.getCause(), uriSyntaxException);
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
@@ -189,7 +181,7 @@ public class DocScanServiceTest {
         SessionSpec sessionSpecMock = mock(SessionSpec.class);
         doAnswer(i -> {throw someException;}).when(yotiHttpRequestBuilderFactoryMock).create();
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSession(SOME_APP_ID, authStrategyMock, sessionSpecMock));
 
         assertSame(ex.getCause(), someException);
         assertThat(ex.getMessage(), containsString("Error creating the session: Some exception we weren't expecting"));
@@ -202,12 +194,12 @@ public class DocScanServiceTest {
         when(objectMapperMock.writeValueAsBytes(sessionSpecMock)).thenReturn(SOME_SESSION_SPEC_BYTES);
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(CreateSessionResult.class)).thenReturn(createSessionResultMock);
-        when(unsignedPathFactoryMock.createNewYotiDocsSessionPath(SOME_APP_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createNewYotiDocsSessionPath()).thenReturn(SOME_PATH);
 
-        CreateSessionResult result = docScanService.createSession(SOME_APP_ID, KEY_PAIR, sessionSpecMock);
+        CreateSessionResult result = docScanService.createSession(SOME_APP_ID, authStrategyMock, sessionSpecMock);
 
         assertThat(result, is(createSessionResultMock));
-        verify(yotiHttpRequestBuilderMock).withKeyPair(KEY_PAIR);
+        verify(yotiHttpRequestBuilderMock).withAuthStrategy(authStrategyMock);
         verify(yotiHttpRequestBuilderMock).withEndpoint(SOME_PATH);
         verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
         verify(yotiHttpRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_POST);
@@ -230,22 +222,22 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void retrieveSession_shouldThrowExceptionWhenMissingKeyPair() {
+    public void retrieveSession_shouldThrowExceptionWhenMissingAuthStrategy() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.retrieveSession(SOME_APP_ID, null, null));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void retrieveSession_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.retrieveSession(SOME_APP_ID, authStrategyMock, null));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void retrieveSession_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.retrieveSession(SOME_APP_ID, authStrategyMock, ""));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
@@ -255,7 +247,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), gse);
         assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
@@ -267,7 +259,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(GetSessionResult.class)).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), resourceException);
         assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
@@ -279,7 +271,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(GetSessionResult.class)).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), ioException);
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
@@ -290,7 +282,7 @@ public class DocScanServiceTest {
         Exception someException = new Exception("Some exception we weren't expecting");
         doAnswer(i -> {throw someException;}).when(yotiHttpRequestBuilderFactoryMock).create();
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.retrieveSession(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), someException);
         assertThat(ex.getMessage(), containsString("Error retrieving the session: Some exception we weren't expecting"));
@@ -301,12 +293,12 @@ public class DocScanServiceTest {
         GetSessionResult docScanSessionResponseMock = mock(GetSessionResult.class);
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(GetSessionResult.class)).thenReturn(docScanSessionResponseMock);
-        when(unsignedPathFactoryMock.createYotiDocsSessionPath(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createYotiDocsSessionPath(SOME_SESSION_ID)).thenReturn(SOME_PATH);
 
-        GetSessionResult result = docScanService.retrieveSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
+        GetSessionResult result = docScanService.retrieveSession(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID);
 
         assertThat(result, is(docScanSessionResponseMock));
-        verify(yotiHttpRequestBuilderMock).withKeyPair(KEY_PAIR);
+        verify(yotiHttpRequestBuilderMock).withAuthStrategy(authStrategyMock);
         verify(yotiHttpRequestBuilderMock).withEndpoint(SOME_PATH);
         verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
         verify(yotiHttpRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_GET);
@@ -327,22 +319,22 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void deleteSession_shouldThrowExceptionWhenKeyPairIsNull() {
+    public void deleteSession_shouldThrowExceptionWhenAuthStrategyIsNull() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteSession(SOME_APP_ID, null, null));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void deleteSession_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteSession(SOME_APP_ID, authStrategyMock, null));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void deleteSession_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteSession(SOME_APP_ID, authStrategyMock, ""));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
@@ -352,7 +344,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), gse);
         assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
@@ -364,7 +356,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), resourceException);
         assertThat(ex.getMessage(), containsString("Error executing the DELETE: Failed Request"));
@@ -376,7 +368,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), ioException);
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
@@ -387,7 +379,7 @@ public class DocScanServiceTest {
         Exception someException = new Exception("Some exception we weren't expecting");
         doAnswer(i -> {throw someException;}).when(yotiHttpRequestBuilderFactoryMock).create();
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteSession(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), someException);
         assertThat(ex.getMessage(), containsString("Error deleting the session: Some exception we weren't expecting"));
@@ -396,11 +388,11 @@ public class DocScanServiceTest {
     @Test
     public void deleteSession_shouldBuildSignedRequest() throws Exception {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
-        when(unsignedPathFactoryMock.createYotiDocsSessionPath(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createYotiDocsSessionPath(SOME_SESSION_ID)).thenReturn(SOME_PATH);
 
-        docScanService.deleteSession(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
+        docScanService.deleteSession(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID);
 
-        verify(yotiHttpRequestBuilderMock).withKeyPair(KEY_PAIR);
+        verify(yotiHttpRequestBuilderMock).withAuthStrategy(authStrategyMock);
         verify(yotiHttpRequestBuilderMock).withEndpoint(SOME_PATH);
         verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
         verify(yotiHttpRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_DELETE);
@@ -421,36 +413,36 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void getMediaContent_shouldThrowExceptionWhenKeyPairIsNull() {
+    public void getMediaContent_shouldThrowExceptionWhenAuthStrategyIsNull() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, null, null, null));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void getMediaContent_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, null, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, authStrategyMock, null, null));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void getMediaContent_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, "", null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, authStrategyMock, "", null));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void getMediaContent_shouldThrowExceptionWhenMediaIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, null));
 
         assertThat(ex.getMessage(), containsString("mediaId"));
     }
 
     @Test
     public void getMediaContent_shouldThrowExceptionWhenMediaIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, ""));
 
         assertThat(ex.getMessage(), containsString("mediaId"));
     }
@@ -460,7 +452,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_MEDIA_ID));
 
         assertSame(ex.getCause(), gse);
         assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
@@ -472,7 +464,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_MEDIA_ID));
 
         assertSame(ex.getCause(), resourceException);
         assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
@@ -484,7 +476,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_MEDIA_ID));
 
         assertSame(ex.getCause(), ioException);
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
@@ -495,7 +487,7 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_MEDIA_ID));
 
         assertSame(ex.getCause(), uriSyntaxException);
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
@@ -506,11 +498,11 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         YotiHttpResponse yotiHttpResponseMock = mock(YotiHttpResponse.class, RETURNS_DEEP_STUBS);
         when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
-        when(unsignedPathFactoryMock.createMediaContentPath(SOME_APP_ID, SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createMediaContentPath(SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
 
-        docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
+        docScanService.getMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_MEDIA_ID);
 
-        verify(yotiHttpRequestBuilderMock).withKeyPair(KEY_PAIR);
+        verify(yotiHttpRequestBuilderMock).withAuthStrategy(authStrategyMock);
         verify(yotiHttpRequestBuilderMock).withEndpoint(SOME_PATH);
         verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
         verify(yotiHttpRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_GET);
@@ -522,9 +514,9 @@ public class DocScanServiceTest {
         when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
         when(yotiHttpResponseMock.getResponseHeaders()).thenReturn(createHeadersMap(CONTENT_TYPE, CONTENT_TYPE_JSON));
         when(yotiHttpResponseMock.getResponseBody()).thenReturn(IMAGE_BODY);
-        when(unsignedPathFactoryMock.createMediaContentPath(SOME_APP_ID, SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createMediaContentPath(SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
 
-        Media result = docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
+        Media result = docScanService.getMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_MEDIA_ID);
 
         assertThat(result.getMimeType(), is(CONTENT_TYPE_JSON));
         assertThat(result.getContent(), is(IMAGE_BODY));
@@ -535,9 +527,9 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
         when(yotiHttpResponseMock.getResponseCode()).thenReturn(204);
-        when(unsignedPathFactoryMock.createMediaContentPath(SOME_APP_ID, SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createMediaContentPath(SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
 
-        Media result = docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
+        Media result = docScanService.getMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_MEDIA_ID);
 
         assertThat(result, is(nullValue()));
     }
@@ -548,9 +540,9 @@ public class DocScanServiceTest {
         when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
         when(yotiHttpResponseMock.getResponseHeaders()).thenReturn(createHeadersMap("content-type", "image/png"));
         when(yotiHttpResponseMock.getResponseBody()).thenReturn(IMAGE_BODY);
-        when(unsignedPathFactoryMock.createMediaContentPath(SOME_APP_ID, SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createMediaContentPath(SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
 
-        Media result = docScanService.getMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
+        Media result = docScanService.getMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_MEDIA_ID);
 
         assertThat(result.getMimeType(), is("image/png"));
         assertThat(result.getContent(), is(IMAGE_BODY));
@@ -577,36 +569,36 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void deleteMediaContent_shouldThrowExceptionWhenKeyPairIsNull() {
+    public void deleteMediaContent_shouldThrowExceptionWhenAuthStrategyIsNull() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, null, null, null));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void deleteMediaContent_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, null, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, authStrategyMock, null, null));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void deleteMediaContent_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, "", null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, authStrategyMock, "", null));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void deleteMediaContent_shouldThrowExceptionWhenMediaIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, null));
 
         assertThat(ex.getMessage(), containsString("mediaId"));
     }
 
     @Test
     public void deleteMediaContent_shouldThrowExceptionWhenMediaIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, ""));
 
         assertThat(ex.getMessage(), containsString("mediaId"));
     }
@@ -616,7 +608,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_MEDIA_ID));
 
         assertSame(ex.getCause(), gse);
         assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
@@ -628,7 +620,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_MEDIA_ID));
 
         assertSame(ex.getCause(), resourceException);
         assertThat(ex.getMessage(), containsString("Error executing the DELETE: Failed Request"));
@@ -640,7 +632,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_MEDIA_ID));
 
         assertSame(ex.getCause(), ioException);
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
@@ -651,7 +643,7 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_MEDIA_ID));
 
         assertSame(ex.getCause(), uriSyntaxException);
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
@@ -660,11 +652,11 @@ public class DocScanServiceTest {
     @Test
     public void deleteMediaContent_shouldBuildSignedRequest() throws Exception {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
-        when(unsignedPathFactoryMock.createMediaContentPath(SOME_APP_ID, SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createMediaContentPath(SOME_SESSION_ID, SOME_MEDIA_ID)).thenReturn(SOME_PATH);
 
-        docScanService.deleteMediaContent(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_MEDIA_ID);
+        docScanService.deleteMediaContent(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_MEDIA_ID);
 
-        verify(yotiHttpRequestBuilderMock).withKeyPair(KEY_PAIR);
+        verify(yotiHttpRequestBuilderMock).withAuthStrategy(authStrategyMock);
         verify(yotiHttpRequestBuilderMock).withEndpoint(SOME_PATH);
         verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
         verify(yotiHttpRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_DELETE);
@@ -694,42 +686,42 @@ public class DocScanServiceTest {
 
     @Test
     public void putIbvInstructions_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(null, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(null, authStrategyMock, SOME_SESSION_ID, instructionsMock));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void putIbvInstructions_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions("", KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions("", authStrategyMock, SOME_SESSION_ID, instructionsMock));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void putIbvInstructions_shouldThrowExceptionWhenKeyPairIsNull() {
+    public void putIbvInstructions_shouldThrowExceptionWhenAuthStrategyIsNull() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, null, SOME_SESSION_ID, instructionsMock));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void putIbvInstructions_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, null, instructionsMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, authStrategyMock, null, instructionsMock));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void putIbvInstructions_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, "", instructionsMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, authStrategyMock, "", instructionsMock));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void putIbvInstructions_shouldThrowExceptionWhenInstructionsIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, null));
 
         assertThat(ex.getMessage(), containsString("instructions"));
     }
@@ -739,7 +731,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, instructionsMock));
 
         assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
@@ -750,7 +742,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, instructionsMock));
 
         assertThat(ex.getMessage(), containsString("Error executing the PUT: Failed Request"));
     }
@@ -761,7 +753,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, instructionsMock));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
@@ -771,42 +763,42 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, instructionsMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.putIbvInstructions(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, instructionsMock));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
     public void getIbvInstructions_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(null, KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(null, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void getIbvInstructions_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions("", KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions("", authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void getIbvInstructions_shouldThrowExceptionWhenKeyPairIsNull() {
+    public void getIbvInstructions_shouldThrowExceptionWhenAuthStrategyIsNull() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, null, SOME_SESSION_ID));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void getIbvInstructions_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, authStrategyMock, null));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void getIbvInstructions_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, authStrategyMock, ""));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
@@ -816,7 +808,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
@@ -827,7 +819,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(InstructionsResponse.class)).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
     }
@@ -838,7 +830,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(InstructionsResponse.class)).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
@@ -848,42 +840,44 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructions(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
     public void getIbvInstructionsPdf_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(null, KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(null, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void getIbvInstructionsPdf_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf("", KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf("", authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void getIbvInstructionsPdf_shouldThrowExceptionWhenKeyPairIsNull() {
+    public void getIbvInstructionsPdf_shouldThrowExceptionWhenAuthStrategyIsNull() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, null, SOME_SESSION_ID));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void getIbvInstructionsPdf_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID,
+                authStrategyMock, null));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void getIbvInstructionsPdf_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID,
+                authStrategyMock, ""));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
@@ -893,7 +887,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
@@ -904,7 +898,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
     }
@@ -915,7 +909,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
@@ -925,7 +919,7 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getIbvInstructionsPdf(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
@@ -936,9 +930,9 @@ public class DocScanServiceTest {
         when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
         when(yotiHttpResponseMock.getResponseHeaders()).thenReturn(createHeadersMap(CONTENT_TYPE, CONTENT_TYPE_JSON));
         when(yotiHttpResponseMock.getResponseBody()).thenReturn(IMAGE_BODY);
-        when(unsignedPathFactoryMock.createFetchIbvInstructionsPdfPath(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createFetchIbvInstructionsPdfPath(SOME_SESSION_ID)).thenReturn(SOME_PATH);
 
-        Media result = docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
+        Media result = docScanService.getIbvInstructionsPdf(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID);
 
         assertThat(result.getMimeType(), is(CONTENT_TYPE_JSON));
         assertThat(result.getContent(), is(IMAGE_BODY));
@@ -949,44 +943,48 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
         when(yotiHttpResponseMock.getResponseCode()).thenReturn(204);
-        when(unsignedPathFactoryMock.createFetchIbvInstructionsPdfPath(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createFetchIbvInstructionsPdfPath(SOME_SESSION_ID)).thenReturn(SOME_PATH);
 
-        Media result = docScanService.getIbvInstructionsPdf(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
+        Media result = docScanService.getIbvInstructionsPdf(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID);
 
         assertThat(result, is(nullValue()));
     }
 
     @Test
     public void fetchInstructionsContactProfile_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(null, KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(null,
+                authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void fetchInstructionsContactProfile_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile("", KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile("",
+                authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void fetchInstructionsContactProfile_shouldThrowExceptionWhenKeyPairIsNull() {
+    public void fetchInstructionsContactProfile_shouldThrowExceptionWhenAuthStrategyIsNull() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, null, SOME_SESSION_ID));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void fetchInstructionsContactProfile_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID,
+                authStrategyMock, null));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void fetchInstructionsContactProfile_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID,
+                authStrategyMock, ""));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
@@ -996,7 +994,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
@@ -1007,7 +1005,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(ContactProfileResponse.class)).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
     }
@@ -1018,7 +1016,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(ContactProfileResponse.class)).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
@@ -1028,42 +1026,44 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchInstructionsContactProfile(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
     public void fetchSessionConfiguration_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(null, KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(null, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void fetchSessionConfiguration_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration("", KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration("", authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void fetchSessionConfiguration_shouldThrowExceptionWhenKeyPairIsNull() {
+    public void fetchSessionConfiguration_shouldThrowExceptionWhenAuthStrategyIsNull() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, null, SOME_SESSION_ID));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void fetchSessionConfiguration_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID,
+                authStrategyMock, null));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void fetchSessionConfiguration_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID,
+                authStrategyMock, ""));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
@@ -1073,7 +1073,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
@@ -1084,7 +1084,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(SessionConfigurationResponse.class)).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
     }
@@ -1095,7 +1095,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(SessionConfigurationResponse.class)).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
@@ -1105,49 +1105,52 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.fetchSessionConfiguration(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
     public void createFaceCaptureResource_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(null, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(null, authStrategyMock, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void createFaceCaptureResource_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource("", KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource("", authStrategyMock, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void createFaceCaptureResource_shouldThrowExceptionWhenKeyPairIsNull() {
+    public void createFaceCaptureResource_shouldThrowExceptionWhenAuthStrategyIsNull() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, null, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void createFaceCaptureResource_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, null, createFaceCaptureResourcePayloadMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID,
+                authStrategyMock, null, createFaceCaptureResourcePayloadMock));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void createFaceCaptureResource_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, "", createFaceCaptureResourcePayloadMock));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID,
+                authStrategyMock, "", createFaceCaptureResourcePayloadMock));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void createFaceCaptureResource_shouldThrowExceptionWhenPayloadIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID,
+                authStrategyMock, SOME_SESSION_ID, null));
 
         assertThat(ex.getMessage(), containsString("createFaceCaptureResourcePayload"));
     }
@@ -1157,7 +1160,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
         assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
     }
@@ -1168,7 +1171,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(CreateFaceCaptureResourceResponse.class)).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
         assertThat(ex.getMessage(), containsString("Error executing the POST: Failed Request"));
     }
@@ -1179,7 +1182,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(CreateFaceCaptureResourceResponse.class)).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
@@ -1189,7 +1192,7 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createFaceCaptureResource(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, createFaceCaptureResourcePayloadMock));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
@@ -1209,43 +1212,48 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void uploadFaceCaptureImage_shouldFailForNullKeyPair() {
+    public void uploadFaceCaptureImage_shouldFailForNullAuthStrategy() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, null, null, null, null));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void uploadFaceCaptureImage_shouldFailForNullSessionId() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, null, null,null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID,
+                authStrategyMock, null, null,null));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void uploadFaceCaptureImage_shouldFailForEmptySessionId() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, "", null, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID,
+                authStrategyMock, "", null, null));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void uploadFaceCaptureImage_shouldFailForNullResourceId() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, null,null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID,
+                authStrategyMock, SOME_SESSION_ID, null,null));
 
         assertThat(ex.getMessage(), containsString("resourceId"));
     }
 
     @Test
     public void uploadFaceCaptureImage_shouldFailForEmptyResourceId() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, "", null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID,
+                authStrategyMock, SOME_SESSION_ID, "", null));
 
         assertThat(ex.getMessage(), containsString("resourceId"));
     }
 
     @Test
     public void uploadFaceCaptureImage_shouldFailForNullPayload() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID,
+                authStrategyMock, SOME_SESSION_ID, SOME_RESOURCE_ID, null));
 
         assertThat(ex.getMessage(), containsString("faceCaptureImagePayload"));
     }
@@ -1254,11 +1262,11 @@ public class DocScanServiceTest {
     public void uploadFaceCaptureImage_shouldWrapGeneralSecurityException() throws Exception {
         when(uploadFaceCaptureImagePayloadMock.getImageContents()).thenReturn(IMAGE_BODY);
         when(uploadFaceCaptureImagePayloadMock.getImageContentType()).thenReturn(SOME_IMAGE_CONTENT_TYPE);
-        when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_APP_ID, SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
 
         assertSame(ex.getCause(), gse);
         assertThat(ex.getMessage(), containsString("Error executing the PUT: some gse"));
@@ -1268,11 +1276,11 @@ public class DocScanServiceTest {
     public void uploadFaceCaptureImage_shouldWrapURISyntaxException() throws Exception {
         when(uploadFaceCaptureImagePayloadMock.getImageContents()).thenReturn(IMAGE_BODY);
         when(uploadFaceCaptureImagePayloadMock.getImageContentType()).thenReturn(SOME_IMAGE_CONTENT_TYPE);
-        when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_APP_ID, SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
 
         assertSame(ex.getCause(), uriSyntaxException);
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
@@ -1282,12 +1290,12 @@ public class DocScanServiceTest {
     public void uploadFaceCaptureImage_shouldWrapIOException() throws Exception {
         when(uploadFaceCaptureImagePayloadMock.getImageContents()).thenReturn(IMAGE_BODY);
         when(uploadFaceCaptureImagePayloadMock.getImageContentType()).thenReturn(SOME_IMAGE_CONTENT_TYPE);
-        when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_APP_ID, SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
         IOException ioException = new IOException("some IO exception");
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
 
         assertSame(ex.getCause(), ioException);
         assertThat(ex.getMessage(), containsString("Error building the request: some IO exception"));
@@ -1297,12 +1305,12 @@ public class DocScanServiceTest {
     public void uploadFaceCaptureImage_shouldWrapResourceException() throws Exception {
         when(uploadFaceCaptureImagePayloadMock.getImageContents()).thenReturn(IMAGE_BODY);
         when(uploadFaceCaptureImagePayloadMock.getImageContentType()).thenReturn(SOME_IMAGE_CONTENT_TYPE);
-        when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_APP_ID, SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createUploadFaceCaptureImagePath(SOME_SESSION_ID, SOME_RESOURCE_ID)).thenReturn(SOME_PATH);
         ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.uploadFaceCaptureImage(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID, SOME_RESOURCE_ID, uploadFaceCaptureImagePayloadMock));
 
         assertSame(ex.getCause(), resourceException);
         assertThat(ex.getMessage(), containsString("Error executing the PUT: Failed Request"));
@@ -1310,35 +1318,37 @@ public class DocScanServiceTest {
 
     @Test
     public void triggerIbvEmailNotification_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(null, KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(null, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void triggerIbvEmailNotification_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification("", KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification("", authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void triggerIbvEmailNotification_shouldThrowExceptionWhenKeyPairIsNull() {
+    public void triggerIbvEmailNotification_shouldThrowExceptionWhenAuthStrategyIsNull() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, null, SOME_SESSION_ID));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void triggerIbvEmailNotification_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID,
+                authStrategyMock, null));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void triggerIbvEmailNotification_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID,
+                authStrategyMock, ""));
 
         assertThat(ex.getMessage(), containsString("sessionId"));
     }
@@ -1348,7 +1358,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error executing the POST: some gse"));
     }
@@ -1359,7 +1369,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error executing the POST: Failed Request"));
     }
@@ -1370,7 +1380,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
     }
@@ -1380,16 +1390,16 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.triggerIbvEmailNotification(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
     }
 
     @Test
-    public void getSupportedDocuments_shouldThrowExceptionWhenKeyPairIsNull() {
+    public void getSupportedDocuments_shouldThrowExceptionWhenAuthStrategyIsNull() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getSupportedDocuments(null, false));
 
-        assertThat(ex.getMessage(), containsString("Application key Pair"));
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
@@ -1397,7 +1407,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(KEY_PAIR, false));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(authStrategyMock, false));
 
         assertSame(ex.getCause(), gse);
         assertThat(ex.getMessage(), containsString("Error executing the GET: some gse"));
@@ -1409,7 +1419,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(KEY_PAIR, false));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(authStrategyMock, false));
 
         assertSame(ex.getCause(), resourceException);
         assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
@@ -1421,7 +1431,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(KEY_PAIR, false));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(authStrategyMock, false));
 
         assertSame(ex.getCause(), ioException);
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
@@ -1432,7 +1442,7 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(KEY_PAIR, false));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(authStrategyMock, false));
 
         assertSame(ex.getCause(), uriSyntaxException);
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
@@ -1444,38 +1454,40 @@ public class DocScanServiceTest {
         when(yotiHttpRequestMock.execute(SupportedDocumentsResponse.class)).thenReturn(supportedDocumentsResponseMock);
         when(unsignedPathFactoryMock.createGetSupportedDocumentsPath(false)).thenReturn(SOME_PATH);
 
-        SupportedDocumentsResponse result = docScanService.getSupportedDocuments(KEY_PAIR, false);
+        SupportedDocumentsResponse result = docScanService.getSupportedDocuments(authStrategyMock, false);
 
         assertThat(result, is(instanceOf(SupportedDocumentsResponse.class)));
     }
 
     @Test
     public void getTrackedDevices_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices(null, KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices(null, authStrategyMock, SOME_SESSION_ID));
         assertThat(exception.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void getTrackedDevices_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices("", KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices("", authStrategyMock, SOME_SESSION_ID));
         assertThat(exception.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void getTrackedDevices_shouldThrowExceptionWhenKeyPairIsNull() {
+    public void getTrackedDevices_shouldThrowExceptionWhenAuthStrategyIsNull() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, null, SOME_SESSION_ID));
-        assertThat(exception.getMessage(), containsString("Application key Pair"));
+        assertThat(exception.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void getTrackedDevices_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID,
+                authStrategyMock, null));
         assertThat(exception.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void getTrackedDevices_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID,
+                authStrategyMock, ""));
         assertThat(exception.getMessage(), containsString("sessionId"));
     }
 
@@ -1484,7 +1496,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), gse);
         assertThat(ex.getMessage(), containsString("Error executing the GET: some gse"));
@@ -1496,7 +1508,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(ArgumentMatchers.any(TypeReference.class))).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), resourceException);
         assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
@@ -1508,7 +1520,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(ArgumentMatchers.any(TypeReference.class))).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), ioException);
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
@@ -1519,7 +1531,7 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getTrackedDevices(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), uriSyntaxException);
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
@@ -1530,40 +1542,42 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         MetadataResponse metadataResponseMock = mock(MetadataResponse.class);
         when(yotiHttpRequestMock.execute(ArgumentMatchers.any(TypeReference.class))).thenReturn(Collections.singletonList(metadataResponseMock));
-        when(unsignedPathFactoryMock.createFetchTrackedDevices(SOME_APP_ID, SOME_SESSION_ID)).thenReturn(SOME_PATH);
+        when(unsignedPathFactoryMock.createFetchTrackedDevices(SOME_SESSION_ID)).thenReturn(SOME_PATH);
 
-        List<MetadataResponse> result = docScanService.getTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID);
+        List<MetadataResponse> result = docScanService.getTrackedDevices(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID);
 
         assertThat(result.get(0), is(metadataResponseMock));
     }
 
     @Test
     public void deleteTrackedDevices_shouldThrowExceptionWhenSdkIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices(null, KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices(null, authStrategyMock, SOME_SESSION_ID));
         assertThat(exception.getMessage(), containsString("SDK ID"));
     }
 
     @Test
     public void deleteTrackedDevices_shouldThrowExceptionWhenSdkIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices("", KEY_PAIR, SOME_SESSION_ID));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices("", authStrategyMock, SOME_SESSION_ID));
         assertThat(exception.getMessage(), containsString("SDK ID"));
     }
 
     @Test
-    public void deleteTrackedDevices_shouldThrowExceptionWhenKeyPairIsNull() {
+    public void deleteTrackedDevices_shouldThrowExceptionWhenAuthStrategyIsNull() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, null, SOME_SESSION_ID));
-        assertThat(exception.getMessage(), containsString("Application key Pair"));
+        assertThat(exception.getMessage(), containsString("'authStrategy' must not be null."));
     }
 
     @Test
     public void deleteTrackedDevices_shouldThrowExceptionWhenSessionIdIsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID,
+                authStrategyMock, null));
         assertThat(exception.getMessage(), containsString("sessionId"));
     }
 
     @Test
     public void deleteTrackedDevices_shouldThrowExceptionWhenSessionIdIsEmpty() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, ""));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID,
+                authStrategyMock, ""));
         assertThat(exception.getMessage(), containsString("sessionId"));
     }
 
@@ -1572,7 +1586,7 @@ public class DocScanServiceTest {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), gse);
         assertThat(ex.getMessage(), containsString("Error executing the GET: some gse"));
@@ -1584,7 +1598,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), resourceException);
         assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
@@ -1596,7 +1610,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), ioException);
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
@@ -1607,7 +1621,7 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, KEY_PAIR, SOME_SESSION_ID));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.deleteTrackedDevices(SOME_APP_ID, authStrategyMock, SOME_SESSION_ID));
 
         assertSame(ex.getCause(), uriSyntaxException);
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));

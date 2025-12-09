@@ -28,6 +28,7 @@ import com.yoti.api.client.spi.remote.ActivityDetailsFactory;
 import com.yoti.api.client.spi.remote.ReceiptFetcher;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
+import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.qrcode.DynamicSharingService;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 
@@ -35,6 +36,8 @@ import org.bouncycastle.openssl.PEMException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -48,6 +51,7 @@ public class YotiClientTest {
     @Mock RemoteAmlService remoteAmlServiceMock;
     @Mock ActivityDetailsFactory activityDetailsFactoryMock;
     @Mock DynamicSharingService sharingServiceMock;
+    @Captor ArgumentCaptor<SignedRequestStrategy> signedRequestThingyCaptor;
 
     @Mock Receipt receiptMock;
     @Mock ActivityDetails activityDetailsMock;
@@ -68,7 +72,7 @@ public class YotiClientTest {
     @Test
     public void getActivityDetails_shouldFailWithExceptionFromReceiptFetcher() throws Exception {
         ProfileException profileException = new ProfileException("Test exception");
-        when(receiptFetcherMock.fetch(eq(encryptedToken), any(KeyPair.class), eq(APP_ID))).thenThrow(profileException);
+        when(receiptFetcherMock.fetch(eq(encryptedToken), any(KeyPair.class), signedRequestThingyCaptor.capture(), eq(APP_ID))).thenThrow(profileException);
 
         try {
             YotiClient testObj = new YotiClient(APP_ID, validKeyPairSource, receiptFetcherMock, activityDetailsFactoryMock, remoteAmlServiceMock,
@@ -84,7 +88,7 @@ public class YotiClientTest {
     @Test
     public void getActivityDetails_shouldFailWithExceptionFromActivityDetailsFactory() throws Exception {
         ProfileException profileException = new ProfileException("Test exception");
-        when(receiptFetcherMock.fetch(eq(encryptedToken), any(KeyPair.class), eq(APP_ID))).thenReturn(receiptMock);
+        when(receiptFetcherMock.fetch(eq(encryptedToken), any(KeyPair.class), signedRequestThingyCaptor.capture(), eq(APP_ID))).thenReturn(receiptMock);
         when(activityDetailsFactoryMock.create(eq(receiptMock), any(PrivateKey.class))).thenThrow(profileException);
 
         try {
@@ -101,7 +105,7 @@ public class YotiClientTest {
 
     @Test
     public void getActivityDetails_shouldReturnActivityDetails() throws Exception {
-        when(receiptFetcherMock.fetch(eq(encryptedToken), any(KeyPair.class), eq(APP_ID))).thenReturn(receiptMock);
+        when(receiptFetcherMock.fetch(eq(encryptedToken), any(KeyPair.class), signedRequestThingyCaptor.capture(), eq(APP_ID))).thenReturn(receiptMock);
         when(activityDetailsFactoryMock.create(eq(receiptMock), any(PrivateKey.class))).thenReturn(activityDetailsMock);
 
         YotiClient testObj = new YotiClient(APP_ID, validKeyPairSource, receiptFetcherMock, activityDetailsFactoryMock, remoteAmlServiceMock,

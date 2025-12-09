@@ -10,6 +10,7 @@ import com.yoti.api.client.identity.ShareSession;
 import com.yoti.api.client.identity.ShareSessionQrCode;
 import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
+import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityException;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityService;
 import com.yoti.api.client.spi.remote.call.identity.Receipt;
@@ -25,39 +26,41 @@ public class DigitalIdentityClient {
 
     private final String sdkId;
     private final KeyPair keyPair;
+    private final SignedRequestStrategy signedRequestThingy;
     private final DigitalIdentityService identityService;
 
-    DigitalIdentityClient(String sdkId, KeyPairSource keyPair, DigitalIdentityService identityService) {
+    DigitalIdentityClient(String sdkId, KeyPairSource keyPairSource, DigitalIdentityService identityService) {
         Validation.notNullOrEmpty(sdkId, "SDK ID");
-        Validation.notNull(keyPair, "Application Key Pair");
+        Validation.notNull(keyPairSource, "Application Key Pair");
 
         this.sdkId = sdkId;
-        this.keyPair = loadKeyPair(keyPair);
+        this.keyPair = loadKeyPair(keyPairSource);
+        this.signedRequestThingy = new SignedRequestStrategy(keyPair, sdkId);
         this.identityService = identityService;
     }
 
     public ShareSession createShareSession(ShareSessionRequest request) throws DigitalIdentityException {
-        return identityService.createShareSession(sdkId, keyPair, request);
+        return identityService.createShareSession(sdkId, signedRequestThingy, request);
     }
 
     public ShareSession fetchShareSession(String sessionId) throws DigitalIdentityException {
-        return identityService.fetchShareSession(sdkId, keyPair, sessionId);
+        return identityService.fetchShareSession(sdkId, signedRequestThingy, sessionId);
     }
 
     public ShareSessionQrCode createShareQrCode(String sessionId) throws DigitalIdentityException {
-        return identityService.createShareQrCode(sdkId, keyPair, sessionId);
+        return identityService.createShareQrCode(sdkId, signedRequestThingy, sessionId);
     }
 
     public ShareSessionQrCode fetchShareQrCode(String qrCodeId) throws DigitalIdentityException {
-        return identityService.fetchShareQrCode(sdkId, keyPair, qrCodeId);
+        return identityService.fetchShareQrCode(sdkId, signedRequestThingy, qrCodeId);
     }
 
     public Receipt fetchShareReceipt(String receiptId) throws DigitalIdentityException {
-        return identityService.fetchShareReceipt(sdkId, keyPair, receiptId);
+        return identityService.fetchShareReceipt(sdkId, signedRequestThingy, keyPair, receiptId);
     }
 
     public MatchResult fetchMatch(MatchRequest request) throws DigitalIdentityException {
-        return identityService.fetchMatch(sdkId, keyPair, request);
+        return identityService.fetchMatch(sdkId, signedRequestThingy, request);
     }
 
     private KeyPair loadKeyPair(KeyPairSource keyPairSource) throws InitialisationException {

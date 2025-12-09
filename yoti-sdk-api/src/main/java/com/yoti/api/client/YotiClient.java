@@ -16,6 +16,7 @@ import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 import com.yoti.api.client.spi.remote.ReceiptFetcher;
 import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.call.aml.RemoteAmlService;
+import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.qrcode.DynamicSharingService;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -40,6 +41,7 @@ public class YotiClient {
 
     private final String appId;
     private final KeyPair keyPair;
+    private final SignedRequestStrategy signedRequestThingy;
     private final ReceiptFetcher receiptFetcher;
     private final RemoteAmlService remoteAmlService;
     private final ActivityDetailsFactory activityDetailsFactory;
@@ -53,6 +55,7 @@ public class YotiClient {
             DynamicSharingService dynamicSharingService) throws InitialisationException {
         this.appId = notNull(applicationId, "Application id");
         this.keyPair = loadKeyPair(notNull(kpSource, "Key pair source"));
+        this.signedRequestThingy = new SignedRequestStrategy(keyPair, appId);
         this.receiptFetcher = notNull(receiptFetcher, "receiptFetcher");
         this.remoteAmlService = notNull(remoteAmlService, "amlService");
         this.activityDetailsFactory = notNull(activityDetailsFactory, "activityDetailsFactory");
@@ -80,7 +83,7 @@ public class YotiClient {
      * @throws ProfileException aggregate exception signalling issues during the call
      */
     public ActivityDetails getActivityDetails(String encryptedYotiToken) throws ProfileException {
-        Receipt receipt = receiptFetcher.fetch(encryptedYotiToken, keyPair, appId);
+        Receipt receipt = receiptFetcher.fetch(encryptedYotiToken, keyPair, signedRequestThingy, appId);
         return activityDetailsFactory.create(receipt, keyPair.getPrivate());
     }
 
@@ -96,7 +99,7 @@ public class YotiClient {
      */
     public AmlResult performAmlCheck(AmlProfile amlProfile) throws AmlException {
         LOG.debug("Performing aml check...");
-        return remoteAmlService.performCheck(keyPair, appId, amlProfile);
+        return remoteAmlService.performCheck(signedRequestThingy, appId, amlProfile);
     }
 
     /**
@@ -113,7 +116,7 @@ public class YotiClient {
      */
     public ShareUrlResult createShareUrl(DynamicScenario dynamicScenario) throws DynamicShareException {
         LOG.debug("Request a share url for a dynamicScenario...");
-        return dynamicSharingService.createShareUrl(appId, keyPair, dynamicScenario);
+        return dynamicSharingService.createShareUrl(appId, signedRequestThingy, dynamicScenario);
     }
 
     private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {

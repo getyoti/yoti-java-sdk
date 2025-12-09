@@ -1,7 +1,5 @@
 package com.yoti.api.client.spi.remote.call.factory;
 
-import static com.yoti.api.client.spi.remote.call.YotiConstants.AUTH_KEY_HEADER;
-import static com.yoti.api.client.spi.remote.call.YotiConstants.DIGEST_HEADER;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.JAVA;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.SDK_VERSION;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_HEADER;
@@ -10,20 +8,15 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_VERSION
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.Header;
+
 public class HeadersFactory {
 
-    public Map<String, String> create(String digest) {
+    public Map<String, String> create(Header header) {
         Map<String, String> headers = new HashMap<>();
-        headers.put(DIGEST_HEADER, digest);
+        headers.put(header.getName(), header.getValue());
         headers.put(YOTI_SDK_HEADER, JAVA);
         headers.put(YOTI_SDK_VERSION_HEADER, SDK_VERSION);
-        return headers;
-    }
-
-    @Deprecated
-    public Map<String, String> create(String digest, String authKey) {
-        Map<String, String> headers = create(digest);
-        headers.put(AUTH_KEY_HEADER, authKey);
         return headers;
     }
 

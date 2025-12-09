@@ -29,17 +29,17 @@ public class PathFactory {
         return unsignedPathFactory.createDynamicSharingPath(appId) + "?" + createSignatureParams();
     }
 
-    public String createNewYotiDocsSessionPath(String appId) {
-        return unsignedPathFactory.createNewYotiDocsSessionPath(appId) + "&" + createSignatureParams();
-    }
+//    public String createNewYotiDocsSessionPath(String appId) {
+//        return unsignedPathFactory.createNewYotiDocsSessionPath() + "&" + createSignatureParams();
+//    }
 
-    public String createGetYotiDocsSessionPath(String appId, String sessionId) {
-        return unsignedPathFactory.createYotiDocsSessionPath(appId, sessionId) + "&" + createSignatureParams();
-    }
+//    public String createGetYotiDocsSessionPath(String appId, String sessionId) {
+//        return unsignedPathFactory.createYotiDocsSessionPath(sessionId) + "&" + createSignatureParams();
+//    }
 
-    public String createMediaContentPath(String appId, String sessionId, String mediaId) {
-        return unsignedPathFactory.createMediaContentPath(appId, sessionId, mediaId) + "&" + createSignatureParams();
-    }
+//    public String createMediaContentPath(String sessionId, String mediaId) {
+//        return unsignedPathFactory.createMediaContentPath(sessionId, mediaId) + "&" + createSignatureParams();
+//    }
 
     public String createGetSupportedDocumentsPath(boolean includeNonLatin) {
         return unsignedPathFactory.createGetSupportedDocumentsPath(includeNonLatin) + "&" + createSignatureParams();

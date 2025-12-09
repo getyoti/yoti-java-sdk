@@ -18,6 +18,7 @@ import java.security.Security;
 import java.util.Base64;
 
 import com.yoti.api.client.ProfileException;
+import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -49,11 +50,11 @@ public class ProfileService {
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
 
-    public Receipt getReceipt(KeyPair keyPair, String appId, String connectToken) throws ProfileException {
-        return getProfile(keyPair, appId, connectToken).getReceipt();
+    public Receipt getReceipt(SignedRequestStrategy signedRequestThingy, KeyPair keyPair, String appId, String connectToken) throws ProfileException {
+        return getProfile(signedRequestThingy, keyPair, appId, connectToken).getReceipt();
     }
 
-    public ProfileResponse getProfile(KeyPair keyPair, String appId, String connectToken) throws ProfileException {
+    public ProfileResponse getProfile(SignedRequestStrategy signedRequestThingy, KeyPair keyPair, String appId, String connectToken) throws ProfileException {
         notNull(keyPair, "Key pair");
         notNull(appId, "Application id");
         notNull(connectToken, "Connect token");
@@ -63,7 +64,7 @@ public class ProfileService {
         try {
             String authKey = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
 
-            YotiHttpRequest yotiHttpRequest = createSignedRequest(keyPair, path, authKey);
+            YotiHttpRequest yotiHttpRequest = createSignedRequest(signedRequestThingy, path, authKey);
             return fetchReceipt(yotiHttpRequest);
         } catch (IOException ioe) {
             throw new ProfileException("Error calling service to get profile", ioe);
@@ -88,10 +89,10 @@ public class ProfileService {
         }
     }
 
-    YotiHttpRequest createSignedRequest(KeyPair keyPair, String path, String authKey) throws ProfileException {
+    YotiHttpRequest createSignedRequest(SignedRequestStrategy signedRequestThingy, String path, String authKey) throws ProfileException {
         try {
             return yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(signedRequestThingy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)

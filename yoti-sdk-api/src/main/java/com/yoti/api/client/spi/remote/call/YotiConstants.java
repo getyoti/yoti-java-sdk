@@ -22,6 +22,7 @@ public final class YotiConstants {
     public static final String DIGEST_HEADER = "X-Yoti-Auth-Digest";
     public static final String YOTI_SDK_HEADER = "X-Yoti-SDK";
     public static final String YOTI_SDK_VERSION_HEADER = YOTI_SDK_HEADER + "-Version";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
 
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CONTENT_TYPE_JSON = "application/json";

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
-import java.security.KeyPair;
 
 import com.yoti.api.client.shareurl.DynamicScenario;
 import com.yoti.api.client.shareurl.DynamicShareException;
@@ -17,6 +16,7 @@ import com.yoti.api.client.shareurl.ShareUrlResult;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
+import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,9 +51,9 @@ public final class DynamicSharingService {
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
 
-    public ShareUrlResult createShareUrl(String appId, KeyPair keyPair, DynamicScenario dynamicScenario) throws DynamicShareException {
+    public ShareUrlResult createShareUrl(String appId, SignedRequestStrategy signedRequestThingy, DynamicScenario dynamicScenario) throws DynamicShareException {
         notNull(appId, "Application id");
-        notNull(keyPair, "Application key Pair");
+        notNull(signedRequestThingy, "Application key Pair");
         notNull(dynamicScenario, "Dynamic scenario");
 
         String path = unsignedPathFactory.createDynamicSharingPath(appId);
@@ -62,7 +62,7 @@ public final class DynamicSharingService {
         try {
             byte[] body = objectMapper.writeValueAsString(dynamicScenario).getBytes(DEFAULT_CHARSET);
 
-            YotiHttpRequest yotiHttpRequest = createSignedRequest(keyPair, path, body);
+            YotiHttpRequest yotiHttpRequest = createSignedRequest(signedRequestThingy, path, body);
 
             return yotiHttpRequest.execute(ShareUrlResult.class);
         } catch (ResourceException ex) {
@@ -72,10 +72,10 @@ public final class DynamicSharingService {
         }
     }
 
-    YotiHttpRequest createSignedRequest(KeyPair keyPair, String path, byte[] body) throws DynamicShareException {
+    YotiHttpRequest createSignedRequest(SignedRequestStrategy signedRequestThingy, String path, byte[] body) throws DynamicShareException {
         try {
             return yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(signedRequestThingy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withPayload(body)

@@ -1,8 +1,5 @@
 package com.yoti.api.client.docs;
 
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
-import static com.yoti.api.client.spi.remote.util.Validation.notNullOrEmpty;
-
 import java.io.IOException;
 import java.security.KeyPair;
 import java.security.Security;
@@ -24,6 +21,9 @@ import com.yoti.api.client.docs.session.retrieve.instructions.ContactProfileResp
 import com.yoti.api.client.docs.session.retrieve.instructions.InstructionsResponse;
 import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
+import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
+import com.yoti.api.client.spi.remote.call.factory.AuthTokenStrategy;
+import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
@@ -43,15 +43,23 @@ public class DocScanClient {
     }
 
     private final String sdkId;
-    private final KeyPair keyPair;
-
+    private final AuthStrategy authStrategy;
     private final DocScanService docScanService;
 
     DocScanClient(final String sdkId,
             final KeyPairSource keyPairSource,
             DocScanService docScanService) {
         this.sdkId = sdkId;
-        this.keyPair = loadKeyPair(keyPairSource);
+        KeyPair keyPair = loadKeyPair(keyPairSource);
+        this.authStrategy = new SignedRequestStrategy(keyPair, sdkId);
+        this.docScanService = docScanService;
+    }
+
+    DocScanClient(final String sdkId,
+            final String authenticationToken,
+            DocScanService docScanService) {
+        this.sdkId = sdkId;
+        this.authStrategy = new AuthTokenStrategy(authenticationToken);
         this.docScanService = docScanService;
     }
 
@@ -68,7 +76,7 @@ public class DocScanClient {
      */
     public CreateSessionResult createSession(SessionSpec sessionSpec) throws DocScanException {
         LOG.debug("Creating a YotiDocs session...");
-        return docScanService.createSession(sdkId, keyPair, sessionSpec);
+        return docScanService.createSession(sdkId, authStrategy, sessionSpec);
     }
 
     /**
@@ -80,7 +88,7 @@ public class DocScanClient {
      */
     public GetSessionResult getSession(String sessionId) throws DocScanException {
         LOG.debug("Retrieving session '{}'", sessionId);
-        return docScanService.retrieveSession(sdkId, keyPair, sessionId);
+        return docScanService.retrieveSession(sdkId, authStrategy, sessionId);
     }
 
     /**
@@ -92,7 +100,7 @@ public class DocScanClient {
      */
     public void deleteSession(String sessionId) throws DocScanException {
         LOG.debug("Deleting session '{}'", sessionId);
-        docScanService.deleteSession(sdkId, keyPair, sessionId);
+        docScanService.deleteSession(sdkId, authStrategy, sessionId);
     }
 
     /**
@@ -106,7 +114,7 @@ public class DocScanClient {
      */
     public Media getMediaContent(String sessionId, String mediaId) throws DocScanException {
         LOG.debug("Retrieving media content '{}' in session '{}'", mediaId, sessionId);
-        return docScanService.getMediaContent(sdkId, keyPair, sessionId, mediaId);
+        return docScanService.getMediaContent(sdkId, authStrategy, sessionId, mediaId);
     }
 
     /**
@@ -119,7 +127,7 @@ public class DocScanClient {
      */
     public void deleteMediaContent(String sessionId, String mediaId) throws DocScanException {
         LOG.debug("Deleting media content '{}' in session '{}'", mediaId, sessionId);
-        docScanService.deleteMediaContent(sdkId, keyPair, sessionId, mediaId);
+        docScanService.deleteMediaContent(sdkId, authStrategy, sessionId, mediaId);
     }
 
     /**
@@ -131,7 +139,7 @@ public class DocScanClient {
      */
     public void putIbvInstructions(String sessionId, Instructions instructions) throws DocScanException {
         LOG.debug("Setting IBV instructions for session '{}'", sessionId);
-        docScanService.putIbvInstructions(sdkId, keyPair, sessionId, instructions);
+        docScanService.putIbvInstructions(sdkId, authStrategy, sessionId, instructions);
     }
 
     /**
@@ -143,7 +151,7 @@ public class DocScanClient {
      */
     public Media getIbvInstructionsPdf(String sessionId) throws DocScanException {
         LOG.debug("Retrieving IBV instructions PDF in session '{}'", sessionId);
-        return docScanService.getIbvInstructionsPdf(sdkId, keyPair, sessionId);
+        return docScanService.getIbvInstructionsPdf(sdkId, authStrategy, sessionId);
     }
 
     /**
@@ -155,7 +163,7 @@ public class DocScanClient {
      */
     public ContactProfileResponse fetchInstructionsContactProfile(String sessionId) throws DocScanException {
         LOG.debug("Fetching instructions contact profile in session '{}'", sessionId);
-        return docScanService.fetchInstructionsContactProfile(sdkId, keyPair, sessionId);
+        return docScanService.fetchInstructionsContactProfile(sdkId, authStrategy, sessionId);
     }
 
     /**
@@ -169,7 +177,7 @@ public class DocScanClient {
      */
     public CreateFaceCaptureResourceResponse createFaceCaptureResource(String sessionId, CreateFaceCaptureResourcePayload createFaceCaptureResourcePayload) throws DocScanException {
         LOG.debug("Creating Face Capture resource in session '{}' for requirement '{}'", sessionId, createFaceCaptureResourcePayload.getRequirementId());
-        return docScanService.createFaceCaptureResource(sdkId, keyPair, sessionId, createFaceCaptureResourcePayload);
+        return docScanService.createFaceCaptureResource(sdkId, authStrategy, sessionId, createFaceCaptureResourcePayload);
     }
 
     /**
@@ -181,7 +189,7 @@ public class DocScanClient {
      */
     public void uploadFaceCaptureImage(String sessionId, String resourceId, UploadFaceCaptureImagePayload uploadFaceCaptureImagePayload) throws DocScanException {
         LOG.debug("Uploading image to Face Capture resource '{}' for session '{}'", resourceId, sessionId);
-        docScanService.uploadFaceCaptureImage(sdkId, keyPair, sessionId, resourceId, uploadFaceCaptureImagePayload);
+        docScanService.uploadFaceCaptureImage(sdkId, authStrategy, sessionId, resourceId, uploadFaceCaptureImagePayload);
     }
 
     /**
@@ -193,7 +201,7 @@ public class DocScanClient {
      */
     public SupportedDocumentsResponse getSupportedDocuments(boolean includeNonLatin) throws DocScanException {
         LOG.debug("Getting all supported documents");
-        return docScanService.getSupportedDocuments(keyPair, includeNonLatin);
+        return docScanService.getSupportedDocuments(authStrategy, includeNonLatin);
     }
 
     /**
@@ -214,7 +222,7 @@ public class DocScanClient {
      */
     public InstructionsResponse getIbvInstructions(String sessionId) throws DocScanException {
         LOG.debug("Fetching instructions for session '{}'", sessionId);
-        return docScanService.getIbvInstructions(sdkId, keyPair, sessionId);
+        return docScanService.getIbvInstructions(sdkId, authStrategy, sessionId);
     }
 
     /**
@@ -228,7 +236,7 @@ public class DocScanClient {
      */
     public void triggerIbvEmailNotification(String sessionId) throws DocScanException {
         LOG.debug("Triggering IBV email notification for session '{}'", sessionId);
-        docScanService.triggerIbvEmailNotification(sdkId, keyPair, sessionId);
+        docScanService.triggerIbvEmailNotification(sdkId, authStrategy, sessionId);
     }
 
     /**
@@ -241,7 +249,7 @@ public class DocScanClient {
      */
     public SessionConfigurationResponse getSessionConfiguration(String sessionId) throws DocScanException {
         LOG.debug("Fetching configuration for session '{}'", sessionId);
-        return docScanService.fetchSessionConfiguration(sdkId, keyPair, sessionId);
+        return docScanService.fetchSessionConfiguration(sdkId, authStrategy, sessionId);
     }
 
     /**
@@ -254,7 +262,7 @@ public class DocScanClient {
      */
     public List<MetadataResponse> getTrackedDevices(String sessionId) throws DocScanException {
         LOG.debug("Fetching tracked devices for session '{}'", sessionId);
-        return docScanService.getTrackedDevices(sdkId, keyPair, sessionId);
+        return docScanService.getTrackedDevices(sdkId, authStrategy, sessionId);
     }
 
     /**
@@ -266,7 +274,7 @@ public class DocScanClient {
      */
     public void deleteTrackedDevices(String sessionId) throws DocScanException {
         LOG.debug("Deleting tracked devices for session '{}'", sessionId);
-        docScanService.deleteTrackedDevices(sdkId, keyPair, sessionId);
+        docScanService.deleteTrackedDevices(sdkId, authStrategy, sessionId);
     }
 
     private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {
@@ -282,8 +290,14 @@ public class DocScanClient {
 
         private static final DocScanService docScanService = DocScanService.newInstance();
 
+        private String authenticationToken;
         private String sdkId;
         private KeyPairSource keyPairSource;
+
+        public Builder withAuthenticationToken(String authenticationToken) {
+            this.authenticationToken = authenticationToken;
+            return this;
+        }
 
         public Builder withClientSdkId(String sdkId) {
             this.sdkId = sdkId;
@@ -296,14 +310,24 @@ public class DocScanClient {
         }
 
         public DocScanClient build() {
-            notNullOrEmpty(sdkId, "SDK ID");
-            notNull(keyPairSource, "Application key Pair");
+            validate();
+            if (authenticationToken == null) {
+                return new DocScanClient(sdkId, keyPairSource, docScanService);
+            } else {
+                return new DocScanClient(sdkId, authenticationToken, docScanService);
+            }
+        }
 
-            return new DocScanClient(
-                    sdkId,
-                    keyPairSource,
-                    docScanService
-            );
+        private void validate() {
+            if (authenticationToken == null) {
+                if (sdkId == null || sdkId.isEmpty() || keyPairSource == null) {
+                    throw new IllegalStateException("An sdkId and KeyPairSource must be provided when not using an authentication token");
+                }
+            } else {
+                if (sdkId != null || keyPairSource != null) {
+                    throw new IllegalStateException("Must not supply sdkId or KeyPairSource when using an authentication token");
+                }
+            }
         }
     }
 

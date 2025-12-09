@@ -13,6 +13,7 @@ import java.security.KeyPair;
 import java.util.Base64;
 
 import com.yoti.api.client.ProfileException;
+import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import org.junit.Before;
@@ -45,6 +46,7 @@ public class ProfileServiceTest {
 
     @Mock UnsignedPathFactory unsignedPathFactory;
 
+    @Mock SignedRequestStrategy signedRequestThingyMock;
     @Mock YotiHttpRequest yotiHttpRequest;
 
     @BeforeClass
@@ -60,21 +62,21 @@ public class ProfileServiceTest {
 
     @Test
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
-        doReturn(yotiHttpRequest).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
+        doReturn(yotiHttpRequest).when(testObj).createSignedRequest(signedRequestThingyMock, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
         when(yotiHttpRequest.execute(ProfileResponse.class)).thenReturn(PROFILE_RESPONSE);
 
-        Receipt result = testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);
+        Receipt result = testObj.getReceipt(signedRequestThingyMock, KEY_PAIR, APP_ID, TOKEN);
         assertSame(RECEIPT, result);
     }
 
     @Test
     public void shouldThrowExceptionForIOError() throws Exception {
         IOException ioException = new IOException("Test exception");
-        doReturn(yotiHttpRequest).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
+        doReturn(yotiHttpRequest).when(testObj).createSignedRequest(signedRequestThingyMock, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
         when(yotiHttpRequest.execute(ProfileResponse.class)).thenThrow(ioException);
 
         try {
-            testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);
+            testObj.getReceipt(signedRequestThingyMock, KEY_PAIR, APP_ID, TOKEN);
             fail("Expected a ProfileException");
         } catch (ProfileException e) {
             assertSame(ioException, e.getCause());
@@ -84,11 +86,11 @@ public class ProfileServiceTest {
     @Test
     public void shouldThrowExceptionWithResourceExceptionCause() throws Throwable {
         ResourceException resourceException = new ResourceException(404, "Not Found", "Test exception");
-        doReturn(yotiHttpRequest).when(testObj).createSignedRequest(KEY_PAIR, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
+        doReturn(yotiHttpRequest).when(testObj).createSignedRequest(signedRequestThingyMock, GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
         when(yotiHttpRequest.execute(ProfileResponse.class)).thenThrow(resourceException);
 
         try {
-            testObj.getReceipt(KEY_PAIR, APP_ID, TOKEN);
+            testObj.getReceipt(signedRequestThingyMock, KEY_PAIR, APP_ID, TOKEN);
             fail("Expected a ProfileException");
         } catch (ProfileException e) {
             assertSame(resourceException, e.getCause());
@@ -97,17 +99,17 @@ public class ProfileServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWithNullKeyPair() throws Exception {
-        testObj.getReceipt(null, APP_ID, TOKEN);
+        testObj.getReceipt(null, null,  APP_ID, TOKEN);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWithNullAppId() throws Exception {
-        testObj.getReceipt(KEY_PAIR, null, TOKEN);
+        testObj.getReceipt(null, KEY_PAIR, null, TOKEN);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWithNullConnectToken() throws Exception {
-        testObj.getReceipt(KEY_PAIR, APP_ID, null);
+        testObj.getReceipt(null, KEY_PAIR, APP_ID, null);
     }
 
 }

@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
-import java.security.KeyPair;
 
 import com.yoti.api.client.AmlException;
 import com.yoti.api.client.aml.AmlProfile;
@@ -22,6 +21,7 @@ import com.yoti.api.client.aml.AmlResult;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
+import com.yoti.api.client.spi.remote.call.factory.SignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,8 +51,8 @@ public class RemoteAmlService {
         apiUrl = System.getProperty(PROPERTY_YOTI_API_URL, DEFAULT_YOTI_API_URL);
     }
 
-    public AmlResult performCheck(KeyPair keyPair, String appId, AmlProfile amlProfile) throws AmlException {
-        notNull(keyPair, "Key pair");
+    public AmlResult performCheck(SignedRequestStrategy signedRequestStrategy, String appId, AmlProfile amlProfile) throws AmlException {
+        notNull(signedRequestStrategy, "signedRequestStrategy");
         notNull(appId, "Application id");
         notNull(amlProfile, "amlProfile");
 
@@ -60,7 +60,7 @@ public class RemoteAmlService {
             String resourcePath = unsignedPathFactory.createAmlPath(appId);
             byte[] body = objectMapper.writeValueAsString(amlProfile).getBytes(DEFAULT_CHARSET);
 
-            YotiHttpRequest yotiHttpRequest = createSignedRequest(keyPair, resourcePath, body);
+            YotiHttpRequest yotiHttpRequest = createSignedRequest(signedRequestStrategy, resourcePath, body);
             return yotiHttpRequest.execute(AmlResult.class);
         } catch (IOException ioException) {
             throw new AmlException("Error communicating with AML endpoint", ioException);
@@ -82,10 +82,10 @@ public class RemoteAmlService {
         }
     }
 
-    YotiHttpRequest createSignedRequest(KeyPair keyPair, String resourcePath, byte[] body) throws AmlException {
+    YotiHttpRequest createSignedRequest(SignedRequestStrategy signedRequestThingy, String resourcePath, byte[] body) throws AmlException {
         try {
             return yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(signedRequestThingy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(resourcePath)
                     .withPayload(body)
