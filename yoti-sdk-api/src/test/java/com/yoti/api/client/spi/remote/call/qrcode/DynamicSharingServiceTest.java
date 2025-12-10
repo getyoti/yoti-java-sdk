@@ -16,7 +16,6 @@ import com.yoti.api.client.shareurl.DynamicShareException;
 import com.yoti.api.client.shareurl.ShareUrlResult;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
-import com.yoti.api.client.spi.remote.call.factory.DocsSignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -44,7 +43,6 @@ public class DynamicSharingServiceTest {
     @Mock UnsignedPathFactory unsignedPathFactoryMock;
     @Mock ObjectMapper objectMapperMock;
 
-    @Mock DocsSignedRequestStrategy signedRequestThingyMock;
     @Mock DynamicScenario simpleDynamicScenarioMock;
     @Mock YotiHttpRequest yotiHttpRequestMock;
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPairMock;

@@ -6,6 +6,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThrows;
 
+import java.io.IOException;
+
+import com.yoti.api.client.InitialisationException;
 import com.yoti.api.client.KeyPairSource;
 import com.yoti.api.client.common.StaticKeyPairSource;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
@@ -74,6 +77,19 @@ public class DocScanClientBuilderTest {
         IllegalStateException ex = assertThrows(IllegalStateException.class, builder::build);
 
         assertThat(ex.getMessage(), containsString("sdkId or KeyPairSource"));
+    }
+
+    @Test
+    public void shouldFailWhenStreamExceptionLoadingKeys() {
+        KeyPairSource badKeyPairSource = new StaticKeyPairSource(true);
+        DocScanClient.Builder builder = DocScanClient.builder()
+                .withClientSdkId(SOME_APPLICATION_ID)
+                .withKeyPairSource(badKeyPairSource);
+
+        InitialisationException ex = assertThrows(InitialisationException.class, builder::build);
+
+        IOException ioException = (IOException) ex.getCause();
+        assertThat(ioException.getMessage(), containsString("Test stream exception"));
     }
 
     @Test

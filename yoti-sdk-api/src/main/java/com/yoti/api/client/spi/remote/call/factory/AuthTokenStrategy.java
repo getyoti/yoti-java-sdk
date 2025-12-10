@@ -18,8 +18,8 @@ public class AuthTokenStrategy implements AuthStrategy {
     }
 
     @Override
-    public Header createAuthHeader(String httpMethod, String endpoint, byte[] payload) {
-        return new BasicHeader(YotiConstants.AUTHORIZATION_HEADER, "Bearer " + authenticationToken);
+    public List<Header> createAuthHeaders(String httpMethod, String endpoint, byte[] payload) {
+        return Collections.singletonList(new BasicHeader(YotiConstants.AUTHORIZATION_HEADER, "Bearer " + authenticationToken));
     }
 
     @Override

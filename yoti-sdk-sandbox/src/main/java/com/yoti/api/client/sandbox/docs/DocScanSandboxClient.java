@@ -36,12 +36,12 @@ public class DocScanSandboxClient {
     private final String sdkId;
     private final DocsSignedRequestStrategy authStrategy;
 
-    DocScanSandboxClient(String sdkId,
-            KeyPair keyPair,
+    private DocScanSandboxClient(String sdkId,
+            DocsSignedRequestStrategy authStrategy,
             ObjectMapper mapper,
             YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory) {
         this.sdkId = sdkId;
-        this.authStrategy = new DocsSignedRequestStrategy(keyPair, sdkId);
+        this.authStrategy = authStrategy;
         this.mapper = mapper;
         this.yotiHttpRequestBuilderFactory = yotiHttpRequestBuilderFactory;
         this.docScanBaseUrl = System.getProperty(PROPERTY_YOTI_DOCS_URL, DEFAULT_DOC_SCAN_SANDBOX_API_URL);
@@ -133,7 +133,7 @@ public class DocScanSandboxClient {
             notNullOrEmpty(sdkId, "sdkId");
             notNull(keyPair, "keyPair");
 
-            return new DocScanSandboxClient(sdkId, keyPair, new ObjectMapper(), new YotiHttpRequestBuilderFactory());
+            return new DocScanSandboxClient(sdkId, new DocsSignedRequestStrategy(keyPair, sdkId), new ObjectMapper(), new YotiHttpRequestBuilderFactory());
         }
     }
 

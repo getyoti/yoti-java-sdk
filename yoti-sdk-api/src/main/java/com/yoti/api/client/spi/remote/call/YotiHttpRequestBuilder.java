@@ -14,11 +14,13 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.yoti.api.client.spi.remote.call.factory.AmlSignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
 import com.yoti.api.client.spi.remote.call.factory.AuthTokenStrategy;
+import com.yoti.api.client.spi.remote.call.factory.DigitalIdentitySignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.DocsSignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
 import com.yoti.api.client.spi.remote.call.factory.ProfileSignedRequestStrategy;
@@ -89,6 +91,12 @@ public class YotiHttpRequestBuilder {
     // FIXME: Test me?
     public YotiHttpRequestBuilder forProfileRequest(KeyPair keyPair, String appId) {
         this.authStrategy = new ProfileSignedRequestStrategy(keyPair, appId);
+        return this;
+    }
+
+    // FIXME: Test me?
+    public YotiHttpRequestBuilder forDigitalIdentityRequest(KeyPair keyPair, String appId) {
+        this.authStrategy = new DigitalIdentitySignedRequestStrategy(keyPair, appId);
         return this;
     }
 
@@ -236,8 +244,8 @@ public class YotiHttpRequestBuilder {
             }
         }
 
-        Header authHeader = authStrategy.createAuthHeader(httpMethod, builtEndpoint, finalPayload);
-        headers.putAll(headersFactory.create(authHeader));
+        List<Header> authHeaders = authStrategy.createAuthHeaders(httpMethod, builtEndpoint, finalPayload);
+        headers.putAll(headersFactory.create(authHeaders));
 
         return new YotiHttpRequest(
                 new URI(baseUrl + builtEndpoint),

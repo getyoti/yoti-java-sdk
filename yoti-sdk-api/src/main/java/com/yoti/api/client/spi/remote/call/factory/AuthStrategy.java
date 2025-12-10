@@ -8,7 +8,7 @@ import org.apache.http.NameValuePair;
 
 public interface AuthStrategy {
 
-    Header createAuthHeader(String httpMethod, String endpoint, byte[] payload) throws GeneralSecurityException;
+    List<Header> createAuthHeaders(String httpMethod, String endpoint, byte[] payload) throws GeneralSecurityException;
 
     List<NameValuePair> createQueryParams();
 

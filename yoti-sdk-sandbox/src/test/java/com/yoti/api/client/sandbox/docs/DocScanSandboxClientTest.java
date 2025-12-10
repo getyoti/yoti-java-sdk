@@ -4,7 +4,7 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_DO
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -25,11 +25,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,16 +37,16 @@ public class DocScanSandboxClientTest {
     private static final String SOME_SDK_ID = "someSdkId";
     private static final String SOME_SESSION_ID = "someSessionId";
 
+    @InjectMocks DocScanSandboxClient testObj;
+
     @Mock YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory;
     @Mock ObjectMapper objectMapperMock;
-    @Captor ArgumentCaptor<DocsSignedRequestStrategy> signedRequestThingyCaptor;
+    @Mock DocsSignedRequestStrategy authStrategyMock;
 
     @Mock(answer = Answers.RETURNS_SELF) YotiHttpRequestBuilder yotiHttpRequestBuilderMock;
     @Mock YotiHttpRequest yotiHttpRequestMock;
     @Mock ResponseConfig responseConfigMock;
     @Mock KeyPair keyPairMock;
-
-    @Spy @InjectMocks DocScanSandboxClient docScanSandboxClient;
 
     @Before
     public void setUp() {
@@ -59,35 +56,25 @@ public class DocScanSandboxClientTest {
     @Test
     public void configureSessionResponse_shouldWrapIoException() throws Exception {
         IOException ioException = new IOException("Some error");
-
         when(objectMapperMock.writeValueAsBytes(responseConfigMock)).thenReturn(SOME_BYTES);
-        when(yotiHttpRequestMock.execute()).thenThrow(ioException);
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(ioException);
 
-        try {
-            docScanSandboxClient.configureSessionResponse(SOME_SESSION_ID, responseConfigMock);
-        } catch (SandboxException ex) {
-            assertThat(ex.getMessage(), containsString("Some error"));
-            return;
-        }
-        fail("Expected an exception");
+        SandboxException thrown = assertThrows(SandboxException.class, () -> testObj.configureSessionResponse(SOME_SESSION_ID, responseConfigMock));
+
+        assertThat(thrown.getMessage(), containsString("Some error"));
     }
 
     @Test
     public void configureSessionResponse_shouldWrapResourceException() throws Exception {
         ResourceException resourceException = new ResourceException(400, "Some error", "There was some error");
-
         when(objectMapperMock.writeValueAsBytes(responseConfigMock)).thenReturn(SOME_BYTES);
-        when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
 
-        try {
-            docScanSandboxClient.configureSessionResponse(SOME_SESSION_ID, responseConfigMock);
-        } catch (SandboxException ex) {
-            assertThat(ex.getMessage(), containsString("Some error"));
-            return;
-        }
-        fail("Expected an exception");
+        SandboxException thrown = assertThrows(SandboxException.class, () -> testObj.configureSessionResponse(SOME_SESSION_ID, responseConfigMock));
+
+        assertThat(thrown.getMessage(), containsString("Some error"));
     }
 
     @Test
@@ -95,10 +82,10 @@ public class DocScanSandboxClientTest {
         when(objectMapperMock.writeValueAsBytes(responseConfigMock)).thenReturn(SOME_BYTES);
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
 
-        docScanSandboxClient.configureSessionResponse(SOME_SESSION_ID, responseConfigMock);
+        testObj.configureSessionResponse(SOME_SESSION_ID, responseConfigMock);
 
         verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
-        verify(yotiHttpRequestBuilderMock).withAuthStrategy(signedRequestThingyCaptor.capture()); // FIXME
+        verify(yotiHttpRequestBuilderMock).withAuthStrategy(authStrategyMock);
         verify(yotiHttpRequestBuilderMock).withEndpoint("/sessions/" + SOME_SESSION_ID + "/response-config");
         verify(yotiHttpRequestBuilderMock).withPayload(SOME_BYTES);
     }
@@ -108,12 +95,12 @@ public class DocScanSandboxClientTest {
         when(objectMapperMock.writeValueAsBytes(responseConfigMock)).thenReturn(SOME_BYTES);
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
 
-        FieldSetter.setField(docScanSandboxClient, "sdkId", SOME_SDK_ID);
+        FieldSetter.setField(testObj, "sdkId", SOME_SDK_ID);
 
-        docScanSandboxClient.configureApplicationResponse(responseConfigMock);
+        testObj.configureApplicationResponse(responseConfigMock);
 
         verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
-        verify(yotiHttpRequestBuilderMock).withAuthStrategy(signedRequestThingyCaptor.capture()); // FIXME
+        verify(yotiHttpRequestBuilderMock).withAuthStrategy(authStrategyMock);
         verify(yotiHttpRequestBuilderMock).withEndpoint("/apps/" + SOME_SDK_ID + "/response-config");
         verify(yotiHttpRequestBuilderMock).withPayload(SOME_BYTES);
     }

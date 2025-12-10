@@ -45,14 +45,8 @@ public class DocScanClient {
     private final AuthStrategy authStrategy;
     private final DocScanService docScanService;
 
-    DocScanClient(final String sdkId, final KeyPairSource keyPairSource, DocScanService docScanService) {
-        KeyPair keyPair = loadKeyPair(keyPairSource);
-        this.authStrategy = new DocsSignedRequestStrategy(keyPair, sdkId);
-        this.docScanService = docScanService;
-    }
-
-    DocScanClient(final String authenticationToken, DocScanService docScanService) {
-        this.authStrategy = new AuthTokenStrategy(authenticationToken);
+    private DocScanClient(AuthStrategy authStrategy, DocScanService docScanService) {
+        this.authStrategy = authStrategy;
         this.docScanService = docScanService;
     }
 
@@ -270,15 +264,6 @@ public class DocScanClient {
         docScanService.deleteTrackedDevices(authStrategy, sessionId);
     }
 
-    private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {
-        try {
-            LOG.debug("Loading key pair from '{}'", kpSource);
-            return kpSource.getFromStream(new KeyStreamVisitor());
-        } catch (IOException e) {
-            throw new InitialisationException("Cannot load key pair", e);
-        }
-    }
-
     public static class Builder {
 
         private static final DocScanService docScanService = DocScanService.newInstance();
@@ -303,25 +288,37 @@ public class DocScanClient {
         }
 
         public DocScanClient build() {
-            validate();
             if (authenticationToken == null) {
-                return new DocScanClient(sdkId, keyPairSource, docScanService);
+                validateForSignedRequest();
+                KeyPair keyPair = loadKeyPair(keyPairSource);
+                return new DocScanClient(new DocsSignedRequestStrategy(keyPair, sdkId), docScanService);
             } else {
-                return new DocScanClient(authenticationToken, docScanService);
+                validateAuthToken();
+                return new DocScanClient(new AuthTokenStrategy(authenticationToken), docScanService);
             }
         }
 
-        private void validate() {
-            if (authenticationToken == null) {
-                if (sdkId == null || sdkId.isEmpty() || keyPairSource == null) {
-                    throw new IllegalStateException("An sdkId and KeyPairSource must be provided when not using an authentication token");
-                }
-            } else {
-                if (sdkId != null || keyPairSource != null) {
-                    throw new IllegalStateException("Must not supply sdkId or KeyPairSource when using an authentication token");
-                }
+        private void validateForSignedRequest() {
+            if (sdkId == null || sdkId.isEmpty() || keyPairSource == null) {
+                throw new IllegalStateException("An sdkId and KeyPairSource must be provided when not using an authentication token");
             }
         }
+
+        private KeyPair loadKeyPair(KeyPairSource kpSource) throws InitialisationException {
+            try {
+                LOG.debug("Loading key pair from '{}'", kpSource);
+                return kpSource.getFromStream(new KeyStreamVisitor());
+            } catch (IOException e) {
+                throw new InitialisationException("Cannot load key pair", e);
+            }
+        }
+
+        private void validateAuthToken() {
+            if (sdkId != null || keyPairSource != null) {
+                throw new IllegalStateException("Must not supply sdkId or KeyPairSource when using an authentication token");
+            }
+        }
+
     }
 
 }

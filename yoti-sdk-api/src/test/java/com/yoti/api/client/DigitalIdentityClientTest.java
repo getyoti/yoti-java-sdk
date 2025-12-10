@@ -1,12 +1,12 @@
 package com.yoti.api.client;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,17 +15,18 @@ import java.security.KeyPair;
 
 import com.yoti.api.client.identity.MatchRequest;
 import com.yoti.api.client.identity.ShareSessionRequest;
-import com.yoti.api.client.spi.remote.KeyStreamVisitor;
-import com.yoti.api.client.spi.remote.call.factory.DocsSignedRequestStrategy;
+import com.yoti.api.client.spi.remote.call.factory.DigitalIdentitySignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityException;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityService;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 
 import org.bouncycastle.openssl.PEMException;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
-import org.mockito.junit.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DigitalIdentityClientTest {
@@ -35,9 +36,10 @@ public class DigitalIdentityClientTest {
     private static final String A_SESSION_ID = "aSessionId";
     private static final String A_RECEIPT_ID = "aReceiptId";
 
-    @Mock KeyPairSource keyPairSourceMock;
+    @InjectMocks DigitalIdentityClient testObj;
+
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPairMock;
-    @Captor ArgumentCaptor<DocsSignedRequestStrategy> signedRequestThingyCaptor;
+    @Mock DigitalIdentitySignedRequestStrategy authStrategyMock;
     @Mock DigitalIdentityService identityServiceMock;
     @Mock ShareSessionRequest shareSessionRequest;
     @Mock MatchRequest matchRequest;
@@ -120,21 +122,13 @@ public class DigitalIdentityClientTest {
 
     @Test
     public void client_CreateShareSessionException_DigitalIdentityException() throws IOException {
-        when(keyPairSourceMock.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPairMock);
-
-        DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_SDK_ID,
-                keyPairSourceMock,
-                identityServiceMock
-        );
-
         String exMessage = "Create Share Session Error";
-        when(identityServiceMock.createShareSession(eq(AN_SDK_ID), signedRequestThingyCaptor.capture(), eq(shareSessionRequest)))
+        when(identityServiceMock.createShareSession(authStrategyMock, shareSessionRequest))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
-                () -> identityClient.createShareSession(shareSessionRequest)
+                () -> testObj.createShareSession(shareSessionRequest)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));
@@ -142,21 +136,13 @@ public class DigitalIdentityClientTest {
 
     @Test
     public void client_FetchShareSessionException_DigitalIdentityException() throws IOException {
-        when(keyPairSourceMock.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPairMock);
-
-        DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_SDK_ID,
-                keyPairSourceMock,
-                identityServiceMock
-        );
-
         String exMessage = "Fetch Share Session Error";
-        when(identityServiceMock.fetchShareSession(eq(AN_SDK_ID), signedRequestThingyCaptor.capture(), eq(A_SESSION_ID)))
+        when(identityServiceMock.fetchShareSession(authStrategyMock, A_SESSION_ID))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
-                () -> identityClient.fetchShareSession(A_SESSION_ID)
+                () -> testObj.fetchShareSession(A_SESSION_ID)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));
@@ -164,21 +150,13 @@ public class DigitalIdentityClientTest {
 
     @Test
     public void client_CreateShareQrCodeException_DigitalIdentityException() throws IOException {
-        when(keyPairSourceMock.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPairMock);
-
-        DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_SDK_ID,
-                keyPairSourceMock,
-                identityServiceMock
-        );
-
         String exMessage = "Create Share QR Error";
-        when(identityServiceMock.createShareQrCode(eq(AN_SDK_ID), signedRequestThingyCaptor.capture(), eq(A_SESSION_ID)))
+        when(identityServiceMock.createShareQrCode(authStrategyMock, A_SESSION_ID))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
-                () -> identityClient.createShareQrCode(A_SESSION_ID)
+                () -> testObj.createShareQrCode(A_SESSION_ID)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));
@@ -186,21 +164,13 @@ public class DigitalIdentityClientTest {
 
     @Test
     public void client_FetchShareQrCodeException_DigitalIdentityException() throws IOException {
-        when(keyPairSourceMock.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPairMock);
-
-        DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_SDK_ID,
-                keyPairSourceMock,
-                identityServiceMock
-        );
-
         String exMessage = "Fetch Share QR Error";
-        when(identityServiceMock.fetchShareQrCode(eq(AN_SDK_ID), signedRequestThingyCaptor.capture(), eq(A_QR_CODE_ID)))
+        when(identityServiceMock.fetchShareQrCode(authStrategyMock, A_QR_CODE_ID))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
-                () -> identityClient.fetchShareQrCode(A_QR_CODE_ID)
+                () -> testObj.fetchShareQrCode(A_QR_CODE_ID)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));
@@ -208,21 +178,13 @@ public class DigitalIdentityClientTest {
 
     @Test
     public void client_FetchShareReceiptException_DigitalIdentityException() throws IOException {
-        when(keyPairSourceMock.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPairMock);
-
-        DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_SDK_ID,
-                keyPairSourceMock,
-                identityServiceMock
-        );
-
         String exMessage = "Fetch Share Receipt Error";
-        when(identityServiceMock.fetchShareReceipt(eq(AN_SDK_ID), signedRequestThingyCaptor.capture(), eq(keyPairMock), eq(A_RECEIPT_ID)))
+        when(identityServiceMock.fetchShareReceipt(authStrategyMock, keyPairMock, A_RECEIPT_ID))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
-                () -> identityClient.fetchShareReceipt(A_RECEIPT_ID)
+                () -> testObj.fetchShareReceipt(A_RECEIPT_ID)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));
@@ -230,21 +192,13 @@ public class DigitalIdentityClientTest {
 
     @Test
     public void client_FetchDigitalIdMatchException_DigitalIdentityException() throws IOException {
-        when(keyPairSourceMock.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPairMock);
-
-        DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_SDK_ID,
-                keyPairSourceMock,
-                identityServiceMock
-        );
-
         String exMessage = "Fetch digital identity match error";
-        when(identityServiceMock.fetchMatch(eq(AN_SDK_ID), signedRequestThingyCaptor.capture(), eq(matchRequest)))
+        when(identityServiceMock.fetchMatch(authStrategyMock, matchRequest))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
-                () -> identityClient.fetchMatch(matchRequest)
+                () -> testObj.fetchMatch(matchRequest)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));

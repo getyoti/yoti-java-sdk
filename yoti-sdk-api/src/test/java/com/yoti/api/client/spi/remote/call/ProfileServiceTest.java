@@ -13,7 +13,6 @@ import java.security.KeyPair;
 import java.util.Base64;
 
 import com.yoti.api.client.ProfileException;
-import com.yoti.api.client.spi.remote.call.factory.DocsSignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.ProfileSignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 

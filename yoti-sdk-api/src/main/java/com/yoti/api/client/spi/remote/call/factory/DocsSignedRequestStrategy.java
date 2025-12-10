@@ -6,6 +6,7 @@ import static java.util.UUID.randomUUID;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.yoti.api.client.spi.remote.call.YotiConstants;
@@ -32,14 +33,14 @@ public class DocsSignedRequestStrategy implements AuthStrategy {
     }
 
     @Override
-    public Header createAuthHeader(String httpMethod, String endpoint, byte[] payload) throws GeneralSecurityException {
+    public List<Header> createAuthHeaders(String httpMethod, String endpoint, byte[] payload) throws GeneralSecurityException {
         String digest;
         if (payload == null) {
             digest = signedMessageFactory.create(keyPair.getPrivate(), httpMethod, endpoint);
         } else {
             digest = signedMessageFactory.create(keyPair.getPrivate(), httpMethod, endpoint, payload);
         }
-        return new BasicHeader(YotiConstants.DIGEST_HEADER, digest);
+        return Collections.singletonList(new BasicHeader(YotiConstants.DIGEST_HEADER, digest));
     }
 
     @Override

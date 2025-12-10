@@ -1,5 +1,7 @@
 package com.yoti.api.client.spi.remote.call;
 
+import static java.util.Arrays.asList;
+
 import static com.yoti.api.client.spi.remote.call.HttpMethod.HTTP_GET;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.CONTENT_TYPE;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_API_URL;
@@ -16,21 +18,22 @@ import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.security.Security;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
 import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
 
 import org.apache.http.Header;
-import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -72,13 +75,11 @@ public class YotiHttpRequestBuilderTest {
 
     @InjectMocks YotiHttpRequestBuilder yotiHttpRequestBuilder;
 
-//    @Mock PathFactory pathFactoryMock;
     @Mock HeadersFactory headersFactoryMock;
     @Mock MultipartEntityBuilder multipartEntityBuilderMock;
 
     @Mock(answer = Answers.RETURNS_SELF) HttpEntity httpEntityMock;
-    @Mock Header authHeaderMock;
-    @Mock HeaderElement headerElementMock;
+    List<Header> authHeaders = Collections.singletonList(mock(Header.class));
     @Mock AuthStrategy authStrategyMock;
 
     @Test
@@ -145,7 +146,7 @@ public class YotiHttpRequestBuilderTest {
 
     @Test
     public void build_shouldCreateSignedRequestWithCustomQueryParameter() throws Exception {
-        when(authStrategyMock.createQueryParams()).thenReturn(Arrays.asList(new BasicNameValuePair("timestamp", "someTimestamp")));
+        when(authStrategyMock.createQueryParams()).thenReturn(asList(new BasicNameValuePair("timestamp", "someTimestamp")));
 
         YotiHttpRequest result = yotiHttpRequestBuilder.withAuthStrategy(authStrategyMock)
                 .withBaseUrl(SOME_BASE_URL)
@@ -172,9 +173,9 @@ public class YotiHttpRequestBuilderTest {
 
     @Test
     public void build_shouldIgnoreAnyProvidedAuthenticationHeaders() throws Exception {
-        when(authStrategyMock.createQueryParams()).thenReturn(Arrays.asList(new BasicNameValuePair("timestamp", "someTimestamp")));
-        when(authStrategyMock.createAuthHeader(HTTP_GET, SOME_ENDPOINT + "?" + SIGNATURE_PARAMS_STRING, null)).thenReturn(authHeaderMock);
-        when(headersFactoryMock.create(authHeaderMock)).thenReturn(SIGNED_REQUEST_HEADERS);
+        when(authStrategyMock.createQueryParams()).thenReturn(asList(new BasicNameValuePair("timestamp", "someTimestamp")));
+        when(authStrategyMock.createAuthHeaders(HTTP_GET, SOME_ENDPOINT + "?" + SIGNATURE_PARAMS_STRING, null)).thenReturn(authHeaders);
+        when(headersFactoryMock.create(authHeaders)).thenReturn(SIGNED_REQUEST_HEADERS);
 
         YotiHttpRequest result = yotiHttpRequestBuilder.withAuthStrategy(authStrategyMock)
                 .withBaseUrl(DEFAULT_YOTI_API_URL)
@@ -183,7 +184,7 @@ public class YotiHttpRequestBuilderTest {
                 .withHeader(DIGEST_HEADER, "customHeaderValue")
                 .build();
 
-        verify(authStrategyMock).createAuthHeader(HTTP_GET, SOME_ENDPOINT + "?" + SIGNATURE_PARAMS_STRING, null);
+        verify(authStrategyMock).createAuthHeaders(HTTP_GET, SOME_ENDPOINT + "?" + SIGNATURE_PARAMS_STRING, null);
         assertThat(result.getHeaders(), hasEntry(DIGEST_HEADER, SOME_SIGNATURE));
     }
 
@@ -256,10 +257,10 @@ public class YotiHttpRequestBuilderTest {
 
     @Test
     public void shouldCreateSignedRequestSuccessfullyWithRequiredFieldsOnly() throws Exception {
-        when(authStrategyMock.createQueryParams()).thenReturn(Arrays.asList(new BasicNameValuePair("timestamp", "someTimestamp")));
+        when(authStrategyMock.createQueryParams()).thenReturn(asList(new BasicNameValuePair("timestamp", "someTimestamp")));
         String fullPath = SOME_ENDPOINT + "?" + SIGNATURE_PARAMS_STRING;
-        when(authStrategyMock.createAuthHeader(HTTP_GET, fullPath, null)).thenReturn(authHeaderMock);
-        when(headersFactoryMock.create(authHeaderMock)).thenReturn(SIGNED_REQUEST_HEADERS);
+        when(authStrategyMock.createAuthHeaders(HTTP_GET, fullPath, null)).thenReturn(authHeaders);
+        when(headersFactoryMock.create(authHeaders)).thenReturn(SIGNED_REQUEST_HEADERS);
 
         YotiHttpRequest result = yotiHttpRequestBuilder.withAuthStrategy(authStrategyMock)
                 .withBaseUrl(SOME_BASE_URL)
@@ -277,9 +278,9 @@ public class YotiHttpRequestBuilderTest {
     @Test
     public void shouldCreateSignedRequestSuccessfullyWithAllProperties() throws Exception {
         String fullPath = SOME_ENDPOINT + "?someQueryParam=someParamValue&someKey=someValue";
-        when(authStrategyMock.createAuthHeader(HTTP_GET, fullPath, SOME_BYTES)).thenReturn(authHeaderMock);
-        when(authStrategyMock.createQueryParams()).thenReturn(Arrays.asList(new BasicNameValuePair("someKey","someValue")));
-        when(headersFactoryMock.create(authHeaderMock)).thenReturn(SIGNED_REQUEST_HEADERS);
+        when(authStrategyMock.createAuthHeaders(HTTP_GET, fullPath, SOME_BYTES)).thenReturn(authHeaders);
+        when(authStrategyMock.createQueryParams()).thenReturn(asList(new BasicNameValuePair("someKey","someValue")));
+        when(headersFactoryMock.create(authHeaders)).thenReturn(SIGNED_REQUEST_HEADERS);
 
         YotiHttpRequest result = yotiHttpRequestBuilder.withAuthStrategy(authStrategyMock)
                 .withBaseUrl(SOME_BASE_URL)
@@ -300,8 +301,6 @@ public class YotiHttpRequestBuilderTest {
 
     @Test
     public void shouldSetContentTypeToMultipartWhenUserHasSetRequestTypeToMultipart() throws Exception {
-//        when(authStrategyMock.createAuthHeader(HTTP_GET, SOME_ENDPOINT + "?" + SIGNATURE_PARAMS_STRING, SOME_BUILT_MULTIPART_BODY)).thenReturn(authHeaderMock);
-//        when(headersFactoryMock.create(authHeaderMock)).thenReturn(SIGNED_REQUEST_HEADERS);
         when(multipartEntityBuilderMock.build()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContentType()).thenReturn(new BasicHeader("Content-Type", SOME_MULTIPART_CONTENT_TYPE.toString()));
 
@@ -332,12 +331,8 @@ public class YotiHttpRequestBuilderTest {
 
     @Test
     public void shouldThrowIllegalArgumentExceptionWhenThereIsAnErrorBuildingTheMultipartBody() throws Exception {
-//        when(pathFactoryMock.createSignatureParams()).thenReturn(SIGNATURE_PARAMS_STRING);
         when(multipartEntityBuilderMock.build()).thenReturn(httpEntityMock);
-
-        when(headerElementMock.toString()).thenReturn(SOME_MULTIPART_CONTENT_TYPE.toString());
-        when(authHeaderMock.getElements()).thenReturn(new HeaderElement[]{headerElementMock});
-        when(httpEntityMock.getContentType()).thenReturn(authHeaderMock);
+        when(httpEntityMock.getContentType()).thenReturn(new BasicHeader(CONTENT_TYPE, SOME_MULTIPART_CONTENT_TYPE.toString()));
 
         IOException ioException = new IOException();
         doThrow(ioException).when(httpEntityMock).writeTo(any(OutputStream.class));

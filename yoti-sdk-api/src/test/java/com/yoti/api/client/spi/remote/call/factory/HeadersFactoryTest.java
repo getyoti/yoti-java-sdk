@@ -8,6 +8,7 @@ import static com.yoti.api.client.spi.remote.call.YotiConstants.YOTI_SDK_VERSION
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.apache.http.Header;
@@ -25,7 +26,7 @@ public class HeadersFactoryTest {
     public void shouldCreate() {
         Header header = new BasicHeader(SOME_KEY, SOME_VALUE);
 
-        Map<String, String> result = testObj.create(header);
+        Map<String, String> result = testObj.create(Collections.singletonList(header));
 
         assertThat(result, hasEntry(SOME_KEY, SOME_VALUE));
         assertThat(result, hasEntry(YOTI_SDK_HEADER, JAVA));
