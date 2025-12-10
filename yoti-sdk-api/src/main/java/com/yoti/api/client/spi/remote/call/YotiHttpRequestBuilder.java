@@ -14,20 +14,28 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.yoti.api.client.spi.remote.call.factory.AmlSignedRequestStrategy;
+import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
+import com.yoti.api.client.spi.remote.call.factory.AuthTokenStrategy;
+import com.yoti.api.client.spi.remote.call.factory.DigitalIdentitySignedRequestStrategy;
+import com.yoti.api.client.spi.remote.call.factory.DocsSignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.HeadersFactory;
-import com.yoti.api.client.spi.remote.call.factory.PathFactory;
-import com.yoti.api.client.spi.remote.call.factory.SignedMessageFactory;
+import com.yoti.api.client.spi.remote.call.factory.ProfileSignedRequestStrategy;
+import com.yoti.api.client.spi.remote.call.factory.SimpleSignedRequestStrategy;
 import com.yoti.validation.Validation;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 
 public class YotiHttpRequestBuilder {
 
-    private KeyPair keyPair;
+    private AuthStrategy authStrategy;
     private String baseUrl;
     private String endpoint;
     private byte[] payload;
@@ -35,22 +43,16 @@ public class YotiHttpRequestBuilder {
     private final Map<String, String> headers = new HashMap<>();
     private String httpMethod;
 
-    private final PathFactory pathFactory;
-    private final SignedMessageFactory signedMessageFactory;
     private final HeadersFactory headersFactory;
     private final JsonResourceFetcher jsonResourceFetcher;
     private final RawResourceFetcher rawResourceFetcher;
     private final ImageResourceFetcher imageResourceFetcher;
     private MultipartEntityBuilder multipartEntityBuilder;
 
-    YotiHttpRequestBuilder(PathFactory pathFactory,
-            SignedMessageFactory signedMessageFactory,
-            HeadersFactory headersFactory,
+    YotiHttpRequestBuilder(HeadersFactory headersFactory,
             JsonResourceFetcher jsonResourceFetcher,
             RawResourceFetcher rawResourceFetcher,
             ImageResourceFetcher imageResourceFetcher) {
-        this.pathFactory = pathFactory;
-        this.signedMessageFactory = signedMessageFactory;
         this.headersFactory = headersFactory;
         this.jsonResourceFetcher = jsonResourceFetcher;
         this.rawResourceFetcher = rawResourceFetcher;
@@ -60,11 +62,41 @@ public class YotiHttpRequestBuilder {
     /**
      * Proceed building the signed request with a specific key pair
      *
-     * @param keyPair the key pair
+     * @param authStrategy the key pair
      * @return the updated builder
      */
-    public YotiHttpRequestBuilder withKeyPair(KeyPair keyPair) {
-        this.keyPair = keyPair;
+    public YotiHttpRequestBuilder withAuthStrategy(AuthStrategy authStrategy) {
+        this.authStrategy = authStrategy;
+        return this;
+    }
+
+    public YotiHttpRequestBuilder forAuthTokenRequest(String authToken) {
+        this.authStrategy = new AuthTokenStrategy(authToken);
+        return this;
+    }
+
+    public YotiHttpRequestBuilder forDocsSignedRequest(KeyPair keyPair, String sdkId) {
+        this.authStrategy = new DocsSignedRequestStrategy(keyPair, sdkId);
+        return this;
+    }
+
+    public YotiHttpRequestBuilder forAmlSignedRequest(KeyPair keyPair, String appId) {
+        this.authStrategy = new AmlSignedRequestStrategy(keyPair, appId);
+        return this;
+    }
+
+    public YotiHttpRequestBuilder forProfileRequest(KeyPair keyPair, String appId) {
+        this.authStrategy = new ProfileSignedRequestStrategy(keyPair, appId);
+        return this;
+    }
+
+    public YotiHttpRequestBuilder forDigitalIdentityRequest(KeyPair keyPair, String appId) {
+        this.authStrategy = new DigitalIdentitySignedRequestStrategy(keyPair, appId);
+        return this;
+    }
+
+    public YotiHttpRequestBuilder forSignedRequest(KeyPair keyPair) {
+        this.authStrategy = new SimpleSignedRequestStrategy(keyPair);
         return this;
     }
 
@@ -188,14 +220,7 @@ public class YotiHttpRequestBuilder {
      */
     public YotiHttpRequest build() throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
         validateRequest();
-
-        if (endpoint.contains("?")) {
-            endpoint = endpoint.concat("&");
-        } else {
-            endpoint = endpoint.concat("?");
-        }
-
-        String builtEndpoint = endpoint + createQueryParameterString(queryParameters);
+        String builtEndpoint = endpoint + createQueryParameterString();
 
         byte[] finalPayload;
         if (multipartEntityBuilder == null) {
@@ -213,8 +238,8 @@ public class YotiHttpRequestBuilder {
             }
         }
 
-        String digest = createDigest(builtEndpoint, finalPayload);
-        headers.putAll(headersFactory.create(digest));
+        List<Header> authHeaders = authStrategy.createAuthHeaders(httpMethod, builtEndpoint, finalPayload);
+        headers.putAll(headersFactory.create(authHeaders));
 
         return new YotiHttpRequest(
                 new URI(baseUrl + builtEndpoint),
@@ -227,30 +252,38 @@ public class YotiHttpRequestBuilder {
     }
 
     private void validateRequest() {
-        Validation.notNull(keyPair, "keyPair");
+        Validation.notNull(authStrategy, "authStrategy");
         Validation.notNullOrEmpty(baseUrl, "baseUrl");
         Validation.notNullOrEmpty(endpoint, "endpoint");
         Validation.notNullOrEmpty(httpMethod, "httpMethod");
     }
 
-    private String createQueryParameterString(Map<String, String> queryParameters) throws UnsupportedEncodingException {
+    private String createQueryParameterString() throws UnsupportedEncodingException {
         StringBuilder stringBuilder = new StringBuilder();
+
         for (Map.Entry<String, String> entry : queryParameters.entrySet()) {
+            if (stringBuilder.length() > 0) {
+                stringBuilder.append("&");
+            }
             stringBuilder.append(entry.getKey());
             stringBuilder.append("=");
             stringBuilder.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
-            stringBuilder.append("&");
         }
-        stringBuilder.append(pathFactory.createSignatureParams());
-        return stringBuilder.toString();
-    }
 
-    private String createDigest(String endpoint, byte[] payload) throws GeneralSecurityException {
-        if (payload != null) {
-            return signedMessageFactory.create(keyPair.getPrivate(), httpMethod, endpoint, payload);
-        } else {
-            return signedMessageFactory.create(keyPair.getPrivate(), httpMethod, endpoint);
+        for (NameValuePair queryParam : authStrategy.createQueryParams()) {
+            if (stringBuilder.length() > 0) {
+                stringBuilder.append("&");
+            }
+            stringBuilder.append(queryParam);
         }
+
+        String built = stringBuilder.toString();
+        if (built.isEmpty()) {
+            return built;
+        }
+
+        String prefix = endpoint.contains("?") ? "&" : "?";
+        return prefix.concat(built);
     }
 
 }
