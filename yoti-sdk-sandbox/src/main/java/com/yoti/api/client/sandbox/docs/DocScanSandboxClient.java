@@ -70,7 +70,6 @@ public class DocScanSandboxClient {
                     .withAuthStrategy(authStrategy)
                     .withHttpMethod(HttpMethod.HTTP_PUT)
                     .withPayload(body)
-                    .withQueryParameter("sdkId", sdkId)
                     .build();
 
             yotiHttpRequest.execute();
