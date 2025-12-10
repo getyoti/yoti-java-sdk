@@ -1,52 +1,27 @@
 package com.yoti.api.client.spi.remote.call.factory;
 
-import static java.lang.System.nanoTime;
-import static java.util.UUID.randomUUID;
-
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.yoti.api.client.spi.remote.call.YotiConstants;
-
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicNameValuePair;
 
-public class SimpleSignedRequestStrategy implements AuthStrategy {
-
-    private static final SignedMessageFactory signedMessageFactory;
-
-    static {
-        signedMessageFactory = SignedMessageFactory.newInstance();
-    }
-
-    private final KeyPair keyPair;
+public class SimpleSignedRequestStrategy extends SignedRequestStrategy {
 
     public SimpleSignedRequestStrategy(KeyPair keyPair) {
-        this.keyPair = keyPair;
+        super(keyPair);
     }
 
     @Override
     public List<Header> createAuthHeaders(String httpMethod, String endpoint, byte[] payload) throws GeneralSecurityException {
-        String digest;
-        if (payload == null) {
-            digest = signedMessageFactory.create(keyPair.getPrivate(), httpMethod, endpoint);
-        } else {
-            digest = signedMessageFactory.create(keyPair.getPrivate(), httpMethod, endpoint, payload);
-        }
-        return Collections.singletonList(new BasicHeader(YotiConstants.DIGEST_HEADER, digest));
+        return Collections.singletonList(createDigestHeader(httpMethod, endpoint, payload));
     }
 
     @Override
     public List<NameValuePair> createQueryParams() {
-        List<NameValuePair> queryParams = new ArrayList<>();
-        queryParams.add(new BasicNameValuePair("nonce", randomUUID().toString()));
-        queryParams.add(new BasicNameValuePair("timestamp", Long.toString(nanoTime() / 1000)));
-        return queryParams;
+        return createSignedRequestParams();
     }
 
 }
