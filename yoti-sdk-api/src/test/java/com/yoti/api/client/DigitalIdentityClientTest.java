@@ -1,12 +1,12 @@
 package com.yoti.api.client;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,16 +15,17 @@ import java.security.KeyPair;
 
 import com.yoti.api.client.identity.MatchRequest;
 import com.yoti.api.client.identity.ShareSessionRequest;
-import com.yoti.api.client.spi.remote.KeyStreamVisitor;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityException;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityService;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 
 import org.bouncycastle.openssl.PEMException;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
-import org.mockito.junit.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DigitalIdentityClientTest {
@@ -34,9 +35,10 @@ public class DigitalIdentityClientTest {
     private static final String A_SESSION_ID = "aSessionId";
     private static final String A_RECEIPT_ID = "aReceiptId";
 
-    @Mock KeyPairSource keyPairSource;
-    @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPair;
-    @Mock DigitalIdentityService identityService;
+    @InjectMocks DigitalIdentityClient testObj;
+
+    @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPairMock;
+    @Mock DigitalIdentityService identityServiceMock;
     @Mock ShareSessionRequest shareSessionRequest;
     @Mock MatchRequest matchRequest;
 
@@ -118,21 +120,13 @@ public class DigitalIdentityClientTest {
 
     @Test
     public void client_CreateShareSessionException_DigitalIdentityException() throws IOException {
-        when(keyPairSource.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPair);
-
-        DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_SDK_ID,
-                keyPairSource,
-                identityService
-        );
-
         String exMessage = "Create Share Session Error";
-        when(identityService.createShareSession(AN_SDK_ID, keyPair, shareSessionRequest))
+        when(identityServiceMock.createShareSession(shareSessionRequest))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
-                () -> identityClient.createShareSession(shareSessionRequest)
+                () -> testObj.createShareSession(shareSessionRequest)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));
@@ -140,21 +134,13 @@ public class DigitalIdentityClientTest {
 
     @Test
     public void client_FetchShareSessionException_DigitalIdentityException() throws IOException {
-        when(keyPairSource.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPair);
-
-        DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_SDK_ID,
-                keyPairSource,
-                identityService
-        );
-
         String exMessage = "Fetch Share Session Error";
-        when(identityService.fetchShareSession(AN_SDK_ID, keyPair, A_SESSION_ID))
+        when(identityServiceMock.fetchShareSession(A_SESSION_ID))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
-                () -> identityClient.fetchShareSession(A_SESSION_ID)
+                () -> testObj.fetchShareSession(A_SESSION_ID)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));
@@ -162,21 +148,13 @@ public class DigitalIdentityClientTest {
 
     @Test
     public void client_CreateShareQrCodeException_DigitalIdentityException() throws IOException {
-        when(keyPairSource.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPair);
-
-        DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_SDK_ID,
-                keyPairSource,
-                identityService
-        );
-
         String exMessage = "Create Share QR Error";
-        when(identityService.createShareQrCode(AN_SDK_ID, keyPair, A_SESSION_ID))
+        when(identityServiceMock.createShareQrCode(A_SESSION_ID))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
-                () -> identityClient.createShareQrCode(A_SESSION_ID)
+                () -> testObj.createShareQrCode(A_SESSION_ID)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));
@@ -184,21 +162,13 @@ public class DigitalIdentityClientTest {
 
     @Test
     public void client_FetchShareQrCodeException_DigitalIdentityException() throws IOException {
-        when(keyPairSource.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPair);
-
-        DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_SDK_ID,
-                keyPairSource,
-                identityService
-        );
-
         String exMessage = "Fetch Share QR Error";
-        when(identityService.fetchShareQrCode(AN_SDK_ID, keyPair, A_QR_CODE_ID))
+        when(identityServiceMock.fetchShareQrCode(A_QR_CODE_ID))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
-                () -> identityClient.fetchShareQrCode(A_QR_CODE_ID)
+                () -> testObj.fetchShareQrCode(A_QR_CODE_ID)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));
@@ -206,21 +176,13 @@ public class DigitalIdentityClientTest {
 
     @Test
     public void client_FetchShareReceiptException_DigitalIdentityException() throws IOException {
-        when(keyPairSource.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPair);
-
-        DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_SDK_ID,
-                keyPairSource,
-                identityService
-        );
-
         String exMessage = "Fetch Share Receipt Error";
-        when(identityService.fetchShareReceipt(AN_SDK_ID, keyPair, A_RECEIPT_ID))
+        when(identityServiceMock.fetchShareReceipt(keyPairMock, A_RECEIPT_ID))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
-                () -> identityClient.fetchShareReceipt(A_RECEIPT_ID)
+                () -> testObj.fetchShareReceipt(A_RECEIPT_ID)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));
@@ -228,21 +190,13 @@ public class DigitalIdentityClientTest {
 
     @Test
     public void client_FetchDigitalIdMatchException_DigitalIdentityException() throws IOException {
-        when(keyPairSource.getFromStream(any(KeyStreamVisitor.class))).thenReturn(keyPair);
-
-        DigitalIdentityClient identityClient = new DigitalIdentityClient(
-                AN_SDK_ID,
-                keyPairSource,
-                identityService
-        );
-
         String exMessage = "Fetch digital identity match error";
-        when(identityService.fetchMatch(AN_SDK_ID, keyPair, matchRequest))
+        when(identityServiceMock.fetchMatch(matchRequest))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
                 DigitalIdentityException.class,
-                () -> identityClient.fetchMatch(matchRequest)
+                () -> testObj.fetchMatch(matchRequest)
         );
 
         assertThat(ex.getMessage(), equalTo(exMessage));

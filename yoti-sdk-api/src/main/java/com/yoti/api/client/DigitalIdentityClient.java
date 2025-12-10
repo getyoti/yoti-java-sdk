@@ -23,49 +23,36 @@ public class DigitalIdentityClient {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    private final String sdkId;
     private final KeyPair keyPair;
     private final DigitalIdentityService identityService;
 
-    DigitalIdentityClient(String sdkId, KeyPairSource keyPair, DigitalIdentityService identityService) {
-        Validation.notNullOrEmpty(sdkId, "SDK ID");
-        Validation.notNull(keyPair, "Application Key Pair");
-
-        this.sdkId = sdkId;
-        this.keyPair = loadKeyPair(keyPair);
+    private DigitalIdentityClient(KeyPair keyPair, DigitalIdentityService identityService) {
+        this.keyPair = keyPair;
         this.identityService = identityService;
     }
 
     public ShareSession createShareSession(ShareSessionRequest request) throws DigitalIdentityException {
-        return identityService.createShareSession(sdkId, keyPair, request);
+        return identityService.createShareSession(request);
     }
 
     public ShareSession fetchShareSession(String sessionId) throws DigitalIdentityException {
-        return identityService.fetchShareSession(sdkId, keyPair, sessionId);
+        return identityService.fetchShareSession(sessionId);
     }
 
     public ShareSessionQrCode createShareQrCode(String sessionId) throws DigitalIdentityException {
-        return identityService.createShareQrCode(sdkId, keyPair, sessionId);
+        return identityService.createShareQrCode(sessionId);
     }
 
     public ShareSessionQrCode fetchShareQrCode(String qrCodeId) throws DigitalIdentityException {
-        return identityService.fetchShareQrCode(sdkId, keyPair, qrCodeId);
+        return identityService.fetchShareQrCode(qrCodeId);
     }
 
     public Receipt fetchShareReceipt(String receiptId) throws DigitalIdentityException {
-        return identityService.fetchShareReceipt(sdkId, keyPair, receiptId);
+        return identityService.fetchShareReceipt(keyPair, receiptId);
     }
 
     public MatchResult fetchMatch(MatchRequest request) throws DigitalIdentityException {
-        return identityService.fetchMatch(sdkId, keyPair, request);
-    }
-
-    private KeyPair loadKeyPair(KeyPairSource keyPairSource) throws InitialisationException {
-        try {
-            return keyPairSource.getFromStream(new KeyStreamVisitor());
-        } catch (IOException ex) {
-            throw new InitialisationException("Cannot load Key Pair", ex);
-        }
+        return identityService.fetchMatch(request);
     }
 
     public static Builder builder() {
@@ -94,7 +81,19 @@ public class DigitalIdentityClient {
         }
 
         public DigitalIdentityClient build() {
-            return new DigitalIdentityClient(sdkId, keyPairSource, DigitalIdentityService.newInstance());
+            Validation.notNullOrEmpty(sdkId, "SDK ID");
+            Validation.notNull(keyPairSource, "Application Key Pair");
+
+            KeyPair keyPair = loadKeyPair(keyPairSource);
+            return new DigitalIdentityClient(keyPair, DigitalIdentityService.newInstance(keyPair, sdkId));
+        }
+
+        private KeyPair loadKeyPair(KeyPairSource keyPairSource) throws InitialisationException {
+            try {
+                return keyPairSource.getFromStream(new KeyStreamVisitor());
+            } catch (IOException ex) {
+                throw new InitialisationException("Cannot load Key Pair", ex);
+            }
         }
 
     }

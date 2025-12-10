@@ -60,17 +60,12 @@ public class DynamicSharingServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWithNullAppId() throws Exception {
-        testObj.createShareUrl(null, keyPairMock, simpleDynamicScenarioMock);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldFailWithNullKeyPair() throws Exception {
-        testObj.createShareUrl(APP_ID, null, simpleDynamicScenarioMock);
+        testObj.createShareUrl(null, simpleDynamicScenarioMock);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWithNullDynamicScenario() throws Exception {
-        testObj.createShareUrl(APP_ID, keyPairMock, null);
+        testObj.createShareUrl(APP_ID, null);
     }
 
     @Test
@@ -79,7 +74,7 @@ public class DynamicSharingServiceTest {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenThrow(jsonProcessingException);
 
         try {
-            testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
+            testObj.createShareUrl(APP_ID, simpleDynamicScenarioMock);
             fail("Expected a DynamicShareException");
         } catch (DynamicShareException ex) {
             assertSame(jsonProcessingException, ex.getCause());
@@ -90,11 +85,11 @@ public class DynamicSharingServiceTest {
     public void shouldThrowExceptionForIOError() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         IOException ioException = new IOException();
-        doReturn(yotiHttpRequestMock).when(testObj).createSignedRequest(keyPairMock, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
+        doReturn(yotiHttpRequestMock).when(testObj).createSignedRequest(DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
         when(yotiHttpRequestMock.execute(ShareUrlResult.class)).thenThrow(ioException);
 
         try {
-            testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
+            testObj.createShareUrl(APP_ID, simpleDynamicScenarioMock);
             fail("Expected a DynamicShareException");
         } catch (DynamicShareException ex) {
             assertSame(ioException, ex.getCause());
@@ -105,11 +100,11 @@ public class DynamicSharingServiceTest {
     public void shouldThrowExceptionWithResourceExceptionCause() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         ResourceException resourceException = new ResourceException(404, "Not Found", "Test exception");
-        doReturn(yotiHttpRequestMock).when(testObj).createSignedRequest(keyPairMock, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
+        doReturn(yotiHttpRequestMock).when(testObj).createSignedRequest(DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
         when(yotiHttpRequestMock.execute(ShareUrlResult.class)).thenThrow(resourceException);
 
         try {
-            testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
+            testObj.createShareUrl(APP_ID, simpleDynamicScenarioMock);
             fail("Expected a DynamicShareException");
         } catch (DynamicShareException ex) {
             assertSame(resourceException, ex.getCause());
@@ -119,10 +114,10 @@ public class DynamicSharingServiceTest {
     @Test
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
-        doReturn(yotiHttpRequestMock).when(testObj).createSignedRequest(keyPairMock, DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
+        doReturn(yotiHttpRequestMock).when(testObj).createSignedRequest(DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
         when(yotiHttpRequestMock.execute(ShareUrlResult.class)).thenReturn(shareUrlResultMock);
 
-        ShareUrlResult result = testObj.createShareUrl(APP_ID, keyPairMock, simpleDynamicScenarioMock);
+        ShareUrlResult result = testObj.createShareUrl(APP_ID, simpleDynamicScenarioMock);
         assertSame(shareUrlResultMock, result);
     }
 
