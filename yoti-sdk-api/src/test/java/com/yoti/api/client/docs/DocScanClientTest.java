@@ -143,7 +143,7 @@ public class DocScanClientTest {
     @Test
     public void getSupportedDocuments_shouldFailWithExceptionFromYotiDocsService() throws Exception {
         DocScanException original = new DocScanException("Test exception");
-        doThrow(original).when(docScanServiceMock).getSupportedDocuments(authStrategyMock, false);
+        doThrow(original).when(docScanServiceMock).getSupportedDocuments(false);
 
         DocScanException thrown = assertThrows(DocScanException.class, () -> testObj.getSupportedDocuments());
 

@@ -1218,18 +1218,11 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void getSupportedDocuments_shouldThrowExceptionWhenAuthStrategyIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.getSupportedDocuments(null, false));
-
-        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
-    }
-
-    @Test
     public void getSupportedDocuments_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(authStrategyMock, false));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(false));
 
         assertSame(ex.getCause(), gse);
         assertThat(ex.getMessage(), containsString("Error executing the GET: some gse"));
@@ -1241,7 +1234,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(resourceException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(authStrategyMock, false));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(false));
 
         assertSame(ex.getCause(), resourceException);
         assertThat(ex.getMessage(), containsString("Error executing the GET: Failed Request"));
@@ -1253,7 +1246,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
         when(yotiHttpRequestMock.execute(SupportedDocumentsResponse.class)).thenThrow(ioException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(authStrategyMock, false));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(false));
 
         assertSame(ex.getCause(), ioException);
         assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
@@ -1264,7 +1257,7 @@ public class DocScanServiceTest {
         URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
 
-        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(authStrategyMock, false));
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.getSupportedDocuments(false));
 
         assertSame(ex.getCause(), uriSyntaxException);
         assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
@@ -1276,7 +1269,7 @@ public class DocScanServiceTest {
         when(yotiHttpRequestMock.execute(SupportedDocumentsResponse.class)).thenReturn(supportedDocumentsResponseMock);
         when(unsignedPathFactoryMock.createGetSupportedDocumentsPath(false)).thenReturn(SOME_PATH);
 
-        SupportedDocumentsResponse result = docScanService.getSupportedDocuments(authStrategyMock, false);
+        SupportedDocumentsResponse result = docScanService.getSupportedDocuments(false);
 
         assertThat(result, is(instanceOf(SupportedDocumentsResponse.class)));
     }

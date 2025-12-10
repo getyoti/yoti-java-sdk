@@ -25,7 +25,7 @@ abstract class SignedRequestStrategy implements AuthStrategy {
 
     private final KeyPair keyPair;
 
-    public SignedRequestStrategy(KeyPair keyPair) {
+    SignedRequestStrategy(KeyPair keyPair) {
         this.keyPair = keyPair;
     }
 

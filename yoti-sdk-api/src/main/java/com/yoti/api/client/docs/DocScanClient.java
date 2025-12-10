@@ -188,7 +188,7 @@ public class DocScanClient {
      */
     public SupportedDocumentsResponse getSupportedDocuments(boolean includeNonLatin) throws DocScanException {
         LOG.debug("Getting all supported documents");
-        return docScanService.getSupportedDocuments(authStrategy, includeNonLatin);
+        return docScanService.getSupportedDocuments(includeNonLatin);
     }
 
     /**

@@ -75,7 +75,7 @@ final class DocScanService {
         apiUrl = System.getProperty(PROPERTY_YOTI_DOCS_URL, DEFAULT_YOTI_DOCS_URL);
     }
 
-    public static DocScanService newInstance() {
+    static DocScanService newInstance() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
@@ -93,7 +93,7 @@ final class DocScanService {
      * @return the session creation result
      * @throws DocScanException if there was an error
      */
-    public CreateSessionResult createSession(AuthStrategy authStrategy, SessionSpec sessionSpec) throws DocScanException {
+    CreateSessionResult createSession(AuthStrategy authStrategy, SessionSpec sessionSpec) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNull(sessionSpec, "sessionSpec");
 
@@ -132,7 +132,7 @@ final class DocScanService {
      * @return the session state
      * @throws DocScanException if there was an error
      */
-    public GetSessionResult retrieveSession(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+    GetSessionResult retrieveSession(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -166,7 +166,7 @@ final class DocScanService {
      * @param sessionId    the session ID
      * @throws DocScanException if there was an error
      */
-    public void deleteSession(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+    void deleteSession(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -202,7 +202,7 @@ final class DocScanService {
      * @return the {@code Media} content, null if 204 No Content
      * @throws DocScanException if there was an error
      */
-    public Media getMediaContent(AuthStrategy authStrategy, String sessionId, String mediaId) throws DocScanException {
+    Media getMediaContent(AuthStrategy authStrategy, String sessionId, String mediaId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
         notNullOrEmpty(mediaId, "mediaId");
@@ -240,7 +240,7 @@ final class DocScanService {
      * @param mediaId      the media ID
      * @throws DocScanException if there was an error
      */
-    public void deleteMediaContent(AuthStrategy authStrategy, String sessionId, String mediaId) throws DocScanException {
+    void deleteMediaContent(AuthStrategy authStrategy, String sessionId, String mediaId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
         notNullOrEmpty(mediaId, "mediaId");
@@ -266,7 +266,7 @@ final class DocScanService {
         }
     }
 
-    public void putIbvInstructions(AuthStrategy authStrategy, String sessionId, Instructions instructions) throws DocScanException {
+    void putIbvInstructions(AuthStrategy authStrategy, String sessionId, Instructions instructions) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
         notNull(instructions, "instructions");
@@ -295,7 +295,7 @@ final class DocScanService {
         }
     }
 
-    public InstructionsResponse getIbvInstructions(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+    InstructionsResponse getIbvInstructions(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -328,7 +328,7 @@ final class DocScanService {
      * @return the session state
      * @throws DocScanException if there was an error
      */
-    public ContactProfileResponse fetchInstructionsContactProfile(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+    ContactProfileResponse fetchInstructionsContactProfile(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -353,7 +353,7 @@ final class DocScanService {
         }
     }
 
-    public Media getIbvInstructionsPdf(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+    Media getIbvInstructionsPdf(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -382,7 +382,7 @@ final class DocScanService {
         }
     }
 
-    public SessionConfigurationResponse fetchSessionConfiguration(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+    SessionConfigurationResponse fetchSessionConfiguration(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -407,7 +407,7 @@ final class DocScanService {
         }
     }
 
-    public CreateFaceCaptureResourceResponse createFaceCaptureResource(AuthStrategy authStrategy,
+    CreateFaceCaptureResourceResponse createFaceCaptureResource(AuthStrategy authStrategy,
             String sessionId,
             CreateFaceCaptureResourcePayload createFaceCaptureResourcePayload) throws DocScanException {
         notNull(authStrategy, "authStrategy");
@@ -438,7 +438,7 @@ final class DocScanService {
         }
     }
 
-    public void uploadFaceCaptureImage(AuthStrategy authStrategy, String sessionId, String resourceId, UploadFaceCaptureImagePayload faceCaptureImagePayload)
+    void uploadFaceCaptureImage(AuthStrategy authStrategy, String sessionId, String resourceId, UploadFaceCaptureImagePayload faceCaptureImagePayload)
             throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
@@ -469,20 +469,15 @@ final class DocScanService {
         }
     }
 
-    // Surely this needs no auth at all....?
-    public SupportedDocumentsResponse getSupportedDocuments(AuthStrategy authStrategy, boolean includeNonLatin) throws DocScanException {
-        notNull(authStrategy, "authStrategy");
-
+    SupportedDocumentsResponse getSupportedDocuments(boolean includeNonLatin) throws DocScanException {
         String path = unsignedPathFactory.createGetSupportedDocumentsPath(includeNonLatin);
 
         try {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
                     .build();
-
             return yotiHttpRequest.execute(SupportedDocumentsResponse.class);
         } catch (GeneralSecurityException | ResourceException ex) {
             throw new DocScanException("Error executing the GET: " + ex.getMessage(), ex);
@@ -491,7 +486,7 @@ final class DocScanService {
         }
     }
 
-    public void triggerIbvEmailNotification(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+    void triggerIbvEmailNotification(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -513,7 +508,7 @@ final class DocScanService {
         }
     }
 
-    public List<MetadataResponse> getTrackedDevices(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+    List<MetadataResponse> getTrackedDevices(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -536,7 +531,7 @@ final class DocScanService {
         }
     }
 
-    public void deleteTrackedDevices(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+    void deleteTrackedDevices(AuthStrategy authStrategy, String sessionId) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
@@ -568,6 +563,5 @@ final class DocScanService {
         }
         return contentTypeValues == null || contentTypeValues.isEmpty() ? "" : contentTypeValues.get(0);
     }
-
 
 }
