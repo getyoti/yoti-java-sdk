@@ -6,14 +6,16 @@ import static com.yoti.api.client.spi.remote.util.CryptoUtil.generateKeyPairFrom
 
 import static org.bouncycastle.util.encoders.Base64.decode;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 import java.security.KeyPair;
 import java.security.PublicKey;
@@ -30,10 +32,12 @@ import com.yoti.api.client.spi.remote.call.Receipt;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
-import org.mockito.junit.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReceiptFetcherTest {
@@ -62,7 +66,7 @@ public class ReceiptFetcherTest {
     @Test
     public void shouldFailForNullToken() {
         try {
-            testObj.fetch(null, keyPair, APP_ID);
+            testObj.fetch(null, keyPair);
         } catch (ProfileException ex) {
             assertThat(ex.getMessage(), containsString("Cannot decrypt connect token"));
             assertTrue(ex.getCause() instanceof NullPointerException);
@@ -74,7 +78,7 @@ public class ReceiptFetcherTest {
     @Test
     public void shouldFailForNonBase64Token() {
         try {
-            testObj.fetch(TOKEN, keyPair, APP_ID);
+            testObj.fetch(TOKEN, keyPair);
         } catch (ProfileException ex) {
             assertThat(ex.getMessage(), containsString("Cannot decrypt connect token"));
             assertTrue(ex.getCause() instanceof IllegalArgumentException);
@@ -86,7 +90,7 @@ public class ReceiptFetcherTest {
     @Test
     public void shouldFailForBadlyEncryptedToken() {
         try {
-            testObj.fetch(Base64.getEncoder().encodeToString(TOKEN.getBytes()), keyPair, APP_ID);
+            testObj.fetch(Base64.getEncoder().encodeToString(TOKEN.getBytes()), keyPair);
         } catch (ProfileException ex) {
             assertThat(ex.getMessage(), containsString("Cannot decrypt connect token"));
             assertTrue(ex.getCause() instanceof ProfileException);
@@ -99,10 +103,10 @@ public class ReceiptFetcherTest {
     @Test
     public void shouldFailWithExceptionFromProfileService() throws Exception {
         ProfileException profileException = new ProfileException("Test exception");
-        when(profileService.getProfile(any(KeyPair.class), anyString(), anyString())).thenThrow(profileException);
+        when(profileService.getProfile(any(KeyPair.class), anyString())).thenThrow(profileException);
 
         try {
-            testObj.fetch(encryptedToken, keyPair, APP_ID);
+            testObj.fetch(encryptedToken, keyPair);
         } catch (ProfileException ex) {
             assertSame(profileException, ex);
             return;
@@ -112,10 +116,10 @@ public class ReceiptFetcherTest {
 
     @Test
     public void shouldFailWhenNoProfileReturned() throws Exception {
-        when(profileService.getProfile(any(KeyPair.class), anyString(), anyString())).thenReturn(null);
+        when(profileService.getProfile(any(KeyPair.class), anyString())).thenReturn(null);
 
         try {
-            testObj.fetch(encryptedToken, keyPair, APP_ID);
+            testObj.fetch(encryptedToken, keyPair);
         } catch (ProfileException e) {
             assertThat(e.getMessage(), containsString("No profile"));
             assertThat(e.getMessage(), containsString(TOKEN));
@@ -126,11 +130,11 @@ public class ReceiptFetcherTest {
 
     @Test
     public void shouldFailWhenNoReceiptReturned() throws Exception {
-        when(profileService.getProfile(any(KeyPair.class), anyString(), anyString()))
+        when(profileService.getProfile(any(KeyPair.class), anyString()))
                 .thenReturn(new ProfileResponse.ProfileResponseBuilder().build());
 
         try {
-            testObj.fetch(encryptedToken, keyPair, APP_ID);
+            testObj.fetch(encryptedToken, keyPair);
         } catch (ProfileException e) {
             assertThat(e.getMessage(), containsString("No profile"));
             assertThat(e.getMessage(), containsString(TOKEN));
@@ -154,10 +158,10 @@ public class ReceiptFetcherTest {
                 .setReceipt(receipt)
                 .setError(error)
                 .build();
-        when(profileService.getProfile(keyPair, APP_ID, TOKEN)).thenReturn(profileResponse);
+        when(profileService.getProfile(keyPair, TOKEN)).thenReturn(profileResponse);
 
         try {
-            testObj.fetch(encryptedToken, keyPair, APP_ID);
+            testObj.fetch(encryptedToken, keyPair);
         } catch (ActivityFailureException ex) {
             String exMsg = ex.getMessage();
             assertThat(exMsg, containsString(ENCODED_RECEIPT_STRING));
@@ -182,10 +186,10 @@ public class ReceiptFetcherTest {
                 .build();
 
         ProfileResponse profileResponse = new ProfileResponse.ProfileResponseBuilder().setReceipt(receipt).build();
-        when(profileService.getProfile(keyPair, APP_ID, TOKEN)).thenReturn(profileResponse);
+        when(profileService.getProfile(keyPair, TOKEN)).thenReturn(profileResponse);
 
         try {
-            testObj.fetch(encryptedToken, keyPair, APP_ID);
+            testObj.fetch(encryptedToken, keyPair);
         } catch (ActivityFailureException ex) {
             assertThat(ex.getMessage(), containsString(ENCODED_RECEIPT_STRING));
             assertThat(ex.getMessage(), not(containsString("error")));
@@ -215,10 +219,10 @@ public class ReceiptFetcherTest {
                 .setReceipt(receipt)
                 .setError(error)
                 .build();
-        when(profileService.getProfile(keyPair, APP_ID, TOKEN)).thenReturn(profileResponse);
+        when(profileService.getProfile(keyPair, TOKEN)).thenReturn(profileResponse);
 
         try {
-            testObj.fetch(encryptedToken, keyPair, APP_ID);
+            testObj.fetch(encryptedToken, keyPair);
         } catch (ActivityFailureException ex) {
             String exMsg = ex.getMessage();
             assertThat(exMsg, containsString(ENCODED_RECEIPT_STRING));
@@ -242,9 +246,9 @@ public class ReceiptFetcherTest {
                 .build();
 
         ProfileResponse profileResponse = new ProfileResponse.ProfileResponseBuilder().setReceipt(receipt).build();
-        when(profileService.getProfile(keyPair, APP_ID, TOKEN)).thenReturn(profileResponse);
+        when(profileService.getProfile(keyPair, TOKEN)).thenReturn(profileResponse);
 
-        Receipt result = testObj.fetch(encryptedToken, keyPair, APP_ID);
+        Receipt result = testObj.fetch(encryptedToken, keyPair);
 
         assertSame(result, receipt);
     }
