@@ -15,7 +15,6 @@ import java.security.KeyPair;
 
 import com.yoti.api.client.identity.MatchRequest;
 import com.yoti.api.client.identity.ShareSessionRequest;
-import com.yoti.api.client.spi.remote.call.factory.DigitalIdentitySignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityException;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityService;
 import com.yoti.api.client.spi.remote.util.CryptoUtil;
@@ -39,7 +38,6 @@ public class DigitalIdentityClientTest {
     @InjectMocks DigitalIdentityClient testObj;
 
     @Mock(answer = RETURNS_DEEP_STUBS) KeyPair keyPairMock;
-    @Mock DigitalIdentitySignedRequestStrategy authStrategyMock;
     @Mock DigitalIdentityService identityServiceMock;
     @Mock ShareSessionRequest shareSessionRequest;
     @Mock MatchRequest matchRequest;
@@ -123,7 +121,7 @@ public class DigitalIdentityClientTest {
     @Test
     public void client_CreateShareSessionException_DigitalIdentityException() throws IOException {
         String exMessage = "Create Share Session Error";
-        when(identityServiceMock.createShareSession(authStrategyMock, shareSessionRequest))
+        when(identityServiceMock.createShareSession(shareSessionRequest))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
@@ -137,7 +135,7 @@ public class DigitalIdentityClientTest {
     @Test
     public void client_FetchShareSessionException_DigitalIdentityException() throws IOException {
         String exMessage = "Fetch Share Session Error";
-        when(identityServiceMock.fetchShareSession(authStrategyMock, A_SESSION_ID))
+        when(identityServiceMock.fetchShareSession(A_SESSION_ID))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
@@ -151,7 +149,7 @@ public class DigitalIdentityClientTest {
     @Test
     public void client_CreateShareQrCodeException_DigitalIdentityException() throws IOException {
         String exMessage = "Create Share QR Error";
-        when(identityServiceMock.createShareQrCode(authStrategyMock, A_SESSION_ID))
+        when(identityServiceMock.createShareQrCode(A_SESSION_ID))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
@@ -165,7 +163,7 @@ public class DigitalIdentityClientTest {
     @Test
     public void client_FetchShareQrCodeException_DigitalIdentityException() throws IOException {
         String exMessage = "Fetch Share QR Error";
-        when(identityServiceMock.fetchShareQrCode(authStrategyMock, A_QR_CODE_ID))
+        when(identityServiceMock.fetchShareQrCode(A_QR_CODE_ID))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
@@ -179,7 +177,7 @@ public class DigitalIdentityClientTest {
     @Test
     public void client_FetchShareReceiptException_DigitalIdentityException() throws IOException {
         String exMessage = "Fetch Share Receipt Error";
-        when(identityServiceMock.fetchShareReceipt(authStrategyMock, keyPairMock, A_RECEIPT_ID))
+        when(identityServiceMock.fetchShareReceipt(keyPairMock, A_RECEIPT_ID))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(
@@ -193,7 +191,7 @@ public class DigitalIdentityClientTest {
     @Test
     public void client_FetchDigitalIdMatchException_DigitalIdentityException() throws IOException {
         String exMessage = "Fetch digital identity match error";
-        when(identityServiceMock.fetchMatch(authStrategyMock, matchRequest))
+        when(identityServiceMock.fetchMatch(matchRequest))
                 .thenThrow(new DigitalIdentityException(exMessage));
 
         DigitalIdentityException ex = assertThrows(

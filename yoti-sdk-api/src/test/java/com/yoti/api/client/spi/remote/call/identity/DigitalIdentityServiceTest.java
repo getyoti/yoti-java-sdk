@@ -50,10 +50,10 @@ public class DigitalIdentityServiceTest {
 
     @Mock UnsignedPathFactory unsignedPathFactoryMock;
     @Mock YotiHttpRequestBuilderFactory requestBuilderFactoryMock;
+    @Mock DigitalIdentitySignedRequestStrategy authStrategyMock;
 
     @Mock(answer = RETURNS_DEEP_STUBS) YotiHttpRequestBuilder yotiHttpRequestBuilder;
 
-    @Mock DigitalIdentitySignedRequestStrategy authStrategyMock;
     @Mock YotiHttpRequest yotiHttpRequest;
     @Mock ShareSessionRequest shareSessionRequest;
     @Mock ShareSession shareSession;
@@ -69,20 +69,10 @@ public class DigitalIdentityServiceTest {
     }
 
     @Test
-    public void createShareSession_NullSignedRequestStrategy_Exception() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> identityService.createShareSession(null, shareSessionRequest)
-        );
-
-        assertThat(ex.getMessage(), containsString("'signedRequestStrategy' must not be null"));
-    }
-
-    @Test
     public void createShareSession_NullShareSessionRequest_Exception() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> identityService.createShareSession(authStrategyMock, null)
+                () -> identityService.createShareSession(null)
         );
 
         assertThat(ex.getMessage(), containsString("Share Session request"));
@@ -97,7 +87,7 @@ public class DigitalIdentityServiceTest {
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.createShareSession(authStrategyMock, shareSessionRequest)
+                    () -> identityService.createShareSession(shareSessionRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -113,11 +103,11 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "URI wrong format";
             URISyntaxException causeEx = new URISyntaxException("", exMessage);
-            when(identityService.createSignedRequest(authStrategyMock, SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
+            when(identityService.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.createShareSession(authStrategyMock, shareSessionRequest)
+                    () -> identityService.createShareSession(shareSessionRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -135,11 +125,11 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "Wrong query params format";
             UnsupportedEncodingException causeEx = new UnsupportedEncodingException(exMessage);
-            when(identityService.createSignedRequest(authStrategyMock, SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
+            when(identityService.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.createShareSession(authStrategyMock, shareSessionRequest)
+                    () -> identityService.createShareSession(shareSessionRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -157,11 +147,11 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "Wrong digest";
             GeneralSecurityException causeEx = new GeneralSecurityException(exMessage);
-            when(identityService.createSignedRequest(authStrategyMock, SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
+            when(identityService.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.createShareSession(authStrategyMock, shareSessionRequest)
+                    () -> identityService.createShareSession(shareSessionRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -175,70 +165,40 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(shareSessionRequest)).thenReturn(A_BODY_BYTES);
             
-            when(identityService.createSignedRequest(authStrategyMock, SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenReturn(yotiHttpRequest);
+            when(identityService.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenReturn(yotiHttpRequest);
             when(yotiHttpRequest.execute(ShareSession.class)).thenReturn(shareSession);
 
-            ShareSession result = identityService.createShareSession(authStrategyMock, shareSessionRequest);
+            ShareSession result = identityService.createShareSession(shareSessionRequest);
 
             assertSame(shareSession, result);
         }
     }
 
     @Test
-    public void createShareQrCode_NullSignedRequestStrategy_Exception() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> identityService.createShareQrCode(null, SESSION_ID)
-        );
-
-        assertThat(ex.getMessage(), containsString("'signedRequestStrategy' must not be null"));
-    }
-
-    @Test
     public void createShareQrCode_NullSessionId_Exception() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> identityService.createShareQrCode(authStrategyMock, null)
+                () -> identityService.createShareQrCode(null)
         );
 
         assertThat(ex.getMessage(), containsString("Session ID"));
     }
 
     @Test
-    public void fetchShareQrCode_NullSignedRequestStrategy_Exception() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> identityService.fetchShareQrCode(null, QR_CODE_ID)
-        );
-
-        assertThat(ex.getMessage(), containsString("'signedRequestStrategy' must not be null"));
-    }
-
-    @Test
     public void fetchShareQrCode_NullSessionId_Exception() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> identityService.fetchShareQrCode(authStrategyMock, null)
+                () -> identityService.fetchShareQrCode(null)
         );
 
         assertThat(ex.getMessage(), containsString("QR Code ID"));
     }
 
     @Test
-    public void fetchMatch_NullKeyPair_Exception() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> identityService.fetchMatch(null, matchRequest)
-        );
-
-        assertThat(ex.getMessage(), containsString("Application Key Pair"));
-    }
-
-    @Test
     public void fetchMatch_NullMatchRequest_Exception() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> identityService.fetchMatch(authStrategyMock, null)
+                () -> identityService.fetchMatch(null)
         );
 
         assertThat(ex.getMessage(), notNullValue());
@@ -253,7 +213,7 @@ public class DigitalIdentityServiceTest {
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.fetchMatch(authStrategyMock, matchRequest)
+                    () -> identityService.fetchMatch(matchRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -270,11 +230,11 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "URI wrong format";
             URISyntaxException causeEx = new URISyntaxException("", exMessage);
-            when(identityService.createSignedRequest(authStrategyMock, DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
+            when(identityService.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.fetchMatch(authStrategyMock, matchRequest)
+                    () -> identityService.fetchMatch(matchRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -292,12 +252,12 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "Wrong query params format";
             UnsupportedEncodingException causeEx = new UnsupportedEncodingException(exMessage);
-            when(identityService.createSignedRequest(authStrategyMock, DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
+            when(identityService.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
                     .thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.fetchMatch(authStrategyMock, matchRequest)
+                    () -> identityService.fetchMatch(matchRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -315,12 +275,12 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "Wrong digest";
             GeneralSecurityException causeEx = new GeneralSecurityException(exMessage);
-            when(identityService.createSignedRequest(authStrategyMock, DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
+            when(identityService.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
                     .thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.fetchMatch(authStrategyMock, matchRequest)
+                    () -> identityService.fetchMatch(matchRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -335,12 +295,12 @@ public class DigitalIdentityServiceTest {
             mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
 
             
-            when(identityService.createSignedRequest(authStrategyMock, DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
+            when(identityService.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
                     .thenReturn(yotiHttpRequest);
 
             when(yotiHttpRequest.execute(MatchResult.class)).thenReturn(matchResult);
 
-            MatchResult result = identityService.fetchMatch(authStrategyMock, matchRequest);
+            MatchResult result = identityService.fetchMatch(matchRequest);
             assertSame(matchResult, result);
         }
     }

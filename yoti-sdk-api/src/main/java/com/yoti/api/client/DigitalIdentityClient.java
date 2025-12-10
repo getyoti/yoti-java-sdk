@@ -10,7 +10,6 @@ import com.yoti.api.client.identity.ShareSession;
 import com.yoti.api.client.identity.ShareSessionQrCode;
 import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.KeyStreamVisitor;
-import com.yoti.api.client.spi.remote.call.factory.DigitalIdentitySignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityException;
 import com.yoti.api.client.spi.remote.call.identity.DigitalIdentityService;
 import com.yoti.api.client.spi.remote.call.identity.Receipt;
@@ -25,37 +24,35 @@ public class DigitalIdentityClient {
     }
 
     private final KeyPair keyPair;
-    private final DigitalIdentitySignedRequestStrategy authStrategy;
     private final DigitalIdentityService identityService;
 
-    private DigitalIdentityClient(KeyPair keyPair, DigitalIdentitySignedRequestStrategy authStrategy, DigitalIdentityService identityService) {
+    private DigitalIdentityClient(KeyPair keyPair, DigitalIdentityService identityService) {
         this.keyPair = keyPair;
-        this.authStrategy = authStrategy;
         this.identityService = identityService;
     }
 
     public ShareSession createShareSession(ShareSessionRequest request) throws DigitalIdentityException {
-        return identityService.createShareSession(authStrategy, request);
+        return identityService.createShareSession(request);
     }
 
     public ShareSession fetchShareSession(String sessionId) throws DigitalIdentityException {
-        return identityService.fetchShareSession(authStrategy, sessionId);
+        return identityService.fetchShareSession(sessionId);
     }
 
     public ShareSessionQrCode createShareQrCode(String sessionId) throws DigitalIdentityException {
-        return identityService.createShareQrCode(authStrategy, sessionId);
+        return identityService.createShareQrCode(sessionId);
     }
 
     public ShareSessionQrCode fetchShareQrCode(String qrCodeId) throws DigitalIdentityException {
-        return identityService.fetchShareQrCode(authStrategy, qrCodeId);
+        return identityService.fetchShareQrCode(qrCodeId);
     }
 
     public Receipt fetchShareReceipt(String receiptId) throws DigitalIdentityException {
-        return identityService.fetchShareReceipt(authStrategy, keyPair, receiptId);
+        return identityService.fetchShareReceipt(keyPair, receiptId);
     }
 
     public MatchResult fetchMatch(MatchRequest request) throws DigitalIdentityException {
-        return identityService.fetchMatch(authStrategy, request);
+        return identityService.fetchMatch(request);
     }
 
     public static Builder builder() {
@@ -88,7 +85,7 @@ public class DigitalIdentityClient {
             Validation.notNull(keyPairSource, "Application Key Pair");
 
             KeyPair keyPair = loadKeyPair(keyPairSource);
-            return new DigitalIdentityClient(keyPair, new DigitalIdentitySignedRequestStrategy(keyPair, sdkId), DigitalIdentityService.newInstance());
+            return new DigitalIdentityClient(keyPair, DigitalIdentityService.newInstance(keyPair, sdkId));
         }
 
         private KeyPair loadKeyPair(KeyPairSource keyPairSource) throws InitialisationException {
