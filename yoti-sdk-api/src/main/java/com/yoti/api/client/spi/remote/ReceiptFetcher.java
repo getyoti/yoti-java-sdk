@@ -27,17 +27,17 @@ public class ReceiptFetcher {
         this.profileService = profileService;
     }
 
-    public static ReceiptFetcher newInstance() {
-        return new ReceiptFetcher(ProfileService.newInstance());
+    public static ReceiptFetcher newInstance(KeyPair keyPair, String appId) {
+        return new ReceiptFetcher(ProfileService.newInstance(keyPair, appId));
     }
 
-    public Receipt fetch(String encryptedConnectToken, KeyPair keyPair, String appId) throws ProfileException {
+    public Receipt fetch(String encryptedConnectToken, KeyPair keyPair) throws ProfileException {
         LOG.debug("Decrypting connect token: '{}'", encryptedConnectToken);
 
         String connectToken = decryptConnectToken(encryptedConnectToken, keyPair.getPrivate());
         LOG.debug("Connect token decrypted: '{}'", connectToken);
 
-        ProfileResponse profile = profileService.getProfile(keyPair, appId, connectToken);
+        ProfileResponse profile = profileService.getProfile(keyPair, connectToken);
         validateReceipt(profile, connectToken);
         return profile.getReceipt();
     }

@@ -58,8 +58,7 @@ public class YotiSandboxClientTest {
     public void setUp() throws Exception {
         when(yotiHttpRequestBuilderFactoryMock.create()).thenReturn(yotiHttpRequestBuilderMock);
         when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
-        testObj = new YotiSandboxClient(SOME_APP_ID, keyPairMock, sandboxPathFactoryMock, objectMapperMock, resourceFetcherMock,
-                yotiHttpRequestBuilderFactoryMock);
+        testObj = new YotiSandboxClient(SOME_APP_ID, keyPairMock, sandboxPathFactoryMock, objectMapperMock, resourceFetcherMock, yotiHttpRequestBuilderFactoryMock);
     }
 
     @Test

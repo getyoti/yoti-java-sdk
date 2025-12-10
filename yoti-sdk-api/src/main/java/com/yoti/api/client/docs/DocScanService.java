@@ -14,7 +14,6 @@ import static com.yoti.api.client.spi.remote.util.Validation.notNullOrEmpty;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
-import java.security.KeyPair;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -37,6 +36,7 @@ import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.YotiHttpResponse;
+import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -75,7 +75,7 @@ final class DocScanService {
         apiUrl = System.getProperty(PROPERTY_YOTI_DOCS_URL, DEFAULT_YOTI_DOCS_URL);
     }
 
-    public static DocScanService newInstance() {
+    static DocScanService newInstance() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
@@ -88,25 +88,23 @@ final class DocScanService {
     /**
      * Uses the supplied session specification to create a session
      *
-     * @param sdkId       the SDK ID
-     * @param keyPair     the {@code KeyPair}
-     * @param sessionSpec the {@code SessionSpec}
+     * @param authStrategy the {@code AuthStrategy}
+     * @param sessionSpec  the {@code SessionSpec}
      * @return the session creation result
      * @throws DocScanException if there was an error
      */
-    public CreateSessionResult createSession(String sdkId, KeyPair keyPair, SessionSpec sessionSpec) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+    CreateSessionResult createSession(AuthStrategy authStrategy, SessionSpec sessionSpec) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
         notNull(sessionSpec, "sessionSpec");
 
-        String path = unsignedPathFactory.createNewYotiDocsSessionPath(sdkId);
+        String path = unsignedPathFactory.createNewYotiDocsSessionPath();
         LOG.info("Creating session at '{}'", path);
 
         try {
             byte[] payload = objectMapper.writeValueAsBytes(sessionSpec);
 
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_POST)
@@ -129,23 +127,21 @@ final class DocScanService {
     /**
      * Retrieves the current state of a given session
      *
-     * @param sdkId     the SDK ID
-     * @param keyPair   the {@code KeyPair}
-     * @param sessionId the session ID
+     * @param authStrategy the {@code AuthStrategy}
+     * @param sessionId    the session ID
      * @return the session state
      * @throws DocScanException if there was an error
      */
-    public GetSessionResult retrieveSession(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+    GetSessionResult retrieveSession(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
-        String path = unsignedPathFactory.createYotiDocsSessionPath(sdkId, sessionId);
+        String path = unsignedPathFactory.createYotiDocsSessionPath(sessionId);
         LOG.info("Fetching session from '{}'", path);
 
         try {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
@@ -166,22 +162,20 @@ final class DocScanService {
     /**
      * Deletes a session and all of its associated content
      *
-     * @param sdkId     the SDK ID
-     * @param keyPair   the {@code KeyPair}
-     * @param sessionId the session ID
+     * @param authStrategy the {@code AuthStrategy}
+     * @param sessionId    the session ID
      * @throws DocScanException if there was an error
      */
-    public void deleteSession(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+    void deleteSession(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
-        String path = unsignedPathFactory.createYotiDocsSessionPath(sdkId, sessionId);
+        String path = unsignedPathFactory.createYotiDocsSessionPath(sessionId);
         LOG.info("Deleting session from '{}'", path);
 
         try {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_DELETE)
@@ -202,25 +196,23 @@ final class DocScanService {
     /**
      * Retrieves {@link Media} content for a given session and media ID
      *
-     * @param sdkId     the SDK ID
-     * @param keyPair   the {@code KeyPair}
-     * @param sessionId the session ID
-     * @param mediaId   the media ID
+     * @param authStrategy the {@code AuthStrategy}
+     * @param sessionId    the session ID
+     * @param mediaId      the media ID
      * @return the {@code Media} content, null if 204 No Content
      * @throws DocScanException if there was an error
      */
-    public Media getMediaContent(String sdkId, KeyPair keyPair, String sessionId, String mediaId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+    Media getMediaContent(AuthStrategy authStrategy, String sessionId, String mediaId) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
         notNullOrEmpty(mediaId, "mediaId");
 
-        String path = unsignedPathFactory.createMediaContentPath(sdkId, sessionId, mediaId);
+        String path = unsignedPathFactory.createMediaContentPath(sessionId, mediaId);
         LOG.info("Fetching media from '{}'", path);
 
         try {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
@@ -243,24 +235,22 @@ final class DocScanService {
     /**
      * Deletes media content for a given session and media ID
      *
-     * @param sdkId     the SDK ID
-     * @param keyPair   the {@code KeyPair}
-     * @param sessionId the session ID
-     * @param mediaId   the media ID
+     * @param authStrategy the {@code AuthStrategy}
+     * @param sessionId    the session ID
+     * @param mediaId      the media ID
      * @throws DocScanException if there was an error
      */
-    public void deleteMediaContent(String sdkId, KeyPair keyPair, String sessionId, String mediaId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+    void deleteMediaContent(AuthStrategy authStrategy, String sessionId, String mediaId) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
         notNullOrEmpty(mediaId, "mediaId");
 
-        String path = unsignedPathFactory.createMediaContentPath(sdkId, sessionId, mediaId);
+        String path = unsignedPathFactory.createMediaContentPath(sessionId, mediaId);
         LOG.info("Deleting media at '{}'", path);
 
         try {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_DELETE)
@@ -276,20 +266,19 @@ final class DocScanService {
         }
     }
 
-    public void putIbvInstructions(String sdkId, KeyPair keyPair, String sessionId, Instructions instructions) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+    void putIbvInstructions(AuthStrategy authStrategy, String sessionId, Instructions instructions) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
         notNull(instructions, "instructions");
 
-        String path = unsignedPathFactory.createPutIbvInstructionsPath(sdkId, sessionId);
+        String path = unsignedPathFactory.createPutIbvInstructionsPath(sessionId);
         LOG.info("Setting IBV instructions at '{}'", path);
 
         try {
             byte[] payload = objectMapper.writeValueAsBytes(instructions);
 
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_PUT)
@@ -306,17 +295,16 @@ final class DocScanService {
         }
     }
 
-    public InstructionsResponse getIbvInstructions(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+    InstructionsResponse getIbvInstructions(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
-        String path = unsignedPathFactory.createFetchIbvInstructionsPath(sdkId, sessionId);
+        String path = unsignedPathFactory.createFetchIbvInstructionsPath(sessionId);
         LOG.info("Fetching IBV instructions at '{}'", path);
 
         try {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
@@ -335,23 +323,21 @@ final class DocScanService {
     /**
      * Retrieves the current state of a given session
      *
-     * @param sdkId     the SDK ID
-     * @param keyPair   the {@code KeyPair}
-     * @param sessionId the session ID
+     * @param authStrategy the {@code AuthStrategy}
+     * @param sessionId    the session ID
      * @return the session state
      * @throws DocScanException if there was an error
      */
-    public ContactProfileResponse fetchInstructionsContactProfile(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+    ContactProfileResponse fetchInstructionsContactProfile(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
-        String path = unsignedPathFactory.createFetchInstructionsContactProfilePath(sdkId, sessionId);
+        String path = unsignedPathFactory.createFetchInstructionsContactProfilePath(sessionId);
         LOG.info("Fetching instruction contact profile from '{}'", path);
 
         try {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
@@ -367,17 +353,16 @@ final class DocScanService {
         }
     }
 
-    public Media getIbvInstructionsPdf(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+    Media getIbvInstructionsPdf(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
-        String path = unsignedPathFactory.createFetchIbvInstructionsPdfPath(sdkId, sessionId);
+        String path = unsignedPathFactory.createFetchIbvInstructionsPdfPath(sessionId);
         LOG.info("Fetching instructions PDF at '{}'", path);
 
         try {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
@@ -397,17 +382,16 @@ final class DocScanService {
         }
     }
 
-    public SessionConfigurationResponse fetchSessionConfiguration(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+    SessionConfigurationResponse fetchSessionConfiguration(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
-        String path = unsignedPathFactory.createFetchSessionConfigurationPath(sdkId, sessionId);
+        String path = unsignedPathFactory.createFetchSessionConfigurationPath(sessionId);
         LOG.info("Fetching session configuration from '{}'", path);
 
         try {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
@@ -423,23 +407,21 @@ final class DocScanService {
         }
     }
 
-    public CreateFaceCaptureResourceResponse createFaceCaptureResource(String sdkId,
-            KeyPair keyPair,
+    CreateFaceCaptureResourceResponse createFaceCaptureResource(AuthStrategy authStrategy,
             String sessionId,
             CreateFaceCaptureResourcePayload createFaceCaptureResourcePayload) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
         notNull(createFaceCaptureResourcePayload, "createFaceCaptureResourcePayload");
 
-        String path = unsignedPathFactory.createNewFaceCaptureResourcePath(sdkId, sessionId);
+        String path = unsignedPathFactory.createNewFaceCaptureResourcePath(sessionId);
         LOG.info("Creating new Face Capture resource at '{}'", path);
 
         try {
             byte[] payload = objectMapper.writeValueAsBytes(createFaceCaptureResourcePayload);
 
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withPayload(payload)
@@ -456,15 +438,14 @@ final class DocScanService {
         }
     }
 
-    public void uploadFaceCaptureImage(String sdkId, KeyPair keyPair, String sessionId, String resourceId, UploadFaceCaptureImagePayload faceCaptureImagePayload)
+    void uploadFaceCaptureImage(AuthStrategy authStrategy, String sessionId, String resourceId, UploadFaceCaptureImagePayload faceCaptureImagePayload)
             throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
         notNullOrEmpty(resourceId, "resourceId");
         notNull(faceCaptureImagePayload, "faceCaptureImagePayload");
 
-        String path = unsignedPathFactory.createUploadFaceCaptureImagePath(sdkId, sessionId, resourceId);
+        String path = unsignedPathFactory.createUploadFaceCaptureImagePath(sessionId, resourceId);
         LOG.info("Uploading image to Face Capture resource at '{}'", path);
 
         try {
@@ -475,7 +456,7 @@ final class DocScanService {
                             faceCaptureImagePayload.getImageContents(),
                             ContentType.parse(faceCaptureImagePayload.getImageContentType()),
                             "face-capture-image")
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_PUT)
@@ -488,19 +469,15 @@ final class DocScanService {
         }
     }
 
-    public SupportedDocumentsResponse getSupportedDocuments(KeyPair keyPair, boolean includeNonLatin) throws DocScanException {
-        notNull(keyPair, "Application key Pair");
-
+    SupportedDocumentsResponse getSupportedDocuments(boolean includeNonLatin) throws DocScanException {
         String path = unsignedPathFactory.createGetSupportedDocumentsPath(includeNonLatin);
 
         try {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
                     .build();
-
             return yotiHttpRequest.execute(SupportedDocumentsResponse.class);
         } catch (GeneralSecurityException | ResourceException ex) {
             throw new DocScanException("Error executing the GET: " + ex.getMessage(), ex);
@@ -509,17 +486,16 @@ final class DocScanService {
         }
     }
 
-    public void triggerIbvEmailNotification(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+    void triggerIbvEmailNotification(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
-        String path = unsignedPathFactory.createTriggerIbvEmailNotificationPath(sdkId, sessionId);
+        String path = unsignedPathFactory.createTriggerIbvEmailNotificationPath(sessionId);
         LOG.info("Triggering IBV email notification at '{}'", path);
 
         try {
             yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_POST)
@@ -532,17 +508,16 @@ final class DocScanService {
         }
     }
 
-    public List<MetadataResponse> getTrackedDevices(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+    List<MetadataResponse> getTrackedDevices(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
-        String path = unsignedPathFactory.createFetchTrackedDevices(sdkId, sessionId);
+        String path = unsignedPathFactory.createFetchTrackedDevices(sessionId);
         LOG.info("Fetching tracked devices at '{}'", path);
 
         try {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
@@ -556,17 +531,16 @@ final class DocScanService {
         }
     }
 
-    public void deleteTrackedDevices(String sdkId, KeyPair keyPair, String sessionId) throws DocScanException {
-        notNullOrEmpty(sdkId, "SDK ID");
-        notNull(keyPair, "Application key Pair");
+    void deleteTrackedDevices(AuthStrategy authStrategy, String sessionId) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
 
-        String path = unsignedPathFactory.createDeleteTrackedDevices(sdkId, sessionId);
+        String path = unsignedPathFactory.createDeleteTrackedDevices(sessionId);
         LOG.info("Deleting tracked devices at '{}'", path);
 
         try {
             yotiHttpRequestBuilderFactory.create()
-                    .withKeyPair(keyPair)
+                    .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_DELETE)
@@ -589,6 +563,5 @@ final class DocScanService {
         }
         return contentTypeValues == null || contentTypeValues.isEmpty() ? "" : contentTypeValues.get(0);
     }
-
 
 }
