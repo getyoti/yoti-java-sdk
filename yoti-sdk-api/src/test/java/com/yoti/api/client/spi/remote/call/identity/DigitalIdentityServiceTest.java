@@ -38,19 +38,15 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class DigitalIdentityServiceTest {
 
-    private static final String SDK_ID = "anSdkId";
-    private static final String SESSION_ID = "aSessionId";
-    private static final String QR_CODE_ID = "aQrCodeId";
     private static final String SESSION_CREATION_PATH = "aSessionCreationPath";
     private static final String DIGITAL_ID_MATCH_PATH = "aDigitalIdMatchPath";
     private static final String POST = "POST";
     private static final byte[] A_BODY_BYTES = "aBody".getBytes(StandardCharsets.UTF_8);
 
-    @InjectMocks DigitalIdentityService identityService;
+    @InjectMocks DigitalIdentityService testObj;
 
     @Mock UnsignedPathFactory unsignedPathFactoryMock;
     @Mock YotiHttpRequestBuilderFactory requestBuilderFactoryMock;
-    @Mock DigitalIdentitySignedRequestStrategy authStrategyMock;
 
     @Mock(answer = RETURNS_DEEP_STUBS) YotiHttpRequestBuilder yotiHttpRequestBuilder;
 
@@ -72,7 +68,7 @@ public class DigitalIdentityServiceTest {
     public void createShareSession_NullShareSessionRequest_Exception() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> identityService.createShareSession(null)
+                () -> testObj.createShareSession(null)
         );
 
         assertThat(ex.getMessage(), containsString("Share Session request"));
@@ -87,7 +83,7 @@ public class DigitalIdentityServiceTest {
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.createShareSession(shareSessionRequest)
+                    () -> testObj.createShareSession(shareSessionRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -103,11 +99,11 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "URI wrong format";
             URISyntaxException causeEx = new URISyntaxException("", exMessage);
-            when(identityService.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
+            when(testObj.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.createShareSession(shareSessionRequest)
+                    () -> testObj.createShareSession(shareSessionRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -121,15 +117,13 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(shareSessionRequest)).thenReturn(A_BODY_BYTES);
 
-            
-
             String exMessage = "Wrong query params format";
             UnsupportedEncodingException causeEx = new UnsupportedEncodingException(exMessage);
-            when(identityService.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
+            when(testObj.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.createShareSession(shareSessionRequest)
+                    () -> testObj.createShareSession(shareSessionRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -143,15 +137,13 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(shareSessionRequest)).thenReturn(A_BODY_BYTES);
 
-            
-
             String exMessage = "Wrong digest";
             GeneralSecurityException causeEx = new GeneralSecurityException(exMessage);
-            when(identityService.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
+            when(testObj.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.createShareSession(shareSessionRequest)
+                    () -> testObj.createShareSession(shareSessionRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -164,11 +156,11 @@ public class DigitalIdentityServiceTest {
     public void createShareSession_SessionRequest_exception() throws Exception {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(shareSessionRequest)).thenReturn(A_BODY_BYTES);
-            
-            when(identityService.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenReturn(yotiHttpRequest);
+
+            when(testObj.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenReturn(yotiHttpRequest);
             when(yotiHttpRequest.execute(ShareSession.class)).thenReturn(shareSession);
 
-            ShareSession result = identityService.createShareSession(shareSessionRequest);
+            ShareSession result = testObj.createShareSession(shareSessionRequest);
 
             assertSame(shareSession, result);
         }
@@ -178,7 +170,7 @@ public class DigitalIdentityServiceTest {
     public void createShareQrCode_NullSessionId_Exception() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> identityService.createShareQrCode(null)
+                () -> testObj.createShareQrCode(null)
         );
 
         assertThat(ex.getMessage(), containsString("Session ID"));
@@ -188,7 +180,7 @@ public class DigitalIdentityServiceTest {
     public void fetchShareQrCode_NullSessionId_Exception() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> identityService.fetchShareQrCode(null)
+                () -> testObj.fetchShareQrCode(null)
         );
 
         assertThat(ex.getMessage(), containsString("QR Code ID"));
@@ -198,7 +190,7 @@ public class DigitalIdentityServiceTest {
     public void fetchMatch_NullMatchRequest_Exception() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> identityService.fetchMatch(null)
+                () -> testObj.fetchMatch(null)
         );
 
         assertThat(ex.getMessage(), notNullValue());
@@ -213,7 +205,7 @@ public class DigitalIdentityServiceTest {
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.fetchMatch(matchRequest)
+                    () -> testObj.fetchMatch(matchRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -226,15 +218,14 @@ public class DigitalIdentityServiceTest {
     public void fetchMatch_BuildingRequestWithWrongEndpoint_Exception() throws Exception {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
-            
 
             String exMessage = "URI wrong format";
             URISyntaxException causeEx = new URISyntaxException("", exMessage);
-            when(identityService.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
+            when(testObj.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.fetchMatch(matchRequest)
+                    () -> testObj.fetchMatch(matchRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -248,16 +239,14 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
 
-            
-
             String exMessage = "Wrong query params format";
             UnsupportedEncodingException causeEx = new UnsupportedEncodingException(exMessage);
-            when(identityService.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
+            when(testObj.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
                     .thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.fetchMatch(matchRequest)
+                    () -> testObj.fetchMatch(matchRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -271,16 +260,14 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
 
-            
-
             String exMessage = "Wrong digest";
             GeneralSecurityException causeEx = new GeneralSecurityException(exMessage);
-            when(identityService.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
+            when(testObj.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
                     .thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
-                    () -> identityService.fetchMatch(matchRequest)
+                    () -> testObj.fetchMatch(matchRequest)
             );
 
             Throwable cause = ex.getCause();
@@ -294,13 +281,12 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
 
-            
-            when(identityService.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
+            when(testObj.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
                     .thenReturn(yotiHttpRequest);
-
             when(yotiHttpRequest.execute(MatchResult.class)).thenReturn(matchResult);
 
-            MatchResult result = identityService.fetchMatch(matchRequest);
+            MatchResult result = testObj.fetchMatch(matchRequest);
+
             assertSame(matchResult, result);
         }
     }
