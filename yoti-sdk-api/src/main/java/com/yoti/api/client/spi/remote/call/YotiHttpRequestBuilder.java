@@ -107,7 +107,13 @@ public class YotiHttpRequestBuilder {
      * @return the updated builder
      */
     public YotiHttpRequestBuilder withBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl.replaceAll("([/]+)$", "");
+        int index;
+        for (index = baseUrl.length() - 1; index >= 0; index--) {
+            if (baseUrl.charAt(index) != '/') {
+                break;
+            }
+        }
+        this.baseUrl = baseUrl.substring(0, index + 1);
         return this;
     }
 
