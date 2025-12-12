@@ -2,8 +2,7 @@ package com.yoti.api.client.sandbox.docs;
 
 import static com.yoti.api.client.spi.remote.call.YotiConstants.DEFAULT_YOTI_HOST;
 import static com.yoti.api.client.spi.remote.call.YotiConstants.PROPERTY_YOTI_DOCS_URL;
-import static com.yoti.api.client.spi.remote.util.Validation.notNull;
-import static com.yoti.api.client.spi.remote.util.Validation.notNullOrEmpty;
+import static com.yoti.validation.Validation.notNullOrEmpty;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -19,6 +18,8 @@ import com.yoti.api.client.spi.remote.call.HttpMethod;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
+import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
+import com.yoti.api.client.spi.remote.call.factory.AuthTokenStrategy;
 import com.yoti.api.client.spi.remote.call.factory.DocsSignedRequestStrategy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,10 +35,10 @@ public class DocScanSandboxClient {
     private final ObjectMapper mapper;
     private final YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory;
     private final String sdkId;
-    private final DocsSignedRequestStrategy authStrategy;
+    private final AuthStrategy authStrategy;
 
     private DocScanSandboxClient(String sdkId,
-            DocsSignedRequestStrategy authStrategy,
+            AuthStrategy authStrategy,
             ObjectMapper mapper,
             YotiHttpRequestBuilderFactory yotiHttpRequestBuilderFactory) {
         this.sdkId = sdkId;
@@ -107,10 +108,15 @@ public class DocScanSandboxClient {
 
         private static final Logger LOGGER = LoggerFactory.getLogger(Builder.class);
 
+        private String authToken;
         private String sdkId;
         private KeyPair keyPair;
 
-        private Builder() {
+        private Builder() {}
+
+        public Builder withAuthenticationToken(String authenticationToken) {
+            this.authToken = authenticationToken;
+            return this;
         }
 
         public Builder withSdkId(String sdkId) {
@@ -130,10 +136,28 @@ public class DocScanSandboxClient {
 
         public DocScanSandboxClient build() {
             notNullOrEmpty(sdkId, "sdkId");
-            notNull(keyPair, "keyPair");
 
-            return new DocScanSandboxClient(sdkId, new DocsSignedRequestStrategy(keyPair, sdkId), new ObjectMapper(), new YotiHttpRequestBuilderFactory());
+            if (authToken == null) {
+                validateForSignedRequest();
+                return new DocScanSandboxClient(sdkId, new DocsSignedRequestStrategy(keyPair, sdkId), new ObjectMapper(), new YotiHttpRequestBuilderFactory());
+            } else {
+                validateAuthToken();
+                return new DocScanSandboxClient(sdkId, new AuthTokenStrategy(authToken), new ObjectMapper(), new YotiHttpRequestBuilderFactory());
+            }
         }
+
+        private void validateForSignedRequest() {
+            if (sdkId == null || sdkId.isEmpty() || keyPair == null) {
+                throw new IllegalStateException("An sdkId and KeyPairSource must be provided when not using an authentication token");
+            }
+        }
+
+        private void validateAuthToken() {
+            if (keyPair != null) {
+                throw new IllegalStateException("Must not supply KeyPairSource when using an authentication token");
+            }
+        }
+
     }
 
 }
