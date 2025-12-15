@@ -66,7 +66,7 @@ public final class DynamicSharingService {
         try {
             byte[] body = objectMapper.writeValueAsString(dynamicScenario).getBytes(DEFAULT_CHARSET);
 
-            YotiHttpRequest yotiHttpRequest = createSignedRequest(path, body);
+            YotiHttpRequest yotiHttpRequest = createRequest(path, body);
 
             return yotiHttpRequest.execute(ShareUrlResult.class);
         } catch (ResourceException ex) {
@@ -76,7 +76,7 @@ public final class DynamicSharingService {
         }
     }
 
-    YotiHttpRequest createSignedRequest(String path, byte[] body) throws DynamicShareException {
+    YotiHttpRequest createRequest(String path, byte[] body) throws DynamicShareException {
         try {
             return yotiHttpRequestBuilderFactory.create()
                     .withAuthStrategy(simpleSignedRequestStrategy)

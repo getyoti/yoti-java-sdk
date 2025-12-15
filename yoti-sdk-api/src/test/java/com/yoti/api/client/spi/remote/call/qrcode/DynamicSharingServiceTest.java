@@ -85,7 +85,7 @@ public class DynamicSharingServiceTest {
     public void shouldThrowExceptionForIOError() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         IOException ioException = new IOException();
-        doReturn(yotiHttpRequestMock).when(testObj).createSignedRequest(DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
+        doReturn(yotiHttpRequestMock).when(testObj).createRequest(DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
         when(yotiHttpRequestMock.execute(ShareUrlResult.class)).thenThrow(ioException);
 
         try {
@@ -100,7 +100,7 @@ public class DynamicSharingServiceTest {
     public void shouldThrowExceptionWithResourceExceptionCause() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
         ResourceException resourceException = new ResourceException(404, "Not Found", "Test exception");
-        doReturn(yotiHttpRequestMock).when(testObj).createSignedRequest(DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
+        doReturn(yotiHttpRequestMock).when(testObj).createRequest(DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
         when(yotiHttpRequestMock.execute(ShareUrlResult.class)).thenThrow(resourceException);
 
         try {
@@ -114,7 +114,7 @@ public class DynamicSharingServiceTest {
     @Test
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
         when(objectMapperMock.writeValueAsString(simpleDynamicScenarioMock)).thenReturn(SOME_BODY);
-        doReturn(yotiHttpRequestMock).when(testObj).createSignedRequest(DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
+        doReturn(yotiHttpRequestMock).when(testObj).createRequest(DYNAMIC_QRCODE_PATH, SOME_BODY_BYTES);
         when(yotiHttpRequestMock.execute(ShareUrlResult.class)).thenReturn(shareUrlResultMock);
 
         ShareUrlResult result = testObj.createShareUrl(APP_ID, simpleDynamicScenarioMock);
