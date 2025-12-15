@@ -21,7 +21,6 @@ import com.yoti.api.client.identity.ShareSessionRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilder;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
-import com.yoti.api.client.spi.remote.call.factory.DigitalIdentitySignedRequestStrategy;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 import com.yoti.json.ResourceMapper;
 
@@ -99,7 +98,7 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "URI wrong format";
             URISyntaxException causeEx = new URISyntaxException("", exMessage);
-            when(testObj.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
+            when(testObj.createRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
@@ -119,7 +118,7 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "Wrong query params format";
             UnsupportedEncodingException causeEx = new UnsupportedEncodingException(exMessage);
-            when(testObj.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
+            when(testObj.createRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
@@ -139,7 +138,7 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "Wrong digest";
             GeneralSecurityException causeEx = new GeneralSecurityException(exMessage);
-            when(testObj.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
+            when(testObj.createRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
@@ -157,7 +156,7 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(shareSessionRequest)).thenReturn(A_BODY_BYTES);
 
-            when(testObj.createSignedRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenReturn(yotiHttpRequest);
+            when(testObj.createRequest(SESSION_CREATION_PATH, POST, A_BODY_BYTES)).thenReturn(yotiHttpRequest);
             when(yotiHttpRequest.execute(ShareSession.class)).thenReturn(shareSession);
 
             ShareSession result = testObj.createShareSession(shareSessionRequest);
@@ -221,7 +220,7 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "URI wrong format";
             URISyntaxException causeEx = new URISyntaxException("", exMessage);
-            when(testObj.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
+            when(testObj.createRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES)).thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
                     DigitalIdentityException.class,
@@ -241,7 +240,7 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "Wrong query params format";
             UnsupportedEncodingException causeEx = new UnsupportedEncodingException(exMessage);
-            when(testObj.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
+            when(testObj.createRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
                     .thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
@@ -262,7 +261,7 @@ public class DigitalIdentityServiceTest {
 
             String exMessage = "Wrong digest";
             GeneralSecurityException causeEx = new GeneralSecurityException(exMessage);
-            when(testObj.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
+            when(testObj.createRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
                     .thenThrow(causeEx);
 
             DigitalIdentityException ex = assertThrows(
@@ -281,7 +280,7 @@ public class DigitalIdentityServiceTest {
         try (MockedStatic<ResourceMapper> mapper = Mockito.mockStatic(ResourceMapper.class)) {
             mapper.when(() -> ResourceMapper.writeValueAsString(matchRequest)).thenReturn(A_BODY_BYTES);
 
-            when(testObj.createSignedRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
+            when(testObj.createRequest(DIGITAL_ID_MATCH_PATH, POST, A_BODY_BYTES))
                     .thenReturn(yotiHttpRequest);
             when(yotiHttpRequest.execute(MatchResult.class)).thenReturn(matchResult);
 

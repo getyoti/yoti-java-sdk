@@ -66,7 +66,7 @@ public class ProfileService {
 
         try {
             String authKey = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
-            YotiHttpRequest yotiHttpRequest = createSignedRequest(path, authKey);
+            YotiHttpRequest yotiHttpRequest = createRequest(path, authKey);
             return fetchReceipt(yotiHttpRequest);
         } catch (IOException ioe) {
             throw new ProfileException("Error calling service to get profile", ioe);
@@ -91,7 +91,7 @@ public class ProfileService {
         }
     }
 
-    YotiHttpRequest createSignedRequest(String path, String authKey) throws ProfileException {
+    YotiHttpRequest createRequest(String path, String authKey) throws ProfileException {
         try {
             return yotiHttpRequestBuilderFactory.create()
                     .withAuthStrategy(profileSignedRequestStrategy)
