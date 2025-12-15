@@ -63,7 +63,7 @@ public class RemoteAmlService {
             String resourcePath = unsignedPathFactory.createAmlPath();
             byte[] body = objectMapper.writeValueAsString(amlProfile).getBytes(DEFAULT_CHARSET);
 
-            YotiHttpRequest yotiHttpRequest = createSignedRequest(resourcePath, body);
+            YotiHttpRequest yotiHttpRequest = createRequest(resourcePath, body);
             return yotiHttpRequest.execute(AmlResult.class);
         } catch (IOException ioException) {
             throw new AmlException("Error communicating with AML endpoint", ioException);
@@ -85,7 +85,7 @@ public class RemoteAmlService {
         }
     }
 
-    YotiHttpRequest createSignedRequest(String resourcePath, byte[] body) throws AmlException {
+    YotiHttpRequest createRequest(String resourcePath, byte[] body) throws AmlException {
         try {
             return yotiHttpRequestBuilderFactory.create()
                     .withAuthStrategy(amlSignedRequestStrategy)

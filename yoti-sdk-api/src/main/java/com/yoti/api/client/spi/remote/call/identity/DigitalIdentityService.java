@@ -72,7 +72,7 @@ public class DigitalIdentityService {
 
         try {
             byte[] payload = ResourceMapper.writeValueAsString(shareSessionRequest);
-            return createSignedRequest(path, HTTP_POST, payload).execute(ShareSession.class);
+            return createRequest(path, HTTP_POST, payload).execute(ShareSession.class);
         } catch (IOException ex) {
             throw new DigitalIdentityException("Error while parsing the share session creation request ", ex);
         } catch (URISyntaxException ex) {
@@ -90,7 +90,7 @@ public class DigitalIdentityService {
         LOG.debug("Requesting share session '{}' at '{}'", sessionId, path);
 
         try {
-            return createSignedRequest(path).execute(ShareSession.class);
+            return createRequest(path).execute(ShareSession.class);
         } catch (Exception ex) {
             throw new DigitalIdentityException(
                     String.format("Error while fetching the share session '{%s}' ", sessionId),
@@ -107,7 +107,7 @@ public class DigitalIdentityService {
         LOG.debug("Requesting share session '{}' QR code creation at '{}'", sessionId, path);
 
         try {
-            return createSignedRequest(path, HTTP_POST, EMPTY_JSON).execute(ShareSessionQrCode.class);
+            return createRequest(path, HTTP_POST, EMPTY_JSON).execute(ShareSessionQrCode.class);
         } catch (GeneralSecurityException ex) {
             throw new DigitalIdentityException("Error while signing the share QR code creation request ", ex);
         } catch (IOException | URISyntaxException | ResourceException ex) {
@@ -123,7 +123,7 @@ public class DigitalIdentityService {
         LOG.debug("Requesting share session QR code '{} at '{}'", qrCodeId, path);
 
         try {
-            return createSignedRequest(path).execute(ShareSessionQrCode.class);
+            return createRequest(path).execute(ShareSessionQrCode.class);
         } catch (Exception ex) {
             throw new DigitalIdentityException(
                     String.format("Error while fetching the share session QR code '{%s}' ", qrCodeId),
@@ -149,7 +149,7 @@ public class DigitalIdentityService {
         LOG.debug("Requesting share session receipt '{}' at '{}'", receiptId, path);
 
         try {
-            return createSignedRequest(path).execute(WrappedReceipt.class);
+            return createRequest(path).execute(WrappedReceipt.class);
         } catch (Exception ex) {
             throw new DigitalIdentityException(
                     String.format("Error while fetching the share session QR code '{%s}' ", receiptId),
@@ -164,7 +164,7 @@ public class DigitalIdentityService {
         LOG.debug("Requesting share session receipt item key '{}' at '{}'", wrappedItemKeyId, path);
 
         try {
-            return createSignedRequest(path).execute(ReceiptItemKey.class);
+            return createRequest(path).execute(ReceiptItemKey.class);
         } catch (Exception ex) {
             throw new DigitalIdentityException(
                     String.format("Error while fetching the share session receipt key '{%s}' ", wrappedItemKeyId),
@@ -180,7 +180,7 @@ public class DigitalIdentityService {
 
         try {
             byte[] payload = ResourceMapper.writeValueAsString(matchRequest);
-            return createSignedRequest(path, HTTP_POST, payload).execute(MatchResult.class);
+            return createRequest(path, HTTP_POST, payload).execute(MatchResult.class);
         } catch (IOException ex) {
             throw new DigitalIdentityException("Error while parsing the DID Match request", ex);
         } catch (URISyntaxException ex) {
@@ -192,11 +192,11 @@ public class DigitalIdentityService {
         }
     }
 
-    YotiHttpRequest createSignedRequest(String path) throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
-        return createSignedRequest(path, HTTP_GET, null);
+    YotiHttpRequest createRequest(String path) throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
+        return createRequest(path, HTTP_GET, null);
     }
 
-    YotiHttpRequest createSignedRequest(String path, String method, byte[] payload)
+    YotiHttpRequest createRequest(String path, String method, byte[] payload)
             throws GeneralSecurityException, UnsupportedEncodingException, URISyntaxException {
         YotiHttpRequestBuilder request = requestBuilderFactory.create()
                 .withAuthStrategy(authStrategy)
