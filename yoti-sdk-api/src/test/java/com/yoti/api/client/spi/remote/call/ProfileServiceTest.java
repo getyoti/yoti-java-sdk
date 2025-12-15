@@ -62,7 +62,7 @@ public class ProfileServiceTest {
 
     @Test
     public void shouldReturnReceiptForCorrectRequest() throws Exception {
-        doReturn(yotiHttpRequest).when(testObj).createSignedRequest(GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
+        doReturn(yotiHttpRequest).when(testObj).createRequest(GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
         when(yotiHttpRequest.execute(ProfileResponse.class)).thenReturn(PROFILE_RESPONSE);
 
         Receipt result = testObj.getReceipt(KEY_PAIR, TOKEN);
@@ -73,7 +73,7 @@ public class ProfileServiceTest {
     @Test
     public void shouldThrowExceptionForIOError() throws Exception {
         IOException ioException = new IOException("Test exception");
-        doReturn(yotiHttpRequest).when(testObj).createSignedRequest(GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
+        doReturn(yotiHttpRequest).when(testObj).createRequest(GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
         when(yotiHttpRequest.execute(ProfileResponse.class)).thenThrow(ioException);
 
         try {
@@ -87,7 +87,7 @@ public class ProfileServiceTest {
     @Test
     public void shouldThrowExceptionWithResourceExceptionCause() throws Throwable {
         ResourceException resourceException = new ResourceException(404, "Not Found", "Test exception");
-        doReturn(yotiHttpRequest).when(testObj).createSignedRequest(GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
+        doReturn(yotiHttpRequest).when(testObj).createRequest(GENERATED_PROFILE_PATH, B64_PUBLIC_KEY);
         when(yotiHttpRequest.execute(ProfileResponse.class)).thenThrow(resourceException);
 
         try {
