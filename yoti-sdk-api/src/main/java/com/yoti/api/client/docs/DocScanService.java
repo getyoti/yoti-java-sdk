@@ -37,6 +37,7 @@ import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.YotiHttpResponse;
 import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
+import com.yoti.api.client.spi.remote.call.factory.NoAuthStrategy;
 import com.yoti.api.client.spi.remote.call.factory.UnsignedPathFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -474,6 +475,7 @@ final class DocScanService {
 
         try {
             YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
+                    .withAuthStrategy(new NoAuthStrategy())
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
                     .withHttpMethod(HTTP_GET)
