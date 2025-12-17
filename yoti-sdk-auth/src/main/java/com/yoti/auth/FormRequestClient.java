@@ -59,14 +59,14 @@ final class FormRequestClient {
     private byte[] parseResponse(HttpURLConnection httpUrlConnection) throws ResourceException, IOException {
         int responseCode = httpUrlConnection.getResponseCode();
         if (responseCode >= HttpURLConnection.HTTP_BAD_REQUEST) {
-            byte[] responseBody = readBody(httpUrlConnection);
+            byte[] responseBody = readBody(httpUrlConnection.getErrorStream());
             throw new ResourceException(responseCode, httpUrlConnection.getResponseMessage(), new String(responseBody));
         }
-        return readBody(httpUrlConnection);
+        return readBody(httpUrlConnection.getInputStream());
     }
 
-    private byte[] readBody(HttpURLConnection httpURLConnection) throws IOException {
-        try (QuietCloseable<InputStream> inputStream = new QuietCloseable<>(httpURLConnection.getInputStream())) {
+    private byte[] readBody(InputStream httpInputStream) throws IOException {
+        try (QuietCloseable<InputStream> inputStream = new QuietCloseable<>(httpInputStream)) {
             return readChunked(inputStream.get());
         }
     }
