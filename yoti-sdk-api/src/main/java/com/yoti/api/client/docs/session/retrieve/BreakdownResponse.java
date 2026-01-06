@@ -15,6 +15,9 @@ public class BreakdownResponse {
     @JsonProperty("details")
     private List<DetailsResponse> details;
 
+    @JsonProperty("process")
+    private String process;
+
     public String getSubCheck() {
         return subCheck;
     }
@@ -25,6 +28,10 @@ public class BreakdownResponse {
 
     public List<? extends DetailsResponse> getDetails() {
         return details;
+    }
+
+    public String getProcess() {
+        return process;
     }
 
 }
