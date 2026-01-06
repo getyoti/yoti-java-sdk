@@ -2,6 +2,7 @@ package com.yoti.api.client.docs.session.create;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInRelativeOrder;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
@@ -38,6 +39,11 @@ public class SessionSpecTest {
     private static final String SOME_SDK_CONFIG_FONT_COLOUR = "#b40c12";
     private static final String SOME_SDK_CONFIG_LOCALE = "en";
     private static final String SOME_SDK_CONFIG_PRESET_ISSUING_COUNTRY = "USA";
+
+    private static final String SOME_ISSUER = "UK_GOV";
+    private static final String SOME_SCHEME = "RTW";
+    private static final String SOME_OTHER_ISSUER = "someOtherIssuer";
+    private static final String SOME_OTHER_SCHEME = "someOtherScheme";
 
     private static final String SOME_SDK_CONFIG_SUCCESS_URL = "https://yourdomain.com/some/success/endpoint";
     private static final String SOME_SDK_CONFIG_ERROR_URL = "https://yourdomain.com/some/error/endpoint";
@@ -249,6 +255,39 @@ public class SessionSpecTest {
                 .build();
 
         assertThat(sessionSpec.getImportToken(), is(importTokenMock));
+    }
+
+    @Test
+    public void shouldBuildWithSingleRequiredShareCode() {
+        RequiredShareCodePayload requiredShareCodePayload = RequiredShareCodePayload.builder()
+                .withIssuer(SOME_ISSUER)
+                .withScheme(SOME_SCHEME)
+                .build();
+
+        SessionSpec sessionSpec = SessionSpec.builder()
+                .withRequiredShareCode(requiredShareCodePayload)
+                .build();
+
+        assertThat(sessionSpec.getRequiredShareCodes(), containsInRelativeOrder(requiredShareCodePayload));
+    }
+
+    @Test
+    public void shouldBuildWithMultipleRequiredShareCodes() {
+        RequiredShareCodePayload requiredShareCodePayload1 = RequiredShareCodePayload.builder()
+                .withIssuer(SOME_ISSUER)
+                .withScheme(SOME_SCHEME)
+                .build();
+        RequiredShareCodePayload requiredShareCodePayload2 = RequiredShareCodePayload.builder()
+                .withIssuer(SOME_OTHER_ISSUER)
+                .withScheme(SOME_OTHER_SCHEME)
+                .build();
+
+        SessionSpec sessionSpec = SessionSpec.builder()
+                .withRequiredShareCode(requiredShareCodePayload1)
+                .withRequiredShareCode(requiredShareCodePayload2)
+                .build();
+
+        assertThat(sessionSpec.getRequiredShareCodes(), containsInRelativeOrder(requiredShareCodePayload1, requiredShareCodePayload2));
     }
 
 }
