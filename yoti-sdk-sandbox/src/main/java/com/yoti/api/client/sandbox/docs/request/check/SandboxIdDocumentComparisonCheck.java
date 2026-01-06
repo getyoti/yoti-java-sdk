@@ -10,7 +10,7 @@ public class SandboxIdDocumentComparisonCheck extends SandboxCheck {
     @JsonProperty("secondary_document_filter")
     private final SandboxDocumentFilter secondaryDocumentFilter;
 
-    SandboxIdDocumentComparisonCheck(SandboxCheckResult result, SandboxDocumentFilter secondaryDocumentFilter) {
+    private SandboxIdDocumentComparisonCheck(SandboxCheckResult result, SandboxDocumentFilter secondaryDocumentFilter) {
         super(result);
         this.secondaryDocumentFilter = secondaryDocumentFilter;
     }

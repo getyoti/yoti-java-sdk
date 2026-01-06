@@ -11,7 +11,7 @@ public class RequestedProfileDocumentMatchCheck extends RequestedCheck<Requested
 
     private final RequestedProfileDocumentMatchConfig config;
 
-    RequestedProfileDocumentMatchCheck(RequestedProfileDocumentMatchConfig config) {
+    private RequestedProfileDocumentMatchCheck(RequestedProfileDocumentMatchConfig config) {
         this.config = config;
     }
 

@@ -6,7 +6,7 @@ public class RequestedIdDocumentComparisonCheck extends RequestedCheck<Requested
 
     private final RequestedIdDocumentComparisonConfig config;
 
-    RequestedIdDocumentComparisonCheck(RequestedIdDocumentComparisonConfig config) {
+    private RequestedIdDocumentComparisonCheck(RequestedIdDocumentComparisonConfig config) {
         this.config = config;
     }
 

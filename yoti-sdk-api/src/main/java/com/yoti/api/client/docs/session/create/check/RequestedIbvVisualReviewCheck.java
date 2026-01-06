@@ -11,7 +11,7 @@ public class RequestedIbvVisualReviewCheck extends RequestedCheck<RequestedIbvVi
 
     private final RequestedIbvVisualReviewConfig config;
 
-    RequestedIbvVisualReviewCheck(RequestedIbvVisualReviewConfig config) {
+    private RequestedIbvVisualReviewCheck(RequestedIbvVisualReviewConfig config) {
         this.config = config;
     }
 

@@ -60,7 +60,10 @@ public class AmlTest {
 
     @Test
     public void shouldReturnAmlAddress() {
-        AmlAddress amlAddress = new AmlAddress(SOME_POSTCODE, SOME_COUNTRY);
+        AmlAddress amlAddress = AmlAddress.builder()
+                .withPostCode(SOME_POSTCODE)
+                .withCountry(SOME_COUNTRY)
+                .build();
 
         assertNotNull(amlAddress);
         assertThat(amlAddress.getPostCode(), is(SOME_POSTCODE));

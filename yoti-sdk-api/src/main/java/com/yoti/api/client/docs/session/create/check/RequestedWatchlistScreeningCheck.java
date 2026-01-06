@@ -6,7 +6,7 @@ public class RequestedWatchlistScreeningCheck extends RequestedCheck<RequestedWa
 
     private final RequestedWatchlistScreeningConfig config;
 
-    RequestedWatchlistScreeningCheck(RequestedWatchlistScreeningConfig config) {
+    private RequestedWatchlistScreeningCheck(RequestedWatchlistScreeningConfig config) {
         this.config = config;
     }
 

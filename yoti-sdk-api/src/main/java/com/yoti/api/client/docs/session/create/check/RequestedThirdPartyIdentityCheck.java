@@ -6,7 +6,7 @@ public class RequestedThirdPartyIdentityCheck extends RequestedCheck<RequestedTh
 
     private final RequestedThirdPartyIdentityConfig config;
 
-    RequestedThirdPartyIdentityCheck(RequestedThirdPartyIdentityConfig config) {
+    private RequestedThirdPartyIdentityCheck(RequestedThirdPartyIdentityConfig config) {
         this.config = config;
     }
 

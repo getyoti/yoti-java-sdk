@@ -4,7 +4,7 @@ import com.yoti.api.client.docs.DocScanConstants;
 
 public class ProofOfAddressObjective extends Objective {
 
-    ProofOfAddressObjective() {
+    private ProofOfAddressObjective() {
         super(DocScanConstants.PROOF_OF_ADDRESS);
     }
 

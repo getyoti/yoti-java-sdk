@@ -16,7 +16,7 @@ public class AmlProfile {
     @JsonProperty("address")
     private final AmlAddress amlAddress;
 
-    AmlProfile(String givenNames, String familyName, String ssn, AmlAddress amlAddress) {
+    private AmlProfile(String givenNames, String familyName, String ssn, AmlAddress amlAddress) {
         this.givenNames = givenNames;
         this.familyName = familyName;
         this.ssn = ssn;

@@ -16,7 +16,7 @@ public class RequestedWatchlistScreeningConfig implements RequestedCheckConfig {
     @JsonProperty("categories")
     private final List<String> categories;
 
-    RequestedWatchlistScreeningConfig(List<String> categories) {
+    private RequestedWatchlistScreeningConfig(List<String> categories) {
         this.categories = categories;
     }
 

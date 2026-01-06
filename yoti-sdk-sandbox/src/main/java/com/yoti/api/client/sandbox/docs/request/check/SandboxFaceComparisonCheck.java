@@ -4,7 +4,7 @@ import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxFaceComparisonCheck extends SandboxCheck {
 
-    SandboxFaceComparisonCheck(SandboxCheckResult result) {
+    private SandboxFaceComparisonCheck(SandboxCheckResult result) {
         super(result);
     }
 

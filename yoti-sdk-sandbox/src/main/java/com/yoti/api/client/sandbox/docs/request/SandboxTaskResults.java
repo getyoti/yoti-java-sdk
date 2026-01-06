@@ -19,7 +19,7 @@ public class SandboxTaskResults {
     @JsonProperty(DocScanConstants.SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION)
     private final List<SandboxSupplementaryDocTextDataExtractionTask> supplementaryTextDataExtractionTasks;
 
-    SandboxTaskResults(List<SandboxDocumentTextDataExtractionTask> documentTextDataExtractionTasks,
+    private SandboxTaskResults(List<SandboxDocumentTextDataExtractionTask> documentTextDataExtractionTasks,
             List<SandboxSupplementaryDocTextDataExtractionTask> supplementaryTextDataExtractionTasks) {
         this.documentTextDataExtractionTasks = documentTextDataExtractionTasks;
         this.supplementaryTextDataExtractionTasks = supplementaryTextDataExtractionTasks;

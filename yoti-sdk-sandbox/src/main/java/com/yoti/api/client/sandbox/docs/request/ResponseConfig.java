@@ -12,7 +12,7 @@ public class ResponseConfig {
     @JsonProperty("check_reports")
     private SandboxCheckReports checkReports;
 
-    ResponseConfig(SandboxTaskResults taskResults, SandboxCheckReports checkReports) {
+    private ResponseConfig(SandboxTaskResults taskResults, SandboxCheckReports checkReports) {
         this.taskResults = taskResults;
         this.checkReports = checkReports;
     }

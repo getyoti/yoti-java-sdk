@@ -12,7 +12,7 @@ public class IdentityProfileSchemePayload {
     @JsonProperty("objective")
     private final String objective;
 
-    IdentityProfileSchemePayload(String type, String objective) {
+    private IdentityProfileSchemePayload(String type, String objective) {
         this.type = type;
         this.objective = objective;
     }

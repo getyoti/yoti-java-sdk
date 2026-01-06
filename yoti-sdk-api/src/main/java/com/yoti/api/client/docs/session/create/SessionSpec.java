@@ -72,7 +72,7 @@ public class SessionSpec {
     @JsonProperty("required_share_codes")
     private final List<RequiredShareCodePayload> requiredShareCodes;
 
-    SessionSpec(Integer clientSessionTokenTtl,
+    private SessionSpec(Integer clientSessionTokenTtl,
             Integer resourcesTtl,
             ImportTokenPayload importToken,
             String userTrackingId,

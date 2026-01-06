@@ -74,7 +74,7 @@ public class SandboxCheckReports {
     @JsonProperty("async_report_delay")
     private final Integer asyncReportDelay;
 
-    SandboxCheckReports(List<SandboxDocumentTextDataCheck> documentTextDataChecks,
+    private SandboxCheckReports(List<SandboxDocumentTextDataCheck> documentTextDataChecks,
             List<SandboxDocumentAuthenticityCheck> documentAuthenticityChecks,
             List<SandboxLivenessCheck> livenessChecks,
             List<SandboxDocumentFaceMatchCheck> documentFaceMatchChecks,

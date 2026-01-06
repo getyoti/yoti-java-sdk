@@ -8,7 +8,7 @@ import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxSupplementaryDocumentTextDataCheck extends SandboxDocumentCheck {
 
-    SandboxSupplementaryDocumentTextDataCheck(SandboxSupplementaryDocumentTextDataCheckResult result, SandboxDocumentFilter documentFilter) {
+    private SandboxSupplementaryDocumentTextDataCheck(SandboxSupplementaryDocumentTextDataCheckResult result, SandboxDocumentFilter documentFilter) {
         super(result, documentFilter);
     }
 
