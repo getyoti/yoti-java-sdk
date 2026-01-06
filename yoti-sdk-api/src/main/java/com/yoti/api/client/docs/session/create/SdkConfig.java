@@ -60,7 +60,7 @@ public class SdkConfig {
     @JsonProperty("suppressed_screens")
     private final List<String> suppressedScreens;
 
-    SdkConfig(String allowedCaptureMethods,
+    private SdkConfig(String allowedCaptureMethods,
             String primaryColour,
             String primaryColourDarkMode,
             String secondaryColour,

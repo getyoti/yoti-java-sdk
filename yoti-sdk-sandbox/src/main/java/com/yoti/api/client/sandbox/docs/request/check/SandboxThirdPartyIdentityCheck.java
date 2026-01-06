@@ -4,7 +4,7 @@ import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxThirdPartyIdentityCheck extends SandboxCheck {
 
-    SandboxThirdPartyIdentityCheck(SandboxCheckResult result) {
+    private SandboxThirdPartyIdentityCheck(SandboxCheckResult result) {
         super(result);
     }
 

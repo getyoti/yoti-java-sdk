@@ -7,7 +7,7 @@ public class SubjectPayload {
     @JsonProperty("subject_id")
     private final String subjectId;
 
-    SubjectPayload(String subjectId) {
+    private SubjectPayload(String subjectId) {
         this.subjectId = subjectId;
     }
 

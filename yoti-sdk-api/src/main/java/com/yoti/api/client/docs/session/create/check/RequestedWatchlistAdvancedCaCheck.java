@@ -6,7 +6,7 @@ public class RequestedWatchlistAdvancedCaCheck extends RequestedCheck<RequestedW
 
     private final RequestedWatchlistAdvancedCaConfig config;
 
-    RequestedWatchlistAdvancedCaCheck(RequestedWatchlistAdvancedCaConfig config) {
+    private RequestedWatchlistAdvancedCaCheck(RequestedWatchlistAdvancedCaConfig config) {
         this.config = config;
     }
 

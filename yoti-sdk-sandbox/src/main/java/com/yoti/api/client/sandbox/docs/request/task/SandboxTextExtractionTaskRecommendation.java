@@ -14,7 +14,7 @@ public class SandboxTextExtractionTaskRecommendation {
     @JsonProperty("reason")
     private final SandboxTextExtractionTaskReason reason;
 
-    SandboxTextExtractionTaskRecommendation(String value, SandboxTextExtractionTaskReason reason) {
+    private SandboxTextExtractionTaskRecommendation(String value, SandboxTextExtractionTaskReason reason) {
         this.value = value;
         this.reason = reason;
     }

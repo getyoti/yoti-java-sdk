@@ -9,7 +9,7 @@ public class RequestedSupplementaryDocTextExtractionTask extends RequestedTask<R
     @JsonProperty("config")
     private final RequestedSupplementaryDocTextExtractionTaskConfig config;
 
-    RequestedSupplementaryDocTextExtractionTask(RequestedSupplementaryDocTextExtractionTaskConfig config) {
+    private RequestedSupplementaryDocTextExtractionTask(RequestedSupplementaryDocTextExtractionTaskConfig config) {
         this.config = config;
     }
 

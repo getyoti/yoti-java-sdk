@@ -5,7 +5,7 @@ import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxDocumentAuthenticityCheck extends SandboxDocumentCheck {
 
-    SandboxDocumentAuthenticityCheck(SandboxCheckResult result, SandboxDocumentFilter documentFilter) {
+    private SandboxDocumentAuthenticityCheck(SandboxCheckResult result, SandboxDocumentFilter documentFilter) {
         super(result, documentFilter);
     }
 

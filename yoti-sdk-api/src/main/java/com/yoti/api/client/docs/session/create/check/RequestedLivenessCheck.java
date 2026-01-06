@@ -11,7 +11,7 @@ public class RequestedLivenessCheck extends RequestedCheck<RequestedLivenessConf
 
     private final RequestedLivenessConfig config;
 
-    RequestedLivenessCheck(RequestedLivenessConfig config) {
+    private RequestedLivenessCheck(RequestedLivenessConfig config) {
         this.config = config;
     }
 

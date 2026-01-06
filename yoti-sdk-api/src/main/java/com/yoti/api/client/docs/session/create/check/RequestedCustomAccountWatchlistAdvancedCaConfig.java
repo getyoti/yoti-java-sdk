@@ -21,7 +21,7 @@ public class RequestedCustomAccountWatchlistAdvancedCaConfig extends RequestedWa
     @JsonProperty("client_ref")
     private final String clientRef;
 
-    RequestedCustomAccountWatchlistAdvancedCaConfig(Boolean removeDeceased,
+    private RequestedCustomAccountWatchlistAdvancedCaConfig(Boolean removeDeceased,
             Boolean shareUrl,
             RequestedCaSources sources,
             RequestedCaMatchingStrategy matchingStrategy,

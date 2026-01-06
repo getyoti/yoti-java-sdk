@@ -20,7 +20,7 @@ public class RequiredSupplementaryDocument extends RequiredDocument {
     @JsonProperty("country_codes")
     private final List<String> countryCodes;
 
-    RequiredSupplementaryDocument(Objective objective, List<String> documentTypes, List<String> countryCodes) {
+    private RequiredSupplementaryDocument(Objective objective, List<String> documentTypes, List<String> countryCodes) {
         this.objective = objective;
         this.documentTypes = documentTypes;
         this.countryCodes = countryCodes;

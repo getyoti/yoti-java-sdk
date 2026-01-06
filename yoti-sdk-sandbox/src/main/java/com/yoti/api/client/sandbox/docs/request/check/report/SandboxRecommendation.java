@@ -15,7 +15,7 @@ public class SandboxRecommendation {
     @JsonProperty("recovery_suggestion")
     private final String recoverySuggestion;
 
-    SandboxRecommendation(String value, String reason, String recoverySuggestion) {
+    private SandboxRecommendation(String value, String reason, String recoverySuggestion) {
         this.value = value;
         this.reason = reason;
         this.recoverySuggestion = recoverySuggestion;

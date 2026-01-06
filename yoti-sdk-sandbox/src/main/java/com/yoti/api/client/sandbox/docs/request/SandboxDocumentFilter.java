@@ -15,7 +15,7 @@ public class SandboxDocumentFilter {
     @JsonProperty("country_codes")
     private final List<String> countryCodes;
 
-    SandboxDocumentFilter(List<String> documentTypes, List<String> countryCodes) {
+    private SandboxDocumentFilter(List<String> documentTypes, List<String> countryCodes) {
         this.documentTypes = documentTypes;
         this.countryCodes = countryCodes;
     }

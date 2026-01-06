@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class SandboxDocumentTextDataCheck extends SandboxDocumentCheck {
 
-    SandboxDocumentTextDataCheck(SandboxDocumentTextDataCheckResult result, SandboxDocumentFilter documentFilter) {
+    private SandboxDocumentTextDataCheck(SandboxDocumentTextDataCheckResult result, SandboxDocumentFilter documentFilter) {
         super(result, documentFilter);
     }
 

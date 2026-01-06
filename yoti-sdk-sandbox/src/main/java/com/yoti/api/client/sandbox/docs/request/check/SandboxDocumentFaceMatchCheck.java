@@ -5,7 +5,7 @@ import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxDocumentFaceMatchCheck extends SandboxDocumentCheck {
 
-    SandboxDocumentFaceMatchCheck(SandboxCheckResult result, SandboxDocumentFilter documentFilter) {
+    private SandboxDocumentFaceMatchCheck(SandboxCheckResult result, SandboxDocumentFilter documentFilter) {
         super(result, documentFilter);
     }
 
