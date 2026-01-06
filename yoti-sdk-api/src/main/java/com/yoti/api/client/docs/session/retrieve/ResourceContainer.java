@@ -23,6 +23,9 @@ public class ResourceContainer {
     @JsonProperty("applicant_profiles")
     private List<ApplicantProfileResourceResponse> applicantProfiles;
 
+    @JsonProperty("share_codes")
+    private List<ShareCodeResourceResponse> shareCodes;
+
     /**
      * Returns ID documents that were uploaded by the user
      *
@@ -95,6 +98,15 @@ public class ResourceContainer {
      */
     public List<ApplicantProfileResourceResponse> getApplicantProfiles() {
         return applicantProfiles;
+    }
+
+    /**
+     * Returns ShareCode resources uploaded by the user
+     *
+     * @return the list of Share Code resources
+     */
+    public List<ShareCodeResourceResponse> getShareCodes() {
+        return shareCodes;
     }
 
     ResourceContainer filterForCheck(CheckResponse checkResponse) {
