@@ -36,6 +36,8 @@ public class DocScanConstants {
     public static final String SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = "SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK";
     public static final String SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION = "SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION";
 
+    public static final String VERIFY_SHARE_CODE_TASK = "VERIFY_SHARE_CODE_TASK";
+
     public static final String LIVENESS = "LIVENESS";
     public static final String ZOOM = "ZOOM";
     public static final String STATIC = "STATIC";

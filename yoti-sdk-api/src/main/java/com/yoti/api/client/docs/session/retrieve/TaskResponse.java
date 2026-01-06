@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = IdDocTextExtractionTaskResponse.class, name = DocScanConstants.ID_DOCUMENT_TEXT_DATA_EXTRACTION),
         @JsonSubTypes.Type(value = SupplementaryDocumentTextExtractionTaskResponse.class, name = DocScanConstants.SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION),
+        @JsonSubTypes.Type(value = ShareCodeTaskResponse.class, name = DocScanConstants.VERIFY_SHARE_CODE_TASK)
 })
 public class TaskResponse {
 
