@@ -10,7 +10,7 @@ public class RequestedDocumentAuthenticityCheck extends RequestedCheck<Requested
 
     private final RequestedDocumentAuthenticityConfig config;
 
-    RequestedDocumentAuthenticityCheck(RequestedDocumentAuthenticityConfig config) {
+    private RequestedDocumentAuthenticityCheck(RequestedDocumentAuthenticityConfig config) {
         this.config = config;
     }
 

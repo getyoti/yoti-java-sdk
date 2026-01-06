@@ -12,7 +12,7 @@ public class RequiredIdDocument extends RequiredDocument {
     @JsonProperty("filter")
     private final DocumentFilter filter;
 
-    RequiredIdDocument(DocumentFilter filter) {
+    private RequiredIdDocument(DocumentFilter filter) {
         this.filter = filter;
     }
 

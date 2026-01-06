@@ -14,7 +14,7 @@ public class OrthogonalRestrictionsFilter extends DocumentFilter {
     @JsonProperty("type_restriction")
     private final TypeRestriction typeRestriction;
 
-    OrthogonalRestrictionsFilter(CountryRestriction countryRestriction, TypeRestriction typeRestriction, Boolean allowNonLatinDocuments, Boolean allowExpiredDocuments) {
+    private OrthogonalRestrictionsFilter(CountryRestriction countryRestriction, TypeRestriction typeRestriction, Boolean allowNonLatinDocuments, Boolean allowExpiredDocuments) {
         super(DocScanConstants.ORTHOGONAL_RESTRICTIONS, allowNonLatinDocuments, allowExpiredDocuments);
         this.countryRestriction = countryRestriction;
         this.typeRestriction = typeRestriction;

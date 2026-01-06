@@ -7,7 +7,7 @@ public class ImportTokenPayload {
     @JsonProperty("ttl")
     private Integer ttl;
 
-    ImportTokenPayload(Integer ttl) {
+    private ImportTokenPayload(Integer ttl) {
         this.ttl = ttl;
     }
 

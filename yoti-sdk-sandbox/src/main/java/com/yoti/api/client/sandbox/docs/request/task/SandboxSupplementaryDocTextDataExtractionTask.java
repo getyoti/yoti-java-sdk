@@ -25,7 +25,7 @@ public class SandboxSupplementaryDocTextDataExtractionTask {
     @JsonProperty("result_template")
     private final String resultTemplate;
 
-    SandboxSupplementaryDocTextDataExtractionTask(SandboxSupplementaryDocTextDataExtractionTaskResult result,
+    private SandboxSupplementaryDocTextDataExtractionTask(SandboxSupplementaryDocTextDataExtractionTaskResult result,
             SandboxDocumentFilter documentFilter,
             Integer responseDelay,
             String resultTemplate) {

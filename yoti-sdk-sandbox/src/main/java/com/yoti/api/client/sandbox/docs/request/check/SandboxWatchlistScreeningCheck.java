@@ -4,7 +4,7 @@ import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxWatchlistScreeningCheck extends SandboxCheck {
 
-    SandboxWatchlistScreeningCheck(SandboxCheckResult result) {
+    private SandboxWatchlistScreeningCheck(SandboxCheckResult result) {
         super(result);
     }
 

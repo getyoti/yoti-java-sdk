@@ -9,7 +9,7 @@ public class RequestedIdDocTextExtractionTask extends RequestedTask<RequestedIdD
 
     private final RequestedIdDocTextExtractionTaskConfig config;
 
-    RequestedIdDocTextExtractionTask(RequestedIdDocTextExtractionTaskConfig config) {
+    private RequestedIdDocTextExtractionTask(RequestedIdDocTextExtractionTaskConfig config) {
         this.config = config;
     }
 

@@ -11,7 +11,7 @@ public class RequestedDocumentSchemeValidityCheck extends RequestedCheck<Request
 
     private final RequestedDocumentSchemeValidityConfig config;
 
-    RequestedDocumentSchemeValidityCheck(RequestedDocumentSchemeValidityConfig config) {
+    private RequestedDocumentSchemeValidityCheck(RequestedDocumentSchemeValidityConfig config) {
         this.config = config;
     }
 

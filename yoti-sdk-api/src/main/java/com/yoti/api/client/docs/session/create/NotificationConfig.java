@@ -26,7 +26,7 @@ public class NotificationConfig {
     @JsonProperty("topics")
     private final List<String> topics;
 
-    NotificationConfig(String authToken, String authType, String endpoint, List<String> topics) {
+    private NotificationConfig(String authToken, String authType, String endpoint, List<String> topics) {
         this.authToken = authToken;
         this.authType = authType;
         this.endpoint = endpoint;

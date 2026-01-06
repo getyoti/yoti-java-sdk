@@ -11,7 +11,7 @@ public class SandboxWatchlistAdvancedCaCheck extends SandboxCheck {
     @JsonProperty("sources_filter")
     private final SandboxCaSourcesFilter sourcesFilter;
 
-    SandboxWatchlistAdvancedCaCheck(SandboxCheckResult result, SandboxCaSourcesFilter sourcesFilter) {
+    private SandboxWatchlistAdvancedCaCheck(SandboxCheckResult result, SandboxCaSourcesFilter sourcesFilter) {
         super(result);
         this.sourcesFilter = sourcesFilter;
     }

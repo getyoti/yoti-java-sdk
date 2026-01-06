@@ -17,7 +17,7 @@ public class DocumentRestrictionsFilter extends DocumentFilter {
     @JsonProperty("documents")
     private final List<DocumentRestriction> documents;
 
-    DocumentRestrictionsFilter(String inclusion, List<DocumentRestriction> documents, Boolean allowNonLatinDocuments, Boolean allowExpiredDocuments) {
+    private DocumentRestrictionsFilter(String inclusion, List<DocumentRestriction> documents, Boolean allowNonLatinDocuments, Boolean allowExpiredDocuments) {
         super(DocScanConstants.DOCUMENT_RESTRICTIONS, allowNonLatinDocuments, allowExpiredDocuments);
         this.inclusion = inclusion;
         this.documents = documents;

@@ -18,7 +18,7 @@ public class SandboxBreakdown {
     @JsonProperty("details")
     private final List<SandboxDetail> details;
 
-    SandboxBreakdown(String subCheck, String result, List<SandboxDetail> details) {
+    private SandboxBreakdown(String subCheck, String result, List<SandboxDetail> details) {
         this.subCheck = subCheck;
         this.result = result;
         this.details = details;

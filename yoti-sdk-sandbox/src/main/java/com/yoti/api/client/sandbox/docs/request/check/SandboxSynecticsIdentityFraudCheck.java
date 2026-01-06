@@ -4,7 +4,7 @@ import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxSynecticsIdentityFraudCheck extends SandboxCheck {
 
-    SandboxSynecticsIdentityFraudCheck(SandboxCheckResult result) {
+    private SandboxSynecticsIdentityFraudCheck(SandboxCheckResult result) {
         super(result);
     }
 

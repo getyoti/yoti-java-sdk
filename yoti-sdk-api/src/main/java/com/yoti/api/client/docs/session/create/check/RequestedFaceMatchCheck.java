@@ -11,7 +11,7 @@ public class RequestedFaceMatchCheck extends RequestedCheck<RequestedFaceMatchCo
 
     private final RequestedFaceMatchConfig config;
 
-    RequestedFaceMatchCheck(RequestedFaceMatchConfig config) {
+    private RequestedFaceMatchCheck(RequestedFaceMatchConfig config) {
         this.config = config;
     }
 

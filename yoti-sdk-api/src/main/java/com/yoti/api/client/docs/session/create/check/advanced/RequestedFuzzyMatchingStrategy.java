@@ -7,7 +7,7 @@ public class RequestedFuzzyMatchingStrategy extends RequestedCaMatchingStrategy 
     @JsonProperty("fuzziness")
     private final Double fuzziness;
 
-    RequestedFuzzyMatchingStrategy(Double fuzziness) {
+    private RequestedFuzzyMatchingStrategy(Double fuzziness) {
         this.fuzziness = fuzziness;
     }
 

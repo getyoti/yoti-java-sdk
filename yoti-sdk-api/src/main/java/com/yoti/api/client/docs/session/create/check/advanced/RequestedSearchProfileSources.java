@@ -7,7 +7,7 @@ public class RequestedSearchProfileSources extends RequestedCaSources {
     @JsonProperty("search_profile")
     private final String searchProfile;
 
-    RequestedSearchProfileSources(String searchProfile) {
+    private RequestedSearchProfileSources(String searchProfile) {
         this.searchProfile = searchProfile;
     }
 

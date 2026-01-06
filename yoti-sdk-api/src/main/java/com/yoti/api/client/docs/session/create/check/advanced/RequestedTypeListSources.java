@@ -9,7 +9,7 @@ public class RequestedTypeListSources extends RequestedCaSources {
     @JsonProperty("types")
     private final List<String> types;
 
-    RequestedTypeListSources(List<String> types) {
+    private RequestedTypeListSources(List<String> types) {
         this.types = types;
     }
 

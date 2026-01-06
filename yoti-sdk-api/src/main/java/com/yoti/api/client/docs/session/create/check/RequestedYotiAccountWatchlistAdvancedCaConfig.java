@@ -5,7 +5,7 @@ import com.yoti.api.client.docs.session.create.check.advanced.RequestedCaSources
 
 public class RequestedYotiAccountWatchlistAdvancedCaConfig extends RequestedWatchlistAdvancedCaConfig {
 
-    RequestedYotiAccountWatchlistAdvancedCaConfig(Boolean removeDeceased,
+    private RequestedYotiAccountWatchlistAdvancedCaConfig(Boolean removeDeceased,
             Boolean shareUrl,
             RequestedCaSources sources,
             RequestedCaMatchingStrategy matchingStrategy) {

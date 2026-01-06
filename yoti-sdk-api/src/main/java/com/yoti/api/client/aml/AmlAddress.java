@@ -10,7 +10,7 @@ public class AmlAddress {
     @JsonProperty("country")
     private final String country;
 
-    public AmlAddress(String postCode, String country) {
+    private AmlAddress(String postCode, String country) {
         this.postCode = postCode;
         this.country = country;
     }

@@ -12,7 +12,7 @@ public class IdentityProfileRequirementsPayload {
     @JsonProperty("scheme")
     private final IdentityProfileSchemePayload scheme;
 
-    IdentityProfileRequirementsPayload(String trustFramework, IdentityProfileSchemePayload scheme) {
+    private IdentityProfileRequirementsPayload(String trustFramework, IdentityProfileSchemePayload scheme) {
         this.trustFramework = trustFramework;
         this.scheme = scheme;
     }
