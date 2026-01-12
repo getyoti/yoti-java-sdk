@@ -2,9 +2,9 @@ package com.yoti.api.client.sandbox.docs.request.check;
 
 import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
-public class SandboxThirdPartyIdentityCheck extends SandboxCheck {
+public class SandboxThirdPartyIdentityFraudOneCheck extends SandboxCheck {
 
-    SandboxThirdPartyIdentityCheck(SandboxCheckResult result) {
+    SandboxThirdPartyIdentityFraudOneCheck(SandboxCheckResult result) {
         super(result);
     }
 
@@ -13,12 +13,11 @@ public class SandboxThirdPartyIdentityCheck extends SandboxCheck {
     }
 
     /**
-     * Builder for {@link SandboxThirdPartyIdentityCheck}
+     * Builder for {@link SandboxThirdPartyIdentityFraudOneCheck}
      */
     public static class Builder extends SandboxCheck.Builder<Builder> {
 
-        private Builder() {
-        }
+        private Builder() {}
 
         @Override
         protected Builder self() {
@@ -26,13 +25,13 @@ public class SandboxThirdPartyIdentityCheck extends SandboxCheck {
         }
 
         @Override
-        public SandboxThirdPartyIdentityCheck build() {
+        public SandboxThirdPartyIdentityFraudOneCheck build() {
             SandboxCheckReport report = recommendation == null && breakdown == null
                     ? null
                     : new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
-            return new SandboxThirdPartyIdentityCheck(result);
+            return new SandboxThirdPartyIdentityFraudOneCheck(result);
         }
 
     }

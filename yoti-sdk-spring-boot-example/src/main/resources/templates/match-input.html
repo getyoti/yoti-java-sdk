@@ -1,0 +1,66 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>Run Match</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/index.css}"/>
+    <link rel="shortcut icon" type="image/x-icon" href="https://www.yoti.com/wp-content/uploads/yoti-favicon.png"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet"/>
+</head>
+
+<body class="yoti-body">
+<main>
+    <section class="yoti-top-section">
+        <div class="yoti-logo-section">
+            <img class="yoti-logo-image" th:src="@{/static/assets/logo.png}" th:srcset="@{/static/assets/logo@2x.png 2x}" alt="Yoti"/>
+        </div>
+        <h1 class="yoti-top-header">Run Digital ID Match</h1>
+        <form th:action="@{/did/match}" th:object="${matchInputForm}" method="post" class="yoti-login-dialog" onsubmit="return validateHttpMethod()">
+            <h2 class="yoti-login-dialog-header">Enter Match Details:</h2>
+            <label for="valueToMatch">Value to Match:</label>
+            <input class="yoti-input" type="text" th:field="*{value}" id="valueToMatch" placeholder="Value to Match" required/>
+            <h2 class="yoti-login-dialog-header" style="margin-top: 20px;">Notification Details:</h2>
+            <label for="notificationEndpoint">Notification Endpoint URL:</label>
+            <input class="yoti-input" type="text" th:field="*{endpoint}" id="notificationEndpoint" placeholder="Notification Endpoint URL" required/>
+            <label for="httpMethod">HTTP Method (e.g., POST):</label>
+            <input class="yoti-input" type="text" th:field="*{httpMethod}" id="httpMethod" placeholder="HTTP Method (e.g., POST)" required/>
+            <div class="yoti-input" style="display: flex; align-items: center; border: none; padding-left: 0;">
+                <input type="checkbox" th:field="*{verifyTls}" id="verifyTls" style="margin-right: 10px; height: auto; width: auto;"/>
+                <label for="verifyTls">Verify TLS</label>
+            </div>
+            <h3 class="yoti-login-dialog-header" style="font-size: 1em; margin-top: 1em;">Headers:</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10px;">
+                <label for="headerKey1">Header Key 1:</label>
+                <input class="yoti-input" type="text" th:field="*{headerKeys[0]}" id="headerKey1" placeholder="Header Key 1"/>
+                <label for="headerValue1">Header Value 1:</label>
+                <input class="yoti-input" type="text" th:field="*{headerValues[0]}" id="headerValue1" placeholder="Header Value 1"/>
+                <label for="headerKey2">Header Key 2:</label>
+                <input class="yoti-input" type="text" th:field="*{headerKeys[1]}" id="headerKey2" placeholder="Header Key 2"/>
+                <label for="headerValue2">Header Value 2:</label>
+                <input class="yoti-input" type="text" th:field="*{headerValues[1]}" id="headerValue2" placeholder="Header Value 2"/>
+            </div>
+
+            <div class="yoti-login-actions" style="justify-content: center;">
+                <button type="submit" class="yoti-login-button">Run match</button>
+            </div>
+        </form>
+    </section>
+</main>
+<script>
+    function validateHttpMethod() {
+        const input = document.getElementById('httpMethod');
+        let value = input.value.trim().toUpperCase();
+        const allowedMethods = ['POST', 'PUT', 'PATCH', 'GET', 'DELETE'];
+
+        if (value && !allowedMethods.includes(value)) {
+            alert('Invalid HTTP Method. Allowed values are: POST, PUT, PATCH, GET, DELETE');
+            input.value = '';
+            return false;
+        }
+        input.value = value;
+        return true;
+    }
+</script>
+</body>
+
+</html>

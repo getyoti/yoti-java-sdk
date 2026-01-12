@@ -23,10 +23,17 @@ public class SandboxDocumentTextDataExtractionTask {
     @JsonProperty("response_delay")
     private final Integer responseDelay;
 
-    SandboxDocumentTextDataExtractionTask(SandboxDocumentTextDataExtractionTaskResult result, SandboxDocumentFilter documentFilter, Integer responseDelay) {
+    @JsonProperty("result_template")
+    private final String resultTemplate;
+
+    SandboxDocumentTextDataExtractionTask(SandboxDocumentTextDataExtractionTaskResult result,
+            SandboxDocumentFilter documentFilter,
+            Integer responseDelay,
+            String resultTemplate) {
         this.result = result;
         this.documentFilter = documentFilter;
         this.responseDelay = responseDelay;
+        this.resultTemplate = resultTemplate;
     }
 
     public static Builder builder() {
@@ -45,6 +52,10 @@ public class SandboxDocumentTextDataExtractionTask {
         return responseDelay;
     }
 
+    public String getResultTemplate() {
+        return resultTemplate;
+    }
+
     /**
      * Builder for {@link SandboxDocumentTextDataExtractionTask}
      */
@@ -57,6 +68,7 @@ public class SandboxDocumentTextDataExtractionTask {
         private String detectedDocumentType;
         private SandboxTextExtractionTaskRecommendation recommendation;
         private Integer responseDelay;
+        private String resultTemplate;
 
         private Builder() {}
 
@@ -106,13 +118,24 @@ public class SandboxDocumentTextDataExtractionTask {
             return this;
         }
 
+        public Builder withResultTemplate(String resultTemplate) {
+            this.resultTemplate = resultTemplate;
+            return this;
+        }
+
         public SandboxDocumentTextDataExtractionTask build() {
-            SandboxDocumentTextDataExtractionTaskResult result = new SandboxDocumentTextDataExtractionTaskResult(documentFields,
-                    documentIdPhoto,
-                    detectedCountry,
-                    detectedDocumentType,
-                    recommendation);
-            return new SandboxDocumentTextDataExtractionTask(result, documentFilter, responseDelay);
+            SandboxDocumentTextDataExtractionTaskResult result;
+            if (documentFields == null && documentIdPhoto == null && detectedCountry == null && detectedDocumentType == null && recommendation == null) {
+                result = null;
+            } else {
+                result = new SandboxDocumentTextDataExtractionTaskResult(documentFields,
+                        documentIdPhoto,
+                        detectedCountry,
+                        detectedDocumentType,
+                        recommendation);
+            }
+            
+            return new SandboxDocumentTextDataExtractionTask(result, documentFilter, responseDelay, resultTemplate);
         }
     }
 }

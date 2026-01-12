@@ -3,6 +3,7 @@ package com.yoti.api.client.sandbox.docs.request.task;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.util.Base64;
 import java.util.HashMap;
@@ -103,6 +104,16 @@ public class SandboxDocumentTextDataExtractionTaskTest {
                 .build();
 
         assertThat(result.getResponseDelay(), is(10));
+    }
+
+    @Test
+    public void builder_shouldSetResultTemplate() {
+        SandboxDocumentTextDataExtractionTask result = SandboxDocumentTextDataExtractionTask.builder()
+                .withResultTemplate("someResultTemplate")
+                .build();
+
+        assertThat(result.getResultTemplate(), is("someResultTemplate"));
+        assertThat(result.getResult(), is(nullValue()));
     }
 
 }

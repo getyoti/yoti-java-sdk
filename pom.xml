@@ -5,7 +5,7 @@
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk</artifactId>
   <packaging>pom</packaging>
-  <version>3.11.0</version>
+  <version>3.12.0</version>
   <name>Yoti SDK</name>
   <description>Java SDK for simple integration with the Yoti platform</description>
   <url>https://github.com/getyoti/yoti-java-sdk</url>
@@ -25,11 +25,12 @@
     <maven.min.version>3.8.5</maven.min.version>
 
     <!-- plugin versions -->
-    <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
+    <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
     <properties-maven-plugin.version>1.2.1</properties-maven-plugin.version>
-    <spotbugs-maven-plugin.version>4.8.3.1</spotbugs-maven-plugin.version>
-    <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
-    <extra-enforcer-rules.version>1.7.0</extra-enforcer-rules.version>
+    <!-- Spotbugs spotbugs-maven-plugin 4.9.x requires JDK 11+   -->
+    <spotbugs-maven-plugin.version>4.8.6.6</spotbugs-maven-plugin.version>
+    <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
+    <extra-enforcer-rules.version>1.10.0</extra-enforcer-rules.version>
   </properties>
 
   <build>

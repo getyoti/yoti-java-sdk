@@ -6,11 +6,16 @@ import static org.hamcrest.Matchers.is;
 
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentAuthenticityCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentFaceMatchCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxFaceComparisonCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxIdDocumentComparisonCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxLivenessCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxDocumentTextDataCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxSupplementaryDocumentTextDataCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxSynecticsIdentityFraudCheck;
 import com.yoti.api.client.sandbox.docs.request.check.SandboxThirdPartyIdentityCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxThirdPartyIdentityFraudOneCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxWatchlistAdvancedCaCheck;
+import com.yoti.api.client.sandbox.docs.request.check.SandboxWatchlistScreeningCheck;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +32,11 @@ public class SandboxCheckReportsTest {
     @Mock SandboxIdDocumentComparisonCheck idDocumentComparisonCheckMock;
     @Mock SandboxSupplementaryDocumentTextDataCheck supplementaryDocumentTextDataCheckMock;
     @Mock SandboxThirdPartyIdentityCheck thirdPartyIdentityCheckMock;
+    @Mock SandboxFaceComparisonCheck faceComparisonCheckMock;
+    @Mock SandboxSynecticsIdentityFraudCheck synecticsIdentityFraudCheckMock;
+    @Mock SandboxThirdPartyIdentityFraudOneCheck thirdPartyIdentityFraudOneCheckMock;
+    @Mock SandboxWatchlistScreeningCheck watchlistScreeningCheckMock;
+    @Mock SandboxWatchlistAdvancedCaCheck watchlistAdvancedCaCheckMock;
 
     @Test
     public void builder_shouldAllowDocumentAuthenticityChecks() {
@@ -95,6 +105,53 @@ public class SandboxCheckReportsTest {
                 .build();
 
         assertThat(result.getThirdPartyIdentityCheck(), is(thirdPartyIdentityCheckMock));
+    }
+
+    @Test
+    public void builder_shouldAllowFaceComparisonCheck() {
+        SandboxCheckReports result = SandboxCheckReports.builder()
+                .withFaceComparisonCheck(faceComparisonCheckMock)
+                .build();
+
+        assertThat(result.getFaceComparisonCheck(), is(faceComparisonCheckMock));
+    }
+
+    @Test
+    public void builder_shouldAllowSynecticsIdentityFraudChecks() {
+        SandboxCheckReports result = SandboxCheckReports.builder()
+                .withSynecticsIdentityFraudCheck(synecticsIdentityFraudCheckMock)
+                .build();
+
+        assertThat(result.getSynecticsIdentityFraudChecks(), hasSize(1));
+        assertThat(result.getSynecticsIdentityFraudChecks().get(0), is(synecticsIdentityFraudCheckMock));
+    }
+
+    @Test
+    public void builder_shouldAllowThirdPartyIdentityFraudOneCheck() {
+        SandboxCheckReports result = SandboxCheckReports.builder()
+                .withThirdPartyIdentityFraudOneCheck(thirdPartyIdentityFraudOneCheckMock)
+                .build();
+
+        assertThat(result.getThirdPartyIdentityFraudOneCheck(), is(thirdPartyIdentityFraudOneCheckMock));
+    }
+
+    @Test
+    public void builder_shouldAllowWatchlistScreeningCheck() {
+        SandboxCheckReports result = SandboxCheckReports.builder()
+                .withWatchlistScreeningCheck(watchlistScreeningCheckMock)
+                .build();
+
+        assertThat(result.getWatchlistScreeningCheck(), is(watchlistScreeningCheckMock));
+    }
+
+    @Test
+    public void builder_shouldAllowWatchlistAdvancedCaChecks() {
+        SandboxCheckReports result = SandboxCheckReports.builder()
+                .withWatchlistAdvancedCaCheck(watchlistAdvancedCaCheckMock)
+                .build();
+
+        assertThat(result.getWatchlistAdvancedCaChecks(), hasSize(1));
+        assertThat(result.getWatchlistAdvancedCaChecks().get(0), is(watchlistAdvancedCaCheckMock));
     }
 
     @Test

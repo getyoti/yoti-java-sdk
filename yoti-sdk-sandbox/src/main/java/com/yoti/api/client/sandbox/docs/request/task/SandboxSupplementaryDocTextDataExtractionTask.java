@@ -22,12 +22,17 @@ public class SandboxSupplementaryDocTextDataExtractionTask {
     @JsonProperty("response_delay")
     private final Integer responseDelay;
 
+    @JsonProperty("result_template")
+    private final String resultTemplate;
+
     SandboxSupplementaryDocTextDataExtractionTask(SandboxSupplementaryDocTextDataExtractionTaskResult result,
             SandboxDocumentFilter documentFilter,
-            Integer responseDelay) {
+            Integer responseDelay,
+            String resultTemplate) {
         this.result = result;
         this.documentFilter = documentFilter;
         this.responseDelay = responseDelay;
+        this.resultTemplate = resultTemplate;
     }
 
     public static Builder builder() {
@@ -46,6 +51,10 @@ public class SandboxSupplementaryDocTextDataExtractionTask {
         return responseDelay;
     }
 
+    public String getResultTemplate() {
+        return resultTemplate;
+    }
+
     /**
      * Builder for {@link SandboxSupplementaryDocTextDataExtractionTask}
      */
@@ -56,6 +65,7 @@ public class SandboxSupplementaryDocTextDataExtractionTask {
         private String detectedCountry;
         private SandboxTextExtractionTaskRecommendation recommendation;
         private Integer responseDelay;
+        private String resultTemplate;
 
         private Builder() {}
 
@@ -94,10 +104,21 @@ public class SandboxSupplementaryDocTextDataExtractionTask {
             return this;
         }
 
+        public Builder withResultTemplate(String resultTemplate) {
+            this.resultTemplate = resultTemplate;
+            return this;
+        }
+
         public SandboxSupplementaryDocTextDataExtractionTask build() {
-            SandboxSupplementaryDocTextDataExtractionTaskResult result = new SandboxSupplementaryDocTextDataExtractionTaskResult(documentFields,
-                    detectedCountry, recommendation);
-            return new SandboxSupplementaryDocTextDataExtractionTask(result, documentFilter, responseDelay);
+            SandboxSupplementaryDocTextDataExtractionTaskResult result;
+            if (documentFields == null && detectedCountry == null && recommendation == null) {
+                result = null;
+            } else {
+                result = new SandboxSupplementaryDocTextDataExtractionTaskResult(documentFields,
+                        detectedCountry,
+                        recommendation);
+            }
+            return new SandboxSupplementaryDocTextDataExtractionTask(result, documentFilter, responseDelay, resultTemplate);
         }
     }
 }
