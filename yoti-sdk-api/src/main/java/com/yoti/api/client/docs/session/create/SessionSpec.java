@@ -69,9 +69,6 @@ public class SessionSpec {
     @JsonProperty("create_identity_profile_preview")
     private final Boolean createIdentityProfilePreview;
 
-    @JsonProperty("required_share_codes")
-    private final List<RequiredShareCodePayload> requiredShareCodes;
-
     private SessionSpec(Integer clientSessionTokenTtl,
             Integer resourcesTtl,
             ImportTokenPayload importToken,
@@ -88,8 +85,7 @@ public class SessionSpec {
             SubjectPayload subject,
             ResourceCreationContainer resources,
             Boolean createIdentityProfilePreview,
-            AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirements,
-            List<RequiredShareCodePayload> requiredShareCodes) {
+            AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirements) {
         this.clientSessionTokenTtl = clientSessionTokenTtl;
         this.resourcesTtl = resourcesTtl;
         this.importToken = importToken;
@@ -107,7 +103,6 @@ public class SessionSpec {
         this.resources = resources;
         this.createIdentityProfilePreview = createIdentityProfilePreview;
         this.advancedIdentityProfileRequirements = advancedIdentityProfileRequirements;
-        this.requiredShareCodes = requiredShareCodes;
     }
 
     public static Builder builder() {
@@ -268,15 +263,6 @@ public class SessionSpec {
         return advancedIdentityProfileRequirements;
     }
 
-    /**
-     * The list of Share Codes being requested.
-     *
-     * @return the requested Share Codes
-     */
-    public List<RequiredShareCodePayload> getRequiredShareCodes() {
-        return requiredShareCodes;
-    }
-
     public static class Builder {
 
         private final List<RequestedCheck<?>> requestedChecks;
@@ -296,13 +282,11 @@ public class SessionSpec {
         private SubjectPayload subject;
         private ResourceCreationContainer resources;
         private Boolean createIdentityProfilePreview;
-        private final List<RequiredShareCodePayload> requiredShareCodes;
 
         private Builder() {
             requestedChecks = new ArrayList<>();
             requestedTasks = new ArrayList<>();
             requiredDocuments = new ArrayList<>();
-            requiredShareCodes = new ArrayList<>();
         }
 
         /**
@@ -494,17 +478,6 @@ public class SessionSpec {
         }
 
         /**
-         * Adds a required Share Code to the list
-         *
-         * @param requiredShareCode the required share code
-         * @return the builder
-         */
-        public Builder withRequiredShareCode(RequiredShareCodePayload requiredShareCode) {
-            this.requiredShareCodes.add(requiredShareCode);
-            return this;
-        }
-
-        /**
          * Builds the {@link SessionSpec} based on the values supplied to the builder
          *
          * @return the built {@link SessionSpec}
@@ -527,8 +500,7 @@ public class SessionSpec {
                     subject,
                     resources,
                     createIdentityProfilePreview,
-                    advancedIdentityProfileRequirementsPayload,
-                    requiredShareCodes);
+                    advancedIdentityProfileRequirementsPayload);
         }
     }
 
