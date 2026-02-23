@@ -2,7 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
   <modelVersion>4.0.0</modelVersion>
+  <artifactId>yoti-sdk-auth</artifactId>
+  <name>Yoti SDK Auth Module</name>
+  <description>Java SDK module for generating authentication tokens</description>
+  <url>https://github.com/getyoti/yoti-java-sdk</url>
   
   <parent>
     <groupId>com.yoti</groupId>
@@ -11,7 +16,6 @@
     <relativePath>../yoti-sdk-parent</relativePath>
   </parent>
   
-  <artifactId>yoti-sdk-auth</artifactId>
   
   <properties>
     <jjwt.version>0.13.0</jjwt.version>
