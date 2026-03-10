@@ -15,6 +15,9 @@ public class PageResponse {
     @JsonProperty("frames")
     private List<FrameResponse> frames;
 
+    @JsonProperty("extraction_image_ids")
+    private List<String> extractionImageIds;
+
     public String getCaptureMethod() {
         return captureMethod;
     }
@@ -25,6 +28,10 @@ public class PageResponse {
 
     public List<? extends FrameResponse> getFrames() {
         return frames;
+    }
+
+    public List<String> getExtractionImageIds() {
+        return extractionImageIds;
     }
 
 }
