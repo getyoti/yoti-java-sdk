@@ -24,6 +24,9 @@ public class IdDocumentResourceResponse extends ResourceResponse {
     @JsonProperty("expanded_document_fields")
     private ExpandedDocumentFieldsResponse expandedDocumentFields;
 
+    @JsonProperty("provider")
+    private String provider;
+
     public String getDocumentType() {
         return documentType;
     }
@@ -50,6 +53,15 @@ public class IdDocumentResourceResponse extends ResourceResponse {
 
     public ExpandedDocumentFieldsResponse getExpandedDocumentFields() {
         return expandedDocumentFields;
+    }
+
+    /**
+     * The digital ID provider that the document was sourced from. Only present for a digital ID.
+     *
+     * @return the provider, may be {@code null}
+     */
+    public String getProvider() {
+        return provider;
     }
 
 }

@@ -126,4 +126,59 @@ public class DocumentRestrictionsFilterTest {
         assertThat(result.getAllowExpiredDocuments(), nullValue());
     }
 
+    @Test
+    public void shouldSetAllowDigitalIdsFlag() {
+        DocumentRestrictionsFilter result = DocumentRestrictionsFilter.builder()
+                .forWhitelist()
+                .withAllowDigitalIds(true)
+                .build();
+
+        assertThat(result.getAllowDigitalIds(), is(true));
+    }
+
+    @Test
+    public void shouldSetNullForAllowDigitalIdsFlagWhenNotProvidedExplicitly() {
+        DocumentRestrictionsFilter result = DocumentRestrictionsFilter.builder()
+                .forWhitelist()
+                .build();
+
+        assertThat(result.getAllowDigitalIds(), nullValue());
+    }
+
+    @Test
+    public void shouldAddAllowedProvidersByName() {
+        DocumentRestrictionsFilter result = DocumentRestrictionsFilter.builder()
+                .forWhitelist()
+                .withAllowedProvider("DIGILOCKER")
+                .withAllowedProvider("EPHIL_ID_QR")
+                .build();
+
+        assertThat(result.getAllowedProviders(), hasSize(2));
+        assertThat(result.getAllowedProviders().get(0).getName(), is("DIGILOCKER"));
+        assertThat(result.getAllowedProviders().get(1).getName(), is("EPHIL_ID_QR"));
+    }
+
+    @Test
+    public void shouldSetAllowedProvidersList() {
+        List<AllowedProviderPayload> providers = Arrays.asList(
+                AllowedProviderPayload.builder().withName("DIGILOCKER").build());
+
+        DocumentRestrictionsFilter result = DocumentRestrictionsFilter.builder()
+                .forWhitelist()
+                .withAllowedProviders(providers)
+                .build();
+
+        assertThat(result.getAllowedProviders(), hasSize(1));
+        assertThat(result.getAllowedProviders().get(0).getName(), is("DIGILOCKER"));
+    }
+
+    @Test
+    public void shouldSetNullForAllowedProvidersWhenNotProvidedExplicitly() {
+        DocumentRestrictionsFilter result = DocumentRestrictionsFilter.builder()
+                .forWhitelist()
+                .build();
+
+        assertThat(result.getAllowedProviders(), nullValue());
+    }
+
 }

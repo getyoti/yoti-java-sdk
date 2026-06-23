@@ -50,6 +50,9 @@ public class GetSessionResult {
     @JsonProperty("import_token")
     private ImportTokenResponse importToken;
 
+    @JsonProperty("digital_id_shares")
+    private List<DigitalIdShareResponse> digitalIdShares;
+
     public long getClientSessionTokenTtl() {
         return clientSessionTokenTtl;
     }
@@ -100,6 +103,15 @@ public class GetSessionResult {
 
     public ImportTokenResponse getImportToken() {
         return importToken;
+    }
+
+    /**
+     * The digital ID shares that were performed during the session
+     *
+     * @return the digital ID shares
+     */
+    public List<DigitalIdShareResponse> getDigitalIdShares() {
+        return digitalIdShares;
     }
 
     public ResourceContainer getResourcesForCheck(String checkId) {

@@ -41,7 +41,9 @@ import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.AuthenticityCheckResponse;
 import com.yoti.api.client.docs.session.retrieve.CheckResponse;
 import com.yoti.api.client.docs.session.retrieve.CreateFaceCaptureResourceResponse;
+import com.yoti.api.client.docs.session.retrieve.DigitalIdShareResponse;
 import com.yoti.api.client.docs.session.retrieve.GetSessionResult;
+import com.yoti.api.client.docs.session.retrieve.IdDocumentResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.LivenessResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.ZoomLivenessResourceResponse;
 import com.yoti.api.client.docs.session.retrieve.configuration.SessionConfigurationResponse;
@@ -618,6 +620,30 @@ public class DocScanServiceTest {
 
         assertThat(livenessResourceResponse.get(1), is(instanceOf(ZoomLivenessResourceResponse.class)));
         assertThat(livenessResourceResponse.get(1).getId(), is("someZoomId"));
+    }
+
+    @Test
+    public void shouldDeserializeDigitalIdShares() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/GetSessionResultExample.json");
+        GetSessionResult result = MAPPER.readValue(is, GetSessionResult.class);
+
+        List<? extends IdDocumentResourceResponse> idDocuments = result.getResources().getIdDocuments();
+        assertThat(idDocuments, hasSize(1));
+        assertThat(idDocuments.get(0).getProvider(), is("DIGILOCKER"));
+
+        List<DigitalIdShareResponse> shares = result.getDigitalIdShares();
+        assertThat(shares, hasSize(2));
+
+        assertThat(shares.get(0).getId(), is("someShareId"));
+        assertThat(shares.get(0).getDocumentType(), is("DIGITAL_AADHAAR"));
+        assertThat(shares.get(0).getIssuingCountry(), is("IND"));
+        assertThat(shares.get(0).getProvider(), is("DIGILOCKER"));
+        assertThat(shares.get(0).getResourceId(), is("someIdDocumentId"));
+        assertThat(shares.get(0).getError(), is(nullValue()));
+
+        assertThat(shares.get(1).getId(), is("someFailedShareId"));
+        assertThat(shares.get(1).getError().getCode(), is("SOME_ERROR_CODE"));
+        assertThat(shares.get(1).getError().getDescription(), is("the share could not be completed"));
     }
 
     @Test
