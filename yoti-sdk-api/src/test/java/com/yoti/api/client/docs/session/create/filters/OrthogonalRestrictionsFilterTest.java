@@ -2,6 +2,7 @@ package com.yoti.api.client.docs.session.create.filters;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -111,6 +112,56 @@ public class OrthogonalRestrictionsFilterTest {
                 .build();
 
         assertThat(result.getAllowExpiredDocuments(), nullValue());
+    }
+
+    @Test
+    public void shouldSetAllowDigitalIdsFlag() {
+        OrthogonalRestrictionsFilter result = OrthogonalRestrictionsFilter.builder()
+                .withAllowDigitalIds(true)
+                .build();
+
+        assertThat(result.getAllowDigitalIds(), is(true));
+    }
+
+    @Test
+    public void shouldSetNullForAllowDigitalIdsFlagWhenNotProvidedExplicitly() {
+        OrthogonalRestrictionsFilter result = OrthogonalRestrictionsFilter.builder()
+                .build();
+
+        assertThat(result.getAllowDigitalIds(), nullValue());
+    }
+
+    @Test
+    public void shouldAddAllowedProvidersByName() {
+        OrthogonalRestrictionsFilter result = OrthogonalRestrictionsFilter.builder()
+                .withAllowedProvider("DIGILOCKER")
+                .withAllowedProvider("EPHIL_ID_QR")
+                .build();
+
+        assertThat(result.getAllowedProviders(), hasSize(2));
+        assertThat(result.getAllowedProviders().get(0).getName(), is("DIGILOCKER"));
+        assertThat(result.getAllowedProviders().get(1).getName(), is("EPHIL_ID_QR"));
+    }
+
+    @Test
+    public void shouldSetAllowedProvidersList() {
+        List<AllowedProviderPayload> providers = Arrays.asList(
+                AllowedProviderPayload.builder().withName("DIGILOCKER").build());
+
+        OrthogonalRestrictionsFilter result = OrthogonalRestrictionsFilter.builder()
+                .withAllowedProviders(providers)
+                .build();
+
+        assertThat(result.getAllowedProviders(), hasSize(1));
+        assertThat(result.getAllowedProviders().get(0).getName(), is("DIGILOCKER"));
+    }
+
+    @Test
+    public void shouldSetNullForAllowedProvidersWhenNotProvidedExplicitly() {
+        OrthogonalRestrictionsFilter result = OrthogonalRestrictionsFilter.builder()
+                .build();
+
+        assertThat(result.getAllowedProviders(), nullValue());
     }
 
 }

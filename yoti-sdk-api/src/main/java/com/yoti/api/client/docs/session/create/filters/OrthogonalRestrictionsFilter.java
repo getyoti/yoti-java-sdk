@@ -1,5 +1,6 @@
 package com.yoti.api.client.docs.session.create.filters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.yoti.api.client.docs.DocScanConstants;
@@ -14,8 +15,9 @@ public class OrthogonalRestrictionsFilter extends DocumentFilter {
     @JsonProperty("type_restriction")
     private final TypeRestriction typeRestriction;
 
-    private OrthogonalRestrictionsFilter(CountryRestriction countryRestriction, TypeRestriction typeRestriction, Boolean allowNonLatinDocuments, Boolean allowExpiredDocuments) {
-        super(DocScanConstants.ORTHOGONAL_RESTRICTIONS, allowNonLatinDocuments, allowExpiredDocuments);
+    private OrthogonalRestrictionsFilter(CountryRestriction countryRestriction, TypeRestriction typeRestriction, Boolean allowNonLatinDocuments,
+            Boolean allowExpiredDocuments, Boolean allowDigitalIds, List<AllowedProviderPayload> allowedProviders) {
+        super(DocScanConstants.ORTHOGONAL_RESTRICTIONS, allowNonLatinDocuments, allowExpiredDocuments, allowDigitalIds, allowedProviders);
         this.countryRestriction = countryRestriction;
         this.typeRestriction = typeRestriction;
     }
@@ -38,6 +40,8 @@ public class OrthogonalRestrictionsFilter extends DocumentFilter {
         private TypeRestriction typeRestriction;
         private Boolean allowNonLatinDocuments;
         private Boolean allowExpiredDocuments;
+        private Boolean allowDigitalIds;
+        private List<AllowedProviderPayload> allowedProviders;
 
         private Builder() {}
 
@@ -107,8 +111,44 @@ public class OrthogonalRestrictionsFilter extends DocumentFilter {
             return this;
         }
 
+        /**
+         * Sets the flag to allow/disallow digital IDs
+         *
+         * @param allowDigitalIds the flag
+         * @return the builder
+         */
+        public Builder withAllowDigitalIds(boolean allowDigitalIds) {
+            this.allowDigitalIds = allowDigitalIds;
+            return this;
+        }
+
+        /**
+         * Sets the list of digital ID providers that are allowed to satisfy the filter
+         *
+         * @param allowedProviders the allowed providers
+         * @return the builder
+         */
+        public Builder withAllowedProviders(List<AllowedProviderPayload> allowedProviders) {
+            this.allowedProviders = allowedProviders;
+            return this;
+        }
+
+        /**
+         * Adds a digital ID provider, by name, to the list of allowed providers
+         *
+         * @param name the provider name
+         * @return the builder
+         */
+        public Builder withAllowedProvider(String name) {
+            if (this.allowedProviders == null) {
+                this.allowedProviders = new ArrayList<>();
+            }
+            this.allowedProviders.add(AllowedProviderPayload.builder().withName(name).build());
+            return this;
+        }
+
         public OrthogonalRestrictionsFilter build() {
-            return new OrthogonalRestrictionsFilter(countryRestriction, typeRestriction, allowNonLatinDocuments, allowExpiredDocuments);
+            return new OrthogonalRestrictionsFilter(countryRestriction, typeRestriction, allowNonLatinDocuments, allowExpiredDocuments, allowDigitalIds, allowedProviders);
         }
         
     }
