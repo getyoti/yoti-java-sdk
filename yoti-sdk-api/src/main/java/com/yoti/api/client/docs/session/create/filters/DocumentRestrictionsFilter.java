@@ -17,8 +17,9 @@ public class DocumentRestrictionsFilter extends DocumentFilter {
     @JsonProperty("documents")
     private final List<DocumentRestriction> documents;
 
-    private DocumentRestrictionsFilter(String inclusion, List<DocumentRestriction> documents, Boolean allowNonLatinDocuments, Boolean allowExpiredDocuments) {
-        super(DocScanConstants.DOCUMENT_RESTRICTIONS, allowNonLatinDocuments, allowExpiredDocuments);
+    private DocumentRestrictionsFilter(String inclusion, List<DocumentRestriction> documents, Boolean allowNonLatinDocuments,
+            Boolean allowExpiredDocuments, Boolean allowDigitalIds, List<AllowedProviderPayload> allowedProviders) {
+        super(DocScanConstants.DOCUMENT_RESTRICTIONS, allowNonLatinDocuments, allowExpiredDocuments, allowDigitalIds, allowedProviders);
         this.inclusion = inclusion;
         this.documents = documents;
     }
@@ -41,6 +42,8 @@ public class DocumentRestrictionsFilter extends DocumentFilter {
         private final List<DocumentRestriction> documents;
         private Boolean allowNonLatinDocuments;
         private Boolean allowExpiredDocuments;
+        private Boolean allowDigitalIds;
+        private List<AllowedProviderPayload> allowedProviders;
 
         private Builder() {
             this.documents = new ArrayList<>();
@@ -111,9 +114,45 @@ public class DocumentRestrictionsFilter extends DocumentFilter {
             return this;
         }
 
+        /**
+         * Sets the flag to allow/disallow digital IDs
+         *
+         * @param allowDigitalIds the flag
+         * @return the builder
+         */
+        public Builder withAllowDigitalIds(boolean allowDigitalIds) {
+            this.allowDigitalIds = allowDigitalIds;
+            return this;
+        }
+
+        /**
+         * Sets the list of digital ID providers that are allowed to satisfy the filter
+         *
+         * @param allowedProviders the allowed providers
+         * @return the builder
+         */
+        public Builder withAllowedProviders(List<AllowedProviderPayload> allowedProviders) {
+            this.allowedProviders = allowedProviders;
+            return this;
+        }
+
+        /**
+         * Adds a digital ID provider, by name, to the list of allowed providers
+         *
+         * @param name the provider name
+         * @return the builder
+         */
+        public Builder withAllowedProvider(String name) {
+            if (this.allowedProviders == null) {
+                this.allowedProviders = new ArrayList<>();
+            }
+            this.allowedProviders.add(AllowedProviderPayload.builder().withName(name).build());
+            return this;
+        }
+
         public DocumentRestrictionsFilter build() {
             notNullOrEmpty(inclusion, "inclusion");
-            return new DocumentRestrictionsFilter(inclusion, documents, allowNonLatinDocuments, allowExpiredDocuments);
+            return new DocumentRestrictionsFilter(inclusion, documents, allowNonLatinDocuments, allowExpiredDocuments, allowDigitalIds, allowedProviders);
         }
 
     }
