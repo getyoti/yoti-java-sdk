@@ -44,6 +44,7 @@ public class SdkConfigTest {
                 .withErrorUrl(SOME_ERROR_URL)
                 .withPrivacyPolicyUrl(SOME_PRIVACY_POLICY_URL)
                 .withAllowHandoff(true)
+                .withEnforceHandoff(true)
                 .withAttemptsConfiguration(attemptsConfigurationMock)
                 .withBrandId(SOME_BRAND_ID)
                 .withSuppressedScreen(SOME_SUPPRESSED_SCREEN)
@@ -64,6 +65,7 @@ public class SdkConfigTest {
         assertThat(result.getErrorUrl(), is(SOME_ERROR_URL));
         assertThat(result.getPrivacyPolicyUrl(), is(SOME_PRIVACY_POLICY_URL));
         assertThat(result.getAllowHandoff(), is(true));
+        assertThat(result.getEnforceHandoff(), is(true));
         assertThat(result.getAttemptsConfiguration(), is(attemptsConfigurationMock));
         assertThat(result.getBrandId(), is(SOME_BRAND_ID));
         assertThat(result.getSuppressedScreens(), hasSize(2));
@@ -76,6 +78,14 @@ public class SdkConfigTest {
                 .build();
 
         assertThat(result.getAllowHandoff(), is(nullValue()));
+    }
+
+    @Test
+    public void enforceHandoff_shouldBeNullWhenNotSet() {
+        SdkConfig result = SdkConfig.builder()
+                .build();
+
+        assertThat(result.getEnforceHandoff(), is(nullValue()));
     }
 
     @Test
