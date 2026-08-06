@@ -48,6 +48,9 @@ public class SdkConfig {
     @JsonProperty("allow_handoff")
     private final Boolean allowHandoff;
 
+    @JsonProperty("enforce_handoff")
+    private final Boolean enforceHandoff;
+
     @JsonProperty("attempts_configuration")
     private final AttemptsConfiguration attemptsConfiguration;
 
@@ -72,6 +75,7 @@ public class SdkConfig {
             String errorUrl,
             String privacyPolicyUrl,
             Boolean allowHandoff,
+            Boolean enforceHandoff,
             AttemptsConfiguration attemptsConfiguration,
             String brandId,
             String biometricConsentFlow,
@@ -88,6 +92,7 @@ public class SdkConfig {
         this.errorUrl = errorUrl;
         this.privacyPolicyUrl = privacyPolicyUrl;
         this.allowHandoff = allowHandoff;
+        this.enforceHandoff = enforceHandoff;
         this.attemptsConfiguration = attemptsConfiguration;
         this.brandId = brandId;
         this.biometricConsentFlow = biometricConsentFlow;
@@ -207,6 +212,15 @@ public class SdkConfig {
     }
 
     /**
+     * If mobile handoff is enforced in the session
+     *
+     * @return if mobile handoff is enforced
+     */
+    public Boolean getEnforceHandoff() {
+        return enforceHandoff;
+    }
+
+    /**
      * The number of allowed attempts for certain tasks
      *
      * @return the attempts configuration
@@ -259,6 +273,7 @@ public class SdkConfig {
         private String errorUrl;
         private String privacyPolicyUrl;
         private Boolean allowHandoff;
+        private Boolean enforceHandoff;
         private AttemptsConfiguration attemptsConfiguration;
         private String brandId;
         private String biometricConsentFlow;
@@ -445,6 +460,17 @@ public class SdkConfig {
         }
 
         /**
+         * Sets if the user is required to perform mobile handoff
+         *
+         * @param enforceHandoff if mobile handoff is enforced
+         * @return the builder
+         */
+        public Builder withEnforceHandoff(boolean enforceHandoff) {
+            this.enforceHandoff = enforceHandoff;
+            return this;
+        }
+
+        /**
          * Sets the {@link AttemptsConfiguration} for any Text Extractions Tasks
          *
          * @param attemptsConfiguration the configuration for retries
@@ -528,6 +554,7 @@ public class SdkConfig {
                     errorUrl,
                     privacyPolicyUrl,
                     allowHandoff,
+                    enforceHandoff,
                     attemptsConfiguration,
                     brandId,
                     biometricConsentFlow,
