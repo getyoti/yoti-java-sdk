@@ -69,6 +69,9 @@ public class SessionSpec {
     @JsonProperty("create_identity_profile_preview")
     private final Boolean createIdentityProfilePreview;
 
+    @JsonProperty("company_profile")
+    private final CompanyProfilePayload companyProfile;
+
     private SessionSpec(Integer clientSessionTokenTtl,
             Integer resourcesTtl,
             ImportTokenPayload importToken,
@@ -85,7 +88,8 @@ public class SessionSpec {
             SubjectPayload subject,
             ResourceCreationContainer resources,
             Boolean createIdentityProfilePreview,
-            AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirements) {
+            AdvancedIdentityProfileRequirementsPayload advancedIdentityProfileRequirements,
+            CompanyProfilePayload companyProfile) {
         this.clientSessionTokenTtl = clientSessionTokenTtl;
         this.resourcesTtl = resourcesTtl;
         this.importToken = importToken;
@@ -103,6 +107,7 @@ public class SessionSpec {
         this.resources = resources;
         this.createIdentityProfilePreview = createIdentityProfilePreview;
         this.advancedIdentityProfileRequirements = advancedIdentityProfileRequirements;
+        this.companyProfile = companyProfile;
     }
 
     public static Builder builder() {
@@ -263,6 +268,15 @@ public class SessionSpec {
         return advancedIdentityProfileRequirements;
     }
 
+    /**
+     * The company profile to be used for the session
+     *
+     * @return the company profile
+     */
+    public CompanyProfilePayload getCompanyProfile() {
+        return companyProfile;
+    }
+
     public static class Builder {
 
         private final List<RequestedCheck<?>> requestedChecks;
@@ -282,6 +296,7 @@ public class SessionSpec {
         private SubjectPayload subject;
         private ResourceCreationContainer resources;
         private Boolean createIdentityProfilePreview;
+        private CompanyProfilePayload companyProfile;
 
         private Builder() {
             requestedChecks = new ArrayList<>();
@@ -478,6 +493,17 @@ public class SessionSpec {
         }
 
         /**
+         * Sets the company profile to be used for the session
+         *
+         * @param companyProfile the company profile
+         * @return the builder
+         */
+        public Builder withCompanyProfile(CompanyProfilePayload companyProfile) {
+            this.companyProfile = companyProfile;
+            return this;
+        }
+
+        /**
          * Builds the {@link SessionSpec} based on the values supplied to the builder
          *
          * @return the built {@link SessionSpec}
@@ -500,7 +526,8 @@ public class SessionSpec {
                     subject,
                     resources,
                     createIdentityProfilePreview,
-                    advancedIdentityProfileRequirementsPayload);
+                    advancedIdentityProfileRequirementsPayload,
+                    companyProfile);
         }
     }
 

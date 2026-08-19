@@ -50,6 +50,7 @@ public class SessionSpecTest {
     @Mock ImportTokenPayload importTokenMock;
     @Mock IdentityProfileRequirementsPayload identityProfileRequirementsPayloadMock;
     @Mock SubjectPayload subjectPayloadMock;
+    @Mock CompanyProfilePayload companyProfilePayloadMock;
 
     @Test
     public void shouldBuildWithMinimalConfiguration() {
@@ -72,6 +73,7 @@ public class SessionSpecTest {
         assertThat(result.getSubject(), is(nullValue()));
         assertThat(result.getResources(), is(nullValue()));
         assertThat(result.getCreateIdentityProfilePreview(), is(nullValue()));
+        assertThat(result.getCompanyProfile(), is(nullValue()));
     }
 
     @Test
@@ -250,6 +252,15 @@ public class SessionSpecTest {
                 .build();
 
         assertThat(sessionSpec.getImportToken(), is(importTokenMock));
+    }
+
+    @Test
+    public void withCompanyProfile_shouldSetTheCompanyProfile() {
+        SessionSpec result = SessionSpec.builder()
+                .withCompanyProfile(companyProfilePayloadMock)
+                .build();
+
+        assertThat(result.getCompanyProfile(), is(companyProfilePayloadMock));
     }
 
 }
