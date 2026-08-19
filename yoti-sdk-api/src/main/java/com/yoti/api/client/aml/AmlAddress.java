@@ -2,6 +2,11 @@ package com.yoti.api.client.aml;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * @deprecated The AML check service has been discontinued and this class is no longer used.
+ *             This API will be removed in the next major release.
+ */
+@Deprecated
 public class AmlAddress {
 
     @JsonProperty("post_code")
