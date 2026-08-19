@@ -5,7 +5,7 @@
   <groupId>com.yoti</groupId>
   <artifactId>yoti-sdk-parent</artifactId>
   <packaging>pom</packaging>
-  <version>4.3.0</version>
+  <version>4.4.0-SNAPSHOT</version>
   <name>Yoti SDK Parent Pom</name>
   <description>Parent pom for the Java SDK projects</description>
   <url>https://github.com/getyoti/yoti-java-sdk</url>
@@ -137,7 +137,7 @@
 
     <maven-project-info-reports-plugin.version>3.9.0</maven-project-info-reports-plugin.version>
 
-    <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
+    <coveralls-maven-plugin.version>4.4.0-SNAPSHOT</coveralls-maven-plugin.version>
 
     <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
   </properties>
