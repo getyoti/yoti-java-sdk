@@ -15,12 +15,16 @@ public class SandboxBreakdown {
     @JsonProperty("result")
     private final String result;
 
+    @JsonProperty("process")
+    private final String process;
+
     @JsonProperty("details")
     private final List<SandboxDetail> details;
 
-    private SandboxBreakdown(String subCheck, String result, List<SandboxDetail> details) {
+    private SandboxBreakdown(String subCheck, String result, String process, List<SandboxDetail> details) {
         this.subCheck = subCheck;
         this.result = result;
+        this.process = process;
         this.details = details;
     }
 
@@ -36,6 +40,10 @@ public class SandboxBreakdown {
         return result;
     }
 
+    public String getProcess() {
+        return process;
+    }
+
     public List<SandboxDetail> getDetails() {
         return details;
     }
@@ -47,6 +55,7 @@ public class SandboxBreakdown {
 
         private String subCheck;
         private String result;
+        private String process;
         private List<SandboxDetail> details = new ArrayList<>();
 
         private Builder() {
@@ -62,6 +71,11 @@ public class SandboxBreakdown {
             return this;
         }
 
+        public Builder withProcess(String process) {
+            this.process = process;
+            return this;
+        }
+
         public Builder withDetail(String name, String value) {
             SandboxDetail detail = new SandboxDetail(name, value);
             details.add(detail);
@@ -72,7 +86,7 @@ public class SandboxBreakdown {
             notNullOrEmpty(subCheck, "subCheck");
             notNullOrEmpty(result, "result");
 
-            return new SandboxBreakdown(subCheck, result, details);
+            return new SandboxBreakdown(subCheck, result, process, details);
         }
     }
 }

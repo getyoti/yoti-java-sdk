@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 
 import com.yoti.api.client.sandbox.docs.request.check.report.SandboxBreakdown;
@@ -13,7 +14,8 @@ import org.junit.Test;
 public class SandboxBreakdownTest {
     
     private static final String SOME_SUB_CHECK = "someSubCheck";
-    private static final String SOME_RESULT = "someResult";    
+    private static final String SOME_RESULT = "someResult";
+    private static final String SOME_PROCESS = "someProcess";
     private static final String SOME_DETAIL_NAME = "someDetailName";
     private static final String SOME_DETAIL_VALUE = "someDetailValue";
 
@@ -50,7 +52,19 @@ public class SandboxBreakdownTest {
 
         assertThat(result.getSubCheck(), is(SOME_SUB_CHECK));
         assertThat(result.getResult(), is(SOME_RESULT));
+        assertThat(result.getProcess(), is(nullValue()));
         assertThat(result.getDetails(), hasSize(0));
+    }
+
+    @Test
+    public void builder_shouldBuildCorrectlyWithProcess() {
+        SandboxBreakdown result = SandboxBreakdown.builder()
+                .withSubCheck(SOME_SUB_CHECK)
+                .withResult(SOME_RESULT)
+                .withProcess(SOME_PROCESS)
+                .build();
+
+        assertThat(result.getProcess(), is(SOME_PROCESS));
     }
 
     @Test
