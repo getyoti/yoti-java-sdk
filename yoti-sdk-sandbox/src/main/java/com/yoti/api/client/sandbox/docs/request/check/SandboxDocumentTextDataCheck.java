@@ -11,8 +11,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class SandboxDocumentTextDataCheck extends SandboxDocumentCheck {
 
-    private SandboxDocumentTextDataCheck(SandboxDocumentTextDataCheckResult result, SandboxDocumentFilter documentFilter) {
-        super(result, documentFilter);
+    private SandboxDocumentTextDataCheck(SandboxDocumentTextDataCheckResult result, Integer handledCheckLimit, SandboxDocumentFilter documentFilter) {
+        super(result, handledCheckLimit, documentFilter);
     }
 
     public static Builder builder() {
@@ -60,7 +60,7 @@ public class SandboxDocumentTextDataCheck extends SandboxDocumentCheck {
                     : new SandboxCheckReport(recommendation, breakdown);
             SandboxDocumentTextDataCheckResult result = new SandboxDocumentTextDataCheckResult(report, reportTemplate, documentFields);
 
-            return new SandboxDocumentTextDataCheck(result, documentFilter);
+            return new SandboxDocumentTextDataCheck(result, handledCheckLimit, documentFilter);
         }
 
     }

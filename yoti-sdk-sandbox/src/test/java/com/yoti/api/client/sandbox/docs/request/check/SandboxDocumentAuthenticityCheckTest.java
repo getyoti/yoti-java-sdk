@@ -64,4 +64,15 @@ public class SandboxDocumentAuthenticityCheckTest {
         assertThat(result.getResult().getReport().getBreakdown(), hasSize(3));
     }
 
+    @Test
+    public void builder_shouldAllowSettingHandledCheckLimit() {
+        SandboxDocumentAuthenticityCheck result = SandboxDocumentAuthenticityCheck.builder()
+                .withRecommendation(sandboxRecommendationMock)
+                .withBreakdown(sandboxBreakdownMock)
+                .withHandledCheckLimit(3)
+                .build();
+
+        assertThat(result.getHandledCheckLimit(), is(3));
+    }
+
 }

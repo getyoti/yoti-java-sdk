@@ -53,4 +53,26 @@ public class SandboxZoomLivenessCheckTest {
         assertThat(result.getLivenessType(), is("STATIC"));
     }
 
+    @Test
+    public void builder_shouldAllowSettingHandledCheckLimitForZoom() {
+        SandboxLivenessCheck result = new SandboxZoomLivenessCheckBuilder()
+                .withRecommendation(sandboxRecommendationMock)
+                .withBreakdown(sandboxBreakdownMock)
+                .withHandledCheckLimit(3)
+                .build();
+
+        assertThat(result.getHandledCheckLimit(), is(3));
+    }
+
+    @Test
+    public void builder_shouldAllowSettingHandledCheckLimitForStatic() {
+        SandboxLivenessCheck result = new SandboxStaticLivenessCheckBuilder()
+                .withRecommendation(sandboxRecommendationMock)
+                .withBreakdown(sandboxBreakdownMock)
+                .withHandledCheckLimit(3)
+                .build();
+
+        assertThat(result.getHandledCheckLimit(), is(3));
+    }
+
 }

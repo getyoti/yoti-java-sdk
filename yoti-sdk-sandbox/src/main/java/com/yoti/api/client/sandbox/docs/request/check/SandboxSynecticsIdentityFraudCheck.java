@@ -4,8 +4,8 @@ import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxSynecticsIdentityFraudCheck extends SandboxCheck {
 
-    private SandboxSynecticsIdentityFraudCheck(SandboxCheckResult result) {
-        super(result);
+    private SandboxSynecticsIdentityFraudCheck(SandboxCheckResult result, Integer handledCheckLimit) {
+        super(result, handledCheckLimit);
     }
 
     public static Builder builder() {
@@ -31,7 +31,7 @@ public class SandboxSynecticsIdentityFraudCheck extends SandboxCheck {
                     : new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
-            return new SandboxSynecticsIdentityFraudCheck(result);
+            return new SandboxSynecticsIdentityFraudCheck(result, handledCheckLimit);
         }
 
     }

@@ -17,12 +17,20 @@ public abstract class SandboxCheck {
     @JsonProperty("result")
     private final SandboxCheckResult result;
 
-    SandboxCheck(SandboxCheckResult result) {
+    @JsonProperty("handled_check_limit")
+    private final Integer handledCheckLimit;
+
+    SandboxCheck(SandboxCheckResult result, Integer handledCheckLimit) {
         this.result = result;
+        this.handledCheckLimit = handledCheckLimit;
     }
 
     public SandboxCheckResult getResult() {
         return result;
+    }
+
+    public Integer getHandledCheckLimit() {
+        return handledCheckLimit;
     }
 
     static abstract class Builder<T extends Builder<T>> {
@@ -30,6 +38,7 @@ public abstract class SandboxCheck {
         protected SandboxRecommendation recommendation;
         protected List<SandboxBreakdown> breakdown;
         protected String reportTemplate;
+        protected Integer handledCheckLimit;
 
         public T withRecommendation(SandboxRecommendation recommendation) {
             this.recommendation = recommendation;
@@ -51,6 +60,11 @@ public abstract class SandboxCheck {
 
         public T withReportTemplate(String reportTemplate) {
             this.reportTemplate = reportTemplate;
+            return self();
+        }
+
+        public T withHandledCheckLimit(Integer handledCheckLimit) {
+            this.handledCheckLimit = handledCheckLimit;
             return self();
         }
 

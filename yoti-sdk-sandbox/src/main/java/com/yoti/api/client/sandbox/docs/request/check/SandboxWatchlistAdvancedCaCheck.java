@@ -11,8 +11,8 @@ public class SandboxWatchlistAdvancedCaCheck extends SandboxCheck {
     @JsonProperty("sources_filter")
     private final SandboxCaSourcesFilter sourcesFilter;
 
-    private SandboxWatchlistAdvancedCaCheck(SandboxCheckResult result, SandboxCaSourcesFilter sourcesFilter) {
-        super(result);
+    private SandboxWatchlistAdvancedCaCheck(SandboxCheckResult result, Integer handledCheckLimit, SandboxCaSourcesFilter sourcesFilter) {
+        super(result, handledCheckLimit);
         this.sourcesFilter = sourcesFilter;
     }
 
@@ -55,7 +55,7 @@ public class SandboxWatchlistAdvancedCaCheck extends SandboxCheck {
                     : new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
-            return new SandboxWatchlistAdvancedCaCheck(result, sourcesFilter);
+            return new SandboxWatchlistAdvancedCaCheck(result, handledCheckLimit, sourcesFilter);
         }
 
     }

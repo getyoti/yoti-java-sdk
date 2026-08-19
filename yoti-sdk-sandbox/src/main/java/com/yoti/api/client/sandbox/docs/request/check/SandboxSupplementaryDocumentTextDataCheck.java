@@ -8,8 +8,8 @@ import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxSupplementaryDocumentTextDataCheck extends SandboxDocumentCheck {
 
-    private SandboxSupplementaryDocumentTextDataCheck(SandboxSupplementaryDocumentTextDataCheckResult result, SandboxDocumentFilter documentFilter) {
-        super(result, documentFilter);
+    private SandboxSupplementaryDocumentTextDataCheck(SandboxSupplementaryDocumentTextDataCheckResult result, Integer handledCheckLimit, SandboxDocumentFilter documentFilter) {
+        super(result, handledCheckLimit, documentFilter);
     }
 
     public static Builder builder() {
@@ -57,7 +57,7 @@ public class SandboxSupplementaryDocumentTextDataCheck extends SandboxDocumentCh
                     : new SandboxCheckReport(recommendation, breakdown);
             SandboxSupplementaryDocumentTextDataCheckResult result = new SandboxSupplementaryDocumentTextDataCheckResult(report, reportTemplate, documentFields);
 
-            return new SandboxSupplementaryDocumentTextDataCheck(result, documentFilter);
+            return new SandboxSupplementaryDocumentTextDataCheck(result, handledCheckLimit, documentFilter);
         }
     }
 }

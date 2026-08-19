@@ -4,8 +4,8 @@ import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxWatchlistScreeningCheck extends SandboxCheck {
 
-    private SandboxWatchlistScreeningCheck(SandboxCheckResult result) {
-        super(result);
+    private SandboxWatchlistScreeningCheck(SandboxCheckResult result, Integer handledCheckLimit) {
+        super(result, handledCheckLimit);
     }
 
     public static Builder builder() {
@@ -31,7 +31,7 @@ public class SandboxWatchlistScreeningCheck extends SandboxCheck {
                     : new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
-            return new SandboxWatchlistScreeningCheck(result);
+            return new SandboxWatchlistScreeningCheck(result, handledCheckLimit);
         }
 
     }

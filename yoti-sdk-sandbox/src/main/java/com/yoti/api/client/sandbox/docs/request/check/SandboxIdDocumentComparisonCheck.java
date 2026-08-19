@@ -10,8 +10,8 @@ public class SandboxIdDocumentComparisonCheck extends SandboxCheck {
     @JsonProperty("secondary_document_filter")
     private final SandboxDocumentFilter secondaryDocumentFilter;
 
-    private SandboxIdDocumentComparisonCheck(SandboxCheckResult result, SandboxDocumentFilter secondaryDocumentFilter) {
-        super(result);
+    private SandboxIdDocumentComparisonCheck(SandboxCheckResult result, Integer handledCheckLimit, SandboxDocumentFilter secondaryDocumentFilter) {
+        super(result, handledCheckLimit);
         this.secondaryDocumentFilter = secondaryDocumentFilter;
     }
 
@@ -44,7 +44,7 @@ public class SandboxIdDocumentComparisonCheck extends SandboxCheck {
                     : new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
-            return new SandboxIdDocumentComparisonCheck(result, secondaryDocumentFilter);
+            return new SandboxIdDocumentComparisonCheck(result, handledCheckLimit, secondaryDocumentFilter);
         }
     }
 
