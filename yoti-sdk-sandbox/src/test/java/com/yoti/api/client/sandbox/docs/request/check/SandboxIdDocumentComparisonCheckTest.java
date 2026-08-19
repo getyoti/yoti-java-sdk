@@ -35,4 +35,15 @@ public class SandboxIdDocumentComparisonCheckTest {
         assertThat(result.getResult().getReport().getRecommendation(), is(sandboxRecommendationMock));
     }
 
+    @Test
+    public void builder_shouldAllowSettingHandledCheckLimit() {
+        SandboxIdDocumentComparisonCheck result = SandboxIdDocumentComparisonCheck.builder()
+                .withRecommendation(sandboxRecommendationMock)
+                .withBreakdown(sandboxBreakdownMock)
+                .withHandledCheckLimit(3)
+                .build();
+
+        assertThat(result.getHandledCheckLimit(), is(3));
+    }
+
 }

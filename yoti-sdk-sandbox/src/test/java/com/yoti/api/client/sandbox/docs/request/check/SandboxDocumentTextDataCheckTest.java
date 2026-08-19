@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 
 import java.util.HashMap;
@@ -55,5 +56,16 @@ public class SandboxDocumentTextDataCheckTest {
 
         assertThat(result.getResult().getDocumentFields(), hasEntry("firstKey", (Object) "firstValue"));
         assertThat(result.getResult().getDocumentFields(), hasEntry("secondKey", (Object) 100));
+    }
+
+    @Test
+    public void builder_shouldAllowSettingHandledCheckLimit() {
+        SandboxDocumentTextDataCheck result = SandboxDocumentTextDataCheck.builder()
+                .withRecommendation(sandboxRecommendationMock)
+                .withBreakdown(sandboxBreakdownMock)
+                .withHandledCheckLimit(3)
+                .build();
+
+        assertThat(result.getHandledCheckLimit(), is(3));
     }
 }
