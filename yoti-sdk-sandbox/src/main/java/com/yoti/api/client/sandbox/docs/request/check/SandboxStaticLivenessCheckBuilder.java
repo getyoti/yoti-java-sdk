@@ -26,7 +26,7 @@ public class SandboxStaticLivenessCheckBuilder extends SandboxCheck.Builder<Sand
                 : new SandboxCheckReport(recommendation, breakdown);
         SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
-        return new SandboxLivenessCheck(result, DocScanConstants.STATIC, responseDelay);
+        return new SandboxLivenessCheck(result, handledCheckLimit, DocScanConstants.STATIC, responseDelay);
     }
 
 }

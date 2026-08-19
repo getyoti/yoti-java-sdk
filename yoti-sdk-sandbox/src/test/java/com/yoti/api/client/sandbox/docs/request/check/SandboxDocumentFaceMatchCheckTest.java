@@ -33,4 +33,15 @@ public class SandboxDocumentFaceMatchCheckTest {
         assertThat(result.getDocumentFilter(), is(nullValue()));
     }
 
+    @Test
+    public void builder_shouldAllowSettingHandledCheckLimit() {
+        SandboxDocumentFaceMatchCheck result = SandboxDocumentFaceMatchCheck.builder()
+                .withRecommendation(sandboxRecommendationMock)
+                .withBreakdown(sandboxBreakdownMock)
+                .withHandledCheckLimit(3)
+                .build();
+
+        assertThat(result.getHandledCheckLimit(), is(3));
+    }
+
 }

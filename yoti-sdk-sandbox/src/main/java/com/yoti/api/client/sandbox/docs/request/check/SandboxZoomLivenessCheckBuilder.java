@@ -26,7 +26,7 @@ public class SandboxZoomLivenessCheckBuilder extends SandboxCheck.Builder<Sandbo
                 : new SandboxCheckReport(recommendation, breakdown);
         SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
-        return new SandboxLivenessCheck(result, DocScanConstants.ZOOM, responseDelay);
+        return new SandboxLivenessCheck(result, handledCheckLimit, DocScanConstants.ZOOM, responseDelay);
     }
 
 }

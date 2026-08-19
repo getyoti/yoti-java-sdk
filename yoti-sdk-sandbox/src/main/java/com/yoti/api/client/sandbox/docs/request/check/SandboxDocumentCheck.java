@@ -11,8 +11,8 @@ class SandboxDocumentCheck extends SandboxCheck {
     @JsonProperty("document_filter")
     private SandboxDocumentFilter documentFilter;
 
-    SandboxDocumentCheck(SandboxCheckResult result, SandboxDocumentFilter documentFilter) {
-        super(result);
+    SandboxDocumentCheck(SandboxCheckResult result, Integer handledCheckLimit, SandboxDocumentFilter documentFilter) {
+        super(result, handledCheckLimit);
         this.documentFilter = documentFilter;
     }
 

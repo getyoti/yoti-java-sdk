@@ -5,8 +5,8 @@ import com.yoti.api.client.sandbox.docs.request.check.report.SandboxCheckReport;
 
 public class SandboxDocumentAuthenticityCheck extends SandboxDocumentCheck {
 
-    private SandboxDocumentAuthenticityCheck(SandboxCheckResult result, SandboxDocumentFilter documentFilter) {
-        super(result, documentFilter);
+    private SandboxDocumentAuthenticityCheck(SandboxCheckResult result, Integer handledCheckLimit, SandboxDocumentFilter documentFilter) {
+        super(result, handledCheckLimit, documentFilter);
     }
 
     public static Builder builder() {
@@ -33,7 +33,7 @@ public class SandboxDocumentAuthenticityCheck extends SandboxDocumentCheck {
                     : new SandboxCheckReport(recommendation, breakdown);
             SandboxCheckResult result = new SandboxCheckResult(report, reportTemplate);
 
-            return new SandboxDocumentAuthenticityCheck(result, documentFilter);
+            return new SandboxDocumentAuthenticityCheck(result, handledCheckLimit, documentFilter);
         }
 
     }
