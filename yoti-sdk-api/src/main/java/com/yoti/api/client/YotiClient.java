@@ -93,7 +93,11 @@ public class YotiClient {
      *
      * @throws AmlException
      *             aggregate exception signalling issues during the call
+     *
+     * @deprecated The AML check service has been discontinued and this call will no longer succeed.
+     *             This API will be removed in the next major release.
      */
+    @Deprecated
     public AmlResult performAmlCheck(AmlProfile amlProfile) throws AmlException {
         LOG.debug("Performing aml check...");
         return remoteAmlService.performCheck(amlProfile);
