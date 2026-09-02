@@ -17,6 +17,12 @@ public class GetSessionResult {
     @JsonProperty("session_id")
     private String sessionId;
 
+    @JsonProperty("organisation_name")
+    private String organisationName;
+
+    @JsonProperty("company_profile")
+    private CompanyProfileResponse companyProfileResponse;
+
     @JsonProperty("user_tracking_id")
     private String userTrackingId;
 
@@ -59,6 +65,14 @@ public class GetSessionResult {
 
     public String getSessionId() {
         return sessionId;
+    }
+
+    public String getOrganisationName() {
+        return organisationName;
+    }
+
+    public CompanyProfileResponse getCompanyProfile() {
+        return companyProfileResponse;
     }
 
     public String getUserTrackingId() {
