@@ -36,6 +36,7 @@ public class UnsignedPathFactory {
     private static final String DOCS_UPLOAD_FACE_CAPTURE_IMAGE = "/sessions/%s/resources/face-capture/%s/image";
     private static final String DOCS_TRIGGER_IBV_NOTIFICATION = "/sessions/%s/instructions/email";
     private static final String DOCS_TRACKED_DEVICES = "/sessions/%s/tracked-devices";
+    private static final String DOCS_SESSION_OVERVIEW_PDF = "/sessions/%s/pdf";
 
     public String createAmlPath() {
         return format(AML);
@@ -103,6 +104,10 @@ public class UnsignedPathFactory {
 
     public String createFetchIbvInstructionsPdfPath(String sessionId) {
         return format(DOCS_FETCH_IBV_INSTRUCTIONS_PDF, sessionId);
+    }
+
+    public String createSessionOverviewPdfPath(String sessionId) {
+        return format(DOCS_SESSION_OVERVIEW_PDF, sessionId);
     }
 
     public String createGetSupportedDocumentsPath(boolean includeNonLatin) {

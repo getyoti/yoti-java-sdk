@@ -21,6 +21,7 @@ import com.yoti.api.client.docs.session.create.filters.OrthogonalRestrictionsFil
 import com.yoti.api.client.docs.session.create.filters.RequiredIdDocument;
 import com.yoti.api.client.docs.session.create.filters.RequiredSupplementaryDocument;
 import com.yoti.api.client.docs.session.create.objective.ProofOfAddressObjective;
+import com.yoti.api.client.docs.session.create.pdf.CreateSessionOverviewPdfPayload;
 import com.yoti.api.client.docs.session.create.task.RequestedIdDocTextExtractionTask;
 import com.yoti.api.client.docs.session.create.task.RequestedSupplementaryDocTextExtractionTask;
 import com.yoti.api.client.docs.session.devicemetadata.MetadataResponse;
@@ -149,6 +150,16 @@ public class DocScanService {
 
     public Media getMedia(String sessionId, String mediaId) throws DocScanException {
         return docScanClient.getMediaContent(sessionId, mediaId);
+    }
+
+    public Media createSessionOverviewPdf(String sessionId) throws DocScanException {
+        CreateSessionOverviewPdfPayload payload = CreateSessionOverviewPdfPayload.builder()
+                .withIncludeImages(true)
+                .withIncludeExtractedText(true)
+                .withIncludeDeviceTracking(true)
+                .build();
+
+        return docScanClient.createSessionOverviewPdf(sessionId, payload);
     }
 
     public List<MetadataResponse> getTrackedDevices(String sessionId) throws DocScanException {

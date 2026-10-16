@@ -12,6 +12,7 @@ import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.create.facecapture.CreateFaceCaptureResourcePayload;
 import com.yoti.api.client.docs.session.create.facecapture.UploadFaceCaptureImagePayload;
+import com.yoti.api.client.docs.session.create.pdf.CreateSessionOverviewPdfPayload;
 import com.yoti.api.client.docs.session.devicemetadata.MetadataResponse;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.CreateFaceCaptureResourceResponse;
@@ -139,6 +140,19 @@ public class DocScanClient {
     public Media getIbvInstructionsPdf(String sessionId) throws DocScanException {
         LOG.debug("Retrieving IBV instructions PDF in session '{}'", sessionId);
         return docScanService.getIbvInstructionsPdf(authStrategy, sessionId);
+    }
+
+    /**
+     * Creates a PDF overview of the given session.
+     *
+     * @param sessionId the session ID
+     * @param createSessionOverviewPdfPayload the {@link CreateSessionOverviewPdfPayload} describing what to include
+     * @return the PDF media
+     * @throws DocScanException if an error has occurred
+     */
+    public Media createSessionOverviewPdf(String sessionId, CreateSessionOverviewPdfPayload createSessionOverviewPdfPayload) throws DocScanException {
+        LOG.debug("Creating session overview PDF for session '{}'", sessionId);
+        return docScanService.createSessionOverviewPdf(authStrategy, sessionId, createSessionOverviewPdfPayload);
     }
 
     /**
