@@ -36,6 +36,7 @@ import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.create.facecapture.CreateFaceCaptureResourcePayload;
 import com.yoti.api.client.docs.session.create.facecapture.UploadFaceCaptureImagePayload;
+import com.yoti.api.client.docs.session.create.pdf.CreateSessionOverviewPdfPayload;
 import com.yoti.api.client.docs.session.devicemetadata.MetadataResponse;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.AuthenticityCheckResponse;
@@ -98,6 +99,7 @@ public class DocScanServiceTest {
     @Mock Instructions instructionsMock;
     @Mock CreateFaceCaptureResourcePayload createFaceCaptureResourcePayloadMock;
     @Mock UploadFaceCaptureImagePayload uploadFaceCaptureImagePayloadMock;
+    @Mock CreateSessionOverviewPdfPayload createSessionOverviewPdfPayloadMock;
 
     @Before
     public void setUp() {
@@ -868,6 +870,100 @@ public class DocScanServiceTest {
         Media result = docScanService.getIbvInstructionsPdf(authStrategyMock, SOME_SESSION_ID);
 
         assertThat(result, is(nullValue()));
+    }
+
+    @Test
+    public void createSessionOverviewPdf_shouldThrowExceptionWhenAuthStrategyIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createSessionOverviewPdf(
+                null, SOME_SESSION_ID, createSessionOverviewPdfPayloadMock));
+
+        assertThat(ex.getMessage(), containsString("'authStrategy' must not be null."));
+    }
+
+    @Test
+    public void createSessionOverviewPdf_shouldThrowExceptionWhenSessionIdIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createSessionOverviewPdf(
+                authStrategyMock, null, createSessionOverviewPdfPayloadMock));
+
+        assertThat(ex.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void createSessionOverviewPdf_shouldThrowExceptionWhenSessionIdIsEmpty() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createSessionOverviewPdf(
+                authStrategyMock, "", createSessionOverviewPdfPayloadMock));
+
+        assertThat(ex.getMessage(), containsString("sessionId"));
+    }
+
+    @Test
+    public void createSessionOverviewPdf_shouldThrowExceptionWhenPayloadIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createSessionOverviewPdf(
+                authStrategyMock, SOME_SESSION_ID, null));
+
+        assertThat(ex.getMessage(), containsString("createSessionOverviewPdfPayload"));
+    }
+
+    @Test
+    public void createSessionOverviewPdf_shouldWrapGeneralSecurityException() throws Exception {
+        GeneralSecurityException gse = new GeneralSecurityException("some gse");
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
+
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSessionOverviewPdf(authStrategyMock, SOME_SESSION_ID, createSessionOverviewPdfPayloadMock));
+
+        assertThat(ex.getMessage(), containsString("Error signing the request: some gse"));
+    }
+
+    @Test
+    public void createSessionOverviewPdf_shouldWrapResourceException() throws Exception {
+        ResourceException resourceException = new ResourceException(400, "Failed Request", "Some response from API");
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(resourceException);
+
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSessionOverviewPdf(authStrategyMock, SOME_SESSION_ID, createSessionOverviewPdfPayloadMock));
+
+        assertThat(ex.getMessage(), containsString("Error executing the POST: Failed Request"));
+    }
+
+    @Test
+    public void createSessionOverviewPdf_shouldWrapIOException() throws Exception {
+        IOException ioException = new IOException("Some io exception");
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenThrow(ioException);
+
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSessionOverviewPdf(authStrategyMock, SOME_SESSION_ID, createSessionOverviewPdfPayloadMock));
+
+        assertThat(ex.getMessage(), containsString("Error building the request: Some io exception"));
+    }
+
+    @Test
+    public void createSessionOverviewPdf_shouldWrapURISyntaxException() throws Exception {
+        URISyntaxException uriSyntaxException = new URISyntaxException("someUrl", "Failed to build URI");
+        when(yotiHttpRequestBuilderMock.build()).thenThrow(uriSyntaxException);
+
+        DocScanException ex = assertThrows(DocScanException.class, () -> docScanService.createSessionOverviewPdf(authStrategyMock, SOME_SESSION_ID, createSessionOverviewPdfPayloadMock));
+
+        assertThat(ex.getMessage(), containsString("Error building the request: Failed to build URI: someUrl"));
+    }
+
+    @Test
+    public void createSessionOverviewPdf_shouldPostPayloadAndReturnMedia() throws Exception {
+        when(objectMapperMock.writeValueAsBytes(createSessionOverviewPdfPayloadMock)).thenReturn(SOME_SESSION_SPEC_BYTES);
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
+        when(yotiHttpResponseMock.getResponseHeaders()).thenReturn(createHeadersMap(CONTENT_TYPE, "application/pdf"));
+        when(yotiHttpResponseMock.getResponseBody()).thenReturn(IMAGE_BODY);
+        when(unsignedPathFactoryMock.createSessionOverviewPdfPath(SOME_SESSION_ID)).thenReturn(SOME_PATH);
+
+        Media result = docScanService.createSessionOverviewPdf(authStrategyMock, SOME_SESSION_ID, createSessionOverviewPdfPayloadMock);
+
+        assertThat(result.getMimeType(), is("application/pdf"));
+        assertThat(result.getContent(), is(IMAGE_BODY));
+        verify(yotiHttpRequestBuilderMock).withAuthStrategy(authStrategyMock);
+        verify(yotiHttpRequestBuilderMock).withEndpoint(SOME_PATH);
+        verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
+        verify(yotiHttpRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_POST);
+        verify(yotiHttpRequestBuilderMock).withPayload(SOME_SESSION_SPEC_BYTES);
     }
 
     @Test

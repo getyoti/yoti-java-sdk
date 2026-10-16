@@ -126,6 +126,23 @@ public class DocScanController implements WebMvcConfigurer {
         return new ResponseEntity<>(media.getContent(), headers, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/session-overview-pdf", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> getSessionOverviewPdf(@RequestParam(value = "sessionId") String sessionId) {
+        Media media;
+        try {
+            media = docScanService.createSessionOverviewPdf(sessionId);
+        } catch (DocScanException e) {
+            LOG.error(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(media.getMimeType()));
+        headers.setContentDispositionFormData("attachment", "session-overview.pdf");
+
+        return new ResponseEntity<>(media.getContent(), headers, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/tracked-devices", method = RequestMethod.GET)
     public @ResponseBody List<MetadataResponse> getTrackedDevices(@RequestParam(value = "sessionId") String sessionId) throws DocScanException {
         return docScanService.getTrackedDevices(sessionId);
