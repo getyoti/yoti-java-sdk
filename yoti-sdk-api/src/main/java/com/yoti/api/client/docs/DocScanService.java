@@ -23,6 +23,7 @@ import com.yoti.api.client.docs.session.create.CreateSessionResult;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.create.facecapture.CreateFaceCaptureResourcePayload;
 import com.yoti.api.client.docs.session.create.facecapture.UploadFaceCaptureImagePayload;
+import com.yoti.api.client.docs.session.create.pdf.CreateSessionOverviewPdfPayload;
 import com.yoti.api.client.docs.session.devicemetadata.MetadataResponse;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.docs.session.retrieve.CreateFaceCaptureResourceResponse;
@@ -378,6 +379,38 @@ final class DocScanService {
             throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
         } catch (ResourceException ex) {
             throw new DocScanException("Error executing the GET: " + ex.getMessage(), ex);
+        } catch (IOException | URISyntaxException ex) {
+            throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
+        }
+    }
+
+    Media createSessionOverviewPdf(AuthStrategy authStrategy,
+            String sessionId,
+            CreateSessionOverviewPdfPayload createSessionOverviewPdfPayload) throws DocScanException {
+        notNull(authStrategy, "authStrategy");
+        notNullOrEmpty(sessionId, "sessionId");
+        notNull(createSessionOverviewPdfPayload, "createSessionOverviewPdfPayload");
+
+        String path = unsignedPathFactory.createSessionOverviewPdfPath(sessionId);
+        LOG.info("Creating session overview PDF at '{}'", path);
+
+        try {
+            byte[] payload = objectMapper.writeValueAsBytes(createSessionOverviewPdfPayload);
+
+            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
+                    .withAuthStrategy(authStrategy)
+                    .withBaseUrl(apiUrl)
+                    .withEndpoint(path)
+                    .withPayload(payload)
+                    .withHttpMethod(HTTP_POST)
+                    .build();
+            YotiHttpResponse response = yotiHttpRequest.execute();
+
+            return new MediaValue(findContentType(response), response.getResponseBody());
+        } catch (GeneralSecurityException ex) {
+            throw new DocScanException("Error signing the request: " + ex.getMessage(), ex);
+        } catch (ResourceException ex) {
+            throw new DocScanException("Error executing the POST: " + ex.getMessage(), ex);
         } catch (IOException | URISyntaxException ex) {
             throw new DocScanException("Error building the request: " + ex.getMessage(), ex);
         }

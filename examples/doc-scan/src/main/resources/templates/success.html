@@ -1063,6 +1063,18 @@
             </h2>
         </div>
     </div>
+
+    <div class="row pt-4">
+        <div class="col">
+            <h2>
+                Session Overview PDF
+                <a th:href="${'/session-overview-pdf?sessionId=' + sessionResult.getSessionId()}">
+                    <span class="badge badge-success" th:text="DOWNLOAD">
+                    </span>
+                </a>
+            </h2>
+        </div>
+    </div>
 </div>
 
 <div th:replace="fragments/components :: footer"></div>

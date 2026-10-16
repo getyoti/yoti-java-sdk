@@ -7,6 +7,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import com.yoti.api.client.docs.session.create.SessionSpec;
+import com.yoti.api.client.docs.session.create.pdf.CreateSessionOverviewPdfPayload;
 import com.yoti.api.client.docs.session.instructions.Instructions;
 import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
 
@@ -106,6 +107,17 @@ public class DocScanClientTest {
         doThrow(original).when(docScanServiceMock).getIbvInstructionsPdf(authStrategyMock, SOME_SESSION_ID);
 
         DocScanException exception = assertThrows(DocScanException.class, () -> testObj.getIbvInstructionsPdf(SOME_SESSION_ID));
+
+        assertThat(exception, is(original));
+    }
+
+    @Test
+    public void createSessionOverviewPdf_shouldFailWithExceptionFromYotiDocsService() throws Exception {
+        CreateSessionOverviewPdfPayload payload = CreateSessionOverviewPdfPayload.builder().build();
+        DocScanException original = new DocScanException("Test exception");
+        doThrow(original).when(docScanServiceMock).createSessionOverviewPdf(authStrategyMock, SOME_SESSION_ID, payload);
+
+        DocScanException exception = assertThrows(DocScanException.class, () -> testObj.createSessionOverviewPdf(SOME_SESSION_ID, payload));
 
         assertThat(exception, is(original));
     }
