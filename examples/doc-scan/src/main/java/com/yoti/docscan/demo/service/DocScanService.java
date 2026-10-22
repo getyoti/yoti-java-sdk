@@ -21,6 +21,7 @@ import com.yoti.api.client.docs.session.create.filters.OrthogonalRestrictionsFil
 import com.yoti.api.client.docs.session.create.filters.RequiredIdDocument;
 import com.yoti.api.client.docs.session.create.filters.RequiredSupplementaryDocument;
 import com.yoti.api.client.docs.session.create.objective.ProofOfAddressObjective;
+import com.yoti.api.client.docs.session.create.pdf.CreateSessionOverviewPdfOptions;
 import com.yoti.api.client.docs.session.create.pdf.CreateSessionOverviewPdfPayload;
 import com.yoti.api.client.docs.session.create.task.RequestedIdDocTextExtractionTask;
 import com.yoti.api.client.docs.session.create.task.RequestedSupplementaryDocTextExtractionTask;
@@ -153,10 +154,14 @@ public class DocScanService {
     }
 
     public Media createSessionOverviewPdf(String sessionId) throws DocScanException {
-        CreateSessionOverviewPdfPayload payload = CreateSessionOverviewPdfPayload.builder()
+        CreateSessionOverviewPdfOptions options = CreateSessionOverviewPdfOptions.builder()
                 .withIncludeImages(true)
                 .withIncludeExtractedText(true)
                 .withIncludeDeviceTracking(true)
+                .build();
+
+        CreateSessionOverviewPdfPayload payload = CreateSessionOverviewPdfPayload.builder()
+                .withOptions(options)
                 .build();
 
         return docScanClient.createSessionOverviewPdf(sessionId, payload);
