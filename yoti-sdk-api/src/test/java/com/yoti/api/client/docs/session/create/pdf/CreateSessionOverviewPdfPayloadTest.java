@@ -12,35 +12,36 @@ public class CreateSessionOverviewPdfPayloadTest {
 
     @Test
     public void build_shouldBuildCreateSessionOverviewPdfPayloadCorrectly() {
+        CreateSessionOverviewPdfOptions options = CreateSessionOverviewPdfOptions.builder().build();
+
         CreateSessionOverviewPdfPayload result = CreateSessionOverviewPdfPayload.builder()
-                .withIncludeImages(true)
-                .withIncludeExtractedText(false)
-                .withIncludeDeviceTracking(true)
+                .withOptions(options)
                 .build();
 
-        assertThat(result.getIncludeImages(), is(true));
-        assertThat(result.getIncludeExtractedText(), is(false));
-        assertThat(result.getIncludeDeviceTracking(), is(true));
+        assertThat(result.getOptions(), is(options));
     }
 
     @Test
-    public void build_shouldLeaveUnsetValuesNull() {
+    public void build_shouldLeaveUnsetOptionsNull() {
         CreateSessionOverviewPdfPayload result = CreateSessionOverviewPdfPayload.builder().build();
 
-        assertThat(result.getIncludeImages(), is(nullValue()));
-        assertThat(result.getIncludeExtractedText(), is(nullValue()));
-        assertThat(result.getIncludeDeviceTracking(), is(nullValue()));
+        assertThat(result.getOptions(), is(nullValue()));
     }
 
     @Test
-    public void shouldOnlySerializeProvidedValues() throws Exception {
+    public void shouldSerializeOptionsUnderOptionsProperty() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
         CreateSessionOverviewPdfPayload payload = CreateSessionOverviewPdfPayload.builder()
-                .withIncludeExtractedText(false)
+                .withOptions(CreateSessionOverviewPdfOptions.builder()
+                        .withIncludeImages(true)
+                        .withIncludeExtractedText(false)
+                        .withIncludeDeviceTracking(true)
+                        .build())
                 .build();
 
-        assertThat(objectMapper.writeValueAsString(payload), is("{\"include_extracted_text\":false}"));
+        assertThat(objectMapper.writeValueAsString(payload),
+                is("{\"options\":{\"include_images\":true,\"include_extracted_text\":false,\"include_device_tracking\":true}}"));
     }
 
 }
