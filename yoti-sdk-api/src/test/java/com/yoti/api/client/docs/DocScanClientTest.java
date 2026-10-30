@@ -4,8 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.yoti.api.client.Media;
 import com.yoti.api.client.docs.session.create.SessionSpec;
 import com.yoti.api.client.docs.session.create.pdf.CreateSessionOverviewPdfPayload;
 import com.yoti.api.client.docs.session.instructions.Instructions;
@@ -120,6 +122,16 @@ public class DocScanClientTest {
         DocScanException exception = assertThrows(DocScanException.class, () -> testObj.createSessionOverviewPdf(SOME_SESSION_ID, payload));
 
         assertThat(exception, is(original));
+    }
+
+    @Test
+    public void createSessionOverviewPdf_shouldCallServiceWithNullPayloadWhenNoPayloadSupplied() throws Exception {
+        Media media = mock(Media.class);
+        when(docScanServiceMock.createSessionOverviewPdf(authStrategyMock, SOME_SESSION_ID, null)).thenReturn(media);
+
+        Media result = testObj.createSessionOverviewPdf(SOME_SESSION_ID);
+
+        assertThat(result, is(media));
     }
 
     @Test

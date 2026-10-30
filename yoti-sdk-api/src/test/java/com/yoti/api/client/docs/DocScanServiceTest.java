@@ -18,7 +18,9 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -897,14 +899,6 @@ public class DocScanServiceTest {
     }
 
     @Test
-    public void createSessionOverviewPdf_shouldThrowExceptionWhenPayloadIsNull() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> docScanService.createSessionOverviewPdf(
-                authStrategyMock, SOME_SESSION_ID, null));
-
-        assertThat(ex.getMessage(), containsString("createSessionOverviewPdfPayload"));
-    }
-
-    @Test
     public void createSessionOverviewPdf_shouldWrapGeneralSecurityException() throws Exception {
         GeneralSecurityException gse = new GeneralSecurityException("some gse");
         when(yotiHttpRequestBuilderMock.build()).thenThrow(gse);
@@ -964,6 +958,22 @@ public class DocScanServiceTest {
         verify(yotiHttpRequestBuilderMock).withBaseUrl(SOME_API_URL);
         verify(yotiHttpRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_POST);
         verify(yotiHttpRequestBuilderMock).withPayload(SOME_SESSION_SPEC_BYTES);
+    }
+
+    @Test
+    public void createSessionOverviewPdf_shouldPostWithoutPayloadWhenPayloadIsNull() throws Exception {
+        when(yotiHttpRequestBuilderMock.build()).thenReturn(yotiHttpRequestMock);
+        when(yotiHttpRequestMock.execute()).thenReturn(yotiHttpResponseMock);
+        when(yotiHttpResponseMock.getResponseHeaders()).thenReturn(createHeadersMap(CONTENT_TYPE, "application/pdf"));
+        when(yotiHttpResponseMock.getResponseBody()).thenReturn(IMAGE_BODY);
+        when(unsignedPathFactoryMock.createSessionOverviewPdfPath(SOME_SESSION_ID)).thenReturn(SOME_PATH);
+
+        Media result = docScanService.createSessionOverviewPdf(authStrategyMock, SOME_SESSION_ID, null);
+
+        assertThat(result.getMimeType(), is("application/pdf"));
+        assertThat(result.getContent(), is(IMAGE_BODY));
+        verify(yotiHttpRequestBuilderMock).withHttpMethod(HttpMethod.HTTP_POST);
+        verify(yotiHttpRequestBuilderMock, never()).withPayload(any());
     }
 
     @Test
