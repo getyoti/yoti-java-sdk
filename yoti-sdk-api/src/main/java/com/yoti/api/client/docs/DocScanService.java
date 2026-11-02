@@ -35,6 +35,7 @@ import com.yoti.api.client.docs.support.SupportedDocumentsResponse;
 import com.yoti.api.client.spi.remote.MediaValue;
 import com.yoti.api.client.spi.remote.call.ResourceException;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequest;
+import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilder;
 import com.yoti.api.client.spi.remote.call.YotiHttpRequestBuilderFactory;
 import com.yoti.api.client.spi.remote.call.YotiHttpResponse;
 import com.yoti.api.client.spi.remote.call.factory.AuthStrategy;
@@ -389,22 +390,22 @@ final class DocScanService {
             CreateSessionOverviewPdfPayload createSessionOverviewPdfPayload) throws DocScanException {
         notNull(authStrategy, "authStrategy");
         notNullOrEmpty(sessionId, "sessionId");
-        notNull(createSessionOverviewPdfPayload, "createSessionOverviewPdfPayload");
 
         String path = unsignedPathFactory.createSessionOverviewPdfPath(sessionId);
         LOG.info("Creating session overview PDF at '{}'", path);
 
         try {
-            byte[] payload = objectMapper.writeValueAsBytes(createSessionOverviewPdfPayload);
-
-            YotiHttpRequest yotiHttpRequest = yotiHttpRequestBuilderFactory.create()
+            YotiHttpRequestBuilder yotiHttpRequestBuilder = yotiHttpRequestBuilderFactory.create()
                     .withAuthStrategy(authStrategy)
                     .withBaseUrl(apiUrl)
                     .withEndpoint(path)
-                    .withPayload(payload)
-                    .withHttpMethod(HTTP_POST)
-                    .build();
-            YotiHttpResponse response = yotiHttpRequest.execute();
+                    .withHttpMethod(HTTP_POST);
+
+            if (createSessionOverviewPdfPayload != null) {
+                yotiHttpRequestBuilder.withPayload(objectMapper.writeValueAsBytes(createSessionOverviewPdfPayload));
+            }
+
+            YotiHttpResponse response = yotiHttpRequestBuilder.build().execute();
 
             return new MediaValue(findContentType(response), response.getResponseBody());
         } catch (GeneralSecurityException ex) {

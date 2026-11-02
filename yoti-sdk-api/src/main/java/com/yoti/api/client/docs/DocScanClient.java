@@ -143,6 +143,17 @@ public class DocScanClient {
     }
 
     /**
+     * Creates a PDF overview of the given session, using the default content.
+     *
+     * @param sessionId the session ID
+     * @return the PDF media
+     * @throws DocScanException if an error has occurred
+     */
+    public Media createSessionOverviewPdf(String sessionId) throws DocScanException {
+        return createSessionOverviewPdf(sessionId, null);
+    }
+
+    /**
      * Creates a PDF overview of the given session.
      *
      * @param sessionId the session ID
